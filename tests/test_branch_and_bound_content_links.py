@@ -15,5 +15,5 @@ def test_branch_and_bound_guide_separates_proof_from_budget_stop() -> None:
     assert "#/theater/search-tree/binary-knapsack-bnb-complete" in branch_and_bound.body
     assert "#/theater/search-tree/binary-knapsack-bnb-budget" in branch_and_bound.body
     assert "#/compare/COMPARE_KNAPSACK_BNB_BUDGET" in branch_and_bound.body
-    assert "正のgapと未探索node" in branch_and_bound.body
+    assert "正のgapと未探索のnode" in branch_and_bound.body
     assert "一般性能ranking" in branch_and_bound.body

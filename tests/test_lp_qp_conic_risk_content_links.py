@@ -44,7 +44,8 @@ def test_active_set_qp_separates_working_set_and_operator_splitting() -> None:
         assert route in guide.body
 
     assert "OSQPのようなoperator-splitting型" in guide.body
-    assert "working setとは別の反復を使います" in guide.body
+    assert "作業集合とは別の反復を使います" in guide.body
+    assert "作業集合（working set）" in guide.body
     assert style_warnings(guide) == ()
 
 
@@ -60,8 +61,8 @@ def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
         assert route in guide.body
 
     for diagnostic in (
-        "primal feasibility residual",
-        "dual feasibility residual",
+        "主 feasibility 残差",
+        "双対 feasibility 残差",
         "duality gap",
     ):
         assert diagnostic in guide.body
@@ -82,14 +83,14 @@ def test_pdlp_keeps_first_order_stopping_contract_and_accuracy_scope_visible() -
         assert route in guide.body
 
     for diagnostic in (
-        "primal feasibility residual",
-        "dual feasibility residual",
+        "主 feasibility 残差",
+        "双対 feasibility 残差",
         "duality gap",
-        "absolute／relative scaling",
+        "absolute／relative 尺度調整",
     ):
         assert diagnostic in guide.body
 
-    assert "PDLPを中精度だけのsolverとはみなしません" in guide.body
-    assert "basisを持つ頂点解や疎な頂点解" in guide.body
+    assert "PDLPを中精度だけのソルバーとはみなしません" in guide.body
+    assert "基底を持つ頂点解や疎な頂点解" in guide.body
     assert "exact certificate" not in guide.body
     assert style_warnings(guide) == ()

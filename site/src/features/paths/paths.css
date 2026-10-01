@@ -1,0 +1,316 @@
+/* Learning paths (ADR 0017). Questions are the primary reading line. */
+
+.path-index,
+.path-detail {
+  --path-accent: #315c48;
+  --path-accent-soft: #e3eee7;
+  --path-line: #d6dbd3;
+  --path-muted: #4f5b53;
+  --path-question: #b3532d;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.path-index-header,
+.path-hero {
+  display: grid;
+  gap: 0.6rem;
+  max-width: var(--measure-lead, 48rem);
+}
+
+.path-index-header h1,
+.path-hero h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.path-index-header p,
+.path-hero > p {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: var(--leading-body, 1.8);
+}
+
+.path-hero .eyebrow a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.path-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+
+.path-card {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border: 1px solid var(--path-line);
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.path-card h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.path-card p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: var(--leading-support, 1.65);
+}
+
+.path-card-audience {
+  color: var(--path-muted);
+}
+
+.path-card-next {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.75rem;
+  border-left: 3px solid var(--path-question);
+  background: #fff7f2;
+}
+
+.path-card-next span {
+  color: var(--path-question);
+  font-size: var(--type-label, 0.875rem);
+  font-weight: 700;
+}
+
+.path-primary-action {
+  justify-self: start;
+  padding: 0.6rem 1rem;
+  border-radius: 0.55rem;
+  background: var(--path-accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.path-primary-action:hover,
+.path-primary-action:focus-visible {
+  background: #234737;
+}
+
+.path-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--type-meta, 0.875rem);
+  color: var(--path-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.path-meter progress {
+  flex: 1 1 auto;
+  max-width: 16rem;
+  height: 0.6rem;
+  accent-color: var(--path-accent);
+}
+
+.path-contract {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.path-contract div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.path-contract dt {
+  color: var(--path-muted);
+  font-size: var(--type-label, 0.875rem);
+  font-weight: 700;
+}
+
+.path-contract dd {
+  margin: 0;
+  font-size: 1rem;
+  line-height: var(--leading-support, 1.65);
+}
+
+.path-steps {
+  display: grid;
+  gap: 0;
+  max-width: 52rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 0.9rem 0;
+}
+
+.path-step::before {
+  position: absolute;
+  top: 3.3rem;
+  bottom: -0.9rem;
+  left: 1.2rem;
+  width: 2px;
+  background: var(--path-line);
+  content: "";
+}
+
+.path-step:last-child::before {
+  display: none;
+}
+
+.path-step-number {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid var(--path-accent);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--path-accent);
+  font-weight: 800;
+  place-items: center;
+}
+
+.path-step-done .path-step-number {
+  background: var(--path-accent);
+  color: #fff;
+}
+
+.path-step-question {
+  margin: 0 0 0.35rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.path-step-target {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.path-step-target span {
+  color: var(--path-muted);
+  font-size: var(--type-label, 0.875rem);
+}
+
+.path-step-target .path-step-stub {
+  padding: 0 0.45rem;
+  border: 1px dashed #aab4ab;
+  border-radius: 999px;
+}
+
+.path-step-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.path-step-check input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--path-accent);
+}
+
+/* Position bar and next-question card shown on step pages */
+
+.path-position {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--path-line, #d6dbd3);
+  border-radius: 0.6rem;
+  background: #f5f8f4;
+  font-size: var(--type-meta, 0.875rem);
+}
+
+.path-position a {
+  color: #315c48;
+  font-weight: 700;
+}
+
+.path-position span {
+  color: #4f5b53;
+  font-variant-numeric: tabular-nums;
+}
+
+.path-position p {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.path-next-card {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+  margin: 2rem 0 0;
+  padding: 1.25rem;
+  border: 2px solid #315c48;
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.path-next-link {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.6rem;
+  background: #fff7f2;
+  color: inherit;
+  text-decoration: none;
+}
+
+.path-next-link:hover,
+.path-next-link:focus-visible {
+  outline: 2px solid #b3532d;
+}
+
+.path-next-link span {
+  color: #b3532d;
+  font-size: var(--type-label, 0.875rem);
+  font-weight: 700;
+}
+
+.path-next-link strong {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.path-next-link small {
+  color: #315c48;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.path-previous-link {
+  font-size: 1rem;
+}
+
+@media (max-width: 40rem) {
+  .path-step {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .path-step .path-step-check {
+    grid-column: 2;
+  }
+}

@@ -12,6 +12,6 @@ def test_weighted_sum_guide_separates_front_generation_from_preference() -> None
     assert weighted_sum.comparison_ids == ("COMPARE_PARETO_PREFERENCE",)
     assert "#/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY" in weighted_sum.body
     assert "#/compare/COMPARE_PARETO_PREFERENCE" in weighted_sum.body
-    assert "front上の選択点だけを動かします" in weighted_sum.body
-    assert "solverを再実行してfrontを改善する実験ではありません" in weighted_sum.body
-    assert "一般性能ranking" in weighted_sum.body
+    assert "フロント上の選択点だけを動かします" in weighted_sum.body
+    assert "ソルバーを再実行してフロントを改善する実験ではありません" in weighted_sum.body
+    assert "一般性能順位" in weighted_sum.body

@@ -4,151 +4,241 @@ kind: method
 method_id: M_PROJECTED_GRADIENT
 title_ja: 射影勾配法
 title_en: Projected Gradient Method
-summary: 勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
+summary: 勾配の一歩のあとで実行可能集合へ射影（projection）し、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
 source_ids: [S055, S056, S066]
 prerequisites: [method.gradient-descent, constrained-continuous]
-related_ids: [method.gradient-descent, proximal-gradient, mirror-descent, active-set]
+related_ids: [method.gradient-descent, proximal-gradient, mirror-descent, active-set, lbfgsb, riemannian-gradient]
 visualization_ids: [so3-projected-alignment]
 comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 aliases: [/learn/projected-gradient]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
+勾配の一歩のあとで実行可能集合へ射影（projection）し、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
 
 ## 30秒でつかむ
 
-Projected Gradientは、勾配で下った点をそのまま採用せず、実行可能集合へ戻して次の反復を続けます。
+柵に囲まれた斜面を、ボールが転がり落ちる様子を想像してください。
+ボールは、勾配の向きに転がります。そのまま柵を越えそうになったら、柵の内側の、いちばん近い場所へ戻されます。
+射影勾配法は、この「転がして、はみ出したら最も近い場所へ戻す」を繰り返します。どの反復でも、点は柵の内側にあります。
 
-- 見ているもの: feasible objective、projected-gradient mapping、projection distance
-- 動かしているもの: 現在点、step size、active face、projection
-- 前進の判断: mapping normと目的値が下がり、projection後の点が実行可能であること
-- 恐れていること: projectionの高コスト、悪いstep、単純なclipによる制約の取り違え
+- **見るもの**: 実行可能な点での目的値、射影勾配写像（projected-gradient mapping）のノルム、射影で動いた距離
+- **動かすもの**: 現在点、歩幅（step size）、射影
+- **前進の判断**: 写像のノルムと目的値が下がり、射影後の点が実行可能であること
+- **恐れていること**: 射影の高い費用、大きすぎる歩幅、単純な `clip` による制約の取り違え
 
-projection後の点がfeasibleなら、接空間に沿って進んだ一歩と同じでしょうか。
-SO(3)の固定実行では、どちらもaccepted rotationの構造残差を小さく保ちますが、QR projectionが直す量とtargetまでの角度履歴は一致しません。
+境界で止まるときも、普通の勾配は0とは限りません。停止の合図は、写像のノルムです。
 
-![identityから同じnear-pi targetへ向かうProjected GradientとRiemannian Gradientの固定Python実行。上段は12 updateのgeodesic residual、中央は最初のupdate normとmap correction、下段はaccepted rotationの直交性とdeterminant残差を示す。](./media/so3-update-diagnostic.svg "同じtarget、初期rotation、step size、12評価で、ambient stepと接空間stepを比較します。固定3対応・noiseなしの教材であり、一般性能rankingや一般的な局所収束は示しません。")
+## 一手の意味
 
-橙の履歴がこの手法です。
-accepted pointがfeasibleであることと、projection前のcandidateをどれだけ修正したかを分けて読みます。
-
-## 更新式
-
-convex set $C$ に対し、
+一手は、勾配の向きに歩幅 $\eta_k$ だけ進み、その先を実行可能集合 $C$ へ射影する操作です。$C$ は凸集合とします。
 
 $$
-x_{k+1}=\Pi_C(x_k-\eta_k\nabla f(x_k))
+x_{k+1}=\Pi_C\bigl(x_k-\eta_k\nabla f(x_k)\bigr)
 $$
 
-と更新します。$\Pi_C$ はEuclidean projection
+$\Pi_C$ は、ユークリッド射影です。次の式は、$y$ に最も近い $C$ の点を返すという意味です。
 
 $$
-\arg\min_{z\in C}\|z-y\|^2
+\Pi_C(y)=\arg\min_{z\in C}\|z-y\|^2
 $$
 
-です。
+上下限（box）・単体・球・アフィン部分空間のように、射影が閉じた式で得られるか、安価なときに有効です。
 
-box／simplex／ball／affine subspaceなど、projectionが閉形式または安価なときに有効です。
+### 境界上の勾配を読む
 
-## 境界上の勾配を読む
-
-解が境界にある場合、通常の勾配は0でなくてもよいです。重要なのは実行可能方向へ進めないことです。
-
-projected-gradient mapping
+解が境界にあるとき、普通の勾配は0でなくてかまいません。重要なのは、実行可能な方向へ進めないことです。
+その診断が、射影勾配写像です。次の式は、「勾配の一歩を踏み出して射影で戻された分を、歩幅で割った量」という意味です。
 
 $$
 G_\eta(x)=\frac{1}{\eta}\left(x-\Pi_C(x-\eta\nabla f(x))\right)
 $$
 
-がstationarityの診断になります。
+$G_\eta(x)=0$ なら、$x$ は停留点です。境界の解では、勾配のノルムは正のままで、$G_\eta$ だけが0になります。
 
-## Python: box projection
+::: note
+指示関数 $I_C$ の近接写像（prox）は射影です。この意味で、射影勾配法は近接勾配法の特殊例と見られます。
+ただし説明では、「制約集合への射影」という役割を明示します。
+:::
+
+## 小さな例
+
+円盤の中で、原点にできるだけ近い点を探します。
+
+$$
+\min_{x,y}\ x^2+y^2\quad\text{s.t.}\quad (x-1)^2+(y-1)^2\le1
+$$
+
+原点は円盤の外にあるので、答えは境界上の $(1-1/\sqrt2)(1,1)\approx(0.2929,\,0.2929)$ で、目的値は $0.1716$ です。[BFGS法](#/learn/bfgs)の制約コラムと同じ問題です。
+円盤への射影は、安価です。点が円の内側ならそのまま、外側なら中心へ向けて境界まで戻します。
+
+円盤の内側の $(1.5,\,1.5)$ から、歩幅 $\eta=0.25$ で出発します。$c=(1,1)$ は円盤の中心で、$y=x_k-\eta\nabla f(x_k)$ は勾配の一歩の先です。
+
+| 反復 $k$ | 現在点 $x_k$ | 目的値 | 一歩の先 $y$ | $\|y-c\|$ | 射影後の点 $x_{k+1}$ | 写像のノルム |
+|---:|---|---:|---|---:|---|---:|
+| 0 | $(1.5,\,1.5)$ | 4.5 | $(0.75,\,0.75)$ | 0.354 | $(0.75,\,0.75)$ | 4.243 |
+| 1 | $(0.75,\,0.75)$ | 1.125 | $(0.375,\,0.375)$ | 0.884 | $(0.375,\,0.375)$ | 2.121 |
+| 2 | $(0.375,\,0.375)$ | 0.281 | $(0.1875,\,0.1875)$ | 1.149 | $(0.2929,\,0.2929)$ | 0.465 |
+| 3 | $(0.2929,\,0.2929)$ | 0.1716 | $(0.1464,\,0.1464)$ | 1.207 | $(0.2929,\,0.2929)$ | 0 |
+
+$\|y-c\|\le1$ なら、$y$ は円盤の中にあり、射影は何もしません。反復0と1がそうです。勾配の一歩が、そのまま受け入れられます。
+反復2で、初めて $y$ が円の外に出ます（$1.149>1$）。$y$ から中心へ向かう線を引いて、境界との交点 $(0.2929,\,0.2929)$ に戻します。
+反復3でも、$y$ は円の外です。しかし射影すると、元の点に戻ります。動かないので、写像のノルムは $0$ で、ここが停留点です。
+
+このとき、普通の勾配のノルムは $0.828$ で、0ではありません。勾配のノルムで止めようとすると、境界の解を見逃します。
+制約のない勾配降下法なら、同じ勾配の一歩を繰り返して、円盤の外の原点へ進みます。射影が、それを境界で止めています。
+
+## 向く条件・避ける条件
+
+射影勾配法は、目的が滑らかで、制約が射影の安価な凸集合のときに向きます。
+標準形は[上下限付きの滑らかな最小化](#/formulations/PA008)と[制約付きNLP](#/formulations/PA009)で読めます。
+
+| 条件 | 理由 |
+|---|---|
+| 目的が滑らか | 勾配の一歩を使うため |
+| 凸で、射影が安価な制約集合 | 一手の費用が、勾配と射影だけで済むため |
+| 反復の点を常に実行可能に保ちたい | 射影後の点は、必ず集合の中にあるため |
+| 大規模で、一反復を軽くしたい | 行列の分解を使わないため |
+| warm startを使う | 前回の解から再開しやすいため |
+
+避ける、または切り替える条件です。
+
+- 非凸の集合で、射影が多値になる → 射影が一意でないことを確認する
+- 射影が、元の問題より高価 → 近接法・primal-dual法・内点法・パラメータ化を検討する
+- 一般の等式・不等式を、単純な `clip` で代用している → 制約の形に合った方法へ切り替える
+- 歩幅が大きく、境界の間を振動する → 歩幅を小さくする、または直線探索を使う
+- 普通の勾配のノルムだけで停止している → 写像のノルムに替える
+- 非滑らかな正則化項を、射影と混同している → [近接勾配法](#/learn/proximal-gradient)を検討する
+
+### 射影の費用
+
+「制約があるから射影する」のではなく、射影自体が安価かを先に確認します。
+
+- box: 各座標を `clip` するだけ
+- ユークリッド球: 半径方向に縮める
+- 単体: しきい値と並べ替え（sorting）
+- アフィン集合: 線形方程式を解く
+- 半正定値錐（PSD cone）: 固有値分解
+- 複雑な非線形集合: 射影が、別の難しい最適化問題になる
+
+射影が高価なら、近接法・primal-dual法・内点法・パラメータ化を検討します。
+
+## Python
+
+次の例は、小さな例の表を再現します。後半は、上下限だけの問題です。射影は `np.clip` の一回で済みます。
 
 ```python
 import numpy as np
 
+center = np.array([1.0, 1.0])  # 実行可能集合: (x-1)^2 + (y-1)^2 <= 1
+
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 3.0) ** 2 + 4.0 * (x[1] + 1.0) ** 2)
+    return float(x @ x)
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 3.0), 8.0 * (x[1] + 1.0)])
+    return 2.0 * x
 
 
-lower = np.array([-2.0, -3.0])
-upper = np.array([2.0, 3.0])
-x = np.array([0.0, 0.0])
-step = 0.1
+def project_disk(y: np.ndarray) -> np.ndarray:
+    """円盤への射影。内側ならそのまま、外側なら中心へ向けて境界まで戻す。"""
+    offset = y - center
+    distance = np.linalg.norm(offset)
+    return y if distance <= 1.0 else center + offset / distance
 
-for _ in range(2_000):
-    projected = np.clip(x - step * gradient(x), lower, upper)
-    mapping = (x - projected) / step
+
+x, step = np.array([1.5, 1.5]), 0.25
+for k in range(5):
+    projected = project_disk(x - step * gradient(x))
+    mapping = (x - projected) / step  # projected-gradient mapping
+    print(k, x.round(4), round(objective(x), 4), round(float(np.linalg.norm(mapping)), 4),
+          round(float(np.linalg.norm(gradient(x))), 4))
     x = projected
+
+# 上下限だけなら、射影は np.clip 一回です。
+lower, upper = np.array([-2.0, -3.0]), np.array([2.0, 3.0])
+
+
+def box_objective(v: np.ndarray) -> float:
+    return float((v[0] - 3.0) ** 2 + 4.0 * (v[1] + 1.0) ** 2)
+
+
+def box_gradient(v: np.ndarray) -> np.ndarray:
+    return np.array([2.0 * (v[0] - 3.0), 8.0 * (v[1] + 1.0)])
+
+
+v = np.array([0.0, 0.0])
+for _ in range(2_000):
+    projected = np.clip(v - 0.1 * box_gradient(v), lower, upper)
+    mapping = (v - projected) / 0.1
+    v = projected
     if np.linalg.norm(mapping) < 1e-9:
         break
 
-print(x, objective(x), np.linalg.norm(mapping))
+print(v, box_objective(v), np.linalg.norm(mapping))
 ```
 
-無制約minimumの$x_0=3$は上限2を超えるため、constrained solutionは境界へ張り付きます。
+```text
+0 [1.5 1.5] 4.5 4.2426 4.2426
+1 [0.75 0.75] 1.125 2.1213 2.1213
+2 [0.375 0.375] 0.2812 0.4645 1.0607
+3 [0.2929 0.2929] 0.1716 0.0 0.8284
+4 [0.2929 0.2929] 0.1716 0.0 0.8284
+[ 2. -1.] 1.0 2.621436401284427e-10
+```
 
-## Projectionの費用
+前半の各行は、反復番号・現在点・目的値・写像のノルム・勾配のノルムです。表の値と一致します。
+反復3以降、写像のノルムは0ですが、勾配のノルムは $0.8284$ のままです。
+後半では、制約のない最小点の $x_1=3$ が上限の $2$ を超えるため、解は境界の $(2,-1)$ に張り付きます。
 
-「制約があるからprojection」ではなく、projection自体が安価かを確認します。
+## 診断値
 
-- box: coordinate-wise clip
-- Euclidean ball: radial scaling
-- simplex: threshold / sorting
-- affine set: linear solve
-- PSD cone: eigenvalue decomposition
-- 複雑なnonlinear set: projectionが別の難しい最適化問題
+- 目的値と、これまでの実行可能な最良の目的値
+- 射影勾配写像のノルム
+- 歩幅
+- 境界に張り付いた変数、またはactiveな面
+- 射影で動いた距離
+- 関数・勾配・射影の計算時間
+- 射影後の制約違反
+- 直線探索の状態
 
-projectionが高価ならproximal／primal-dual／interior-point／parameterizationを検討します。
+判断の目安です。写像のノルムが許容誤差以下なら、停留点とみなして止めます。
+目的値が下がらず、射影で動く距離ばかり大きいなら、歩幅が大きすぎます。
 
-## 最初に見る診断値
+## 失敗・切替の兆候
 
-- objective / best feasible objective
-- projected-gradient mapping norm
-- step size
-- active bound / active face
-- projection distance
-- function / gradient / projection time
-- constraint violation after projection
-- line-search status
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 境界の近くで、点が行ったり来たりする | 歩幅が大きすぎる | 歩幅を小さくする。直線探索を使う |
+| 勾配のノルムが下がらず、止まらない | 普通の勾配のノルムで判定している | 写像のノルムで判定する |
+| 一反復の時間が、射影で支配される | 射影が高価な集合 | 近接法・primal-dual法・内点法・パラメータ化へ切り替える |
+| 射影後の点が制約を満たさない | 一般の制約を `clip` で代用した | 制約の形に合った方法へ切り替える |
+| 射影の結果が定まらない | 非凸の集合 | 射影が一意かを確認する。別の定式化を検討する |
 
-## 向いている条件
+## コラム: SO(3)で二つの一歩を見分ける
 
-- smooth objective
-- convexでprojectionが安価な制約集合
-- iteratesを常にfeasibleに保ちたい
-- 大規模で一反復を軽くしたい
-- warm startを使う
+射影後の点が実行可能なら、接空間に沿って進んだ一歩と同じでしょうか。
+SO(3)の固定実行では、どちらも受け入れた回転の構造残差を小さく保ちます。しかし、QR射影が直す量と、目標までの角度の履歴は一致しません。
 
-## 避ける／切り替える条件
+![identityから同じnear-pi targetへ向かう射影勾配法とRiemannian勾配法の固定Python実行。上段は12回の更新のgeodesic residual、中央は最初の更新のノルムと写像の補正、下段は受け入れた回転の直交性とdeterminantの残差を示す。](./media/so3-update-diagnostic.svg "同じ目標・初期回転・歩幅・12回の評価で、ambientな一歩と接空間の一歩を比較します。固定3対応・ノイズなしの教材であり、一般性能rankingや一般的な局所収束は示しません。")
 
-- nonconvex setでprojectionが多値
-- projectionが元problemより高価
-- general equality / inequalityを単純clipで代用
-- stepが大きく境界間を振動
-- ordinary gradient normだけで停止
-- nonsmooth regularizerをprojectionと混同
+橙の履歴がこの手法です。
+受け入れた点が実行可能であることと、射影の前の候補をどれだけ修正したかは、分けて読みます。
 
-## SO(3)で二つのstepを見分ける
+[射影更新のTheater](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)では、ambientな空間で進んだあとに、QR射影でSO(3)へ戻る流れを追えます。
+目的関数値と、直交性・determinantの残差を、分けて確認します。
 
-[projected updateのTheater](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)では、ambient空間で進んだ後にQR projectionでSO(3)へ戻る流れを追えます。
-目的関数値と、直交性・determinantの残差を分けて確認します。
+[Riemannian更新とのCompare](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じ目標・初期回転・目的関数・歩幅・12回のoracle evaluationを使います。
+変えるのは、ambientな一歩を射影するか、接空間の一歩を指数写像で戻すかだけです。
 
-[Riemannian updateとのCompare](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じtarget・初期rotation・目的関数・step size・12回のoracle evaluationを使います。
-変えるのは、ambient stepをprojectionするか、接空間のstepをexponential mapで戻すかだけです。
+これは、固定のnear-pi目標・ノイズなし・単一の初期値を使う、教育用の対比です。
+反復回数や最終損失から、一般的な速度rankingを付けるものではありません。
 
-これは固定near-pi target、noiseなし、単一初期値の教育用contrastです。
-iteration数や最終lossから一般的な速度rankingを付けるものではありません。
+## 次に読む
 
-::: note
-indicator function $I_C$ のproxはprojectionです。
-この意味で、Projected GradientはProximal Gradientの特殊例として見られます。
-ただしUIや説明では「制約集合への射影」という役割を明示します。
-:::
+- [近接勾配法](#/learn/proximal-gradient)：射影を、近接写像として一般化する
+- [L-BFGS-B](#/learn/lbfgsb)：上下限つきの問題を、準Newton法で解く
+- [Riemann勾配法](#/learn/riemannian-gradient)：制約集合が多様体のとき、接空間の一歩で進む
+- [上下限付きの滑らかな最小化](#/formulations/PA008)：この手法が解く問題の標準形

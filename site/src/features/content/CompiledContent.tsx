@@ -6,7 +6,8 @@ import { ExplorableMounts } from "../explorable/ExplorableMounts";
 export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" | "toc"> }) {
   const contentRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    contentRef.current?.querySelectorAll("pre").forEach((region) => {
+    // Code blocks and tables scroll inside themselves on narrow screens, so keyboard users need focus.
+    contentRef.current?.querySelectorAll<HTMLElement>("pre, table").forEach((region) => {
       region.tabIndex = 0;
     });
   }, [page.html]);

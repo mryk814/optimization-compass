@@ -10,6 +10,7 @@ from optimization_compass.content_quality import (
     public_content_routes,
     render_content_quality_report,
 )
+from optimization_compass.formulation_atlas import authored_route_ids
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,10 +30,13 @@ def main() -> None:
         (ROOT / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
     )
     published_pages = [page for page in pages if page.status == "published"]
+    formulation_ids, path_ids = authored_route_ids(ROOT)
     routes = public_content_routes(
         published_pages,
         gallery_ids=(item["case_id"] for item in gallery["cases"]),
         comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
+        formulation_ids=formulation_ids,
+        path_ids=path_ids,
     )
     rows = [
         inspect_concept(page, routes)

@@ -9,8 +9,10 @@ from optimization_compass.content_quality import (
     public_content_routes,
     require_published_concept_quality,
 )
+from optimization_compass.content_skeletons import load_pending, require_content_skeletons
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.release_identity import load_dataset_release_identity
 
 MINIMUM_PUBLISHED_CONTENT_PAGES = 12
@@ -31,6 +33,8 @@ def verify_content(root: Path) -> dict[str, int | str]:
     _load_payload(data_root / "recommendation/site-data.json", identity.dataset_version)
     trace_index = _load_payload(data_root / "traces/index.json", identity.dataset_version)
     _load_payload(data_root / "coverage.json", identity.dataset_version)
+    _load_payload(data_root / "formulation-atlas.json", identity.dataset_version)
+    _load_payload(data_root / "learning-paths.json", identity.dataset_version)
 
     source_pages = [page for page in load_content(root / "content") if page.status == "published"]
     generated_pages = content_index["pages"]
@@ -61,12 +65,21 @@ def verify_content(root: Path) -> dict[str, int | str]:
     _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
 
     published_pages = [page for page in source_pages if page.status == "published"]
+    formulation_ids, path_ids = authored_route_ids(root)
     content_routes = public_content_routes(
         published_pages,
         gallery_ids=case_ids,
         comparison_ids=comparison_ids,
+        formulation_ids=formulation_ids,
+        path_ids=path_ids,
     )
     require_published_concept_quality(source_pages, content_routes)
+    prunable = require_content_skeletons(source_pages, load_pending(root))
+    if prunable:
+        print(
+            "skeleton: these pending articles now conform; run "
+            "`uv run python scripts/content_skeleton_report.py --prune`: " + ", ".join(prunable)
+        )
 
     repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")
     known_sources = {

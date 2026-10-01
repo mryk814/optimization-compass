@@ -99,7 +99,8 @@ _STOP_TOKENS = {
 _HTML_TAG = re.compile(r"<[^>]+>")
 _CONTENT_SECTION = re.compile(r'<h2 id="([^"]+)"[^>]*>(.*?)</h2>(.*?)(?=<h2 id=|\Z)', re.DOTALL)
 _CANONICAL_ROUTE = re.compile(
-    r"^/(?:compare|failures|gallery|learn|map|methods|search|sources|theater|traces)(?:[/?]|$)"
+    r"^/(?:compare|failures|formulations|gallery|learn|map|methods|paths|search|sources|theater|traces)"
+    r"(?:[/?]|$)"
 )
 
 

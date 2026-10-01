@@ -10,118 +10,180 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [bfgs, lbfgsb, trust-region-newton-cg]
 aliases: [/learn/newton-method]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-09-30
 ---
 
 勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、現在地の傾きと曲がり方から近くの地形を二次modelで描き、その停留点を狙うことです。
+現在地の傾きだけでなく、地面がどれだけ曲がっているかも測ります。
+傾きと曲がり方が分かれば、近くの地形を一つの椀（二次関数）で近似できます。Newton法は、その椀の底へ一気に跳びます。
 
-- **見るもの**: 目的関数値、勾配、Hessian
-- **動かすもの**: 現在点とNewton step
-- **前進の判断**: 目的関数値とgradient normが下がり、stepが過大にならないこと
+- **見るもの**: 目的関数値、勾配、ヘッセ行列（Hessian、二階微分の行列）
+- **動かすもの**: 現在点と、椀の底へ向かう一手（Newton step）
+- **前進の判断**: 目的関数値と勾配の大きさ（gradient norm）が下がり、一手が長すぎないこと
 
-## 仕組み
+椀が実際の地形とよく合うのは、現在点の近くだけです。椀の底が遠いとき、跳んだ先は現在点より高いかもしれません。
 
-### 一手の意味
+## 一手の意味
 
-現在点 $x_k$ の近くで目的関数を二次近似すると、
+現在点 $x_k$ の近くで、目的関数を二次式で近似します。
+次の式は、現在の値に、傾きによる変化と曲がりによる変化を足したものです。
 
 $$
 f(x_k+p) \approx f(x_k) + \nabla f(x_k)^T p + \frac{1}{2}p^T\nabla^2f(x_k)p
 $$
 
-です。
-このmodelの停留条件からNewton step
+この二次式の停留点は、次の連立一次方程式の解 $p_k$ です。これがNewton stepです。
 
 $$
-\nabla^2 f(x_k)p_k = -\nabla f(x_k)
+\nabla^2 f(x_k)\,p_k = -\nabla f(x_k)
 $$
 
-を解き、$x_{k+1}=x_k+p_k$ と更新します。
+そして $x_{k+1}=x_k+p_k$ と更新します。勾配降下法は傾きの反対へ進むだけでした。Newton法は、Hessianで一手の向きと長さを曲がり方に合わせます。
 
-最適点の十分近くでHessianが正定値なら非常に速く収束できます。
-しかし、遠い初期点、非凸領域、不定Hessianでは、そのままのstepが下り方向にならないことがあります。
+最適点の十分近くでHessianが正定値なら、非常に速く収束できます。
+しかし、次の場合は、そのままの一手が下り方向にならないことがあります。初期点が遠い場合、非凸の領域にいる場合、Hessianが不定の場合です。
 
-## まず確認すること
+## 小さな例
+
+### 二次関数は一手で終わる
+
+[勾配降下法](#/learn/method.gradient-descent)と同じ関数 $f(x,y)=(x-1)^2+20(y+2)^2$ を、初期点 $(4,\,3)$ から解きます。
+勾配は $(6,\,200)$、Hessianは定数の $\mathrm{diag}(2,\,40)$ です。
+
+$$
+p=-\begin{pmatrix}2&0\\0&40\end{pmatrix}^{-1}\begin{pmatrix}6\\200\end{pmatrix}=\begin{pmatrix}-3\\-5\end{pmatrix}
+$$
+
+$x_1=(4,3)+(-3,-5)=(1,\,-2)$ で、これが最小点です。目的値は $509$ から $0$ へ、一手で下がります。
+二次関数では椀が地形そのものなので、底へ跳べば終わりです。勾配降下法は同じ問題に、学習率 $0.04$ で243回の更新が必要でした。
+
+### 椀が合わないと、一手が行き過ぎる
+
+椀が地形と合わない例として、Rosenbrock関数 $f(x,y)=100(y-x^2)^2+(1-x)^2$ を使います。
+初期点 $(-1.2,\,1)$ から、素のNewton法で解きます。最小点は $(1,\,1)$ です。
+
+| 反復 $k$ | $x_k$ | $y_k$ | $f$ | 勾配のノルム |
+|---:|---:|---:|---:|---:|
+| 0 | −1.2000 | 1.0000 | 24.20 | 232.9 |
+| 1 | −1.1753 | 1.3807 | 4.732 | 4.639 |
+| 2 | 0.7631 | −3.1750 | 1411.8 | 1370.8 |
+| 3 | 0.7634 | 0.5828 | 0.05597 | 0.4731 |
+| 4 | 0.999995 | 0.9440 | 0.3132 | 25.03 |
+| 5 | 0.999996 | 0.999991 | 1.9e−11 | 8.6e−6 |
+
+各反復のNewton stepは、毎回下り方向を向いています。それでも目的値は、反復1から2で $4.7$ から $1412$ に跳ね上がります。
+反復1の点では、Hessianの固有値が $0.34$ と $1307$ で、一方向がほとんど平らです。平らな方向へは椀の底が遠く、一手が約 $5$ の長さになります。
+
+その後は最小点の近くに入り、6回の更新で勾配のノルムが $10^{-8}$ を下回ります。
+ただし、途中で目的値が増えた回が2回あります。近くに入ってからの速さは、遠くでの安全を保証しません。
+
+## 向く条件・避ける条件
+
+Newton法の一手は、Hessianを作る費用と、連立方程式を解く費用の両方がかかります。
+先に、次の項目を確認します。
 
 | 項目 | 確認点 |
 |---|---|
-| gradient | analytic、automatic differentiation、検証済み数値微分か |
-| Hessian | 明示行列、sparse構造、Hessian-vector積のどれか |
-| linear solve | factorizationの時間とmemory |
-| globalization | line searchまたはtrust regionを使うか |
-| stopping | gradient norm、step norm、目的値変化 |
+| 勾配 | 解析式、自動微分、検証済みの数値微分のいずれか |
+| Hessian | 明示的な行列、疎構造、Hessianとベクトルの積のどれか |
+| 線形方程式の求解 | 行列分解の時間とメモリ |
+| 大域化（globalization） | 直線探索または信頼領域を使うか |
+| 停止条件 | 勾配のノルム、一手のノルム、目的値の変化 |
 
 Hessianを作る費用だけでなく、線形方程式を解く費用も支配的になります。
-大規模問題ではNewton-CGやtrust-region Krylov法のようにHessian-vector積を使う変種が有力です。
+大規模問題では、Hessianとベクトルの積を使うNewton-CGや信頼領域のKrylov法が有力です。
 
-## 向いている条件・避ける条件
+向く条件です。
 
-向いている条件:
+- 勾配とHessian、またはHessianとベクトルの積を安定して計算できる（[滑らかな無制約の最小化](#/formulations/PA006)）
+- 最適点の十分近くで、Hessianが正定値になる
+- 行列分解や連立方程式の求解の費用を許容できる
 
-- gradientとHessian、またはHessian-vector積を安定して計算できる
-- 最適点の十分近くでHessianが正定値になる
-- factorizationやlinear solveの費用を許容できる
+避ける、または条件付きで使う場合です。
 
-避ける／条件付き:
-
-- 遠い初期点、非凸領域、不定Hessianではglobalizationを加える
-- factorizationが重い場合はNewton-CG、L-BFGS、sparse solverと比較する
-- noiseや不連続が強い場合は二階modelの前提を再検討する
+- 遠い初期点、非凸領域、不定なHessianでは、大域化を加える
+- 行列分解が重い場合は、[Newton-CG](#/learn/newton-cg)や[L-BFGS](#/learn/lbfgs)と比べる（変数が非常に多い場合は[大規模な無制約の最小化](#/formulations/PA007)）
+- ノイズや不連続が強い場合は、二次モデルの前提を再検討する
 
 ## Python
+
+次の例は、素のNewton法を二つの関数に適用します。一つ目は上の二次関数、二つ目はRosenbrock関数です。
 
 ```python
 import numpy as np
 
 
-def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 1.0), 8.0 * (x[1] + 2.0)])
+def newton(x, gradient, hessian, max_iter=20):
+    """一手ごとに Hessian の連立方程式を解く素の Newton 法。"""
+    for iteration in range(max_iter):
+        g = gradient(x)
+        if np.linalg.norm(g) < 1e-8:
+            break
+        x = x + np.linalg.solve(hessian(x), -g)
+    return iteration, x
 
 
-def hessian(_: np.ndarray) -> np.ndarray:
-    return np.array([[2.0, 0.0], [0.0, 8.0]])
+# 二次関数 (x-1)^2 + 20 (y+2)^2 : Hessian は定数
+quad_grad = lambda x: np.array([2.0 * (x[0] - 1.0), 40.0 * (x[1] + 2.0)])
+quad_hess = lambda x: np.array([[2.0, 0.0], [0.0, 40.0]])
+print(newton(np.array([4.0, 3.0]), quad_grad, quad_hess))
+# (1, array([ 1., -2.]))
 
 
-x = np.array([5.0, 3.0])
-for _ in range(10):
-    g = gradient(x)
-    if np.linalg.norm(g) < 1e-10:
-        break
-    step = np.linalg.solve(hessian(x), -g)
-    x = x + step
+# Rosenbrock 関数 100 (y - x^2)^2 + (1 - x)^2
+def rosen_grad(x):
+    return np.array([
+        -400.0 * x[0] * (x[1] - x[0] ** 2) - 2.0 * (1.0 - x[0]),
+        200.0 * (x[1] - x[0] ** 2),
+    ])
 
-print(x)
+
+def rosen_hess(x):
+    return np.array([
+        [1200.0 * x[0] ** 2 - 400.0 * x[1] + 2.0, -400.0 * x[0]],
+        [-400.0 * x[0], 200.0],
+    ])
+
+
+print(newton(np.array([-1.2, 1.0]), rosen_grad, rosen_hess))
+# (6, array([1., 1.]))
 ```
 
-この例は正定値二次関数なのでfull Newton stepが安全です。
-一般の非線形・非凸問題では、この短い実装だけをそのまま使わず、line searchやtrust regionを追加します。
+出力の最初の数は、更新した回数です。二次関数は1回、Rosenbrock関数は6回で止まります。
+Rosenbrock関数がこの初期点から収束したのは、この問題と初期点の組での結果です。手法の保証ではありません。
+
+この例では、正定値の二次関数に限って素の一手が安全です。
+一般の非線形・非凸な問題では、この短い実装をそのまま使わず、直線探索や信頼領域を加えます。
 
 ## 診断値
 
 - 目的関数値
-- gradient norm
+- 勾配のノルム
 - Hessianの固有値
-- step norm
-- 目的値変化
-- factorizationの時間とmemory
+- 一手のノルム
+- 目的値の変化
+- 行列分解の時間とメモリ
 - 制約条件
 
 Newton法の速い局所収束は、大域最適性の証明ではありません。
 非凸問題では初期点を変え、得られた解とHessianの固有値、制約条件を確認します。
+小さな例のように、一手のノルムが急に長くなったときは、Hessianの最小固有値が0に近くないかを見ます。
 
 ## 失敗・切替の兆候
 
-- Hessianが不定で目的値が上がる → modified Newtonまたはtrust region
-- factorizationが重い → Newton-CG、L-BFGS、sparse solver
-- gradient/Hessian checkが合わない → 微分実装を修正
-- stepが巨大 → scaling、damping、trust radiusを確認
-- saddle point付近で停止 → second-order情報やnegative curvatureを確認
-- noiseや不連続が強い → 二階modelの前提を再検討
+- Hessianが不定で目的値が上がる → 二次モデルの底ではなく鞍点を指している → modified Newton法または信頼領域法へ切り替える
+- 一手が巨大で目的値が跳ね上がる → Hessianがほぼ特異で、椀の底が遠い → 尺度、減衰（damping）、信頼半径を確認する
+- 行列分解が重い → Hessianの次元が大きい → Newton-CG、L-BFGS、疎ソルバーへ切り替える
+- 勾配とHessianのチェックが合わない → 微分の実装が誤っている → 微分実装を修正する
+- 鞍点の付近で停止する → 勾配が0でも最小点とは限らない → 二階情報と負の曲率を確認する
+- ノイズや不連続が強い → 二次モデルの前提が成り立たない → 前提を再検討する
 
 ## 次に読む
 
-Hessianを近似する方法は[BFGS](#/learn/bfgs)、局所modelを信頼できる範囲だけで使う方法は[trust-region Newton-CG](#/learn/trust-region-newton-cg)で確認できます。
+- [BFGS](#/learn/bfgs)：Hessianを直接使わず、勾配の変化から近似する方法
+- [trust-region Newton-CG](#/learn/trust-region-newton-cg)：局所モデルを信頼できる範囲だけで使う方法
+- [Newton-CG](#/learn/newton-cg)：Hessianとベクトルの積だけで一手を求める方法
+- [滑らかな無制約の最小化](#/formulations/PA006)：この手法が解く問題の標準形

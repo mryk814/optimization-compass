@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { parseSiteManifest } from "./manifest";
 
 const manifest = {
-  version: "1.4.0",
+  version: "1.5.0",
   dataset_version: "0.2.0",
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
@@ -11,6 +11,8 @@ const manifest = {
   problems: { version: "1.0.0", path: "problems.json" },
   learning_journeys: { version: "1.1.0", path: "learning-journeys.json" },
   formulation_primer: { version: "1.0.0", path: "formulation-primer.json" },
+  formulation_atlas: { version: "1.0.0", path: "formulation-atlas.json" },
+  learning_paths: { version: "1.0.0", path: "learning-paths.json" },
   visualization_scenarios: { version: "1.2.0", path: "visualization-scenarios.json" },
   derived_media: { version: "1.1.0", path: "media/manifest.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },

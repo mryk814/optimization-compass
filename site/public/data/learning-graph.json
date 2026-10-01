@@ -2342,7 +2342,7 @@
       "label_ja": "重み付き和scalarization"
     },
     {
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA031",
       "entity_id": "PA031",
       "entity_type": "problem",
       "external_url": null,
@@ -2350,7 +2350,7 @@
       "label_ja": "配送routing"
     },
     {
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA033",
       "entity_id": "PA033",
       "entity_type": "problem",
       "external_url": null,
@@ -2358,7 +2358,7 @@
       "label_ja": "非線形最小二乗"
     },
     {
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA037",
       "entity_id": "PA037",
       "entity_type": "problem",
       "external_url": null,
@@ -2366,7 +2366,7 @@
       "label_ja": "SO(3)/SE(3)上の最適化"
     },
     {
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA038",
       "entity_id": "PA038",
       "entity_type": "problem",
       "external_url": null,
@@ -2374,7 +2374,7 @@
       "label_ja": "多目的連続最適化"
     },
     {
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA045",
       "entity_id": "PA045",
       "entity_type": "problem",
       "external_url": null,

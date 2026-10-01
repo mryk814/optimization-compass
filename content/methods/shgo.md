@@ -4,54 +4,102 @@ kind: method
 method_id: M_SHGO
 title_ja: SHGO
 title_en: Simplicial Homology Global Optimization
-summary: bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。
+summary: 有界 探索空間を単体複体で標本し、位相の情報から局所最小候補を抽出して局所ソルバーへ渡す大域探索法です。
 source_ids: [S007, S018, S072]
 prerequisites: [concept.derivative-free]
 related_ids: [direct-global, dual-annealing, differential-evolution]
 aliases: [/learn/shgo]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。
+有界 探索空間を単体複体で標本し、位相の情報から局所最小候補を抽出して局所ソルバーへ渡す大域探索法です。
 
-## 探索の考え方
+## 30秒でつかむ
 
-SHGOは領域内のsample点とその近傍関係からsimplicial complexを構成し、目的関数の離散的なtopologyを使って有望なlocal-minimum basinを識別します。候補点からlocal optimizationを行い、複数の局所解を集めます。
+地図上に測定点とその隣接関係を置き、谷に見える場所から細かく下る感覚です。
 
-random restartだけでなく、search space全体の構造をsampleから推定する点が特徴です。
+- **見るもの**：標本点の目的値と隣接関係、局所解の一覧
+- **動かすもの**：標本の配置と局所求解の開始点
+- **前進の判断**：異なる谷の発見と最良値の改善
 
-## Sampling budget
+## 一手の意味
+
+標本と隣接関係から得た局所最小の候補を $C_k$ とします。
+各候補を局所求解 $L$ に渡し、返された解を比較します。
+
+$$
+X_k=\{L(c):c\in C_k\},\qquad
+b_k=\min_{x\in X_k}f(x).
+$$
+
+SHGOは領域内の標本点とその近傍関係から単体複体を構成し、目的関数の離散的な位相を使って有望な局所最小 谷を識別します。候補点から局所最適化を行い、複数の局所解を集めます。
+
+ランダムな再始動だけでなく、探索空間全体の構造を標本から推定する点が特徴です。
+
+## 小さな例
+
+1変数 $f(x)=(x^2-1)^2$ を $[-2,2]$ で最小にします。
+初期標本数8、単体による標本化を固定し、反復上限を1、2、3と変えて実行しました。
+
+| 反復上限 | 返された最良点 | 目的値 | 関数評価数 |
+|---|---:|---:|---:|
+| 1 | 1.0000 | 0.0000 | 12 |
+| 2 | 1.0000 | 0.0000 | 12 |
+| 3 | 1.0000 | 0.0000 | 12 |
+
+この関数では $x=\pm1$ の二つが最適です。
+返された代表点が1であることだけから、谷が一つとは判断しません。
+最初の反復で解が見つかり、反復上限を増やしても評価数は増えませんでした。
+表は上限を変えた独立実行で、内部の全標本や全局所求解の履歴ではありません。
+
+## 向く条件・避ける条件
+
+### Sampling 予算
 
 性能は、
 
-- sample数
-- iteration数
-- sampling method
-- local solver
-- constraint評価
-- dimension
+- 標本数
+- 反復数
+- 標本化 手法
+- 局所ソルバー
+- 制約評価
+- 次元
 
-に依存します。低次元では領域構造を捉えやすい一方、dimension増加でsimplicial samplingの費用が急増します。
+に依存します。低次元では領域構造を捉えやすい一方、次元増加で単体による 標本化の費用が急増します。
 
-## Constraint
+### Constraint
 
-SHGO実装はconstraint付きproblemを扱えますが、
+SHGO実装は制約付き問題を扱えますが、
 
-- feasible regionが細い
-- disconnected
-- constraint evaluationが高価
-- equality toleranceが厳しい
+- 可行領域が細い
+- 分断された
+- 制約評価が高価
+- 等式制約 許容誤差が厳しい
 
-場合、sampleからfeasible候補を得にくいことがあります。feasible fractionを記録します。
+場合、標本から可行候補を得にくいことがあります。可行点の割合を記録します。
 
-## 向いている条件
+### 向いている条件
 
-- bounded low-dimensional problem
-- multimodalなcontinuous objective
-- 複数local minimaを列挙したい
-- 勾配がなくてもlocal solverを組み合わせられる
-- deterministicに近いstructured samplingを使いたい
+- 有界 低次元の 問題
+- 多峰性な連続 目的関数
+- 複数局所最小の一覧を列挙したい
+- 勾配がなくても局所ソルバーを組み合わせられる
+- 決定的に近い構造を持つ 標本化を使いたい
+
+### 避ける／切り替える条件
+
+- 高次元
+- 1評価が極端に高価
+- 強い雑音 / 不連続
+- 上下限が広すぎる
+- 可行領域が極端に細い
+- 大域最適性の証明の前提を確認していない
+- 局所ソルバー 費用を予算に含めない
+
+::: warning
+SHGOの理論的性質は標本化、接続、問題 クラス等の前提に依存します。実装の`success`だけで任意ブラックボックスの大域最適性を断定しません。
+:::
 
 ## Python
 
@@ -79,32 +127,31 @@ print(result.success, result.x, result.fun, result.nfev, result.message)
 print(getattr(result, "xl", None), getattr(result, "funl", None))
 ```
 
-返却されるlocal minima一覧やoptionはSciPy versionの公式documentationで確認します。
+返却される局所最小の一覧や設定は、利用するSciPy版の公式文書で確認します。
 
 ## 診断値
 
-- global best / local minima一覧
-- sample count
-- local optimization count
-- objective / constraint evaluation数
-- unique minima数
-- feasible sample fraction
-- basinごとの初期点
-- termination message
-- dimension / bounds volume
+- 探索全体の最良値と局所最小の一覧
+- 標本数
+- 局所最適化 数
+- 目的関数 / 制約評価数
+- 異なる 局所解数
+- 可行 標本 割合
+- 谷ごとの初期点
+- 停止メッセージ
+- 次元 / 上下限 体積
 
-local minima数が増え続ける場合、sample densityが不足しているか、noiseで偽のbasinが生じている可能性があります。
+局所最小の一覧数が増え続ける場合、標本 密度が不足しているか、雑音で偽の谷が生じている可能性があります。
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- 高次元
-- 1評価が極端に高価
-- strong noise / discontinuity
-- boundsが広すぎる
-- feasible regionが極端に細い
-- global certificateの前提を確認していない
-- local solver costをbudgetに含めない
+- 標本数を増やすと局所解の数だけが増える → 雑音と標本密度を点検します。
+- 可行な標本を得られない → 制約の表現と初期候補を見直します。
+- 局所求解が予算の大半を占める → 局所ソルバーと停止条件を比較します。
+- 高次元で標本数が不足する → [Differential Evolution](#/learn/differential-evolution)などと同じ予算で比較します。
 
-::: warning
-SHGOの理論的性質はsampling、continuity、problem class等の前提に依存します。実装の`success`だけで任意black-boxの大域最適性を断定しません。
-:::
+## 次に読む
+
+- [微分なし大域探索](#/formulations/PA013)：上下限と多峰性
+- [DIRECT](#/learn/direct-global)：領域分割による探索
+- [Multi-start](#/learn/multi-start)：初期点から独立に局所求解

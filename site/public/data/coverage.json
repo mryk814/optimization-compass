@@ -11579,7 +11579,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA001"
           ]
         },
         "recommendation": {
@@ -11659,7 +11659,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA002"
           ]
         },
         "recommendation": {
@@ -11739,7 +11739,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA003"
           ]
         },
         "recommendation": {
@@ -11783,12 +11783,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.root-finding"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -11815,12 +11815,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "/formulations/PA004",
             "EC028",
-            "None"
+            "concept.root-finding"
           ]
         },
         "recommendation": {
@@ -11864,12 +11865,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.linear-least-squares"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -11896,11 +11897,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA005",
+            "concept.linear-least-squares"
           ]
         },
         "recommendation": {
@@ -11980,7 +11982,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA006"
           ]
         },
         "recommendation": {
@@ -12065,7 +12067,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA007"
           ]
         },
         "recommendation": {
@@ -12146,7 +12148,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA008"
           ]
         },
         "recommendation": {
@@ -12191,12 +12193,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.constrained-nlp"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -12223,11 +12225,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA009",
+            "concept.constrained-nlp",
             "constrained-design"
           ]
         },
@@ -12311,7 +12314,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA010"
           ]
         },
         "recommendation": {
@@ -12392,7 +12395,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA011"
           ]
         },
         "recommendation": {
@@ -12473,7 +12476,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA012"
           ]
         },
         "recommendation": {
@@ -12553,7 +12556,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA013"
           ]
         },
         "recommendation": {
@@ -12598,12 +12601,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.expensive-black-box"
+          ]
         },
         "gallery": {
           "count": 4,
@@ -12636,11 +12639,12 @@
           ]
         },
         "map": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA014",
+            "concept.expensive-black-box",
             "formulation-experiment-tuning",
             "laser-process-tuning",
             "manufacturing-process-window",
@@ -12726,7 +12730,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA015"
           ]
         },
         "recommendation": {
@@ -12806,8 +12810,8 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC027",
-            "None"
+            "/formulations/PA016",
+            "EC027"
           ]
         },
         "recommendation": {
@@ -12851,12 +12855,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.linear-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -12883,11 +12887,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA017",
+            "concept.linear-program"
           ]
         },
         "recommendation": {
@@ -12933,12 +12938,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.convex-quadratic-program"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -12965,11 +12970,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA018",
+            "concept.convex-quadratic-program",
             "portfolio-allocation"
           ]
         },
@@ -13051,7 +13057,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA019"
           ]
         },
         "recommendation": {
@@ -13132,7 +13138,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA020"
           ]
         },
         "recommendation": {
@@ -13179,12 +13185,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.semidefinite-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -13211,11 +13217,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA021",
+            "concept.semidefinite-program"
           ]
         },
         "recommendation": {
@@ -13296,7 +13303,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA022"
           ]
         },
         "recommendation": {
@@ -13342,12 +13349,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.mixed-integer-linear-program"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -13374,11 +13381,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA023",
+            "concept.mixed-integer-linear-program",
             "production-mix-planning"
           ]
         },
@@ -13461,7 +13469,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA024"
           ]
         },
         "recommendation": {
@@ -13542,7 +13550,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA025"
           ]
         },
         "recommendation": {
@@ -13586,12 +13594,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.cp-scheduling"
+          ]
         },
         "gallery": {
           "count": 2,
@@ -13620,11 +13628,12 @@
           ]
         },
         "map": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA026",
+            "concept.cp-scheduling",
             "course-timetabling",
             "shift-scheduling"
           ]
@@ -13706,7 +13715,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA027"
           ]
         },
         "recommendation": {
@@ -13786,7 +13795,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA028"
           ]
         },
         "recommendation": {
@@ -13865,7 +13874,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA029"
           ]
         },
         "recommendation": {
@@ -13944,7 +13953,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA030"
           ]
         },
         "recommendation": {
@@ -14023,8 +14032,8 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC019",
-            "None"
+            "/formulations/PA031",
+            "EC019"
           ]
         },
         "recommendation": {
@@ -14068,12 +14077,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.knapsack-set-cover"
+          ]
         },
         "gallery": {
           "count": 7,
@@ -14112,12 +14121,13 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA032",
             "budget-allocation",
+            "concept.knapsack-set-cover",
             "ecosystem-restoration-selection",
             "emergency-shelter-selection",
             "irrigation-retrofit-selection",
@@ -14167,12 +14177,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.nonlinear-least-squares"
+          ]
         },
         "gallery": {
           "count": 2,
@@ -14201,13 +14211,14 @@
           ]
         },
         "map": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "/formulations/PA033",
             "EC013",
-            "None",
-            "bilevel-regularized-regression"
+            "bilevel-regularized-regression",
+            "concept.nonlinear-least-squares"
           ]
         },
         "recommendation": {
@@ -14251,12 +14262,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.robust-regression"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -14283,11 +14294,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA034",
+            "concept.robust-regression"
           ]
         },
         "recommendation": {
@@ -14367,7 +14379,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA035"
           ]
         },
         "recommendation": {
@@ -14412,12 +14424,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.simplex-optimization"
+          ]
         },
         "gallery": {
           "count": 2,
@@ -14446,11 +14458,12 @@
           ]
         },
         "map": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA036",
+            "concept.simplex-optimization",
             "energy-cvar-procurement",
             "portfolio-cvar-allocation"
           ]
@@ -14532,7 +14545,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA037",
             "so3-attitude-alignment"
           ]
         },
@@ -14578,12 +14591,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.multiobjective-optimization"
+          ]
         },
         "gallery": {
           "count": 3,
@@ -14614,13 +14627,14 @@
           ]
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "/formulations/PA038",
             "EC017",
-            "None",
             "battery-operation-tradeoff",
+            "concept.multiobjective-optimization",
             "traffic-signal-tradeoff"
           ]
         },
@@ -14701,7 +14715,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA039",
             "hyperparameter-search"
           ]
         },
@@ -14785,8 +14799,8 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC021",
-            "None"
+            "/formulations/PA040",
+            "EC021"
           ]
         },
         "recommendation": {
@@ -14868,7 +14882,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA041"
           ]
         },
         "recommendation": {
@@ -14913,12 +14927,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.optimal-control"
+          ]
         },
         "gallery": {
           "count": 2,
@@ -14947,13 +14961,14 @@
           ]
         },
         "map": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "/formulations/PA042",
             "EC020",
             "EC029",
-            "None"
+            "concept.optimal-control"
           ]
         },
         "recommendation": {
@@ -15034,8 +15049,8 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC025",
-            "None"
+            "/formulations/PA043",
+            "EC025"
           ]
         },
         "recommendation": {
@@ -15116,7 +15131,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA044"
           ]
         },
         "recommendation": {
@@ -15161,12 +15176,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.pde-constrained-program"
+          ]
         },
         "gallery": {
           "count": 2,
@@ -15195,12 +15210,13 @@
           ]
         },
         "map": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "/formulations/PA045",
             "EC026",
-            "None",
+            "concept.pde-constrained-program",
             "topology-cantilever"
           ]
         },
@@ -15282,7 +15298,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA046"
           ]
         },
         "recommendation": {
@@ -15361,7 +15377,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA047"
           ]
         },
         "recommendation": {
@@ -15441,7 +15457,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA048"
           ]
         },
         "recommendation": {
@@ -15521,7 +15537,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA049"
           ]
         },
         "recommendation": {
@@ -15601,7 +15617,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA050"
           ]
         },
         "recommendation": {
@@ -15680,7 +15696,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA051"
           ]
         },
         "recommendation": {
@@ -15759,7 +15775,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA052"
           ]
         },
         "recommendation": {
@@ -15838,7 +15854,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA053"
           ]
         },
         "recommendation": {
@@ -15919,7 +15935,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA054"
           ]
         },
         "recommendation": {
@@ -16000,7 +16016,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA055"
           ]
         },
         "recommendation": {
@@ -16081,7 +16097,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "/formulations/PA056"
           ]
         },
         "recommendation": {
@@ -16161,7 +16177,7 @@
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None",
+            "/formulations/PA057",
             "shape-diffuser"
           ]
         },

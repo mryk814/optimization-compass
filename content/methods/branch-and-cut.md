@@ -4,100 +4,176 @@ kind: method
 method_id: M_BRANCH_CUT
 title_ja: Branch-and-Cut
 title_en: Branch-and-Cut
-summary: MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。
+summary: MILPを分枝限定法で探索しながら、cutで連続緩和を締め、暫定解（incumbent）と界のgapを詰めて最適性を証明する厳密な探索法です。
 source_ids: [S005, S016, S021, S024, S025, S028]
 prerequisites: [branch-and-bound]
-related_ids: [branch-and-bound, cp-sat, lp-qp-conic]
+related_ids: [branch-and-bound, cp-sat, lp-qp-conic, concept.mixed-integer-linear-program, dual-simplex]
 aliases: [/learn/branch-and-cut]
 visualization_ids: [binary-knapsack-bnb-complete, binary-knapsack-bnb-budget]
 comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。
+MILPを分枝限定法で探索しながら、cutで連続緩和を締め、暫定解（incumbent）と界のgapを詰めて最適性を証明する厳密な探索法です。
 
 ## 30秒でつかむ
 
 この手法の気持ちは、整数解を残したまま不要な枝を切り、見るべき探索だけに集中することです。
 
-整数解を残すcutで連続緩和を締めると、改善不能な枝を早く除外できます。
-それでも残る枝だけを探索し、incumbentとbest boundのgapを詰めます。
+整数解をすべて残すcutで連続緩和を締めると、改善できない枝を早く除けます。
+それでも残る枝だけを探索し、暫定解と最良の界のgapを詰めます。
 
-- **見るもの**: LP relaxation、fractional解、incumbent、best bound、gap
-- **動かすもの**: 探索木、各nodeのrelaxation、追加するcut
-- **前進の判断**: incumbentとbest boundのgapが設定したtoleranceへ近づくこと
+- **見るもの**: LP緩和の解・分数になっている変数・暫定解・最良の界・gap
+- **動かすもの**: 探索木、各nodeの緩和、追加するcut
+- **前進の判断**: 暫定解と最良の界のgapが、設定した許容値へ近づくこと
 
-## 探索結果を先に見る
+## 一手の意味
+
+一手は、nodeの緩和を解いて、分数の解を切り落とす不等式（cut）を足す操作です。解き直しても分数の解が残れば、分枝します。
+
+整数条件を外したLP緩和は、整数の実行可能解より良すぎる分数の解を返すことがあります。
+cutは、次の二つを満たす不等式です。
+
+- すべての整数実行可能解を残す
+- いまの分数の解を除外する
+
+cutを足すとLP緩和が締まり、界が下がります（最大化なら上界が下がります）。切り落とされた分数の解に代わって、次のLP解が返ります。
+cutを足したあとのLPは、直前の最適な基底が実行不能になる形です。そのため、[dual simplex法](#/learn/dual-simplex)で解き直すのが自然です。
+
+Branch-and-Cutは、次の六つを統合した、現代的なMILPソルバーの中心的な枠組みです。
+
+1. presolve
+2. LP緩和
+3. cutの生成（separation）
+4. 実行可能解を探すヒューリスティクス（primal heuristic）
+5. 分枝
+6. nodeの枝刈り
+
+### 界とgapをどう読むか
+
+- **暫定解（incumbent / primal bound）**: いま見つかっている最良の整数実行可能解
+- **最良の界（best bound / dual bound）**: 未探索の領域から得られる可能性の限界
+- **gap**: 暫定解と界の差
+
+最小化では、最良の界が暫定解を下から追います。gapが許容値以下になれば、設定した許容値のもとでの最適性を主張できます。
+
+::: warning
+ソルバーが`optimal`と返す場合でも、整数の許容誤差と実行可能性の許容誤差を確認します。
+相対gapと絶対gapも含め、数学的な完全一致ではなく、数値の許容値付きの判定です。
+:::
+
+## 小さな例
+
+[混合整数線形計画](#/learn/concept.mixed-integer-linear-program)の小さな例を使います。[分枝限定法](#/learn/branch-and-bound)では、この問題に五つの緩和を解きました。
+
+$$
+\max\; 5x_1+4x_2 \quad \text{s.t.}\quad 6x_1+4x_2\le 24,\;\; x_1+2x_2\le 6,\;\; x_1,x_2\in\mathbb{Z}_{\ge 0}
+$$
+
+根のLP緩和の解は $(3,\,1.5)$ で、上界は $21$ です。$x_2$ が分数です。ここで分枝する代わりに、cutを探します。
+
+二本の制約を、$1/4$ 倍と $1/2$ 倍して足します。
+
+$$
+\tfrac14(6x_1+4x_2)+\tfrac12(x_1+2x_2)\le \tfrac14\cdot24+\tfrac12\cdot6
+\;\Longrightarrow\; 2x_1+2x_2\le 9
+$$
+
+$x_1+x_2\le 4.5$ です。$x_1$ と $x_2$ は整数なので、和 $x_1+x_2$ も整数です。整数が $4.5$ 以下なら $4$ 以下です。したがって、次のcutが得られます。
+
+$$
+x_1+x_2\le 4
+$$
+
+整数の実行可能点は全部で13個あり、どれもこのcutを満たします（下のPythonで確かめます）。一方、根の解 $(3,\,1.5)$ は $3+1.5=4.5>4$ なので、除外されます。
+
+| 段階 | LP緩和の解 | 上界 | 状態 |
+|---|---|---:|---|
+| cutなし（根） | $(3,\;1.5)$ | $21$ | $x_2$ が分数 |
+| cut $x_1+x_2\le4$ を足した後 | $(4,\;0)$ | $20$ | 整数解。暫定解 $20$ と上界 $20$ が一致し、gapは0 |
+
+一つのcutで、根のLP緩和の解が整数になり、最適性の証明まで終わりました。分枝は一回も必要ありません。
+この例では、分枝限定法が五つの緩和を解いたのに対し、cutは一つ足すだけで済みました。cutが緩和を締める効果が分かります。
+
+この例は小さいから一つのcutで終わります。実際のソルバーは、cutの生成と再最適化を何回か繰り返し（separation round）、それでも分数の解が残れば分枝します。
+どのcutをどれだけ足すかは、ソルバーとversionに依存します。
+
+### 探索結果を先に見る
 
 ![4変数0-1 knapsackを9 nodeまで決定論的に探索したBranch-and-Bound木。各nodeに部分割当、value、bound、枝刈り状態を示し、最終的にbest feasible 15とglobal bound 15が一致してgap 0になる。](./media/search-tree-proof-execution.svg "Branch-and-Cutの土台になるBranch-and-Boundを固定Python generatorで実行した結果です。cut生成やMILP solverの性能は示しません。")
 
-緑の最適nodeだけでなく、灰色のbound枝刈りと赤い実行不能nodeを見ます。解を一つ得ることと、未探索領域に改善余地がないと証明することは別です。
+緑の最適nodeだけでなく、灰色の界による枝刈りと、赤い実行不能nodeも見ます。解を一つ得ることと、未探索の領域に改善余地がないと証明することは別です。
 
-## Cutは何をするか
+### 探索木で基礎部分を確認する
 
-MILPのLP relaxationは整数条件を外すため、整数実行可能解より良すぎるfractional解を返すことがあります。cutting planeは、
-
-- すべての整数実行可能解を残す
-- 現在のfractional解を除外する
-
-不等式を追加し、relaxationを強くします。
-
-Branch-and-Cutは、
-
-1. presolve
-2. LP relaxation
-3. cut separation
-4. primal heuristic
-5. branching
-6. node pruning
-
-を統合した現代的なMILPソルバーの中心的枠組みです。
-
-## boundとgapをどう読むか
-
-- **incumbent / primal bound**: 現在見つかっている最良整数実行可能解
-- **best bound / dual bound**: 未探索領域から得られる可能性の限界
-- **gap**: incumbentとboundの差
-
-minimizationではbest boundがincumbentを下から追い、gapが許容値以下になれば、設定したtoleranceにおける最適性を主張できます。
-
-::: warning
-ソルバーが`optimal`と返す場合でも、整数許容誤差と実行可能性許容誤差を確認します。
-相対gapと絶対gapも含め、数学的な完全一致ではなく数値許容値付きの判定です。
-:::
-
-## 探索木で基礎部分を確認する
-
-[最後まで探索した木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE)では、incumbentの更新とboundによる枝刈りを追えます。
+[最後まで探索した木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE)では、暫定解の更新と、界による枝刈りを追えます。
 最後にgapが閉じるところまで確認できます。
-[予算で止めた木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_BUDGET)では、同じ問題を途中で止めたときに何が未証明として残るかを確認できます。
+[予算で止めた木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_BUDGET)では、同じ問題を途中で止めたときに、何が未証明として残るかを確認できます。
 
 [2つの停止条件を並べる](#/compare/COMPARE_KNAPSACK_BNB_BUDGET)では、問題とseedを固定しています。
-branch順、bound計算、評価予算も同じです。
+分岐の順、界の計算、評価の予算も同じです。
 nodeの停止上限だけを変えた差を読めます。
 
 これらはBranch-and-Cutの土台であるBranch-and-Boundの教材です。
-cut生成、separation round、root relaxationの強化そのものは表示しません。
-Branch-and-Cut実装のsolver rankingでもありません。
+cutの生成、separation round、根の緩和の強化そのものは表示しません。
+Branch-and-Cut実装のソルバーのrankingでもありません。
 
-## まず確認すること
+## 向く条件・避ける条件
 
-Branch-and-Cutの性能はアルゴリズムの設定値だけでなく、定式化に強く依存します。
-
-確認項目:
+Branch-and-Cutの性能は、アルゴリズムの設定値だけでなく、定式化に強く依存します。まず次を確認します。
 
 - Big-Mが必要以上に大きくないか
-- symmetryがないか
-- variable boundsが十分tightか
-- strong formulationやvalid inequalityがあるか
+- 対称性がないか
+- 変数の上下限（bound）が十分に締まっているか
+- 強い定式化や有効不等式（valid inequality）があるか
 - presolveで固定できる変数があるか
-- 初期incumbentをwarm startできるか
+- 初期の暫定解をwarm startとして与えられるか
 - 係数の桁が極端でないか
 
-## Python: MILPをsolverへ渡す
+向いているのは、線形緩和が強いMILPです。
+避ける、または切り替える場面は次のとおりです。
 
-次の例ではcutやbranchingを手実装せず、HiGHS backendへmodelを渡します。
+- 論理関係・reification・schedulingの大域制約（global constraint）が中心。[CP-SAT](#/learn/cp-sat)が自然に表現できる場合があります。
+- 専用のflow・matching・DP・CPの構造がある。専用法へ戻ります。
+
+CP-SATとMILPのどちらが良いかは、同じ現実問題でも、定式化によって変わります。
+
+## Python
+
+小さな例のcutを、LPで確かめます。cutを足す前後で、LP緩和の解と上界がどう変わるかを見ます。
+
+```python
+from scipy.optimize import linprog
+
+c = [-5, -4]  # 最大化 5 x1 + 4 x2 を最小化に直す
+a_ub, b_ub = [[6, 4], [1, 2]], [24, 6]
+
+
+def solve(a, b):
+    result = linprog(c, A_ub=a, b_ub=b, bounds=[(0, None)] * 2, method="highs")
+    return (result.x.round(3) + 0.0).tolist(), round(-result.fun, 3)
+
+
+print("緩和", solve(a_ub, b_ub))
+
+# cut  x1 + x2 <= 4  は、次の丸めで作れる:
+# (1/4) * (6 x1 + 4 x2 <= 24) + (1/2) * (x1 + 2 x2 <= 6)  ->  2 x1 + 2 x2 <= 9
+# x1 + x2 は整数なので、右辺 4.5 を切り下げて  x1 + x2 <= 4
+points = [(i, j) for i in range(5) for j in range(4) if 6 * i + 4 * j <= 24 and i + 2 * j <= 6]
+print("整数実行可能点の数", len(points), " すべて cut を満たす", all(i + j <= 4 for i, j in points))
+print("cut 後", solve(a_ub + [[1, 1]], b_ub + [4]))
+```
+
+```text
+緩和 ([3.0, 1.5], 21.0)
+整数実行可能点の数 13  すべて cut を満たす True
+cut 後 ([4.0, 0.0], 20.0)
+```
+
+### MILPをソルバーへ渡す
+
+次の例では、cutや分枝を手で実装せず、HiGHSにモデルを渡します。
 
 ```python
 import numpy as np
@@ -117,34 +193,43 @@ result = milp(
 print(result.success, result.x, -result.fun, result.message)
 ```
 
-実装がどのcut familyを有効にするか、どのheuristicを使うかはsolverとversionに依存します。
+```text
+True [1. 1. 0. 0.] 13.0 Optimization terminated successfully. (HiGHS Status 7: Optimal)
+```
+
+実装がどのcutの種類を有効にするか、どのヒューリスティクスを使うかは、ソルバーとversionに依存します。
 
 ## 診断値
 
-- root relaxation gap
-- incumbent / best bound / relative gap
-- node count
-- LP iteration数
-- cut countとcut efficacy
-- feasible solutionが最初に見つかるまでの時間
+- 根の緩和のgap
+- 暫定解・最良の界・相対gap
+- 探索したnode数
+- LPのiteration数
+- cutの数と、cutの効き目（cut efficacy）
+- 最初の実行可能解が見つかるまでの時間
 - memory
-- presolve reduction
-- termination reason
+- presolveで減った変数・制約の数
+- 停止した理由（termination reason）
 
-## CP-SATとの違い
-
-Branch-and-Cutは線形緩和が強いMILPで力を発揮します。CP-SATは論理関係、reification、scheduling global constraintなどを自然に表現できる場合があります。どちらが良いかは、同じ現実問題でも定式化によって変わります。
+判断の目安は次のとおりです。
+根の緩和のgapが大きいまま残るなら、cutが効いていないか、定式化が弱いと疑います。
+cutを足して根の界がどこまで下がったかを、探索の前後で比べます。
 
 ## 失敗・切替の兆候
 
-- root gapが大きいまま
-- node数が指数的に増える
-- incumbentが長時間見つからない
-- memoryがtreeで増大
-- Big-Mによる数値warning
-- symmetryで同等解を繰り返し探索
-- 専用flow、matching、DP、CP構造を無視している
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 根のgapが大きいまま | 定式化が弱い。cutが効かない | Big-Mや上下限を見直す。有効不等式を足す |
+| nodeの数が指数的に増える | 界が弱い。対称性が大きい | 定式化を締める。対称性を崩す制約を足す |
+| 暫定解が長時間見つからない | 実行可能解を作る手がかりが弱い | 初期の暫定解を与える。ヒューリスティクスを使う |
+| memoryが探索木で増大する | nodeの増えすぎ | 探索の順序を見直す。定式化を見直す |
+| Big-Mによる数値warningが出る | Big-Mが大きすぎる | 根拠のある最小の値に取り直す |
+| 同等の解を繰り返し探索している | 対称性 | 順序を付ける制約で崩す |
+| 専用のflow・matching・DP・CPの構造を無視している | 構造の見落とし | 専用法や[CP-SAT](#/learn/cp-sat)へ切り替える |
 
 ## 次に読む
 
-探索木の基本は[Branch-and-Bound](#/learn/branch-and-bound)、論理制約中心のmodelは[CP-SAT](#/learn/cp-sat)で確認できます。
+- [混合整数線形計画](#/learn/concept.mixed-integer-linear-program)：小さな例の問題を定式化から読み直す
+- [Branch-and-Bound](#/learn/branch-and-bound)：cutを使わない探索木の基本
+- [Dual simplex法](#/learn/dual-simplex)：cutを足したあとのLPを解き直す仕組み
+- [CP-SAT](#/learn/cp-sat)：論理制約が中心のモデルでの別の道

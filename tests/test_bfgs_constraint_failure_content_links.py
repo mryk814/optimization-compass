@@ -13,7 +13,9 @@ def test_bfgs_guide_foregrounds_constraint_failure_before_line_search() -> None:
     assert "#/theater/learning/SCENARIO_CONSTRAINED_DISK" in bfgs.body
     assert "#/compare/COMPARE_CONSTRAINED_FAILURE" in bfgs.body
     assert "目的関数値が下がっても、制約違反が残る点は解ではありません" in bfgs.body
-    assert "solverの一般性能rankingにも使いません" in bfgs.body
-    assert bfgs.body.index("## 制約処理はBFGSの外にある") < bfgs.body.index(
-        "## 直線探索（line search）の役割"
-    )
+    assert "ソルバーの一般的な性能ランキングにも使いません" in bfgs.body
+    # The constraint warning is read before any code, in the conditions section.
+    conditions = bfgs.body.index("## 向く条件・避ける条件")
+    warning = bfgs.body.index("制約違反が残る点は解ではありません", conditions)
+    assert warning < bfgs.body.index("## Python")
+    assert "## コラム: 制約処理はBFGSの外にある" in bfgs.body

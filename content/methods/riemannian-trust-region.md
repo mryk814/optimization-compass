@@ -4,42 +4,85 @@ kind: method
 method_id: M_RIEMANNIAN_TRUST_REGION
 title_ja: Riemann trust-region法
 title_en: Riemannian Trust-Region
-summary: 接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。
+summary: 接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。
 source_ids: [S044, S045, S071]
 related_ids: [riemannian-gradient, trust-region-newton-cg, family.manifold, family.trust-region]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-09-30
 ---
 
-接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。
+接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。
 
 ## 30秒でつかむ
 
-Riemann trust-region法は、接空間上の二次modelをtrust radius内で解き、retractionで多様体上へ戻す二階法です。
+球面上で近くの地図を信用する範囲を決め、予想した下り具合と実際の下り具合を比べます。
 
-## Euclid版trust-regionとの対応
+Riemann trust-region法は、接空間上の二次モデルをtrust radius内で解き、多様体へ戻す写像で多様体上へ戻す二階法です。
 
-[Trust-region Newton-CG](#/learn/trust-region-newton-cg)は、現在点まわりの二次modelをEuclid空間上のtrust radius $\Delta_k$ の内側だけで信用し、truncated CGで近似解を求めます。Riemann trust-region法はこの考え方を多様体上へそのまま持ち込みます。二次modelを作る場となる空間が、Euclid空間ではなく現在点の接空間に置き換わる点だけが違います。接空間は局所的に平坦なので、Euclid版の部分問題の解法や採用判定の枠組みをほぼそのまま流用できます。
+## 一手の意味
 
-## 接空間上で何を解いているか
+目的値の実際の減少を、接空間の近似が予測した減少で割ります。
 
-各stepでは、Riemann勾配とRiemann Hessian（接空間上の二次形式）を使って部分問題
+$$
+\rho_k=\frac{f(x_k)-f(R_{x_k}(p_k))}{m_k(0)-m_k(p_k)}
+$$
+
+分母が正の候補でこの比を計算し、採用と半径更新を決めます。
+
+### Euclid版trust-regionとの対応
+
+[Trust-region Newton-CG](#/learn/trust-region-newton-cg)は、現在点まわりの二次モデルをEuclid空間で作ります。
+信頼半径 $\Delta_k$ の内側だけを信用し、打切り共役勾配法で近似解を求めます。
+Riemann trust-region法はこの考え方を多様体上へそのまま持ち込みます。
+二次モデルを作る場となる空間が、Euclid空間ではなく現在点の接空間に置き換わる点だけが違います。
+接空間は局所的に平坦なので、Euclid版の部分問題の解法や採用判定の枠組みをほぼそのまま流用できます。
+
+### 接空間上で何を解いているか
+
+各一歩では、Riemann勾配とRiemann Hessian（接空間上の二次形式）を使って部分問題
 
 $$
 \min_{\|p\|\le \Delta_k,\, p \in T_x M} \; m_k(p)
 $$
 
-をtruncated CGで近似的に解きます。$T_xM$ は現在点$x$における接空間です。得られた候補stepをretractionで多様体上の点へ写し、実際の目的値の改善と modelが予測した改善の比 $\rho_k$ を見て採用・棄却とtrust radiusの更新を判断します。この流れはEuclid版trust-regionの判定ロジックと同じで、幾何の分だけ「二次modelを作る場所」と「stepを多様体へ戻す操作」が追加されています。
+をtruncated CGで近似的に解きます。
+$T_xM$ は現在点$x$における接空間です。
+候補の一歩を、多様体へ戻す写像で多様体上の点へ写します。
+実際の改善とモデルが予測した改善の比 $\rho_k$ を確認します。
+この比から候補の採否と信頼半径の更新を判断します。
+この流れはEuclid版trust-regionの判定ロジックと同じで、幾何の分だけ「二次モデルを作る場所」と「一歩を多様体へ戻す操作」が追加されています。
 
-## Riemann Hessianの入手性という課題
+### Riemann Hessianの入手性という課題
 
-Riemann Hessianは、Euclid Hessianを接空間へ射影し、さらに多様体の曲率に由来する補正項を加えて得られます。この補正項は多様体ごとに異なる幾何量で、Euclid Hessianをそのまま接空間へ落とすだけでは正しいRiemann Hessian-vector積になりません。多くの実務ではこの計算を手で導出せず、Pymanopt（S044）やManopt（S045）が提供する自動微分ベースのRiemann Hessian近似を利用します。
+Riemann Hessianは、Euclid Hessianを接空間へ射影し、さらに多様体の曲率に由来する補正項を加えて得られます。
+この補正項は多様体ごとに異なる幾何量で、Euclid Hessianをそのまま接空間へ落とすだけでは正しいRiemann Hessian-vector積になりません。
+多くの実務ではこの計算を手で導出せず、Pymanopt（S044）やManopt（S045）が提供する自動微分ベースのRiemann Hessian近似を利用します。
 
-## 一次法から乗り換える理由
+## 小さな例
 
-[Riemann勾配法](#/learn/riemannian-gradient)は実装が単純で初期の収束が速いことがありますが、局所解付近での収束が遅くなったり、鞍点付近で長く停滞したりすることがあります。Riemann trust-region法は二次情報を使うため、良い近傍では収束が速く、また負の曲率方向を検出しやすいという性質から、鞍点からの脱出にも使われます。一次法で目的値の減少が長時間止まったときに、高精度化の手段として検討する位置づけです。
+Python節の $A=\operatorname{diag}(1,2,4)$、$x=(1,1,1)/\sqrt3$ を使います。
+接勾配の負方向を長さ0.25に制限し、正規化して球面へ戻します。
 
-## 向いている条件
+| 反復 | $x_1$ | $x_2$ | $x_3$ | 目的値 |
+|---|---:|---:|---:|---:|
+| 1 | 0.7098 | 0.5975 | 0.3730 | 1.7744 |
+| 2 | 0.8213 | 0.5472 | 0.1615 | 1.3776 |
+| 3 | 0.9170 | 0.3988 | -0.0075 | 1.1592 |
+
+この3候補では実際の目的値が下がり、すべて採用されます。
+半径制限と多様体へ戻す操作の簡略例です。
+二次部分問題、改善比、半径更新を含む完全な信頼領域法の反復ではありません。
+
+## 向く条件・避ける条件
+
+### 一次法から乗り換える理由
+
+[Riemann勾配法](#/learn/riemannian-gradient)は実装が単純で初期の収束が速いことがありますが、局所解付近での収束が遅くなったり、鞍点付近で長く停滞したりすることがあります。
+Riemann trust-region法は二次情報を使うため、良い近傍では収束が速くなります。
+負の曲率方向も検出しやすく、鞍点からの脱出にも使われます。
+一次法で目的値の減少が長時間止まったときに、高精度化の手段として検討する位置づけです。
+
+### 向いている条件
 
 - 変数が既知の多様体構造を持つ（球面、Stiefel、Grassmann、SO(3)など）
 - Riemann勾配に加えてRiemann Hessianまたはそのvector積が利用できる
@@ -50,7 +93,8 @@ Hessian情報が得られない、または多様体構造自体が本質でな�
 
 ## Python
 
-次は単位球面を多様体として、Euclid勾配を接空間へ射影し、trust radius内のstepを正規化retractionで戻す最小例です。完全なtrust-region法ではHessianとtruncated CGも使います。
+次は単位球面を多様体として、Euclid勾配を接空間へ射影し、trust radius内の一歩を正規化多様体へ戻す写像で戻す最小例です。
+完全なtrust-region法ではHessianとtruncated CGも使います。
 
 ```python
 import numpy as np
@@ -75,25 +119,28 @@ for _ in range(30):
 print("point:", x, "cost:", x @ matrix @ x)
 ```
 
-gradient、Hessian-vector product、retractionは多様体ごとに異なる幾何演算です。実務では[Pymanopt](https://pymanopt.org/)の公式referenceでtrust-region solverの利用versionに対応する説明を確認します。
+勾配、Hessian-vector product、多様体へ戻す写像は多様体ごとに異なる幾何演算です。
+実務では[Pymanopt](https://pymanopt.org/)の公式referenceでtrust-region ソルバーの利用versionに対応する説明を確認します。
 
 ## 診断値
 
-- Riemannian gradient norm
+- Riemann勾配ノルム
 - trust radius $\Delta_k$
-- actual / predicted reduction ratio $\rho_k$
-- inner truncated CG iteration数
-- retraction error
-- accepted / rejected step数
+- actual / predicted 簡約 ratio $\rho_k$
+- inner truncated CG 反復数
+- 多様体へ戻す写像 error
+- accepted / rejected 一歩数
 
 ## 失敗・切替の兆候
 
-- Riemann gradient検査（有限差分との一致確認）が合わない
-- retraction後に多様体制約からのずれが大きい
-- chart依存の特異点付近でstepの挙動が不安定になる
-- trust radiusが縮み続け候補stepがほぼ採用されない
-- Riemann Hessian近似の質がsolverによって大きく違う
+- Riemann 勾配検査（有限差分との一致確認）が合わない
+- 多様体へ戻す写像後に多様体制約からのずれが大きい
+- chart依存の特異点付近で一歩の挙動が不安定になる
+- trust radiusが縮み続け候補の一歩がほぼ採用されない
+- Riemann Hessian近似の質がソルバーによって大きく違う
 
 ## 次に読む
 
 一次法から始めたいときは[Riemann勾配法](#/learn/riemannian-gradient)、多様体手法全体の選び分けは[Riemann多様体最適化の選び分け](#/learn/family.manifold)を確認します。
+
+- 問題の形を確認する: [回転群上の最適化](#/formulations/PA037)

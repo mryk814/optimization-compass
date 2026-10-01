@@ -10,136 +10,192 @@ related_ids: [least-squares, newton-method, trust-region-newton-cg]
 visualization_ids: [root-finding-component-tolerance, root-finding-small-squared-residual]
 comparison_ids: [COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、合計lossだけでなく観測ごとの残差を見ることです。
-`parameter`の変化に対する残差の動きを使い、全ての残差をまとめて小さくします。
+複数の観測点で、モデルの予測が観測とずれています。ずれの合計だけを見るのではなく、観測ごとのずれを並べて見ます。
+パラメータを少し動かすと、各観測のずれがどれだけ動くかが分かります。その動きを使い、全部のずれを同時に小さくする向きを、一度の線形の計算で決めます。これがGauss–Newton法です。
 
-- 見ているもの: 残差vectorとJacobian
-- 動かしているもの: parameter・線形化されたleast-squares step
-- 前進の判断: 二乗和、残差分布、gradient相当量の低下
-- 恐れていること: rank deficiency／外れ値／初期値の悪さ／大きな残差での近似誤差
+- **見るもの**: 残差ベクトル（観測ごとのずれ）とヤコビ行列（Jacobian）
+- **動かすもの**: パラメータ。一手は、線形化した最小二乗問題の解で決める
+- **前進の判断**: 二乗和、残差の分布、勾配に相当する量 $J^\top r$ が下がること
 
-一般のNewton法とは異なり、目的関数が残差二乗和であることを利用してHessianの一部を近似します。
+一般のNewton法は、Hessianをそのまま使います。Gauss–Newton法は、目的が残差の二乗和であることを利用して、Hessianの一部だけを近似します。
 
-## 仕組み
+## 一手の意味
 
-残差 $r(x)$ を現在点の近くで線形化します。
+残差 $r(x)$ を現在点の近くで線形化します。次の式は、パラメータを $p$ だけ動かしたときの残差を、Jacobianで見積もるものです。
 
 $$
 r(x+p) \approx r(x) + J(x)p
 $$
 
-その近似残差の二乗和を最小にするstepを求めます。
+この見積もりの二乗和を最小にする $p$ が、一手です。線形最小二乗問題の正規方程式を解くことになります。
 
 $$
-J^T J p = -J^T r
+J^T J\, p = -J^T r
 $$
 
-$J^T J$を直接作るとcondition numberが悪化する場合があります。
-実装ではQR・SVD・疎linear algebra・trust-regionを使うことがあります。
+Newton法との関係を見ます。二乗和 $\tfrac12\|r\|^2$ の勾配は $J^T r$ で、Hessianは $J^T J$ に、残差と二階微分の項を足したものです。Gauss–Newton法は、その足す項を落とします。
+残差が小さいほど落とす項も小さいので、解の近くで残差が小さい問題ほど、この近似は良く効きます。
 
-## まず確認すること
+$J^T J$ を直接作ると、条件数が悪化する場合があります。実装では、QR分解や特異値分解（SVD）を使います。疎な線形代数や信頼領域を使う実装もあります。
 
-| 項目 | 確認内容 |
-|---|---|
-| formulation | 目的が本当に残差二乗和として意味を持つか |
-| residual | 観測ごとの残差を返せるか |
-| Jacobian | 正確または安定に計算できるか |
-| weighting | 単位・noise分散に応じたweightが必要か |
-| identifiability | parameterがデータから区別できるか |
-| constraints | boundsや一般制約をどう扱うか |
+## 小さな例
 
-線形最小二乗なら反復法よりQRやSVDを先に検討します。
-外れ値がある場合はrobust lossの意味を明示します。
+[非線形最小二乗](#/learn/concept.nonlinear-least-squares)の記事と同じ、指数減衰の当てはめです。
+時刻 $t=0,1,2,3,4$ で量 $y=5.1,\,3.0,\,1.9,\,1.1,\,0.7$ を観測しました。
+モデル $y=a\,e^{-kt}$ の $(a,\,k)$ を求めます。初期値は $(a,k)=(1,\,0.1)$ とします。
+
+初期値での残差 $r_i=a\,e^{-kt_i}-y_i$ とJacobianです。
+
+| $t_i$ | 残差 $r_i$ | $\partial r_i/\partial a$ | $\partial r_i/\partial k$ |
+|---:|---:|---:|---:|
+| 0 | −4.100 | 1.000 | 0.000 |
+| 1 | −2.095 | 0.905 | −0.905 |
+| 2 | −1.081 | 0.819 | −1.637 |
+| 3 | −0.359 | 0.741 | −2.222 |
+| 4 | −0.030 | 0.670 | −2.681 |
+
+ここから $J^T J$ と $J^T r$ を作ります。
+
+$$
+J^T J\approx\begin{pmatrix}3.487&-5.603\\-5.603&15.629\end{pmatrix},\qquad J^T r\approx\begin{pmatrix}-7.167\\4.544\end{pmatrix}
+$$
+
+$J^T J\,p=-J^T r$ を解くと、一手は $p\approx(3.746,\,1.052)$ です。これを何回か繰り返します。
+
+| 反復 | $a$ | $k$ | 目的値 $\tfrac12\sum r_i^2$ | 次の一手 $(\Delta a,\,\Delta k)$ |
+|---:|---:|---:|---:|---|
+| 0 | 1.000 | 0.100 | 11.25 | $(3.746,\ 1.052)$ |
+| 1 | 4.746 | 1.152 | 2.870 | $(0.287,\ -1.177)$ |
+| 2 | 5.033 | −0.025 | 29.32 | $(-0.609,\ 0.211)$ |
+| 3 | 4.424 | 0.186 | 3.119 | $(0.470,\ 0.220)$ |
+| 4 | 4.894 | 0.407 | 0.1854 | $(0.171,\ 0.088)$ |
+| 5 | 5.065 | 0.495 | 0.005745 | $(0.013,\ 0.010)$ |
+| 6 | 5.078 | 0.505 | 0.004082 | ほぼ $0$ |
+
+最終的に $(a,k)\approx(5.0787,\,0.5049)$ に着きます。ただし、途中の反復2で目的値が $2.87$ から $29.3$ へ跳ね上がっています。
+反復1の点で決めた一手は、$k$ を $1.15$ から $-0.03$ まで大きく動かします。線形化した残差が信じられるのは、現在点の近く、つまり短い一手までです。指数関数の曲がりを無視した一手は、そこまでは通用しません。
+
+初期値が解に近ければ、同じ手続きが素直に収束します。初期値 $(5,\,0.3)$ の目的値は、$1.369 \to 0.0545 \to 0.00427 \to 0.00408$ と、3回の更新で下がりきります。
+一手が長すぎる問題への対策が、次に読む[非線形最小二乗とLevenberg–Marquardt法](#/learn/least-squares)の減衰項です。
 
 ## 向く条件・避ける条件
 
-向きやすい条件:
+先に、次の項目を確認します。
 
-- curve fitting、parameter estimation、bundle adjustmentなどの非線形最小二乗
-- 残差Jacobianを利用できる
-- 解の近くで残差が小さい、またはmodelがよく合う
+| 項目 | 確認内容 |
+|---|---|
+| 定式化 | 目的が、本当に残差の二乗和として意味を持つか |
+| 残差 | 観測ごとの残差を返せるか |
+| Jacobian | 正確に、または安定に計算できるか |
+| 重み | 単位やノイズの分散に応じた重みが必要か |
+| 識別可能性 | パラメータがデータから区別できるか |
+| 制約 | 上下限や一般制約をどう扱うか |
+
+線形最小二乗なら、反復法より先にQR分解やSVDを検討します（[線形最小二乗](#/learn/concept.linear-least-squares)）。
+外れ値がある場合は、頑健な損失（robust loss）の意味を明示します。
+
+向く条件です。
+
+- 曲線の当てはめ、パラメータ推定、バンドル調整などの非線形最小二乗である（[非線形最小二乗](#/learn/concept.nonlinear-least-squares)）
+- 残差のJacobianを利用できる
+- 解の近くで残差が小さい、またはモデルがよく合う
 - 観測ごとの残差を診断したい
 
-避ける条件:
+避ける、または切り替える条件です。
 
-- 一般目的関数を無理に一つの残差へ置き換える
-- 不連続・離散変数・強いoutlierを未処理
-- Jacobianのrankが低くparameterが識別不能
-- 大域最適性certificateが必要
+- 一般目的関数を、無理に一つの残差へ置き換えている → [滑らかな無制約の最小化](#/formulations/PA006)として[BFGS](#/learn/bfgs)などを検討する
+- 一手が大きく振動する、初期値が遠い → 減衰や信頼領域のある[Levenberg–Marquardt法](#/learn/least-squares)へ切り替える
+- 上下限が本質である → [Trust Region Reflective](#/learn/trust-region-reflective)
+- 不連続、離散変数、強い外れ値を未処理のまま扱っている
+- Jacobianのランクが低く、パラメータが識別できない
+- 大域最適性の証明（certificate）が必要である
 
 ## Python
+
+次の例は、上の小さな例と同じ問題を、Gauss–Newton法で解く最小の実装です。一手は、線形最小二乗の求解関数 `lstsq` で求めます。
 
 ```python
 import numpy as np
 
-x_data = np.array([0.0, 1.0, 2.0, 3.0])
-y_data = np.array([1.1, 2.9, 5.2, 6.8])
+t = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+y = np.array([5.1, 3.0, 1.9, 1.1, 0.7])
 
 
-def residuals(parameters: np.ndarray) -> np.ndarray:
-    slope, intercept = parameters
-    return slope * x_data + intercept - y_data
+def residuals(p: np.ndarray) -> np.ndarray:
+    a, k = p
+    return a * np.exp(-k * t) - y
 
 
-def jacobian(parameters: np.ndarray) -> np.ndarray:
-    del parameters
-    return np.column_stack([x_data, np.ones_like(x_data)])
+def jacobian(p: np.ndarray) -> np.ndarray:
+    a, k = p
+    e = np.exp(-k * t)
+    return np.column_stack([e, -a * t * e])
 
 
-parameters = np.array([1.0, 0.0])
-for _ in range(5):
-    residual = residuals(parameters)
-    matrix = jacobian(parameters)
-    step, *_ = np.linalg.lstsq(matrix, -residual, rcond=None)
-    parameters = parameters + step
+def gauss_newton(p: np.ndarray, iterations: int = 8) -> tuple[np.ndarray, list[float]]:
+    costs = [0.5 * float(np.sum(residuals(p) ** 2))]
+    for _ in range(iterations):
+        step, *_ = np.linalg.lstsq(jacobian(p), -residuals(p), rcond=None)
+        p = p + step
+        costs.append(0.5 * float(np.sum(residuals(p) ** 2)))
+    return p, costs
 
-print(parameters, np.linalg.norm(residuals(parameters)))
+
+for start in ([1.0, 0.1], [5.0, 0.3]):
+    p, costs = gauss_newton(np.array(start))
+    print(start, np.round(p, 4), [f"{c:.4g}" for c in costs[:5]])
+# [1.0, 0.1] [5.0787 0.5049] ['11.25', '2.87', '29.32', '3.119', '0.1854']
+# [5.0, 0.3] [5.0787 0.5049] ['1.369', '0.05453', '0.004266', '0.004082', '0.004082']
 ```
+
+出力は、最終のパラメータと、最初の5回の目的値です。
+二つの初期値は同じ答えに着きますが、遠い初期値では、目的値が途中で増えています。この実装には安全策がないので、実用では減衰や信頼領域を加えます。
 
 ## 診断値
 
-残差を一つのnormにまとめるだけでなく、観測別の偏りとparameterの安定性を分けて確認します。
+残差を一つのノルムにまとめるだけでなく、観測ごとの偏りとパラメータの安定性を分けて確認します。
 
-- residual normと観測別residual pattern
-- Jacobian rank / singular values
-- step norm
-- gradient相当の $J^T r$
-- trust radiusまたはdamping
-- 初期値ごとのparameter差
+- 残差のノルムと、観測ごとの残差のパターン
+- Jacobianのランクと特異値
+- 一手のノルム
+- 勾配に相当する $J^T r$
+- 信頼半径、または減衰の大きさ
+- 初期値ごとのパラメータの差
 
-## うまくいったサインと切替サイン
+## 失敗・切替の兆候
 
-- stepが大きく振動する → Levenberg–Marquardtやtrust-regionへ切り替える
-- rank deficiencyがある → parameterization、regularization、固定parameterを見直す
-- 一部観測だけ残差が大きい → model mismatch、outlier、weightを確認する
-- 二乗和は小さいがparameterが不安定 → identifiabilityを疑う
-- constraintsが本質 → constrained least-squares対応または一般NLPへ切り替える
+- 一手が大きく振動する、または目的値が増える → 線形化が長い一手では通用しない → Levenberg–Marquardt法や信頼領域法へ切り替える
+- ランク不足がある → パラメータの効果を区別できない → パラメータ化、正則化、固定するパラメータを見直す
+- 一部の観測だけ残差が大きい → モデルの不一致、外れ値、重みの問題がある → それぞれを確認する
+- 二乗和は小さいのにパラメータが不安定 → 識別可能性が足りない → データや実験設計を見直す
+- 制約が本質である → 上下限や一般制約を扱えない → 制約つきの最小二乗の手法、または一般の非線形計画へ切り替える
 
 ## コラム: 最小二乗の局所性を見落とさない
 
-残差の二乗和が下がっても、モデルの識別性や観測の偏りまで解決したとは限りません。残差patternとparameterの安定性を分けて確認します。
+残差の二乗和が下がっても、モデルの識別性や観測の偏りまで解決したとは限りません。残差のパターンとパラメータの安定性を分けて確認します。
 
-## 残差vectorと二乗和を分けて見る
+### 残差ベクトルと二乗和を分けて見る
 
 [各残差を確認するTrace](#/traces/root-finding-component-tolerance)と[二乗残差だけで止めるTrace](#/traces/root-finding-small-squared-residual)は、同じ固定問題を使います。
-変えるのは停止規則だけです。
-[残差の比較](#/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE)では、二乗和が小さくても一つの成分が要求精度を満たさない状態を確認します。
+変えるのは、停止規則だけです。
+[残差の比較](#/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE)では、二乗和が小さくても、一つの成分が要求精度を満たさない状態を確認します。
 
-これは`root solver`と`least-squares solver`の性能比較ではありません。
-Gauss–Newton実装・Jacobian近似・収束速度も順位付けしません。
-残差のscaleと成分別toleranceを終了判定へ残すためのcontrastです。
+これは、`root solver` と `least-squares solver` の性能比較ではありません。
+Gauss–Newton法の実装、Jacobianの近似、収束速度も順位付けしません。
+残差の尺度と成分別の許容値を、終了判定へ残すための対比です。
 
 ## 次に読む
 
-Gauss–Newton stepが大きすぎる、Jacobianが悪条件、初期点が遠い場合にはdampingやtrust regionが必要です。
-Levenberg–Marquardtはその代表的な安定化です。
+- [非線形最小二乗とLevenberg–Marquardt法](#/learn/least-squares)：一手が大きすぎる、Jacobianが悪条件、初期点が遠い場合の安定化
+- [非線形最小二乗](#/learn/concept.nonlinear-least-squares)：この手法が解く問題の標準形と見分け方
+- [線形最小二乗](#/learn/concept.linear-least-squares)：各反復の中で解かれている問題
+- [Newton法](#/learn/newton-method)：Hessianをそのまま使う場合との違い
 
-実務上は[非線形最小二乗とLevenberg–Marquardt](#/learn/least-squares)を入口にします。
-残差／Jacobian／rank／停止statusを一緒に保存してください。
+実務では、次の四つを一緒に保存してください。残差・Jacobian・ランク・停止時の状態（status）です。

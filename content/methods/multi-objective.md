@@ -4,7 +4,7 @@ kind: method
 method_id: M_NSGA_II
 title_ja: 多目的最適化とPareto front
 title_en: Multi-objective Optimization and the Pareto Front
-summary: 複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。
+summary: 複数目的を根拠なく一つの得点へ潰さず、支配・Pareto集合・選好を分けて交換関係候補を作る最適化です。
 source_ids: [S039, S055, S068]
 prerequisites: []
 related_ids: [concept.convexity, cma-es, constrained-continuous]
@@ -14,68 +14,129 @@ aliases: [/learn/multi-objective]
 visualization_aliases: [biobjective-quadratic-pareto-front|/theater/multi-objective]
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。
+複数目的を根拠なく一つの得点へ潰さず、支配・Pareto集合・選好を分けて交換関係候補を作る最適化です。
 
 ## 30秒でつかむ
 
-多目的最適化の成果物は、単一のbestではなく、互いにdominateされない候補の集合です。
-**Pareto候補を作る計算、限られたevaluation budgetで比較する実験、最終的なpreferenceによる選択**を分けて扱います。
+車の価格と燃費を比べると、一方で優れる車が他方では劣ることがあります。多目的最適化は、その交換関係を候補集合として残します。
 
-- 見ているもの: objective vector、domination、Pareto front、selected solution
-- 動かしているもの: decision variableと候補集合
-- 前進の判断: 非支配候補のcoverageと再現性が、固定したbudget・seed・停止条件の下で改善するか
-- 別に確認するもの: objective direction、normalization、reference point、decision space
-- 恐れていること: infeasible候補の混入、単一のscoreへの過剰な圧縮、比較条件の不一致
+多目的最適化の成果物は、単一の最良ではなく、互いに支配されない候補の集合です。
+**Pareto候補を作る計算、限られた評価予算で比較する実験、最終的な選好による選択**を分けて扱います。
 
-frontが広がったことだけでは、最終選択が決まったことになりません。
+- 見るもの: 目的ベクトル、支配、Paretoフロント、選んだ解
+- 動かすもの: 決定変数と候補集合
+- 前進の判断: 非支配候補の被覆範囲と再現性が、固定した予算・乱数種・停止条件の下で改善するか
 
-非支配候補のfrontと、frontの内側にあるdominated候補を分けてから、preferenceに合う一点を選びます。
+フロントが広がったことだけでは、最終選択が決まったことになりません。
 
-![青緑の非支配候補が右下がりのfrontを作り、その内側に濃紺のdominated候補が散らばり、front上の一点だけが橙で選ばれた模式図](./media/multi-objective-pareto-front.png "非支配候補、dominated候補、preferenceで選ぶ一点を区別する教育用模式図です。目的の尺度、frontの凸性、橙の点の普遍的な優位は示しません。")
+非支配候補のフロントと、フロントの内側にある支配される候補を分けてから、選好に合う一点を選びます。
 
-## まず確認すること
+![青緑の非支配候補が右下がりのフロントを作り、その内側に濃紺の支配される候補が散らばり、フロント上の一点だけが橙で選ばれた模式図](./media/multi-objective-pareto-front.png "非支配候補、dominated候補、preferenceで選ぶ一点を区別する教育用模式図です。目的の尺度、frontの凸性、橙の点の普遍的な優位は示しません。")
+
+## 一手の意味
+
+候補 $a$ が候補 $b$ より全目的で悪くなく、少なくとも一目的で良いとき、$a$ が $b$ を支配します。
+
+$$
+f_i(a)\le f_i(b)\quad(\forall i),\qquad f_j(a)<f_j(b)\quad(\exists j)
+$$
+
+NSGA-IIは、親と子を合わせた候補から非支配順位で残す集団を選びます。
+同じ順位の一部だけを残す場合には、混雑距離で分布を保ちます。
+
+### 単一の最良がない理由
+
+最小化で解 $x_a$ が $x_b$ を支配するとは、
+
+- すべての目的で $f_i(x_a)\le f_i(x_b)$
+- 少なくとも一つで厳密に良い
+
+ことです。どの他解にも支配されない解がPareto最適です。
+
+一方を改善すると他方が悪化する場合、数学だけでは最終選択を一意に決められません。
+選好とリスクを明示します。
+運用方針（方針）と実務制約も別に確認します。
+
+### NSGA-IIの状態
+
+NSGA-IIは、
+
+- 非支配ソート
+- 混雑距離
+- 選択
+- 交叉 / 突然変異
+- 集団更新
+
+で近似フロントを作ります。集団密度は探索の分布であり、最適性証明ではありません。
+
+記録するパラメータ:
+
+- 集団の大きさ
+- 世代 / 評価予算
+- 交叉 / 突然変異
+- 制約の処理
+- 乱数種
+- 初期化
+- 重複除去
+
+### 代表的な解き方
+
+- 重み付き和
+- ε-制約
+- 目標計画法
+- 達成度単目的化関数
+- NSGA-IIなど集団を使う MOEA
+- 多目的Bayesian Optimization
+
+重み付き和は簡単ですが、非凸なParetoフロントの一部を取得できない場合があります。選好が明確なら、広いフロント全体を生成せず必要領域だけ解く方が効率的です。
+
+## 小さな例
+
+$f_1(x)=x^2,f_2(x)=(x-2)^2$ について、候補を $-1,0,1$ の順に追加します。
+追加するたび、支配される候補を除く処理を実行しました。
+
+| 追加した $x$ | 目的値 $(f_1,f_2)$ | 残る候補 $x$ |
+|---|---|---|
+| -1 | $(1,9)$ | -1 |
+| 0 | $(0,4)$ | 0 |
+| 1 | $(1,1)$ | 0, 1 |
+
+$x=0$ は $x=-1$ より両目的で良いので置き換えます。
+$x=0$ と $x=1$ は互いに支配せず、両方が残ります。
+候補集合の更新を追う例であり、NSGA-IIの世代更新全体ではありません。
+
+## 向く条件・避ける条件
+
+### まず確認すること
 
 | 項目 | 確認内容 |
 |---|---|
-| objectives | 競合する目的とdirectionを定義できるか |
-| constraints | hard constraintをobjectiveと分けて扱えるか |
-| preference | 事前に固定するか、候補を見て決めるか |
-| budget | total evaluation数、seed、stoppingを固定できるか |
-| comparison | normalization、reference point、metricsを揃えられるか |
+| 目的 | 競合する目的と方向を定義できるか |
+| 制約 | 厳守する制約を目的と分けて扱えるか |
+| 選好 | 事前に固定するか、候補を見て決めるか |
+| 予算 | 総評価回数、乱数種、停止を固定できるか |
+| 比較 | 正規化、参照点、指標を揃えられるか |
 
-## 単一のbestがない理由
+### 向いている条件
 
-minimizationで解 $x_a$ が $x_b$ をdominateするとは、
+- 本当に競合する複数目的がある
+- 選好を事前に完全固定できない
+- 候補集合を意思決定者へ提示したい
+- ブラックボックスや非凸で単目的化だけではフロントを取りにくい
+- 複数設計の頑健性を比較したい
 
-- すべての目的で $f_i(x_a)\le f_i(x_b)$
-- 少なくとも一つでstrictに良い
+### 避ける／切り替える条件
 
-ことです。どの他解にもdominateされない解がPareto optimalです。
-
-一方を改善すると他方が悪化する場合、数学だけでは最終選択を一意に決められません。
-preferenceとriskを明示します。
-運用方針（policy）と実務制約も別に確認します。
-
-## Decision spaceとobjective space
-
-- decision space: 実際に選ぶ設計変数 $x$
-- objective space: $(f_1(x),f_2(x),\ldots)$
-
-objective spaceで近い二点でも、decision spaceでは全く異なる設計かもしれません。可視化では両空間の選択をlinkedさせると理解しやすくなります。
-
-## 代表的な解き方
-
-- weighted sum
-- ε-constraint
-- goal programming
-- achievement scalarizing function
-- NSGA-IIなどpopulation-based MOEA
-- multi-objective Bayesian Optimization
-
-weighted sumは簡単ですが、非凸なPareto frontの一部を取得できない場合があります。preferenceが明確なら、広いfront全体を生成せず必要領域だけ解く方が効率的です。
+- 単位換算可能な同一価値を別目的として重複計上
+- 厳守するな制約（制約）を目的へ弱く入れて実行不能候補を残す
+- 選好が明確なのに巨大フロントを無目的に生成
+- 目的の方向を混同
+- 重み付き和一回だけで「Pareto最適化済み」とする
+- 2D 図の左下だけ見て決定変数を確認しない
+- 確率的なアルゴリズムの一つの乱数種だけをフロントとして固定
 
 ## Python
 
@@ -106,86 +167,68 @@ pareto_values = values[mask]
 print(pareto_decisions[[0, -1]], pareto_values[[0, -1]])
 ```
 
-これは候補gridから非劣点を抽出する教育例です。連続問題の厳密frontを証明するalgorithmではありません。
-
-## NSGA-IIの状態
-
-NSGA-IIは、
-
-- non-dominated sorting
-- crowding distance
-- selection
-- crossover / mutation
-- population更新
-
-で近似frontを作ります。population densityは探索の分布であり、最適性certificateではありません。
-
-記録するparameter:
-
-- population size
-- generation / evaluation budget
-- crossover / mutation
-- constraint handling
-- seed
-- initialization
-- duplicate elimination
-
-## Normalizationとreference
-
-コスト（cost）が数千、riskが0.01のようにscaleが違うと、plotやweighted sumが一方に支配されます。
-
-- objective direction
-- physical unit
-- normalization range
-- ideal point
-- nadir / reference point
-- hypervolume reference
-
-を明示します。ideal pointは各目的を別々に最適化した値で、同時に実現できる解とは限りません。
+これは候補格子から非劣点を抽出する教育例です。連続問題の厳密フロントを証明するアルゴリズムではありません。
 
 ## 診断値
 
-- feasible / infeasible population
-- non-dominated solution数
-- hypervolumeとreference point
-- generational distance系
-- spacing / diversity
-- duplicate solution数
-- evaluation budget
-- seed間のfront variation
-- selected solutionのdecision variables
+- 可行 / 実行不能集団
+- 非支配解数
+- ハイパーボリュームと参照点
+- 世代間距離系
+- 間隔 / 多様性
+- 重複解数
+- 評価予算
+- 乱数種間のフロント交叉・突然変異
+- 選んだ解の決定変数
 
-hypervolumeやspacingは、reference pointとnormalizationを固定して比較します。
-評価budgetも揃えます。
-seedが異なるfrontや、停止条件が異なるfrontを単純に優劣比較しません。
+ハイパーボリュームや間隔は、参照点と正規化を固定して比較します。
+評価予算も揃えます。
+乱数種が異なるフロントや、停止条件が異なるフロントを単純に優劣比較しません。
 
-## 向いている条件
+- 別に確認するもの: 目的の方向、正規化、参照点、決定空間
+- 恐れていること: 実行不能候補の混入、単一の得点への過剰な圧縮、比較条件の不一致
 
-- 本当に競合する複数目的がある
-- preferenceを事前に完全固定できない
-- 候補集合を意思決定者へ提示したい
-- black-boxやnonconvexでscalarizationだけではfrontを取りにくい
-- 複数設計のrobustnessを比較したい
+## 失敗・切替の兆候
 
-## 避ける／切り替える条件
+- 実行不能な候補が残る → 厳守する制約を目的と分けて確認します。
+- 目的空間の図だけで解を選ぶ → 対応する設計変数と運用条件を確かめます。
+- 同じ重みから同じ候補しか出ない → 非凸なフロントの欠落を疑い、[ε-constraint法](#/learn/epsilon-constraint)を比較します。
 
-- 単位換算可能な同一価値を別目的として重複計上
-- hardな制約（constraint）をobjectiveへ弱く入れてinfeasible候補を残す
-- preferenceが明確なのに巨大frontを無目的に生成
-- objective directionを混同
-- weighted sum一回だけで「Pareto最適化済み」とする
-- 2D plotの左下だけ見てdecision variablesを確認しない
-- stochastic algorithmの単一seedだけをfrontとして固定
+### 決定空間と目的空間
 
-## Frontと最終選択を分けて見る
+- 決定空間: 実際に選ぶ設計変数 $x$
+- 目的空間: $(f_1(x),f_2(x),\ldots)$
 
-[Pareto Theater](#/theater/multi-objective)では、dominatedとnon-dominatedを区別します。
-ideal／nadir referenceも同じobjective spaceで確認します。
-[preferenceを変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)では、同じfront上でweightとselected solutionの対応を読みます。
+目的空間で近い二点でも、決定空間では全く異なる設計かもしれません。可視化では両空間の選択を連動させると理解しやすくなります。
 
-この比較は手法性能のbenchmarkではなく、意思決定上のtrade-offを読む固定教材です。
-解析的な凸frontを使うため、一般の非凸frontでweighted sumが全非劣点を取得できるとは主張しません。
+### Normalizationと参照
+
+コスト（コスト）が数千、リスクが0.01のように尺度が違うと、図や重み付き和が一方に支配されます。
+
+- 目的の方向
+- 物理単位
+- 正規化範囲
+- 理想点
+- ナディア / 参照点
+- ハイパーボリュームの参照点
+
+を明示します。理想点は各目的を別々に最適化した値で、同時に実現できる解とは限りません。
+
+### Frontと最終選択を分けて見る
+
+[Pareto Theater](#/theater/multi-objective)では、支配されると非支配を区別します。
+理想点／ナディア参照も同じ目的空間で確認します。
+[選好を変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)では、同じフロント上で重みと選んだ解の対応を読みます。
+
+この比較は手法性能のベンチマークではなく、意思決定上の交換関係を読む固定教材です。
+解析的な凸フロントを使うため、一般の非凸フロントで重み付き和が全非劣点を取得できるとは主張しません。
 
 ::: warning
-Pareto frontは意思決定を代替しません。trade-offを可視化し、選択に必要なpreferenceと制約を明らかにするための成果物です。
+Paretoフロントは意思決定を代替しません。交換関係を可視化し、選択に必要な選好と制約を明らかにするための成果物です。
 :::
+
+## 次に読む
+
+- [関連する手法の記事](#/learn/concept.convexity)：一手の意味と選び分けを比べます。
+
+- [この手法を使う問題の定式化](#/formulations/PA038)：決定変数と目的を確認します。

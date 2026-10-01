@@ -18,8 +18,8 @@ test("HomeからMapを展開し、共有URLとreloadで選択を復元する", a
   });
 
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
-  const primaryNavigation = page.getByRole("navigation", { name: "主要ナビゲーション" });
-  await primaryNavigation.getByRole("link", { name: "問題構造", exact: true }).click();
+  await page.locator(".navigation-overflow > summary").click();
+  await page.getByRole("link", { name: "問題構造をたどる", exact: true }).click();
   const tree = page.getByRole("tree", { name: "最適化問題の構造" });
   await expect(tree).toBeVisible();
 

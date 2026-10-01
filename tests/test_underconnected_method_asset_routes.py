@@ -16,7 +16,7 @@ def test_existing_method_guides_expose_their_canonical_learning_assets() -> None
             ("binary-knapsack-bnb-complete", "binary-knapsack-bnb-budget"),
             ("COMPARE_KNAPSACK_BNB_BUDGET",),
             "#/compare/COMPARE_KNAPSACK_BNB_BUDGET",
-            "cut生成、separation round、root relaxationの強化そのものは表示しません",
+            "cutの生成、separation round、根の緩和の強化そのものは表示しません",
         ),
         "family.constrained-nlp": (
             ("constrained-disk-feasible-region",),
@@ -34,13 +34,13 @@ def test_existing_method_guides_expose_their_canonical_learning_assets() -> None
             ("time-window-routing-feasible", "time-window-routing-violation"),
             ("COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",),
             "#/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
-            "route品質の性能比較ではありません",
+            "経路品質の性能比較ではありません",
         ),
         "mads": (
             ("failed-simulation-feasible-ledger", "failed-simulation-failure-ledger"),
             ("COMPARE_FAILED_SIMULATION_STATUS_LEDGER",),
             "#/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
-            "実設計品質のbenchmarkではありません",
+            "実設計品質のベンチマークではありません",
         ),
     }
 

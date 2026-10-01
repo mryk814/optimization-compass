@@ -11,5 +11,5 @@ def test_multi_objective_guide_separates_front_generation_from_preference() -> N
     assert multi_objective.comparison_ids == ("COMPARE_PARETO_PREFERENCE",)
     assert "#/theater/multi-objective" in multi_objective.body
     assert "#/compare/COMPARE_PARETO_PREFERENCE" in multi_objective.body
-    assert "手法性能のbenchmarkではなく" in multi_objective.body
-    assert "一般の非凸front" in multi_objective.body
+    assert "手法性能のベンチマークではなく" in multi_objective.body
+    assert "一般の非凸フロント" in multi_objective.body

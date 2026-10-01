@@ -4,7 +4,7 @@ kind: method
 method_id: M_DENSITY_FILTER
 title_ja: density filter
 title_en: Density Filter
-summary: density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。
+summary: density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
 source_ids: [S099]
 prerequisites: [topology-optimization, simp-topology]
 related_ids: [shape-optimization, geometry-update-failure-modes, optimality-criteria-topology, adjoint-sensitivity]
@@ -12,15 +12,25 @@ visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA]
 aliases: [/learn/density-filter]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。
+density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
 
-## 隣接要素を独立に更新しない
+## 30秒でつかむ
+
+細かい格子の一升だけで材料量を決めず、隣の升の値も混ぜて更新します。
+
+- 見るもの: 近傍密度と交互模様
+- 動かすもの: 平均した密度または感度
+- 前進の判断: 格子由来の模様を抑え、体積と物理指標も保つこと
+
+## 一手の意味
+
+### 隣接要素を独立に更新しない
 
 有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。
-density filterは近傍半径と距離重みを使い、各要素の更新を周囲のfieldと結びます。
+density フィルターは近傍半径と距離重みを使い、各要素の更新を周囲の場と結びます。
 
 典型的な平均は、
 
@@ -30,51 +40,94 @@ $$
 $$
 
 の形です。
-実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。
+実際に密度をフィルターするか、感度をフィルターするかで、制約の扱いと実装の意味は変わります。
 
 近傍平均は、単に画像をぼかす処理ではありません。
-設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。
+設計変数の更新前に、どの要素がどの要素へ影響を渡すかを定義します。
+境界付近の重み／フィルター半径／体積制約を同時に確認します。
 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。
-したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。
+交互模様の指標だけを下げることを成功条件にしません。
+コンプライアンスと中間密度率に加え、メッシュ細分化後の挙動を並べて読みます。
 
-mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。
-density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。
+メッシュ 節点を直接動かす形状更新とは、artifactの抑え方が違います。
+density フィルターは場の近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。
 
-## filterの有無を先に比べる
+### 何を直しているか
 
-![8×4要素の固定教材で、filterありの反復6と反復12、filterなしの反復12を並べたdensity field。filterなしでは交互模様が強く、checkerboard scoreも大きい。](./media/topology-field-execution.svg "同じ教育用更新をfilterあり・なしで実行した結果です。filter radiusの一般的な最適値や実部材の製造可能性は示しません。")
-
-右下のfilterなしfieldでは、濃淡が細かく交互に残ります。形が滑らかに見えるかだけでなく、checkerboard scoreとgray fractionを対応させます。
-
-```python
-weights = build_neighbor_weights(mesh, radius)
-filtered_density = weighted_average(density, weights)
-filtered_sensitivity = weighted_average(raw_sensitivity, weights)
-```
-
-## 何を直しているか
-
-filterはcomplianceを直接最小化する手法ではありません。
-近傍を混ぜることで、meshの一要素だけに依存する更新を抑え、設計fieldに最小長さのような性質を持たせます。
+フィルターはコンプライアンスを直接最小化する手法ではありません。
+近傍を混ぜることで、メッシュの一要素だけに依存する更新を抑え、設計場に最小長さのような性質を持たせます。
 
 - `filter radius`：どの範囲を混ぜるか
 - `checkerboard score`：交互模様が残っていないか
 - `gray fraction`：中間密度がどれだけ残るか
 - `volume fraction`：平滑化後も制約を守っているか
 
+## 小さな例
+
+一直線の3要素の密度を $(0.2,0.8,0.2)$ とします。
+隣接距離を1、半径を2とすると、中央の重みは $(1,2,1)$ です。
+端の要素は、自分と隣だけを重み $(2,1)$ で平均します。
+
+| 平均の回数 | 左 | 中央 | 右 | 平均密度 |
+|---|---:|---:|---:|---:|
+| 0 | 0.2000 | 0.8000 | 0.2000 | 0.4000 |
+| 1 | 0.4000 | 0.5000 | 0.4000 | 0.4333 |
+| 2 | 0.4333 | 0.4500 | 0.4333 | 0.4389 |
+| 3 | 0.4389 | 0.4417 | 0.4389 | 0.4398 |
+
+濃淡の交互変化は小さくなりますが、境界の重みの違いで平均密度も変わります。
+密度の平均が体積を自動的に保存するとは限りません。
+この反復は平均操作の教材で、実際の設計反復では物理評価と更新も行います。
+
+### フィルターの有無を先に比べる
+
+![8×4要素の固定教材で、filterありの反復6と反復12、filterなしの反復12を並べたdensity field。filterなしでは交互模様が強く、checkerboard scoreも大きい。](./media/topology-field-execution.svg "同じ教育用更新をfilterあり・なしで実行した結果です。filter radiusの一般的な最適値や実部材の製造可能性は示しません。")
+
+右下のフィルターなし場では、濃淡が細かく交互に残ります。
+形が滑らかに見えるかだけでなく、交互模様の指標と中間密度率を対応させます。
+
+```text
+weights = build_neighbor_weights(mesh, radius)
+filtered_density = weighted_average(density, weights)
+filtered_sensitivity = weighted_average(raw_sensitivity, weights)
+```
+
 ## 向く条件・避ける条件
 
-要素近傍に意味があり、mesh上の短いartifactを抑えたい問題に向きます。
-物理的な最小部材寸法や製造制約をfilter radiusだけで表せるとは限りません。
+### 向く条件・避ける条件
+
+要素近傍に意味があり、メッシュ上の短いartifactを抑えたい問題に向きます。
+物理的な最小部材寸法や製造制約をフィルター半径だけで表せるとは限りません。
+
+## Python
+
+小さな例の計算を再現する、実行可能な教育用コードです。
+
+```python
+import numpy as np
+
+density = np.array([0.2, 0.8, 0.2])
+weights = np.array([[2.0, 1.0, 0.0], [1.0, 2.0, 1.0], [0.0, 1.0, 2.0]])
+for iteration in range(1, 4):
+    density = weights @ density / weights.sum(axis=1)
+    print(iteration, density, density.mean())
+```
+
+## 診断値
+
+各反復の目的値、可行性、更新幅を同じ時点で記録します。
+目的値だけで停止を決めません。
 
 ## 失敗・切替の兆候
 
-filter radiusを変えると結果が大きく変わる場合、mesh、projection、penalizationの影響を分けて確認します。
-filterを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。
+フィルター半径で結果が大きく変わる場合は、メッシュ／射影／罰則化の影響を分けて確認します。
+フィルターを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。
 
-目的値が改善しても、mesh refinementで荷重経路や境界が変わるならmesh dependenceが残っています。
-[形状更新の失敗モード](#/learn/geometry-update-failure-modes)でgeometry validityとmesh qualityを先に確認してください。
+目的値が改善しても、メッシュ refinementで荷重経路や境界が変わるならメッシュ dependenceが残っています。
+[形状更新の失敗モード](#/learn/geometry-update-failure-modes)でgeometry validityとメッシュ 品質を先に確認してください。
 
 ## 次に読む
 
-[SIMP密度法](#/learn/simp-topology)で密度と剛性の関係を確認し、[Optimality Criteria](#/learn/optimality-criteria-topology)でfilter後の感度を更新へ使う流れを追います。
+[SIMP密度法](#/learn/simp-topology)で密度と剛性の関係を確認し、[Optimality Criteria](#/learn/optimality-criteria-topology)でフィルター後の感度を更新へ使う流れを追います。
+
+- 問題の形を確認する: [PDE制約付き最適化](#/formulations/PA045)

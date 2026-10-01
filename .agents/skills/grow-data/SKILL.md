@@ -25,8 +25,9 @@ description: Decide what Optimization Compass knowledge to grow next (データ�
 
 ## Step 2 — 育成対象を1つに絞る
 
-Roadmapの方針は「新しい基盤の数より、完全に辿れるProblem journeyを増やす」。迷ったら:
+Roadmapの方針は「学習者が引ける・進める・当てはめられることを増やす」（`docs/product-direction/learning-atlas.md`）。迷ったら:
 
+0. `uv run python scripts/formulation_backlog.py` の上位にある、記事のない定式化（道筋・事例から多く参照されている順）
 1. coverage priority slice上位に紐づく既存entityの未接続リンク
 2. 密度floor未達・`draft` 記事の充実
 3. 既存entityだけで書けるGallery case
@@ -38,6 +39,7 @@ Roadmapの方針は「新しい基盤の数より、完全に辿れるProblem jo
 
 | 育てたいもの | skill | 反復チェック | PRゲート |
 |---|---|---|---|
+| 定式化記事・定式化の関係・学ぶ道筋 | `add-formulation` | `uv run optimization-compass validate content` | `validate tier-a` |
 | method/concept記事 | `add-content-article` | `uv run optimization-compass validate content` | `validate tier-a` |
 | Gallery case | `add-gallery-case` | `validate gallery` | `validate tier-b` |
 | comparison | `add-comparison` | `validate comparison` | `validate tier-b` |

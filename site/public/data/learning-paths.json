@@ -1,0 +1,196 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.18.19",
+  "paths": [
+    {
+      "audience_ja": "微分と行列の積は分かるが、最適化は初めて学ぶ人",
+      "goal_ja": "問題文を読んで「何を決め、何を良くし、何を守るか」を式に書き、その形からおおよその解き方と保証の強さを言えるようになります。",
+      "path_id": "formulation-basics",
+      "route": "/paths/formulation-basics",
+      "steps": [
+        {
+          "content_id": "concept.variable-domain",
+          "has_article": true,
+          "question_ja": "決めるものが連続か、整数か、選択かで、なぜ使える道具が変わるのか。",
+          "route": "/learn/concept.variable-domain",
+          "step": 1,
+          "target_id": "concept.variable-domain",
+          "target_type": "content",
+          "title_ja": "変数のdomain"
+        },
+        {
+          "content_id": "concept.linear-program",
+          "has_article": true,
+          "question_ja": "費用も制約も足し算と定数倍で書ける問題は、どんな形をしているか。",
+          "route": "/formulations/PA017",
+          "step": 2,
+          "target_id": "PA017",
+          "target_type": "formulation",
+          "title_ja": "線形計画"
+        },
+        {
+          "content_id": "concept.convexity",
+          "has_article": true,
+          "question_ja": "近くで一番低い点が、全体でも一番低いと言えるのはどんなときか。",
+          "route": "/learn/concept.convexity",
+          "step": 3,
+          "target_id": "concept.convexity",
+          "target_type": "content",
+          "title_ja": "凸性"
+        },
+        {
+          "content_id": "primal-simplex",
+          "has_article": true,
+          "question_ja": "線形計画の答えは、なぜ頂点を順にたどれば見つかるのか。",
+          "route": "/methods/M_SIMPLEX",
+          "step": 4,
+          "target_id": "primal-simplex",
+          "target_type": "content",
+          "title_ja": "Primal simplex法"
+        },
+        {
+          "content_id": "concept.convex-quadratic-program",
+          "has_article": true,
+          "question_ja": "目的に二乗が入ると、答えの位置と解き方はどう変わるのか。",
+          "route": "/formulations/PA018",
+          "step": 5,
+          "target_id": "PA018",
+          "target_type": "formulation",
+          "title_ja": "凸二次計画"
+        },
+        {
+          "content_id": "concept.mixed-integer-linear-program",
+          "has_article": true,
+          "question_ja": "「整数であること」を一つ足すだけで、何が難しくなるのか。",
+          "route": "/formulations/PA023",
+          "step": 6,
+          "target_id": "PA023",
+          "target_type": "formulation",
+          "title_ja": "混合整数線形計画"
+        },
+        {
+          "content_id": "branch-and-bound",
+          "has_article": true,
+          "question_ja": "整数の問題を、緩和による下界と分岐でどう絞り込むのか。",
+          "route": "/methods/M_BRANCH_BOUND",
+          "step": 7,
+          "target_id": "branch-and-bound",
+          "target_type": "content",
+          "title_ja": "Branch-and-Bound（分枝限定法）"
+        },
+        {
+          "content_id": "concept.linear-least-squares",
+          "has_article": true,
+          "question_ja": "データに直線を合わせる問題は、どんな最適化になるのか。",
+          "route": "/formulations/PA005",
+          "step": 8,
+          "target_id": "PA005",
+          "target_type": "formulation",
+          "title_ja": "線形最小二乗"
+        },
+        {
+          "content_id": "concept.nonlinear-least-squares",
+          "has_article": true,
+          "question_ja": "モデルが非線形になると、何が失われ、何が残るのか。",
+          "route": "/formulations/PA033",
+          "step": 9,
+          "target_id": "PA033",
+          "target_type": "formulation",
+          "title_ja": "非線形最小二乗"
+        },
+        {
+          "content_id": "gauss-newton",
+          "has_article": true,
+          "question_ja": "残差の構造を使うと、なぜ一般の最小化より速く進めるのか。",
+          "route": "/methods/M_GAUSS_NEWTON",
+          "step": 10,
+          "target_id": "gauss-newton",
+          "target_type": "content",
+          "title_ja": "Gauss–Newton法"
+        }
+      ],
+      "summary_ja": "線形計画を起点に、二次・整数・データへの当てはめへ形を一つずつ広げ、形が変わると解き方と保証がどう変わるかをたどります。",
+      "title_ja": "定式化の最初の一歩"
+    },
+    {
+      "audience_ja": "回帰やfittingを使ったことがあり、うまくいかない理由を知りたい人",
+      "goal_ja": "当てはめの問題を見て、残差の形・損失の選び方・正則化の要否を判断し、対応する解き方を選べるようになります。",
+      "path_id": "fit-to-data",
+      "route": "/paths/fit-to-data",
+      "steps": [
+        {
+          "content_id": "concept.linear-least-squares",
+          "has_article": true,
+          "question_ja": "二乗誤差の最小化は、なぜ線形代数だけで解けるのか。",
+          "route": "/formulations/PA005",
+          "step": 1,
+          "target_id": "PA005",
+          "target_type": "formulation",
+          "title_ja": "線形最小二乗"
+        },
+        {
+          "content_id": "concept.nonlinear-least-squares",
+          "has_article": true,
+          "question_ja": "モデルが parameter について非線形になると、何が変わるのか。",
+          "route": "/formulations/PA033",
+          "step": 2,
+          "target_id": "PA033",
+          "target_type": "formulation",
+          "title_ja": "非線形最小二乗"
+        },
+        {
+          "content_id": "gauss-newton",
+          "has_article": true,
+          "question_ja": "残差を線形化して解く一手は、どんなときに信用できるのか。",
+          "route": "/methods/M_GAUSS_NEWTON",
+          "step": 3,
+          "target_id": "gauss-newton",
+          "target_type": "content",
+          "title_ja": "Gauss–Newton法"
+        },
+        {
+          "content_id": "least-squares",
+          "has_article": true,
+          "question_ja": "Gauss–Newton法が不安定なとき、減衰項は何を補うのか。",
+          "route": "/methods/M_LEVENBERG_MARQUARDT",
+          "step": 4,
+          "target_id": "least-squares",
+          "target_type": "content",
+          "title_ja": "非線形最小二乗とLevenberg–Marquardt法"
+        },
+        {
+          "content_id": "concept.robust-regression",
+          "has_article": true,
+          "question_ja": "外れ値が混ざると、二乗損失の何が問題になるのか。",
+          "route": "/formulations/PA034",
+          "step": 5,
+          "target_id": "PA034",
+          "target_type": "formulation",
+          "title_ja": "外れ値を含むrobust regression"
+        },
+        {
+          "content_id": null,
+          "has_article": false,
+          "question_ja": "L1 罰則を足すと、なぜ係数がちょうど0になるのか。",
+          "route": "/formulations/PA035",
+          "step": 6,
+          "target_id": "PA035",
+          "target_type": "formulation",
+          "title_ja": "L1・sparse regularization"
+        },
+        {
+          "content_id": null,
+          "has_article": false,
+          "question_ja": "データだけで答えが決まらないとき、正則化は何を仮定しているのか。",
+          "route": "/formulations/PA055",
+          "step": 7,
+          "target_id": "PA055",
+          "target_type": "formulation",
+          "title_ja": "逆問題"
+        }
+      ],
+      "summary_ja": "線形最小二乗から出発し、非線形モデル、外れ値、疎性、逆問題へと、当てはめの問題を一段ずつ広げます。",
+      "title_ja": "データに合わせる"
+    }
+  ]
+}

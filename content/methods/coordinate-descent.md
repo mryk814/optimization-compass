@@ -10,40 +10,140 @@ prerequisites: [method.gradient-descent]
 related_ids: [proximal-gradient, fista, least-squares]
 aliases: [/learn/coordinate-descent]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
 全変数を同時に動かさず、一つまたは小さなblockだけを更新して安価な部分問題を反復する大規模最適化法です。
 
 ## 30秒でつかむ
 
-一度に全変数を動かす必要がなければ、各座標や小さなblockの問題へ分けることで、一回の計算を軽くできます。
+つまみがいくつもあるミキサーで、音を整える場面を想像してください。
+全部のつまみを同時に回すのは難しいので、一つずつ、音がいちばんよくなる位置まで回します。すべてのつまみを一巡したら、もう一巡します。
 
-- 見ているもの: 部分問題の改善、全体のobjective、duality gap
-- 動かしているもの: 一つの座標またはblock、active set、更新順序
-- 前進の判断: full sweepごとのobjectiveまたはgapが減り、更新が安定すること
-- 恐れていること: 座標間のcoupling、悪いscaling、更新のstaleness
+- **見るもの**: 一つの座標（または小さなblock）を動かしたときの改善、全体の目的関数値、双対ギャップ（duality gap）
+- **動かすもの**: 一つの座標またはblock、更新の順序、必要なら有効な座標の集まり（active set）
+- **前進の判断**: 一巡（掃引、sweep）ごとに目的関数値またはギャップが減り、更新が安定すること
 
-## 部分問題をどう解くか
+全変数を同時に動かす必要がなければ、問題を座標やblockごとの小さな問題へ分けられます。一回の計算が軽くなるのが、この手法の利点です。
+気をつける点は三つあります。座標どうしの結合、悪い尺度、更新の遅れ（staleness）です。
 
-現在点 $x$ の座標 $j$ だけを変えるとき、
+## 一手の意味
+
+現在点 $x$ の座標 $j$ だけを動かします。次の式は、ほかの座標を固定したまま、座標 $j$ の方向へどれだけ動けば最も良いかを表す一次元の問題です。
 
 $$
 \min_d f(x + d e_j)
 $$
 
-という1次元部分問題を解きます。更新順はcyclic、random、greedy、block単位などがあります。
+ここで $e_j$ は、座標 $j$ だけが1で、ほかが0のベクトルです。この一次元の問題を解いて座標 $j$ を更新し、次の座標へ移ります。
 
-Lassoのように各座標更新がsoft-thresholdingで閉形式になる問題では、汎用勾配法より構造を直接使えます。
+目的関数が二次関数のときは、答えが閉じた形で書けます。座標 $j$ の偏微分を $\partial_j f$、Hessianの対角成分を $H_{jj}$ とします。
 
-## まず確認すること
+$$
+x_j \leftarrow x_j - \frac{\partial_j f(x)}{H_{jj}}
+$$
 
-- 座標またはblockを固定した部分問題が安価に解けるか
-- L1正則化やseparable penaltyなど、座標分解を活かせる構造があるか
-- cyclic、randomized、greedyのどの選択ruleを使うか
-- constraintやcache更新を含めて、1 coordinate updateと1 full sweepのどちらを反復単位とするか
+L1正則化つきの最小二乗（Lasso）でも、各座標の更新が閉じた形になります。
+残差から座標 $j$ の寄与を除いたものを $r_j$、列ベクトルを $a_j$ とすると、更新は次の式です。
 
-## Python: Lassoのcoordinate update
+$$
+x_j \leftarrow \frac{S_\lambda(a_j^\top r_j)}{\lVert a_j\rVert^2},\qquad S_\lambda(t)=\mathrm{sign}(t)\max(|t|-\lambda,\,0)
+$$
+
+$S_\lambda$ はソフト閾値（soft-thresholding）です。相関が小さい座標を、ちょうど0にします。
+汎用の勾配法より、この構造を直接使えるのが強みです。
+
+更新の順序には、いくつかの選び方があります。
+
+- cyclic: 決まった順に回す。実装が単純で再現しやすい
+- randomized: 順序をランダムにする。意地悪な順序を避けやすい
+- greedy（Gauss–Southwell）: 大きく改善しそうな座標を選ぶ
+- block coordinate: 結合の強い変数をまとめて動かす
+- asynchronous: 分散や並列で動かす。更新の遅れを管理する必要がある
+
+同じ座標降下法でも、選択規則と、部分問題を解く精度によって挙動が変わります。
+
+## 小さな例
+
+### 分離できる問題は1掃引で終わる
+
+[勾配降下法](#/learn/method.gradient-descent)と同じ関数 $f(x,y)=(x-1)^2+20(y+2)^2$ を、初期点 $(4,\,3)$ から解きます。
+$x$ と $y$ が別々の項に分かれているので、座標ごとの最小化は互いに影響しません。
+
+| 更新 | 動かす座標 | 更新後の点 | 目的値 |
+|---:|---|---|---:|
+| 0 | | $(4,\,3)$ | 509 |
+| 1 | $x$ | $(1,\,3)$ | 500 |
+| 2 | $y$ | $(1,\,-2)$ | 0 |
+
+2回の座標更新、つまり1掃引で最小点に着きます。勾配降下法は同じ問題に、学習率 $0.04$ で243回の更新が必要でした。
+目的関数が座標ごとの和に分かれる問題では、座標降下法は非常に有利です。
+
+### 座標が結合すると遅くなる
+
+$x$ と $y$ の積の項を足して、座標を結合させます。
+
+$$
+f(x,y)=(x-1)^2+20(y+2)^2+4(x-1)(y+2)
+$$
+
+最小点は同じ $(1,\,-2)$ です。Hessianは $\begin{pmatrix}2&4\\4&40\end{pmatrix}$ で、正定値です。
+初期点 $(4,\,3)$ から、$x$、$y$ の順に厳密に最小化します。
+
+| 更新 | 動かす座標 | 更新後の点 | 目的値 |
+|---:|---|---|---:|
+| 0 | | $(4,\,3)$ | 569 |
+| 1 | $x$ | $(-9,\,3)$ | 400 |
+| 2 | $y$ | $(-9,\,-1)$ | 80 |
+| 3 | $x$ | $(-1,\,-1)$ | 16 |
+| 4 | $y$ | $(-1,\,-1.8)$ | 3.2 |
+| 5 | $x$ | $(0.6,\,-1.8)$ | 0.64 |
+| 6 | $y$ | $(0.6,\,-1.96)$ | 0.128 |
+
+1回目の更新で、$x$ は $4$ から $-9$ まで動きます。$y+2=5$ の影響を打ち消そうとして、最小点を大きく行き過ぎるためです。次の $y$ の更新が、その分を戻します。
+2回目の更新からは、座標を一つ更新するたびに、目的値が $0.2$ 倍になります。この $0.2$ は、結合の強さ $4^2/(2\cdot 40)$ です。
+
+結合の係数を変えると、掃引の回数が変わります。勾配のノルムが $10^{-6}$ を下回るまでの掃引の回数です。
+
+| 結合の係数 | 0 | 4 | 8 |
+|---|---:|---:|---:|
+| 掃引の回数 | 1 | 12 | 73 |
+
+結合が強いほど、一つの座標だけで動ける範囲が狭くなります。この二次関数では、係数 $8$ で更新ごとの倍率が $0.8$ になり、掃引が大きく増えます。
+結合が強い問題では、結合した座標を一つのblockにまとめて動かす方法が有効です。
+
+## 向く条件・避ける条件
+
+座標降下法は、座標またはblockごとの部分問題が安く、変数が非常に多い問題に向きます。
+先に、次の項目を確認します。
+
+| 項目 | 確認すること |
+|---|---|
+| 部分問題 | 座標やblockを固定した部分問題が安く解けるか |
+| 構造 | L1正則化や、座標ごとに分かれた罰則など、分解を活かせる構造があるか |
+| 選択規則 | cyclic、randomized、greedyのどれを使うか |
+| 反復の単位 | 一回の座標更新と、一掃引のどちらを反復と数えるか |
+
+向く条件です。
+
+- 高次元で疎な問題である（[非滑らかな凸複合の最小化](#/formulations/PA010)、[L1正則化つきの当てはめ](#/formulations/PA035)）
+- 各座標やblockの部分問題が安価である
+- L1正則化や、座標ごとに分かれた罰則がある
+- データ行列の列へ効率よくアクセスできる
+- ウォームスタート（warm start）で、正則化の強さを変えながら解の経路を追う
+
+避ける、または切り替える条件です。
+
+- 変数どうしの結合が強く、一座標ずつでは極端に遅い → blockにまとめるか、全変数を同時に動かす手法を検討する
+- 座標ごとの尺度が悪い → 変数の尺度を揃え、選択規則を見直す
+- 座標に分けられない制約を、更新のたびに破る → 実行可能な部分問題、射影、近接作用素を検討する
+- 部分問題が、元の問題と同じくらい高価である → 部分問題の再利用とキャッシュを見直す
+- 非滑らかな正則化を、全変数の近接作用素で扱いたい → [近接勾配法](#/learn/proximal-gradient)、加速するなら[FISTA](#/learn/fista)へ切り替える
+
+## Python
+
+次の例は、上のLassoの座標更新を実行する最小例です。教育用に、毎回の座標で行列とベクトルの積を計算しなおしています。
+実務では、残差を差分で更新し、疎な構造や有効な座標の集まりを使います。
 
 ```python
 import numpy as np
@@ -53,16 +153,17 @@ def soft_threshold(value: float, threshold: float) -> float:
     return float(np.sign(value) * max(abs(value) - threshold, 0.0))
 
 
+# Lasso: 0.5 * ||a x - b||^2 + lam * ||x||_1
 rng = np.random.default_rng(3)
 a = rng.normal(size=(80, 10))
 true_x = np.zeros(10)
 true_x[[1, 4, 8]] = [1.2, -1.8, 0.7]
 b = a @ true_x + 0.05 * rng.normal(size=80)
-lam = 0.1
+lam = 1.0
 x = np.zeros(a.shape[1])
 column_norm = np.sum(a * a, axis=0)
 
-for _ in range(1_000):
+for sweep in range(1, 1_001):
     previous = x.copy()
     for coordinate in range(a.shape[1]):
         residual_without_coordinate = b - a @ x + a[:, coordinate] * x[coordinate]
@@ -71,54 +172,71 @@ for _ in range(1_000):
     if np.linalg.norm(x - previous) < 1e-10:
         break
 
-print(x)
+print(sweep, {i: round(float(v), 3) for i, v in enumerate(x) if v != 0.0})
+# 10 {1: 1.189, 4: -1.796, 8: 0.69}
 ```
 
-この例はdense matrixを毎座標で再計算する教育実装です。実務ではresidualをincrementalに更新し、sparse構造やactive setを利用します。
+10回の掃引で止まり、非ゼロは3座標だけです。真の非ゼロの位置（1、4、8）と一致します。ほかの7座標は、ソフト閾値でちょうど0になっています。
+非ゼロの値は、真の値（1.2・−1.8・0.7）と少し違います。理由は、L1正則化が値を縮めることと、データのノイズです。
 
-## 更新順序
+次の例は、上の小さな例の掃引の回数を再現します。
 
-- cyclic: 実装が単純で再現的
-- randomized: adversarialな順序を避けやすい
-- greedy / Gauss-Southwell: 大きく改善しそうな座標を選ぶ
-- block coordinate: coupledな変数群をまとめる
-- asynchronous: 分散・並列だがstalenessを管理する
+```python
+import numpy as np
 
-同じcoordinate descentでも選択ruleとpartial solve accuracyで挙動が変わります。
 
-## 最初に見る診断値
+def sweeps_needed(coupling: float) -> int:
+    """f = (x-1)^2 + 20 (y+2)^2 + coupling (x-1)(y+2) を座標ごとに厳密に最小化する。"""
+    hessian = np.array([[2.0, coupling], [coupling, 40.0]])
+    z = np.array([4.0, 3.0]) - np.array([1.0, -2.0])   # 最小点からのずれ
+    for sweep in range(1, 10_000):
+        for j in range(2):
+            z[j] -= (hessian[j] @ z) / hessian[j, j]
+        if np.linalg.norm(hessian @ z) < 1e-6:
+            return sweep
+    return -1
 
-- objective / duality gap
-- coordinate update norm
-- full sweep数
-- active coordinate数
-- residual norm
-- zero-to-nonzero / nonzero-to-zero transitions
-- coordinate selection frequency
-- cache / sparse operation time
-- stopping tolerance
 
-座標ごとの更新が小さくても、全体の勾配やduality gapが大きければ収束していません。
+for coupling in (0.0, 4.0, 8.0):
+    print(coupling, sweeps_needed(coupling))
+# 0.0 1
+# 4.0 11
+# 8.0 70
+```
 
-## 向いている条件
+## 診断値
 
-- 高次元・疎なproblem
-- 各座標またはblockの部分問題が安価
-- L1正則化やseparable penalty
-- data matrixのcolumn accessが効率的
-- warm startでregularization pathを解く
+座標ごとの更新が小さくても、全体の勾配や双対ギャップが大きければ、収束していません。
+最低限、次を記録します。
+
+- 目的関数値と、双対ギャップ
+- 座標の更新量のノルム
+- 掃引の回数
+- 有効な座標の数
+- 残差のノルム
+- 0から非ゼロへ、非ゼロから0への座標の遷移
+- 各座標が選ばれた頻度
+- キャッシュや疎な演算にかかった時間
+- 停止の許容値
+
+一巡しただけでは止めません。目的値とギャップと全体の更新量で判断します。
 
 ## 失敗・切替の兆候
 
-- 変数間couplingが強く一座標ずつでは極端に遅い → block化またはfull-vector法を検討する
-- coordinate scalingが悪い → 変数をscalingし、selection ruleを見直す
-- nonseparable constraintを更新ごとに破る → feasibleな部分問題、projection、proxを検討する
-- 部分問題が元問題と同じくらい高価 → 部分問題の再利用性とcacheを見直す
-- asynchronous updateのstalenessが大きい → 同期化またはblock設計を見直す
-- stoppingを「一周した」だけで判定 → objective、gap、全体の更新量で判定する
+- 掃引をいくら重ねても目的値が下がらない → 変数どうしの結合が強い → blockにまとめるか、全変数を同時に動かす手法へ切り替える
+- 座標の更新量に大きな偏りがある → 座標ごとの尺度が悪い → 変数の尺度を揃え、選択規則を見直す
+- 更新のたびに、座標に分けられない制約を破る → 部分問題が制約を知らない → 実行可能な部分問題、射影、近接作用素を検討する
+- 一座標の部分問題が、元の問題と同じくらい高価である → 分解の利点が失われている → 部分問題の再利用とキャッシュを見直す
+- 非同期の更新で、古い値による遅れが大きい → 更新の順序が乱れている → 同期させるか、blockの設計を見直す
+- 一周したことだけで止めている → 停止の判定が弱い → 目的値、ギャップ、全体の更新量で判定する
 
 ::: note
-iterationはcoordinate updateかfull sweepかを明記します。Gradient Descentの一反復とcoordinate update一回を直接比較しません。
+反復が、座標の更新一回なのか、一掃引なのかを明記します。勾配降下法の一反復と、座標更新の一回を、そのまま比べません。
 :::
 
-非滑らか正則化をfull-vector proxで扱う方法は[近接勾配法](#/learn/proximal-gradient)、加速法は[FISTA](#/learn/fista)で確認できます。
+## 次に読む
+
+- [近接勾配法](#/learn/proximal-gradient)：非滑らかな正則化を、全変数の近接作用素で扱う一手
+- [FISTA](#/learn/fista)：近接勾配法を加速する方法
+- [非滑らかな凸複合の最小化](#/formulations/PA010)：この手法が解く問題の標準形
+- [L1正則化つきの当てはめ](#/formulations/PA035)：Lassoの標準形

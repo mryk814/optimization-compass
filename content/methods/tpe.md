@@ -4,87 +4,82 @@ kind: method
 method_id: M_TPE
 title_ja: TPE（Tree-structured Parzen Estimator）
 title_en: Tree-Structured Parzen Estimator
-summary: 観測済みtrialを良い群と悪い群に分け、条件付きsearch spaceでも良い群に現れやすいparameterを提案する逐次探索です。
+summary: 観測済み試行を良い群と悪い群に分け、条件付き探索空間でも良い群に現れやすいパラメータを提案する逐次探索です。
 source_ids: [S034]
 related_ids: [family.expensive-black-box, bayesian-optimization]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-観測済みtrialを良い群と悪い群に分け、条件付きsearch spaceでも良い群に現れやすいparameterを提案する逐次探索です。
+観測済み試行を良い群と悪い群に分け、条件付き探索空間でも良い群に現れやすいパラメータを提案する逐次探索です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**目的関数そのものを滑らかな曲面として当てるより、これまで良かったtrialではどんなparameterが多く、悪かったtrialでは何が多かったかを比べたい**というものです。
+成功した試作品と失敗した試作品を分け、成功した側に多い設定を次に試します。TPEは、良い群と悪い群の設定分布を比べます。
 
-- 見ているもの: trial履歴、objective、parameter、trial status
-- 動かしているもの: 良い群・悪い群の密度modelと次の提案
-- 前進の判断: best-so-far改善と良い群へのdensity ratio
-- 別に確認するもの: trial budget、parallelism、failed / pruned trialの扱い
-- 恐れていること: 少ない履歴、条件付きparameterの誤表現、失敗trialの偏り
+目的関数そのものを滑らかな曲面として当てる方法とは異なります。これまで良かった試行と悪かった試行で、どんなパラメータが多かったかを比べます。
 
-Gaussian-process BOと同じ「履歴を使う逐次探索」ですが、model化する向きと得意なsearch spaceが異なります。
+- 見るもの: 試行履歴、目的、パラメータ、試行状態
+- 動かすもの: 良い群・悪い群の密度モデルと次の提案
+- 前進の判断: これまでの最良値改善と良い群への密度比
 
-## まず確認すること
+ガウス過程 BOと同じ「履歴を使う逐次探索」ですが、モデル化する向きと得意な探索空間が異なります。
 
-| 項目 | 確認内容 |
-|---|---|
-| search space | 連続、整数、カテゴリ、条件付きparameterを明示できるか |
-| trial budget | densityを学ぶだけの履歴が得られるか |
-| objective | directionとtrial間の比較が安定しているか |
-| failures | prune、timeout、crashをどう扱うか |
-| parallelism | sequentialかbatch / asynchronousか |
-| baseline | random searchより履歴活用に価値があるか |
+## 一手の意味
 
-parameter名だけでなく、log scale、step、条件付き有効範囲、default値をsearch-space contractとして保存します。
+### 仕組み
 
-## 仕組み
-
-観測値の上位側を良い群 $l(x)$、残りを悪い群 $g(x)$としてparameter densityを推定します。次の候補は概念的には、良い群で起きやすく悪い群では起きにくい場所を優先します。
+観測値の上位側を良い群 $l(x)$、残りを悪い群 $g(x)$としてパラメータ密度を推定します。次の候補は概念的には、良い群で起きやすく悪い群では起きにくい場所を優先します。
 
 $$
 \text{prefer } x \text{ with large } \frac{l(x)}{g(x)}
 $$
 
-実装ではstartup trial、良い群の分位、独立・多変量model、条件付きparameter、並列suggestionなどのoptionが挙動を変えます。
+実装では初期試行数と良い群の分位が挙動を変えます。独立・多変量モデルの選択も影響します。条件付きパラメータと並列提案の設定も確認します。
+
+## 小さな例
+
+良い群の設定を $0.8,1.2$、悪い群を $-1,0,3$ とします。
+各設定の周囲に幅 $0.5$ のガウス形の山を置き、群内で平均しました。
+共通の正規化定数は比で消えるため、表では省いています。
+
+| 次候補 $x$ | 良い群の密度相当 $l$ | 悪い群の密度相当 $g$ | $l/g$ |
+|---|---:|---:|---:|
+| 0 | 0.167086 | 0.378445 | 0.441507 |
+| 1 | 0.923116 | 0.045335 | 20.361931 |
+| 2 | 0.167086 | 0.045224 | 3.694666 |
+
+3候補を計算すると、$x=1$ の密度比が最大です。
+これは密度比の読み方を示す教材です。実装の事前分布や幅の選び方まで再現しません。
 
 ## 向く条件・避ける条件
 
+### まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| 探索空間 | 連続、整数、カテゴリ、条件付きパラメータを明示できるか |
+| 試行予算 | 密度を学ぶだけの履歴が得られるか |
+| 目的 | 方向と試行間の比較が安定しているか |
+| failures | 打切り、時間切れ、異常終了をどう扱うか |
+| 並列数 | 逐次か一括 / 非同期か |
+| 比較基準 | 無作為探索より履歴活用に価値があるか |
+
+パラメータ名だけでなく、対数尺度と離散化の刻み幅も保存します。条件付き有効範囲と既定値も探索空間の仕様に含めます。
+
 向きやすい条件:
 
-- hyperparameter optimization
-- カテゴリ・整数・条件付きparameterが混在
-- trial履歴を再利用したい
-- GPの距離やkernelを自然に定義しにくい
+- ハイパーパラメータ最適化
+- カテゴリ・整数・条件付きパラメータが混在
+- 試行履歴を再利用したい
+- GPの距離やカーネルを自然に定義しにくい
 
 避ける条件:
 
-- 一回の評価が安価でrandom searchを大量並列できる
+- 一回の評価が安価で無作為探索を大量並列できる
 - 履歴が極端に少ない
-- search spaceが時間とともに変わり比較不能
-- 大域最適性certificateが必要
-
-## 診断値
-
-見る値:
-
-- best-so-farとtrial数
-- startup trial比率
-- parameterごとの提案分布
-- duplicate / boundary suggestion率
-- failed / pruned trial率
-- seed間のbest分布
-- random-search baselineとの差
-
-best-so-far、提案分布、失敗trial、seed間のばらつきは、同じtrial budgetと停止条件で比較します。
-
-## うまくいったサインと切替サイン
-
-- 良い群のsampleが少なすぎる → startup数やbudgetを増やす
-- 同じカテゴリへ偏り続ける → prior、multivariate設定、space設計を見直す
-- 連続低次元でuncertaintyを読みたい → GP-BOと比較
-- intermediate metricが利用可能 → Hyperband / ASHAとの組合せを検討
-- 多数並列でsuggestionが似る → asynchronous policyやrandom fractionを見直す
+- 探索空間が時間とともに変わり比較不能
+- 大域最適性証明が必要
 
 ## Python
 
@@ -106,10 +101,43 @@ study.optimize(objective, n_trials=40)
 print(study.best_value, study.best_params)
 ```
 
-実務ではstudy storage、search-space version、sampler option、失敗trialも保存します。
+実務では試行記録の保存先と探索空間の版を記録します。提案器の設定と失敗試行も保存します。
 
-## コラム: TPEは木を探索するalgorithmではない
+## 診断値
 
-名前の`Tree-structured`は、条件付きparameterでsearch spaceが木構造になることに由来します。decision tree modelを必ず使うという意味ではありません。
+見る値:
 
-[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)でGP-BO、SMAC、Hyperband、Random Searchとの役割を確認してください。
+- これまでの最良値と試行数
+- 初期試行比率
+- パラメータごとの提案分布
+- 重複 / 境界提案率
+- 失敗 / 打切り試行率
+- 乱数種間の最良分布
+- 無作為探索比較基準との差
+
+これまでの最良値と提案分布は、同じ試行予算と停止条件で比較します。失敗試行や乱数種間のばらつきも同じ条件で比べます。
+
+- 別に確認するもの: 試行予算、並列数、失敗 / 打切り試行の扱い
+- 恐れていること: 少ない履歴、条件付きパラメータの誤表現、失敗試行の偏り
+
+## 失敗・切替の兆候
+
+### うまくいったサインと切替サイン
+
+- 良い群の標本が少なすぎる → 初期数や予算を増やす
+- 同じカテゴリへ偏り続ける → 事前分布、多変量設定、空間設計を見直す
+- 低次元の連続変数で不確実性を読みたい → GP-BOと比較
+- 中間指標が利用可能 → Hyperband / ASHAとの組合せを検討
+- 多数並列で提案が似る → 非同期方針や無作為提案の割合を見直す
+
+### コラム: TPEは木を探索するアルゴリズムではない
+
+名前の`Tree-structured`は、条件付きパラメータで探索空間が木構造になることに由来します。決定木モデルを必ず使うという意味ではありません。
+
+[高価なブラックボックス・HPOの選び分け](#/learn/family.expensive-black-box)でGP-BO・SMAC・Hyperband・Random Searchとの役割を確認してください。
+
+## 次に読む
+
+- [関連する手法の記事](#/learn/family.expensive-black-box)：一手の意味と選び分けを比べます。
+
+- [この手法を使う問題の定式化](#/formulations/PA039)：決定変数と目的を確認します。

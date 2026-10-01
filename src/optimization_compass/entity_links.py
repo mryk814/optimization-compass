@@ -188,14 +188,17 @@ def build_entity_link_index(
         for source_id in split_ids(str(row["reference_source_ids"] or "")):
             connect("method", str(row["method_id"]), "evidence", "source", source_id)
 
+    archetype_ids: set[str] = set()
     for row in repository.fetch_all(
         "SELECT problem_id, name_ja, summary FROM problem_archetypes ORDER BY problem_id"
     ):
+        archetype_ids.add(str(row["problem_id"]))
         add(
             "problem",
             str(row["problem_id"]),
             str(row["name_ja"] or row["problem_id"]),
             summary=str(row["summary"] or ""),
+            canonical_url=f"/formulations/{row['problem_id']}",
         )
     for row in repository.fetch_all(
         "SELECT feature_id, name_ja, definition FROM problem_features ORDER BY feature_id"
@@ -259,7 +262,10 @@ def build_entity_link_index(
         )
 
     for page in content:
-        _add_content_entity(add, page)
+        explains_archetype = (
+            page.canonical_entity_type == "problem" and page.canonical_entity_id in archetype_ids
+        )
+        _add_content_entity(add, page, explains_archetype=explains_archetype)
         for source_id in page.source_ids:
             connect("content", page.content_id, "evidence", "source", source_id)
         for related_id in (*page.prerequisites, *page.related_ids):
@@ -277,6 +283,22 @@ def build_entity_link_index(
             )
             for source_id in page.source_ids:
                 connect("method", page.method_id, "evidence", "source", source_id)
+        elif explains_archetype:
+            # A formulation article is read on its formulation page, like a method article.
+            add(
+                "problem",
+                page.canonical_entity_id,
+                page.title_ja,
+                aliases=tuple(page.aliases) or (f"/learn/{page.content_id}",),
+            )
+            connect(
+                "problem",
+                page.canonical_entity_id,
+                "learning",
+                "content",
+                page.content_id,
+                reverse_type="explains",
+            )
         for trace_id in page.visualization_ids:
             connect("content", page.content_id, "visualization", "trace", trace_id)
             if page.method_id:
@@ -611,13 +633,15 @@ def build_entity_link_index(
     )
 
 
-def _add_content_entity(add: Any, page: ContentPage) -> None:
+def _add_content_entity(add: Any, page: ContentPage, *, explains_archetype: bool) -> None:
     add(
         "content",
         page.content_id,
         page.title_ja,
         summary=page.summary,
-        canonical_url=None if page.method_id else f"/learn/{page.content_id}",
+        canonical_url=(
+            None if page.method_id or explains_archetype else f"/learn/{page.content_id}"
+        ),
     )
 
 

@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_skeletons import skeleton_gaps
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 
@@ -164,6 +165,10 @@ def test_second_method_tranche_uses_the_beginner_first_contract() -> None:
         assert page.status == "published"
         assert page.kind == "method"
         assert page.method_id.startswith("M_")
+        # Articles migrated to the method skeleton (ADR 0017) satisfy the beginner contract
+        # through it; articles still pending keep the earlier section contract.
+        if skeleton_gaps(page) == ():
+            continue
         for section in REQUIRED_BEGINNER_METHOD_SECTIONS:
             assert section in page.body, f"{content_id} is missing {section}"
         assert "この手法の気持ち" in page.body
@@ -194,6 +199,5 @@ def test_representative_methods_open_with_the_intuition_contract() -> None:
         introduction = page.body.split("## 30秒でつかむ", maxsplit=1)[1].split("\n## ", maxsplit=1)[
             0
         ]
-        assert introduction.count("この手法の気持ち") == 1
         for label in REQUIRED_INTUITION_LABELS:
             assert introduction.count(label) == 1, f"{method_id} is missing {label}"

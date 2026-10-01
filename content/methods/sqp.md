@@ -4,115 +4,218 @@ kind: method
 method_id: M_SQP
 title_ja: 逐次二次計画法（SQP）
 title_en: Sequential Quadratic Programming
-summary: 各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
+summary: 各反復で、目的関数の二次近似と制約の線形近似から二次計画（QP）の部分問題を作り、その解を探索方向にする制約付きNLPのアルゴリズム枠組みです。
 source_ids: [S030, S056, S064]
 prerequisites: [bfgs]
-related_ids: [slsqp, interior-point-nlp, family.constrained-nlp]
+related_ids: [slsqp, interior-point-nlp, family.constrained-nlp, concept.convex-quadratic-program]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
+各反復で、目的関数の二次近似と制約の線形近似から二次計画（QP）の部分問題を作り、その解を探索方向にする制約付きNLPのアルゴリズム枠組みです。
 
-## 各反復で何を解いているか
+## 30秒でつかむ
 
-現在点$x_k$で目的関数を二次modelに、制約を線形に近似します。探索方向$p$を求めるQP subproblemは
+曲がりくねった山道を歩くとき、いまいる地点の足元だけを、簡単な地図に描き直すところを想像してください。
+地図の中では、谷は放物面で、道の縁はまっすぐな線です。この簡単な地図で最良の進み方を決め、本物の道で確かめてから、次の地点でまた描き直します。
+SQPは、この描き直しを繰り返して、制約の縁と目的の谷の両方に近づきます。
+
+- **見るもの**: 目的関数の勾配、制約の値とJacobian、Lagrangianの曲率、乗数の推定値
+- **動かすもの**: 現在点、乗数の推定値、曲率の近似 $B_k$
+- **前進の判断**: 一歩が、目的の改善と制約違反の減少をあわせて見る基準（merit関数やフィルター）に受け入れられること
+
+簡単な地図は、本物の道と食い違います。そのため、一歩をそのまま信じず、本物の値で確かめます。
+
+## 一手の意味
+
+一手は、現在点 $x_k$ のまわりで問題を「二次の目的」と「線形の制約」に置き換え、その二次計画（QP）の解を探索方向にする操作です。
+次の式は、探索方向 $p$ を求めるQPの部分問題です。不等式 $g_i(x)\le0$ と等式 $h_j(x)=0$ は、現在点で線形化します。
 
 $$
-\min_{p} \quad \nabla f(x_k)^T p + \frac{1}{2} p^T B_k p
+\min_{p}\ \nabla f(x_k)^\top p+\tfrac12\,p^\top B_k\,p
+\quad\text{s.t.}\quad g_i(x_k)+\nabla g_i(x_k)^\top p\le0,\quad h_j(x_k)+\nabla h_j(x_k)^\top p=0
 $$
 
-を、線形化した等式・不等式制約のもとで解く形になります。$B_k$はLagrangianのHessian、またはBFGS型の準Newton近似です。QPを解くとstepの方向$p_k$と、制約のLagrange乗数の推定値が同時に得られます。この乗数は次の反復のLagrangian Hessian近似や停止判定に使われます。
+$B_k$ は、LagrangianのHessian、またはそのBFGS型の準Newton近似です。
+QPを解くと、一歩の方向 $p_k$ と、制約のLagrange乗数（multiplier）の推定値が同時に得られます。この乗数は、次の反復の $B_k$ と停止判定に使われます。
 
-## 何を見て停止するか
+### 一歩を受け入れる条件
 
-SQPはKarush-Kuhn-Tucker（KKT）条件、つまり
+QPの解をそのまま採用すると、目的が悪化したり、制約違反が増えたりすることがあります。
+実用的な実装は、一歩を受理するか棄却するかを、次のどちらかで決めます。
 
-- stationarity（Lagrangian勾配が十分小さい）
-- primal feasibility（制約が満たされている）
-- dual feasibility（不等式乗数の符号条件）
-- complementarity（活性でない制約の乗数がゼロに近い）
+- 目的の改善と制約違反を一つにまとめるmerit関数（$\ell_1$ペナルティなど）
+- 二つを別々に見るフィルター法
 
-への収束を目安に停止判定します。二次収束が理論的に期待できるのは局所的にKKT点近傍かつ制約想定（constraint qualification）が成り立つ場合で、非凸問題では見つかる点が局所解にとどまります。
+必要なら歩幅（step length）も縮めます。
+この調整を大域化（globalization）と呼びます。QPの近似が悪い領域では、大域化がないと発散することがあります。
 
-## Stepを受理する条件
+SQPは一つのアルゴリズムではありません。$B_k$ の更新方法とQPソルバーの選び方、そして大域化の方針（merit関数かフィルターか）で、多くの実装系統に分かれます。
+[SLSQP](#/learn/slsqp)はその一実装です。SQP一般に共通する挙動と、SLSQPというソフトウェア系統に固有の停止条件・符号規約は、区別して確認します。
 
-QP subproblemの解をそのまま採用すると、目的が悪化したり制約違反が増えたりする場合があります。実用的なSQP実装は、objective improvementとconstraint violationを同時に評価するmerit関数（$\ell_1$penaltyなど）やfilter法でstepを受理・棄却し、必要ならstep lengthを縮小します。この調整（globalization）がないと、QP近似が良くない領域で発散する可能性があります。
+## 小さな例
 
-SQPは一つのアルゴリズムではなく、$B_k$の更新方法、QP solverの選び方、merit関数かfilterかというglobalization方針の組み合わせで多くの実装系統に分かれます。[SLSQP](#/learn/slsqp)はその一実装であり、SQP一般に共通する挙動と、SLSQPというsoftware系統固有の停止条件・sign conventionは区別して確認します。
+円盤の中で、原点にできるだけ近い点を探します。
 
-## 向いている条件
+$$
+\min_{x,y}\ x^2+y^2\quad\text{s.t.}\quad g(x,y)=(x-1)^2+(y-1)^2-1\le0
+$$
 
-- 目的・制約が滑らかで、中規模までの変数数
-- bounds・等式・不等式が混在する制約付きNLP
-- KKT残差や制約違反など、収束の診断値を確認したい
-- 似た問題を繰り返し解き、warm startを活用できる
-- gradientとconstraint Jacobianが精度良く得られる
+目的の最小点は原点ですが、原点は円盤の外にあります（$g=1$）。制約が効くので、答えは境界上の点になります。
+座標は $(1-1/\sqrt2)(1,1)\approx(0.2929,\,0.2929)$ です。目的値は $0.1716$ で、乗数は $\sqrt2-1\approx0.4142$ です。
+[BFGS法](#/learn/bfgs)の制約コラムと同じ問題です。
 
-## 避ける／切り替える条件
+円盤の内側の $(1.5,\,1.5)$ から出発し、$B_k$ にはLagrangianのHessian $2(1+\lambda)I$ をそのまま使います。最初の乗数は $\lambda=0$ です。
+歩幅は縮めず、QPの解をそのまま受け入れました。
 
-- 離散変数を含む、または制約が不連続
-- 勾配・Jacobianに強いnoiseが乗る
-- 変数や制約のscaleが極端に異なる
-- infeasibleな初期点からconstraint qualificationが崩れている
+| 反復 $k$ | 現在点 $x_k$ | 目的値 | 制約値 $g(x_k)$ | QPの乗数 | 一歩 $p_k$ |
+|---:|---|---:|---:|---:|---|
+| 0 | $(1.5,\,1.5)$ | 4.5 | −0.5 | 0 | $(-1.5,\,-1.5)$ |
+| 1 | $(0,\,0)$ | 0 | 1.0 | 0.25 | $(0.25,\,0.25)$ |
+| 2 | $(0.25,\,0.25)$ | 0.125 | 0.125 | 0.4028 | $(0.0417,\,0.0417)$ |
+| 3 | $(0.2917,\,0.2917)$ | 0.1701 | 0.0035 | 0.4142 | $(0.0012,\,0.0012)$ |
+| 4 | $(0.2929,\,0.2929)$ | 0.1716 | 0.000003 | 0.4142 | ほぼ $0$ |
 
-大規模疎なNLPでは[Interior-point NLP](#/learn/interior-point-nlp)を、制約付きNLP全体の選び分けは[制約付き非線形最適化の選び分け](#/learn/family.constrained-nlp)を確認します。
+反復0では、円盤の内側にいるので、線形化した制約はほとんど効きません。QPの解は、目的だけを見た一歩 $(-1.5,\,-1.5)$ で、原点へ跳びます。
+線形化した制約 $g+\nabla g^\top p=-3.5$ は満たされていますが、本物の $g(0,0)=1$ は円盤の外です。
+円のような凸の制約では、接線で近似した領域は本物の領域より広くなるので、こうしたずれが起こります。実用的な実装はここで一歩を縮めますが、この表は縮めずに追いました。
+
+反復1では、原点で制約違反が $1.0$ です。線形化した制約は、$p_1+p_2\ge0.5$ を要求します。
+その条件のもとで一歩の長さを最小にする解が $(0.25,\,0.25)$ で、乗数は $0.25$ と推定されます。
+
+その後の違反は、$1.0\to0.125\to0.0035\to0.000003$ と減ります。違反が縮む倍率は $8$ 倍から $36$ 倍、約 $1000$ 倍へと大きくなります。線形化が本物の制約に近づくからです。
+乗数の推定も $0.25\to0.4028\to0.4142$ と、$\sqrt2-1$ に収束します。
+
+## 向く条件・避ける条件
+
+SQPが向くのは、目的と制約が滑らかで、変数が中規模までの問題です（[制約付きNLP](#/formulations/PA009)）。
+
+| 条件 | 理由 |
+|---|---|
+| 目的・制約が滑らかで、変数が中規模まで | QP部分問題を毎回解くため |
+| 上下限・等式・不等式が混在する | 部分問題が、その混在をそのまま扱えるため |
+| KKT残差や制約違反で収束を確認したい | 乗数が一歩ごとに推定されるため |
+| 似た問題を繰り返し解き、warm startを使える | 前回の解と乗数を出発点にできるため |
+| 勾配と制約のJacobianを精度良く得られる | 線形近似の質が、そのまま一歩の質になるため |
+
+避ける、または切り替える条件です。
+
+- 離散変数を含む、または制約が不連続 → 別の定式化を検討する
+- 勾配やJacobianに強いノイズが乗る → 微分を使わない方法を検討する
+- 変数や制約の尺度（scale）が極端に違う → 先に尺度を揃える
+- 実行不能な初期点から、制約想定（constraint qualification）が崩れている → モデルの実行可能性を確認する
+- 大規模で疎なNLP → [非線形内点法](#/learn/interior-point-nlp)を検討する
+
+制約付きNLP全体の選び分けは、[制約付き非線形最適化の選び分け](#/learn/family.constrained-nlp)で確認します。
 
 ## Python
+
+次の例は、上の小さな例の表を、SQPの一歩をそのまま書き下して再現します。部分問題のQPは、制約が一本なので閉じた式で解いています。
+最後に、SQPの一実装であるSLSQPで、同じ問題を解いて確かめます。
 
 ```python
 import numpy as np
 from scipy.optimize import minimize
 
+center = np.array([1.0, 1.0])
+
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 1.0) ** 2 + 2.0 * (x[1] - 2.0) ** 2)
+    return float(x @ x)
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 1.0), 4.0 * (x[1] - 2.0)])
+    return 2.0 * x
 
 
-def inequality(x: np.ndarray) -> float:
-    return float(x[0] + x[1] - 2.0)
+def constraint(x: np.ndarray) -> float:
+    """g(x) <= 0 が実行可能。円盤 (x-1)^2 + (y-1)^2 <= 1 を表す。"""
+    return float((x - center) @ (x - center) - 1.0)
 
+
+def constraint_gradient(x: np.ndarray) -> np.ndarray:
+    return 2.0 * (x - center)
+
+
+def qp_step(x: np.ndarray, multiplier: float) -> tuple[np.ndarray, float]:
+    """線形化した制約のもとで二次近似を最小にする一歩と、新しい乗数を返す。"""
+    b_inverse = 1.0 / (2.0 * (1.0 + multiplier))  # B = 2(1 + λ) I
+    a = constraint_gradient(x)
+    p = -b_inverse * gradient(x)
+    if constraint(x) + a @ p <= 0.0:  # 線形化した制約を満たすなら、制約は効かない
+        return p, 0.0
+    mu = (constraint(x) - b_inverse * (a @ gradient(x))) / (b_inverse * (a @ a))
+    return -b_inverse * (gradient(x) + mu * a), mu
+
+
+x, multiplier = np.array([1.5, 1.5]), 0.0
+for k in range(5):
+    p, new_multiplier = qp_step(x, multiplier)
+    print(k, x.round(4), round(objective(x), 4), round(constraint(x), 6), round(new_multiplier, 5))
+    x, multiplier = x + p, new_multiplier
 
 result = minimize(
     objective,
-    x0=np.array([0.5, 1.5]),
+    x0=np.array([1.5, 1.5]),
     jac=gradient,
     method="SLSQP",
-    constraints=[{"type": "ineq", "fun": inequality}],
-    options={"ftol": 1e-10, "maxiter": 200},
+    constraints=[{"type": "ineq", "fun": lambda v: -constraint(v)}],
+    options={"ftol": 1e-12},
 )
-
-print(result.success, result.x, result.fun, inequality(result.x), result.message)
+print(result.success, result.x.round(5), round(result.fun, 5))
 ```
 
-`inequality(result.x)`が0以上ならSciPyの規約上feasibleです。ここではSLSQPというSQPの一実装を使っており、options名や制約の符号規約は実装固有です。[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html)で利用versionに対応する説明を確認します。
+```text
+0 [1.5 1.5] 4.5 -0.5 0.0
+1 [0. 0.] 0.0 1.0 0.25
+2 [0.25 0.25] 0.125 0.125 0.40278
+3 [0.2917 0.2917] 0.1701 0.003472 0.41419
+4 [0.2929 0.2929] 0.1716 3e-06 0.41421
+True [0.29289 0.29289] 0.17157
+```
+
+各行は、反復番号・現在点・目的値・制約値・QPが推定した乗数を並べたものです。表の値と一致します。
+SciPyの `ineq` は、関数値が0以上を実行可能とみなします。上の `constraint` は $g\le0$ の形なので、符号を反転して渡しています。
+SLSQPの反復は、上の素朴なSQPと同じとは限りません。オプション名や符号規約は実装に固有なので、利用中のバージョンの[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html)で確認します。
 
 ## 診断値
 
-- constraint_violation（最大制約違反量）
-- stationarity（Lagrangian勾配residual）
-- complementarity
-- factorization_status
-- QP subproblemのstatusまたはiteration数
-- function / gradient / Jacobian evaluation数
+SQPは、Karush–Kuhn–Tucker（KKT）条件への収束を目安に止まります。次の四つを、別々に確認します。
+
+- 停留性（stationarity）: Lagrangianの勾配が十分小さいか
+- 主実行可能性（primal feasibility）: 制約が満たされているか
+- 双対実行可能性（dual feasibility）: 不等式の乗数が0以上か
+- 相補性（complementarity）: 効いていない制約の乗数が0に近いか
+
+あわせて、次の値を記録します。
+
+- 最大制約違反
+- 停留性の残差（Lagrangianの勾配）
+- QP部分問題の状態、または反復回数
+- 分解（factorization）の状態
+- 関数・勾配・Jacobianの評価回数
+
+二次収束が理論的に期待できるのは、局所的にKKT点の近くにいて、制約想定が成り立つ場合です。非凸の問題では、見つかる点は局所解にとどまります。
+最大制約違反と停留性の残差がどちらも許容誤差以下なら、停止してよい目安です。どちらかが停滞するなら、下の表で切替先を選びます。
 
 ::: warning
-`success=True`はsolver内部の停止判定を満たしたことを示すだけです。実際のconstraint_violationとstationarityを自分で再計算し、SQP一般の理論と使用中の実装固有の挙動を混同しないようにします。
+`success=True` は、ソルバー内部の停止判定を満たしたことを示すだけです。最大制約違反と停留性の残差を自分で再計算します。SQP一般の理論と、使用中の実装に固有の挙動を混同しません。
 :::
 
 ## 失敗・切替の兆候
 
-- infeasible_start（初期点から実行可能領域に入れない）
-- constraint_qualification_failure（制約想定が崩れている）
-- bad_jacobian（Jacobianが不正確、または有限差分noiseが大きい）
-- poor_scaling（変数・制約のscaleが極端）
-- KKT残差が反復を重ねても減らない
-- 正則化やstep縮小の反復回数が増大し続ける
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 初期点から実行可能領域に入れない | 実行不能な初期点、または領域が空 | 制約を見直す。実行可能な初期点を用意する |
+| 制約のJacobianの階数が落ちる、乗数が発散する | 制約想定が崩れている | 冗長な制約を除く。[拡張Lagrangian法](#/learn/augmented-lagrangian)を検討する |
+| KKT残差が有限差分の刻みに左右される | Jacobianが不正確、またはノイズが大きい | 解析的な微分に替える。微分の実装を照合する |
+| 一歩が極端に短い、条件が悪化する | 変数・制約の尺度が極端に違う | 変数と制約を正規化して尺度を揃える |
+| KKT残差が反復を重ねても減らない | 大域化が働いていない、または近似が悪い | 初期点、$B_k$ の更新、一歩の受理基準を見直す |
+| 正則化や一歩の縮小が増え続ける | QPの近似が本物の問題から外れている | [非線形内点法](#/learn/interior-point-nlp)など別の系統へ切り替える |
 
 ## 次に読む
 
-Hessian近似の基本となる準Newton法は[BFGS法](#/learn/bfgs)、同じSQP枠組みの具体的な一実装は[SLSQP](#/learn/slsqp)で確認できます。
+- [SLSQP](#/learn/slsqp)：同じSQPの枠組みを、具体的なソフトウェアの実装として読む
+- [非線形内点法](#/learn/interior-point-nlp)：大規模で疎な問題へ広げる別の系統
+- [制約付きNLP](#/formulations/PA009)：この手法が解く問題の標準形
+- [BFGS法](#/learn/bfgs)：$B_k$ の近似に使う準Newton法の基本

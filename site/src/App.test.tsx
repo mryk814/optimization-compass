@@ -244,11 +244,11 @@ describe("application routes", () => {
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
-    expect(links).toHaveLength(8);
+    expect(links).toHaveLength(10);
     expect(screen.getByRole("link", { name: "Optimization Atlasのホーム" })).toBeVisible();
-    expect(within(navigation).getByRole("link", { name: "条件で診断" })).toBeVisible();
-    expect(within(navigation).getByRole("link", { name: "事例を見る" })).toBeVisible();
-    expect(within(navigation).getByRole("link", { name: "手法を学ぶ" })).toBeVisible();
+    for (const name of ["道筋", "辞書", "手法", "診断", "事例"]) {
+      expect(within(navigation).getByRole("link", { name })).toBeVisible();
+    }
     expect(within(navigation).getByRole("link", { name: "動きを見る" })).not.toBeVisible();
     expect(within(navigation).getByRole("link", { name: "条件を比較" })).not.toBeVisible();
     expect(within(navigation).getByRole("link", { name: "問題構造" })).not.toBeVisible();
@@ -260,6 +260,8 @@ describe("application routes", () => {
     expect(within(navigation).getByRole("link", { name: "根拠を見る" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "動きを見る" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "条件を比較" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "道筋から学び始める" })).toHaveAttribute("href", "#/paths");
+    expect(screen.getByRole("link", { name: "定式化の辞書を引く" })).toHaveAttribute("href", "#/formulations");
     expect(screen.getByRole("link", { name: "条件から診断を始める" })).toBeVisible();
     expect(screen.getByRole("link", { name: "実例から探す" })).toBeVisible();
     within(screen.getByRole("navigation", { name: "次に進む入口" }))
@@ -269,12 +271,12 @@ describe("application routes", () => {
 
   test("the methods navigation opens the real learning index and stays active on method pages", () => {
     render(<App initialEntityLinks={testLinks} />);
-    expect(screen.getByRole("link", { name: "手法を学ぶ" })).toHaveAttribute("href", "#/learn");
+    expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("href", "#/learn");
     cleanup();
 
     window.location.hash = "#/methods/M_NELDER_MEAD";
     render(<App initialEntityLinks={testLinks} />);
-    expect(screen.getByRole("link", { name: "手法を学ぶ" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("aria-current", "page");
   });
 
   test("keeps Theater and Compare as distinct destinations inside the exploration menu", () => {
@@ -317,7 +319,7 @@ describe("application routes", () => {
     fireEvent.click(skipLink);
     expect(screen.getByRole("main")).toHaveFocus();
 
-    const learnLink = screen.getByRole("link", { name: "手法を学ぶ" });
+    const learnLink = screen.getByRole("link", { name: "手法" });
     learnLink.focus();
     expect(learnLink).toHaveFocus();
     fireEvent.click(learnLink);

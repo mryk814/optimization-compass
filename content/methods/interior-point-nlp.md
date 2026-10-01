@@ -4,123 +4,230 @@ kind: method
 method_id: M_INTERIOR_POINT_NLP
 title_ja: 非線形内点法
 title_en: Nonlinear Interior-Point Method
-summary: 不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかなNLPを解く方法です。
+summary: 不等式制約にバリア（barrier）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。
 source_ids: [S017, S029, S056, S087]
 prerequisites: [constrained-continuous]
-related_ids: [constrained-continuous, slsqp, augmented-lagrangian]
+related_ids: [constrained-continuous, slsqp, augmented-lagrangian, barrier-lp-qp, sqp]
 aliases: [/learn/interior-point-nlp]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかなNLPを解く方法です。
+不等式制約にバリア（barrier）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、制約境界との距離をbarrierで保ちながら、目的とKKT条件を同時に整えることです。
+電気柵に囲まれた牧場を歩くところを想像してください。
+柵に触れると痛いので、まず柵から十分に離れた道を歩きます。柵までの余裕の目安を少しずつ縮めると、歩く道は、柵の近くにある最良の場所へ寄っていきます。
+非線形内点法は、この余裕の目安を縮めながら、目的とKKT条件を同時に整えます。
 
-- **見るもの**: 目的関数、制約、微分情報、primal・dual residualとcomplementarity
-- **動かすもの**: primal変数、dual変数、slack、barrier parameter
-- **前進の判断**: primal・dual infeasibilityとcomplementarityが小さくなること
+- **見るもの**: 目的関数、制約、微分情報、主・双対の残差と相補性
+- **動かすもの**: 主変数、双対変数、スラック変数、バリアの強さを決める $\mu$
+- **前進の判断**: 主・双対の実行不能性と相補性が小さくなること
 
-## 境界の内側を進む
+有効な制約の組を推定する[active-set法](#/learn/active-set)とは違い、内点法はすべての不等式を境界の内側に保ったまま、余裕を少しずつ縮めます。
 
-不等式 $g_i(x)\le0$ にslack $s_i>0$ を導入し、barrier parameter $\mu$ を使って境界へ近づきます。log barrierの単純な形は
+## 一手の意味
+
+不等式 $g_i(x)\le0$ にスラック変数 $s_i>0$ を導入し、境界からの余裕を変数として持ちます。
+次の式は、境界に近づくほど値が無限大に近づくペナルティを、目的に足した形です。$\mu$ が大きいほど境界から遠ざかり、小さいほど境界の近くを許します。
 
 $$
 f(x)-\mu\sum_i\log(-g_i(x))
 $$
 
-です。primal-dual法では、KKT systemへslackとdual multiplierを含め、$\mu$を下げながらcomplementarityを0へ近づけます。
+primal-dual法は、この最小化を直接は解きません。スラックと双対変数を含むKKT条件の連立方程式を解きます。ただし、相補性の条件 $s_i\lambda_i=0$ を $s_i\lambda_i=\mu$ に緩めます。
 
-## 「feasible interior」が必要とは限らない
+$$
+\nabla f(x)+\nabla g(x)^\top\lambda=0,\qquad g(x)+s=0,\qquad s_i\lambda_i=\mu,\qquad s>0,\ \lambda>0
+$$
 
-古典的barrierの説明ではstrictly feasible startを想定しますが、現代実装はrestoration phase、filter、slack、infeasible-start primal-dual法などを持つ場合があります。実装が何を要求するかを確認します。
+一手は、この連立方程式のNewton方向を一回解き、$s$ と $\lambda$ が正のまま残る歩幅で更新する操作です。$\mu$ を下げながら繰り返すと、$s_i\lambda_i=\mu$ が $0$ へ近づき、KKT条件そのものに収束します。
 
-## KKT systemとsparsity
+### 内部の実行可能な初期点が必要とは限らない
 
-大規模NLPでは、目的評価よりKKT matrixのfactorizationが支配することがあります。
+古典的なバリア法の説明は、すべての不等式が厳密に成り立つ初期点（strictly feasible start）を想定します。
+現代の実装には、次のような仕組みを持つものがあります。
 
-見るべき構造:
+- 復元フェーズ（restoration phase）
+- フィルター
+- スラック変数
+- 実行不能な初期点から始められるprimal-dual法
 
-- Jacobian sparsity
-- Hessian / Lagrangian Hessian sparsity
-- symmetric indefinite linear solve
-- fill-in
-- ordering
-- regularization
-- iterative refinement
+実装が何を要求するかを確認します。
 
-automatic differentiationで値が得られても、sparse patternを失うとmemoryが増大します。
+### KKT系と疎性
 
-## 向いている条件
+大規模なNLPでは、目的の評価よりも、KKT行列の分解（factorization）が時間を支配することがあります。次の構造を見ます。
 
-- smoothな大規模・疎NLP
-- boundsと多数の一般制約
-- gradient / Jacobian / HessianまたはHVPが利用可能
-- KKT residualを追いたい
-- local solutionで十分、またはconvex問題
+- Jacobianの疎性
+- Hessian、またはLagrangian Hessianの疎性
+- 対称不定値の連立一次方程式の解法
+- 分解で増える非ゼロ要素（fill-in）
+- 変数の並べ替え（ordering）
+- 正則化
+- 反復改良（iterative refinement）
 
-## 避ける／切り替える条件
+自動微分で値が得られても、疎なパターンを失うと、メモリが増大します。
 
-- discontinuous / noisy constraint
-- discrete variable
-- derivativeが不正確
-- KKT solveがmemoryを超える
-- scaleが悪くregularizationが増大
-- infeasible modelをbarrier調整で隠す
-- strict real-time budgetにfactorizationが合わない
+## 小さな例
 
-## Python: trust-constrでbarrierを観察する
+[凸二次計画](#/learn/concept.convex-quadratic-program)の小さな例を、内点法で解きます。
+
+$$
+\min_{x}\; (x_1-3)^2+(x_2-2)^2 \quad \text{s.t.}\quad x_1+x_2\le 3,\; x\ge 0
+$$
+
+答えは $(2,1)$ で、目的値は $2$、乗数は $2$ です。$x\ge0$ は解で効かないので、ここでは省き、$x_1+x_2+s=3$（$s>0$）だけを考えます。
+
+まず、$\mu$ を決めたときにKKT系が指す点を、手計算で求められます。
+$2(x-(3,2))+\lambda(1,1)=0$ から、$x=(3,2)-\tfrac{\lambda}{2}(1,1)$ です。これを $s=3-x_1-x_2$ に入れると $s=\lambda-2$ です。
+$s\lambda=\mu$ から、$\lambda=1+\sqrt{1+\mu}$ が決まります。
+
+| $\mu$ | 点 $x$ | スラック $s$ | 乗数 $\lambda$ | 目的値 |
+|---:|---|---:|---:|---:|
+| 1 | $(1.7929,\,0.7929)$ | 0.4142 | 2.4142 | 2.9142 |
+| 0.1 | $(1.9756,\,0.9756)$ | 0.0488 | 2.0488 | 2.0988 |
+| 0.01 | $(1.9975,\,0.9975)$ | 0.0050 | 2.0050 | 2.0100 |
+| 0.001 | $(1.99975,\,0.99975)$ | 0.0005 | 2.0005 | 2.0010 |
+
+$\mu$ を1桁下げるたびに、点は境界 $x_1+x_2=3$ の内側から、答え $(2,1)$ へ寄ります。スラックは $0$ に、乗数は $2$ に近づきます。
+最適値 $2$ との差は、$\mu$ が小さいほど、およそ $\mu$ に近づきます。どの点も $x_1+x_2<3$ で、境界の内側です。
+
+次に、一手の中身を見ます。$\mu=1$ の点から、目標を $\mu=0.1$ に下げ、Newton方向を解きます。歩幅はどの反復も $1$ で受け入れました。
+
+| Newton反復 | 点 $x$ | スラック $s$ | 乗数 $\lambda$ | $s\lambda$ |
+|---:|---|---:|---:|---:|
+| 0 | $(1.7929,\,0.7929)$ | 0.41421 | 2.41421 | 1.0 |
+| 1 | $(1.9520,\,0.9520)$ | 0.09602 | 2.09602 | 0.20125 |
+| 2 | $(1.9751,\,0.9751)$ | 0.04983 | 2.04983 | 0.10213 |
+| 3 | $(1.9756,\,0.9756)$ | 0.04881 | 2.04881 | 0.10000 |
+
+相補性 $s\lambda$ が、目標の $0.1$ へ急速に近づきます。3回で、表の $\mu=0.1$ の点に着きました。
+$\mu$ を下げる規則と、次の $\mu$ へ進む時機は、実装ごとに違います。この表は、その一例にすぎません。
+
+## 向く条件・避ける条件
+
+非線形内点法は、滑らかで大規模・疎なNLPで、KKT残差を追いながら局所解を求めたいときに向きます（[制約付きNLP](#/formulations/PA009)）。
+
+| 条件 | 理由 |
+|---|---|
+| 滑らかな大規模・疎なNLP | 疎なKKT系を、分解で効率よく解けるため |
+| 上下限と多数の一般制約がある | どの制約も、スラックで同じ形に扱えるため |
+| 勾配・Jacobian・Hessian（またはHessian-vector積）を使える | Newton方向を作るため |
+| KKT残差を追いたい | 主・双対の残差と相補性が、反復ごとに得られるため |
+| 局所解で十分、または凸の問題 | 大域最適性を保証する手法ではないため |
+
+避ける、または切り替える条件です。
+
+- 制約が不連続、またはノイズを含む → 微分を使う前提が崩れる
+- 離散変数がある → 別の定式化を検討する
+- 微分が不正確 → 先に微分の実装を直す
+- KKT系の分解がメモリを超える → 分解の要らない方法を検討する
+- 尺度が悪く、正則化が増え続ける → 先に尺度を揃える
+- 実行不能なモデルを、バリアの調整で隠している → モデルの制約を見直す
+- 厳しいリアルタイムの時間制約に、分解の費用が合わない → 反復あたりの費用が軽い方法を検討する
+
+## Python
+
+次の例は、小さな例の二つの表を再現します。前半はNewton方向を解く自作の一手で、後半は `scipy.optimize` の `trust-constr` で同じ問題を解いた確認です。
+`trust-constr` は、不等式制約に対しては内点法を使います。
 
 ```python
 import numpy as np
-from scipy.optimize import NonlinearConstraint, minimize
+from scipy.optimize import LinearConstraint, minimize
+
+target = np.array([3.0, 2.0])
+a = np.array([1.0, 1.0])  # 制約 a.x + s = 3, s > 0
 
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 1.0) ** 2 + (x[1] - 2.0) ** 2)
+    return float((x - target) @ (x - target))
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 1.0), 2.0 * (x[1] - 2.0)])
+    return 2.0 * (x - target)
 
 
-def constraint(x: np.ndarray) -> np.ndarray:
-    return np.array([x[0] ** 2 + x[1] ** 2])
+def newton_step(x, s, lam, mu):
+    """primal-dual系の一手。s * lam = mu を目標に、Newton方向を解く。"""
+    kkt = np.zeros((4, 4))
+    kkt[:2, :2] = 2.0 * np.eye(2)  # 目的のHessian
+    kkt[:2, 3] = a
+    kkt[2, 2], kkt[2, 3] = lam, s
+    kkt[3, :2], kkt[3, 2] = a, 1.0
+    rhs = -np.concatenate([gradient(x) + lam * a, [s * lam - mu], [a @ x + s - 3.0]])
+    dx, ds, dlam = np.split(np.linalg.solve(kkt, rhs), [2, 3])
+    return x + dx, s + ds[0], lam + dlam[0]
 
 
-unit_disk = NonlinearConstraint(constraint, -np.inf, 1.0)
+# mu = 1 の中心 (x, s, lam) から出発し、mu = 0.1 を目標にする。
+lam0 = 1.0 + np.sqrt(2.0)
+x, s, lam = target - 0.5 * lam0 * a, lam0 - 2.0, lam0
+for k in range(4):
+    print(k, x.round(4), round(s, 5), round(lam, 5), round(s * lam, 5))
+    x, s, lam = newton_step(x, s, lam, mu=0.1)
+
 result = minimize(
     objective,
-    x0=np.array([0.2, 0.2]),
+    x0=np.array([1.0, 0.5]),
     jac=gradient,
+    hess=lambda v: 2.0 * np.eye(2),
     method="trust-constr",
-    constraints=[unit_disk],
-    options={"gtol": 1e-9, "barrier_tol": 1e-9, "maxiter": 1_000},
+    constraints=[LinearConstraint(a.reshape(1, 2), -np.inf, 3.0)],
+    options={"gtol": 1e-9, "maxiter": 1000},
 )
-
-violation = max(0.0, constraint(result.x)[0] - 1.0)
-print(result.success, result.x, result.fun, violation, result.message)
+print(result.success, result.x.round(4), result.nit)
+print(result.constr_violation, result.barrier_parameter, result.v[0].round(4))
 ```
 
-SciPyの`trust-constr`とIpopt等の実装は同じではありません。linear solver、Hessian approximation、filter、scaling、restorationをversion付きで記録します。
+```text
+0 [1.7929 0.7929] 0.41421 2.41421 1.0
+1 [1.952 0.952] 0.09602 2.09602 0.20125
+2 [1.9751 0.9751] 0.04983 2.04983 0.10213
+3 [1.9756 0.9756] 0.04881 2.04881 0.1
+True [1.9998 0.9998] 9
+0.0 0.0008 [2.0004]
+```
+
+前半の四行は、表のNewton反復と一致します。
+`trust-constr` の答えは $(1.9998,\,0.9998)$ で、$(2,1)$ にわずかに届きません。バリアの強さ `barrier_parameter` が $0.0008$ のまま、勾配の許容誤差 `gtol` で止まったためです。乗数の推定は $2.0004$ で、真の値 $2$ に近い値です。
+`trust-constr` とIpoptなどの実装は、同じではありません。次の項目を、バージョンとあわせて記録します。線形ソルバー・Hessianの近似・フィルター・尺度の調整・復元フェーズです。
 
 ## 診断値
 
-- primal infeasibility
-- dual infeasibility / stationarity
-- complementarity
-- barrier parameter $\mu$
-- step acceptance / filter status
-- restoration phase
-- KKT factorization status
-- regularization magnitude
-- function / derivative evaluation数
-- termination reason
+- 主実行不能性（primal infeasibility）
+- 双対実行不能性、または停留性（stationarity）
+- 相補性（complementarity）
+- バリアの強さ $\mu$
+- 一歩の受理の状況、またはフィルターの状態
+- 復元フェーズに入ったか
+- KKT系の分解の状態
+- 正則化の大きさ
+- 関数と微分の評価回数
+- 終了の理由
 
-barrier parameterが小さくてもprimal infeasibilityが残っていれば、良い解ではありません。
+判断の目安です。主・双対の実行不能性と相補性が、どれも許容誤差以下なら止めます。
+バリアの強さが小さくても、主実行不能性が残っていれば、良い解ではありません。
 
 ::: warning
-内点法のiteration数は少なく見えることがありますが、一反復のKKT solveは重い場合があります。SLSQPやfirst-order法との比較ではfactorization・derivative費用を含むwall timeを記録します。
+内点法の反復回数は少なく見えることがありますが、一反復のKKT系の解は重いことがあります。SLSQPや一次法と比べるときは、分解と微分の費用を含む経過時間（wall time）を記録します。
 :::
+
+## 失敗・切替の兆候
+
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 正則化の大きさが増え続ける | 尺度が悪い、またはHessianが悪条件 | 変数と制約の尺度を揃える。Hessianの近似を見直す |
+| 復元フェーズに入り続ける | 実行不能に近い、またはモデルの制約が矛盾 | 制約を見直す。実行可能な初期点を試す |
+| 分解でメモリが足りない | KKT行列のfill-inが大きい | 疎なパターンと並べ替えを確認する。分解の要らない方法を検討する |
+| 相補性は小さいのに、主実行不能性が残る | 許容誤差の設定、または尺度 | 主実行不能性を単独で確認する。許容誤差を見直す |
+| 一歩が極端に短くなる | 微分が不正確、または制約が不連続 | 微分を有限差分と照合する。滑らかさを確認する |
+| 反復あたりの時間が予算を超える | 分解の費用が支配的 | 反復あたりの費用が軽い方法や、[SLSQP](#/learn/slsqp)を検討する |
+
+## 次に読む
+
+- [SLSQP](#/learn/slsqp)：小〜中規模で、有効な制約を選び分けながら解く方法との違い
+- [拡張Lagrangian法](#/learn/augmented-lagrangian)：制約を分離して外側の反復で扱う方法
+- [制約付きNLP](#/formulations/PA009)：この手法が解く問題の標準形
+- [Primal-dual barrier法](#/learn/barrier-lp-qp)：同じ考え方を、LP・QPに適用した場合

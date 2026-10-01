@@ -4,105 +4,131 @@ kind: method
 method_id: M_PBT
 title_ja: Population Based Training
 title_en: Population-Based Training
-summary: 並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。
+summary: 並走する作業者の途中成績を比較し、良い作業者の学習状態を継承してハイパーパラメータを変える継続学習型HPOです。
 source_ids: [S038, S069]
 prerequisites: []
 related_ids: [hyperband-asha, random-search, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。
+並走する作業者の途中成績を比較し、良い作業者の学習状態を継承してハイパーパラメータを変える継続学習型HPOです。
 
 ## 30秒でつかむ
 
-PBTは、固定したconfigurationを一つずつ完走させる方法ではありません。
-**学習途中のworkerを比較し、良い系譜を継承しながらhyperparameter scheduleを変えます。**
+複数の練習チームが途中成績を比べ、良いチームの練習状態を引き継いで練習の強さを変えます。PBTでは、学習状態の継承と設定の変更を組み合わせます。
 
-- 見ているもの: validation metric、worker state、hyperparameter、lineage
-- 動かしているもの: weight、optimizer state、hyperparameterの摂動
-- 前進の判断: 同じtotal training budgetで、良い系譜が残り続けるか
-- 別に確認するもの: worker間のresource利用率、exploit / explore頻度、再現性
-- 恐れていること: population collapse、誤った継承、系譜の欠落、noiseへの過反応
+PBTは、固定した設定を一つずつ完走させる方法ではありません。
+**学習途中の作業者を比較し、良い系譜を継承しながらハイパーパラメータの予定を変えます。**
 
-最終workerのhyperparameterだけでは、結果を再現する情報になりません。
+- 見るもの: 検証指標、作業者の状態、ハイパーパラメータ、系譜
+- 動かすもの: 重み、最適化器の状態、ハイパーパラメータの摂動
+- 前進の判断: 同じ総学習予算で、良い系譜が残り続けるか
 
-## まず確認すること
+最終作業者のハイパーパラメータだけでは、結果を再現する情報になりません。
+
+## 一手の意味
+
+下位の作業者 $j$ は上位の作業者 $i$ の状態を引き継ぎ、設定を摂動します。
+
+$$
+\theta_j\leftarrow\theta_i,\qquad h_j\leftarrow\operatorname{perturb}(h_i)
+$$
+
+$\theta$ は学習状態、$h$ はハイパーパラメータです。継承時点と継承元も保存します。
+
+### 何を並走させているか
+
+PBTは複数の作業者を同時に学習させます。
+各作業者は、自分の重みとハイパーパラメータを持ちます。
+一定の一歩やエポックごとに検証指標を測り、作業者間の途中成績を比較します。
+
+無作為探索やHyperbandでは、1つの作業者が固定のハイパーパラメータで学習を続けます。
+PBTは途中経過を比較し、学習状態を作業者間で受け渡します。
+
+### 継承と摂動が何をしているか
+
+1回の更新繰返しでは、何を保ち、何を変えたかを順番に追います。
+
+1. **学習**: 各作業者を同じ区間だけ進める
+2. **評価**: 検証指標で途中成績を比較する
+3. **継承**: 下位作業者へ上位作業者の重みと、必要なら最適化器の状態をコピーする
+4. **摂動・記録**: ハイパーパラメータを摂動または再標本し、継承元と変更値を残す
+
+この操作を繰り返すと、1つの作業者の系譜が途中で枝分かれします。
+学習の前半と後半で、異なるハイパーパラメータを経験する場合もあります。
+PBTが探索する対象は、固定のハイパーパラメータの組ではありません。
+学習の進行に応じて値を変える**ハイパーパラメータの予定**です。
+
+作業者IDの線だけを見ても、複製後に誰の学習状態を継いだかは分かりません。
+次の固定教材では、得点と系譜を上下に分けて同じラウンド軸で追います。
+
+![6 作業者を10 ラウンド動かした固定PBT教材。上段では各作業者の得点が上がる。下段では2 ラウンドごとの5回の継承を矢印で示す。W0の系譜の根は0から5、さらに3へ変わる。最良得点は-1.0032から-0.0118へ上がる。](./media/pbt-lineage-execution.svg "worker scoreとlineage継承を同時に追う固定PBT実行")
+
+上段のW0は一本の線ですが、下段の根は `0 → 5 → 3` と変わります。
+つまり、最終的なW0と学習率だけを保存しても、途中の予定は再現できません。
+
+> この図は固定得点関数で6 作業者を10 ラウンド動かした教材です。
+> 2 ラウンドごとに最良作業者の状態を最下位へ複製し、学習率だけを0.8倍または1.2倍します。
+> 実モデルの学習、保存状態転送コスト、検証雑音は含みません。
+> 非同期実行やPBT一般の性能も示していません。
+
+### 通常のHPOと結果の解釈が違う点
+
+無作為探索やHyperbandは、試行ごとに固定のハイパーパラメータの組を割り当てます。
+そこで比べるのは「この設定がどれだけ良いか」です。
+
+PBTで最後に残る成績は、継承と摂動を経た系譜全体の結果です。
+したがって「良いハイパーパラメータの組」ではなく、「良い予定を持つ系譜」を見つけたと解釈します。
+
+最終ハイパーパラメータだけでは、この結果を再現できません。
+いつ、どの作業者から、どの状態を継承したかも必要です。
+集団全体について、継承元／摂動後の値／評価時点の指標を記録します。
+
+## 小さな例
+
+Python節の6作業者を、同じ区間ずつ学習させます。
+最初の3ラウンドで、最良成績と継承の有無を記録しました。
+
+| ラウンド | 最良検証得点 | 継承 |
+|---|---:|---|
+| 1 | -0.178 | なし |
+| 2 | -0.050 | 作業者5から作業者0へ |
+| 3 | -0.031 | なし |
+
+2ラウンド目の継承で、作業者0は作業者5の状態を受け取ります。
+作業者IDが同じでも、学習の系譜は変わります。
+
+## 向く条件・避ける条件
+
+### まず確認すること
 
 | 項目 | 確認内容 |
 |---|---|
-| worker | 同じarchitectureでweightを継承できるか |
-| metric | 一定間隔でvalidationできるか |
-| interval | exploit / exploreの頻度が学習速度に合うか |
-| budget | populationと学習時間を同じ条件で比較できるか |
-| lineage | source、継承時点、摂動後の値を保存できるか |
+| 作業者 | 同じ構造で重みを継承できるか |
+| 指標 | 一定間隔で検証できるか |
+| 区間 | 継承と摂動の頻度が学習速度に合うか |
+| 予算 | 集団と学習時間を同じ条件で比較できるか |
+| 系譜 | 継承元、継承時点、摂動後の値を保存できるか |
 
-## 何を並走させているか
+### 向いている条件
 
-PBTは複数のworkerを同時に学習させます。
-各workerは、自分のweightとhyperparameterを持ちます。
-一定のstepやepochごとにvalidation metricを測り、worker間の途中成績を比較します。
+- 長時間の学習で、学習率や正則化などのハイパーパラメータを学習の進行に応じて変化させる価値がある
+- 集団を同時に走らせるだけの並列資源がある
+- 検証指標を一定間隔で安価に計算できる
+- 作業者の間で重みを転用できる（同一構造）
 
-random searchやHyperbandでは、1つのworkerが固定のhyperparameterで学習を続けます。
-PBTは途中経過を比較し、学習状態をworker間で受け渡します。
+### 避ける／切り替える条件
 
-## exploitとexploreが何をしているか
-
-1回の更新loopでは、何を保ち、何を変えたかを順番に追います。
-
-1. **学習**: 各workerを同じintervalだけ進める
-2. **評価**: validation metricで途中成績を比較する
-3. **exploit**: 下位workerへ上位workerのweightと、必要ならoptimizer stateをコピーする
-4. **explore・記録**: hyperparameterを摂動または再sampleし、継承元と変更値を残す
-
-このloopを繰り返すと、1つのworkerの系譜（lineage）が途中で枝分かれします。
-学習の前半と後半で、異なるhyperparameterを経験する場合もあります。
-PBTが探索する対象は、固定のhyperparameter setではありません。
-学習の進行に応じて値を変える**hyperparameter schedule**です。
-
-worker IDの線だけを見ても、copy後に誰の学習状態を継いだかは分かりません。
-次の固定教材では、scoreとlineageを上下に分けて同じround軸で追います。
-
-![6 workerを10 round動かした固定PBT教材。上段では各workerのscoreが上がる。下段では2 roundごとの5回のexploitを矢印で示す。W0のlineage rootは0から5、さらに3へ変わる。best scoreは-1.0032から-0.0118へ上がる。](./media/pbt-lineage-execution.svg "worker scoreとlineage継承を同時に追う固定PBT実行")
-
-上段のW0は一本の線ですが、下段のrootは `0 → 5 → 3` と変わります。
-つまり、最終的なW0とlearning rateだけを保存しても、途中のscheduleは再現できません。
-
-> この図は固定score関数で6 workerを10 round動かした教材です。
-> 2 roundごとに最良workerのstateを最下位へcopyし、learning rateだけを0.8倍または1.2倍します。
-> 実modelの学習、checkpoint転送cost、validation noiseは含みません。
-> 非同期実行やPBT一般の性能も示していません。
-
-## 通常のHPOと結果の解釈が違う点
-
-random searchやHyperbandは、trialごとに固定のhyperparameter setを割り当てます。
-そこで比べるのは「このconfigurationがどれだけ良いか」です。
-
-PBTで最後に残る成績は、継承と摂動を経た系譜全体の結果です。
-したがって「良いhyperparameter set」ではなく、「良いscheduleを持つ系譜」を見つけたと解釈します。
-
-最終hyperparameterだけでは、この結果を再現できません。
-いつ、どのworkerから、どの状態を継承したかも必要です。
-population全体について、exploit元／explore後の値／評価時点のmetricを記録します。
-
-## 向いている条件
-
-- 長時間の学習で、learning rateやregularizationなどのhyperparameterを学習の進行に応じて変化させる価値がある
-- populationを同時に走らせるだけの並列resourceがある
-- validation metricを一定間隔で安価に計算できる
-- workerの間でweightを転用できる（同一architecture）
-
-## 避ける／切り替える条件
-
-- 評価や学習が安価で、大量trialを単純に並列実行できる → [Random Search](#/learn/random-search)や[Hyperband / ASHA](#/learn/hyperband-asha)で十分な場合
-- populationを同時に走らせる並列resourceがない
-- 固定configの比較として単純な再現性・監査性を優先したい
-- weightの継承が意味を持たない設定（architecture自体を探索するなど）
+- 評価や学習が安価で、大量試行を単純に並列実行できる → [Random Search](#/learn/random-search)や[Hyperband / ASHA](#/learn/hyperband-asha)で十分な場合
+- 集団を同時に走らせる並列資源がない
+- 固定設定の比較として単純な再現性・監査性を優先したい
+- 重みの継承が意味を持たない設定（構造自体を探索するなど）
 
 ## Python
 
 図の固定教材をPythonで再現します。
-`lineage_root` をworker IDと分けて持つため、copyを繰り返しても継承元を追えます。
+`lineage_root` を作業者IDと分けて持つため、複製を繰り返しても継承元を追えます。
 
 ```python
 from dataclasses import dataclass
@@ -144,31 +170,36 @@ print([(worker.worker_id, worker.lineage_root) for worker in population])
 print(max(map(validation_score, population)))
 ```
 
-出力は、exploitの `(round, source, target)` が
+出力は、継承の `(round, source, target)` が
 `[(2, 5, 0), (4, 5, 1), (6, 4, 2), (8, 3, 0), (10, 0, 5)]`、
-最終lineage rootが `[(0, 3), (1, 5), (2, 4), (3, 3), (4, 4), (5, 3)]` になります。
-best scoreは `-0.011770171589838159` です。
+最終系譜の根が `[(0, 3), (1, 5), (2, 4), (3, 3), (4, 4), (5, 3)]` になります。
+最良得点は `-0.011770171589838159` です。
 
-実務では、この操作を学習intervalごとに繰り返します。
-weight／optimizer state／系譜はcheckpointへ保存します。
-実装時は[Ray TuneのPBT guide](https://docs.ray.io/en/latest/tune/examples/pbt_guide.html)で、利用versionのAPIとcheckpoint挙動を確認します。
+実務では、この操作を学習区間ごとに繰り返します。
+重み／最適化器の状態／系譜は保存状態へ保存します。
+実装時は[Ray TuneのPBT ガイド](https://docs.ray.io/en/latest/tune/examples/pbt_guide.html)で、利用版のAPIと保存状態挙動を確認します。
 
 ## 診断値
 
-- best-so-far（系譜全体での最良validation metric）
-- population内のhyperparameter分散（多様性が早期に失われていないか）
-- exploit発生頻度と、exploit元・exploit先の系譜記録
-- explore後のhyperparameterが実際に成績を改善したか
-- worker間のidle time・resource利用率
+- これまでの最良値（系譜全体での最良検証指標）
+- 集団内のハイパーパラメータ分散（多様性が早期に失われていないか）
+- 継承発生頻度と、継承元・継承先の系譜記録
+- 摂動後のハイパーパラメータが実際に成績を改善したか
+- 作業者間の待機時間・資源利用率
+
+- 別に確認するもの: 作業者間の資源利用率、継承と摂動頻度、再現性
+- 恐れていること: 集団の同質化、誤った継承、系譜の欠落、雑音への過反応
 
 ## 失敗・切替の兆候
 
-- populationが早期に同じhyperparameterへ収束し、多様性を失う（population collapse）
-- exploitが頻発しすぎて学習が不安定になる
-- explore時の摂動が大きすぎてweightの継承価値を壊す
-- validation metricがnoiseに支配され、誤ったworkerをexploitしてしまう
+- 集団が早期に同じハイパーパラメータへ収束し、多様性を失う（集団の同質化）
+- 継承が頻発しすぎて学習が不安定になる
+- 摂動時の摂動が大きすぎて重みの継承価値を壊す
+- 検証指標が雑音に支配され、誤った作業者を継承してしまう
 - 系譜の記録が不完全で、最終結果を再現できない
 
 ## 次に読む
 
-途中成績で候補を打ち切りbudgetを再配分する考え方は[Hyperband / ASHA](#/learn/hyperband-asha)、何も仮定しないbaselineは[Random Search](#/learn/random-search)で確認できます。高価なblack-box評価全体の選び分けは[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)にまとめています。
+途中成績で候補を打ち切り予算を再配分する考え方は[Hyperband / ASHA](#/learn/hyperband-asha)、何も仮定しない比較基準は[Random Search](#/learn/random-search)で確認できます。高価なブラックボックス評価全体の選び分けは[高価なブラックボックス・HPOの選び分け](#/learn/family.expensive-black-box)にまとめています。
+
+- [この手法を使う問題の定式化](#/formulations/PA039)：決定変数と目的を確認します。

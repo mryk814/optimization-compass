@@ -1,0 +1,260 @@
+---
+content_id: concept.knapsack-set-cover
+kind: concept
+canonical_entity_type: problem
+canonical_entity_id: PA032
+title_ja: knapsack・set cover
+title_en: Knapsack and Set Cover
+summary: knapsack と set cover は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。knapsack は容量の上限のもとで価値を最大にし、set cover は全部を覆う条件のもとで費用を最小にします。
+prerequisites: [concept.mixed-integer-linear-program]
+related_ids: [dynamic-programming, branch-and-cut, cp-sat, local-search-combinatorial]
+source_ids: [S054, S021, S022, S079, S002]
+status: published
+last_reviewed: 2026-09-30
+---
+
+knapsack と set cover は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。knapsack は容量の上限のもとで価値を最大にし、set cover は全部を覆う条件のもとで費用を最小にします。
+
+## 30秒でつかむ
+
+予算が7の防災事業を、4つの候補から選ぶ場面を考えます。
+事業ごとに費用と便益が決まっていて、半分だけ実施することはできません。
+費用の合計が予算に収まる範囲で、便益の合計が最大になる組み合わせを選びます。これが knapsack（ナップサック問題）です。
+
+- **決めるもの**: 品目ごとの「入れる（1）・入れない（0）」
+- **良くしたいもの**: 選んだ品目の価値の合計
+- **守ること**: 選んだ品目の重さ（費用）の合計が、容量（予算）以下
+
+向きを逆にした型が set cover（集合被覆）です。すべての地区を、いずれかの拠点の担当範囲に入れなければなりません。守るべき条件は「全部を覆う」で、良くしたいのは選ぶ拠点の費用の少なさです。
+容量の上限を守る問題と、覆い残しをなくす問題は、同じ0-1の決定で書けます。
+
+## 標準形を読む
+
+knapsack は、価値の合計を、重さの上限のもとで最大にする問題です。
+
+$$
+\max_{x\in\{0,1\}^n}\; v^\top x \quad \text{s.t.}\quad w^\top x\le W
+$$
+
+| 記号 | 意味 |
+|---|---|
+| $x_i$ | 品目 $i$ を入れるとき1、入れないとき0 |
+| $v_i$ | 品目 $i$ の価値。事例では便益スコアや期待効果 |
+| $w_i$ | 品目 $i$ の重さ。事例では費用 |
+| $W$ | 容量。事例では予算の上限 |
+
+set cover は、選ぶ集合の費用の合計を、要素の覆い残しなしで最小にする問題です。
+
+$$
+\min_{y\in\{0,1\}^m}\; c^\top y \quad \text{s.t.}\quad \sum_{j:\,i\in S_j} y_j\ge 1\;\;(i=1,\dots,n)
+$$
+
+$y_j$ は集合 $S_j$ を選ぶとき1です。要素 $i$ ごとに1本の制約があり、$i$ を含む集合のうち少なくとも1つを選ぶことを求めます。
+knapsack は「上限」の制約を1本だけ持ち、set cover は「下限」の制約を要素の数だけ持ちます。
+
+どちらも $x\in\{0,1\}^n$ の整数条件が主役です。この条件があるため、混合整数線形計画の特別な場合として扱えます。
+
+## 小さな例
+
+動的計画法の記事と同じ、容量8のリュックに4品目を入れる問題です。
+
+| 品目 | A | B | C | D |
+|---|---:|---:|---:|---:|
+| 重さ $w$ | 4 | 3 | 5 | 2 |
+| 価値 $v$ | 8 | 5 | 6 | 4 |
+
+入る組み合わせは限られているので、手で全部数えられます。
+
+| 選ぶ品目 | 重さの合計 | 価値の合計 |
+|---|---:|---:|
+| A, B | 7 | 13 |
+| A, D | 6 | 12 |
+| B, C | 8 | 11 |
+| C, D | 7 | 10 |
+| B, D | 5 | 9 |
+
+A と C は重さが9で入らず、1品だけなら価値は最大でも8です。3品以上の組み合わせは、すべて重さが8を超えます。
+最適解は A と B で、価値は $13$ です。使い残した容量は1です。
+
+### 読み取り: 「お得な順」に詰めても最適とは限らない
+
+価値÷重さの比は、品目ごとに次のとおりです。
+
+| 品目 | A | B | C | D |
+|---|---:|---:|---:|---:|
+| 価値÷重さ | 2 | 約1.67 | 1.2 | 2 |
+
+比の大きい順に、入るものを入れていきます。A と D を選ぶと、価値は $12$ で、重さは6です。
+次の B は重さ3ですが、残りの容量は2なので入りません。C も入りません。
+
+最適解 $13$ は、比の高い D を外し、B を入れた組み合わせです。容量を使い切らないほうが、価値の合計が大きくなる場合があります。
+
+### 上界で「どこまで良くなり得るか」を測る
+
+0-1の条件を外し、$0\le x_i\le 1$ の連続量にすると、線形計画の緩和になります。
+A と D を全部入れると、容量の残りは2です。この残りで B を $2/3$ だけ入れた $x=(1,\tfrac23,0,1)$ が答えです。
+価値は $8+4+\tfrac23\cdot5\approx 15.33$ です。
+
+どの0-1の解も、この値を超えられません。見つけた解が $13$ なら、最適値は $13$ と $15.33$ の間にあります。
+分枝限定法は、この幅を詰めて最適性を証明します。この事例の緩和の答えは、B が分数のままなので、丸めるだけでは解になりません。
+
+### 事例との対応
+
+公開事例『限られた予算で防災事業を選ぶ』は、同じ形です。費用が $4,3,2,3$、便益が $9,6,4,5$、予算が $7$ です。
+全部を数えると、最適は事業 A と B です。便益は $15$ で、費用は $7$ です。
+他の予算配分の事例は、ここに「地域ごとに少なくとも1件を選ぶ」のような条件が加わります。制約が複数の行に増え、純粋な knapsack より一般的な0-1整数計画になります。
+
+### set cover の小さな例
+
+6つの地区 $1,\dots,6$ を、次の集合（拠点の担当範囲）で覆います。費用はどれも1で、選ぶ数を最小にします。
+
+| 集合 | 覆う地区 |
+|---|---|
+| A | 1, 2, 3, 4 |
+| B | 1, 2, 5 |
+| C | 3, 4, 6 |
+| D | 5 |
+| E | 6 |
+
+最も多くを覆う A から選ぶと、地区5と6が残り、B と C を足して3つになります。
+B と C だけで、1から6のすべてを覆えます。2つで足り、これが最小です。
+
+「新しく覆える数が最大の集合を順に選ぶ」貪欲法は、ここでは最適ではありません。knapsack の貪欲法と同じく、先に得をした選択が後で響きます。
+
+## 見分け方
+
+次の言葉が出てきたら、knapsack を疑います。
+
+- 限られた予算・容量・時間で、どの案件・品目を採用するかを選ぶ
+- 案件ごとに費用と便益が決まっていて、分割して実施できない
+- 「入れる・入れない」「採用・見送り」の二択の集合が答え
+
+次の言葉が出てきたら、set cover を疑います。
+
+- すべての地区・顧客・要件を、どれかの拠点や手段で必ず満たす
+- 満たすために選ぶ拠点や手段の数、または費用を減らしたい
+
+別の型へ向かう兆候もあります。
+
+- 同じ品目を複数個買える、台数や個数が答え → [混合整数線形計画](#/formulations/PA023)（整数変数）
+- 品目を連続量で配分できる → [線形計画](#/learn/concept.linear-program)。0-1の条件が要らず、丸めの問題が消えます
+- 「AならばB」「AとBは同時に選べない」のような論理条件が多い → [CP-SAT](#/learn/cp-sat)や混合整数計画
+- 品目どうしの組み合わせで価値が変わる（相乗効果、重なり） → 目的に二次の項が入る別の定式化
+
+## 近い定式化
+
+- **混合整数線形計画**: knapsack は、制約が1本の0-1整数計画です。制約を足し、連続変数を混ぜれば混合整数線形計画になります。
+- **線形計画（LP緩和）**: 0-1の条件を $0\le x_i\le1$ にした問題です。最大化の問題では、この値が上界になります。knapsack の緩和は、価値÷重さの大きい順に詰め、最後の1品を分数で入れる方法で解けます。前提は、価値が0以上で重さが正であることです。
+- **set cover**: 制約が要素ごとに増える0-1整数計画です。最小化なので、LP緩和の値は下界になります。
+- **動的計画法**: 重さと容量が整数なら、knapsack を表を埋める方法で厳密に解けます。表の大きさは品目数×容量で、容量の数値が大きいと表も大きくなります。
+
+## 解き方の系統
+
+- **動的計画法**: 「$i$ 品目まで見て、容量が $a$」の部分問題を表に残します。整数の重さと小さい容量に向き、最適性を証明できます。制約が増えて部分問題に分けにくくなると、扱いにくくなります。
+- **branch-and-cut**: 緩和で上界を求め、変数を0と1に分けて探索します。upper bound と incumbent の差（gap）が、最適性の残りの余地を示します。MILP solver の標準的な方法です。
+- **CP-SAT**: 整数の係数を前提に、論理条件と探索で解きます。「少なくとも1件」のような条件が多い事例で使いやすい方法です。
+- **貪欲法・local search**: 速く良い解を作れます。ただし最適性は証明しません。上の例では、貪欲法は最適に届きませんでした。
+
+次のコードは、LP緩和と整数解と貪欲法の結果を並べます。`scipy.optimize.milp` は内部でHiGHSを使います。
+
+```python
+import numpy as np
+from scipy.optimize import Bounds, LinearConstraint, milp
+
+names = "ABCD"
+value = np.array([8, 5, 6, 4])
+weight = np.array([4, 3, 5, 2])
+capacity = 8
+
+
+def solve(integer):
+    return milp(
+        c=-value,  # 最大化を最小化に直す
+        constraints=LinearConstraint([weight], ub=capacity),
+        integrality=np.ones(4) if integer else np.zeros(4),
+        bounds=Bounds(0, 1),
+    )
+
+
+relaxed, exact = solve(False), solve(True)
+print("LP relaxation:", relaxed.x.round(3), round(-relaxed.fun, 3))
+print("integer:", exact.x.round(3), -exact.fun)
+
+# 価値÷重さの大きい順に、入る品目を入れていく貪欲法
+remaining, picked = capacity, []
+for i in np.argsort(-value / weight, kind="stable"):
+    if weight[i] <= remaining:
+        remaining -= weight[i]
+        picked.append(i)
+print("greedy:", [names[i] for i in picked], value[picked].sum())
+```
+
+実行すると、次のように出ます。
+
+```text
+LP relaxation: [1.    0.667 0.    1.   ] 15.333
+integer: [1. 1. 0. 0.] 13.0
+greedy: ['A', 'D'] 12
+```
+
+手計算の結果と、1行ずつ照らして確かめます。LP緩和の $0.667$ は B の分数です。整数解は A と B を選び、貪欲法は $12$ で止まります。
+
+set cover は、要素ごとの制約を行列にして渡します。
+
+```python
+import numpy as np
+from scipy.optimize import Bounds, LinearConstraint, milp
+
+sets = {"A": {1, 2, 3, 4}, "B": {1, 2, 5}, "C": {3, 4, 6}, "D": {5}, "E": {6}}
+names = list(sets)
+# 行が要素 1..6、列が集合。要素 i が集合 j に入っていれば 1
+cover = np.array([[int(e in sets[n]) for n in names] for e in range(1, 7)])
+
+
+def min_cover(matrix):
+    return milp(
+        c=np.ones(len(names)),  # 選ぶ集合の数を最小にする
+        constraints=LinearConstraint(matrix, lb=1),  # どの要素も1回以上覆う
+        integrality=np.ones(len(names)),
+        bounds=Bounds(0, 1),
+    )
+
+
+result = min_cover(cover)
+print("optimal:", [n for n, y in zip(names, result.x) if y > 0.5], result.fun)
+
+# 新しく覆える要素が最も多い集合を、順に選ぶ貪欲法
+uncovered, chosen = set(range(1, 7)), []
+while uncovered:
+    best = max(sets, key=lambda n: len(sets[n] & uncovered))
+    chosen.append(best)
+    uncovered -= sets[best]
+print("greedy:", chosen)
+
+# どの集合にも入らない要素を足すと、実行不可能になる
+bad = min_cover(np.vstack([cover, np.zeros(len(names), dtype=int)]))
+print("status:", bad.status, bad.success)
+```
+
+```text
+optimal: ['B', 'C'] 2.0
+greedy: ['A', 'B', 'C']
+status: 2 False
+```
+
+最適は2つ、貪欲法は3つです。最後の行の `status` が2なら、実行不可能と判定されています。
+
+## つまずきやすい点
+
+- **貪欲法の結果を最適と読む**: 価値÷重さの順や、新しく覆える数の順で選ぶ方法は、速い代わりに最適性の根拠がありません。上の2つの例で、どちらも最適を外しました。厳密な答えが必要なら、gap を出す方法か動的計画法で確かめます。
+- **LP緩和の解を丸める**: 緩和の答え $x_2=0.667$ を四捨五入して B を入れると、A と B と D で重さが9になり、容量8を超えます。丸めは実行可能性を保証しません。
+- **重さが小数のまま**: 動的計画法とCP-SATは、整数の重さや費用を前提にします。$3.5$ のような値は、単位を変えて整数にそろえます。丸めて整数にすると、容量の境界で別の問題になるので、精度を先に決めます。
+- **set cover で覆えない要素がある**: どの集合にも入らない要素があると、実行可能な解が存在しません。上のコードのように `status` を確かめ、データの入力漏れを疑います。
+- **制約の向きの取り違え**: knapsack は上限（$\le$）、set cover は下限（$\ge$）です。逆に書くと、全部を選ぶか何も選ばないかが答えになり、問題が意味を失います。
+
+## 次に読む
+
+- [混合整数線形計画](#/learn/concept.mixed-integer-linear-program)：knapsack を一般化する枠組みと、gap の読み方
+- [動的計画法](#/learn/dynamic-programming)：同じ4品目を表で解き、選択を復元する
+- [分枝限定法](#/learn/branch-and-bound)：緩和の界で探索を刈り込む仕組み
+- [CP-SATと制約programming](#/learn/cp-sat)：「少なくとも1件」のような論理条件が多い問題の道具

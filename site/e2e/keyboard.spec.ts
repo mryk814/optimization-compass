@@ -20,9 +20,9 @@ test("skip linkとprimary navigationをkeyboardだけで操作する", async ({ 
   await expect(page.getByRole("link", { name: "Optimization Atlasのホーム" })).toBeFocused();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "問題構造", exact: true })).toBeFocused();
+  await expect(page.getByRole("link", { name: "辞書", exact: true })).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("tree", { name: "最適化問題の構造" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "定式化の辞書" })).toBeVisible();
 });
 
 test("Map treeを矢印、Enter、Spaceで操作する", async ({ page, baseURL }) => {

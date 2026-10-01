@@ -33,6 +33,12 @@ from optimization_compass.failed_simulation import (
     generate_failed_simulation_traces,
 )
 from optimization_compass.failure_discovery import build_failure_discovery_index
+from optimization_compass.formulation_atlas import (
+    build_formulation_atlas_index,
+    build_learning_path_index,
+    load_formulation_atlas_seed,
+    load_learning_path_seed,
+)
 from optimization_compass.formulation_primer import build_formulation_primer_index
 from optimization_compass.learning_graph import build_learning_graph_index
 from optimization_compass.learning_journey_policy import load_learning_journey_asset_policy
@@ -192,7 +198,7 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-SITE_MANIFEST_VERSION: Literal["1.4.0"] = "1.4.0"
+SITE_MANIFEST_VERSION: Literal["1.5.0"] = "1.5.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
@@ -200,6 +206,8 @@ COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
 SEARCH_BENCHMARK_SEED = ROOT / "data/seeds/search_benchmark.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
 FORMULATION_PRIMER_TERMS_SEED = ROOT / "data/seeds/formulation_primer_terms.json"
+FORMULATION_ATLAS_SEED = ROOT / "data/seeds/formulation_atlas.json"
+LEARNING_PATH_SEED = ROOT / "data/seeds/learning_paths.json"
 LEARNING_JOURNEY_ASSET_POLICY_SEED = ROOT / "data/seeds/learning_journey_asset_policy.json"
 RELEASE_CATALOG_PATH = ROOT / "data/releases/catalog.json"
 
@@ -529,6 +537,30 @@ def export_site_data(
         ],
     )
     _write_json(output_dir / "formulation-primer.json", formulation_primer)
+    formulation_atlas = build_formulation_atlas_index(
+        repository,
+        load_formulation_atlas_seed(FORMULATION_ATLAS_SEED),
+        dataset_version=release["version"],
+        content_pages=content_pages,
+        gallery_cases=gallery_index["cases"],
+    )
+    _write_json(output_dir / "formulation-atlas.json", formulation_atlas)
+    _write_json(
+        output_dir / "learning-paths.json",
+        build_learning_path_index(
+            load_learning_path_seed(LEARNING_PATH_SEED),
+            dataset_version=release["version"],
+            archetypes={
+                item["problem_id"]: item["name_ja"] for item in formulation_atlas["formulations"]
+            },
+            content_pages=content_pages,
+            formulation_articles={
+                item["problem_id"]: item["content_id"]
+                for item in formulation_atlas["formulations"]
+                if item["content_id"]
+            },
+        ),
+    )
     search_tree_routes = {
         entry.trace_id: f"/theater/search-tree/{entry.artifact_id}"
         for entry in search_tree_index.artifacts
@@ -642,6 +674,8 @@ def export_site_data(
             version="1.1.0", path="learning-journeys.json"
         ),
         formulation_primer=ManifestAsset(version="1.0.0", path="formulation-primer.json"),
+        formulation_atlas=ManifestAsset(version="1.0.0", path="formulation-atlas.json"),
+        learning_paths=ManifestAsset(version="1.0.0", path="learning-paths.json"),
         visualization_scenarios=ManifestVisualizationScenarioAsset(
             version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
         ),

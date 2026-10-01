@@ -168,6 +168,7 @@ describe("DiagnosePage", () => {
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toBeUndefined();
 
     fireEvent.click(screen.getByRole("button", { name: "すべての質問を表示" }));
+    expect(screen.getByRole("group", { name: /f\(x\)や制約を1回計算する時間は/u })).toBeVisible();
     const q2 = screen.getByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u });
     fireEvent.click(within(q2).getByRole("button", { name: /まだ分からない/u }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q02).toEqual({
@@ -202,8 +203,6 @@ describe("DiagnosePage", () => {
     expect(await screen.findByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u })).toBeVisible();
     expect(screen.getByText("回答済み・変更")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "すべての質問を表示" }));
-    expect(nextGroup).not.toHaveAttribute("open");
-    fireEvent.click(screen.getByText("次に、計算の性質"));
     expect(nextGroup).toHaveAttribute("open");
     expect(screen.getByRole("progressbar", { name: "診断の回答進捗" })).toHaveAttribute("value", "1");
   });

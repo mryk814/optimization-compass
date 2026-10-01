@@ -4,27 +4,45 @@ kind: method
 method_id: M_SIMPLEX
 title_ja: Primal simplex法
 title_en: Primal Simplex
-summary: LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。
+summary: 線形計画（LP）の実行可能な基底（basis）を保ちながら、被約費用（reduced cost）が示す隣の基底へピボット（pivot）し、目的値を改善するsimplex法です。
 source_ids: [S004, S016, S055]
 prerequisites: [concept.convexity]
-related_ids: [dual-simplex, lp-qp-conic, family.discrete-structure]
+related_ids: [dual-simplex, lp-qp-conic, family.discrete-structure, concept.linear-program]
 aliases: [/learn/primal-simplex]
 status: published
-last_reviewed: 2026-09-29
+last_reviewed: 2026-09-30
 ---
 
-LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。
+線形計画（LP）の実行可能な基底（basis）を保ちながら、被約費用（reduced cost）が示す隣の基底へピボット（pivot）し、目的値を改善するsimplex法です。
 
-## LPの頂点とbasis
+## 30秒でつかむ
 
-線形計画問題の実行可能領域は多面体です。
-目的関数が線形で最適値が有限なら、最適解は多面体のどこかの頂点、つまりbasic feasible solutionに存在します。
-内部の点をわずかに動かしても目的値は線形にしか変化しないため、頂点の集合だけを調べれば最適解を取りこぼしません。
+多角形の広場を、角から角へ歩く登山者を思い浮かべます。
+各地点では、いまの角から出る辺のうち、登れる辺があるかどうかだけを見ます。
+登れる辺があれば、その辺の先の角まで歩きます。どの辺も下りなら、そこが頂上です。
 
-$n$個の変数と$m$本の等式制約からなる標準形では、頂点は$m$個の変数を基底（basis）として選び、残りを$0$に固定した解に対応します。
-primal simplexは、常にprimal feasibleなbasisを保ったまま、より目的値の良い隣接basisへ移動を繰り返します。
+- **見るもの**: 基底に入っていない変数それぞれの被約費用（1単位増やしたときの目的値の変化）
+- **動かすもの**: 基底。一つの変数を入れ、一つの変数を外して、隣の頂点へ移る
+- **前進の判断**: 被約費用が負の変数があれば目的値が下がるので進む。すべて0以上なら最適で止まる
 
-2変数なら、頂点は多角形の角で、隣接basisへの移動は隣の角への移動です。次の図は、下のPython例と同じLPです。$x+y\le4$ と $2x+y\le5$ と $x,y\ge0$ のもとで $3x+2y$ を最大化します。目的の係数を動かして、最適解が頂点に現れることを確かめてください。
+進む先は、頂点から頂点への移動だけです。領域の内部は通りません。
+
+## 一手の意味
+
+simplex法の一手は、被約費用で「増やす変数」を選び、比の最小値で「先に0になる変数」を選ぶ操作です。
+この入れ替えをピボットと呼び、一回のピボットで頂点が一つ隣に移ります。
+
+### 頂点と基底
+
+線形計画の可行領域は多面体です。目的関数が線形で最適値が有限なら、最適解は多面体のどこかの頂点、つまり基底可能解（basic feasible solution）に存在します。
+内部の点をわずかに動かしても目的値は線形にしか変化しないため、頂点だけを調べれば最適解を取りこぼしません。
+
+$n$ 個の変数と $m$ 本の等式制約からなる標準形では、頂点は $m$ 個の変数を基底に選び、残りを $0$ に固定した解に対応します。
+primal simplexは、常に実行可能（primal feasible）な基底を保ったまま、より目的値の良い隣の基底へ移ります。
+
+2変数なら、頂点は多角形の角で、隣の基底への移動は隣の角への移動です。
+次の図は、小さな例とは別の、2変数の固定したLPです。$x+y\le4$ と $2x+y\le5$ と $x,y\ge0$ のもとで $3x+2y$ を最大化します。
+目的の係数を動かして、最適解が頂点に現れることを確かめてください。
 
 ::: explorable lp-vertex-walk
 橙の直線は、いまの位置での目的値が等しい点の集まりです。係数 c を動かすと、最良の頂点が切り替わります。紺の点は実行可能領域の内部を自由に動かせますが、目的値は最良の頂点を超えません。隣の頂点へ移る動きはpivotの直感を示す教材用の模式化で、実際のpivot ruleではありません。
@@ -32,95 +50,184 @@ primal simplexは、常にprimal feasibleなbasisを保ったまま、より目�
 
 係数を $(1,1)$ にすると、目的の向きが辺 $x+y=4$ と直角になり、その辺全体が最適になります。最適解が頂点一つとは限らないことが、図から読み取れます。
 
-## 被約費用とpivotの直感
+### 被約費用で入る変数を選ぶ
 
-現在のbasisで、非基底変数$x_j$を$1$単位だけ増やしたときの目的値の変化量を被約費用（reduced cost）と呼びます。
+被約費用は、いまの基底のまま非基底変数 $x_j$ を1単位だけ増やしたときの、目的値の変化量です。
+式は、$x_j$ 自身の費用から、基底変数が調整に使う分を引いたものになります。
 
 $$
-\bar{c}_j = c_j - c_B^T B^{-1} A_j
+\bar{c}_j = c_j - c_B^\top B^{-1} A_j
 $$
 
-最小化問題では、$\bar{c}_j < 0$となる非基底変数が存在すれば、その変数を増やすことで目的値を改善できます。
-この変数を**entering variable**として選び、基底変数のどれかが実行可能性の境界（多くは非負制約）に達するまで増やします。
-境界に達した基底変数が**leaving variable**としてbasisから外れ、新しいbasisに置き換わる操作がpivotです。
-すべての非基底変数で$\bar{c}_j \ge 0$になれば、それ以上改善する方向がなく最適basisに到達したと判断できます。
+$B$ は基底に入っている列を集めた行列、$c_B$ はその費用です。
+最小化では、$\bar{c}_j < 0$ の非基底変数を増やすと目的値が下がります。この変数を**入る変数**（entering variable）に選びます。
 
-## 退化・cycling・infeasible/unboundedの見分け方
+### 比の最小値で出る変数を選ぶ
 
-leaving variableの候補が複数（境界までの余裕が同時に$0$）になる状況をdegeneracyと呼びます。degenerateなpivotでは目的値が変化しないまま基底だけが入れ替わり、選び方によっては同じbasisの列を巡回するcyclingが起こり得ます。entering/leaving変数の選び方（pivot rule）はcyclingを避けるための実装上の工夫です。
+入る変数を増やすと、基底変数の値が動きます。先に0へ届く基底変数が、実行可能性の境界です。
+増やせる量は、次の比の最小値で決まります。
 
-探索の結果は次のいずれかに分類されます。
+$$
+\theta=\min_{i:\,d_i>0}\frac{(B^{-1}b)_i}{d_i},\qquad d=B^{-1}A_j
+$$
 
-- 最適basisに到達した（すべての被約費用が最適性条件を満たす）
-- 実行可能な初期basisが存在しない（infeasible）
-- ある方向へ目的値を改善し続けても実行可能領域から出ない（unbounded）
+$d_i$ は、入る変数を1増やしたときに基底変数 $i$ が減る量です。最小の比を与える基底変数が**出る変数**（leaving variable）になり、基底から外れます。
+すべての非基底変数で $\bar{c}_j \ge 0$ になれば、改善する方向がなく、最適な基底に着いたと判断できます。
 
-`infeasible`と`unbounded`は別の状態であり、どちらも「解なし」とひとまとめにはできません。
+### 止まり方は三通り
 
-## 向いている条件
+探索の結果は、次のいずれかに分類されます。
+
+- 最適な基底に着いた（すべての被約費用が0以上）
+- 実行可能な初期基底が存在しない（infeasible）
+- ある方向へ目的値を改善し続けても可行領域から出ない（unbounded。入る変数の列に正の成分がなく、比が取れない）
+
+`infeasible` と `unbounded` は別の状態です。どちらも「解なし」とひとまとめにはできません。
+
+## 小さな例
+
+[線形計画](#/learn/concept.linear-program)のパン屋の問題を、simplex法で解きます。
+食パンを $x_1$ 個、クロワッサンを $x_2$ 個焼き、売上 $3x_1+4x_2$ を最大にします。小麦粉は $3x_1+2x_2\le18$、バターは $x_1+3x_2\le13$ です。
+
+最小化の形 $\min\,-3x_1-4x_2$ に直し、余り（slack）変数 $s_1,s_2$ を足して等式にします。
+
+$$
+3x_1+2x_2+s_1=18,\qquad x_1+3x_2+s_2=13
+$$
+
+最初の基底は $\{s_1,s_2\}$ で、頂点は原点です。何も焼かず、在庫がそのまま余っている状態です。
+
+| 反復 | 基底 | 頂点 $(x_1,x_2)$ | 売上 | 被約費用 $(x_1,\,x_2,\,s_1,\,s_2)$ | 次の一手 |
+|---:|---|---|---:|---|---|
+| 0 | $s_1,s_2$ | $(0,\,0)$ | $0$ | $(-3,\,-4,\,0,\,0)$ | $x_2$ が入る。比は $18/2=9$ と $13/3$。$s_2$ が出る |
+| 1 | $s_1,x_2$ | $(0,\,13/3)$ | $52/3\approx17.3$ | $(-5/3,\,0,\,0,\,4/3)$ | $x_1$ が入る。比は $4$ と $13$。$s_1$ が出る |
+| 2 | $x_1,x_2$ | $(4,\,3)$ | $24$ | $(0,\,0,\,5/7,\,6/7)$ | すべて0以上。最適 |
+
+反復0では、被約費用が最も小さい $x_2$（$-4$）を選びました。
+$x_2$ を増やすと、小麦粉の余りは $18-2x_2$、バターの余りは $13-3x_2$ で減ります。バターの方が先に0になる（$13/3<9$）ので、$s_2$ が基底から外れます。
+バターを使い切るまで $x_2$ を増やした点が、頂点 $(0,\,13/3)$ です。
+
+反復1では、$x_1$ を増やします。バターを使い切る辺に沿って進み、小麦粉の余りが先に0になる（比 $4$）ところで止まります。
+小麦粉とバターの両方を使い切る頂点 $(4,\,3)$ で、売上は $24$ です。
+
+最後の行の $5/7$ と $6/7$ は、余り変数 $s_1,s_2$ の被約費用です。これは小麦粉とバターの値段（双対値）に一致します。
+反復2で被約費用がすべて0以上になったことが、最適であることの証拠です。
+
+入る変数の選び方を変えると、通る頂点は変わります。
+最初に $x_1$ を選ぶと、原点から $(6,\,0)$ を通って $(4,\,3)$ へ進みます。選び方（pivot rule）で経路は変わっても、最適な頂点は同じです。
+
+## 向く条件・避ける条件
 
 | 条件 | 理由 |
 |---|---|
-| 問題が線形（LP）として明示できる | basisと被約費用の議論がLPの構造に依存するため |
-| basisをwarm startとして再利用したい | 直前のbasisから近い解を得やすいため |
-| basis・被約費用として解釈したい | 頂点・活性制約・sensitivityが読みやすいため |
-| sparse構造がある | factorizationの計算量を抑えやすいため |
+| 問題が線形（LP）として明示できる | 基底と被約費用の議論がLPの構造に依存するため |
+| 基底をwarm startとして再利用したい | 直前の基底から近い解を得やすいため |
+| 基底・被約費用として解釈したい | 頂点・有効な制約・感度（sensitivity）が読みやすいため |
+| 疎（sparse）な構造がある | 行列の分解（factorization）の計算量を抑えやすいため |
 
-大規模で密なLPや、barrier法のように反復ごとの計算量を均したい場合はinterior-point法も候補になります。両者は「一反復あたりの仕事量」も異なるため、iteration数だけで比較しません。
+大規模で密なLPや、反復ごとの計算量を均したい場合は、内点法の[primal-dual barrier法](#/learn/barrier-lp-qp)も候補になります。
+両者は一反復あたりの仕事量も異なるため、iteration数だけで比較しません。
+
+避ける、または切り替える場面は次のとおりです。
+
+- 制約や目的が非線形で、LPに収まらない。[LP・QP・錐最適化](#/learn/lp-qp-conic)や非線形の手法へ移ります。
+- 制約を足したあとの再最適化が主役。基底が実行不能になるので、[dual simplex法](#/learn/dual-simplex)が自然です。
+- 整数条件が本質。simplex法は緩和のLPを解く道具になり、整数性は[分枝限定法](#/learn/branch-and-bound)側で扱います。
+- 構造がネットワークの流れそのもの。[ネットワーク単体法](#/learn/network-simplex)が向きます。
 
 ## Python
 
+小さな例の表を、分数のまま再現します。表の各行は、`print` が出す基底・頂点・売上・被約費用に対応します。
+
 ```python
+from fractions import Fraction
+
 import numpy as np
 from scipy.optimize import linprog
 
+# 最小化 -3 x1 - 4 x2  s.t.  3 x1 + 2 x2 + s1 = 18,  x1 + 3 x2 + s2 = 13
+names = ["x1", "x2", "s1", "s2"]
+tableau = [
+    [Fraction(v) for v in (3, 2, 1, 0, 18)],
+    [Fraction(v) for v in (1, 3, 0, 1, 13)],
+    [Fraction(v) for v in (-3, -4, 0, 0, 0)],  # 被約費用の行。右端は -(目的値)
+]
+basis = [2, 3]  # 最初の基底は s1, s2（原点）
 
-def build_problem() -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    cost = np.array([-3.0, -2.0])
-    a_ub = np.array([
-        [1.0, 1.0],
-        [2.0, 1.0],
-    ])
-    b_ub = np.array([4.0, 5.0])
-    return cost, a_ub, b_ub
+for iteration in range(10):
+    reduced = tableau[-1][:4]
+    x = {names[b]: tableau[i][-1] for i, b in enumerate(basis)}
+    vertex = (x.get("x1", Fraction(0)), x.get("x2", Fraction(0)))
+    print(iteration, [names[b] for b in basis], [str(v) for v in vertex],
+          str(tableau[-1][-1]), [str(v) for v in reduced])
+    entering = min(range(4), key=lambda j: reduced[j])
+    if reduced[entering] >= 0:
+        break  # すべての被約費用が 0 以上なので最適
+    ratios = [(tableau[i][-1] / tableau[i][entering], i)
+              for i in range(2) if tableau[i][entering] > 0]
+    _, leaving = min(ratios)  # 比の最小値で出る行を選ぶ
+    pivot = tableau[leaving][entering]
+    tableau[leaving] = [v / pivot for v in tableau[leaving]]
+    for i in range(3):
+        if i != leaving:
+            factor = tableau[i][entering]
+            tableau[i] = [a - factor * b for a, b in zip(tableau[i], tableau[leaving])]
+    basis[leaving] = entering
 
-
-cost, a_ub, b_ub = build_problem()
-result = linprog(
-    cost,
-    A_ub=a_ub,
-    b_ub=b_ub,
-    bounds=[(0.0, None), (0.0, None)],
-    method="highs",
-)
-
-print(result.success, result.x, -result.fun, result.status, result.message)
+result = linprog([-3, -4], A_ub=[[3, 2], [1, 3]], b_ub=[18, 13],
+                 bounds=[(0, None)] * 2, method="highs-ds")
+print(result.x, -result.fun, -result.ineqlin.marginals)
 ```
 
-`scipy.optimize.linprog`はHiGHSをbackendとしており、simplexとinterior-pointの選び分けは`method`optionに従います。`method="highs"`はpresolveの判断に応じてsolverが内部でroutineを選び、`method="highs-ds"`はHiGHSのdual simplexを明示的に指定します。primal simplexをどのoptionで明示的に選べるかはHiGHSのversionに依存するため、利用versionで用意されているoptionは[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html)で確認します。
+```text
+0 ['s1', 's2'] ['0', '0'] 0 ['-3', '-4', '0', '0']
+1 ['s1', 'x2'] ['0', '13/3'] 52/3 ['-5/3', '0', '0', '4/3']
+2 ['x1', 'x2'] ['4', '3'] 24 ['0', '0', '5/7', '6/7']
+[4. 3.] 24.0 [0.71428571 0.85714286]
+```
+
+最後の二行は、`scipy.optimize.linprog` で同じ問題を解いた確認です。最適解は $(4,3)$、売上は $24$ です。双対値 $5/7,\,6/7$ も手計算と一致します。
+`linprog` はHiGHSを裏で使い、`method="highs"` ではpresolveの判断に応じてソルバー（solver）が内部の方法を選びます。
+`method="highs-ds"` はHiGHSのdual simplexを明示的に指定します。primal simplexをどのoptionで明示的に選べるかはHiGHSのversionに依存します。利用versionで用意されているoptionは[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html)で確認します。
 
 ## 診断値
 
-- primal feasibility residual
-- objective value（$-$`result.fun`は元の最大化目的への符号戻し）
-- basis status / active constraints
-- simplex iteration数
-- degeneracy（同一目的値でのpivot継続）
-- presolve reduction
-- condition（factorizationの数値的な安定性）
+- 実行可能性の残差（primal feasibility residual）
+- 目的値。`-result.fun` は、元の最大化の目的へ符号を戻した値です
+- 基底の状態（basis status）と有効な制約
+- simplexのiteration数
+- 退化（degeneracy）。目的値が同じままピボットが続く回数
+- presolveで減った変数・制約の数
+- 条件数（condition）。分解の数値的な安定性
+
+判断の目安は次のとおりです。すべての被約費用が許容誤差の範囲で0以上なら停止します。
+目的値が変わらないままiteration数だけが増えるなら、退化を疑って設定を見直します。条件数が急に悪化するなら、尺度（scale）を揃え直します。
 
 ::: warning
-「primal simplexを使った」だけでは再現条件として不十分です。presolveの有無、scaling、pivot rule、boundsの与え方を一緒に記録します。
+「primal simplexを使った」だけでは再現条件として不十分です。presolveの有無・scaling・pivot rule・boundsの与え方を一緒に記録します。
 :::
 
 ## 失敗・切替の兆候
 
-- presolveの段階でinfeasibleと判定される
-- 目的値が改善しないままiteration数だけが増える（degeneracy/stalling）
-- 係数のscaleが桁違いで数値warningが出る
-- factorizationがmemoryを圧迫する大規模denseなLP
-- 反復のたびに同じ頂点集合を巡回している疑いがある
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| presolveの段階でinfeasibleと判定される | 制約の矛盾、単位や符号の誤り | モデルの式と単位を見直す。実行可能な初期基底が作れるかを確かめる |
+| 目的値が改善しないままiteration数だけが増える | 退化による停滞 | pivot ruleや摂動（perturbation）の設定を確認する。内点法へ切り替える |
+| 係数の尺度が桁違いで数値warningが出る | 単位の不揃い | 単位を揃えて尺度を調整する |
+| 分解のためのmemoryが足りない | 大規模で密なLP | [primal-dual barrier法](#/learn/barrier-lp-qp)を検討する |
+| 同じ頂点の集合を巡回している疑いがある | cycling | anti-cyclingの規則を持つ実装を使う。ソルバーの設定を記録する |
+
+## コラム: 退化と巡回
+
+出る変数の候補が複数ある（境界までの余裕が同時に $0$ になる）状況を、退化（degeneracy）と呼びます。
+退化したピボットでは、目的値が変わらないまま基底だけが入れ替わります。選び方によっては、同じ基底の列を巡回するcyclingが起こり得ます。
+入る変数・出る変数の選び方（pivot rule）は、cyclingを避けるための実装上の工夫です。
 
 ## 次に読む
 
-被可行性の向きを変えたsimplex変種は[Dual Simplex](#/learn/dual-simplex)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)、離散変数を含む問題での役割は[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)で確認できます。
+離散変数や組合せ構造が入る場合は、[離散構造の選び分け](#/learn/family.discrete-structure)へ進みます。
+
+- [線形計画](#/learn/concept.linear-program)：小さな例の問題を定式化から読み直す
+- [Dual simplex法](#/learn/dual-simplex)：実行可能性の向きを変えたsimplexの変種
+- [Primal-dual barrier法](#/learn/barrier-lp-qp)：内部を通って最適解へ近づく別の道
+- [LP・QP・錐最適化](#/learn/lp-qp-conic)：LP・QP・錐最適化全体の位置づけ

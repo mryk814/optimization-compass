@@ -4,69 +4,114 @@ kind: method
 method_id: M_TRUST_NCG
 title_ja: Trust-region Newton-CG
 title_en: Trust-region Newton-CG
-summary: 局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
+summary: 局所的な二次近似を信頼半径の内側だけで使い、共役勾配法（CG）でNewton方向を近似する、大域化された二階法です。
 source_ids: [S002, S056]
 prerequisites: [newton-method]
-related_ids: [newton-method, bfgs, least-squares]
+related_ids: [newton-method, bfgs, least-squares, newton-cg]
 aliases: [/learn/trust-region-newton-cg]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
+局所的な二次近似を信頼半径の内側だけで使い、共役勾配法（CG）でNewton方向を近似する、大域化された二階法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、局所二次modelを信じる範囲を区切り、予測が当たった分だけ慎重に歩幅を広げることです。
+霧の中で、足元の地形を測りながら山を下りるところを想像してください。
+足元の地図（二次近似）は、近くでは正確ですが、遠くでは当てになりません。そこで「この地図を信じるのは、半径これだけの範囲」と決め、その中で最良の場所へ試しに一歩進みます。
+実際に下がった高さが、地図の予想どおりなら、半径を広げます。予想より悪ければ、その一歩は捨てて、半径を縮めます。
 
-- **見るもの**: 目的関数値、勾配、Hessian-vector積、実改善と予測改善の比
-- **動かすもの**: 現在点、試行step、trust radius
-- **前進の判断**: 試行stepが受理され、gradient normが下がること
+- **見るもの**: 目的関数値、勾配、Hessian-vector積、実際の改善と予測した改善の比
+- **動かすもの**: 現在点、試しの一歩、信頼半径
+- **前進の判断**: 試しの一歩が受け入れられ、勾配の大きさ（gradient norm）が下がること
 
-## 仕組み
+Hessianの行列そのものは要りません。Hessianとベクトルの積だけで動きます。
 
-Newton stepを無条件に採用せず、現在点の周囲
+## 一手の意味
+
+Newton法の一歩を無条件には採用しません。現在点 $x_k$ のまわりの二次近似を、信頼領域（trust region）の中で最小にします。
+次の式は、二次近似 $m_k(p)$ を、長さが $\Delta_k$ 以下の一歩 $p$ の中で最小にするという意味です。$\Delta_k$ は、この近似をどこまで信用するかを表す半径です。
 
 $$
-\|p\| \le \Delta_k
+\min_{p}\ m_k(p)=f(x_k)+\nabla f(x_k)^\top p+\tfrac12\,p^\top\nabla^2 f(x_k)\,p
+\quad\text{s.t.}\quad \|p\|\le\Delta_k
 $$
 
-で二次modelを最小化します。
-$\Delta_k$ は「このmodelをどこまで信用するか」を表す半径です。
-
-試行stepの後、実際の改善とmodelが予測した改善の比
+試しの一歩を進めたあとで、実際の改善と、近似が予測した改善の比 $\rho_k$ を見ます。
 
 $$
 \rho_k = \frac{f(x_k)-f(x_k+p_k)}{m_k(0)-m_k(p_k)}
 $$
 
-を見ます。
-予測がよく当たればstepを採用して半径を広げ、外れれば棄却して半径を縮めます。
+$\rho_k$ が1に近ければ、近似が当たっています。負なら、目的値が増えています。
+予測がよく当たれば、一歩を採用して半径を広げます。外れたら、一歩を棄却して半径を縮めます。
 
-## Newton-CGで何を省いているか
+### Newton-CGで何を省いているか
 
-Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-region部分問題を近似します。
-必要なのはHessian-vector積 $\nabla^2 f(x)v$ で、巨大なHessian行列を明示しなくても動かせます。
+Hessianを完全に分解する代わりに、共役勾配法（CG）で、信頼領域の部分問題を近似して解きます。
+必要なのは、Hessian-vector積（HVP）$\nabla^2 f(x)v$ だけです。巨大なHessian行列を明示しなくても動かせます。
 
-## まず確認すること
+CGは、次のいずれかで止まります。
 
-向いている条件:
+- 残差が十分小さくなる（Newton方向に近い解に着く）
+- 一歩が信頼半径の境界に届く
+- 負の曲率の方向が見つかり、その方向で境界まで進む
 
-- 連続・滑らかな問題
-- 勾配とHessian-vector積が利用可能
-- dense Hessianを保存できない
-- line search Newtonが不安定
-- negative curvatureも検出しながら進みたい
+## 小さな例
 
-避ける／切り替える条件:
+次の関数を、初期点 $(-1.2,\,1)$ から最小にします。最小点は $(1,\,1)$ で、目的値は $0$ です。
 
-- 目的関数が不連続または強いnoiseを含む
-- gradient / HVPを信頼できない
-- 1回のHVPが目的評価より極端に高価
-- 単純なboundsだけでL-BFGS-Bが十分
-- 一般制約が中心で、制約付きtrust-region実装を用意していない
+$$
+f(x,y)=(1-x)^2+20\,(y-x^2)^2
+$$
+
+放物線 $y=x^2$ に沿った細長い谷が、曲がりながら最小点へ続く形です。初期の信頼半径は $\Delta_0=1$ です。
+ここでは、半径の更新に次の規則を使いました。$\rho_k<0.25$ なら半径を $1/4$ に、$\rho_k>0.75$ で一歩が境界に届いたなら半径を2倍にします。$\rho_k>0.15$ なら一歩を受け入れます。
+CGの終了と半径の更新は、SciPyの `trust-ncg` の規則にあわせました。SciPy 1.18.1 の反復点と、表の点が一致することを確かめてあります。
+
+| 反復 | 現在点 $x_k$ | 目的値 | 半径 $\Delta_k$ | 一歩の長さ | 予測した減少 | 実際の減少 | $\rho_k$ | 判定 |
+|---:|---|---:|---:|---:|---:|---:|---:|---|
+| 0 | $(-1.2,\,1)$ | 8.712 | 1 | 0.165 | 4.106 | 4.501 | 1.10 | 受け入れ |
+| 1 | $(-1.0459,\,1.0582)$ | 4.211 | 1 | 0.035 | 0.126 | 0.130 | 1.03 | 受け入れ |
+| 2 | $(-1.0117,\,1.0651)$ | 4.081 | 1 | 1.000 | 1.163 | −0.213 | −0.18 | 棄却 |
+| 3 | $(-1.0117,\,1.0651)$ | 4.081 | 0.25 | 0.250 | 0.408 | 0.391 | 0.96 | 受け入れ |
+| 4 | $(-0.9201,\,0.8324)$ | 3.691 | 0.5 | 0.032 | 0.078 | 0.081 | 1.03 | 受け入れ |
+
+反復0と1では、CGが半径の内側で収束します。一歩の長さは、半径 $1$ より短いままです。この場合は、信頼領域が効かず、Newton法に近い一歩になります。
+$\rho_k$ が1を超えるのは、予測より実際の方が大きく下がったという意味です。悪いことではありません。
+
+反復2で、様子が変わります。CGが半径の境界まで進み、一歩の長さが $1$ になります。近似は $1.163$ の減少を予測しましたが、実際には目的値が $0.213$ 増えました。
+$\rho_2$ は負なので、この一歩は捨てます。現在点は動かず、半径が $1/4$ になります。
+
+反復3は、同じ点から、半径 $0.25$ で試し直します。今度は境界で止まりつつ、予測 $0.408$ に対して実際に $0.391$ 下がりました。$\rho_3=0.96$ です。
+一歩が境界に届き、しかも当たったので、半径を2倍の $0.5$ に戻します。近似を信じる範囲が、誤りを通じて、いまの地形に合わせて調整されました。
+
+この関数は、23回の反復で $(1,\,1)$ に着きます（下のコードで確認できます）。
+
+## 向く条件・避ける条件
+
+この手法は、滑らかな問題で、大きなHessian行列を持ちたくないときに向きます。勾配とHessian-vector積は、使えることが前提です。
+標準形は[滑らかな無制約の最小化](#/formulations/PA006)と[大規模な無制約の最小化](#/formulations/PA007)で読めます。
+
+| 条件 | 理由 |
+|---|---|
+| 連続で滑らか | 二次近似と、Hessian-vector積が意味を持つため |
+| 勾配とHessian-vector積を使える | CGがそれだけで動くため |
+| 密なHessianを保存できない | 行列を明示せずに済むため |
+| 直線探索つきのNewton法が不安定 | 信頼領域が、一歩の長さを自動で抑えるため |
+| 負の曲率も検出しながら進みたい | CGが負の曲率の方向を見つけるため |
+
+避ける、または切り替える条件です。
+
+- 目的関数が不連続、または強いノイズを含む → 微分を使わない手法を検討する
+- 勾配やHessian-vector積を信頼できない → 先に微分の実装を直す
+- 一回のHessian-vector積が、目的の評価より極端に高価 → [BFGS法](#/learn/bfgs)や[L-BFGS](#/learn/lbfgs)を検討する
+- 上下限だけなら → [L-BFGS-B](#/learn/lbfgsb)で足りる場合がある（[上下限付きの滑らかな最小化](#/formulations/PA008)）
+- 一般の制約が中心で、制約付きの信頼領域の実装を用意していない → [SLSQP](#/learn/slsqp)や[非線形内点法](#/learn/interior-point-nlp)を検討する
 
 ## Python
+
+次の例は、小さな例の関数を、`scipy.optimize.minimize` の `trust-ncg` で解きます。Hessian-vector積を `hessp` で渡し、`callback` で各反復の点を記録します。
 
 ```python
 import numpy as np
@@ -92,38 +137,65 @@ def hessian_product(x: np.ndarray, vector: np.ndarray) -> np.ndarray:
     return hessian @ vector
 
 
+path = [np.array([-1.2, 1.0])]
 result = minimize(
     objective,
-    x0=np.array([-1.2, 1.0]),
+    x0=path[0],
     jac=gradient,
     hessp=hessian_product,
     method="trust-ncg",
     options={"gtol": 1e-8, "maxiter": 300},
+    callback=lambda xk: path.append(xk.copy()),
 )
 
-print(result.success, result.x, result.fun, result.message)
+for k, x in enumerate(path[:5]):
+    print(k, x.round(4), round(objective(x), 4))
+print(result.success, result.x, result.fun, result.nit, result.nfev, result.njev, result.nhev)
 ```
 
+```text
+0 [-1.2  1. ] 8.712
+1 [-1.0459  1.0582] 4.2112
+2 [-1.0117  1.0651] 4.0814
+3 [-1.0117  1.0651] 4.0814
+4 [-0.9201  0.8324] 3.6906
+True [1. 1.] 0.0 23 24 23 61
+```
+
+先頭の5行は、各反復のあとの点と目的値です。表の反復0〜4に対応します。
+2行目と3行目が同じ点なのは、反復2の一歩を棄却したからです。最後の行は、成功・解・目的値・反復回数・関数評価・勾配評価・Hessian-vector積の評価回数です。
+23回の反復に、61回のHessian-vector積を使いました。
+
 ::: note
-反復回数だけでBFGSと比較しません。
-HVP、gradient、目的関数の各評価費を分け、同じ停止条件と初期点で比較します。
+反復回数だけでBFGS法と比べません。Hessian-vector積・勾配・目的関数の評価費を分け、同じ停止条件と初期点で比べます。
 :::
 
 ## 診断値
 
-- gradient norm
-- trust radius $\Delta_k$
-- actual / predicted reduction ratio $\rho_k$
-- accepted / rejected step数
-- inner CG iteration数
-- negative-curvatureまたはboundary termination
-- function / gradient / HVP evaluation数
+- 勾配の大きさ（gradient norm）
+- 信頼半径 $\Delta_k$
+- 実際の減少と予測した減少の比 $\rho_k$
+- 受け入れた一歩と、棄却した一歩の数
+- 内側のCGの反復回数
+- 負の曲率、または境界で終わったか
+- 関数・勾配・Hessian-vector積の評価回数
+
+判断の目安です。勾配の大きさが許容誤差以下なら止めます。
+棄却が続いて半径が縮み続けるなら、下の表で原因を絞ります。$\rho_k$ が1に近く、半径が広がっているなら、順調です。
 
 ## 失敗・切替の兆候
 
-半径が縮み続ける場合、微分が誤っている、modelが不連続を跨いでいる、scaleが悪い、または目的関数評価にnoiseがある可能性があります。
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 半径が縮み続ける | 微分の誤り、近似が不連続を跨いでいる、尺度が悪い、目的の評価にノイズがある | 勾配とHessian-vector積を有限差分と照合する。尺度を揃える |
+| $\rho_k$ が負のまま、棄却が続く | 近似が現在点のまわりでも当たらない | 初期の半径を小さくする。目的の滑らかさを確認する |
+| 内側のCGの反復が多い | Hessianの条件が悪い | 尺度を揃える。CGの許容誤差を見直す |
+| Hessian-vector積が極端に高価 | 微分の実装の費用 | [BFGS法](#/learn/bfgs)など、勾配だけを使う方法を検討する |
+| 上下限に張り付く、または一般の制約が効く | 制約のない手法の前提が崩れている | [L-BFGS-B](#/learn/lbfgsb)や[SLSQP](#/learn/slsqp)へ切り替える |
 
 ## 次に読む
 
-Hessianを明示せずに曲率を使う設計をさらに比較するなら、[Newton-CG](#/learn/newton-cg)と[Trust-krylov](#/learn/trust-krylov)を同じHVP budgetで確認します。
-一次または準Newton法との交換条件は[BFGS](#/learn/bfgs)で確認できます。
+- [Newton-CG](#/learn/newton-cg)と[Trust-krylov](#/learn/trust-krylov)：Hessianを明示せずに曲率を使う設計を、同じHessian-vector積の予算で比べる
+- [BFGS法](#/learn/bfgs)：勾配だけで曲率を学ぶ準Newton法との交換条件
+- [大規模な無制約の最小化](#/formulations/PA007)：この手法が向く問題の標準形
+- [滑らかな無制約の最小化](#/formulations/PA006)：制約も規模の制限もない場合の標準形

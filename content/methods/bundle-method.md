@@ -8,66 +8,114 @@ summary: 非滑らか凸関数で過去の劣勾配を捨てずcutの束とし�
 source_ids: [S055, S056]
 related_ids: [family.composite-convex, subgradient, proximal-gradient]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
 非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**折れ曲がった関数で今の劣勾配だけを信じるのではなく、これまで観測した支持平面を束ねて、次に進むための下側modelを育てたい**というものです。
+折れ曲がった地形を歩くたびに、足元に「この平面より下には潜らない」という板を1枚立てます。
+板が増えると、地形の下側の輪郭が見えてきます。その輪郭の底へ向かって、ただし今いる場所から離れすぎないよう手綱を引きながら、試しに一歩踏み出します。
+この板が、cut（凸性から得られる支持平面）です。板の集まりが束（bundle）です。
 
-- 見ているもの: 関数値、劣勾配、cut、model gap
-- 動かしているもの: bundle、中心点、trial point
-- 前進の判断: serious stepで中心点を改善できるか
-- 恐れていること: cutの増大、弱いmodel、部分問題の重さ
+- **見るもの**: 関数値、劣勾配、cutの束、モデルが予測した減少と実際の減少
+- **動かすもの**: 束、中心点（実際にいる点）、試しに踏み出す試行点
+- **前進の判断**: 重大な一歩（serious step）で、中心点の目的値を改善できるか
 
-劣勾配法が一回ごとに方向を使い捨てるのに対し、Bundle法は過去情報を局所modelへ残します。
+[劣勾配法](#/learn/subgradient)は、一回ごとに得た向きを使い捨てます。Bundle法は、過去の情報を局所モデルとして残します。
+気をつける点は三つあります。cutの増加、弱いモデル、部分問題の重さです。
 
-## まず確認すること
+## 一手の意味
 
-| 項目 | 確認内容 |
-|---|---|
-| convexity | 凸非滑らか問題として扱えるか |
-| oracle | 関数値と劣勾配を返せるか |
-| prox structure | より単純な近接作用素を使えないか |
-| dimension | bundle subproblemを解ける規模か |
-| precision | 粗い解か、安定したgap診断が必要か |
-
-L1正則化などproxが安価なら、Proximal GradientやFISTAを先に考える方が単純です。
-
-## 仕組み
-
-観測点 $x_i$ と劣勾配 $g_i$から、凸性に基づくcutを作ります。
+観測した点 $x_i$ とその劣勾配 $g_i$ から、凸性に基づくcutを作ります。次の式は、関数がこの平面より下には潜らないという意味です。
 
 $$
 f(x) \geq f(x_i) + g_i^T(x-x_i)
 $$
 
-複数cutの最大値でpiecewise-linear modelを作り、中心点から離れすぎない安定化項と合わせてtrial pointを選びます。trialが十分改善すればserious step、改善が弱くても有用なcutならnull stepとしてbundleだけ更新します。
+cutは、関数全体を下から支えます。複数のcutの最大値をとると、区分線形のモデルになります。
+
+$$
+m_k(x)=\max_{i}\left\{f(x_i)+g_i^T(x-x_i)\right\}
+$$
+
+モデルは、関数の下側の輪郭です。ただし、cutが少ないうちは、遠くで大きく下がることがあります。
+そこで、中心点 $x_c$ から離れすぎないように、安定化の項を足して試行点を選びます。
+
+$$
+x^{+}=\arg\min_x\; m_k(x)+\frac{\mu}{2}\lVert x-x_c\rVert^2
+$$
+
+$\mu$ が大きいほど手綱は固くなり、試行点は中心点の近くに留まります。
+
+試行点で関数値を評価し、モデルが予測した減少 $f(x_c)-m_k(x^{+})$ と、実際の減少 $f(x_c)-f(x^{+})$ を比べます。
+
+- 実際の減少が予測の一定割合以上なら、**serious step** です。中心点を試行点へ動かします。
+- そうでなければ、**null step** です。中心点は動かさず、試行点で得た新しいcutだけを束に足します。
+
+ここで書いたのは、安定化項をもつ代表的な形です。$\mu$ の更新と採否の割合とcutの間引きの方針は、実装ごとに異なります。
+
+## 小さな例
+
+いちばん小さな折れ目、$f(x)=|x|$ で、束が育つ様子を追います。最小点は $x=0$、値は $0$ です。
+中心点を $x_c=2$ から始め、手綱の強さを $\mu=0.25$、採用の割合を $0.1$ とします。
+
+| 反復 | 中心点 | 試行点 | 予測した減少 | 実際の減少 | 判定 |
+|---:|---:|---:|---:|---:|---|
+| 1 | 2 | −2 | 4 | 0 | null step |
+| 2 | 2 | 0 | 2 | 2 | serious step |
+| 3 | 0 | 0 | 0 | 0 | 停止 |
+
+反復1の束は、$x=2$ で得たcut $v\ge x$ が1枚だけです。このモデルは、左へ行くほど下がり続けます。
+手綱の項が試行点を $x=2-1/\mu=-2$ に決めますが、$f(-2)=2$ で、中心点と同じ高さです。予測した減少は $4$、実際の減少は $0$ なので、採用の割合 $0.1$ を満たしません。null step です。
+
+中心点は動きません。ただし、$x=-2$ で得た劣勾配 $-1$ から、新しいcut $v\ge -x$ が束に加わります。
+反復2のモデルは $\max\{x,\,-x\}=|x|$ で、関数そのものです。試行点は折れ目の底 $x=0$ に決まります。予測と実際の減少がどちらも $2$ なので、serious step です。中心点が $0$ に動きます。
+
+反復3では、試行点が中心点と同じ $0$ で、予測した減少が $0$ です。モデルの最小値は $0$ で、cutは関数全体の下界なので、$f(x)\ge0$ がすべての $x$ で成り立ちます。中心点の値 $0$ が最小値だと、ここで証明できます。
+
+失敗したように見える反復1が、反復2の判断材料を作っています。劣勾配法は、$x=2$ で得た傾き $1$ だけを見て進みます。Bundle法は、$x=-2$ での外れをcutとして残すので、折れ目の底を直接狙えました。
 
 ## 向く条件・避ける条件
 
-向きやすい条件:
+Bundle法は、凸で非滑らかな目的に、劣勾配法より安定した進み方を求める手法です。
+先に、次の項目を確認します。
 
-- 凸だが非滑らかな目的関数
-- 関数値と劣勾配oracleがある
-- 単純なsubgradient法より安定した進行が必要
-- dual decompositionなどcutに意味がある
+| 項目 | 確認すること |
+|---|---|
+| 凸性 | 凸で非滑らかな問題として扱えるか |
+| oracle | 関数値と劣勾配を返せるか |
+| 近接構造 | より単純な近接作用素を使えないか |
+| 次元 | 束の部分問題を解ける規模か |
+| 精度 | 粗い解でよいか、安定したギャップの診断が必要か |
 
-避ける条件:
+向く条件です。
 
-- 非凸でcutがglobal lower modelにならない
-- proxを閉形式で計算できる単純構造
-- bundle部分問題が元問題並みに重い
-- 離散変数や強いnoiseを未model化
+- 凸だが非滑らかな目的関数である（[非滑らかな凸複合の最小化](#/formulations/PA010)）
+- 関数値と劣勾配のoracleがある
+- 単純な劣勾配法より、安定した進みが必要である
+- 双対分解など、cutに意味がある構造である
+
+避ける、または切り替える条件です。
+
+- 非凸で、cutが大域的な下界のモデルにならない
+- 近接作用素を閉じた形で計算できる単純な構造である → [近接勾配法](#/learn/proximal-gradient)を先に考える
+- 束の部分問題が、元の問題と同じくらい重い
+- 離散変数や強いノイズを、モデルに入れていない
+- 粗い解で足りる → [劣勾配法](#/learn/subgradient)で十分なことがある
+
+L1正則化など、近接作用素が安価なら、近接勾配法や[FISTA](#/learn/fista)のほうが単純です。
 
 ## Python
+
+次の例は、上の小さな例を再現する最小の実装です。含むのは、cutの束とモデルの値です。安定化つきの部分問題と、serious stepの判定も含みます。
 
 ```python
 from dataclasses import dataclass
 
 import numpy as np
+from scipy.optimize import minimize
 
 
 @dataclass
@@ -77,48 +125,90 @@ class Cut:
     subgradient: np.ndarray
 
 
+def objective(x: np.ndarray) -> float:
+    return float(abs(x[0]))
+
+
+def oracle(x: np.ndarray) -> Cut:
+    """関数値と劣勾配を返す。折れ目 (x = 0) では 0 を選ぶ。"""
+    return Cut(x.copy(), objective(x), np.array([np.sign(x[0])]))
+
+
 def model_value(cuts: list[Cut], candidate: np.ndarray) -> float:
-    return max(
-        cut.value + float(cut.subgradient @ (candidate - cut.point))
-        for cut in cuts
-    )
+    """cut の最大値。凸関数を下から支える、区分線形のモデル。"""
+    return max(c.value + float(c.subgradient @ (candidate - c.point)) for c in cuts)
 
 
-cuts = [
-    Cut(np.array([1.0, 0.0]), 1.0, np.array([1.0, -1.0])),
-    Cut(np.array([0.0, 1.0]), 0.8, np.array([-0.5, 1.0])),
-]
-trial = np.array([0.5, 0.5])
-print(model_value(cuts, trial))
+def trial_point(cuts: list[Cut], center: np.ndarray, mu: float) -> np.ndarray:
+    """安定化つきの部分問題: min v + (mu/2)||x - center||^2, ただし v は各 cut 以上。"""
+    n = center.size
+    constraints = [
+        {"type": "ineq",
+         "fun": lambda z, c=c: z[n] - c.value - c.subgradient @ (z[:n] - c.point)}
+        for c in cuts
+    ]
+    start = np.append(center, model_value(cuts, center))
+    result = minimize(lambda z: z[n] + 0.5 * mu * np.sum((z[:n] - center) ** 2),
+                      start, constraints=constraints, method="SLSQP")
+    return result.x[:n]
+
+
+center = np.array([2.0])
+cuts = [oracle(center)]
+mu, accept_ratio = 0.25, 0.1
+
+for iteration in range(1, 4):
+    trial = trial_point(cuts, center, mu)
+    predicted = objective(center) - model_value(cuts, trial)   # モデルが約束した減少
+    actual = objective(center) - objective(trial)              # 実際の減少
+    row = (iteration, round(center[0], 3) + 0.0, round(trial[0], 3) + 0.0,
+           round(predicted, 3) + 0.0, round(actual, 3) + 0.0)
+    if predicted < 1e-6:
+        print(*row, "stop")
+        break
+    if actual >= accept_ratio * predicted:
+        print(*row, "serious")
+        center = trial
+    else:
+        print(*row, "null")
+    cuts.append(oracle(trial))
+# 1 2.0 -2.0 4.0 0.0 null
+# 2 2.0 0.0 2.0 2.0 serious
+# 3 0.0 0.0 0.0 0.0 stop
 ```
 
-この例はcut modelだけを示す教育用断片です。実装には安定化付きsubproblem、serious-step判定、cut管理が必要です。
+出力は、上の表と一致します。
+この例は教育用の断片です。実務のBundle法には、$\mu$ の更新が必要です。cutの集約と削除、専用の二次計画（QP）ソルバーも必要です。
 
 ## 診断値
 
-見る値:
+serious stepとnull stepの比率と、モデルの隙間（gap）が、進み具合の中心です。
 
-- serious / null step比率
-- model gap
-- bundle size
-- center objective
-- stabilization parameter
-- cutのactive数
+- serious stepとnull stepの比率
+- モデルの隙間（中心点の目的値と、モデルの最小値の差）
+- 束の大きさ（cutの数）
+- 中心点の目的値
+- 安定化の係数 $\mu$
+- 有効なcutの数
 
-## うまくいったサインと切替サイン
+null stepが続いても、新しいcutでモデルが良くなっていれば、情報は増えています。ただし、続きすぎるときは、進んでいない可能性があります。
 
-切替サイン:
+## 失敗・切替の兆候
 
-- null stepばかり続く → model、stabilization、oracleを確認
-- bundleが増えmemoryを圧迫 → aggregationやcut deletionを検討
-- proxが実は安価 → Proximal Gradientへ
-- 非凸性が重要 → convex guaranteeを外し別methodへ
-- 劣勾配noiseが大きい → samplingやrobust oracleを検討
+- null stepばかり続く → モデル、安定化、oracleのいずれかが合っていない → 安定化の係数とoracleの精度を確認する
+- 束が増えてメモリを圧迫する → cutの管理が追いついていない → cutの集約や削除を検討する
+- 近接作用素が実は安価である → 構造を使えていない → [近接勾配法](#/learn/proximal-gradient)へ切り替える
+- 非凸性が重要である → cutが下界のモデルにならず、凸の保証を外れる → 別の手法へ切り替える
+- 劣勾配のノイズが大きい → cutが不正確で、モデルが崩れる → サンプリングや、頑健なoracleを検討する
 
 ## コラム: null stepは失敗ではない
 
-trial pointが中心点を更新しなくても、新しいcutがmodelを改善するなら情報は増えています。これがBundle法の特徴です。ただしnull stepが続きすぎる場合は進行していない可能性があります。
+試行点が中心点を更新しなくても、新しいcutがモデルを改善するなら、情報は増えています。上の反復1がその例です。
+これがBundle法の特徴です。ただし、null stepが続きすぎる場合は、進行していない可能性があります。
 
 ## 次に読む
 
-[非滑らか・複合凸最適化の選び分け](#/learn/family.composite-convex)でSubgradient、Proximal Gradient、ADMMとの前提差を確認してください。
+- [非滑らか・複合凸最適化の選び分け](#/learn/family.composite-convex)：劣勾配法、近接勾配法、ADMMとの前提の違い
+- [劣勾配法](#/learn/subgradient)：cutを蓄えず、一回ごとの劣勾配で進む基本形
+- [近接勾配法](#/learn/proximal-gradient)：近接作用素を使える構造での一手
+- [非滑らかな凸複合の最小化](#/formulations/PA010)：この手法が解く問題の標準形

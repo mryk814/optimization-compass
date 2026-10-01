@@ -4,87 +4,83 @@ kind: method
 method_id: M_MOEA_D
 title_ja: MOEA/D
 title_en: Multi-Objective Evolutionary Algorithm Based on Decomposition
-summary: 多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。
+summary: 多目的問題を異なる重みや参照方向を持つ多数の単目的部分問題へ分け、近い部分問題同士で候補を共有する進化的手法です。
 source_ids: [S039]
 related_ids: [multi-objective, epsilon-constraint, nsga-iii]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。
+多目的問題を異なる重みや参照方向を持つ多数の単目的部分問題へ分け、近い部分問題同士で候補を共有する進化的手法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**Pareto front全体を一つの巨大なpopulation問題として扱うより、異なるtrade-offを担当する小さな仕事へ分け、近い担当同士で良い候補を交換したい**というものです。
+異なる優先度を持つ買い手が、それぞれ候補を選び、似た優先度の買い手と情報を交換する場面を考えます。MOEA/Dは、その担当ごとに単目的問題を持ちます。
 
-- 見ているもの: scalarized value、reference方向、近傍subproblem、objective vector
-- 動かしているもの: subproblemごとの候補と近傍population
-- 前進の判断: 各方向のscalarized objectiveと全体coverageの改善
-- 別に確認するもの: subproblem数、generation数、total evaluation budget
-- 恐れていること: decompositionの偏り、objective scaling、近傍の同質化
+異なる交換関係を担当する小さな仕事へ分けます。近い担当同士で良い候補を交換し、Paretoフロントの各領域を調べます。
 
-分解に使うscalarizationが探索するfrontの形へ影響します。weightを均等に置けば解が均等に並ぶとは限りません。
+- 見るもの: 単目的化した値、参照方向、近傍部分問題、目的ベクトル
+- 動かすもの: 部分問題ごとの候補と近傍集団
+- 前進の判断: 各方向の単目的化した目的と全体被覆範囲の改善
 
-## まず確認すること
+分解に使う単目的化が探索するフロントの形へ影響します。重みを均等に置けば解が均等に並ぶとは限りません。
 
-| 項目 | 確認内容 |
-|---|---|
-| objectives | direction、scale、rangeが定義されているか |
-| decomposition | weighted sum、Tchebycheffなど何を使うか |
-| reference directions | 関心領域と必要な解数に合うか |
-| neighborhood | どのsubproblem間で情報を共有するか |
-| constraints | feasible solutionをどう優先するか |
-| budget | subproblem数 × generationの評価数を許容できるか |
+## 一手の意味
 
-convex frontだけを前提にweighted sumを使うと、非凸frontの一部を取りにくい場合があります。
+### 仕組み
 
-## 仕組み
-
-各weight vector $w^j$に対してscalarized subproblemを作ります。
+各重みベクトル $w^j$に対して単目的化した部分問題を作ります。
 
 $$
 \min_x g(x\mid w^j, z^*)
 $$
 
-$z^*$はideal pointなどのreferenceです。近いweight vectorをneighborとし、variationで作った候補がneighbor subproblemを改善すれば置き換えます。これにより局所的な情報共有とfront全体の分布を両立させます。
+$z^*$は理想点などの参照です。近い重みベクトルを近傍とし、交叉・突然変異で作った候補が近傍の部分問題を改善すれば置き換えます。これにより局所的な情報共有とフロント全体の分布を両立させます。
+
+## 小さな例
+
+二目的の重み付き和を使い、重みを $(0.2,0.8),(0.5,0.5),(0.8,0.2)$ とします。
+各担当の初期目的値は $(4,4)$ です。
+3候補を順に全担当へ渡し、値が厳密に改善するときだけ置き換えました。
+
+| 候補の目的値 | 置き換わる担当 | 更新後の3担当の目的値 |
+|---|---|---|
+| $(1,3)$ | 全担当 | $(1,3),(1,3),(1,3)$ |
+| $(2,2)$ | $(0.2,0.8)$ | $(2,2),(1,3),(1,3)$ |
+| $(3,1)$ | $(0.2,0.8)$ | $(3,1),(1,3),(1,3)$ |
+
+同じ候補でも、担当の重みで採否が変わります。
+中央の担当では和が同じなので置き換えません。
+これは置換処理を切り出した例です。Python節は別問題と実装の分解を使います。
 
 ## 向く条件・避ける条件
 
+### まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| 目的 | 方向、尺度、範囲が定義されているか |
+| 分解 | 重み付き和、Tchebycheffなど何を使うか |
+| 参照方向 | 関心領域と必要な解数に合うか |
+| 近傍 | どの部分問題間で情報を共有するか |
+| 制約 | 可行解をどう優先するか |
+| 予算 | 部分問題数 × 世代の評価数を許容できるか |
+
+凸なフロントだけを前提に重み付き和を使うと、非凸フロントの一部を取りにくい場合があります。
+
 向きやすい条件:
 
-- 複数目的のblack-box問題
-- trade-offを複数の方向へ分解して管理したい
-- objective spaceに近傍関係を置ける
-- population評価を並列化できる
+- 複数目的のブラックボックス問題
+- 交換関係を複数の方向へ分解して管理したい
+- 目的空間に近傍関係を置ける
+- 集団評価を並列化できる
 
 避ける条件:
 
-- 一評価が高価で多数subproblemを維持できない
-- objective scaleが未整理
-- preferenceが一領域に集中しているのに全方向を探索する
-- 厳密なPareto certificateが必要
-
-## 診断値
-
-見る値:
-
-- subproblemごとの改善率
-- occupied reference direction数
-- neighbor replacement数
-- hypervolume / IGD / spacing
-- ideal pointの更新
-- feasible fraction
-- seed間のfront差
-
-## うまくいったサインと切替サイン
-
-切替サイン:
-
-- 一部方向だけ改善 → scaling、decomposition、weight配置を見直す
-- neighborが同じ解へ収束 → neighborhoodやvariationを広げる
-- frontの重要領域が疎い → preference-based weightへ集中
-- 目的数が多くweight数が爆発 → NSGA-IIIや別many-objective法を比較
-- backend solverが強くthresholdに意味がある → ε-constraintへ
+- 一評価が高価で多数部分問題を維持できない
+- 目的尺度が未整理
+- 選好が一領域に集中しているのに全方向を探索する
+- 厳密なPareto 証明が必要
 
 ## Python
 
@@ -105,11 +101,44 @@ result = minimize(problem, algorithm, ("n_gen", 100), seed=7, verbose=False)
 print(result.F.shape)
 ```
 
-比較ではdecomposition、weight、neighborhood、population相当数、seed、evaluation budgetを固定または明示します。
-occupied directionが増えても、preferenceに合う解が選ばれたことを意味しません。
+比較では分解・重み・近傍を固定または明示します。集団相当数・乱数種・評価予算も揃えるか明示します。
+占有方向が増えても、選好に合う解が選ばれたことを意味しません。
 
-## コラム: 分解は意思決定ではない
+## 診断値
 
-多数のscalarized subproblemを解いても、最終的にどの解を採用するかは別の意思決定です。均等なweightは利用者の選好を表すとは限りません。
+見る値:
 
-[多目的最適化とPareto front](#/learn/multi-objective)を入口に、many-objectiveでreference方向を直接使う[NSGA-III](#/learn/nsga-iii)や、許容値を明示する[ε-constraint法](#/learn/epsilon-constraint)と比較してください。
+- 部分問題ごとの改善率
+- 占有された参照方向数
+- 近傍の置換数
+- ハイパーボリューム / IGD / 間隔
+- 理想点の更新
+- 可行な候補の割合
+- 乱数種間のフロント差
+
+- 別に確認するもの: 部分問題数、世代数、総評価予算
+- 恐れていること: 分解の偏り、目的尺度調整、近傍の同質化
+
+## 失敗・切替の兆候
+
+### うまくいったサインと切替サイン
+
+切替サイン:
+
+- 一部方向だけ改善 → 尺度調整、分解、重み配置を見直す
+- 近傍が同じ解へ収束 → 近傍や交叉・突然変異を広げる
+- フロントの重要領域が疎い → 選好を反映した重みへ集中
+- 目的数が多く重み数が爆発 → NSGA-IIIや別多数目的法を比較
+- 内部ソルバーが強く閾値に意味がある → ε-制約へ
+
+### コラム: 分解は意思決定ではない
+
+多数の単目的化した部分問題を解いても、最終的にどの解を採用するかは別の意思決定です。均等な重みは利用者の選好を表すとは限りません。
+
+[多目的最適化とParetoフロント](#/learn/multi-objective)を入口に、多数目的で参照方向を直接使う[NSGA-III](#/learn/nsga-iii)や、許容値を明示する[ε-constraint法](#/learn/epsilon-constraint)と比較してください。
+
+## 次に読む
+
+- [関連する手法の記事](#/learn/multi-objective)：一手の意味と選び分けを比べます。
+
+- [この手法を使う問題の定式化](#/formulations/PA038)：決定変数と目的を確認します。

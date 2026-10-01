@@ -1,0 +1,480 @@
+{
+  "contract_version": "1.0.0",
+  "families": [
+    {
+      "family_id": "reduce_first",
+      "lens": "form",
+      "title_ja": "最適化の前に：方程式・線形代数へ帰着",
+      "summary_ja": "反復的な最適化を始める前に、閉形式・線形方程式・固有値問題・求根として解けないかを確かめる型です。",
+      "problem_ids": ["PA001", "PA002", "PA003", "PA004"]
+    },
+    {
+      "family_id": "linear_conic",
+      "lens": "form",
+      "title_ja": "線形・凸錐",
+      "summary_ja": "線形・凸二次・錐の制約で書ける型です。凸なので、局所解がそのまま大域解になり、双対による証明も得られます。",
+      "problem_ids": ["PA017", "PA018", "PA020", "PA021", "PA022"]
+    },
+    {
+      "family_id": "fitting",
+      "lens": "form",
+      "title_ja": "データへの当てはめ",
+      "summary_ja": "観測とモデルのずれ（残差）を小さくする型です。残差の構造を捨てずに使うことが、解き方を選ぶ鍵になります。",
+      "problem_ids": ["PA005", "PA033", "PA034", "PA035", "PA055", "PA056"]
+    },
+    {
+      "family_id": "continuous_nonlinear",
+      "lens": "form",
+      "title_ja": "連続の非線形",
+      "summary_ja": "連続変数の非線形な目的と制約を扱う型です。多くは局所解までしか保証できず、滑らかさと制約の種類で道具が分かれます。",
+      "problem_ids": ["PA006", "PA007", "PA008", "PA009", "PA010", "PA011", "PA019", "PA036", "PA037"]
+    },
+    {
+      "family_id": "integer_combinatorial",
+      "lens": "form",
+      "title_ja": "整数・組合せ",
+      "summary_ja": "個数・選択・順序のように飛び飛びの値を決める型です。緩和で得た下界と実行可能解の差（gap）で進み具合を測ります。",
+      "problem_ids": ["PA023", "PA024", "PA025", "PA026", "PA027", "PA032"]
+    },
+    {
+      "family_id": "graph",
+      "lens": "form",
+      "title_ja": "グラフ・ネットワーク",
+      "summary_ja": "点と辺の上の流れ・経路・対応を決める型です。専用アルゴリズムで汎用solverより速く厳密に解けるものが多くあります。",
+      "problem_ids": ["PA028", "PA029", "PA030", "PA031"]
+    },
+    {
+      "family_id": "dynamics_physics",
+      "lens": "form",
+      "title_ja": "時間・物理を含む",
+      "summary_ja": "微分方程式や状態方程式が制約に入る型です。決める変数と、そこから計算される状態を区別して扱います。",
+      "problem_ids": ["PA042", "PA043", "PA044", "PA045", "PA057", "PA053"]
+    },
+    {
+      "family_id": "uncertainty_structure",
+      "lens": "form",
+      "title_ja": "不確実性・多目的・入れ子",
+      "summary_ja": "目的が複数ある、条件が不確か、別の最適化問題が制約に入る、といった構造を持つ型です。",
+      "problem_ids": ["PA038", "PA046", "PA047", "PA048", "PA049", "PA050"]
+    },
+    {
+      "family_id": "black_box",
+      "lens": "oracle",
+      "title_ja": "評価の事情で分ける型（black-box）",
+      "summary_ja": "数式の形ではなく、目的値の得られ方（高価・noise・失敗・勾配なし）で分ける型です。形の型と組み合わせて読みます。",
+      "problem_ids": ["PA012", "PA013", "PA014", "PA015", "PA016", "PA039"]
+    },
+    {
+      "family_id": "learning_scale",
+      "lens": "application",
+      "title_ja": "学習・大規模・逐次",
+      "summary_ja": "機械学習、分散計算、逐次的な意思決定、実験計画のように、使われる場面で性質が決まる型です。",
+      "problem_ids": ["PA040", "PA041", "PA051", "PA052", "PA054"]
+    }
+  ],
+  "formulations": [
+    {
+      "problem_id": "PA001",
+      "standard_form": "\\nabla f(x^{*})=0 \\;\\Rightarrow\\; x^{*}=\\phi(\\text{data})",
+      "reading_ja": "最適性の条件を式変形だけで解き、答えを式として書き下せる場合です。",
+      "cues_ja": ["二次関数や指数関数の組み合わせで、微分して0と置くと解けそう", "同じ形の問題をパラメータだけ変えて何度も解く"]
+    },
+    {
+      "problem_id": "PA002",
+      "standard_form": "\\text{find } x\\in\\mathbb{R}^n \\;\\text{ s.t. }\\; Ax=b",
+      "reading_ja": "未知数と同じ数の線形な等式を満たす値を求めます。最小化ではなく、線形代数で直接解きます。",
+      "cues_ja": ["つり合い・保存則・回路のように、線形の等式が未知数の数だけある"]
+    },
+    {
+      "problem_id": "PA003",
+      "standard_form": "\\min_{\\|x\\|_2=1}\\; x^\\top A x,\\quad A=A^\\top",
+      "reading_ja": "長さ1のベクトルの中で二次形式を最小にします。答えは最小固有値に対応する固有ベクトルです。",
+      "cues_ja": ["主成分・振動モード・低ランク近似を求めたい", "向きだけが問題で、大きさは正規化されている"]
+    },
+    {
+      "problem_id": "PA004",
+      "standard_form": "\\text{find } x \\;\\text{ s.t. }\\; F(x)=0,\\quad F:\\mathbb{R}^n\\to\\mathbb{R}^n",
+      "reading_ja": "非線形な方程式系の解を探します。良さの比較ではなく、条件を満たす点そのものが答えです。",
+      "cues_ja": ["平衡点・定常状態・つり合いの条件を満たす値を求めたい", "式の数と未知数の数が同じ"]
+    },
+    {
+      "problem_id": "PA005",
+      "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; \\|Ax-b\\|_2^2",
+      "reading_ja": "線形モデル Ax と観測 b のずれの二乗和を最小にします。凸で、線形代数だけで大域解が求まります。",
+      "cues_ja": ["直線・平面・多項式をデータに合わせたい", "式の数が未知数より多く、ぴったりは満たせない"]
+    },
+    {
+      "problem_id": "PA006",
+      "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; f(x),\\quad f \\text{ は滑らか},\\; n \\text{ は小さい}",
+      "reading_ja": "制約のない滑らかな関数を、少数の変数について最小にします。勾配と曲率を使う局所法が基本です。",
+      "cues_ja": ["変数が数個〜数十個で、目的が微分できる式で書ける"]
+    },
+    {
+      "problem_id": "PA007",
+      "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; f(x),\\quad \\nabla f \\text{ が使える},\\; n \\text{ は大きい}",
+      "reading_ja": "変数が非常に多い滑らかな最小化です。Hessianを持てないため、勾配と少量の履歴だけで進みます。",
+      "cues_ja": ["変数が数千〜数百万あり、自動微分で勾配は取れる"]
+    },
+    {
+      "problem_id": "PA008",
+      "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; \\ell\\le x\\le u",
+      "reading_ja": "各変数に上下限だけがある滑らかな最小化です。上下限は射影で簡単に守れるため、一般の制約より扱いやすい型です。",
+      "cues_ja": ["物理的に負にならない量や、仕様上の範囲がある値を決める"]
+    },
+    {
+      "problem_id": "PA009",
+      "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x)\\le 0,\\; h(x)=0",
+      "reading_ja": "非線形の目的を、非線形の不等式・等式制約を守りながら最小にする一般形です。",
+      "cues_ja": ["性能を上げたいが、強度・重量・安全率などの条件を式で守る必要がある"]
+    },
+    {
+      "problem_id": "PA010",
+      "standard_form": "\\min_{x}\\; f(x)+g(x),\\quad f \\text{ は滑らかな凸},\\; g \\text{ は凸だが微分できない}",
+      "reading_ja": "滑らかな部分と、角のある凸な部分の和を最小にします。角のある部分は近接作用素で扱います。",
+      "cues_ja": ["誤差の項に、疎性や上下限を促す罰則を足している"]
+    },
+    {
+      "problem_id": "PA011",
+      "standard_form": "\\min_{x}\\; f(x),\\quad f \\text{ は局所Lipschitzだが微分できない点を持つ}",
+      "reading_ja": "角や折れ目があり、凸とも限らない関数の局所解を探します。勾配の代わりに劣勾配や直接探索を使います。",
+      "cues_ja": ["最大値・絶対値・場合分けを含む目的で、凸性は分からない"]
+    },
+    {
+      "problem_id": "PA012",
+      "standard_form": "\\min_{x\\in[\\ell,u]}\\; F(x),\\quad F \\text{ は決定論的だが不連続なsimulation}",
+      "reading_ja": "同じ入力なら同じ値を返すものの、値が飛ぶsimulationを最小にします。勾配は信用できません。",
+      "cues_ja": ["閾値・場合分け・離散的な内部処理を含むsimulatorの出力を良くしたい"]
+    },
+    {
+      "problem_id": "PA013",
+      "standard_form": "\\min_{x}\\; \\mathbb{E}_{\\xi}\\big[F(x,\\xi)\\big],\\quad \\text{観測できるのは } F(x,\\xi) \\text{ だけ}",
+      "reading_ja": "同じ入力でも毎回ばらつく評価の、期待値を最小にします。一回の値の差をそのまま信じてはいけません。",
+      "cues_ja": ["実験・乱数を含むsimulation・A/Bテストの結果を良くしたい"]
+    },
+    {
+      "problem_id": "PA014",
+      "standard_form": "\\min_{x\\in[\\ell,u]}\\; F(x),\\quad \\text{1回の評価が高価},\\; n \\text{ は小さい}",
+      "reading_ja": "一回の評価に時間や費用がかかり、試せる回数が少ない最小化です。次にどこを試すかの選び方が主題になります。",
+      "cues_ja": ["一回の実験や計算に数分〜数日かかり、数十回しか試せない"]
+    },
+    {
+      "problem_id": "PA015",
+      "standard_form": "\\min_{x\\in[\\ell,u]}\\; F(x),\\quad \\text{勾配なし},\\; n \\text{ は大きい}",
+      "reading_ja": "勾配が得られないまま、多くの変数を同時に決めます。次元が増えると探索の効率が急に落ちます。",
+      "cues_ja": ["数百個のparameterを持つsimulatorを、中身を見ずに調整したい"]
+    },
+    {
+      "problem_id": "PA016",
+      "standard_form": "\\min_{x\\in X}\\; F(x),\\quad F(x)\\in\\mathbb{R}\\cup\\{\\text{fail}\\}",
+      "reading_ja": "評価そのものが失敗して値が返らない点を含む最小化です。失敗を目的値の大きさと混同しない扱いが必要です。",
+      "cues_ja": ["meshが壊れる、solverが収束しない、NaNが返る入力がある"]
+    },
+    {
+      "problem_id": "PA017",
+      "standard_form": "\\min_{x}\\; c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\; x\\ge 0",
+      "reading_ja": "線形の費用を、線形の不等式を守りながら最小にします。最適解は可行領域の頂点に現れます。",
+      "cues_ja": ["量を配分し、費用も制約も量の足し算と定数倍で書ける", "原料・時間・予算に上限がある"]
+    },
+    {
+      "problem_id": "PA018",
+      "standard_form": "\\min_{x}\\; \\tfrac12 x^\\top Q x + c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\quad Q\\succeq 0",
+      "reading_ja": "凸な二次の目的を、線形制約のもとで最小にします。最適解は頂点とは限らず、境界や内部にも現れます。",
+      "cues_ja": ["リスク（分散）や二乗誤差を、線形な予算・上下限のもとで小さくしたい"]
+    },
+    {
+      "problem_id": "PA019",
+      "standard_form": "\\min_{x}\\; x^\\top Q_0 x + c_0^\\top x \\;\\text{ s.t. }\\; x^\\top Q_i x + c_i^\\top x\\le b_i,\\quad Q_i \\text{ は不定値も可}",
+      "reading_ja": "二次の目的や二次の制約を持ち、凸とは限らない型です。見た目は凸QPに近くても、大域解の保証は急に難しくなります。",
+      "cues_ja": ["積 x_i x_j が目的や制約に入り、行列が半正定値とは限らない"]
+    },
+    {
+      "problem_id": "PA020",
+      "standard_form": "\\min_{x}\\; f^\\top x \\;\\text{ s.t. }\\; \\|A_i x+b_i\\|_2\\le c_i^\\top x+d_i",
+      "reading_ja": "線形の目的を、ノルムが線形関数以下という二次錐制約のもとで最小にします。凸で、内点法で効率よく解けます。",
+      "cues_ja": ["距離・ノルム・楕円の不確かさが制約に入る"]
+    },
+    {
+      "problem_id": "PA021",
+      "standard_form": "\\min_{X}\\; \\langle C,X\\rangle \\;\\text{ s.t. }\\; \\langle A_i,X\\rangle=b_i,\\; X\\succeq 0",
+      "reading_ja": "行列の変数を、半正定値という条件のもとで線形に最適化します。組合せ問題や非凸問題の緩和としてよく現れます。",
+      "cues_ja": ["決めるものが共分散行列やGram行列で、半正定値である必要がある"]
+    },
+    {
+      "problem_id": "PA022",
+      "standard_form": "\\min_{x}\\; c^\\top x \\;\\text{ s.t. }\\; b-Ax\\in\\mathcal{K},\\quad \\mathcal{K} \\text{ は凸錐の直積}",
+      "reading_ja": "非負象限・二次錐・半正定値錐・指数錐などを組み合わせた一般の錐制約です。モデリング言語が内部で使う共通の形です。",
+      "cues_ja": ["log・exp・ノルム・行列条件が混在するが、各部品は凸と分かっている"]
+    },
+    {
+      "problem_id": "PA023",
+      "standard_form": "\\min_{x}\\; c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
+      "reading_ja": "線形計画の一部の変数に「整数であること」を加えた型です。この一条件で、凸性が失われ難しさが大きく変わります。",
+      "cues_ja": ["買う・買わない、開く・閉じる、台数・人数のように飛び飛びの値を決める"]
+    },
+    {
+      "problem_id": "PA024",
+      "standard_form": "\\min_{x}\\; \\tfrac12 x^\\top Q x+c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
+      "reading_ja": "凸QPの一部の変数を整数に制限した型です。銘柄数の上限つきポートフォリオなどに現れます。",
+      "cues_ja": ["二乗の目的に、選ぶ・選ばないの決定が混ざる"]
+    },
+    {
+      "problem_id": "PA025",
+      "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x)\\le 0,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
+      "reading_ja": "非線形の目的・制約と整数変数が同時にある型です。連続緩和も非凸になり得るため、最も難しい部類に入ります。",
+      "cues_ja": ["設備の数や種類を選びながら、非線形な物理モデルも守る"]
+    },
+    {
+      "problem_id": "PA026",
+      "standard_form": "\\min\\; \\max_i\\,(s_i+p_i) \\;\\text{ s.t. }\\; \\text{NoOverlap}(\\{[s_i,s_i+p_i)\\}),\\; \\text{precedence},\\; \\text{resource}",
+      "reading_ja": "作業の開始時刻を決め、重なり・順序・資源の条件を守りながら終了時刻を早めます。制約を論理として直接書けます。",
+      "cues_ja": ["シフト・工程・会議室のように、時間の区間が重ならないよう並べる"]
+    },
+    {
+      "problem_id": "PA027",
+      "standard_form": "\\max_{x\\in\\{0,1\\}^n}\\; \\sum_k w_k\\,\\mathbb{1}\\big[C_k(x)\\big]",
+      "reading_ja": "真偽値の変数に対し、論理式（節）をなるべく多く、または重み付きで満たします。全部を満たすかだけを問えばSATです。",
+      "cues_ja": ["条件が「AならばBではない」のような論理で書ける"]
+    },
+    {
+      "problem_id": "PA028",
+      "standard_form": "\\min_{f}\\; \\sum_{(i,j)\\in E} c_{ij}f_{ij} \\;\\text{ s.t. }\\; \\sum_{j} f_{ij}-\\sum_{j} f_{ji}=b_i,\\; 0\\le f_{ij}\\le u_{ij}",
+      "reading_ja": "ネットワークの各辺に流す量を、各点での出入りの差と容量を守りながら、費用最小に決めます。",
+      "cues_ja": ["物・電力・データを、容量のある経路網で送る"]
+    },
+    {
+      "problem_id": "PA029",
+      "standard_form": "\\min_{P:\\,s\\to t}\\; \\sum_{(i,j)\\in P} c_{ij}",
+      "reading_ja": "始点から終点までの経路のうち、辺の重みの合計が最小のものを選びます。",
+      "cues_ja": ["地点を結ぶ道の中で、最短・最安・最速の一本を選ぶ"]
+    },
+    {
+      "problem_id": "PA030",
+      "standard_form": "\\min_{x}\\; \\sum_{i,j} c_{ij}x_{ij} \\;\\text{ s.t. }\\; \\sum_j x_{ij}=1,\\; \\sum_i x_{ij}=1,\\; x_{ij}\\in\\{0,1\\}",
+      "reading_ja": "人と仕事のような二つの集合を一対一に組み合わせ、組み合わせの費用の合計を最小にします。",
+      "cues_ja": ["担当者と案件、機械と作業を一対一で割り当てる"]
+    },
+    {
+      "problem_id": "PA031",
+      "standard_form": "\\min\\; \\sum_{k}\\sum_{(i,j)} c_{ij}x_{ijk} \\;\\text{ s.t. }\\; \\text{各顧客を1回訪問},\\; \\text{容量},\\; \\text{時間枠}",
+      "reading_ja": "複数の車両で顧客を回る巡回路を決めます。最短路を並べるだけでは解けず、訪問順と割当を同時に決めます。",
+      "cues_ja": ["配送・巡回・点検で、何台の車がどの順に回るかを決める"]
+    },
+    {
+      "problem_id": "PA032",
+      "standard_form": "\\max_{x\\in\\{0,1\\}^n}\\; v^\\top x \\;\\text{ s.t. }\\; w^\\top x\\le W",
+      "reading_ja": "予算や容量の上限内で、価値の合計が最大になる品目の組を選びます。すべての要素を覆う最も安い組を選ぶ set cover も、同じ0-1選択の仲間です。",
+      "cues_ja": ["限られた予算で、どの案件・品目を採用するかを選ぶ", "すべての地区・需要を少なくとも1回は覆う拠点や集合を、最小の費用で選ぶ"]
+    },
+    {
+      "problem_id": "PA033",
+      "standard_form": "\\min_{x}\\; \\tfrac12\\sum_{i=1}^m r_i(x)^2 \\;\\text{ s.t. }\\; \\ell\\le x\\le u",
+      "reading_ja": "非線形なモデルの残差の二乗和を最小にします。残差のJacobianを使うと、一般の最小化より速く解けます。",
+      "cues_ja": ["指数減衰・反応速度・カメラ幾何のような非線形モデルのparameterを観測から推定する"]
+    },
+    {
+      "problem_id": "PA034",
+      "standard_form": "\\min_{x}\\; \\sum_{i=1}^m \\rho\\big(a_i^\\top x-b_i\\big),\\quad \\rho \\text{ はHuber損失など}",
+      "reading_ja": "外れ値の影響を抑える損失で線形回帰を行います。大きな残差ほど重みを弱めます。",
+      "cues_ja": ["データに明らかな外れ値が混ざり、二乗誤差だと一点に引っ張られる"]
+    },
+    {
+      "problem_id": "PA035",
+      "standard_form": "\\min_{x}\\; \\tfrac12\\|Ax-b\\|_2^2+\\lambda\\|x\\|_1",
+      "reading_ja": "当てはめの誤差に L1 罰則を足し、多くの係数がちょうど0になる解を求めます。",
+      "cues_ja": ["候補の特徴量が多く、効いているものだけを残したい"]
+    },
+    {
+      "problem_id": "PA036",
+      "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; \\textstyle\\sum_i x_i=1,\\; x\\ge 0",
+      "reading_ja": "非負で合計が1の変数、つまり割合や確率を決めます。可行集合は単体（simplex）です。",
+      "cues_ja": ["配分比率・混合比・確率分布を決める"]
+    },
+    {
+      "problem_id": "PA037",
+      "standard_form": "\\min_{R\\in SO(3)}\\; \\sum_i \\|Rp_i-q_i\\|_2^2",
+      "reading_ja": "回転行列の集合という曲がった空間の上で最小化します。成分を自由に動かすと回転でなくなる点に注意します。",
+      "cues_ja": ["カメラやロボットの姿勢、点群の向き合わせを推定する"]
+    },
+    {
+      "problem_id": "PA038",
+      "standard_form": "\\min_{x\\in X}\\; \\big(f_1(x),\\dots,f_m(x)\\big)",
+      "reading_ja": "複数の目的を同時に小さくします。答えは一点ではなく、どれかを良くすると別のどれかが悪くなる点の集合です。",
+      "cues_ja": ["コストと性能、速さと精度のように、重みを先に決めたくない"]
+    },
+    {
+      "problem_id": "PA039",
+      "standard_form": "\\min_{\\lambda\\in\\Lambda}\\; \\mathcal{L}_{\\text{val}}\\big(w^{*}(\\lambda)\\big),\\quad w^{*}(\\lambda)=\\text{学習の結果}",
+      "reading_ja": "学習アルゴリズムの設定値を、学習してから検証するという高価で noisy な評価で選びます。",
+      "cues_ja": ["learning rate・木の深さ・正則化の強さを決めたい"]
+    },
+    {
+      "problem_id": "PA040",
+      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big),\\quad h_w \\text{ はneural network}",
+      "reading_ja": "neural networkの重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
+      "cues_ja": ["大量のデータで、多層のモデルを学習させる"]
+    },
+    {
+      "problem_id": "PA041",
+      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell_i(w)+r(w),\\quad \\ell_i \\text{ は凸},\\; N \\text{ は巨大}",
+      "reading_ja": "多数のデータ点の凸な損失の平均を最小にします。全データの勾配は高価なので、一部のデータで近似しながら進みます。",
+      "cues_ja": ["ロジスティック回帰やSVMを、メモリに乗りきらないデータで学習する"]
+    },
+    {
+      "problem_id": "PA042",
+      "standard_form": "\\min_{u(\\cdot)}\\; \\int_0^T L\\big(x(t),u(t)\\big)\\,dt+\\Phi\\big(x(T)\\big) \\;\\text{ s.t. }\\; \\dot x=f(x,u)",
+      "reading_ja": "時間とともに変わる操作量 u(t) を決め、状態 x(t) の動きを通して累積費用を最小にします。",
+      "cues_ja": ["燃料・時間・エネルギーを最小にする操作の時系列を求める"]
+    },
+    {
+      "problem_id": "PA043",
+      "standard_form": "\\min_{u_0,\\dots,u_{N-1}}\\; \\sum_{k=0}^{N-1}\\big(x_k^\\top Qx_k+u_k^\\top Ru_k\\big)+x_N^\\top Px_N \\;\\text{ s.t. }\\; x_{k+1}=Ax_k+Bu_k,\\; x_0=\\hat x(t)",
+      "reading_ja": "現在の状態から有限の先までの操作を最適化し、最初の一手だけを実行して、次の時刻にまた解き直します。",
+      "cues_ja": ["制御周期ごとに、制約つきの最適な操作を実時間で求めたい"]
+    },
+    {
+      "problem_id": "PA044",
+      "standard_form": "\\min_{x(\\cdot),u(\\cdot),T}\\; J \\;\\text{ s.t. }\\; \\dot x=f(x,u),\\; c(x,u)\\le 0,\\; x(0)=x_0,\\; x(T)\\in\\mathcal{X}_T",
+      "reading_ja": "始点から目標までの状態と操作の軌道を、経路上の制約を守りながら決めます。",
+      "cues_ja": ["ロボットの動作・ロケットの上昇経路・車の走行ラインを設計する"]
+    },
+    {
+      "problem_id": "PA045",
+      "standard_form": "\\min_{q,u}\\; J(u,q) \\;\\text{ s.t. }\\; R(u,q)=0 \\;(\\text{偏微分方程式})",
+      "reading_ja": "設計変数 q を決めると、偏微分方程式を解いて状態 u が決まります。u を通して目的を評価する型です。",
+      "cues_ja": ["流体・構造・熱のsimulationを内側に持つ設計や推定"]
+    },
+    {
+      "problem_id": "PA046",
+      "standard_form": "\\min_{x}\\; F\\big(x,y^{*}\\big) \\;\\text{ s.t. }\\; y^{*}\\in\\arg\\min_{y}\\, f(x,y)",
+      "reading_ja": "上位の決定 x に対して、下位の主体が自分の最適化で y を決めます。上位は下位の反応を見越して x を選びます。",
+      "cues_ja": ["価格を決めると相手が最適に反応する", "hyperparameterを決めると学習がparameterを決める"]
+    },
+    {
+      "problem_id": "PA047",
+      "standard_form": "\\text{find } x^{*}\\in X \\;\\text{ s.t. }\\; \\langle F(x^{*}),x-x^{*}\\rangle\\ge 0 \\;\\;\\forall x\\in X",
+      "reading_ja": "複数の主体がそれぞれ最適化した結果の釣り合い（均衡）を、変分不等式として求めます。",
+      "cues_ja": ["市場・交通・ゲームで、誰も一人だけ動いて得をしない状態を求める"]
+    },
+    {
+      "problem_id": "PA048",
+      "standard_form": "\\text{find } x \\;\\text{ s.t. }\\; x\\ge 0,\\; F(x)\\ge 0,\\; x^\\top F(x)=0",
+      "reading_ja": "二つの非負の量のうち、各成分でどちらか一方は必ず0になる条件を満たす点を求めます。",
+      "cues_ja": ["接触・摩擦・KKT条件のように「どちらかが0」という条件がある"]
+    },
+    {
+      "problem_id": "PA049",
+      "standard_form": "\\min_{x}\\; c^\\top x+\\mathbb{E}_{\\xi}\\big[Q(x,\\xi)\\big]",
+      "reading_ja": "いま決める x と、不確かさ ξ が明らかになった後の対応（recourse）の費用の期待値を合わせて最小にします。",
+      "cues_ja": ["需要が分からないまま発注量を決め、後で不足や余りに対応する"]
+    },
+    {
+      "problem_id": "PA050",
+      "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x,u)\\le 0 \\;\\;\\forall u\\in\\mathcal{U}",
+      "reading_ja": "不確かな値 u が集合 U のどこに来ても制約を破らないように x を決めます。",
+      "cues_ja": ["最悪の場合でも制約を守る設計が必要で、分布は分からない"]
+    },
+    {
+      "problem_id": "PA051",
+      "standard_form": "\\min_{x_1,\\dots,x_N,z}\\; \\sum_{i=1}^N f_i(x_i) \\;\\text{ s.t. }\\; x_i=z\\;(i=1,\\dots,N)",
+      "reading_ja": "目的を各計算機の持つ部分に分け、各部分の解が共通の値 z に一致するよう調整しながら解きます。",
+      "cues_ja": ["データが複数の拠点に分かれ、一か所に集められない"]
+    },
+    {
+      "problem_id": "PA052",
+      "standard_form": "\\text{各回 } t:\\; x_t \\text{ を選び } f_t \\text{ を観測};\\quad \\min\\; \\sum_{t=1}^T f_t(x_t)-\\min_{x}\\sum_{t=1}^T f_t(x)",
+      "reading_ja": "目的が毎回変わり、選んだ後に初めて分かる状況で、後から振り返った最良の固定解との差（regret）を小さくします。",
+      "cues_ja": ["広告配信や価格設定のように、決めてから結果が分かることを繰り返す"]
+    },
+    {
+      "problem_id": "PA053",
+      "standard_form": "\\min_{x}\\; \\tfrac12 x^\\top Qx+(c+D\\theta_t)^\\top x \\;\\text{ s.t. }\\; Ax\\le b+E\\theta_t \\quad (t=1,2,\\dots)",
+      "reading_ja": "形は同じで、parameter θ だけが変わる問題を何度も解きます。前回の解を次の初期値に使えます。",
+      "cues_ja": ["同じモデルを制御周期ごと、日ごと、シナリオごとに解き直す"]
+    },
+    {
+      "problem_id": "PA054",
+      "standard_form": "\\max_{\\xi=\\{x_1,\\dots,x_n\\}}\\; \\log\\det M(\\xi),\\quad M(\\xi)=\\sum_{i=1}^n \\phi(x_i)\\phi(x_i)^\\top",
+      "reading_ja": "推定の精度が最も上がるように、どの条件で実験するかを選びます。情報行列の大きさを最大にします。",
+      "cues_ja": ["実験の回数が限られ、どの条件で測るかを事前に決めたい"]
+    },
+    {
+      "problem_id": "PA055",
+      "standard_form": "\\min_{m}\\; \\tfrac12\\|G(m)-d\\|_2^2+\\tfrac{\\alpha}{2}\\|Lm\\|_2^2",
+      "reading_ja": "観測 d から、それを生んだ原因 m を推定します。データだけでは決まらない部分を正則化で補います。",
+      "cues_ja": ["断層画像・地下構造・熱源のように、結果から原因を逆算する"]
+    },
+    {
+      "problem_id": "PA056",
+      "standard_form": "\\min_{\\theta}\\; \\sum_{i=1}^m \\rho\\big(y_i-h(x_i;\\theta)\\big)",
+      "reading_ja": "非線形モデルのparameterを、外れ値に強い損失で推定します。",
+      "cues_ja": ["非線形モデルの当てはめで、一部の観測が壊れている"]
+    },
+    {
+      "problem_id": "PA057",
+      "standard_form": "\\min_{q}\\; J\\big(u(q),\\Omega(q)\\big) \\;\\text{ s.t. }\\; R\\big(u,\\Omega(q)\\big)=0,\\; \\text{形状・meshの制約}",
+      "reading_ja": "物体の形 Ω(q) を決めると状態方程式の解 u が決まり、その性能を最適化します。形が変わると計算領域も変わります。",
+      "cues_ja": ["翼・流路・部品の外形を、simulationの結果を見ながら変える"]
+    }
+  ],
+  "relations": [
+    {"from": "PA017", "to": "PA018", "type": "special_case_of", "note_ja": "Q=0 とすると凸QPは線形計画になります。"},
+    {"from": "PA018", "to": "PA020", "type": "special_case_of", "note_ja": "目的の二次項をepigraphへ移すと、二次錐制約で書けます。"},
+    {"from": "PA020", "to": "PA021", "type": "special_case_of", "note_ja": "二次錐制約は、Schur補行列を使って半正定値制約で表せます。"},
+    {"from": "PA021", "to": "PA022", "type": "special_case_of", "note_ja": "半正定値錐は、一般の錐最適化で扱う錐の一つです。"},
+    {"from": "PA017", "to": "PA023", "type": "special_case_of", "note_ja": "整数変数が一つもない（I が空）MILPは線形計画です。"},
+    {"from": "PA023", "to": "PA024", "type": "special_case_of", "note_ja": "Q=0 のMIQPはMILPです。"},
+    {"from": "PA018", "to": "PA024", "type": "special_case_of", "note_ja": "整数変数を持たないMIQPは凸QPです。"},
+    {"from": "PA024", "to": "PA025", "type": "special_case_of", "note_ja": "目的が二次で制約が線形のMINLPがMIQPです。"},
+    {"from": "PA032", "to": "PA023", "type": "special_case_of", "note_ja": "knapsackは制約が1本の0-1整数線形計画です。"},
+    {"from": "PA029", "to": "PA028", "type": "special_case_of", "note_ja": "始点から終点へ1単位だけ流す最小費用流が最短路です。"},
+    {"from": "PA030", "to": "PA028", "type": "special_case_of", "note_ja": "二部グラフ上で各点が1単位を送受する最小費用流が割当です。"},
+    {"from": "PA028", "to": "PA017", "type": "special_case_of", "note_ja": "最小費用流は線形計画です。係数行列が完全単模なので、整数データなら整数の最適頂点を持ちます。"},
+    {"from": "PA005", "to": "PA033", "type": "special_case_of", "note_ja": "残差 r(x) が x の線形関数なら、非線形最小二乗は線形最小二乗になります。"},
+    {"from": "PA005", "to": "PA018", "type": "special_case_of", "note_ja": "‖Ax−b‖² を展開すると、制約のない凸二次関数になります。"},
+    {"from": "PA033", "to": "PA008", "type": "special_case_of", "note_ja": "上下限つきの滑らかな最小化の一種です。ただし残差構造を捨てて一般形で解くと、Jacobianの情報を失います。"},
+    {"from": "PA008", "to": "PA009", "type": "special_case_of", "note_ja": "上下限は、一般の不等式制約のうち最も単純なものです。"},
+    {"from": "PA006", "to": "PA008", "type": "special_case_of", "note_ja": "上下限を無限大にとれば、制約なしの問題になります。"},
+    {"from": "PA036", "to": "PA009", "type": "special_case_of", "note_ja": "単体制約は、線形等式1本と非負制約の組です。"},
+    {"from": "PA035", "to": "PA010", "type": "special_case_of", "note_ja": "滑らかな二乗誤差と、角のある L1 罰則の和です。"},
+    {"from": "PA034", "to": "PA056", "type": "special_case_of", "note_ja": "モデル h(x;θ) が θ について線形なら、robust回帰になります。"},
+    {"from": "PA044", "to": "PA042", "type": "special_case_of", "note_ja": "軌道最適化は、開ループの最適制御問題として定式化されます。"},
+    {"from": "PA043", "to": "PA053", "type": "special_case_of", "note_ja": "MPCでは、現在の状態をparameterとして同じ形の問題を毎周期解き直します。"},
+    {"from": "PA057", "to": "PA045", "type": "special_case_of", "note_ja": "形状を設計変数とするPDE制約付き最適化です。"},
+    {"from": "PA048", "to": "PA047", "type": "special_case_of", "note_ja": "非線形相補性問題は、非負象限上の変分不等式と同値です。"},
+    {"from": "PA039", "to": "PA046", "type": "special_case_of", "note_ja": "下位問題が学習、上位問題が検証損失の最小化という二段の問題です。"},
+    {"from": "PA023", "to": "PA017", "type": "relaxes_to", "note_ja": "整数条件を外したLP緩和の最適値は、MILPの下界になります。分枝限定法はこの下界を使います。"},
+    {"from": "PA024", "to": "PA018", "type": "relaxes_to", "note_ja": "整数条件を外すと凸QPになり、その最適値が下界になります。"},
+    {"from": "PA025", "to": "PA009", "type": "relaxes_to", "note_ja": "整数条件を外すと連続のNLPになります。非凸なら、その局所解は下界になりません。"},
+    {"from": "PA019", "to": "PA021", "type": "relaxes_to", "note_ja": "xxᵀ を行列変数 X に置き換えるShor緩和で、下界を与えるSDPになります。"},
+    {"from": "PA054", "to": "PA021", "type": "relaxes_to", "note_ja": "候補点への実験の重みへ緩和すると、log det 最大化の凸問題になり、SDPで表せます。"},
+    {"from": "PA005", "to": "PA002", "type": "reformulates_to", "note_ja": "正規方程式 AᵀAx=Aᵀb に帰着します。数値的にはQR分解やSVDで解きます。"},
+    {"from": "PA006", "to": "PA001", "type": "reformulates_to", "note_ja": "∇f(x)=0 を記号的に解ければ、反復計算は要りません。"},
+    {"from": "PA006", "to": "PA004", "type": "reformulates_to", "note_ja": "停留点の条件 ∇f(x)=0 は求根問題です。ただし最小点以外の停留点も解に含まれます。"},
+    {"from": "PA004", "to": "PA033", "type": "reformulates_to", "note_ja": "‖F(x)‖² の最小化として解けます。ただし0でない局所最小に止まると、根ではありません。"},
+    {"from": "PA037", "to": "PA003", "type": "reformulates_to", "note_ja": "点の対応が分かっている回転推定は、行列のSVDで閉形式に解けます（Wahba問題）。"},
+    {"from": "PA043", "to": "PA018", "type": "reformulates_to", "note_ja": "線形モデル・二次費用・線形制約なら、毎周期の問題は凸QPです。"},
+    {"from": "PA042", "to": "PA009", "type": "reformulates_to", "note_ja": "時間を離散化（直接法）すると、有限次元の制約付きNLPになります。"},
+    {"from": "PA045", "to": "PA009", "type": "reformulates_to", "note_ja": "偏微分方程式を離散化すると、大規模な制約付きNLPになります。離散化した問題の保証は、連続の問題の保証とは別です。"},
+    {"from": "PA055", "to": "PA033", "type": "reformulates_to", "note_ja": "Tikhonov正則化は残差を一本追加した形なので、非線形最小二乗として解けます。"},
+    {"from": "PA046", "to": "PA048", "type": "reformulates_to", "note_ja": "下位問題が凸なら、KKT条件へ置き換えて相補性制約付きの問題（MPCC）にできます。"},
+    {"from": "PA027", "to": "PA023", "type": "reformulates_to", "note_ja": "各節は0-1変数の線形不等式として書けます。"},
+    {"from": "PA026", "to": "PA023", "type": "reformulates_to", "note_ja": "時刻を離散化するか big-M 制約を使うとMILPで書けます。制約programmingの方が自然で速いことも多くあります。"},
+    {"from": "PA031", "to": "PA023", "type": "reformulates_to", "note_ja": "MILPとして書けますが、実用規模では専用のroutingヒューリスティクスが主に使われます。"},
+    {"from": "PA049", "to": "PA017", "type": "reformulates_to", "note_ja": "シナリオが有限個で対応が線形なら、全シナリオを並べた大きなLP（決定論的等価問題）になります。"},
+    {"from": "PA050", "to": "PA020", "type": "reformulates_to", "note_ja": "線形制約の係数が楕円集合で不確かなら、robust対応問題は二次錐計画になります。"},
+    {"from": "PA038", "to": "PA009", "type": "reformulates_to", "note_ja": "重み付き和やε制約でスカラー化すると、一つの目的の問題の列になります。"},
+    {"from": "PA039", "to": "PA014", "type": "reformulates_to", "note_ja": "検証損失を高価なblack-box評価として扱うと、Bayes最適化などの対象になります。"},
+    {"from": "PA041", "to": "PA051", "type": "reformulates_to", "note_ja": "データを拠点ごとに分けると、合意制約付きの分散問題になります。"},
+    {"from": "PA018", "to": "PA019", "type": "contrasts_with", "note_ja": "式の形は同じでも、Q が半正定値かどうかで局所解が大域解になるかが変わります。"},
+    {"from": "PA005", "to": "PA034", "type": "contrasts_with", "note_ja": "二乗損失は外れ値に強く引っ張られます。損失を変えると、同じデータでも推定値が変わります。"},
+    {"from": "PA029", "to": "PA031", "type": "contrasts_with", "note_ja": "一本の最短路は多項式時間で解けますが、複数の顧客を回る巡回路はNP困難です。"},
+    {"from": "PA006", "to": "PA007", "type": "contrasts_with", "note_ja": "同じ無制約の滑らかな問題でも、次元が大きいとHessianを持てず、道具が変わります。"},
+    {"from": "PA010", "to": "PA011", "type": "contrasts_with", "note_ja": "角があっても凸で構造が分かれば近接法が使えます。構造が分からない非凸では局所解探しになります。"},
+    {"from": "PA012", "to": "PA013", "type": "contrasts_with", "note_ja": "値が飛ぶのは入力の変化のせいか、同じ入力でのばらつきか。対処が異なります。"},
+    {"from": "PA012", "to": "PA016", "type": "contrasts_with", "note_ja": "値が飛ぶことと、値が返らないことは別の問題です。失敗を大きな目的値で置き換えると探索を誤らせます。"},
+    {"from": "PA014", "to": "PA013", "type": "contrasts_with", "note_ja": "高価でも同じ入力で同じ値が返るのか、毎回ばらつくのかで、代理モデルの作り方と停止の判断が変わります。"},
+    {"from": "PA014", "to": "PA015", "type": "contrasts_with", "note_ja": "評価が高価でも低次元ならsurrogateが効きます。高次元ではsurrogateの構築自体が難しくなります。"},
+    {"from": "PA040", "to": "PA041", "type": "contrasts_with", "note_ja": "どちらもデータ平均の損失ですが、凸かどうかで得られる保証が大きく違います。"},
+    {"from": "PA041", "to": "PA052", "type": "contrasts_with", "note_ja": "データが最初から揃っているか、決めた後に順に届くかで目標が変わります。"}
+  ]
+}

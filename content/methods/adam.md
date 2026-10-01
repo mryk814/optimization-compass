@@ -7,35 +7,32 @@ title_en: Adam
 summary: Adamは勾配のfirst／second momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
 source_ids: [S047, S048, S049, S070]
 prerequisites: [method.gradient-descent]
-related_ids: [momentum-sgd, method.gradient-descent, bfgs]
+related_ids: [momentum-sgd, method.gradient-descent, bfgs, adamw, sgd]
 visualization_ids: [adam-quadratic-divergence]
 comparison_ids: [COMPARE_GRADIENT_FAMILY, COMPARE_GRADIENT_DIVERGENCE]
 aliases: [/learn/adam]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
 Adamは勾配のfirst／second momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
 
 ## 30秒でつかむ
 
-Adamは勾配の向きをfirst momentで平滑化します。
-座標ごとの勾配scaleをsecond momentで見積もり、適応stepを作ります。
+荷車を押して、坂を下る場面を考えます。
+車輪の向きは、これまでの押し方の平均でなめらかに決めます。急な坂の方向は、これまでの勾配の大きさを見て、歩幅を小さくします。緩やかな方向は、歩幅を大きくします。
+Adamは、勾配の向きを一次モーメント（first moment）でならし、座標ごとの勾配の大きさを二次モーメント（second moment）で見積もります。
 
-- **見るもの**: 目的関数値、勾配、一次モーメントと二次モーメント、適応的なstep
-- **動かすもの**: 現在のパラメータ、moment state、global learning rate
-- **前進の判断**: 目的関数値またはvalidation metricが改善し、gradient normとupdate normが安定して小さくなること
+- **見るもの**: 勾配、一次モーメントと二次モーメント、座標ごとの適応的な歩幅
+- **動かすもの**: 現在のパラメータ、モーメントの状態、全体の学習率（learning rate）
+- **前進の判断**: 目的関数値または検証指標が改善し、勾配とupdateの大きさが安定して小さくなること
 
-## 実行結果を先に見る
+座標ごとの歩幅の調整は自動ですが、全体の学習率までは自動で決まりません。
 
-![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Adamは座標ごとのgradient scaleを使い、他の二手法と異なる経路を取る。](./media/gradient-family-execution.svg "固定Python generatorの実行結果です。Adamの軌跡を他の更新則と同じ条件で読みます。この一例は一般性能rankingではありません。")
+## 一手の意味
 
-青いAdamの軌跡に注目します。座標ごとのstep調整は、常に最短経路や最小の最終値を与える仕組みではありません。
-
-## 仕組み
-
-時刻 $t$ の勾配（gradient）を $g_t$ とすると、Adamは概ね
+時刻 $t$ の勾配を $g_t$ とします。Adamは、まず二つのモーメントを更新します。
 
 $$
 m_t=\beta_1m_{t-1}+(1-\beta_1)g_t
@@ -45,41 +42,86 @@ $$
 v_t=\beta_2v_{t-1}+(1-\beta_2)g_t^2
 $$
 
-を更新します。初期値0によるbiasを補正した $\hat m_t,\hat v_t$ を使い、
+この式は「$m_t$ は勾配の移動平均、$v_t$ は勾配の二乗の移動平均」と読みます。
+$m_t$ は方向をならし、$v_t$ は座標ごとの勾配の大きさを表します。
+初期値が0であることによる偏りを補正した $\hat m_t,\hat v_t$ を使って、パラメータを更新します。
 
 $$
 x_{t+1}=x_t-\eta\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
 $$
 
-と進みます。
+この式は「座標ごとに、平滑化した勾配を勾配の大きさで割り、学習率 $\eta$ の分だけ進む」と読みます。
+勾配が大きい座標ほど、割る数が大きくなり、歩幅が小さくなります。
+$\eta/(\sqrt{\hat v}+\epsilon)$ を、座標ごとの有効な歩幅と呼びます。
 
-$m_t$ は方向の平滑化、$v_t$ は座標ごとのgradient scaleを表します。
+## 小さな例
 
-## まず確認すること
+目的関数 $f(x_1,x_2)=(x_1-1)^2+40(x_2+2)^2$ を、$x=(4,\,3)$ から最小化します。最小点は $(1,\,-2)$ です。
+勾配は $(2(x_1-1),\,80(x_2+2))$ で、$x_2$ 方向の勾配が $x_1$ 方向よりずっと大きい細長い谷です。
+学習率は $\eta=0.08$ とします。他は $\beta_1=0.9$、$\beta_2=0.999$、$\epsilon=10^{-8}$ です。
+勾配に乱数は入らないので、seed は不要です。
 
-Adamは座標ごとのstepを正規化しますが、自動的にlearning rateを決めるわけではありません。
-global learning rate $\eta$とscheduleは依然として重要です。
-$\beta_1$／$\beta_2$／$\epsilon$も確認します。
+| 一歩 | 勾配 $g$ | 補正後の一次モーメント $\hat m$ | 補正後の二次モーメント $\hat v$ | 更新量 | 更新後の $x$ | $f(x)$ |
+|---:|---|---|---|---|---|---:|
+| 1 | $(6,\ 400)$ | $(6,\ 400)$ | $(36,\ 160000)$ | $(0.080,\ 0.080)$ | $(3.920,\ 2.920)$ | 976.8 |
+| 2 | $(5.840,\ 393.6)$ | $(5.916,\ 396.6)$ | $(35.05,\ 157459)$ | $(0.0799,\ 0.0800)$ | $(3.840,\ 2.840)$ | 945.1 |
+| 3 | $(5.680,\ 387.2)$ | $(5.829,\ 393.2)$ | $(34.12,\ 154946)$ | $(0.0798,\ 0.0799)$ | $(3.760,\ 2.760)$ | 914.0 |
 
-さらに、次のvariantによって挙動が変わります。
+初期の $f$ は $1009$ です。
+
+最初の一歩で、勾配は $6$ と $400$ で、約67倍違います。
+それでも、更新量は二つの座標でどちらも $0.08$、つまり学習率と同じです。
+最初の一歩では $\hat m=g$、$\hat v=g^2$ です。
+更新量は $\eta\,g/(|g|+\epsilon)\approx\eta\,\mathrm{sign}(g)$ になります。
+有効な歩幅は、$x_1$ で $0.0133$、$x_2$ で $0.0002$ です。
+座標ごとの勾配の大きさの違いを打ち消して、同じ大きさで進んでいます。
+
+同じ学習率 $0.08$ の通常の勾配降下法では、事情が違います。
+$x_2$ 方向の曲率が大きいので、最初の一歩で $x_2$ が $3$ から $-29$ へ飛び、$f$ は約 $2.9\times10^{4}$ になります。その後も、値は大きくなり続けます。
+Adamは、この細長い谷でも、発散せずに進みます。
+
+この後、$x_1$ は $1$ へ向かって進み、$x_2$ は $-2$ へ向かって進みます。
+コードを最後まで実行すると、450歩で勾配の大きさと更新量が $10^{-8}$ を下回り、$x=(1,\,-2)$ で止まります。
+
+### 他の一次法との軌跡
+
+同じ細長い二次の目的関数、初期点、評価予算で実行した軌跡です。予算は40回です。更新則は、Gradient DescentとMomentumとAdamです。
+
+![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Adamは座標ごとのgradient scaleを使い、他の二手法と異なる経路を取る。](./media/gradient-family-execution.svg "固定Python generatorの実行結果です。Adamの軌跡を他の更新則と同じ条件で読みます。この一例は一般性能rankingではありません。")
+
+青いAdamの軌跡に注目します。座標ごとの歩幅の調整は、常に最短の経路や、最小の最終値を与える仕組みではありません。
+
+## 向く条件・避ける条件
+
+向く条件です。
+
+- 確率勾配を使う大規模な学習
+- 座標ごとの勾配の尺度が違う
+- sparseまたは非定常（nonstationary）な勾配
+- 初期の実用的なbaselineを、早く作りたい
+- 厳密な局所最適化より、学習の予算（training budget）が支配的
+
+避ける、または切り替える条件です。
+
+- 小規模で滑らかな決定論的問題で、高精度の局所解が欲しい → [BFGS](#/learn/bfgs)のような準Newton法のほうが診断しやすい
+- 初期の改善が速くても、最終的な汎化が最良とは限らない → 検証指標で確かめ、[Momentum SGD](#/learn/momentum-sgd)と同じ条件で比べる
+
+### 先に確認すること
+
+Adamは座標ごとの歩幅を正規化しますが、学習率を自動では決めません。
+全体の学習率 $\eta$ とそのスケジュールは、依然として重要です。$\beta_1$、$\beta_2$、$\epsilon$も確認します。
+
+次のvariantによって、挙動が変わります。
 
 - 損失に加えるL2 penalty（coupled L2 penalty）
-- 分離したweight decay（decoupled weight decay）
+- 分離したweight decay（decoupled weight decay）。[AdamW](#/learn/adamw)が代表
 - AMSGrad
-- clipping
-- mixed precision
-
-などのvariantで挙動が変わります。
-
-## 向いている条件
-
-- stochastic gradientを使う大規模学習
-- 座標ごとのgradient scaleが違う
-- sparseまたはnonstationaryなgradient
-- 初期の実用的なbaselineを早く作りたい
-- exactな局所最適化よりtraining budgetが支配的
+- gradient clipping
+- 混合精度（mixed precision）
 
 ## Python
+
+次の例は、「小さな例」と同じ二次の目的関数を、Adamの更新式で直接解きます。
 
 ```python
 import numpy as np
@@ -109,56 +151,64 @@ for step in range(1, 3_001):
         break
 
 print(x, np.linalg.norm(gradient(x)))
+# [ 1. -2.] 8.009858587798909e-09
 ```
 
-これはdeterministic quadraticの教育例です。mini-batch noise、weight decay、scheduleを含むframework実装とは条件が異なります。
+これは決定論的な二次関数の教育例です。ミニバッチのnoiseを含むframework実装とは、条件が異なります。weight decayやスケジュールも含みません。
 
 ## 診断値
 
-- objective / validation metric
-- gradient norm
-- update norm
-- effective step $\eta/(\sqrt{\hat v} + \epsilon)$
-- first / second moment norm
-- parameter norm
-- gradient clipping率
-- learning-rate schedule
-- seed間のばらつき
+| 診断値 | 見方 | 判断 |
+|---|---|---|
+| 目的関数値・検証指標 | 学習が進んでいるか | 検証指標が停滞するなら、optimizerの停止条件とモデルの汎化を分けて考える |
+| 勾配の大きさ（gradient norm） | 傾きが小さくなっているか | 小さく安定すれば停止の候補 |
+| updateの大きさ（update norm） | 一歩の大きさ | 小さく安定していなければ、学習率を見直す |
+| 有効な歩幅 $\eta/(\sqrt{\hat v} + \epsilon)$ | 座標ごとの歩幅 | 極端に小さいなら、二次モーメントが大きくなりすぎている |
+| 一次・二次モーメントの大きさ | 状態が発散していないか | 急に増えるなら、学習率か勾配の尺度を見る |
+| パラメータの大きさ | 重みが増え続けていないか | 増え続けるなら、正則化を確認する |
+| gradient clippingの発動率 | 切り詰めが常時起きていないか | 常時なら、学習率か勾配の尺度を見直す |
+| 学習率のスケジュール | 現在の学習率 | 損失の変化と合わせて読む |
+| seed間のばらつき | 結果が偶然でないか | 大きければ、複数のseedで比べる |
 
-training lossだけ下がりvalidationが悪化する場合、optimizerの停止条件とmodel generalizationを分けて考えます。
+学習損失だけが下がり、検証指標が悪化する場合は、二つを分けて考えます。optimizerの停止条件と、モデルの汎化です。
 
 ## 失敗・切替の兆候
 
-- learning rateが大きくlossが不安定
-- second momentが大きくなりstepが極小化
-- epsilonが低精度計算で支配的
-- weight decayをL2 penaltyと混同
-- validation metricが停滞しtraining lossだけ改善
-- gradient clippingが常時発動
-- optimizer stateをrestoreせずresume
+| 症状 | 考えられる原因 | 対処・切替先 |
+|---|---|---|
+| 学習率が大きく、損失が不安定 | 全体の学習率が問題に合っていない | 学習率とスケジュールを見直す |
+| 二次モーメントが大きくなり、歩幅が極小になる | 過去の大きな勾配が、二次モーメントに残った | 学習率、$\beta_2$、AMSGradのvariantを確認する |
+| $\epsilon$ が低精度の計算で支配的になる | $\sqrt{\hat v}$ が $\epsilon$ と同程度に小さい | $\epsilon$ と数値精度を確認する |
+| weight decayをL2 penaltyと混同している | Adamでは、二つの実装が同じ挙動にならない | [AdamW](#/learn/adamw)のように、分離したweight decayを使う |
+| 検証指標が停滞し、学習損失だけが改善する | 過学習、またはoptimizer以外の原因 | 早期終了、正則化を確認する。[neural networkの学習（PA040）](#/formulations/PA040)を確認する |
+| gradient clippingが常時発動する | 勾配の尺度が学習率に合っていない | 学習率と正規化を見直す |
+| optimizerの状態を復元せずに再開した | モーメントの状態が0から始まり、挙動が変わる | 状態も保存して復元する |
 
-## 固定presetをreferenceとして読む
+::: warning
+Adamの適応的な歩幅は、最適性の証明でも、大域的な保証でもありません。
+終了時の状態には、予算・勾配・検証指標・再現性を含めます。
+:::
 
-[Adamのreference Trace](#/theater/learning/SCENARIO_ADAM_QUADRATIC_DIVERGENCE)では、固定presetのobjectiveと終了statusを追えます。
-[勾配降下法・Momentumとの感度Compare](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回のoracle evaluation budgetを使います。
+## コラム: 固定presetをreferenceとして読む
+
+[Adamのreference Trace](#/theater/learning/SCENARIO_ADAM_QUADRATIC_DIVERGENCE)では、固定presetの目的関数値と終了statusを追えます。
+[勾配降下法・Momentumとの感度Compare](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的関数・初期点・40回のoracle evaluation budgetを使います。
 
 このCompareでAdamはreference memberですが、普遍的な安定性を意味しません。
 良いparameterを探索する比較でも、手法の一般性能rankingでもありません。
 
-::: warning
-Adamの適応stepは、最適性certificateや大域保証ではありません。
-終了時のstatusにはbudget／gradient／validation／再現性を含めます。
-:::
-
 ## コラム: Momentum SGDとの比較
 
-- Adamは座標ごとの二次momentでscaleを変える
-- Momentumは一つのvelocityを蓄積する
-- Adamの初期改善が速くても、最終generalizationが常に優れるとは限らない
-- weight decay実装の違いを揃える
+- Adamは、座標ごとの二次モーメントで歩幅を変える
+- Momentumは、一つのvelocityを蓄積する
+- Adamの初期の改善が速くても、最終的な汎化が常に優れるとは限らない
+- weight decayの実装の違いを揃える
 
-同じepoch数ではなく、batch order／update count／schedule／regularization／seedを揃えます。
+同じエポック数でなく、バッチの順序・更新回数・スケジュール・正則化・seedを揃えて比べます。
 
 ## 次に読む
 
-[勾配降下法](#/learn/gradient-descent)で一次法の基本的なstepを確認し、座標ごとのscale調整や確率勾配での挙動をAdamと比較します。
+- [neural networkの学習（PA040）](#/formulations/PA040)：Adamがよく使われる、非凸な損失の最小化
+- [勾配降下法](#/learn/method.gradient-descent)：一次法の基本の一歩。座標ごとの尺度の調整や確率勾配での挙動をAdamと比べる
+- [Momentum SGD](#/learn/momentum-sgd)：velocityを蓄積する更新
+- [AdamW](#/learn/adamw)：weight decayを分離した変種

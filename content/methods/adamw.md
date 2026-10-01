@@ -4,114 +4,145 @@ kind: method
 method_id: M_ADAMW
 title_ja: AdamW
 title_en: AdamW
-summary: Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離し、勾配（gradient）による更新とパラメータを縮める正則化（regularization）を別の操作として扱う学習optimizerです。
+summary: Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
 source_ids: [S047, S048, S049]
 related_ids: [family.stochastic-ml, adam, momentum-sgd]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-09-30
 ---
 
-Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離し、勾配（gradient）による更新とパラメータを縮める正則化（regularization）を別の操作として扱う学習optimizerです。
+Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
 
 ## 30秒でつかむ
 
+体重計の目盛りに合わせて歩幅を変えながら、荷物も少しずつ軽くする場面を考えます。AdamWは、勾配による移動と重みの縮小を別々に調整します。
+
 この手法の気持ちは、勾配に応じた一歩とパラメータを縮める操作を分け、学習の進み方と正則化を別々に整えることです。
 
-座標ごとの適応的なstepを使いながら、パラメータを小さく保つ操作を勾配へ混ぜ込まず、正則化として独立に調整します。
+座標ごとの適応的な一歩を使いながら、パラメータを小さく保つ操作を勾配へ混ぜ込まず、正則化として独立に調整します。
 
-- 見ているもの: 確率勾配（stochastic gradient）、一次モーメントと二次モーメント、learning rate
-- 動かしているもの: parameter、moment state、weight decay
-- 前進の判断: trainingだけでなくvalidation metricの改善
-- 恐れていること: learning-rateとdecayの混同、過学習、optimizer state memory
+- 見るもの: 確率勾配（stochastic gradient）、一次モーメントと二次モーメント、学習率
+- 動かすもの: パラメータ、モーメントの状態、重み減衰
+- 前進の判断: 学習だけでなく検証指標の改善
 
-AdamWは「Adamより常に良い」という順位ではありません。training recipeの中でregularizationをどう定義するかを明確にする選択です。
+AdamWは「Adamより常に良い」という順位ではありません。学習の設定の中で正則化をどう定義するかを明確にする選択です。
 
-## 仕組み
+## 一手の意味
 
-Adamのmoment推定からadaptiveなgradient stepを作り、そのstepとは別にparameterを縮めます。概念的には次の二つを分けます。
+一次・二次モーメントの偏りを補正した量を $\hat m_k,\hat v_k$ とすると、勾配に応じた更新と重み減衰を足して一歩を決めます。
 
-1. gradient情報による更新
-2. weight decayによるparameter縮小
+$$
+x_{k+1}=x_k-\eta_k\frac{\hat m_k}{\sqrt{\hat v_k}+\varepsilon}-\eta_k\lambda x_k
+$$
 
-実際の式、bias correction、epsilon、parameter groupはframework実装で確認します。特に「L2 penaltyをlossへ加える」ことと「decoupled weight decay」は同じ操作ではありません。
+### 仕組み
 
-## まず確認すること
+Adamのモーメント推定から適応的な勾配による更新を作り、その一歩とは別にパラメータを縮めます。概念的には次の二つを分けます。
 
-| 項目 | 確認内容 |
-|---|---|
-| objective | mini-batch gradientを利用する学習問題か |
-| regularization | weight decayをparameter縮小として扱いたいか |
-| parameter groups | biasやnormalization parameterへdecayを適用するか |
-| schedule | learning rateとdecayをどう時間変化させるか |
-| memory | 一次・二次momentを保持できるか |
-| evaluation | validation metricとearly stoppingがあるか |
+1. 勾配情報による更新
+2. 重み減衰によるパラメータ縮小
 
-小規模なdeterministic凸問題や高精度解が必要な問題では、L-BFGSや専用solverも比較します。
+実際の式と偏り補正はフレームワーク実装で確認します。微小定数 $\varepsilon$ とパラメータ群の定義も確認します。特に「L2罰則を損失へ加える」ことと「分離した重み減衰」は同じ操作ではありません。
+
+## 小さな例
+
+$f(x)=(x-1)^2$ を $x_0=2$ から解きます。
+学習率は $0.1$、重み減衰は $0.1$、モーメント係数は $0.9,0.999$ です。
+Python節の式を実行すると、次の値になります。
+
+| 更新 | 勾配による移動量 | 重み減衰による縮小量 | 更新後の $x$ | $f(x)$ |
+|---|---:|---:|---:|---:|
+| 1 | 0.100000 | 0.020000 | 1.880000 | 0.774400 |
+| 2 | 0.099465 | 0.018800 | 1.761735 | 0.580241 |
+| 3 | 0.098462 | 0.017617 | 1.645656 | 0.416872 |
+
+勾配による移動量と重み減衰量は、同じ更新の中でも異なる値です。
+これは更新式の確認であり、検証データでの性能比較ではありません。
 
 ## 向く条件・避ける条件
 
-- **向く**: neural networkなど高次元stochastic training
-- **向く**: sparseまたは座標ごとにscaleの違うgradient
-- **向く**: Adam系を使いつつweight decayを明示したい
-- **向く**: frameworkのparameter groupで適用範囲を管理できる
-- **避ける**: optimizer state memoryが厳しい
-- **避ける**: validationなしでtraining lossだけを最小化する
-- **避ける**: decay対象を理解せず全parameterへ同じ設定を適用
-- **切り替える**: 厳密な最適性gapや大域certificateが必要
+### まず確認すること
 
+| 項目 | 確認内容 |
+|---|---|
+| 目的 | ミニバッチ勾配を利用する学習問題か |
+| 正則化 | 重み減衰をパラメータ縮小として扱いたいか |
+| パラメータ群 | バイアスや正規化層のパラメータへ減衰を適用するか |
+| 予定 | 学習率と重み減衰をどう時間変化させるか |
+| メモリ | 一次・二次モーメントを保持できるか |
+| 評価 | 検証指標と早期停止があるか |
+
+小規模な決定的な凸問題や高精度解が必要な問題では、L-BFGSや専用ソルバーも比較します。
+
+- **向く**: ニューラルネットワークなど高次元確率的な学習
+- **向く**: 疎なまたは座標ごとに尺度の違う勾配
+- **向く**: Adam系を使いつつ重み減衰を明示したい
+- **向く**: フレームワークのパラメータ群で適用範囲を管理できる
+- **避ける**: 最適化器の状態を保存するメモリが厳しい
+- **避ける**: 検証なしで学習損失だけを最小化する
+- **避ける**: 減衰対象を理解せず全パラメータへ同じ設定を適用
+- **切り替える**: 厳密な最適性ギャップや大域証明が必要
 
 ## Python
 
-次の例は、`torch.optim.AdamW`を使って一回の更新を行う最小例です。
+一次元の更新式を、標準ライブラリだけで実行します。
+実モデルの学習では、フレームワークのモーメント定義とパラメータ群を確認します。
 
 ```python
-import torch
+import math
 
-model = torch.nn.Linear(4, 1)
-optimizer = torch.optim.AdamW(
-    model.parameters(),
-    lr=1e-3,
-    weight_decay=1e-2,
-)
-
-inputs = torch.randn(16, 4)
-targets = torch.randn(16, 1)
-
-optimizer.zero_grad()
-predictions = model(inputs)
-loss = torch.nn.functional.mse_loss(predictions, targets)
-loss.backward()
-optimizer.step()
-
-print(float(loss.detach()))
+x, m, v = 2.0, 0.0, 0.0
+for k in range(1, 4):
+    g = 2.0 * (x - 1.0)
+    m = 0.9 * m + 0.1 * g
+    v = 0.999 * v + 0.001 * g * g
+    gradient_step = 0.1 * (m / (1.0 - 0.9**k)) / (
+        math.sqrt(v / (1.0 - 0.999**k)) + 1e-8
+    )
+    decay = 0.1 * 0.1 * x
+    x -= gradient_step + decay
+    print(k, round(x, 6), round((x - 1.0)**2, 6))
 ```
 
-実務ではseed、data split、schedule、parameter group、framework versionを記録します。
+```text
+1 1.88 0.7744
+2 1.761735 0.580241
+3 1.645656 0.416872
+```
+
+実務では乱数種とデータ分割を記録します。学習率の予定・パラメータ群・フレームワークの版も残します。
+`torch.optim.AdamW`を使う場合も、勾配を計算してから更新し、重み減衰の適用対象を決めます。
 
 ## 診断値
 
-- training / validation loss
-- primary validation metric
-- learning rateとweight decay
-- update normとparameter norm
-- gradient clipping率
-- seed間のばらつき
-- peak memoryとthroughput
+- 学習 / 検証損失
+- 主要な検証指標
+- 学習率と重み減衰
+- 更新量のノルムとパラメータのノルム
+- 勾配のクリッピング率
+- 乱数種間のばらつき
+- 最大メモリと処理量
 
-training lossだけ下がりvalidationが悪化する場合、optimizerの停止条件とmodel generalizationを分けて考えます。
+学習損失だけ下がり検証が悪化する場合、最適化器の停止条件とモデル汎化性能を分けて考えます。
 
-## うまくいったサインと切替サイン
+- 恐れていること: 学習率と減衰の混同、過学習、最適化器の状態を保存するメモリ
 
-- trainingは改善しvalidationが悪化 → decay、data、early stoppingを見直す
-- parameter normが急減 → decayが強すぎる可能性
-- optimizer stateがmemoryを圧迫 → SGD系やstate shardingを検討
-- 初期改善後にplateau → schedule、SGD+momentum、L-BFGSを比較
-- NaNや発散 → learning rate、mixed precision、gradient scalingを確認
+## 失敗・切替の兆候
 
-## コラム: optimizerだけを比較しない
+### うまくいったサインと切替サイン
 
-AdamWの結果はlearning-rate schedule、warmup、batch size、normalization、data augmentation、gradient clippingと組み合わさって決まります。optimizer名だけを変えた比較と、各optimizer向けにrecipeを調整した比較を区別します。
+- 学習は改善し検証が悪化 → 減衰、データ、早期停止を見直す
+- パラメータのノルムが急減 → 減衰が強すぎる可能性
+- 最適化器の状態がメモリを圧迫 → SGD系や状態の分割保存を検討
+- 初期改善後に停滞 → 予定、SGD+モーメンタム、L-BFGSを比較
+- NaNや発散 → 学習率、混合精度、勾配の尺度調整を確認
+
+### コラム: 最適化器だけを比較しない
+
+AdamWの結果は、学習率の予定や準備期間と組み合わさって決まります。バッチサイズ・正規化・データ拡張・勾配のクリッピングも影響します。最適化器名だけを変えた比較と、各最適化器向けに学習の設定を調整した比較を区別します。
 
 ## 次に読む
 
-[確率勾配・機械学習optimizerの選び分け](#/learn/family.stochastic-ml)でSGD、Momentum、Adamとの条件付き優先度を確認してください。
+[確率勾配・機械学習最適化器の選び分け](#/learn/family.stochastic-ml)でSGD、Momentum、Adamとの条件付き優先度を確認してください。
+
+- [この手法を使う問題の定式化](#/formulations/PA040)：決定変数と目的を確認します。
