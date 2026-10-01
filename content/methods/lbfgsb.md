@@ -12,59 +12,91 @@ visualization_ids: [exponential-fit-lbfgsb]
 comparison_ids: [COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS]
 aliases: [/learn/lbfgsb]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-09-30
 ---
 
 少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、最近の曲率情報だけを覚え、boundsの外へ出ずに大規模な問題を進むことです。
+柵で囲われた斜面を、手帳に残した最近の記録だけを頼りに下る場面を想像してください。
+柵にぶつかったら、その方向には進めません。柵に沿って、進める方向だけで下ります。L-BFGS-B法は、この動き方を大規模な問題で行います。
 
-- **見るもの**: 目的関数値、勾配、bounds、直近の曲率更新
-- **動かすもの**: bounds内の現在点とlimited-memoryの更新履歴
-- **前進の判断**: 目的関数値とprojected gradient normが下がること
+- **見るもの**: 目的関数値、勾配、上下限（bounds）、直近の曲率更新
+- **動かすもの**: 上下限の内側にある現在点と、限られた長さの更新履歴
+- **前進の判断**: 目的関数値と、射影した勾配のノルム（projected gradient norm）が下がること
 
-## BFGSとの違い
+## 一手の意味
 
-通常のBFGSはdenseな逆Hessian近似を保持するため、変数数 $n$ に対して概ね $O(n^2)$ のmemoryを使います。L-BFGSは直近 $m$ 回の $s_k$ と $y_k$ だけを保存し、行列を明示せずtwo-loop recursionで方向を計算します。
+[BFGS法](#/learn/bfgs)は、密な逆Hessian近似を保持するため、変数の数 $n$ に対して概ね $O(n^2)$ のメモリを使います。
+[L-BFGS法](#/learn/lbfgs)は、直近 $m$ 回の $s_k$ と $y_k$ だけを保存し、行列を明示せずに方向を計算します。
 
-L-BFGS-Bはさらに各変数のbounds
+L-BFGS-Bは、さらに各変数の上下限を直接扱います。
 
 $$
 l_i \le x_i \le u_i
 $$
 
-をnativeに扱います。一般の等式・不等式制約を扱う手法ではありません。
+一般の等式・不等式制約を扱う手法ではありません。
 
-## 向いている条件
+1回の反復は、次の3段でできています。
 
-- 数千〜数百万変数の滑らかな目的関数
-- gradientまたはautomatic differentiationが利用できる
-- 制約が主に単純な上下限
-- dense Hessianを保存できない
+1. **境界に沿った探索**: 勾配の反対へ進む道を、上下限にぶつかるたびに折り曲げます。この道の上で、二次モデルが最も下がる点（一般化Cauchy点）を求めます。
+2. **自由な変数での部分空間の最小化**: 境界に張り付いていない変数だけを動かし、L-BFGSのモデルを最小にする方向を求めます。
+3. **上下限の内側での直線探索**: 得られた方向へ進み、上下限の内側で一手の長さを決めます。
+
+境界に着いた変数は、第2段では固定されます。この分担で、上下限を破らずに準Newton法の情報を使います。
+
+## 小さな例
+
+[BFGS法](#/learn/bfgs)と同じ関数 $f(x,y)=(x-1)^2+20(y+2)^2$、初期点 $(4,\,3)$ に、上下限を加えます。
+
+- $0\le x\le 5$
+- $-1\le y\le 5$
+
+上下限なしの最小点は $(1,\,-2)$ ですが、$y=-2$ は下限 $-1$ の外にあります。
+上下限つきの最小点は、下限に張り付いた $(1,\,-1)$ で、目的値は $20$ です。
+
+SciPy 1.18のL-BFGS-Bが、反復ごとに受け入れた点を次に示します。内部の詳細はバージョンで変わり得るので、数値は目安です。
+
+| 反復 | 現在点 | 目的値 | 勾配 | 射影した勾配の最大成分 |
+|---:|---|---:|---|---:|
+| 0 | $(4,\,3)$ | 509 | $(6,\,200)$ | 4.0 |
+| 1 | $(0,\,-1)$ | 21.0 | $(-2,\,40)$ | 2.0 |
+| 2 | $(0.104,\,-1)$ | 20.80 | $(-1.79,\,40)$ | 1.79 |
+| 3 | $(1,\,-1)$ | 20.0 | $(0,\,40)$ | 約 $10^{-15}$ |
+
+3回の反復で収束します。表の動きは、次のように読めます。
+
+- 反復1は、履歴がないので、境界に沿った最急降下の道だけで決まります。$y$ は下限 $-1$ で止まり、$x$ は行き過ぎて下限 $0$ の角に着きます。
+- 反復2からは、$y$ が下限に張り付いたまま動きません。自由な $x$ だけが $0$ から $0.104$ へ動きます。
+- 反復3で、$x$ が最適な $1$ に着きます。
+
+最後の点では、勾配 $(0,\,40)$ のノルムは $40$ のままです。それでも、この点は最小点です。
+$y$ 方向の勾配 $40>0$ は、$y$ を下げると目的値が下がることを意味します。しかし、$y$ は下限より下へ行けません。禁止された方向の勾配は、最小点の判定から除きます。この判定に使うのが射影した勾配で、この点では $0$ です。
+
+## 向く条件・避ける条件
+
+向く条件です。
+
+- 数千〜数百万変数の滑らかな目的関数である
+- 勾配または自動微分が利用できる
+- 制約が、主に単純な上下限である（[上下限つきの滑らかな最小化](#/formulations/PA008)）
+- 密なHessianを保存できない
 - 局所解で十分、または凸性により局所解が大域解になる
 
-boundsを付ければ物理的に意味のない値を防げますが、変数間の関係を表す一般制約の代わりにはなりません。
+上下限を付ければ物理的に意味のない値を防げます。ただし、変数間の関係を表す一般制約の代わりにはなりません。
 
-## 境界上の停止を読む
+避ける、または切り替える条件です。
 
-境界に張り付いた変数では、通常のgradient normだけを見ると「勾配が残っている」と見える場合があります。重要なのは、実行可能方向へ射影したgradientやKKT条件です。
-
-確認する値:
-
-- projected gradient norm
-- active boundの数
-- function / gradient evaluation数
-- line-search status
-- step norm
-- memory parameter $m$
-
-::: note
-境界上で解が止まること自体は失敗ではありません。目的関数が境界の外側へ改善する方向を示していても、その方向が禁止されていれば境界点が最適になり得ます。
-:::
+- 上下限がなく変数も少ない → [BFGS](#/learn/bfgs)。上下限なしで大規模なら[L-BFGS](#/learn/lbfgs)（[滑らかな無制約の最小化](#/formulations/PA006)）
+- 残差の二乗和の形をしている → 残差の構造を保つ[非線形最小二乗](#/learn/concept.nonlinear-least-squares)の手法（[Trust Region Reflective](#/learn/trust-region-reflective)）へ進む
+- 非線形の等式や、変数が絡む不等式が本質である → SLSQP、内点法などへ移行する
+- 目的関数が不連続、または強いノイズを含む → 微分を使わない手法を検討する
 
 ## Python
+
+次の例は、上の小さな例と同じ問題をL-BFGS-Bで解きます。最後に、通常の勾配のノルムと、射影した勾配の最大成分を並べます。
 
 ```python
 import numpy as np
@@ -72,37 +104,65 @@ from scipy.optimize import minimize
 
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 3.0) ** 2 + 4.0 * (x[1] + 1.0) ** 2)
+    return float((x[0] - 1.0) ** 2 + 20.0 * (x[1] + 2.0) ** 2)
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 3.0), 8.0 * (x[1] + 1.0)])
+    return np.array([2.0 * (x[0] - 1.0), 40.0 * (x[1] + 2.0)])
 
+
+bounds = [(0.0, 5.0), (-1.0, 5.0)]
+lower, upper = np.array(bounds).T
 
 result = minimize(
     objective,
-    x0=np.array([0.0, 0.0]),
+    x0=np.array([4.0, 3.0]),
     jac=gradient,
     method="L-BFGS-B",
-    bounds=[(-2.0, 2.0), (-3.0, 3.0)],
+    bounds=bounds,
     options={"ftol": 1e-12, "gtol": 1e-8, "maxiter": 300},
 )
 
-print(result.success, result.x, result.fun, result.message)
+projected = np.clip(result.x - gradient(result.x), lower, upper) - result.x
+print(result.success, result.x, result.fun, result.nit)
+# True [ 1. -1.] 20.0 3
+print(result.message)
+# CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL
+print(np.linalg.norm(gradient(result.x)), np.linalg.norm(projected, np.inf))
+# 40.0 9.99e-16
 ```
 
-この例では無制約最適点の $x_0=3$ が上限2を超えるため、制約付き解は境界へ移ります。
+無制約の最小点 $y=-2$ が下限 $-1$ の外にあるので、解は境界へ移ります。
+通常の勾配のノルムは $40$ ですが、射影した勾配は約 $10^{-15}$ で、停止条件はこちらで判定されています。
+
+## 診断値
+
+境界に張り付いた変数では、通常の勾配のノルムだけを見ると「勾配が残っている」と見える場合があります。重要なのは、実行可能な方向へ射影した勾配やKKT条件です。
+
+確認する値は次のとおりです。
+
+- 射影した勾配のノルム（projected gradient norm）
+- 上下限に張り付いた変数（active bound）の数
+- 関数評価と勾配評価の回数
+- 直線探索の状態
+- 一手のノルム
+- メモリのパラメータ $m$
+
+::: note
+境界上で解が止まること自体は失敗ではありません。目的関数が境界の外側へ改善する方向を示していても、その方向が禁止されていれば、境界点が最適になり得ます。
+:::
 
 ## 失敗・切替の兆候
 
-- nonlinear equalityやcoupled inequalityが重要 → SLSQP、interior-pointなどへ移行する
-- 目的関数が不連続・強いnoiseを含む → derivative-free法を検討する
-- gradientが誤っている → 先にgradient checkを通す
-- line searchが何度も失敗 → scaling、非滑らかさ、NaN領域を確認する
-- boundsだけではmodelの実行可能性を表現できない → 一般制約を扱うmodelへ移行する
+- 非線形の等式や、変数が絡む不等式が重要 → 上下限だけでは表せない → SLSQP、内点法などへ移行する
+- 目的関数が不連続、または強いノイズを含む → 勾配が意味を持たない → 微分を使わない手法を検討する
+- 勾配が誤っている → 曲率の履歴が壊れる → 先に勾配チェックを通す
+- 直線探索が何度も失敗する → 尺度、非滑らかさ、NaNの領域がある → それらを確認する
+- 上下限だけでは、モデルの実行可能性を表現できない → 一般制約を扱うモデルへ移行する
 
 ## 次に読む
 
-[scalar fallback条件の共通診断probe](#/traces/exponential-fit-lbfgsb)では、残差vectorを保つ方法と同じ観測量を使い、scalar objectiveへ変換する条件を確認します。
-この線はL-BFGS-Bの実行結果ではありません。
-[solver条件の比較](#/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS)でbounds対応と残差vector interfaceを読み分けた後、残差構造を保つ場合は[非線形最小二乗](#/learn/least-squares)へ進みます。
+- [scalar fallback条件の共通診断probe](#/traces/exponential-fit-lbfgsb)：残差ベクトルを保つ方法と同じ観測量を使い、スカラーの目的へ変換する条件を確認します。この線はL-BFGS-Bの実行結果ではありません。
+- [solver条件の比較](#/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS)：上下限への対応と、残差ベクトルの入口を読み分けます。
+- [非線形最小二乗](#/learn/least-squares)：残差の構造を保つ場合はこちらへ進みます。
+- [上下限つきの滑らかな最小化](#/formulations/PA008)：この手法が解く問題の標準形

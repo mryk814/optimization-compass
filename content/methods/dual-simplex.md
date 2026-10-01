@@ -4,104 +4,224 @@ kind: method
 method_id: M_DUAL_SIMPLEX
 title_ja: Dual Simplex法
 title_en: Dual Simplex Method
-summary: 双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
+summary: 双対可行性（dual feasibility）を保ったまま、実行不能な基底を直し、LPの基底を効率よく再最適化するsimplex法の変種です。
 source_ids: [S004, S016, S055]
 prerequisites: [lp-qp-conic]
-related_ids: [lp-qp-conic, branch-and-cut]
+related_ids: [lp-qp-conic, branch-and-cut, concept.linear-program, concept.mixed-integer-linear-program]
 aliases: [/learn/dual-simplex]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
+双対可行性（dual feasibility）を保ったまま、実行不能な基底を直し、LPの基底を効率よく再最適化するsimplex法の変種です。
 
-## Primal simplexとの対比
+## 30秒でつかむ
 
-LPを標準形で考えると、
+パン屋が、在庫の範囲で最も売上の高い計画を立て終えたところへ、追加の条件が届きます。
+「クロワッサンは1個までにしてほしい」といった条件です。
+立てた計画は、この条件を破っています。ただし、資源の値段の付け方（最適性の条件）は、まだ崩れていません。
 
-- primal simplex: primal feasibleなbasisを保ち、objectiveを改善する
-- dual simplex: dual feasibleなbasisを保ち、primal feasibilityを回復する
+最初から計画を立て直す代わりに、値段の付け方を保ったまま、破れた条件だけを直していきます。これがdual simplex法です。
 
-という見方ができます。
+- **見るもの**: 基底変数の値のうち、負になっているもの（実行不能な行）
+- **動かすもの**: 基底。負の行の変数を外し、被約費用（reduced cost）の符号を崩さない変数を入れる
+- **前進の判断**: 負の値がなくなれば最適で止まる。直せる列がなければ、その問題は実行不能
 
-制約の追加、bound変更、MIP nodeでのbranchingなどにより、以前のbasisがdual feasibleだがprimal infeasibleになる状況ではdual simplexが自然です。
+primal simplexは「常に実行可能で、目的値を改善する」手法でした。dual simplexは向きが逆で、「常に最適性の条件を満たし、実行可能性を回復する」手法です。
 
-## どこで使われるか
+## 一手の意味
 
-- MILPの各nodeでLP relaxationを再最適化
-- 既存LPへ制約やcutを追加
-- scenarioやparameter変更後のre-optimization
-- presolve後に得られたbasisの利用
-- sparseな大規模LP
+一手は、値が負の基底変数を一つ選んで外し、代わりに入る変数を比の最小値で選ぶ操作です。
+比の最小値で選ぶことで、すべての被約費用を0以上に保ったまま、負の値を持つ行を直せます。
 
-ユーザーがalgorithmを直接選ばなくても、LP/MIP solverが内部で自動選択する場合があります。
+| | primal simplex | dual simplex |
+|---|---|---|
+| 常に保つもの | 実行可能性（基底変数が0以上） | 双対可行性（被約費用が0以上） |
+| 直していくもの | 目的値 | 実行可能性 |
+| 先に選ぶもの | 入る変数（被約費用が負） | 出る変数（値が負の基底変数） |
+| 後で選ぶもの | 出る変数（比の最小値） | 入る変数（比の最小値） |
+| 止まる条件 | 被約費用がすべて0以上 | 基底変数がすべて0以上 |
 
-## 診断値
+出る行を $r$ とします。その行の非基底変数の係数を $\alpha_{rj}$、被約費用を $\bar{c}_j$ とすると、入る変数は次で選びます。
 
-- primal feasibility residual
-- dual feasibility residual
-- objective value
-- basis status
-- simplex iteration数
-- degeneracy / stalling
-- presolve reduction
-- infeasible / unbounded status
-- numerical warning
+$$
+j^\star=\arg\min_{j:\,\alpha_{rj}<0}\;\frac{\bar{c}_j}{-\alpha_{rj}}
+$$
 
-LPの`infeasible`と`unbounded`は別の状態です。modeling error、単位、bounds、signを確認し、solver statusを単に「失敗」とまとめません。
+負の値を持つ行を直すには、その行で係数が負の変数を増やすしかありません。係数が負の変数だけが候補になるのは、そのためです。
+最小の比を選ぶと、ピボット（pivot）の後も被約費用が0以上のまま残ります。
+候補が一つもない行があれば、その行の式は満たせないと分かり、問題は実行不能です。
 
-## Degeneracyとpivotの停滞
+最適性の条件を保つので、途中の目的値は最適値の界になります。最大化なら、目的値は最適値より大きい側から下がってきます。
 
-複数のbasisが同じvertexを表すdegeneracyでは、pivotしてもobjectiveが変わらないことがあります。anti-cycling、pricing、perturbationなどは実装依存です。
+## 小さな例
 
-::: note
-simplex iteration数をinterior-point iteration数と直接比較しません。一反復の計算内容、factorization、crossover、warm startの有無が異なります。
-:::
+[混合整数線形計画](#/learn/concept.mixed-integer-linear-program)の小さな例を使います。
+
+$$
+\max\; 5x_1+4x_2 \quad \text{s.t.}\quad 6x_1+4x_2\le 24,\;\; x_1+2x_2\le 6,\;\; x\ge 0
+$$
+
+整数条件を外したLP（緩和）の最適解は $(3,\,1.5)$ で、目的値は $21$ です。
+余り変数を $s_1,s_2$ とすると、最適な基底は $\{x_1,x_2\}$ で、表の式は次のとおりです。
+
+$$
+x_1+\tfrac14 s_1-\tfrac12 s_2=3,\qquad x_2-\tfrac18 s_1+\tfrac34 s_2=\tfrac32
+$$
+
+被約費用は $s_1$ が $3/4$、$s_2$ が $1/2$ で、どちらも0以上です。この基底は最適性の条件を満たしています。
+
+ここで、分枝限定法が $x_2$ を分ける場面を考えます。一方の枝の条件は $x_2\le1$ です。
+新しい余り変数 $t$ を使って $x_2+t=1$ と書き、基底に入っている $x_2$ を上の式で置き換えると、新しい行が得られます。
+
+$$
+t+\tfrac18 s_1-\tfrac34 s_2=-\tfrac12
+$$
+
+基底変数 $t$ の値が $-1/2$ で負です。前の最適解 $(3,\,1.5)$ が、新しい条件 $x_2\le1$ を破っていることを表しています。被約費用は変わらないので、双対可行性は保たれています。
+
+- **出る変数**: 値が負の $t$
+- **入る変数の候補**: この行で係数が負なのは $s_2$（$-3/4$）だけ。比は $(1/2)\div(3/4)=2/3$
+- **結果**: $s_2$ が入ります。$x_1=10/3$、$x_2=1$ で、目的値は $62/3\approx20.67$ です。負の値は消え、被約費用も $5/6,\,2/3$ で0以上です
+
+一回のピボットで最適な基底に戻りました。頂点は $(3,\,1.5)$ から $(10/3,\,1)$ へ動き、目的値は $21$ から $20.67$ へ下がっています。
+
+同じ根の基底から始めて、ほかの枝も一回ずつのピボットで再最適化できます。
+
+| 追加した条件 | 負になった値 | 入る変数（比） | 再最適化後の頂点 | 目的値 |
+|---|---:|---|---|---:|
+| $x_2\le1$（根から） | $-1/2$ | $s_2$（$2/3$） | $(10/3,\,1)$ | $20.67$ |
+| $x_2\ge2$（根から） | $-1/2$ | $s_1$（$6$） | $(2,\,2)$ | $18$ |
+| $x_1\le3$（上の枝から） | $-1/3$ | $s_1$（$5$） | $(3,\,1)$ | $19$ |
+| $x_1\ge4$（上の枝から） | $-2/3$ | $t$（$1$） | $(4,\,0)$ | $20$ |
+
+四つの部分問題のどれも、最初から解き直さず、親の基底から一回のピボットで最適解に着きました。
+[分枝限定法](#/learn/branch-and-bound)の探索木の各node（部分問題）を、この形で再最適化しています。
 
 ## 向く条件・避ける条件
 
-向いている:
+dual simplexが自然なのは、直前の最適な基底が実行不能になる場面です。
 
-- LP構造が明示される
-- basis warm startが有効
-- 制約追加後の再最適化
-- MIP node LP
-- exactなblack-box探索ではなく係数modelを解く
+- MILPの各node（部分問題）でLP緩和を再最適化する
+- 既存のLPへ制約やcutを追加する
+- 変数の上下限（bound）を変更する
+- パラメータやシナリオを変えたあとに再最適化する
+- presolve後に得られた基底を使う
+- 疎（sparse）な大規模LP
 
-避ける／切り替える:
+利用者がアルゴリズムを直接選ばなくても、LP・MIPソルバーが内部で自動的に選ぶ場合があります。
 
-- nonlinear / nonconvexな関係を無理にLP化
-- coefficient scaleが極端
-- denseな巨大LPでbarrier法が適する
-- black-box objective
-- integer条件をLP解だけで満たしたと誤解
+向いている条件は次のとおりです。
+
+- LPの構造が明示されている
+- 基底のwarm startが有効
+- 制約を追加したあとの再最適化
+- 係数のモデルを厳密に解く（black-box探索ではない）
+
+避ける、または切り替える場面は次のとおりです。
+
+- 非線形・非凸な関係を無理にLPへ直している。[非線形内点法](#/learn/interior-point-nlp)など別の手法を検討します。
+- 係数の尺度（scale）が極端。まず単位を揃えます。
+- 密で巨大なLP。[primal-dual barrier法](#/learn/barrier-lp-qp)が向く場合があります。
+- black-boxの目的関数。LPの前提が成り立ちません。
+- LPの解だけで整数条件が満たされたと誤解している。整数性は[分枝限定法](#/learn/branch-and-bound)や[branch-and-cut](#/learn/branch-and-cut)で扱います。
 
 ## Python
 
+小さな例の一回のピボットを、分数のまま再現します。根の最適な表から始め、`x2 <= 1` の行を足して、負の値を持つ行を直します。
+
 ```python
-import numpy as np
+from fractions import Fraction as F
+
 from scipy.optimize import linprog
 
-c = np.array([1.0, 2.0, 0.5])
-a_ub = np.array([
-    [-1.0, -1.0, 0.0],
-    [2.0, 1.0, 1.0],
-])
-b_ub = np.array([-1.0, 4.0])
+names = ["x1", "x2", "s1", "s2", "t"]
+# 根の最適な表（最大化 5 x1 + 4 x2）。基底は x1, x2。右端は右辺、最後の行は被約費用と目的値
+rows = [
+    [F(1), F(0), F(1, 4), F(-1, 2), F(0), F(3)],
+    [F(0), F(1), F(-1, 8), F(3, 4), F(0), F(3, 2)],
+]
+cost = [F(0), F(0), F(3, 4), F(1, 2), F(0), F(21)]
+basis = [0, 1]
 
-result = linprog(
-    c,
-    A_ub=a_ub,
-    b_ub=b_ub,
-    bounds=[(0.0, None), (0.0, None), (0.0, None)],
-    method="highs-ds",
-)
+# 条件 x2 <= 1 を足す。x2 + t = 1 から、基底に入っている x2 を消して行にする
+new = [F(0), F(1), F(0), F(0), F(1), F(1)]
+new = [a - new[1] * b for a, b in zip(new, rows[1])]
+rows.append(new)
+basis.append(4)
 
-print(result.success, result.x, result.fun, result.message)
+while any(row[-1] < 0 for row in rows):
+    r = min(range(len(rows)), key=lambda i: rows[i][-1])  # 最も負の行が出る
+    candidates = [j for j in range(5) if rows[r][j] < 0]  # 負の係数の列だけが入れる
+    if not candidates:
+        raise SystemExit("この部分問題は実行不能")
+    j = min(candidates, key=lambda j: cost[j] / -rows[r][j])  # 被約費用を崩さない比
+    print("出る:", names[basis[r]], "値", rows[r][-1], "入る:", names[j])
+    pivot = rows[r][j]
+    rows[r] = [v / pivot for v in rows[r]]
+    for i in range(len(rows)):
+        if i != r:
+            rows[i] = [a - rows[i][j] * b for a, b in zip(rows[i], rows[r])]
+    cost = [a - cost[j] * b for a, b in zip(cost, rows[r])]
+    basis[r] = j
+
+solution = {names[b]: rows[i][-1] for i, b in enumerate(basis)}
+print("x1 =", solution["x1"], " x2 =", solution["x2"], " 目的値 =", cost[-1])
+
+check = linprog([-5, -4], A_ub=[[6, 4], [1, 2]], b_ub=[24, 6],
+                bounds=[(0, None), (0, 1)], method="highs-ds")
+print(check.x, -check.fun)
 ```
 
-`highs-ds`はHiGHSのdual simplex solverを指定します。実装version、presolve、scaling、toleranceは診断値として記録します。
+```text
+出る: t 値 -1/2 入る: s2
+x1 = 10/3  x2 = 1  目的値 = 62/3
+[3.33333333 1.        ] 20.666666666666668
+```
+
+最後の二行は、`x2` の上限を1にして `highs-ds` で解き直した確認です。手計算と同じ $(10/3,\,1)$ が得られます。
+`highs-ds` はHiGHSのdual simplexを指定します。実装version・presolve・scaling・許容誤差（tolerance）は診断値として記録します。
+
+## 診断値
+
+- 実行可能性の残差（primal feasibility residual）
+- 双対の実行可能性の残差（dual feasibility residual）
+- 目的値
+- 基底の状態（basis status）
+- simplexのiteration数
+- 退化（degeneracy）とピボットの停滞
+- presolveで減った変数・制約の数
+- 状態（status）。infeasibleかunboundedか
+- 数値のwarning
+
+判断の目安は次のとおりです。
+基底変数の負の値が許容誤差の範囲でなくなれば、最適で止まります。
+iteration数が増えても目的値が動かなければ、退化による停滞を疑います。
+
+LPの `infeasible` と `unbounded` は別の状態です。モデルの誤り・単位・上下限・符号を確認し、ソルバーのstatusを単に「失敗」とまとめません。
+
+::: note
+simplexのiteration数をinterior-pointのiteration数と直接比較しません。一反復の計算内容・分解（factorization）・crossover・warm startの有無が異なります。
+:::
+
+## 失敗・切替の兆候
+
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 目的値が動かないままピボットが続く | 退化による停滞。複数の基底が同じ頂点を表している | anti-cycling、価格付け（pricing）、摂動（perturbation）の設定を確認する。実装依存なので設定を記録する |
+| 入る変数の候補が一つもない行が出る | 追加した条件が他の制約と両立しない（実行不能） | 条件・単位・符号を見直す。MILPのnodeなら、その枝を打ち切る |
+| 係数の尺度が桁違いで数値warningが出る | 単位の不揃い | 単位を揃えて尺度を調整する |
+| 密で巨大なLPで、分解が重くなる | simplexの一反復あたりの仕事量が大きい | [primal-dual barrier法](#/learn/barrier-lp-qp)を試す |
+| LPの解が整数にならない | 整数条件はLPの中にない | 整数性は[分枝限定法](#/learn/branch-and-bound)側で扱う |
+
+## コラム: 退化とピボットの停滞
+
+複数の基底が同じ頂点を表す退化では、ピボットしても目的値が変わらないことがあります。
+anti-cycling、pricing、摂動などの対処は実装依存です。ソルバーの設定として記録しておくと、再現しやすくなります。
 
 ## 次に読む
 
-LP/QP/conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)、MILP内での利用は[Branch-and-Cut](#/learn/branch-and-cut)で確認できます。
+- [混合整数線形計画](#/learn/concept.mixed-integer-linear-program)：小さな例の問題を定式化から読み直す
+- [Branch-and-Cut](#/learn/branch-and-cut)：MILPの探索の中で、LPの再最適化がどう使われるか
+- [Primal simplex法](#/learn/primal-simplex)：実行可能性を保つ側の向き
+- [LP・QP・錐最適化](#/learn/lp-qp-conic)：LP・QP・錐最適化全体の位置づけ

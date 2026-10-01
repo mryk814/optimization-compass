@@ -5,6 +5,7 @@ import sqlite3
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_skeletons import skeleton_gaps
 from optimization_compass.dataset_release import build_staged_release
 
 ROOT = Path(__file__).parents[1]
@@ -89,6 +90,9 @@ def test_trf_has_a_beginner_first_published_guide() -> None:
     assert page.status == "published"
     assert page.source_ids == ("S003", "S096")
     assert "## 30秒でつかむ" in page.body
-    assert "## なぜReflectiveなのか" in page.body
-    assert "## LM・dogbox・L-BFGS-Bとの違い" in page.body
+    assert skeleton_gaps(page) == ()
+    one_step = page.body.split("## 一手の意味", 1)[1].split("\n## ", 1)[0]
+    assert "反射" in one_step
+    for neighbour in ("Levenberg–Marquardt", "dogbox", "L-BFGS-B"):
+        assert neighbour in page.body
     assert 'method="trf"' in page.body

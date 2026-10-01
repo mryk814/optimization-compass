@@ -2108,7 +2108,7 @@ caption {
 .markdown-body code:not(pre code) { padding: .08rem .25rem; border-radius: .2rem; background: #ecefe9; color: #7a321e; font-size: .88rem; }
 .markdown-body blockquote { margin: .9rem 0; padding: .65rem .8rem; border-left: 3px solid #8ead9c; background: #ecefe9; color: #34453b; font-size: .9rem; line-height: 1.75; }
 .markdown-body blockquote p { margin: 0; }
-.markdown-body table { width: 100%; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+.markdown-body table { display: block; max-width: 100%; overflow-x: auto; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
 .markdown-body th, .markdown-body td { padding: .4rem .5rem; border: 1px solid #d5dbd2; text-align: left; vertical-align: top; }
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
@@ -3885,6 +3885,10 @@ main:focus {
     padding: 0.1rem 0 0.2rem;
   }
 
+  .primary-navigation .nav-link {
+    padding-inline: 0.4rem;
+  }
+
   main {
     padding: 0.9rem 0.7rem 1.25rem;
   }
@@ -4122,9 +4126,9 @@ main:focus {
 .scenario-context-grid div { min-width: 0; }
 .scenario-context-grid dt { color: #52605a; font-size: 0.875rem; }
 .scenario-context-grid dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; }
-.scenario-case-formulation { padding: 0.75rem; border-radius: 0.6rem; background: #fff; }
+.scenario-case-formulation { min-width: 0; padding: 0.75rem; border-radius: 0.6rem; background: #fff; }
 .scenario-case-formulation > summary { cursor: pointer; color: #315745; font-weight: 750; }
-.scenario-case-formulation > div { padding-top: 0.55rem; }
+.scenario-case-formulation > div { min-width: 0; max-width: 100%; overflow-x: auto; padding-top: 0.55rem; }
 .scenario-context-links { display: flex; min-width: 0; flex-wrap: wrap; gap: 0.5rem 1rem; }
 .scenario-context-links a { min-width: 0; overflow-wrap: anywhere; }
 .scenario-run-limit { margin: 0; color: #52605a; }

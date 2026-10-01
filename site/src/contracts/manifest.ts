@@ -44,7 +44,7 @@ export interface SiteLicenseManifest {
 }
 
 export interface SiteManifest {
-  version: "1.4.0";
+  version: "1.5.0";
   dataset_version: string;
   generated_at: string;
   views: ManifestView[];
@@ -53,6 +53,8 @@ export interface SiteManifest {
   problems: ManifestAsset;
   learning_journeys: ManifestAsset<"1.1.0">;
   formulation_primer: ManifestAsset;
+  formulation_atlas: ManifestAsset;
+  learning_paths: ManifestAsset;
   visualization_scenarios: ManifestAsset<"1.2.0">;
   derived_media: ManifestAsset<"1.1.0">;
   entity_links: ManifestAsset;
@@ -83,6 +85,8 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "problems",
       "learning_journeys",
       "formulation_primer",
+      "formulation_atlas",
+      "learning_paths",
       "visualization_scenarios",
       "derived_media",
       "entity_links",
@@ -100,7 +104,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     ],
     "SiteManifest",
   );
-  if (data.version !== "1.4.0") throw new Error("Unsupported SiteManifest version.");
+  if (data.version !== "1.5.0") throw new Error("Unsupported SiteManifest version.");
 
   const views = array(data.views, "views").map((value, index): ManifestView => {
     const view = record(value, `views[${index}]`);
@@ -144,6 +148,12 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const formulationPrimer = record(data.formulation_primer, "formulation_primer");
   exactKeys(formulationPrimer, ["version", "path"], "formulation_primer");
   if (formulationPrimer.version !== "1.0.0") throw new Error("formulation_primer.version is unsupported.");
+  const formulationAtlas = record(data.formulation_atlas, "formulation_atlas");
+  exactKeys(formulationAtlas, ["version", "path"], "formulation_atlas");
+  if (formulationAtlas.version !== "1.0.0") throw new Error("formulation_atlas.version is unsupported.");
+  const learningPaths = record(data.learning_paths, "learning_paths");
+  exactKeys(learningPaths, ["version", "path"], "learning_paths");
+  if (learningPaths.version !== "1.0.0") throw new Error("learning_paths.version is unsupported.");
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
   if (entityLinks.version !== "1.0.0") throw new Error("entity_links.version is unsupported.");
@@ -196,7 +206,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   }
 
   return {
-    version: "1.4.0",
+    version: "1.5.0",
     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
     generated_at: nonEmptyString(data.generated_at, "generated_at"),
     views,
@@ -222,6 +232,14 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     formulation_primer: {
       version: "1.0.0",
       path: safeRelativePath(formulationPrimer.path, "formulation_primer.path"),
+    },
+    formulation_atlas: {
+      version: "1.0.0",
+      path: safeRelativePath(formulationAtlas.path, "formulation_atlas.path"),
+    },
+    learning_paths: {
+      version: "1.0.0",
+      path: safeRelativePath(learningPaths.path, "learning_paths.path"),
     },
     visualization_scenarios: {
       version: "1.2.0",

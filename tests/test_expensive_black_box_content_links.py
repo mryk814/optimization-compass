@@ -20,7 +20,8 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     )
     assert "#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE" in bayesian_optimization.body
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in bayesian_optimization.body
-    assert "個別のsensitivity runとbaselineは比較ページから開けます" in (bayesian_optimization.body)
+    caveat = "個別のsensitivity runとbaselineは、比較ページから開けます"
+    assert caveat in bayesian_optimization.body
 
     family = pages["family.expensive-black-box"]
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in family.body
@@ -42,10 +43,10 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     for phase in (
         "**学習**",
         "**評価**",
-        "**exploit**",
-        "**explore・記録**",
+        "**継承**",
+        "**摂動・記録**",
     ):
         assert phase in pbt.body
-    assert "良いscheduleを持つ系譜" in pbt.body
-    assert "exploit元／explore後の値／評価時点のmetric" in pbt.body
+    assert "良い予定を持つ系譜" in pbt.body
+    assert "継承元／摂動後の値／評価時点の指標" in pbt.body
     assert style_warnings(pbt) == ()

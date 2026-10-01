@@ -435,3 +435,42 @@
     display: none;
   }
 }
+
+/* Two ways in: learn the forms, or solve one's own problem (ADR 0017). */
+.home-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.home-mode {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid #c9d3cc;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.home-mode-learn {
+  border-color: #214e39;
+  box-shadow: 0 0.5rem 1.5rem rgb(33 78 57 / 10%);
+}
+
+.home-mode h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.home-mode > p {
+  margin: 0;
+  color: #3d4a42;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.home-mode .home-primary-actions {
+  margin-top: 0.5rem;
+}

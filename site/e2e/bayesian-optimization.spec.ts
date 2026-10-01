@@ -33,6 +33,7 @@ test("BO Theaterでcanonical scenarioを切り替え、keyboardで次点選択�
 
 test("DiagnoseとMapの高価なblack-box導線からBO Theaterへ進める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/diagnose");
+  await page.getByRole("button", { name: "すべての質問を表示" }).click();
   const evaluationCost = page.getByRole("group", {
     name: "f(x)や制約を1回計算する時間は？",
   });

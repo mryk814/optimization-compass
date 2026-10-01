@@ -4,122 +4,216 @@ kind: method
 method_id: M_AUGMENTED_LAGRANGIAN
 title_ja: 拡張Lagrangian法
 title_en: Augmented Lagrangian Method
-summary: 制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。
+summary: 制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
 source_ids: [S018, S029, S055, S056]
 prerequisites: [constrained-continuous]
-related_ids: [constrained-continuous, slsqp, interior-point-nlp, admm]
+related_ids: [constrained-continuous, slsqp, interior-point-nlp, admm, concept.convex-quadratic-program]
 aliases: [/learn/augmented-lagrangian]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。
+制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
 
-## Equality constraintの代表形
+## 30秒でつかむ
+
+規則を守らせたい管理者を想像してください。
+違反のたびに罰金を重くしていくと、罰金の額が大きくなりすぎて、日々の運営が不安定になります。
+そこで、違反の記録から「この規則の適正な値段」を学び直します。罰金は中くらいのままにして、値段の見積もりを毎回直します。
+拡張Lagrangian法の乗数が、この値段の見積もりです。
+
+- **見るもの**: 制約残差、乗数の変化、ペナルティの大きさ、内側の問題が止まった理由
+- **動かすもの**: 変数 $x$（内側で近似的に最小化）、乗数 $\lambda$、ペナルティ $\rho$
+- **前進の判断**: 制約残差が小さくなり、乗数の変化が落ち着くこと
+
+内側では、制約のない問題として解きます。制約は、外側の乗数の更新で扱います。
+
+## 一手の意味
+
+一手は、外側の一回の反復です。制約付き問題を、ペナルティと乗数を足した制約なしの問題に置き換えて解き、その結果から乗数を更新します。
+等式制約を持つ問題を考えます。
 
 $$
 \min_x f(x)\quad\text{subject to}\quad c(x)=0
 $$
 
-に対し、augmented Lagrangian
+次の式は、目的に、制約違反の一次の項（乗数 $\lambda$ の項）と二次の項（ペナルティ $\rho$ の項）を足した関数です。これを拡張Lagrangian関数と呼びます。
 
 $$
-L_\rho(x,\lambda)=f(x)+\lambda^Tc(x)+\frac{\rho}{2}\|c(x)\|^2
+L_\rho(x,\lambda)=f(x)+\lambda^\top c(x)+\frac{\rho}{2}\|c(x)\|^2
 $$
 
-を作ります。outer iterationで、
+外側の反復は、次の三つを繰り返します。
 
-1. $x$について $L_\rho$ を近似最小化
-2. $\lambda\leftarrow\lambda+\rho c(x)$
-3. constraint progressに応じて$\rho$を調整
+1. $x$ について $L_\rho$ を近似的に最小化する（内側の問題）
+2. 乗数を $\lambda\leftarrow\lambda+\rho\,c(x)$ と更新する
+3. 制約の進み具合に応じて $\rho$ を調整する
 
-します。
+更新式は、内側の解に残った違反 $c(x)$ に $\rho$ を掛けて、乗数に足すという意味です。
+純粋なペナルティ法のように $\rho$ を無限に大きくする必要を減らせます。そして、収束した乗数は、制約の感度を表します。
 
-pure penalty法のように$\rho$を無限に大きくする必要を減らし、multiplierがconstraintの感度を表します。
+### 不等式制約の場合
 
-## Inequality constraint
+不等式には、変種がいくつかあります。スラック変数を使うもの、乗数を射影して更新するもの、正の部分だけを罰するペナルティを使うものです。
+単純に $g(x)^2$ をペナルティへ入れると、すでに満たされている不等式まで罰してしまうことがあります。
 
-inequalityにはslack、projected multiplier update、positive-part penaltyなどを使う変種があります。単純に$g(x)^2$をpenaltyへ入れると、満たされている不等式まで罰する可能性があります。
+### ADMMとの関係
 
-## ADMMとの関係
+ADMMは、分離できる構造を持つ拡張Lagrangian関数を、交互に更新します。
+ただし、一般の拡張Lagrangian法とADMMは、収束条件・更新の順序・対象とする問題が同じではありません。
 
-ADMMは分離構造を持つaugmented Lagrangianを交互更新します。しかし、一般のaugmented-Lagrangian methodとADMMの収束条件・更新順・対象problemは同じではありません。
+## 小さな例
 
-## 向いている条件
+[凸二次計画](#/learn/concept.convex-quadratic-program)の小さな例で、予算の制約が効く場面を、等式 $x_1+x_2=3$ として解きます。
 
-- equalityまたは一般制約をouter-inner構造で扱う
-- constraintを分離して既存unconstrained solverを再利用したい
-- pure penaltyのill-conditioningを緩和したい
-- warm startや近いproblemの反復solve
-- derivative-free inner solverと組み合わせるvariant
+$$
+\min_{x}\; (x_1-3)^2+(x_2-2)^2 \quad \text{s.t.}\quad h(x)=x_1+x_2-3=0
+$$
 
-## Python: 小さな等式制約
+答えは $(2,1)$ で、目的値は $2$、乗数は $2$ です。内側の問題は二次関数なので、手計算で解けます。
+ペナルティを $\rho=1$ に固定し、乗数だけを更新します。初期の乗数は $\lambda_0=0$ です。
+
+| 外側の反復 $k$ | 乗数 $\lambda_k$ | 内側の解 $x$ | 違反 $h(x)$ | 目的値 | 更新後の乗数 |
+|---:|---:|---|---:|---:|---:|
+| 0 | 0 | $(2.5,\,1.5)$ | 1.0 | 0.5 | 1.0 |
+| 1 | 1.0 | $(2.25,\,1.25)$ | 0.5 | 1.125 | 1.5 |
+| 2 | 1.5 | $(2.125,\,1.125)$ | 0.25 | 1.531 | 1.75 |
+| 3 | 1.75 | $(2.0625,\,1.0625)$ | 0.125 | 1.758 | 1.875 |
+
+反復0の $\lambda_0=0$ は、乗数を使わない純粋なペナルティ法と同じです。$\rho=1$ のペナルティだけでは、違反が $1.0$ 残ります。
+目的値が $0.5$ と低いのは、予算を守らない点だからです。違反が残る点の目的値は、比べる対象にしません。
+
+反復1からは、前の違反 $1.0$ を乗数に足すことで、次の内側の問題が予算を重く見ます。違反は $0.5\to0.25\to0.125$ と、毎回半分になります。
+乗数は $0\to1.0\to1.5\to1.75\to1.875$ と、真の乗数 $2$ に近づきます。ペナルティは $\rho=1$ のまま、増やしていません。
+
+この問題では、内側の問題を解析的に解けます。乗数の誤差 $2-\lambda_k$ と違反 $h$ は、どちらも毎回 $1/(1+\rho)$ 倍になります。$\rho=1$ なら半分です。
+
+比較として、乗数を使わない純粋なペナルティ法は、$\rho$ を大きくするしかありません。この問題では違反が $2/(1+\rho)$ で、$\rho$ に反比例してしか減りません。
+
+| ペナルティ $\rho$ | 解 $x$ | 違反 $h(x)$ |
+|---:|---|---:|
+| 1 | $(2.5,\,1.5)$ | 1.0 |
+| 10 | $(2.0909,\,1.0909)$ | 0.1818 |
+| 100 | $(2.0099,\,1.0099)$ | 0.0198 |
+| 1000 | $(2.001,\,1.001)$ | 0.002 |
+
+違反を $0.002$ まで縮めるのに、$\rho=1000$ が必要でした。実際の問題では、$\rho$ が大きいほど内側の問題が悪条件になります。拡張Lagrangian法は、$\rho$ を中くらいに保ったまま、乗数で違反を消します。
+
+## 向く条件・避ける条件
+
+拡張Lagrangian法は、制約を外側の反復で扱い、既存の制約なしのソルバーを内側に再利用したいときに向きます（[制約付きNLP](#/formulations/PA009)）。
+
+| 条件 | 理由 |
+|---|---|
+| 等式や一般の制約を、外側と内側の二重の構造で扱いたい | 制約は乗数の更新で扱い、内側は制約なしの問題になるため |
+| 制約を分離し、既存の制約なしのソルバーを再利用したい | 内側の問題を、別のソルバーに任せられるため |
+| 純粋なペナルティ法の悪条件を和らげたい | $\rho$ を無限に大きくしなくてよいため |
+| 近い問題を繰り返し解き、warm startを使える | 前回の乗数と解を出発点にできるため |
+| 微分を使わない内側のソルバーと組み合わせたい | 内側の問題が、制約なしの目的関数になるため |
+
+避ける、または切り替える条件です。
+
+- 制約が非滑らか → 滑らかな内側のソルバーに渡すと、内側の解が不安定になる
+- 実行不能なモデル → ペナルティの調整では解決しない。制約を見直す
+- 制約の尺度が極端に違う → 先に制約を正規化する
+- 小〜中規模で、有効な制約を厳密に扱いたい → [SLSQP](#/learn/slsqp)を検討する
+- 大規模で疎な問題 → [非線形内点法](#/learn/interior-point-nlp)を検討する
+
+## Python
+
+次の例は、小さな例の外側の反復を再現します。内側の最小化には、SciPyのBFGS法を使っています。
+外側の反復は、乗数の更新と停止判定で構成されます。実用の実装では、内側の許容誤差・不等式の扱い・乗数の安全弁・ペナルティの更新規則を明示します。
 
 ```python
 import numpy as np
 from scipy.optimize import minimize
 
+target = np.array([3.0, 2.0])
+
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 2.0) ** 2 + (x[1] + 1.0) ** 2)
+    return float((x - target) @ (x - target))
 
 
-def constraint(x: np.ndarray) -> np.ndarray:
-    return np.array([x[0] + x[1] - 1.0])
+def constraint(x: np.ndarray) -> float:
+    """等式制約 x1 + x2 = 3。実行可能なら 0。"""
+    return float(x[0] + x[1] - 3.0)
 
 
-x = np.array([0.0, 0.0])
-multiplier = np.zeros(1)
-penalty = 1.0
+def solve_inner(x, multiplier, penalty):
+    def augmented(v: np.ndarray) -> float:
+        return objective(v) + multiplier * constraint(v) + 0.5 * penalty * constraint(v) ** 2
 
-for _ in range(30):
-    def augmented(value: np.ndarray) -> float:
-        residual = constraint(value)
-        return float(
-            objective(value)
-            + multiplier @ residual
-            + 0.5 * penalty * (residual @ residual)
-        )
+    return minimize(augmented, x, method="BFGS", options={"gtol": 1e-10}).x
 
-    result = minimize(augmented, x, method="BFGS")
-    x = result.x
-    residual = constraint(x)
-    multiplier = multiplier + penalty * residual
-    if np.linalg.norm(residual) < 1e-8:
+
+# 拡張Lagrangian法: ペナルティを 1 に固定し、乗数だけを更新する。
+x, multiplier, penalty = np.array([0.0, 0.0]), 0.0, 1.0
+for k in range(6):
+    x = solve_inner(x, multiplier, penalty)
+    print(k, x.round(4), round(constraint(x), 4), round(multiplier, 4))
+    multiplier += penalty * constraint(x)  # 乗数の更新
+    if abs(constraint(x)) < 1e-8:
         break
-    penalty = min(10.0 * penalty, 1e8)
 
-print(x, objective(x), constraint(x), multiplier)
+# 比較: 乗数を使わない純粋なペナルティ法では、ペナルティを大きくするしかない。
+for penalty in (1.0, 10.0, 100.0, 1000.0):
+    x = solve_inner(np.array([0.0, 0.0]), 0.0, penalty)
+    print(penalty, x.round(4), round(constraint(x), 4))
 ```
 
-これは教育用outer loopです。実装ではinner solve tolerance、inequality treatment、multiplier safeguards、penalty update ruleを明示します。
+```text
+0 [2.5 1.5] 1.0 0.0
+1 [2.25 1.25] 0.5 1.0
+2 [2.125 1.125] 0.25 1.5
+3 [2.0625 1.0625] 0.125 1.75
+4 [2.0313 1.0312] 0.0625 1.875
+5 [2.0156 1.0156] 0.0312 1.9375
+1.0 [2.5 1.5] 1.0
+10.0 [2.0909 1.0909] 0.1818
+100.0 [2.0099 1.0099] 0.0198
+1000.0 [2.001 1.001] 0.002
+```
+
+前半の各行は、外側の反復番号・内側の解・違反・その反復で使った乗数です。表の値と一致します。後半は、純粋なペナルティ法の表と一致します。
+6回の反復では、違反が $0.03$ まで減っただけで、停止判定の $10^{-8}$ には届きません。
+`range(6)` を `range(60)` に変えて実行すると、$10^{-8}$ を下回るまでに外側の反復が30回かかりました。
 
 ## 診断値
 
-各outer iterationでinner problemを高精度に解きすぎると費用を浪費し、粗すぎるとmultiplier updateが不安定になります。
+各外側の反復で、内側の問題を高精度に解きすぎると費用を浪費します。粗すぎると、乗数の更新が不安定になります。記録するものは、次のとおりです。
 
-記録するもの:
+- 外側の反復回数
+- 内側の反復回数と評価回数
+- 内側の許容誤差
+- 制約残差
+- 乗数のノルム
+- ペナルティ $\rho$
+- 目的関数値
+- 停留性
+- 終了の理由
 
-- outer iteration数
-- inner iteration / evaluation数
-- inner tolerance
-- constraint residual
-- multiplier norm
-- penalty $\rho$
-- objective
-- stationarity
-- termination reason
+判断の目安です。制約残差が下がり、乗数の変化が小さくなれば、外側の反復は収束に向かっています。
+残差が下がらないまま $\rho$ だけが増えるなら、下の表で切替先を選びます。
+
+::: warning
+制約残差が小さくても、停留性が悪ければ、局所最適条件を満たしていません。目的値・実行可能性・停留性は、別々に報告します。
+:::
 
 ## 失敗・切替の兆候
 
-- penaltyだけ増えconstraintが減らない
-- multiplierが発散
-- inner solve failureを無視してouter update
-- constraint scaleが極端に違う
-- infeasible model
-- non-smooth constraintをsmooth inner solverへ渡す
-- terminationがinner objectiveだけ
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| ペナルティだけが増え、制約残差が減らない | 内側の問題が解けていない、または実行不能なモデル | 内側の停止理由を確認する。制約を見直す |
+| 乗数が発散する | ペナルティが小さい、または制約想定の崩れ | 乗数に上下限の安全弁を置く。制約を見直す |
+| 内側の失敗を無視して外側を更新している | 内側の結果が信頼できない | 内側が失敗したら、外側の更新を止める |
+| 制約の尺度が極端に違う | 制約ごとに必要なペナルティが違う | 制約を正規化する |
+| 非滑らかな制約を、滑らかな内側のソルバーに渡している | 内側の解が不安定になる | 制約の滑らかさを確認する |
+| 停止判定が内側の目的値だけを見ている | 制約と停留性を確認していない | 制約残差と停留性を別に確認する |
 
-::: warning
-constraint residualが小さくてもstationarityが悪ければ局所最適条件を満たしていません。objective、feasibility、stationarityを別々に報告します。
-:::
+## 次に読む
+
+- [ADMM](#/learn/admm)：分離できる構造で、拡張Lagrangian関数を交互に更新する方法
+- [SLSQP](#/learn/slsqp)：制約を一歩ごとの近似で扱う方法との違い
+- [非線形内点法](#/learn/interior-point-nlp)：大規模で疎な問題への別の系統
+- [制約付きNLP](#/formulations/PA009)：この手法が解く問題の標準形

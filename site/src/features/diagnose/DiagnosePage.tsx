@@ -346,7 +346,10 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
         <button
           aria-expanded={showAllQuestions}
           className="diagnose-all-questions-toggle"
-          onClick={() => setShowAllQuestions((current) => !current)}
+          onClick={() => {
+            if (!showAllQuestions) setOpenGroups(new Set(QUESTION_GROUPS.map((group) => group.title)));
+            setShowAllQuestions((current) => !current);
+          }}
           type="button"
         >
           {showAllQuestions ? "質問を絞る" : "すべての質問を表示"}

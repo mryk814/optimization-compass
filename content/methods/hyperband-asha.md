@@ -4,84 +4,99 @@ kind: method
 method_id: M_HYPERBAND_ASHA
 title_ja: Hyperband / ASHA
 title_en: Hyperband and ASHA
-summary: 多数のtrialを小さなresourceで始め、中間成績が悪いtrialを早期終了して有望なtrialへbudgetを移すmulti-fidelity探索です。
+summary: 多数の試行を小さな資源で始め、中間成績が悪い試行を早期終了して有望な試行へ予算を移す複数の忠実度を使う探索です。
 source_ids: [S034, S038, S069]
 related_ids: [family.expensive-black-box, tpe, bayesian-optimization]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-10-01
 ---
 
-多数のtrialを小さなresourceで始め、中間成績が悪いtrialを早期終了して有望なtrialへbudgetを移すmulti-fidelity探索です。
+多数の試行を小さな資源で始め、中間成績が悪い試行を早期終了して有望な試行へ予算を移す複数の忠実度を使う探索です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**すべての候補を最後まで育てるのではなく、少し試した時点で見込みの薄い候補を止め、その分の時間や計算資源を有望な候補へ回したい**というものです。
+苗を少しずつ育て、途中で有望な苗に置き場所と水を多く配ります。Hyperband / ASHAも、途中成績を見ながら計算資源を配分します。
 
-- 見ているもの: intermediate metric、消費resource、trial status
-- 動かしているもの: trialの継続・停止とresource allocation
-- 前進の判断: 限られた総resourceで良い最終trialを残せるか
-- 別に確認するもの: sampler、pruner、総resource budget、worker utilization
-- 恐れていること: 初期成績と最終成績の不一致、遅咲きtrialの誤prune
+少し試した時点で見込みの薄い候補を止め、その分の時間や計算資源を有望な候補へ回します。
 
-ASHAはasynchronousにpromotion / stoppingを進め、worker待ちを減らす実装strategyです。samplerとprunerは別の役割として記録します。
+- 見るもの: 中間指標、消費資源、試行状態
+- 動かすもの: 試行の継続・停止と資源配分
+- 前進の判断: 限られた総資源で良い最終試行を残せるか
 
-## まず確認すること
+ASHAは非同期に昇格と停止を進め、作業者待ちを減らす実装方針です。提案器と打切り器は別の役割として記録します。
 
-| 項目 | 確認内容 |
-|---|---|
-| resource | epoch、sample数、simulation精度など段階的に増やせるか |
-| intermediate metric | 最終性能をある程度予測するか |
-| checkpoint | trialを継続・再開できるか |
-| workers | asynchronous実行に価値があるか |
-| fairness | trialごとのresourceを比較できるか |
-| noise | 早い段階の揺れで良いtrialを落とさないか |
+## 一手の意味
 
-途中metricが最終目的とほぼ無関係なら、早期停止は探索を速くするどころかsystematic biasを作ります。
+同期型の逐次半減では、縮減率 $\eta>1$ に応じて候補数を減らし、一候補あたりの資源を増やします。
 
-## 仕組み
+$$
+n_{k+1}=\max(1,\lfloor n_k/\eta\rfloor),\qquad r_{k+1}=\eta r_k
+$$
 
-Successive Halvingでは、多数のconfigurationへ小resourceを与え、上位の一部だけを次のresource段階へ進めます。Hyperbandは初期trial数と最大resourceの異なる複数bracketを組み合わせます。
+実際には最大資源や段階の丸めを決めます。ASHAは全候補の同期完了を待たずに判断します。
 
-ASHAではtrial完了を待って同期せず、結果が届いた時点で継続可否を判断します。これにより異なる実行時間のtrialが混在する環境でworkerを使いやすくなります。
+### 仕組み
+
+Successive Halvingでは、多数の設定へ小資源を与え、上位の一部だけを次の資源段階へ進めます。Hyperbandは初期試行数と最大資源の異なる複数枠を組み合わせます。
+
+ASHAでは試行完了を待って同期せず、結果が届いた時点で継続可否を判断します。これにより異なる実行時間の試行が混在する環境で作業者を使いやすくなります。
+
+## 小さな例
+
+### 資源配分を図で見る
+
+![12 trialをresource 1、3、9のrungで12件、4件、1件へ絞る固定Successive Halving実行。](./media/hyperband-rungs-execution.svg "Hyperband / ASHAのresource配分")
+
+灰色のtrialはresource 1で止まり、緑は3、橙は9まで進みます。
+途中結果を見て「どのtrialへresourceを残すか」を読み取ります。
+
+> **この図の範囲**
+> 次の9候補の数値例とは異なり、12候補の滑らかな固定learning curveを使います。
+> promotionだけを同期的に再現し、遅咲きtrial、noise、ASHAのasynchronousなworker待ちは省略しています。
+
+### 9候補の昇格を数値で追う
+
+逐次半減の一つの枠だけを、9候補と縮減率3で追います。
+候補 $i=0,\ldots,8$ の中間値を $10/(i+1)+1/r$ とし、小さいほど良いとします。
+資源段階を $r=1,3,9$ として実行しました。
+
+| 資源 $r$ | 比べる候補数 | 次へ残す候補ID | 最良中間値 |
+|---|---:|---|---:|
+| 1 | 9 | 8,7,6 | 2.111111 |
+| 3 | 3 | 8 | 1.444444 |
+| 9 | 1 | 8 | 1.222222 |
+
+候補数は減り、一候補の資源は増えます。
+この固定式では順位が逆転しません。遅咲き候補を落とす危険や非同期の順序は示しません。
 
 ## 向く条件・避ける条件
 
+### まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| 資源 | エポック、標本数、シミュレーション精度など段階的に増やせるか |
+| 中間指標 | 最終性能をある程度予測するか |
+| 保存状態 | 試行を継続・再開できるか |
+| 作業者 | 非同期実行に価値があるか |
+| 公平性 | 試行ごとの資源を比較できるか |
+| 雑音 | 早い段階の揺れで良い試行を落とさないか |
+
+途中指標が最終目的とほぼ無関係なら、早期停止は探索を速くするどころか系統的な偏りを作ります。
+
 向きやすい条件:
 
-- training epochやsample数を段階的に増やせる
-- intermediate metricと最終metricに相関がある
-- 多数workerでtrialを並列実行する
-- 一trialを最後まで回すcostが高い
+- 学習エポックや標本数を段階的に増やせる
+- 中間指標と最終指標に相関がある
+- 多数作業者で試行を並列実行する
+- 一試行を最後まで回すコストが高い
 
 避ける条件:
 
-- 中間結果を観測できないatomicな実験
-- 遅れて急改善するtrialが多い
-- checkpoint / resumeができず再計算costが大きい
-- 最終性能の僅かな差に厳密certificateが必要
-
-## 診断値
-
-見る値:
-
-- resource段階ごとのtrial数
-- pruned / completed trial比率
-- intermediateとfinal rankingの相関
-- worker utilization
-- checkpoint overhead
-- best final metricと総resource
-- seed / bracket間のばらつき
-
-中間metric、最終metric、pruned判定、総resourceは別々に記録します。
-pruned trialが少ないことだけでは、resource allocationが良いとは判断できません。
-
-## うまくいったサインと切替サイン
-
-- pruned trialが後から良いと判明 → pruningを弱める、grace periodを増やす
-- worker idleが多い → asynchronous schedulingを確認
-- checkpoint overheadが支配的 → resource粒度を粗くする
-- intermediate metricが不安定 → smoothing、複数評価、別metricを検討
-- search-space提案が弱い → TPEやBO samplerと組み合わせる
+- 中間結果を観測できない途中観測できないな実験
+- 遅れて急改善する試行が多い
+- 保存状態 / 再開ができず再計算コストが大きい
+- 最終性能の僅かな差に厳密証明が必要
 
 ## Python
 
@@ -106,10 +121,44 @@ study.optimize(objective, n_trials=30)
 print(len(study.trials), study.best_value)
 ```
 
-この例の中間metricは説明用です。実データではprune判断と最終metricの関係を検証します。
+この例の中間指標は説明用です。実データでは打切り判断と最終指標の関係を検証します。
 
-## コラム: optimizerではなくresource allocator
+## 診断値
 
-Hyperband / ASHAはparameterをどう提案するかと、trialへどれだけresourceを与えるかを分けて考えます。Random、TPE、BOなどのsamplerと組み合わせられます。
+見る値:
 
-[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)でTPEやGP-BOと役割を分けて確認してください。
+- 資源段階ごとの試行数
+- 打切りと完了試行比率
+- 中間と最終順位の相関
+- 作業者の稼働率
+- 状態保存の負担
+- 最良最終指標と総資源
+- 乱数種 / 枠間のばらつき
+
+中間指標と最終指標を分けて記録します。打切り判定と総資源も別々に残します。
+打切り試行が少ないことだけでは、資源配分が良いとは判断できません。
+
+- 別に確認するもの: 提案器、打切り器、総資源予算、作業者の稼働率
+- 恐れていること: 初期成績と最終成績の不一致、遅咲き試行の誤打切り
+
+## 失敗・切替の兆候
+
+### うまくいったサインと切替サイン
+
+- 打切り試行が後から良いと判明 → 打切り判断を弱める、最低実行期間を増やす
+- 作業者待機が多い → 非同期スケジューリングを確認
+- 状態保存の負担が支配的 → 資源粒度を粗くする
+- 中間指標が不安定 → 平滑化、複数評価、別指標を検討
+- 探索空間への提案が弱い → TPEやBO 提案器と組み合わせる
+
+### コラム: 最適化器ではなく資源配分器
+
+Hyperband / ASHAはパラメータをどう提案するかと、試行へどれだけ資源を与えるかを分けて考えます。Random、TPE、BOなどの提案器と組み合わせられます。
+
+[高価なブラックボックス・HPOの選び分け](#/learn/family.expensive-black-box)でTPEやGP-BOと役割を分けて確認してください。
+
+## 次に読む
+
+- [関連する手法の記事](#/learn/family.expensive-black-box)：一手の意味と選び分けを比べます。
+
+- [この手法を使う問題の定式化](#/formulations/PA039)：決定変数と目的を確認します。

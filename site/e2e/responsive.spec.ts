@@ -63,19 +63,20 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
 
 test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
+  await page.getByLabel("表示範囲").selectOption("all");
   const filters = page.locator('.theater-catalog-filters[aria-label="シナリオの絞り込み"]');
-  const scenarioCount = filters.getByText(/^\d+ \/ \d+ シナリオ$/u);
+  const scenarioCount = filters.locator('[aria-live="polite"]');
   await expect(scenarioCount).toBeVisible();
-  await expect(scenarioCount).toHaveText(/^([1-9]\d*) \/ \1 シナリオ$/u);
+  await expect(scenarioCount).toHaveText(/^([1-9]\d*)件を表示 · 条件一致 \1件 · 公開 \1件$/u);
   const initialCount = await scenarioCount.textContent();
-  const countMatch = initialCount?.match(/^(\d+) \/ \1 シナリオ$/u);
+  const countMatch = initialCount?.match(/公開 (\d+)件$/u);
   const total = countMatch?.[1];
   if (!total) throw new Error(`Unexpected scenario count: ${initialCount ?? "missing"}.`);
 
   await filters.getByLabel("問題領域", { exact: true }).selectOption("discrete");
-  await expect(scenarioCount).toHaveText(`2 / ${total} シナリオ`);
+  await expect(scenarioCount).toHaveText(`4件を表示 · 条件一致 4件 · 公開 ${total}件`);
   const catalog = page.locator('[aria-label="Theaterのシナリオカタログ"]');
-  await expect(catalog.locator("a.theater-card")).toHaveCount(2);
+  await expect(catalog.locator("a.theater-card")).toHaveCount(4);
   await expect(catalog.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");
@@ -128,8 +129,9 @@ test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async (
   await expect(player).toBeFocused();
   await expectNoHorizontalOverflow(page);
 
-  const formulaContainer = page.locator(".scenario-case-formulation");
-  await expect(formulaContainer.locator("math").filter({ hasText: "0.16" })).toBeVisible();
+  await page.locator(".scenario-case-formulation > summary").click();
+  const formulaContainer = page.locator(".scenario-case-formulation > div");
+  await expect(formulaContainer.locator("math").filter({ hasText: "0.18" })).toBeVisible();
   await expect(formulaContainer).toHaveAttribute("tabindex", "0");
   const formulaLayout = await formulaContainer.evaluate((container) => {
     const parent = container.parentElement;
@@ -151,8 +153,8 @@ test("375px Coverageが横にはみ出さずfilterできる", async ({ page, bas
   await expect(page.getByRole("heading", { level: 1, name: "Atlasの接続状況" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "学習経路の接続状況" })).toBeVisible();
   await expect(page.getByRole("region", { name: "学習経路の接続状況一覧" })).toBeVisible();
-  await expect(page.getByText(/^\d+\/5 complete$/u)).toBeVisible();
-  await page.getByLabel("Subject").selectOption("feature_family");
+  await expect(page.getByRole("progressbar", { name: /^完了\d+件、目標\d+件$/u })).toBeVisible();
+  await page.getByLabel("対象種別").selectOption("feature_family");
   await expect(page.getByRole("region", { name: "成果物一覧の表" }).getByRole("row")).toHaveCount(11);
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
@@ -170,7 +172,10 @@ test("375px 追加教材のtableとcodeがpage全体をはみ出さない", asyn
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/cp-sat");
   await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
   await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
-  await expect(page.locator("table")).toBeVisible();
+  for (const table of await page.getByRole("region", { name: "教材" }).locator("table").all()) {
+    await expect(table).toBeVisible();
+  }
+  await expect(page.getByRole("region", { name: "教材" }).locator("table").first()).toBeVisible();
   await expect(page.locator("pre code")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Learning path" })).toBeVisible();
   await expectNoHorizontalOverflow(page);

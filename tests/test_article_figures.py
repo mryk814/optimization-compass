@@ -13,17 +13,21 @@ from scripts.generate_article_figures import (
     _dynamic_programming_knapsack_probe,
     _epsilon_constraint_production_probe,
     _finite_horizon_lqr_probe,
+    _hyperband_rungs_probe,
     _local_search_two_opt_probe,
     _multiple_shooting_probe,
     _network_simplex_transport_probe,
     _particle_swarm_probe,
     _pbt_population_probe,
     _pdlp_probe,
+    _random_search_probe,
     _sgd_mini_batch_probe,
     _simulated_annealing_probe,
     _spatial_branch_bound_probe,
     _spatial_interval_lower_bound,
     _spatial_objective,
+    _tpe_density_ratio_probe,
+    _turbo_trust_region_probe,
     generate_article_figures,
     read_dataset_version,
 )
@@ -334,6 +338,54 @@ def test_particle_swarm_probe_tracks_best_and_population_collapse() -> None:
     )
 
 
+def test_hpo_probes_keep_sampling_model_allocation_and_local_control_distinct() -> None:
+    random_probe = _random_search_probe()
+    tpe_probe = _tpe_density_ratio_probe()
+    hyperband_probe = _hyperband_rungs_probe()
+    turbo_probe = _turbo_trust_region_probe()
+
+    assert len(random_probe["points"]) == 48
+    assert random_probe["occupied_cells"] >= 14
+    assert all(
+        current <= previous
+        for previous, current in zip(
+            random_probe["best_history"],
+            random_probe["best_history"][1:],
+            strict=False,
+        )
+    )
+
+    assert len(tpe_probe["good"]) == 4
+    assert len(tpe_probe["bad"]) == 8
+    assert 0.2 < tpe_probe["candidate"] < 0.5
+    assert tpe_probe["candidate_ratio"] > 1
+
+    assert hyperband_probe["rungs"] == (1, 3, 9)
+    assert len(hyperband_probe["promoted_at_one"]) == 4
+    assert len(hyperband_probe["promoted_at_three"]) == 1
+    assert hyperband_probe["used_resource"] < hyperband_probe["full_resource"]
+
+    assert len(turbo_probe["steps"]) == 12
+    assert turbo_probe["steps"][-1][3] < turbo_probe["initial_best"]
+    assert len({step[2] for step in turbo_probe["steps"]}) > 1
+
+
+def test_turbo_figure_clips_local_boxes_to_the_search_domain() -> None:
+    root = ElementTree.fromstring(
+        generate_article_figures(VERSION)["turbo-trust-region-execution.svg"]
+    )
+    boxes = [
+        node
+        for node in root.findall("{http://www.w3.org/2000/svg}rect")
+        if node.attrib.get("fill") == "none"
+    ]
+    assert len(boxes) == 4
+    for box in boxes:
+        x, y, width, height = (float(box.attrib[key]) for key in ("x", "y", "width", "height"))
+        assert 78 <= x < x + width <= 414.01
+        assert 170 <= y < y + height <= 490.01
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -362,13 +414,17 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "pbt-lineage-execution.svg",
         "pdlp-residual-execution.svg",
         "portfolio-risk-execution.svg",
+        "random-search-coverage-execution.svg",
         "search-tree-proof-execution.svg",
         "sgd-mini-batch-execution.svg",
         "simulated-annealing-execution.svg",
         "so3-update-diagnostic.svg",
         "spatial-branch-bound-execution.svg",
         "topology-field-execution.svg",
+        "tpe-density-ratio-execution.svg",
         "trf-probe-execution.svg",
+        "turbo-trust-region-execution.svg",
+        "hyperband-rungs-execution.svg",
     }
     for name, payload in first.items():
         assert payload == (ROOT / "site" / "public" / "media" / name).read_bytes()
@@ -431,6 +487,10 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/weighted-sum.md": "pareto-preference-execution.svg",
         "content/methods/direct-collocation.md": "optimal-control-mesh-execution.svg",
         "content/methods/family-optimal-control.md": "optimal-control-mesh-execution.svg",
+        "content/methods/random-search.md": "random-search-coverage-execution.svg",
+        "content/methods/tpe.md": "tpe-density-ratio-execution.svg",
+        "content/methods/hyperband-asha.md": "hyperband-rungs-execution.svg",
+        "content/methods/turbo-saasbo.md": "turbo-trust-region-execution.svg",
     }
 
     for relative_path, figure in expected.items():

@@ -5,7 +5,7 @@ method_id: M_NELDER_MEAD
 title_ja: Nelder–Mead単体法
 title_en: Nelder–Mead
 summary: 勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。
-related_ids: [concept.derivative-free, mads, differential-evolution]
+related_ids: [concept.derivative-free, mads, differential-evolution, family.local-dfo]
 visualization_ids: [nelder-mead-quadratic, nelder-mead-quadratic-shifted]
 comparison_ids: [COMPARE_GRADIENT_FAMILY, COMPARE_NELDER_MEAD_INITIAL_SIMPLEX]
 aliases: [/learn/method.nelder-mead]
@@ -13,83 +13,103 @@ visualization_aliases: [nelder-mead-quadratic|/theater/nelder-mead]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-09-30
 ---
 
 勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、複数の点で囲んだ単体の悪い頂点を、より良さそうな側へ入れ替え続けることです。
+霧の中の谷で、三人の登山者が互いに近くに立っているとします。
+それぞれ足元の高さしか分かりません。いちばん高い所にいる人が、ほかの二人の反対側へ回り込みます。
+これを繰り返すと、三人の作る三角形が谷底へ向かって転がり、やがて小さくなります。
 
-- **見るもの**: 単体の各頂点における目的関数値
-- **動かすもの**: 単体の頂点と探索geometry
-- **前進の判断**: best-so-farの目的関数値が改善すること
+- **見るもの**: 単体（simplex）の各頂点における目的関数値の順位
+- **動かすもの**: 単体の頂点。いちばん悪い頂点を、ほかの頂点の重心の反対側へ動かす
+- **前進の判断**: 最良値（best-so-far）が改善すること
 
-## 実行結果を先に見る
+微分は使いません。使うのは、頂点の目的関数値を比べて並べた順位だけです。
+
+## 一手の意味
+
+n次元では、n+1個の頂点が単体を作ります。2次元なら三角形、3次元なら四面体です。
+一回の反復（iteration）では、まず頂点を目的関数値の良い順に並べます。最良点、2番目に悪い点、最悪点が決まります。
+最悪点を除く頂点の重心を $c$ とし、最悪点 $x_w$ を重心の反対側へ映した点を試します。
+
+$$
+x_r = c + (c - x_w)
+$$
+
+この式は「最悪点から重心へ向かう方向へ、同じ距離だけ先へ進んだ点」を作ります。この点を反射点（reflection）と呼びます。
+反射点の目的関数値を、頂点の値と比べて次の操作を選びます。
+
+| 反射点の値 | 行う操作 | 試す点 |
+|---|---|---|
+| 最良点より良い | 膨張（expansion）。さらに先まで試し、良いほうを残す | $c + 2(c - x_w)$ |
+| 最良点以上、2番目に悪い点より良い | 反射点をそのまま採用する | $x_r$ |
+| 2番目に悪い点以上、最悪点より良い | 外側収縮（outside contraction） | $c + \tfrac12(x_r - c)$ |
+| 最悪点以上 | 内側収縮（inside contraction） | $c + \tfrac12(x_w - c)$ |
+| 収縮した点も採用できない | 縮小（shrink）。最良点の周りへ全頂点を寄せる | $x_b + \tfrac12(x_i - x_b)$ |
+
+係数は標準的な値です。操作名が同じでも、係数や停止条件は実装のoptionによって違います。
+
+単体が大きく伸びるのは膨張が続くときで、縮むのは収縮や縮小が続くときです。
+この伸び縮みが、谷の幅や向きに形を合わせる仕組みです。
+
+## 小さな例
+
+目的関数 $f(x_1,x_2)=(x_1-3)^2+4(x_2-1)^2$ の最小点は $(3,1)$ で、値は $0$ です。
+初期単体を $(0,0)$、$(1,0)$、$(0,1)$ とします。値は順に $13$、$8$ と $9$ で、評価は3回です。乱数は使わないので、seed は不要です。
+
+| 反復 | 最悪点（値） | 重心 | 反射点（値） | 起きたこと | 反復後の最良点（値） | 累積評価数 |
+|---:|---|---|---|---|---|---:|
+| 1 | $(0,0)$（13） | $(0.5,\,0.5)$ | $(1,1)$（4） | 最良の8より良いので膨張点 $(1.5,1.5)$（3.25）を試し、より良いので採用 | $(1.5,\,1.5)$（3.25） | 5 |
+| 2 | $(0,1)$（9） | $(1.25,\,0.75)$ | $(2.5,0.5)$（1.25） | 最良の3.25より良い。膨張点 $(3.75,0.25)$ は2.81で悪いので、反射点を採用 | $(2.5,\,0.5)$（1.25） | 7 |
+| 3 | $(1,0)$（8） | $(2,\,1)$ | $(3,2)$（4） | 2番目に悪い3.25より悪いが、最悪の8より良い。外側収縮の点 $(2.5,1.5)$（1.25）を採用 | $(2.5,\,0.5)$（1.25） | 9 |
+
+反復1と2では、良い方向へ長く進めたので単体が大きく動きました。
+反復3では、反射点が行きすぎて谷の反対側の壁に当たりました。そこで反射点と重心の中間を採用し、動きを控えています。
+この後の反復4でも外側収縮が起き、最良点は $(3,\,0.75)$、値は $0.25$ になります。
+
+この表の一手ごとに、勾配は一度も出てきません。順位を比べる評価が、反復あたり1〜2回あるだけです。
+この経路は初期単体に依存します。別の初期単体では、操作の並びも変わります。
+
+### 図で見る
+
+80回の評価予算で、別の二次目的関数を解いた実行結果です。
 
 ![二次元の二次目的上でNelder–Meadを80回の評価予算で実行し、初期simplexから反射、拡大、収縮を経て終端simplexへ進む軌跡。各frameでは頂点順位、candidate、受理操作、best valueを同期している。](./media/nelder-mead-execution.svg "Optimization Compassの決定論的Python generatorが出力した終端frameです。2次元の固定教材であり、別問題での速度や頑健性を示しません。")
 
 三角形が動き、形を変え、最後に小さくなる様子がこの手法の本体です。[frameを順に再生する](#/theater/learning/SCENARIO_NM_QUADRATIC)と、候補の採否まで追えます。
 
-## 単体は何を表すか
+## 向く条件・避ける条件
 
-2次元では三角形、3次元では四面体がsimplexです。
-各頂点で目的関数を評価し、best／second-worst／worstを並べます。
-worst以外の頂点の重心 $c$ を基準に、worst点を反対側へ動かして候補を作ります。
+初期点だけでなく、初期単体の大きさと方向が探索を変えます。
+変数の尺度（scale）が大きく違うと、標準の方法で作った単体が偏ることがあります。一部の座標では大きすぎ、別の座標では小さすぎる場合があります。
 
-代表操作:
-
-1. **reflection**: worst点を重心の反対へ移す
-2. **expansion**: reflectionが非常に良ければさらに進む
-3. **outside / inside contraction**: 改善が弱ければ重心側へ縮める
-4. **shrink**: 候補が悪ければbest点の周囲へ全体を縮小する
-
-操作名が同じでも係数や停止条件は実装optionです。
-
-## 画面の読み方
-
-[Nelder–Mead Theater](#/theater/nelder-mead)では、次を区別します。
-
-| 表示 | 意味 |
-|---|---|
-| best / worst | 現在の頂点中で最良・最悪 |
-| centroid | worst以外の頂点の重心 |
-| candidate | reflection等で評価する試行点 |
-| simplex diameter | 探索geometryの大きさ |
-| objective history | best-so-farが改善しているか |
-| operation caption | 候補を採用・棄却した理由 |
-
-単体が小さくなったことと、正しいbasinへ入ったことは別です。
-
-## 初期simplexを変えて経路を見る
-
-[標準の初期simplex](#/theater/learning/SCENARIO_NM_QUADRATIC)と[移動した初期simplex](#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED)では、頂点・重心・candidateの動きを追えます。
-[初期simplexの感度Compare](#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX)は、同じ二次目的・係数・simplex scale 0.8・80回のoracle evaluation budgetを使います。
-変えるのは初期simplexの位置だけです。
-
-二つの経路は、reflection／contractionなどの操作列と探索領域が初期条件で変わることを示します。
-別の目的や次元での頑健性、速度、手法の一般性能rankingは示しません。
-
-## まず確認すること
-
-初期点だけでなく、初期simplexの大きさと方向が探索を変えます。
-変数scaleが大きく違うと、標準生成されたsimplexが一部座標では大きすぎ、別の座標では小さすぎる場合があります。
-
-- 低〜低次元の連続変数か
-- gradientを得られない、またはgradient checkが不安定か
-- 一評価が比較的安価か
-- 無制約または単純boundsで扱えるか
-
-## 向いている条件
+向く条件です。
 
 - 非常に低〜低次元の連続変数
-- gradientを得られない、またはgradient checkが不安定
-- 一評価が比較的安価
-- 無制約または単純bounds
-- 高精度certificateより簡単な局所探索を優先
+- 勾配を得られない、または勾配の確認（gradient check）が不安定
+- 一回の評価が比較的安価
+- 無制約、または単純な上下限（bounds）
+- 高精度の証明より、簡単な局所探索を優先したい
+
+避ける、または切り替える条件です。
+
+- 高次元で、一反復あたりの評価数が重い → [高次元のblack-box最適化（PA015）](#/formulations/PA015)、または[CMA-ES](#/learn/cma-es)
+- 多峰性で、初期点ごとに別の解へ入る → [Differential Evolution](#/learn/differential-evolution)や複数の初期点
+- 一般の制約を扱いたい、またはblack-box制約が主題 → [MADS](#/learn/mads)
+- 一回の評価が高価で、試せる回数が少ない → [高価な低次元評価（PA014）](#/formulations/PA014)、[ベイズ最適化](#/learn/bayesian-optimization)
+
+::: warning
+Nelder–Meadは「微分不要」ですが、「評価回数が少ない」ことを意味しません。
+高価なblack-boxでは、評価予算をBayesian Optimizationや代理モデル（surrogate）を使う手法と比較します。
+:::
 
 ## Python
+
+次の例は、Rosenbrock関数を `scipy.optimize.minimize` で解きます。
 
 ```python
 import numpy as np
@@ -113,37 +133,97 @@ result = minimize(
 )
 
 print(result.success, result.x, result.fun, result.nfev, result.message)
+# True [1. 1.] 1.0990889519195732e-18 219 Optimization terminated successfully.
 ```
 
-`xatol`はgeometry、`fatol`は目的値差の停止条件です。
-両方が小さくても大域最適性は証明されません。
-optionとboundsの具体的な挙動は[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html)で利用versionに対応する説明を確認します。
+`xatol` は単体の大きさ、`fatol` は目的関数値の差に対する停止条件です。
+両方が小さくても、大域最適性は証明されません。
+optionと上下限の具体的な挙動は[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html)で、利用するversionに対応する説明を確認します。
+
+「小さな例」の経路は、初期単体を渡し、反復ごとの最良点を `callback` で受け取ると再現できます。
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+
+def f(p: np.ndarray) -> float:
+    return float((p[0] - 3.0) ** 2 + 4.0 * (p[1] - 1.0) ** 2)
+
+
+simplex = np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
+best_per_iteration: list[list[float]] = []
+minimize(
+    f,
+    simplex[0],
+    method="Nelder-Mead",
+    callback=lambda xk: best_per_iteration.append(np.round(xk, 3).tolist()),
+    options={"initial_simplex": simplex, "maxiter": 5},
+)
+print(best_per_iteration)
+# [[1.5, 1.5], [2.5, 0.5], [2.5, 0.5], [3.0, 0.75]]
+```
+
+SciPy 1.18.1 で確認した出力です。SciPy は標準では初期点の周りに単体を自動で作るため、経路を揃えるには `initial_simplex` を渡します。
 
 ## 診断値
 
-- function evaluation数
-- simplex diameter / volume
-- best and worst objective
-- shrink回数
-- repeated evaluation / duplicate vertex
-- constraint violation（外部penaltyを使う場合）
-- 異なる初期simplexでの解
+単体の形と最良値の両方を記録します。片方だけでは、止まってよいのか、やり直すべきなのかが分かりません。
+
+| 診断値 | 見方 | 判断 |
+|---|---|---|
+| function evaluation数 | 予算に対する消費量 | 予算に近づいたら停止か、別手法との比較へ |
+| 単体の直径・体積 | 探索geometryの大きさ | 小さくなり、最良値も動かなければ停止。細長く退化したら再初期化を検討 |
+| 最良値と最悪値 | 頂点の値の幅 | 幅が縮んでも、最良値が下がらないなら局所解の近くと疑う |
+| 縮小（shrink）の回数 | 収縮が失敗した回数 | 繰り返してもbestが動かなければ、停止か切り替え |
+| 重複した評価・重複した頂点 | 頂点が同一点へ潰れていないか | 潰れていたら、上下限や尺度を見直す |
+| 制約違反（外部penaltyを使う場合） | 目的値と別に記録する | 目的値だけで最良点を選ばない |
+| 異なる初期単体での解 | 解が初期単体に依存するか | 解が割れたら、多峰性を疑って複数の初期点で比べる |
+
+単体が小さくなったことと、正しい谷（basin）へ入ったことは別です。
+停止の判断には、単体の大きさに加えて、初期単体を変えた解の一致を使います。
 
 ## 失敗・切替の兆候
 
-- simplexが細長く退化する
-- shrinkを繰り返してもbestが改善しない
-- noise floor以下の差を追い続ける
-- boundsへ多数の頂点がclipされ同一点になる
-- 高次元で一操作あたりの評価数が重い
-- 多峰性で初期点ごとに別解へ入る
-- 一般制約をpenaltyだけで扱い、infeasible解を誤採用する
+| 症状 | 考えられる原因 | 対処・切替先 |
+|---|---|---|
+| 単体が細長く退化する | 頂点がほぼ一直線に並び、探索方向が減った | 初期単体を作り直して再開する。尺度を揃える |
+| 縮小を繰り返してもbestが改善しない | 谷底の近く、または多峰性 | 停止するか、別の初期点・[Differential Evolution](#/learn/differential-evolution)へ |
+| noiseの底（noise floor）より小さい差を追い続ける | 評価のばらつきで順位が入れ替わる | 反復評価や、noiseを扱う手法へ。[noiseを含むblack-box（PA013）](#/formulations/PA013)を確認する |
+| 上下限に多数の頂点が切り詰められ、同一点になる | 境界の外へ出た点を切り詰めた | 境界を扱える手法（[MADS](#/learn/mads)など）へ |
+| 高次元で一操作あたりの評価数が重い | 頂点数が次元とともに増える | [CMA-ES](#/learn/cma-es)や[PA015](#/formulations/PA015)の手法へ |
+| 多峰性で、初期点ごとに別解へ入る | 局所探索であり、谷を越えられない | 複数の初期点、または集団を使う手法へ |
+| 一般の制約をpenaltyだけで扱い、実行不可能（infeasible）な解を採用する | 目的値の小ささだけで最良点を選んだ | 制約違反を別に記録する。[MADS](#/learn/mads)を検討する |
 
-::: warning
-Nelder–Meadは「微分不要」ですが、「評価回数が少ない」ことを意味しません。
-高価なblack-boxでは、評価budgetをBayesian Optimizationやsurrogate法と比較します。
-:::
+症状が複数出たときは、まず初期単体と尺度を疑います。それで直らなければ、切替先を検討します。
+
+## コラム: 画面の読み方
+
+[Nelder–Mead Theater](#/theater/nelder-mead)では、次の表示を区別して読みます。
+
+| 表示 | 意味 |
+|---|---|
+| best / worst | 現在の頂点中で最良・最悪 |
+| centroid | 最悪点以外の頂点の重心 |
+| candidate | 反射などで評価する試行点 |
+| simplex diameter | 探索geometryの大きさ |
+| objective history | 最良値が改善しているか |
+| operation caption | 候補を採用・棄却した理由 |
+
+「小さな例」の表の各列は、この画面の表示と対応しています。
+
+## コラム: 初期単体を変えて経路を見る
+
+[標準の初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC)と[移動した初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED)では、頂点・重心・候補点の動きを追えます。
+[初期単体の感度Compare](#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX)は、同じ二次目的関数・係数・単体の尺度0.8・80回のoracle evaluation budgetを使います。
+変えるのは初期単体の位置だけです。
+
+二つの経路は、反射や収縮などの操作列と探索領域が、初期条件で変わることを示します。
+別の目的関数や次元での頑健性、速度、手法の一般性能rankingは示しません。
 
 ## 次に読む
 
-black-box制約やstationarityの扱いを強めたい場合は[MADS](#/learn/mads)、複数basinを集団で探したい場合は[Differential Evolution](#/learn/differential-evolution)も候補です。
+- [高価な低次元評価（PA014）](#/formulations/PA014)：一回の評価が高価なとき、次にどこを試すか
+- [値が飛ぶsimulation（PA012）](#/formulations/PA012)：勾配を信用できない目的関数の型
+- [MADS](#/learn/mads)：black-box制約や停留性の扱いを強めたいとき
+- [Differential Evolution](#/learn/differential-evolution)：複数の谷を集団で探したいとき

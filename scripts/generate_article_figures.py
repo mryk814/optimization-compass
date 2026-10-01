@@ -84,6 +84,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "pbt-lineage-execution.svg": _pbt_lineage_svg(dataset_version).encode("utf-8"),
         "pdlp-residual-execution.svg": _pdlp_residual_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
+        "random-search-coverage-execution.svg": _random_search_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "sgd-mini-batch-execution.svg": _sgd_mini_batch_svg(dataset_version).encode("utf-8"),
         "simulated-annealing-execution.svg": _simulated_annealing_svg(dataset_version).encode(
@@ -94,7 +95,12 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             "utf-8"
         ),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
+        "tpe-density-ratio-execution.svg": _tpe_density_ratio_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
+        "turbo-trust-region-execution.svg": _turbo_trust_region_svg(dataset_version).encode(
+            "utf-8"
+        ),
+        "hyperband-rungs-execution.svg": _hyperband_rungs_svg(dataset_version).encode("utf-8"),
     }
 
 
@@ -6380,6 +6386,456 @@ def _topology_field_svg(dataset_version: str) -> str:
                 '<text x="36" y="976" class="caveat">'
                 "8×4の教育用referenceであり、実FEM・強度・座屈・製造性を保証しません。"
                 "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _random_search_probe() -> dict[str, object]:
+    rng = random.Random(7)
+    points: list[tuple[float, float, float]] = []
+    best_history: list[float] = []
+    best = math.inf
+    for _ in range(48):
+        x, y = rng.random(), rng.random()
+        value = (
+            (x - 0.24) ** 2 + 0.8 * (y - 0.72) ** 2 + 0.025 * (1.0 - math.cos(6.0 * math.pi * x))
+        )
+        points.append((x, y, value))
+        best = min(best, value)
+        best_history.append(best)
+    occupied = len({(min(3, int(x * 4)), min(3, int(y * 4))) for x, y, _ in points})
+    best_index = min(range(len(points)), key=lambda index: points[index][2])
+    return {
+        "points": tuple(points),
+        "best_history": tuple(best_history),
+        "occupied_cells": occupied,
+        "best_index": best_index,
+    }
+
+
+def _random_search_svg(dataset_version: str) -> str:
+    probe = _random_search_probe()
+    points = probe["points"]
+    history = probe["best_history"]
+    elements = [
+        _svg_open(
+            "Random Searchの48回をそのまま見る",
+            "固定seedで二次元search spaceを48回samplingした点とbest-so-farの推移。",
+            height=690,
+        ),
+        '<rect width="800" height="690" rx="24" fill="#f7f5ee"/>',
+        '<text x="36" y="52" class="title">Random Searchの48回をそのまま見る</text>',
+        '<text x="36" y="80" class="subtitle">2D search space · 48 trials · seed 7</text>',
+        '<rect x="36" y="112" width="350" height="350" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+        '<text x="54" y="142" class="panel-title">どこを試したか</text>',
+        '<rect x="70" y="166" width="280" height="260" fill="#f5f8f4" stroke="#c7d2ca"/>',
+    ]
+    for index in range(1, 4):
+        x = 70 + index * 70
+        y = 166 + index * 65
+        elements.extend(
+            [
+                f'<line x1="{x}" y1="166" x2="{x}" y2="426" stroke="#e1e7e2"/>',
+                f'<line x1="70" y1="{y}" x2="350" y2="{y}" stroke="#e1e7e2"/>',
+            ]
+        )
+    for index, (x_value, y_value, _) in enumerate(points):
+        x = 70 + 280 * x_value
+        y = 426 - 260 * y_value
+        best = index == probe["best_index"]
+        elements.append(
+            f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{6 if best else 3.8}" '
+            f'fill="{"#dc6b3f" if best else "#3a8062"}" '
+            f'opacity="{1 if best else 0.72}"/>'
+        )
+    elements.extend(
+        [
+            '<text x="70" y="449" class="axis">0</text>',
+            '<text x="350" y="449" text-anchor="end" class="axis">1 · x</text>',
+            '<text x="54" y="172" class="axis">y</text>',
+            '<rect x="414" y="112" width="350" height="350" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+            '<text x="432" y="142" class="panel-title">best-so-farはどう下がったか</text>',
+            '<line x1="448" y1="426" x2="730" y2="426" stroke="#9caaa1"/>',
+            '<line x1="448" y1="170" x2="448" y2="426" stroke="#9caaa1"/>',
+        ]
+    )
+    maximum = max(history)
+    path = []
+    for index, value in enumerate(history):
+        x = 448 + 282 * index / (len(history) - 1)
+        y = 188 + 238 * (maximum - value) / maximum
+        path.append(f"{x:.2f},{y:.2f}")
+    elements.extend(
+        [
+            f'<polyline points="{" ".join(path)}" fill="none" stroke="#dc6b3f" '
+            'stroke-width="4" stroke-linejoin="round"/>',
+            '<text x="448" y="449" class="axis">trial 1</text>',
+            '<text x="730" y="449" text-anchor="end" class="axis">trial 48</text>',
+            '<text x="432" y="493" class="metric">16分割中の訪問cell</text>',
+            f'<text x="730" y="493" text-anchor="end" class="metric-value">'
+            f"{probe['occupied_cells']} / 16</text>",
+            '<text x="432" y="525" class="metric">最終best objective</text>',
+            f'<text x="730" y="525" text-anchor="end" class="metric-value">'
+            f"{history[-1]:.4f}</text>",
+            (
+                '<text x="36" y="574" class="caption">'
+                "点の散らばりと改善の停滞を、同じ48 evaluationsから読む。</text>"
+            ),
+            (
+                '<text x="36" y="608" class="caption">実行生成: '
+                "scripts/generate_article_figures.py::_random_search_probe"
+            ),
+            f" · dataset {html.escape(dataset_version)}</text>",
+            (
+                '<text x="36" y="642" class="caveat">'
+                "固定2D objective・単一seedの教材です。"
+                "高次元での被覆や手法rankingは示しません。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _tpe_density_ratio_probe() -> dict[str, object]:
+    observations = (
+        (0.05, 0.62),
+        (0.13, 0.44),
+        (0.20, 0.26),
+        (0.28, 0.12),
+        (0.34, 0.08),
+        (0.42, 0.11),
+        (0.51, 0.23),
+        (0.62, 0.39),
+        (0.74, 0.55),
+        (0.86, 0.72),
+        (0.93, 0.82),
+        (0.98, 0.91),
+    )
+    ranked = sorted(observations, key=lambda item: item[1])
+    good = tuple(ranked[:4])
+    bad = tuple(ranked[4:])
+    bandwidth = 0.09
+
+    def density(x: float, group: tuple[tuple[float, float], ...]) -> float:
+        return sum(
+            math.exp(-0.5 * ((x - observed_x) / bandwidth) ** 2) for observed_x, _ in group
+        ) / len(group)
+
+    grid = tuple(index / 100 for index in range(101))
+    curves = tuple((x, density(x, good), density(x, bad)) for x in grid)
+    candidate = max(curves, key=lambda item: item[1] / max(item[2], 1e-9))
+    return {
+        "observations": observations,
+        "good": good,
+        "bad": bad,
+        "curves": curves,
+        "candidate": candidate[0],
+        "candidate_ratio": candidate[1] / candidate[2],
+    }
+
+
+def _tpe_density_ratio_svg(dataset_version: str) -> str:
+    probe = _tpe_density_ratio_probe()
+    curves = probe["curves"]
+    maximum = max(max(good, bad) for _, good, bad in curves)
+
+    def curve_path(offset: int) -> str:
+        return " ".join(
+            f"{70 + x * 660:.2f},{430 - 220 * values[offset] / maximum:.2f}"
+            for x, *values in curves
+        )
+
+    elements = [
+        _svg_open(
+            "TPEは良い群と悪い群の密度差を見る",
+            "固定された12 trialを良い4件と悪い8件に分け、"
+            "Gaussian KDEの密度比から次候補を選ぶ教材。",
+            height=700,
+        ),
+        '<rect width="800" height="700" rx="24" fill="#f7f5ee"/>',
+        '<text x="36" y="52" class="title">TPEは「良い群 / 悪い群」の差を見る</text>',
+        (
+            '<text x="36" y="80" class="subtitle">'
+            "12 observed trials · good 4 / bad 8 · fixed bandwidth 0.09</text>"
+        ),
+        '<rect x="36" y="112" width="728" height="390" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+        '<text x="54" y="144" class="panel-title">parameter x のdensity model</text>',
+        '<line x1="70" y1="430" x2="730" y2="430" stroke="#9caaa1"/>',
+        '<line x1="70" y1="182" x2="70" y2="430" stroke="#9caaa1"/>',
+        f'<polyline points="{curve_path(0)}" fill="none" stroke="#28795b" stroke-width="4"/>',
+        f'<polyline points="{curve_path(1)}" fill="none" stroke="#a8a39b" stroke-width="4"/>',
+        '<line x1="566" y1="158" x2="594" y2="158" stroke="#28795b" stroke-width="4"/>',
+        '<text x="604" y="163" class="status">good density l(x)</text>',
+        '<line x1="566" y1="185" x2="594" y2="185" stroke="#a8a39b" stroke-width="4"/>',
+        '<text x="604" y="190" class="status">bad density g(x)</text>',
+    ]
+    for x, _ in probe["good"]:
+        elements.append(f'<circle cx="{70 + x * 660:.2f}" cy="450" r="5" fill="#28795b"/>')
+    for x, _ in probe["bad"]:
+        elements.append(f'<circle cx="{70 + x * 660:.2f}" cy="470" r="4" fill="#a8a39b"/>')
+    candidate_x = 70 + probe["candidate"] * 660
+    elements.extend(
+        [
+            f'<line x1="{candidate_x:.2f}" y1="170" x2="{candidate_x:.2f}" y2="480" '
+            'stroke="#dc6b3f" stroke-width="3" stroke-dasharray="7 6"/>',
+            f'<text x="{candidate_x + 8:.2f}" y="205" class="metric-value" fill="#dc6b3f">'
+            f"next x ≈ {probe['candidate']:.2f}</text>",
+            '<text x="70" y="493" class="axis">0</text>',
+            '<text x="730" y="493" text-anchor="end" class="axis">1 · parameter x</text>',
+            (
+                '<text x="54" y="540" class="caption">'
+                "同じ履歴をobjective曲面ではなく、parameter densityの差として使う。</text>"
+            ),
+            (
+                '<text x="54" y="572" class="caption">'
+                "緑の山が高く、灰色の山が低い場所を次候補として優先する。</text>"
+            ),
+            (
+                '<text x="36" y="616" class="caption">実行生成: '
+                "scripts/generate_article_figures.py::_tpe_density_ratio_probe"
+            ),
+            f" · dataset {html.escape(dataset_version)}</text>",
+            (
+                '<text x="36" y="650" class="caveat">'
+                "1D Gaussian KDEによる概念図です。"
+                "Optuna内部実装や条件付きspace全体は再現しません。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _hyperband_rungs_probe() -> dict[str, object]:
+    trials = tuple(
+        tuple(
+            0.30
+            + 0.045 * trial
+            - (0.06 + 0.008 * ((trial * 5) % 7)) * math.log1p(resource)
+            + 0.018 * math.sin(trial * 1.7 + resource)
+            for resource in range(1, 10)
+        )
+        for trial in range(12)
+    )
+    first = tuple(sorted(range(12), key=lambda trial: trials[trial][0])[:4])
+    second = tuple(sorted(first, key=lambda trial: trials[trial][2])[:1])
+    used_resource = 12 * 1 + 4 * (3 - 1) + (9 - 3)
+    return {
+        "trials": trials,
+        "rungs": (1, 3, 9),
+        "promoted_at_one": first,
+        "promoted_at_three": second,
+        "used_resource": used_resource,
+        "full_resource": 12 * 9,
+    }
+
+
+def _hyperband_rungs_svg(dataset_version: str) -> str:
+    probe = _hyperband_rungs_probe()
+    trials = probe["trials"]
+    promoted_one = set(probe["promoted_at_one"])
+    promoted_three = set(probe["promoted_at_three"])
+    elements = [
+        _svg_open(
+            "Successive Halvingのresource配分",
+            "12 trialをresource 1で評価し4 trial、さらに1 trialへ絞る固定実行。",
+            height=760,
+        ),
+        '<rect width="800" height="760" rx="24" fill="#f7f5ee"/>',
+        '<text x="36" y="52" class="title">全trialを最後まで育てない</text>',
+        (
+            '<text x="36" y="80" class="subtitle">'
+            "Successive Halving · 12 → 4 → 1 trials · resource 1 → 3 → 9</text>"
+        ),
+        '<rect x="36" y="112" width="728" height="430" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+        '<text x="54" y="144" class="panel-title">trialごとのmetricとpromotion</text>',
+    ]
+    x_positions = {1: 105, 3: 400, 9: 695}
+    for resource, x in x_positions.items():
+        elements.extend(
+            [
+                f'<line x1="{x}" y1="170" x2="{x}" y2="500" stroke="#dfe5e0" stroke-width="2"/>',
+                (
+                    f'<text x="{x}" y="526" text-anchor="middle" class="axis">'
+                    f"resource {resource}</text>"
+                ),
+            ]
+        )
+    all_values = [value for trial in trials for value in trial]
+    low, high = min(all_values), max(all_values)
+
+    def project_y(value: float) -> float:
+        return 480 - 285 * (value - low) / (high - low)
+
+    for trial_index, trial in enumerate(trials):
+        points = [(x_positions[1], project_y(trial[0]))]
+        if trial_index in promoted_one:
+            points.append((x_positions[3], project_y(trial[2])))
+        if trial_index in promoted_three:
+            points.append((x_positions[9], project_y(trial[8])))
+        color = (
+            "#dc6b3f"
+            if trial_index in promoted_three
+            else ("#367e61" if trial_index in promoted_one else "#b8beb9")
+        )
+        stroke_width = "4" if trial_index in promoted_three else "2"
+        elements.append(
+            f'<polyline points="{" ".join(f"{x},{y:.2f}" for x, y in points)}" '
+            f'fill="none" stroke="{color}" stroke-width="{stroke_width}"/>'
+        )
+        for x, y in points:
+            elements.append(f'<circle cx="{x}" cy="{y:.2f}" r="4" fill="{color}"/>')
+    saved = 1 - probe["used_resource"] / probe["full_resource"]
+    elements.extend(
+        [
+            '<text x="54" y="582" class="metric">消費resource</text>',
+            f'<text x="746" y="582" text-anchor="end" class="metric-value">'
+            f"{probe['used_resource']} / {probe['full_resource']}（全trial完走比）</text>",
+            '<text x="54" y="616" class="metric">この固定例で省いたresource</text>',
+            f'<text x="746" y="616" text-anchor="end" class="metric-value">{saved:.0%}</text>',
+            (
+                '<text x="36" y="662" class="caption">'
+                "灰色はresource 1、緑は3、橙は9まで進んだtrial。"
+                "allocatorの判断だけを描く。</text>"
+            ),
+            (
+                '<text x="36" y="694" class="caption">実行生成: '
+                "scripts/generate_article_figures.py::_hyperband_rungs_probe"
+            ),
+            f" · dataset {html.escape(dataset_version)}</text>",
+            (
+                '<text x="36" y="728" class="caveat">'
+                "固定の滑らかなlearning curveです。"
+                "遅咲きtrial・noise・asynchronous待ちは省略しています。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _turbo_trust_region_probe() -> dict[str, object]:
+    rng = random.Random(7)
+
+    def objective(x: float, y: float) -> float:
+        return (x - 0.72) ** 2 + 1.3 * (y - 0.28) ** 2 + 0.025 * math.sin(12 * x)
+
+    center = [0.5, 0.5]
+    length = 0.6
+    best = objective(*center)
+    steps = []
+    failures = 0
+    for iteration in range(12):
+        candidate = [
+            min(1.0, max(0.0, center[axis] + rng.uniform(-length / 2, length / 2)))
+            for axis in range(2)
+        ]
+        value = objective(*candidate)
+        improved = value < best
+        if improved:
+            center, best, failures = candidate, value, 0
+            length = min(0.8, length * 1.15)
+        else:
+            failures += 1
+            if failures == 2:
+                length, failures = max(0.08, length / 2), 0
+        steps.append((iteration + 1, tuple(center), length, best, improved))
+    return {"steps": tuple(steps), "initial_best": objective(0.5, 0.5)}
+
+
+def _turbo_trust_region_svg(dataset_version: str) -> str:
+    probe = _turbo_trust_region_probe()
+    steps = probe["steps"]
+    selected = (0, 3, 7, 11)
+    elements = [
+        _svg_open(
+            "TuRBO型trust regionの拡大と縮小",
+            "固定seedの局所box探索で、改善時の中心移動と停滞時のbox縮小を示す。",
+            height=770,
+        ),
+        '<rect width="800" height="770" rx="24" fill="#f7f5ee"/>',
+        '<text x="36" y="52" class="title">探索範囲を局所boxへ絞る</text>',
+        (
+            '<text x="36" y="80" class="subtitle">'
+            "TuRBO-like controller · 2D objective · 12 evaluations · seed 7</text>"
+        ),
+        '<rect x="36" y="112" width="420" height="420" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+        '<text x="54" y="144" class="panel-title">trust regionとincumbent</text>',
+        '<rect x="78" y="170" width="336" height="320" fill="#f5f8f4" stroke="#c7d2ca"/>',
+    ]
+    palette = ("#b7c7be", "#79a58f", "#367e61", "#dc6b3f")
+    path = []
+    for color_index, step_index in enumerate(selected):
+        _, center, length, _, _ = steps[step_index]
+        x = 78 + center[0] * 336
+        y = 490 - center[1] * 320
+        lower = tuple(max(0.0, value - length / 2) for value in center)
+        upper = tuple(min(1.0, value + length / 2) for value in center)
+        left = 78 + lower[0] * 336
+        top = 490 - upper[1] * 320
+        width = (upper[0] - lower[0]) * 336
+        height = (upper[1] - lower[1]) * 320
+        elements.extend(
+            [
+                f'<rect x="{left:.2f}" y="{top:.2f}" '
+                f'width="{width:.2f}" height="{height:.2f}" fill="none" '
+                f'stroke="{palette[color_index]}" stroke-width="3"/>',
+                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="5" fill="{palette[color_index]}"/>',
+            ]
+        )
+        path.append(f"{x:.2f},{y:.2f}")
+    elements.extend(
+        [
+            f'<polyline points="{" ".join(path)}" fill="none" stroke="#6a756e" '
+            'stroke-width="2" stroke-dasharray="5 5"/>',
+            '<rect x="484" y="112" width="280" height="420" rx="18" fill="#fff" stroke="#d6ddd7"/>',
+            '<text x="502" y="144" class="panel-title">12回の制御履歴</text>',
+            '<line x1="516" y1="470" x2="736" y2="470" stroke="#9caaa1"/>',
+            '<line x1="516" y1="180" x2="516" y2="470" stroke="#9caaa1"/>',
+        ]
+    )
+    max_best = probe["initial_best"]
+    lengths = " ".join(
+        f"{516 + 220 * (index - 1) / 11:.2f},{450 - 230 * length / 0.8:.2f}"
+        for index, _, length, _, _ in steps
+    )
+    bests = " ".join(
+        f"{516 + 220 * (index - 1) / 11:.2f},{450 - 230 * (max_best - best) / max_best:.2f}"
+        for index, _, _, best, _ in steps
+    )
+    elements.extend(
+        [
+            f'<polyline points="{lengths}" fill="none" stroke="#367e61" stroke-width="4"/>',
+            f'<polyline points="{bests}" fill="none" stroke="#dc6b3f" stroke-width="4"/>',
+            '<text x="532" y="198" class="status" fill="#367e61">box length</text>',
+            '<text x="532" y="224" class="status" fill="#dc6b3f">best improvement</text>',
+            '<text x="516" y="495" class="axis">1</text>',
+            '<text x="736" y="495" text-anchor="end" class="axis">evaluation 12</text>',
+            (
+                '<text x="36" y="578" class="caption">'
+                "改善した点へ中心を移し、2回停滞するとboxを縮小する。</text>"
+            ),
+            (
+                '<text x="36" y="610" class="caption">'
+                "SAASBOは別の発想で、少数の有効次元をpriorとして表現する。</text>"
+            ),
+            (
+                '<text x="36" y="654" class="caption">実行生成: '
+                "scripts/generate_article_figures.py::_turbo_trust_region_probe"
+            ),
+            f" · dataset {html.escape(dataset_version)}</text>",
+            (
+                '<text x="36" y="688" class="caveat">'
+                "trust-region制御だけの教材です。"
+                "GP・acquisition・SAAS priorは実装していません。</text>"
             ),
             _svg_style(),
             "</svg>\n",

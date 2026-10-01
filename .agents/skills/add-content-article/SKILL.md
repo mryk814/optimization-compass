@@ -21,7 +21,15 @@ description: Add or improve a method/concept article (method記事・concept記�
 3. 密度を確認する:
    `uv run python scripts/method_content_density_report.py --output <一時ファイルパス>`
    （デフォルト出力はリポジトリ内の `docs/` を書き換えるため、必ず一時パスへ）
-4. 検証する:
+4. 書いている途中は、生成物を使わずに記事ファイルだけを検査する（型・リンク・根拠ID・文体。手法記事は `docs/content-reading-principles.md` §3 の型に従う）:
+
+   ```
+   uv run python scripts/check_article.py content/methods/<file>.md
+   ```
+
+   型より前に書かれた記事を型に移したら `uv run python scripts/content_skeleton_report.py --prune` で移行待ちリストから外す。
+
+5. 検証する:
 
    ```
    uv run optimization-compass validate content

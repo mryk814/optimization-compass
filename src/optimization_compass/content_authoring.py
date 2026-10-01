@@ -18,6 +18,7 @@ from optimization_compass.content_quality import (
     style_warnings,
 )
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.method_content_density import inspect_page
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import run_task, validation_task_for_paths
@@ -193,10 +194,13 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
     )
     published_pages = [item for item in pages if item.status == "published"]
+    formulation_ids, path_ids = authored_route_ids(root)
     known_routes = public_content_routes(
         published_pages,
         gallery_ids=(item["case_id"] for item in gallery["cases"]),
         comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
+        formulation_ids=formulation_ids,
+        path_ids=path_ids,
     )
     require_publish_ready(
         page,

@@ -25,6 +25,10 @@
     "path": "failure-modes.json",
     "version": "1.0.0"
   },
+  "formulation_atlas": {
+    "path": "formulation-atlas.json",
+    "version": "1.0.0"
+  },
   "formulation_primer": {
     "path": "formulation-primer.json",
     "version": "1.0.0"
@@ -37,6 +41,10 @@
   "learning_journeys": {
     "path": "learning-journeys.json",
     "version": "1.1.0"
+  },
+  "learning_paths": {
+    "path": "learning-paths.json",
+    "version": "1.0.0"
   },
   "licenses": {
     "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
@@ -90,7 +98,7 @@
     "path": "traces/index.json",
     "sha256": "b6a82e1f4d61ff3df07774a84320131427b9b9a6667fb5a8db54d67563bb7a1f"
   },
-  "version": "1.4.0",
+  "version": "1.5.0",
   "views": [
     {
       "path": "views/problem-structure.json",

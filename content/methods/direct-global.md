@@ -4,94 +4,110 @@ kind: method
 method_id: M_DIRECT
 title_ja: DIRECT
 title_en: DIRECT
-summary: bounded boxをhyperrectangleへ分割し、局所性定数を事前固定せずpotentially optimalな領域を選んで細分化する決定的大域探索法です。
+summary: 有界な矩形領域を分割し、Lipschitz定数を事前固定せず潜在的に最適な領域を選んで細分化する決定的大域探索法です。
 source_ids: [S008, S018, S073]
 prerequisites: [concept.derivative-free]
 related_ids: [shgo, dual-annealing, differential-evolution]
 aliases: [/learn/direct]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-bounded boxをhyperrectangleへ分割し、局所性定数を事前固定せずpotentially optimalな領域を選んで細分化する決定的大域探索法です。
+有界な矩形領域を分割し、Lipschitz定数を事前固定せず潜在的に最適な領域を選んで細分化する決定的大域探索法です。
 
 ## 30秒でつかむ
 
-DIRECTは、良いcenter valueを持つ領域と、まだ大きく残る領域を同じ候補として扱い、bounded boxを決定的に細分化します。
+DIRECTは、中心の目的値が良い領域と、まだ大きく残る領域を候補にします。
+有限の上下限で囲まれた領域を、決定的に細分化します。
 
-- 見ているもの: best-so-far objective、rectangleの大きさ、potentially optimal set
-- 動かしているもの: search box、rectangleのpartition、center evaluation
-- 前進の判断: 未探索scaleを残しながら、良いcenter付近のrefinementが進むこと
-- 恐れていること: 高次元化によるrectangle数の急増、悪いbounds、noisy objective
+- 見るもの: これまでの最良値 目的関数、長方形領域の大きさ、潜在的最適領域の集合
+- 動かすもの: 探索領域、長方形領域の分割、中心点の評価
+- 前進の判断: 未探索尺度を残しながら、良い中心付近の細分化が進むこと
+- 恐れていること: 高次元化による長方形領域数の急増、悪い上下限、雑音のある 目的関数
 
-## 領域をどう選ぶか
+## 一手の意味
 
-DIRECTはDIviding RECTanglesの名前どおり、search boxをrectangleへ分割します。各rectangleのcenterで目的関数を評価し、
+中心の値 $f(c_i)$ から、領域の大きさ $d_i$ に応じた改善の余地を引いて見積もります。
+ある傾き $K>0$ に対してこの見積もりが有望な領域を、候補に残します。
 
-- center valueが良い
-- rectangleが大きく未探索性が高い
+$$
+f(c_i)-K d_i.
+$$
 
-というtrade-offからpotentially optimalなrectangleを選びます。
+### 領域をどう選ぶか
 
-Lipschitz optimizationの考え方を使いますが、Lipschitz constantを一つに固定せず、複数の可能なslopeに対して有望な領域を残します。
+DIRECTはDIviding RECTanglesの名前どおり、探索領域を長方形領域へ分割します。各長方形領域の中心で目的関数を評価し、
 
-## Globalとlocalのbalance
+- 中心点の目的値が良い
+- 長方形領域が大きく未探索性が高い
 
-- large rectangleを残す: unexplored regionを探す
-- good center付近を細分化: exploitation
-- locally biased variant: local refinementを強める
+という兼ね合いから潜在的最適な長方形領域を選びます。
 
-searchが進むとrectangle数が増え、評価済みcenterとpartition管理の両方が必要です。
+Lipschitz最適化の考え方を使いますが、Lipschitz定数を一つに固定せず、複数の可能な傾きに対して有望な領域を残します。
 
-## まず確認すること
+### Globalと局所のbalance
 
-- boundsが探索したい領域を表しているか
-- 問題がbounded low-dimensional black-boxで、objectiveがdeterministicか
-- broad explorationとlocal refinementのどちらを重く見るか
-- evaluation budgetがrectangleの分割とcenter evaluationを許容するか
+- 大きい 長方形領域を残す: 未探索の 領域を探す
+- 良い 中心付近を細分化: 有望な領域の絞り込み
+- 局所に重点を置く変種: 局所的な絞り込みを強める
 
-## Scaling
+探索が進むと長方形領域数が増え、評価済み中心と分割管理の両方が必要です。
 
-各変数を内部的にunit intervalへ写す考え方が基本ですが、boundsの意味が不適切なら探索も不適切です。
+## 小さな例
 
-- boundsが広すぎる
-- optimumがboundary外
-- log scaleが必要
-- categorical変数を連続化
-- unit変換で重要領域を圧縮
+1変数の $f(x)=(x-0.2)^2$ を $[0,1]$ で最小にします。
+最初の中心 $1/2$ と、その領域を三分割した中心を実行して評価しました。
+
+| 段階 | 評価する中心 | 目的値 |
+|---|---|---|
+| 初期領域 | $1/2$ | 0.090000 |
+| 最初の三分割 | $1/6,\;1/2,\;5/6$ | 0.001111 / 0.090000 / 0.401111 |
+| 左領域の三分割 | $1/18,\;1/6,\;5/18$ | 0.020864 / 0.001111 / 0.006049 |
+
+最初の三分割で、左の領域が良さそうだと分かります。
+さらに細かくしても、評価した中心の最良値が必ず改善するとは限りません。
+表は一つの有望領域を追う計算例です。
+実装はほかの潜在的最適領域も選び、元の中心値を再利用します。
+
+## 向く条件・避ける条件
+
+### まず確認すること
+
+- 上下限が探索したい領域を表しているか
+- 問題が有界 低次元の ブラックボックスで、目的関数が決定的か
+- 広い領域の探索と局所的な絞り込みのどちらを重く見るか
+- 評価予算が長方形領域の分割と中心点の評価を許容するか
+
+### Scaling
+
+各変数を内部的に単位 区間へ写す考え方が基本ですが、上下限の意味が不適切なら探索も不適切です。
+
+- 上下限が広すぎる
+- 最適解が境界外
+- log 尺度が必要
+- カテゴリ変数を連続化
+- 単位変換で重要領域を圧縮
 
 を確認します。
 
-## 診断値
+### 向いている条件
 
-- best-so-far objective
-- function evaluation数
-- rectangle count
-- potentially optimal set size
-- rectangle diameter / volume
-- local vs global refinement割合
-- boundary evaluation率
-- termination reason
-- dimension
+- 有界 低次元の ブラックボックス
+- 決定的 目的関数
+- 勾配がない
+- 広い領域の探索と局所的な絞り込みの両方が必要
+- random seedに依存しない比較の基準が欲しい
+- 評価予算が中程度
 
-## 向いている条件
+### 避ける／切り替える条件
 
-- bounded low-dimensional black-box
-- deterministic objective
-- gradientがない
-- broad explorationとlocal refinementの両方が必要
-- random seedに依存しないbaselineが欲しい
-- evaluation budgetが中程度
-
-## 避ける／切り替える条件
-
-- 高次元でrectangle数が急増
-- noisy objectiveでcenter valueの比較が不安定
+- 高次元で長方形領域数が急増
+- 雑音のある 目的関数で中心点の目的値の比較が不安定
 - 1評価が極端に高価
-- unbounded problem
-- general constraintが中心
-- boundsが恣意的
-- exact global certificateの前提を満たさない
+- 非有界 問題
+- 一般制約が中心
+- 上下限が恣意的
+- 厳密な 大域最適性の証明の前提を満たさない
 
 ## Python
 
@@ -119,19 +135,34 @@ result = direct(
 print(result.success, result.x, result.fun, result.nfev, result.message)
 ```
 
-`locally_biased`、volume / length tolerance、known `f_min` optionはSciPy versionの公式documentationで確認します。
+`locally_biased`、体積 / 長さ 許容誤差、既知の `f_min` 設定はSciPy 版の公式文書で確認します。
+
+## 診断値
+
+- これまでの最良値 目的関数
+- 目的関数評価数
+- 長方形領域 数
+- 潜在的最適領域の集合 大きさ
+- 長方形領域 直径 / 体積
+- 局所探索と大域探索 細分化の割合
+- 境界 評価率
+- 停止理由
+- 次元
 
 ## 失敗・切替の兆候
 
-- rectangle数やpotentially optimal set sizeだけが増え、best-so-farが改善しない → dimensionとevaluation budgetを確認する
-- boundary evaluation率が高い → boundsの意味とscalingを確認する
-- center valueの比較が不安定 → noisy objectiveとして別methodを検討する
-- general constraintやunbounded problemが中心 → 制約付き手法または別のglobal searchへ切り替える
+- 長方形領域数や潜在的最適領域の集合 大きさだけが増え、これまでの最良値が改善しない → 次元と評価予算を確認する
+- 境界 評価率が高い → 上下限の意味と尺度合わせを確認する
+- 中心点の目的値の比較が不安定 → 雑音のある 目的関数として別手法を検討する
+- 一般制約や非有界 問題が中心 → 制約付き手法または別の大域探索へ切り替える
 
 ::: warning
-DIRECTは決定的でも、有限budgetで任意のnonconvex black-boxの大域最適性を証明するとは限りません。停止時のbest candidateと未探索scaleを報告します。
+DIRECTは決定的でも、有限予算で任意の非凸 ブラックボックスの大域最適性を証明するとは限りません。停止時の最良候補と未探索尺度を報告します。
 :::
 
 ## 次に読む
 
-[SHGO](#/learn/shgo)、[Dual Annealing](#/learn/dual-annealing)、[Differential Evolution](#/learn/differential-evolution)と、bounds・再現性・evaluation budgetの違いを比較します。
+[微分なし大域探索](#/formulations/PA013)で、上下限と評価値から探索する問題の形を確認します。
+
+[SHGO](#/learn/shgo)と[Dual Annealing](#/learn/dual-annealing)を比較します。
+[Differential Evolution](#/learn/differential-evolution)との上下限、再現性、評価予算の違いも確認します。

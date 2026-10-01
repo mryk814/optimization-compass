@@ -4,110 +4,109 @@ kind: method
 method_id: M_DIRECT_SHOOTING
 title_ja: Direct Shooting
 title_en: Direct Shooting
-summary: 時間ごとのcontrolを最適化変数にし、初期状態からdynamicsを前進simulationして得たtrajectoryのcostと制約を改善する最適制御法です。
+summary: 時間ごとの制御入力を最適化変数にし、初期状態から動力学を前進シミュレーションして得た軌道の費用と制約を改善する最適制御法です。
 source_ids: [S042, S043, S050, S076]
 prerequisites: [concept.trajectory-variable, concept.time-discretization]
 related_ids: [concept.dynamics-defect, concept.path-terminal-constraints, concept.receding-horizon, direct-collocation]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-時間ごとのcontrolを最適化変数にし、初期状態からdynamicsを前進simulationして得たtrajectoryのcostと制約を改善する最適制御法です。
+時間ごとの制御入力を最適化変数にし、初期状態から動力学を前進シミュレーションして得た軌道の費用と制約を改善する最適制御法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、stateをすべて独立には決めないことです。
-**controlを仮定してsimulationし、trajectoryが目標へ近づくよう調整します。**
+この手法の気持ちは、状態をすべて独立には決めないことです。
+**制御入力を仮定してシミュレーションし、軌道が目標へ近づくよう調整します。**
 
-- 見ているもの: rollout trajectory、cost、terminal error、constraint violation
-- 動かしているもの: control sequenceまたはそのparameter
-- 前進の判断: costが下がり、feasibilityが保たれているか
-- 別に確認するもの: rolloutの実時間、warm startの効き、deadlineへの余裕
-- 恐れていること: 不安定dynamics、長いhorizon、初期control依存、感度の悪条件化
+- 見るもの: 前進シミュレーション 軌道、費用、終端誤差、制約違反
+- 動かすもの: 制御入力の列またはそのパラメータ
+- 前進の判断: 費用が下がり、可行性が保たれているか
+- 別に確認するもの: 前進シミュレーションの実時間、前回の解からの再開の効き、締切への余裕
+- 恐れていること: 不安定動力学、長い計画期間、初期制御入力依存、感度の悪条件化
 
-stateはsimulationで決まるため、変数数を減らせます。
-一方、長いhorizonでは早い時刻のcontrolが後半stateへ強く影響します。
-その結果、optimizationが難しくなります。
+状態はシミュレーションで決まるため、変数数を減らせます。
+一方、長い計画期間では早い時刻の制御入力が後半状態へ強く影響します。
+その結果、最適化が難しくなります。
 
-## まず確認すること
+## 一手の意味
 
-| 項目 | 確認内容 |
-|---|---|
-| dynamics | 数値的に安定してsimulationできるか |
-| control parameterization | piecewise constantなど妥当な表現か |
-| horizon | 長すぎて感度が消失・爆発しないか |
-| constraints | path constraintをrolloutだけで評価できるか |
-| derivatives | sensitivityや自動微分を利用できるか |
-| initialization | reasonableな初期controlを用意できるか |
-
-real-time制御ではsolve time、warm start、fallback controllerをcostやfeasibilityとは別の運用条件として記録します。
-
-## 仕組み
-
-離散dynamicsを例にします。
+離散動力学を例にします。
 
 $$
 x_{t+1}=F(x_t,u_t)
 $$
 
-最適化変数はcontrol列 $u_0,\ldots,u_{T-1}$です。候補controlで前進simulationし、trajectory costと制約を評価します。勾配を使う場合は、control変更が将来stateへ伝わる感度を計算します。
+最適化変数は制御入力列 $u_0,\ldots,u_{T-1}$です。候補制御入力で前進シミュレーションし、軌道 費用と制約を評価します。勾配を使う場合は、制御入力変更が将来状態へ伝わる感度を計算します。
 
-stateを独立変数にしないため、rollout上のdynamics equalityは自動的に満たされます。
-その代わり、costを下げてもpath constraintやterminal conditionを満たすとは限りません。
-unstable rolloutや長期感度が、controlの改善を後半のstateへ伝える段階で難しさになります。
+状態を独立変数にしないため、前進シミュレーション上の動力学 等式制約は自動的に満たされます。
+その代わり、費用を下げても経路 制約や終端 条件を満たすとは限りません。
+不安定な 前進シミュレーションや長期感度が、制御入力の改善を後半の状態へ伝える段階で難しさになります。
 
-上段のcontrol列だけがoptimization variableです。
-下段のstate trajectoryは、そのcontrol列を先頭からsimulationした結果です。
+上段の制御入力列だけが最適化 変数です。
+下段の状態 軌道は、その制御入力列を先頭からシミュレーションした結果です。
 
 ![減衰のある1-state dynamicsを20 step前進simulationした固定Direct Shooting実行。optimized controlは前半の約0.51から増える。後半11個は上限1に達する。初期controlのstateは0のままである。optimized controlのstateは0.950まで進む。target 1との差は0.0496残る。](./media/direct-shooting-rollout-execution.svg "control sequenceを変数として更新し、state trajectoryをforward simulationで得る固定Direct Shooting実行")
 
-上段を変えるたびに、下段は初期状態からrolloutし直します。
-この教材ではterminal targetをhard constraintにせず、control costと一緒にobjectiveへ入れています。
-そのため、最終stateはtargetへ完全一致せず `x20 = 0.950` で止まります。
+上段を変えるたびに、下段は初期状態から前進シミュレーションし直します。
+この教材では終端 目標を厳密な制約にせず、制御入力 費用と一緒に目的関数へ入れています。
+そのため、最終状態は目標へ完全一致せず `x20 = 0.950` で止まります。
 
-> 固定dynamics `x[t+1] = 0.92 x[t] + 0.1 u[t]` を80回更新した教材です。
-> objectiveは `1.000 → 0.0344`、20個中11個のcontrolが上限へ達します。
-> path constraintやunstable dynamicsは含みません。
-> model mismatchやDirect Shooting一般の性能も示していません。
+> 固定動力学 `x[t+1] = 0.92 x[t] + 0.1 u[t]` を80回更新した教材です。
+> 目的関数は `1.000 → 0.0344`、20個中11個の制御入力が上限へ達します。
+> 経路 制約や不安定な 動力学は含みません。
+> モデルと実際のずれやDirect Shooting一般の性能も示していません。
+
+## 小さな例
+
+Python例と同じ、減衰のある状態 $x_{t+1}=0.92x_t+0.1u_t$ を使います。
+初期制御はすべて0で、目標状態は1です。
+制御入力を上下限 $[-1,1]$ に戻す勾配更新を、幅4で実行しました。
+
+| 更新回数 | 目的値 | 最終状態 |
+|---|---:|---:|
+| 0 | 1.0000 | 0.0000 |
+| 1 | 0.2558 | 0.5023 |
+| 2 | 0.0965 | 0.7171 |
+| 3 | 0.0652 | 0.7876 |
+
+制御列を更新するたびに、状態列を初期状態から計算し直します。
+3回目で目標へ近づいていますが、まだ終端誤差が残ります。
+終端一致は目的の罰則として入れており、厳密な等式制約ではありません。
+80回後の目的値約0.0344、最終状態約0.9504も、同じ実行で確認できます。
 
 ## 向く条件・避ける条件
 
+### まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| 動力学 | 数値的に安定してシミュレーションできるか |
+| 制御入力 変数の表現 | 区分的に一定など妥当な表現か |
+| 計画期間 | 長すぎて感度が消失・爆発しないか |
+| 制約 | 経路 制約を前進シミュレーションだけで評価できるか |
+| 微分 | 感度や自動微分を利用できるか |
+| 初期化 | reasonableな初期制御入力を用意できるか |
+
+実時間制御では求解時間、前回の解からの再開、代替の制御器を費用や可行性とは別の運用条件として記録します。
+
+### 向く条件・避ける条件
+
 向いている条件:
 
-- horizonが比較的短い
-- dynamics simulationが安定・高速
-- state constraintが少ない、または扱いやすい
-- control dimensionを低くparameterizeできる
+- 計画期間が比較的短い
+- 動力学 シミュレーションが安定・高速
+- 状態 制約が少ない、または扱いやすい
+- 制御入力 次元を低く表現できる
 
-## うまくいったサインと切替サイン
+### うまくいったサインと切替サイン
 
-次の条件では、変数を減らせる利点よりもrolloutの不安定さが支配的になります。
+次の条件では、変数を減らせる利点よりも前進シミュレーションの不安定さが支配的になります。
 
-- 長いhorizonで不安定dynamics
-- 多数の厳しいpath constraint
-- eventやdiscontinuityを未処理
-- model mismatchが大きくsimulationを信用できない
-
-## 診断値
-
-- total costとterminal error
-- state / control constraint violation
-- rollout stability
-- gradient normとstep norm
-- horizon別のsensitivity
-- wall timeとiteration数
-- 初期controlごとの解
-
-costの低下、constraint violationの許容範囲、rolloutの安定性は別々に記録します。
-wall timeとiteration数は、解の良さではなくreal-time運用の判定に使います。
-
-## 追加の診断
-
-- rolloutが発散 → parameterization、horizon、stabilizing initial controlを見直す
-- 初期時刻の勾配だけ巨大 → scalingやmultiple shootingを検討
-- path constraintが満たせない → direct collocationへ
-- horizonを延ばすと解が急変 → discretizationとmodelを確認
-- real-time deadlineを超える → warm start、receding horizon、専用solverを検討
+- 長い計画期間で不安定動力学
+- 多数の厳しい経路 制約
+- 事象や不連続を未処理
+- モデルと実際のずれが大きくシミュレーションを信用できない
 
 ## Python
 
@@ -160,24 +159,49 @@ print(history[0], history[-1])
 print(sum(control >= 1.0 - 1e-12 for control in controls))
 ```
 
-出力ではobjectiveが `1.0` から `0.034356...` へ下がり、terminal stateは `0.950387...` になります。
-上限へ達するcontrolは11個です。
+出力では目的関数が `1.0` から `0.034356...` へ下がり、終端 状態は `0.950387...` になります。
+上限へ達する制御入力は11個です。
 
-この例は単純なdynamicsと固定stepのprojected gradientを使います。
-実務ではintegration errorとstate constraintsを保存します。
-unitsとsolver statusも分けて記録します。
+この例は単純な動力学と固定一歩のprojected 勾配を使います。
+実務では積分誤差と状態 制約を保存します。
+単位とソルバー 状態区分も分けて記録します。
 
-## コラム: Direct Collocationとの違い
+## 診断値
 
-Direct Collocationはstateもdecision variableにし、dynamics defectをconstraintとして課します。変数は増えますが、長いhorizonやpath constraintで疎構造を使いやすくなります。
+- 合計 費用と終端誤差
+- 状態 / 制御入力 制約違反
+- 前進シミュレーションの安定性
+- 勾配ノルムと一歩 ノルム
+- 計画期間別の感度
+- 実行時間と反復数
+- 初期制御入力ごとの解
+
+費用の低下、制約違反の許容範囲、前進シミュレーションの安定性は別々に記録します。
+実行時間と反復数は、解の良さではなく実時間運用の判定に使います。
+
+## 失敗・切替の兆候
+
+### 追加の診断
+
+- 前進シミュレーションが発散 → 変数の表現、計画期間、安定させる 初期 制御入力を見直す
+- 初期時刻の勾配だけ巨大 → 尺度合わせや多重射撃法を検討
+- 経路 制約が満たせない → 直接選点法へ
+- 計画期間を延ばすと解が急変 → 離散化とモデルを確認
+- 実時間の締切を超える → 前回の解からの再開、観測ごとに解き直す運用、専用ソルバーを検討
+
+### コラム: Direct Collocationとの違い
+
+Direct Collocationは状態も決定変数にし、動力学の残差を制約として課します。変数は増えますが、長い計画期間や経路 制約で疎構造を使いやすくなります。
 
 [Direct Collocation](#/learn/direct-collocation)とは、変数数だけで比較しません。
-rollout安定性／defect／sparsity／warm startも確認します。
+前進シミュレーション安定性／整合性の残差／疎構造／前回の解からの再開も確認します。
 
 ## 次に読む
 
-まず[trajectory variable](#/learn/concept.trajectory-variable)で、control列とrolloutされたstate列を分けて読みます。
-次に[時間discretization](#/learn/concept.time-discretization)で、controlの保持方法とstep sizeを確認します。
-path制約やterminal conditionが主役なら、[path・terminal制約](#/learn/concept.path-terminal-constraints)へ進みます。
-長いhorizonでrollout感度が問題なら、[Direct Multiple Shooting](#/learn/multiple-shooting)へ切り替えます。
-観測ごとに先頭のcontrolだけを使う運用は、[receding horizon](#/learn/concept.receding-horizon)で確認します。
+[最適制御の定式化](#/formulations/PA042)で、制御列と状態列の役割を整理します。
+
+まず[軌道 変数](#/learn/concept.trajectory-variable)で、制御入力列と前進シミュレーションされた状態列を分けて読みます。
+次に[時間離散化](#/learn/concept.time-discretization)で、制御入力の保持方法と一歩の大きさを確認します。
+経路制約や終端 条件が主役なら、[経路・終端制約](#/learn/concept.path-terminal-constraints)へ進みます。
+長い計画期間で前進シミュレーション感度が問題なら、[Direct Multiple Shooting](#/learn/multiple-shooting)へ切り替えます。
+観測ごとに先頭の制御入力だけを使う運用は、[観測ごとに解き直す運用](#/learn/concept.receding-horizon)で確認します。

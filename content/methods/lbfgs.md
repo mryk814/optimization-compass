@@ -10,102 +10,164 @@ prerequisites: [bfgs]
 related_ids: [lbfgsb, bfgs, family.smooth-local]
 aliases: [/learn/lbfgs]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
 直近m組の曲率更新だけを保持し、two-loop recursionで逆Hessianの作用を計算する大規模無制約向けの準Newton法です。
 
 ## 30秒でつかむ
 
-L-BFGSはdenseなHessian近似を持たず、直近の勾配差だけから、勾配降下より曲率を反映した方向を作ります。
+登山中に、最近歩いた数区間の記録だけを手帳に残す場面を想像してください。古い記録は捨てます。
+それでも、直近の「これだけ進んだら傾きがこれだけ変わった」という記録から、地面の曲がり方をおおまかに推測できます。L-BFGS法は、BFGS法の曲率の推測を、この短い手帳だけで行います。
 
-- 見ているもの: gradient、line search、直近$m$組の$s_k,y_k$
-- 動かしているもの: 現在点、limited-memoryの履歴、step length
-- 前進の判断: gradient normとobjectiveが安定して減ること
-- 恐れていること: 誤ったgradient、履歴を作れないstep、line search failure
+- **見るもの**: 勾配、直線探索（line search）の結果、直近 $m$ 組の $s_k,\,y_k$
+- **動かすもの**: 現在点、直近の履歴、一手の長さ（step length）
+- **前進の判断**: 勾配の大きさ（gradient norm）と目的関数値が、安定して減ること
 
-## denseな行列を持たずに何を計算しているか
+恐れるのは、誤った勾配と、履歴を作れない一手です。直線探索の失敗も兆候になります。
 
-BFGSは逆Hessian近似$H_k$を$n \times n$のdense行列として更新し、保持します。変数数$n$が大きくなると、この行列だけで概ね$O(n^2)$のmemoryを使うため、大規模problemでは現実的ではありません。
+## 一手の意味
 
-L-BFGSは$H_k$を明示的に組み立てません。代わりに直近$m$回分の
+[BFGS法](#/learn/bfgs)は、逆Hessianの近似 $H_k$ を $n \times n$ の密な（dense）行列として保持します。変数の数 $n$ が大きいと、この行列だけで概ね $O(n^2)$ のメモリを使い、大規模問題では持てません。
+
+L-BFGSは $H_k$ を組み立てません。代わりに直近 $m$ 回分の
 
 - $s_k = x_{k+1} - x_k$
 - $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$
 
-だけを保存し、two-loop recursionと呼ばれる手続きで$H_k \nabla f(x_k)$という積だけを計算します。行列そのものを作らず、保存したvector対に対する内積とscalar倍の組み合わせで同じ作用を再現する点が、BFGSとの本質的な違いです。
+だけを保存します。そして two-loop recursion という手続きで、探索方向に必要な積 $H_k \nabla f(x_k)$ だけを計算します。
 
-## memoryとmの選び方
+手続きは、次の3段です。$\rho_i = 1/(y_i^T s_i)$ とします。
 
-保存するvector対の数を$m$とすると、必要なmemoryは概ね$O(mn)$です。$n$が大きくても$m$を小さく保てば、denseなBFGSでは扱えない規模の問題にも適用できます。
+1. $q \leftarrow \nabla f(x_k)$ とする。新しい履歴から古い履歴へ順に、$\alpha_i = \rho_i s_i^T q$ を求め、$q \leftarrow q - \alpha_i y_i$ と更新する。
+2. 初期の近似 $H_0=\gamma I$ を掛けて、$r \leftarrow \gamma q$ とする。$\gamma$ には、直近の履歴から求めた $s^T y / y^T y$ がよく使われます。
+3. 古い履歴から新しい履歴へ順に進む。$\beta = \rho_i y_i^T r$ を求めて、$r \leftarrow r + s_i(\alpha_i - \beta)$ と更新する。
 
-$m$は曲率情報の解像度を決めるhyperparameterです。$m$を大きくすると、より長い履歴を使った曲率近似になり、Newton法に近い方向を作りやすくなりますが、memoryと1 iterationあたりの計算量が増えます。$m$を小さくすると軽量ですが、履歴が短い分だけ曲率情報が粗く、勾配降下法に近い挙動へ寄っていきます。多くの実装では数〜数十程度の値を初期候補にし、収束の遅さやiteration数を見ながら調整します。
+最後に得た $r$ が $H_k\nabla f(x_k)$ で、探索方向は $p_k=-r$ です。行列そのものは作りません。保存したベクトルの対に対する内積とスカラー倍だけで、BFGSの作用を直近 $m$ 組の範囲で再現します。これがBFGSとの本質的な違いです。
 
-## L-BFGS-Bとの関係
+### メモリと $m$ の選び方
 
-L-BFGSそのものは無制約最適化のアルゴリズムです。各変数に上下限$l_i \le x_i \le u_i$を課したい場合は、[L-BFGS-B](#/learn/lbfgsb)というbounds拡張を使います。scipyでは無制約のL-BFGSも含めて`method="L-BFGS-B"`として提供されており、`bounds`引数を省略すれば実質的に無制約のL-BFGSとして動作します。
+保存するベクトルの対の数を $m$ とすると、必要なメモリは概ね $O(mn)$ です。$n$ が大きくても $m$ を小さく保てば、密なBFGSでは扱えない規模にも適用できます。
 
-## 向いている条件
+$m$ は、曲率情報の解像度を決めるハイパーパラメータ（hyperparameter）です。
+
+- $m$ を大きくすると、長い履歴を使った曲率近似になり、Newton法に近い方向を作りやすくなります。メモリと1反復あたりの計算量は増えます。
+- $m$ を小さくすると軽くなります。ただし履歴が短い分だけ曲率情報が粗くなり、勾配降下法に近い挙動へ寄ります。
+
+多くの実装では、数〜数十を初期候補にします。収束の遅さと反復回数を見ながら調整します。
+
+## 小さな例
+
+[BFGS法](#/learn/bfgs)と同じ問題で、two-loop recursionを一回、手で通します。
+関数は $f(x,y)=(x-1)^2+20(y+2)^2$ で、初期点は $(4,\,3)$ です。
+手で追いやすいように、直線探索は二次関数用の厳密な式にします。履歴は $m=1$ 組とし、初期の近似は $H_0=I$ とします。
+
+反復0は、履歴がないので最急降下の向き $(-6,\,-200)$ に進みます。ここで次の履歴ができます。
+
+- $s_0=(-0.150,\,-5.004)$
+- $y_0=(-0.300,\,-200.17)$
+- $y_0^T s_0\approx 1001.8$、よって $\rho_0\approx 0.000998$
+
+反復1の勾配は $g_1=(5.700,\,-0.171)$ です。履歴1組で、two-loopを通します。
+
+| 段 | 計算 | 結果 |
+|---|---|---|
+| 新→旧 | $\alpha_0=\rho_0\,s_0^T g_1$ | 約 $0$ |
+| 新→旧 | $q=g_1-\alpha_0 y_0$ | $(5.700,\,-0.171)$ |
+| 初期近似 | $r=H_0 q$ | $(5.700,\,-0.171)$ |
+| 旧→新 | $\beta=\rho_0\,y_0^T r$ | 約 $0.0325$ |
+| 旧→新 | $r=r+s_0(\alpha_0-\beta)$ | $(5.705,\,-0.009)$ |
+
+探索方向は $p_1=-r=(-5.705,\,0.009)$ です。BFGS法の反復1と同じ向きです。
+$\alpha_0$ が約0なのは、厳密な直線探索で、新しい勾配が直前の動き $s_0$ と直交するためです。
+
+この反復では、BFGSも履歴を1組しか使っていません。そのため、初期の近似が同じなら、L-BFGSと同じ方向になります。
+二つの方向が分かれるのは、履歴が $m$ 組を超えて、L-BFGSが古い記録を捨て始めてからです。
+
+## 向く条件・避ける条件
 
 | 条件 | 理由 |
 |---|---|
-| 変数が多い（数千〜数百万） | dense $H_k$を保持できないため |
+| 変数が多い（数千〜数百万） | 密な $H_k$ を保持できないため |
 | 目的が局所的に十分滑らか | 曲率情報を勾配差から取り出すため |
 | 勾配が信頼できる | 誤った勾配は曲率近似を壊すため |
 | 局所解でよい | 非凸問題で大域最適性を保証しないため |
 
-denseなBFGSを使えるだけ変数が少ない場合は、[BFGS](#/learn/bfgs)のほうが少ないiterationで収束することがあります。L-BFGSは、memory制約が支配的なときに検討します。
+変数が非常に多く、Hessianを持てない滑らかな最小化がこの手法の主な対象です（[大規模な無制約の最小化](#/formulations/PA007)）。
 
-## 先に確認すること
+先に確認すること:
 
-- 目的関数が局所的に滑らかで、信頼できるgradientを返せるか
-- boundsや一般制約が必要ではないか
-- denseなBFGSではmemoryが支配的になる規模か
+- 目的関数が局所的に滑らかで、信頼できる勾配を返せるか
+- 上下限や一般制約が必要ではないか
+- 密なBFGSではメモリが支配的になる規模か
 - 非凸問題で局所解を受け入れられるか
 
+避ける、または切り替える条件です。
+
+- 上下限を課したい → [L-BFGS-B](#/learn/lbfgsb)。L-BFGSそのものは無制約向けです（[上下限つきの滑らかな最小化](#/formulations/PA008)）
+- 密な曲率近似を保持できる規模 → [BFGS](#/learn/bfgs)のほうが、少ない反復で収束することがあります
+- 制約が一般の等式や不等式である → 制約に対応した手法へ切り替える
+
+SciPyでは、無制約のL-BFGSも `method="L-BFGS-B"` として提供されています。`bounds` を省略すれば、実質的に無制約のL-BFGSとして動作します。
+
 ## Python
+
+次の例は、200変数の二次関数に、$m$（`maxcor`）を変えてL-BFGSを適用します。座標ごとの曲率を1から1000まで変え、条件を悪くしています。
 
 ```python
 import numpy as np
 from scipy.optimize import minimize
 
+n = 200
+curvature = np.logspace(0.0, 3.0, n)  # 各座標の曲率: 1 から 1000 まで
+
 
 def objective(x: np.ndarray) -> float:
-    return float(np.sum((x - np.arange(1, x.size + 1)) ** 2))
+    return float(0.5 * np.sum(curvature * (x - 1.0) ** 2))
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return 2.0 * (x - np.arange(1, x.size + 1))
+    return curvature * (x - 1.0)
 
 
-n = 200
-result = minimize(
-    objective,
-    x0=np.zeros(n),
-    jac=gradient,
-    method="L-BFGS-B",
-    options={"maxcor": 10, "gtol": 1e-8, "maxiter": 300},
-)
-
-print(result.success, result.fun, result.nit, result.nfev)
+for m in (1, 5, 10, 30):
+    result = minimize(
+        objective,
+        x0=np.zeros(n),
+        jac=gradient,
+        method="L-BFGS-B",
+        options={"maxcor": m, "gtol": 1e-8, "maxiter": 1000},
+    )
+    print(m, result.success, result.nit, result.nfev)
+# 1 True 226 244
+# 5 True 211 228
+# 10 True 203 210
+# 30 True 195 206
 ```
 
-`maxcor`が保存するvector対の数$m$に対応します。boundsを渡していないため、この呼び出しは実質的に無制約のL-BFGSです。利用versionのoption名や既定値は[scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)の公式referenceで確認します。
+`maxcor` が保存するベクトルの対の数 $m$ に対応します。boundsを渡していないので、この呼び出しは実質的に無制約のL-BFGSです。
+$m$ を増やすと反復回数は減っていきますが、この問題での減り方は小さく、$m$ を大きくするほどメモリと1反復の計算は増えます。この結果は、この問題とSciPyの実装での観測です。
+利用中のバージョンのオプション名や既定値は、[scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)の公式リファレンスで確認します。
 
-## 最初に見る診断値
+## 診断値
 
-- gradient norm
-- line-search iteration数
-- function / gradient evaluation数
-- objective change
-- memory parameter $m$（保存vector対の数）
+- 勾配のノルム（gradient norm）
+- 直線探索の反復回数
+- 関数評価と勾配評価の回数
+- 目的値の変化
+- メモリのパラメータ $m$（保存するベクトルの対の数）
 
 ## 失敗・切替の兆候
 
-- gradient checkが有限差分と一致しない → gradient実装とscalingを確認する
-- iterationを重ねても目的値が停滞する → line search、step、$m$を確認する
-- line search failureが繰り返し発生する → gradient、非滑らかさ、NaN領域を確認する
-- $m$を増やしても改善しない、またはmemoryが問題になる → $m$を調整し、BFGSや別の一次法と比較する
-- 初期点によって収束先が大きく変わる → multi-startまたはglobal searchを検討する
+- 勾配チェックが有限差分と一致しない → 勾配の実装が誤っている → 勾配と尺度（scaling）を確認する
+- 反復を重ねても目的値が停滞する → 履歴が曲率を捉えていない → 直線探索、一手、$m$ を確認する
+- 直線探索の失敗が繰り返される → 勾配の誤り、非滑らかさ、NaNの領域がある → それらを確認する
+- $m$ を増やしても改善しない、またはメモリが問題になる → $m$ が合っていない → $m$ を調整し、BFGSや別の一次法と比べる
+- 初期点によって収束先が大きく変わる → 非凸で局所解が複数ある → multi-startまたは大域探索を検討する
 
-上下限を課したい場合は[L-BFGS-B](#/learn/lbfgsb)、denseな曲率近似を保持できる規模なら[BFGS](#/learn/bfgs)、滑らかな局所最適化全体の選び分けは[滑らかな局所最適化の選び分け](#/learn/family.smooth-local)で確認できます。
+## 次に読む
+
+- [L-BFGS-B](#/learn/lbfgsb)：同じ履歴の仕組みに上下限を加えた方法
+- [BFGS](#/learn/bfgs)：密な曲率近似を保持できる規模での方法
+- [滑らかな局所最適化の選び分け](#/learn/family.smooth-local)：滑らかな局所最適化全体の見取り図
+- [大規模な無制約の最小化](#/formulations/PA007)：この手法が解く問題の標準形

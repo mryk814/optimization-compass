@@ -4,7 +4,7 @@ kind: method
 method_id: M_RANDOM_SEARCH
 title_ja: Random Search
 title_en: Random Search
-summary: search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。
+summary: 探索空間の同じ分布から独立に点を引いて評価するだけの、ハイパーパラメータ最適化（hyperparameter optimization）で最も単純なbaselineです。
 source_ids: [S034, S038, S069]
 prerequisites: []
 related_ids: [tpe, hyperband-asha, bayesian-optimization, family.expensive-black-box]
@@ -12,58 +12,119 @@ visualization_ids: [ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE]
 comparison_ids: [COMPARE_BO_ACQUISITION_NOISE_BASELINE]
 aliases: [/learn/random-search]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-10-01
 ---
 
-search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。
+探索空間の同じ分布から独立に点を引いて評価するだけの、ハイパーパラメータ最適化（hyperparameter optimization）で最も単純なbaselineです。
 
-## 何を仮定しない手法か
+## 30秒でつかむ
 
-random searchは、各trialでsearch spaceの分布からparameterを1組samplingします。
-分布にはuniform、log-uniform、categoricalなどがあります。
-samplingしたparameterで目的関数を評価し、過去のobjectiveを次のsamplingに反映しません。
+的の全体に向かってダーツを投げ、当たった中でいちばん良い位置を採ります。
+前の投げ方は覚えていません。次の一投は、前の結果に関係なく、同じ的の上に落ちます。
+これがRandom Searchです。
 
-履歴を使わないため、objectiveとparameterの関係を表すmodelも置きません。
-TPEやBayesian Optimizationとは異なり、surrogateのmodel misspecificationは発生しません。
+- **見るもの**: 各試行（trial）の目的関数値と、ここまでの最良値（best-so-far）
+- **動かすもの**: 探索空間の分布から、独立に引いた点。履歴は使わない
+- **前進の判断**: 評価数に対して、最良値が下がること
 
-## grid searchに対する利点
+単純さが強みです。ほかの手法が本当に予算を節約しているかを測る、基準（baseline）になります。
 
-grid searchは、同じtrial数を各次元へ均等に割り当てます。
-重要な次元がごく一部だけなら、重要でない次元の組み合わせを何度も繰り返します。
+## 一手の意味
 
-random samplingでは各次元の値がtrialごとに変わります。
-そのため、重要な少数次元でも多様な値を試しやすくなります。
+各試行では、探索空間の分布 $p$ から、パラメータを1組引きます。
+
+$$
+x_t \sim p,\qquad y_t=f(x_t),\qquad \text{best}_T=\min_{t\le T}\,y_t
+$$
+
+この式は「毎回、同じ分布から独立に点を引いて評価し、$T$ 回目までの最小値を答えとする」と読みます。
+分布には、次のものがあります。一様分布（uniform）、対数一様分布（log-uniform）、カテゴリカル分布です。
+
+過去の目的関数値は、次の抽出に反映されません。
+履歴を使わないので、目的関数とパラメータの関係を表すモデルも置きません。
+TPEやBayesian Optimizationとは違い、代理モデルの仮定が外れる（model misspecification）問題は起きません。
+
+### grid searchとの違い
+
+grid searchは、同じ試行数を、各次元へ均等に割り当てます。
+重要な次元がごく一部なら、重要でない次元の組み合わせを、何度も繰り返します。
+
+Random Searchでは、各次元の値が試行ごとに変わります。
+そのため、重要な少数の次元でも、多様な値を試しやすくなります。
 ただし、次元の呪いを免れるわけではありません。
-高次元で有望な領域の体積が小さければ、random searchでも十分な被覆は保証されません。
+高次元で有望な領域の体積が小さければ、Random Searchでも十分な被覆は保証されません。
 
-## 並列性と履歴を使わないことの意味
+## 小さな例
 
-各trialが他のtrialの結果に依存しないため、random searchは完全に並列実行できます。
-workerの数だけ同時に評価でき、逐次的なsuggestion待ちは発生しません。
+### 点の散らばりと改善を図で見る
 
-一方で、acquisitionの最適化やsurrogateの更新は行いません。
-実装が単純な代わりに、履歴からの学習効果は得られません。
+![固定seedで48回samplingした点とbest-so-far。二次元の教育用objectiveであり、手法の一般的なrankingは示さない。](./media/random-search-coverage-execution.svg "Random Searchのsampling範囲とbest-so-far")
 
-## 同じbudgetで比較する
+同じ48 evaluationsを、左では「どこを試したか」、右では「best-so-farがいつ改善したか」として読めます。
+点は探索空間全体へ散りますが、履歴を使わないので、有望な領域へ次の点が寄っていくわけではありません。
 
-[acquisition・noise・Random Searchの比較](#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE)は、同じ初期designとdomainを使う固定教材です。
-seedとobjective evaluation budgetも揃えています。
-Random Searchのrunでは、提案点とbest-so-farを評価回数に沿って読みます。
-単一seed・1次元・10 evaluationの差から、手法の一般的なrankingは決めません。
+> **この図の範囲**
+> 次の数値例とは異なる、$[0,1]^2$ 上の固定目的関数とseed 7による教材です。
+> 高次元での被覆率やRandom Searchの一般性能を主張する図ではありません。
 
-## 向いている条件
+### 200回の履歴を数値で追う
+
+目的関数 $f(x_1,x_2)=(x_1-0.3)^2+(x_2+0.5)^2+0.05\sin(20x_1)$ を、$[-1,1]^2$ の範囲で最小化します。
+乱数の seed は 7 に固定し、一様分布から200回引きます。最初の5回です。
+
+| 試行 | 引いた点 $(x_1,\,x_2)$ | $f$ | その時点の最良値 |
+|---:|---|---:|---:|
+| 1 | $(0.250,\ 0.794)$ | 1.6301 | 1.6301 |
+| 2 | $(0.551,\ -0.550)$ | 0.0157 | 0.0157 |
+| 3 | $(-0.400,\ 0.747)$ | 1.9953 | 0.0157 |
+| 4 | $(-0.989,\ 0.642)$ | 2.9276 | 0.0157 |
+| 5 | $(0.594,\ -0.064)$ | 0.2449 | 0.0157 |
+
+試行1は、最初の点なので、そのまま最良値になります。
+試行2で、偶然よい点に当たり、最良値が $0.0157$ まで下がりました。
+試行3〜5は、前の結果を見ていないので、まったく関係のない場所に落ちています。最良値は変わりません。
+
+200回まで続けると、最良値が更新されたのは5回だけです。
+更新後の値は次のとおりです。
+
+- 試行1: $1.6301$
+- 試行2: $0.0157$
+- 試行87: $-0.0200$
+- 試行102: $-0.0281$
+- 試行136: $-0.0304$
+
+試行3から86までの84回は、更新のない区間です。
+最終的な最良点は $(0.240,\,-0.626)$ です。
+
+格子で調べた最小値は約 $-0.0462$（$x_1=0.241,\ x_2=-0.5$ 付近）なので、200回でも、最小値には届いていません。
+この数値は seed 固定の一例で、別の seed では変わります。seed 0〜19の20通りで、200回後の最良値は $-0.046$ から $0.007$ までばらつきました。
+
+## 向く条件・避ける条件
+
+向く条件です。
 
 | 条件 | 理由 |
 |---|---|
 | baseline・sanity checkとして使う | model misspecificationがなく、他手法の改善量を測る基準になるため |
 | parameter間の相関が低いHPO | 履歴を使う手法の優位性が出にくい設定のため |
-| 多数のworkerで並列実行できる | trial間に依存がなく完全並列できるため |
-| search spaceの理解が浅い初期段階 | model構築より先に大まかな挙動を把握できるため |
+| 多数のworkerで並列実行できる | trial間に依存がなく、完全並列できるため |
+| search spaceの理解が浅い初期段階 | model構築より先に、大まかな挙動を把握できるため |
 
-評価が安価で大量に実行できる場合は、random searchを候補にできます。
-極端に高次元で有望な領域に届きにくい場合は、model-based法やmulti-fidelity法と比較します。
+各試行が、ほかの試行の結果に依存しません。そのため、workerの数だけ同時に評価でき、逐次的な提案の待ち時間は発生しません。
+その代わり、獲得関数の最適化や、代理モデルの更新は行いません。履歴からの学習の効果は得られません。
+
+避ける、または切り替える条件です。
+
+- 極端に高次元で、有望な領域に届きにくい → model-based法やmulti-fidelity法と比べる。[高次元のblack-box最適化（PA015）](#/formulations/PA015)を確認する
+- 一回の評価が高価で、試せる回数が少ない → [ベイズ最適化](#/learn/bayesian-optimization)や[TPE](#/learn/tpe)。[高価な低次元評価（PA014）](#/formulations/PA014)を確認する
+- 途中の成績で、評価資源を再配分したい → [Hyperband / ASHA](#/learn/hyperband-asha)
+
+評価が安価で、大量に実行できる場合は、Random Searchを候補にできます。
+hyperparameterを選ぶ場面では、[hyperparameter optimization（PA039）](#/formulations/PA039)が入口になります。
 
 ## Python
+
+次の例は、上の目的関数に対して、Random Searchを200回実行します。
 
 ```python
 import numpy as np
@@ -93,36 +154,49 @@ def random_search(
 bounds = np.array([[-1.0, 1.0], [-1.0, 1.0]])
 best_x, best_value, history = random_search(n_trials=200, bounds=bounds, seed=7)
 print(best_x, best_value, history[-1])
+# [ 0.23984692 -0.62571323] -0.030399182852903606 -0.030399182852903606
 ```
 
-`history`はtrialごとのbest-so-farです。
-今回は最小化なので、値は増加せず単調に減ります。
-横ばいの区間が長ければ、追加trialの限界効用が下がっています。
+`history` は、試行ごとの最良値です。
+今回は最小化なので、値は増えず、単調に減ります。
+横ばいの区間が長ければ、追加の試行から得られる改善が小さくなっています。
 
-seedを固定しても、並列実行順序やtie-breakで結果が変わる場合があります。
-再現性の条件として並列度も記録します。
-OptunaのRandomSamplerやRay Tuneでは、sampling分布とseed policyを公式ドキュメントで確認します。
-利用versionも併記します。
+seedを固定しても、並列実行の順序やtie-breakで結果が変わる場合があります。
+再現性の条件として、並列度も記録します。
+OptunaのRandomSamplerやRay Tuneでは、抽出の分布とseedの方針を、公式ドキュメントで確認します。
+利用するversionも併記します。
 
 ## 診断値
 
-- best-so-far（evaluation数に対する改善曲線）
-- failed / invalid trial数
-- evaluation budgetの消費量
-- 次元ごとのsample coverage（範囲内にどれだけ分布しているか）
+| 診断値 | 見方 | 判断 |
+|---|---|---|
+| 最良値（best-so-far） | 評価数に対する改善の曲線 | 更新のない区間が長く続くなら、追加の試行の効果は小さい |
+| 失敗・無効な試行の数 | 値が返らなかった試行 | 多いなら、探索空間の範囲か分布を見直す |
+| 評価予算の消費量 | 使った評価数 | 予算に近づいたら、停止か別手法との比較へ |
+| 次元ごとの抽出の被覆（coverage） | 範囲内にどれだけ分布しているか | 偏っていたら、分布の設定を確認する |
 
 ## 失敗・切替の兆候
 
-- budgetを使い切ってもbest-so-farがほとんど改善しない
-- 高次元で有望な領域の体積が小さく、samplingが有効な組み合わせに当たらない
-- 明らかに相関の強いparameter間の関係を無視して非効率にsamplingし続けている
+| 症状 | 考えられる原因 | 対処・切替先 |
+|---|---|---|
+| 予算を使い切っても、最良値がほとんど改善しない | 有望な領域が狭い | 探索範囲を絞る。[TPE](#/learn/tpe)や[ベイズ最適化](#/learn/bayesian-optimization)へ |
+| 高次元で、有望な領域の体積が小さく、有効な組み合わせに当たらない | 次元の呪い | [PA015](#/formulations/PA015)の手法や、multi-fidelity法へ |
+| 相関の強いパラメータ間の関係を無視して、非効率に引き続けている | 独立な抽出は、パラメータ間の構造を使わない | 探索空間を変換する。履歴を使う手法へ |
 
-model-based法へ切り替えた後も、surrogateのcross validationを確認します。
-uncertaintyが較正されていない場合や、acquisitionが同じ点ばかり提案する場合は、model化を見直します。
-その場合はrandom searchのbaselineへ戻り、同じbudgetで比較します。
+model-based法へ切り替えた後も、代理モデルの交差検証（cross validation）を確認します。
+不確実性が較正されていない場合や、獲得関数が同じ点ばかり提案する場合は、モデル化を見直します。
+その場合は、Random Searchのbaselineへ戻り、同じ予算で比べます。
+
+## コラム: 同じ予算で比べる
+
+[獲得関数・noise・Random Searchの比較](#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE)は、同じ初期設計と定義域を使う固定教材です。
+seedと目的関数の評価予算も揃えています。
+Random Searchのrunでは、提案された点と最良値を、評価数に沿って読みます。
+単一のseed・1次元・10回の評価の差から、手法の一般的なrankingは決めません。
 
 ## 次に読む
 
-履歴を使ってsuggestionを絞る場合は、[TPE](#/learn/tpe)や[ベイズ最適化](#/learn/bayesian-optimization)へ進みます。
-中間成績で評価resourceを再配分する場合は、[Hyperband / ASHA](#/learn/hyperband-asha)を確認します。
-全体の選び分けは[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。
+- [hyperparameter optimization（PA039）](#/formulations/PA039)：Random Searchがよく使われる、学習の設定値を選ぶ問題
+- [TPE](#/learn/tpe)と[ベイズ最適化](#/learn/bayesian-optimization)：履歴を使って、次の提案を絞る
+- [Hyperband / ASHA](#/learn/hyperband-asha)：途中の成績で、評価資源を再配分する
+- [高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)：全体の選び分け

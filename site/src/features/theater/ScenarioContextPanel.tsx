@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { findEntity, relatedEntities } from "../../contracts/entity-links";
 import {
@@ -11,13 +12,15 @@ import {
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
-import { JourneyLink } from "../../state/journey-navigation";
+import { atlasStateFromSearch, JourneyLink } from "../../state/journey-navigation";
 import { scenarioFamilyId, scenarioRoute } from "./scenario-catalog";
 
 type Context = { journey?: LearningJourney; scenarios: VisualizationScenario[] };
 
 export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScenario }) {
   const links = useEntityLinks();
+  const { search } = useLocation();
+  const activeJourneyId = atlasStateFromSearch(search)?.journey?.journeyId;
   const [context, setContext] = useState<Context>();
   useEffect(() => {
     const controller = new AbortController();
@@ -29,8 +32,9 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
       if (!journeyResponse.ok || !scenarioResponse.ok) throw new Error("シナリオの関連情報を読み込めませんでした。");
       const journeys = parseLearningJourneyIndex(await journeyResponse.json());
       const scenarios = parseVisualizationScenarioIndex(await scenarioResponse.json());
+      const matchingJourneys = journeys.journeys.filter((journey) => journey.scenarios.some((item) => item.scenario_id === scenario.scenario_id));
       setContext({
-        journey: journeys.journeys.find((journey) => journey.scenarios.some((item) => item.scenario_id === scenario.scenario_id)),
+        journey: matchingJourneys.find((journey) => journey.journey_id === activeJourneyId) ?? matchingJourneys[0],
         scenarios: scenarios.scenarios,
       });
     };
@@ -38,7 +42,7 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
       if (!controller.signal.aborted) setContext({ scenarios: [] });
     });
     return () => controller.abort();
-  }, [scenario.scenario_id]);
+  }, [activeJourneyId, scenario.scenario_id]);
   const relatedComparisons = useMemo(() => {
     if (links.status !== "ready") return [];
     const entity = findEntity(links.index, "scenario", scenario.scenario_id);
@@ -72,7 +76,7 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
       </details>
       {context?.journey ? <details className="scenario-case-formulation">
         <summary>ケースの数式・制約を確認</summary>
-        <div>
+        <div tabIndex={0}>
           <h3>ケース: {context.journey.title_ja}</h3>
           <p>{context.journey.learning_objective}</p>
           <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>

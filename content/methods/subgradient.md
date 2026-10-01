@@ -7,116 +7,190 @@ title_en: Subgradient Method
 summary: 凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。
 source_ids: [S055, S056]
 prerequisites: [concept.convexity, method.gradient-descent]
-related_ids: [proximal-gradient, mirror-descent, fista]
+related_ids: [proximal-gradient, mirror-descent, fista, bundle-method]
 aliases: [/learn/subgradient]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
 凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。
 
 ## 30秒でつかむ
 
-Subgradient法は、微分できない点を避けるのではなく、凸関数を下から支えるsubgradientを一つ選んで進みます。
-毎回のobjectiveが下がるとは限らないため、best-so-farとstep scheduleを主な手がかりにします。
+屋根の稜線のように、折れ曲がった地形を下る場面を想像してください。
+稜線の真上には、いちばん急な下りが一つに決まりません。使える傾きの候補が、いくつも並びます。
+劣勾配法は、その候補から一つを選んで進みます。選んだ向きが、その一歩で必ず下るとは限りません。そこで、これまでに見た最高記録（最良値、best-so-far）を手帳に残します。
 
-- 見ているもの: current / best-so-far objective、subgradient、lower boundとgap
-- 動かしているもの: 現在点、step schedule、必要ならprojection
-- 前進の判断: best-so-farまたはgapが改善し、stepが理論上の条件に沿うこと
-- 恐れていること: saw-tooth、fixed stepの振動、遅いrate、scaleの不一致
+- **見るもの**: 現在の目的関数値、これまでの最良値、劣勾配、下界とギャップ（分かる場合）
+- **動かすもの**: 現在点、一手の長さの予定表（step schedule）、必要なら射影
+- **前進の判断**: 最良値またはギャップが改善し、一手の長さが理論の条件に沿っていること
 
-## 劣勾配とは何か
+微分できない点を避けるのではなく、凸関数を下から支える傾きを一つ選んで進む手法です。
+気をつける点は四つあります。目的値の鋸歯状の動き（saw-tooth）と、固定の一手長による振動があります。遅い収束率と、座標ごとの尺度の不一致もあります。
 
-凸関数 $f$ の点 $x$ でvector $g$ が
+## 一手の意味
+
+凸関数 $f$ の点 $x$ で、次の式をすべての $y$ で満たすベクトル $g$ を、劣勾配（subgradient）と呼びます。
 
 $$
 f(y)\ge f(x)+g^T(y-x)
 $$
 
-をすべての $y$ で満たすとき、$g$ はsubgradientです。滑らかな点では通常の勾配が唯一のsubgradientですが、$f(x)=|x|$ の $x=0$ では区間 $[-1,1]$ のすべてがsubgradientです。
+式は「$g$ を傾きにもつ直線が、$f$ の下に収まる」と言っています。
+滑らかな点では、通常の勾配が唯一の劣勾配です。$f(x)=|x|$ の $x=0$ では、区間 $[-1,1]$ のすべてが劣勾配です。
 
-更新は
+更新は次の式です。凸集合 $C$ の上で解きたいときは、射影 $\Pi_C$ を付けます。
 
 $$
 x_{k+1}=\Pi_C(x_k-\alpha_k g_k)
 $$
 
-で、必要ならconvex set $C$ へprojectionします。
+勾配降下法と同じ形ですが、$g_k$ が劣勾配である点が違います。
 
-## Gradient Descentとの違い
+### 勾配降下法との違い
 
-subgradient方向へ有限step進んでも、目的値が毎回下がるとは限りません。したがってcurrent objectiveだけでなくbest-so-farやergodic averageを追います。
+劣勾配の向きへ有限の一手を進んでも、目的値が毎回下がるとは限りません。
+そのため、現在の目的値だけでなく、最良値や平均（ergodic average）を追います。
 
-代表的なstep schedule:
+一手の長さ $\alpha_k$ には、代表的な予定表があります。
 
-- diminishing: $\alpha_k\to0$ かつ $\sum_k\alpha_k=\infty$
-- square summable: $\sum_k\alpha_k^2<\infty$
-- Polyak step: optimal valueの下界が分かる場合
-- fixed step: 誤差neighborhoodへ入るが厳密収束しない場合
+- 減衰する一手（diminishing）: $\alpha_k\to0$ かつ $\sum_k\alpha_k=\infty$
+- 二乗和が有限な一手（square summable）: $\sum_k\alpha_k^2<\infty$
+- Polyakの一手: 最適値の下界が分かるときに使う
+- 固定の一手: 誤差の近傍までは入るが、厳密には収束しないことがある
+
+## 小さな例
+
+勾配降下法の二次関数と同じ位置に、折れ目をもつ関数を置きます。
+
+$$
+f(x,y)=|x-1|+20\,|y+2|
+$$
+
+最小点は $(1,\,-2)$、値は $0$ です。$y$ 方向の傾きの大きさが $20$ で、$x$ 方向の20倍あります。二次関数の $\kappa=20$ と同じ、尺度の差を持たせています。
+劣勾配は $(\mathrm{sign}(x-1),\ 20\,\mathrm{sign}(y+2))$ で、折れ目の上では $0$ を選びます。
+
+初期点 $(4,\,3)$ から、一手の長さを $\alpha_k=1/\sqrt{k+1}$ として追います。
+
+| $k$ | 現在点 | 劣勾配 | 目的値 | 最良値 |
+|---:|---|---|---:|---:|
+| 0 | $(4,\,3)$ | $(1,\,20)$ | 103 | 103 |
+| 1 | $(3,\,-17)$ | $(1,\,-20)$ | 302 | 103 |
+| 2 | $(2.293,\,-2.858)$ | $(1,\,-20)$ | 18.45 | 18.45 |
+| 3 | $(1.716,\,8.689)$ | $(1,\,20)$ | 214.5 | 18.45 |
+| 4 | $(1.216,\,-1.311)$ | $(1,\,20)$ | 14.0 | 14.0 |
+| 5 | $(0.768,\,-10.255)$ | $(-1,\,-20)$ | 165.3 | 14.0 |
+| 6 | $(1.177,\,-2.090)$ | $(1,\,-20)$ | 1.98 | 1.98 |
+
+現在の目的値は、$103\to302\to18.5\to214.5\to14.0\to165.3\to1.98$ と大きく上下します。
+$y$ 方向の劣勾配が $20$ なので、一手ごとに $y$ が $20\alpha_k$ だけ動き、折れ目の $y=-2$ を何度も飛び越えるためです。飛び越すたびに劣勾配の符号が反転し、目的値が跳ね上がります。
+
+下がり続けるのは、最良値だけです。最良値は $103\to18.45\to14.0\to1.98$ と進み、上がることはありません。
+一手の長さが小さくなるにつれて、飛び越える幅も縮みます。1000回後の最良値は約 $1.6\times10^{-5}$ です。
+
+一手の長さを固定して $1$ にすると、目的値は $103,\ 302,\ 101,\ 300,\ 100,\ 300,\ \dots$ と往復します。$y$ が $3$ と $-17$ を行き来し、最良値は $100$ から下がりません。
+固定の一手では、誤差の近傍までしか入れません。往復を収束と読まないために、最良値とギャップを見ます。
+
+## 向く条件・避ける条件
+
+劣勾配法は、凸で非滑らかな目的に、最小限の道具で使える手法です。ただし、遅さを前提に選びます。
+
+向く条件です。
+
+- 凸だが非滑らかな目的である（[非滑らかな凸複合の最小化](#/formulations/PA010)）
+- 近接作用素（prox）を計算しにくいが、劣勾配は得られる
+- 巨大な問題で、安価な一反復を優先したい
+- 高精度の解より、粗い解や下界の進みが重要である
+- Lagrange双対の更新である
+
+避ける、または切り替える条件です。
+
+- 近接作用素が計算できる構造がある → [近接勾配法](#/learn/proximal-gradient)を比較する
+- 滑らかで、条件数が支配的である → 勾配法や準Newton法を比較する（[滑らかな低次元無制約](#/formulations/PA006)）
+- 劣勾配の情報を蓄えて安定させたい → [Bundle法](#/learn/bundle-method)を検討する
+- 単体や確率など、ユークリッド距離が合わない領域である → [Mirror Descent](#/learn/mirror-descent)を検討する
+- 非凸で、凸の理論をそのまま当てはめたい → 理論の適用範囲を見直す（[一般非滑らか局所](#/formulations/PA011)）
 
 ## Python
+
+次の例は、上の関数に劣勾配法を適用し、最良値を記録する最小例です。
 
 ```python
 import numpy as np
 
 
-def objective(x: np.ndarray) -> float:
-    return float(abs(x[0] - 2.0) + 0.2 * (x[0] + 1.0) ** 2)
+def objective(p: np.ndarray) -> float:
+    return float(abs(p[0] - 1.0) + 20.0 * abs(p[1] + 2.0))
 
 
-def subgradient(x: np.ndarray) -> np.ndarray:
-    shifted = x[0] - 2.0
-    absolute_part = 0.0 if shifted == 0.0 else np.sign(shifted)
-    return np.array([absolute_part + 0.4 * (x[0] + 1.0)])
+def subgradient(p: np.ndarray) -> np.ndarray:
+    # 折れ目では 0 を選ぶ。oracle が返す劣勾配の選び方も、再現条件に含める。
+    return np.array([np.sign(p[0] - 1.0), 20.0 * np.sign(p[1] + 2.0)])
 
 
-x = np.array([-4.0])
-best_x = x.copy()
-best_value = objective(x)
+def run(step, iterations):
+    p = np.array([4.0, 3.0])
+    best_value = objective(p)
+    rows = []
+    for k in range(iterations):
+        value = objective(p)
+        best_value = min(best_value, value)
+        rows.append((k, p.copy(), value, best_value))
+        p = p - step(k) * subgradient(p)
+    return rows
 
-for iteration in range(1, 5_001):
-    step = 1.0 / np.sqrt(iteration)
-    x = x - step * subgradient(x)
-    value = objective(x)
-    if value < best_value:
-        best_x = x.copy()
-        best_value = value
 
-print(best_x, best_value)
+rows = run(lambda k: 1.0 / np.sqrt(k + 1), 1_000)
+for k, p, value, best in rows[:7]:
+    print(k, np.round(p, 3), round(value, 2), round(best, 2))
+# 0 [4. 3.] 103.0 103.0
+# 1 [  3. -17.] 302.0 103.0
+# 2 [ 2.293 -2.858] 18.45 18.45
+# 3 [1.716 8.689] 214.5 18.45
+# 4 [ 1.216 -1.311] 14.0 14.0
+# 5 [  0.768 -10.255] 165.33 14.0
+# 6 [ 1.177 -2.09 ] 1.98 1.98
+print("1000 回後の最良値", rows[-1][3])
+# 1000 回後の最良値 1.6159782813662815e-05
+
+rows = run(lambda k: 1.0, 1_000)
+print("固定の一手 1 の最良値", rows[-1][3])
+# 固定の一手 1 の最良値 100.0
 ```
 
-非滑らかな点で0を選ぶruleは一例です。oracleが返すsubgradientの選び方も再現条件に含めます。
+出力の前半が、上の表と一致します。目的値は上下しますが、最良値は下がる一方です。
+反復を増やすと、最良値はさらに下がりますが、改善は次第に遅くなります。
 
-## 最初に見る診断値
+## 診断値
 
-- current / best-so-far objective
-- step size
-- subgradient norm
-- projected step norm
-- running average objective
-- lower boundとgap（利用可能な場合）
-- constraint violation
-- iteration / oracle evaluation budget
+目的値が鋸歯状に動くこと自体は、異常ではありません。見分けたいのは三つの場合です。最良値が長く改善しない場合、一手が大きすぎる場合、ノイズの床に着いた場合です。そのために、次を記録します。
 
-目的値がsaw-tooth状に動くこと自体は異常ではありません。best-so-farが長時間改善しない、stepが大きすぎる、またはnoise floorへ達したかを確認します。
-
-## 向いている条件
-
-- convexだが非滑らかな目的
-- proxを計算しにくいがsubgradientは得られる
-- 巨大problemで安価な一反復を優先
-- exact高精度より粗い解やlower-bound progressが重要
-- Lagrangian dualの更新
+- 現在の目的値と、最良値
+- 一手の長さ
+- 劣勾配のノルム
+- 射影した一手のノルム
+- 目的値の移動平均（running average）
+- 下界とギャップ（分かる場合）
+- 制約違反
+- 反復回数と、oracleの評価回数の予算
 
 ## 失敗・切替の兆候
 
-- proximableな構造がある → [近接勾配法](#/learn/proximal-gradient)を比較する
-- smoothで条件数が支配 → gradient / quasi-Newtonを比較する
-- 非凸でsubgradient理論をそのまま適用 → 理論の適用範囲を見直す
-- fixed stepの振動を収束と誤認 → best-so-far、gap、stepを確認する
-- stoppingをcurrent objectiveだけで判定 → best-so-farまたはlower boundを併用する
-- scaleが違う座標へ同じEuclidean step → scalingまたはparameterizationを見直す
+- 近接作用素が計算できる構造がある → 劣勾配法は構造を使っていない → [近接勾配法](#/learn/proximal-gradient)を比較する
+- 滑らかで、条件数が支配的である → 劣勾配より曲率を使える → 勾配法や準Newton法を比較する
+- 非凸なのに、劣勾配の理論をそのまま適用している → 収束の保証が成り立たない → 理論の適用範囲を見直す
+- 固定の一手の振動を、収束と誤認している → 誤差の近傍に留まっている → 最良値、ギャップ、一手の長さを確認する
+- 現在の目的値だけで停止を判定している → 鋸歯状の動きで誤判定する → 最良値や下界を併用する
+- 尺度の違う座標に、同じユークリッドの一手を使っている → 劣勾配の大きい座標が振動し、ほかの座標が進まない → 尺度や変数の取り方を見直す
 
 ::: warning
-劣勾配法の理論rateは一般に遅く、高精度解には多数の反復が必要です。「微分不要法」ではなく、凸解析のsubgradient oracleを使う方法として位置付けます。
+劣勾配法の理論上の収束率は、一般に遅く、高精度の解には多数の反復が必要です。
+「微分不要法」ではなく、凸解析の劣勾配のoracleを使う方法として位置づけます。
 :::
+
+## 次に読む
+
+- [Bundle法](#/learn/bundle-method)：過去の劣勾配を束ねて、より安定した局所モデルを作る方法
+- [Mirror Descent](#/learn/mirror-descent)：距離の測り方を変え、単体などの領域に合わせる方法
+- [近接勾配法](#/learn/proximal-gradient)：近接作用素を使える構造での一手
+- [非滑らかな凸複合の最小化](#/formulations/PA010)：この手法が解く問題の標準形

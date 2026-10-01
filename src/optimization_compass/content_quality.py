@@ -7,6 +7,9 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from optimization_compass.content_models import ContentPage
+from optimization_compass.content_skeletons import SKELETONS, skeleton_gaps, skeleton_kind
+
+FORMULATION_SECTIONS = SKELETONS["formulation"]
 
 MINIMUM_CONCEPT_SUMMARY_CHARACTERS = 35
 MINIMUM_CONCEPT_BODY_CHARACTERS = 1_200
@@ -43,6 +46,27 @@ _NONCANONICAL_HEADINGS = {
     "次に見る": "次に読む",
 }
 _META_PHRASES = ("本稿では", "このページでは", "要するに")
+# Author work reports: readers need the result and how to check it, not what the author did.
+_WORK_REPORT_PHRASES = ("確かめました", "検算", "確認しました", "実行した値", "この教材のため")
+# Pasted program output such as 2.500000; meaningful digits are enough in prose and tables.
+_OVERPRECISE_NUMBER_PATTERN = re.compile(r"(?<![\d.])\d+\.\d{5,}(?![\d.])")
+_INLINE_MATH_PATTERN = re.compile(r"\$[^$]+\$")
+# Starting a line with one of these ties it to the previous sentence, so it breaks a choppy run.
+_CONNECTIVES = (
+    "だから",
+    "ところが",
+    "つまり",
+    "しかし",
+    "ただし",
+    "そのため",
+    "したがって",
+    "一方",
+    "すると",
+    "このため",
+    "なぜなら",
+    "逆に",
+)
+CHOPPY_RUN_LINES = 6
 
 
 @dataclass(frozen=True)
@@ -78,6 +102,8 @@ def public_content_routes(
     *,
     gallery_ids: Iterable[str] = (),
     comparison_ids: Iterable[str] = (),
+    formulation_ids: Iterable[str] = (),
+    path_ids: Iterable[str] = (),
 ) -> frozenset[str]:
     """Return public routes that can be proven from canonical authoring inputs."""
     routes: set[str] = set()
@@ -90,6 +116,9 @@ def public_content_routes(
             routes.add(f"#/methods/{page.method_id}")
     routes.update(f"#/gallery/{case_id}" for case_id in gallery_ids)
     routes.update(f"#/compare/{comparison_id}" for comparison_id in comparison_ids)
+    # Every problem archetype has a formulation page, with or without an article.
+    routes.update(f"#/formulations/{problem_id}" for problem_id in formulation_ids)
+    routes.update(f"#/paths/{path_id}" for path_id in path_ids)
     return frozenset(routes)
 
 
@@ -112,15 +141,31 @@ def inspect_concept(page: ContentPage, known_routes: frozenset[str]) -> ConceptQ
     )
 
 
+def is_formulation_article(page: ContentPage) -> bool:
+    return skeleton_kind(page) == "formulation"
+
+
+def formulation_skeleton_gaps(page: ContentPage) -> tuple[str, ...]:
+    """Return the problems with a formulation article's section skeleton, or an empty tuple."""
+    return skeleton_gaps(page) if is_formulation_article(page) else ()
+
+
 def require_published_concept_quality(
     pages: Iterable[ContentPage], known_routes: frozenset[str]
 ) -> tuple[ConceptQualityRow, ...]:
     """Reject published concepts that expose a visibly incomplete learning surface."""
-    rows = tuple(
-        inspect_concept(page, known_routes)
-        for page in pages
-        if page.kind == "concept" and page.status == "published"
-    )
+    published = [page for page in pages if page.kind == "concept" and page.status == "published"]
+    skeleton_failures = [
+        f"{page.content_id} ({', '.join(gaps)})"
+        for page in published
+        if (gaps := formulation_skeleton_gaps(page))
+    ]
+    if skeleton_failures:
+        raise ValueError(
+            "formulation articles must follow the formulation skeleton: "
+            + "; ".join(skeleton_failures)
+        )
+    rows = tuple(inspect_concept(page, known_routes) for page in published)
     failures = [row for row in rows if not row.meets_floor]
     if failures:
         detail = "; ".join(
@@ -138,57 +183,64 @@ def style_warnings(page: ContentPage) -> tuple[StyleWarning, ...]:
     body = _FENCED_CODE_PATTERN.sub("", page.body)
     body = _DISPLAY_MATH_PATTERN.sub("", body)
     warnings: list[StyleWarning] = []
+
+    def warn(code: str, line_number: int, detail: str) -> None:
+        warnings.append(StyleWarning(page.content_id, code, line_number, detail))
+
+    choppy_run: list[int] = []
+
+    def close_choppy_run() -> None:
+        if len(choppy_run) >= CHOPPY_RUN_LINES:
+            warn("prose.choppy", choppy_run[0], f"{len(choppy_run)} one-sentence lines")
+        choppy_run.clear()
+
     for line_number, raw_line in enumerate(body.splitlines(), start=1):
         line = raw_line.strip()
+        visible = _MARKDOWN_LINK_PATTERN.sub(r"\1", line)
+        visible = re.sub(r"`[^`]+`", "code", visible)
+        if line.startswith("|"):
+            # Tables are skipped by the prose checks, but pasted output digits still show there.
+            for number in _overprecise_numbers(visible):
+                warn("number.overprecise", line_number, number)
         if not line or line.startswith(("|", ":::", "![")):
+            close_choppy_run()
             continue
         if line.startswith("## "):
+            close_choppy_run()
             heading = line.removeprefix("## ").strip()
             replacement = _NONCANONICAL_HEADINGS.get(heading)
             if replacement:
-                warnings.append(
-                    StyleWarning(
-                        page.content_id,
-                        "heading.noncanonical",
-                        line_number,
-                        f"{heading} -> {replacement}",
-                    )
-                )
+                warn("heading.noncanonical", line_number, f"{heading} -> {replacement}")
             continue
-        visible = _MARKDOWN_LINK_PATTERN.sub(r"\1", line)
-        visible = re.sub(r"`[^`]+`", "code", visible)
-        for sentence in _SENTENCE_PATTERN.findall(visible):
-            sentence = sentence.strip()
+        for number in _overprecise_numbers(visible):
+            warn("number.overprecise", line_number, number)
+        sentences = [sentence.strip() for sentence in _SENTENCE_PATTERN.findall(visible)]
+        for sentence in sentences:
             if len(sentence) > 90:
-                warnings.append(
-                    StyleWarning(
-                        page.content_id,
-                        "sentence.long",
-                        line_number,
-                        f"{len(sentence)} characters",
-                    )
-                )
+                warn("sentence.long", line_number, f"{len(sentence)} characters")
             comma_count = sentence.count("、")
             if comma_count >= 3:
-                warnings.append(
-                    StyleWarning(
-                        page.content_id,
-                        "sentence.commas",
-                        line_number,
-                        f"{comma_count} Japanese commas",
-                    )
-                )
+                warn("sentence.commas", line_number, f"{comma_count} Japanese commas")
             for phrase in _META_PHRASES:
                 if phrase in sentence:
-                    warnings.append(
-                        StyleWarning(
-                            page.content_id,
-                            "prose.meta",
-                            line_number,
-                            phrase,
-                        )
-                    )
-    return tuple(warnings)
+                    warn("prose.meta", line_number, phrase)
+            for phrase in _WORK_REPORT_PHRASES:
+                if phrase in sentence:
+                    warn("prose.work-report", line_number, phrase)
+        is_paragraph = not line.startswith(("#", "-", "*", ">")) and not re.match(r"\d+\. ", line)
+        if not is_paragraph or len(sentences) != 1:
+            close_choppy_run()
+            continue
+        if visible.startswith(_CONNECTIVES):
+            # A connective ties this line to the previous one; it may still open the next run.
+            close_choppy_run()
+        choppy_run.append(line_number)
+    close_choppy_run()
+    return tuple(sorted(warnings, key=lambda warning: warning.line))
+
+
+def _overprecise_numbers(visible: str) -> list[str]:
+    return _OVERPRECISE_NUMBER_PATTERN.findall(_INLINE_MATH_PATTERN.sub("", visible))
 
 
 def language_contract_warnings(page: ContentPage) -> tuple[StyleWarning, ...]:
@@ -278,6 +330,8 @@ def render_content_quality_report(
             "- The concept floor is a hard publication gate.",
             "- Sentence length, comma density, meta prose, and legacy headings are "
             "review warnings.",
+            "- Author work reports, over-precise pasted numbers (five or more decimals), and "
+            f"runs of {CHOPPY_RUN_LINES}+ unconnected one-sentence lines are review warnings.",
             "- Existing warnings remain visible without failing unrelated changes.",
             "- `ready content` rejects warnings on the article being prepared, so changed articles "
             "do not add new prose debt.",

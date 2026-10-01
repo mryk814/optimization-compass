@@ -40,7 +40,7 @@ test("日本語IMEの変換確定まで検索条件を更新しない", async ({
 test("主要導線を常設し、探索導線を必要なときだけ展開する", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
   const navigation = page.getByRole("navigation", { name: "主要ナビゲーション" });
-  await expect(navigation.getByRole("link")).toHaveText(["条件で診断", "事例を見る", "手法を学ぶ"]);
+  await expect(navigation.getByRole("link")).toHaveText(["道筋", "辞書", "手法", "診断", "事例"]);
 
   await expect(navigation.getByRole("link", { name: "横断検索" })).not.toBeVisible();
   await navigation.getByText("探索", { exact: true }).click();

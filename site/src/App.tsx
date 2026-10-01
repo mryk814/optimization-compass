@@ -20,6 +20,7 @@ import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
+import { PathStepNavigation } from "./features/paths/PathStepNavigation";
 import { THEATER_ROUTES } from "./features/theater/theater-routes";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { JourneyNavigation } from "./state/journey-navigation";
@@ -57,6 +58,18 @@ const SourceDetailPage = lazy(() => import("./features/evidence/SourcePages").th
 const FailureModePage = lazy(() => import("./features/failures/FailureModePage").then(
   (module) => ({ default: module.FailureModePage }),
 ));
+const FormulationIndexPage = lazy(() => import("./features/formulations/FormulationPages").then(
+  (module) => ({ default: module.FormulationIndexPage }),
+));
+const FormulationPage = lazy(() => import("./features/formulations/FormulationPages").then(
+  (module) => ({ default: module.FormulationPage }),
+));
+const PathIndexPage = lazy(() => import("./features/paths/PathPages").then(
+  (module) => ({ default: module.PathIndexPage }),
+));
+const PathPage = lazy(() => import("./features/paths/PathPages").then(
+  (module) => ({ default: module.PathPage }),
+));
 const GalleryPage = lazy(() => import("./features/gallery/GalleryPage").then(
   (module) => ({ default: module.GalleryPage }),
 ));
@@ -92,10 +105,13 @@ const TheaterIndexPage = lazy(() => import("./features/theater/TheaterIndexPage"
   (module) => ({ default: module.TheaterIndexPage }),
 ));
 
+// Short nouns keep all primary destinations visible at 375px: learn first, then solve.
 const primaryNavigation = [
-  { label: "条件で診断", to: "/diagnose", matchPaths: ["/diagnose"] },
-  { label: "事例を見る", to: "/gallery", matchPaths: ["/gallery"] },
-  { label: "手法を学ぶ", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  { label: "道筋", to: "/paths", matchPaths: ["/paths"] },
+  { label: "辞書", to: "/formulations", matchPaths: ["/formulations"] },
+  { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
+  { label: "事例", to: "/gallery", matchPaths: ["/gallery"] },
 ] as const;
 
 const exploreNavigation = [
@@ -107,8 +123,8 @@ const exploreNavigation = [
 ] as const;
 
 const secondaryHomeLinks = [
+  { label: "手法・概念を読む", to: "/learn" },
   { label: "問題構造をたどる", to: "/map" },
-  { label: "手法・概念を学ぶ", to: "/learn" },
   { label: "動きを見る", to: THEATER_ROUTES.index },
   { label: "比較条件を揃える", to: COMPARE_LAB_ROUTE },
   { label: "横断して検索", to: "/search" },
@@ -150,11 +166,25 @@ function HomePage() {
         <p className="eyebrow">Optimization Compass</p>
         <h1>最適化したい問いを、問題の形にする</h1>
         <p>
-          現実の問いを変数・目的・制約に整理し、候補・除外理由・失敗の兆候・根拠を確認できるAtlasです。
+          最適化は「何を決め、何を良くし、何を守るか」の形で理解できます。形を辞書で引き、問いの順路で学び、自分の問題に当てはめられるAtlasです。
         </p>
-        <div className="home-primary-actions" aria-label="最初に選ぶ入口">
-          <Link className="home-primary-action" to="/diagnose">条件から診断を始める</Link>
-          <Link className="home-secondary-action" to="/gallery">実例から探す</Link>
+        <div className="home-mode-grid">
+          <section aria-labelledby="home-mode-learn" className="home-mode home-mode-learn">
+            <h2 id="home-mode-learn">学ぶ</h2>
+            <p>定式化の形と、形ごとの解き方を、問いの順に理解する。</p>
+            <div className="home-primary-actions" aria-label="学ぶ入口">
+              <Link className="home-primary-action" to="/paths">道筋から学び始める</Link>
+              <Link className="home-secondary-action" to="/formulations">定式化の辞書を引く</Link>
+            </div>
+          </section>
+          <section aria-labelledby="home-mode-solve" className="home-mode home-mode-solve">
+            <h2 id="home-mode-solve">解く</h2>
+            <p>自分の問題の条件から、候補・選ばない理由・根拠をたどる。</p>
+            <div className="home-primary-actions" aria-label="最初に選ぶ入口">
+              <Link className="home-primary-action" to="/diagnose">条件から診断を始める</Link>
+              <Link className="home-secondary-action" to="/gallery">実例から探す</Link>
+            </div>
+          </section>
         </div>
       </header>
 
@@ -364,10 +394,15 @@ function AppShell() {
       <main id="main-content" tabIndex={-1}>
         <SafeBackButton />
         <JourneyNavigation />
+        <PathStepNavigation placement="top" />
         <Suspense fallback={<p className="route-loading" role="status">画面を読み込んでいます…</p>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/map" element={<MapPage />} />
+            <Route path="/formulations" element={<FormulationIndexPage />} />
+            <Route path="/formulations/:problemId" element={<FormulationPage />} />
+            <Route path="/paths" element={<PathIndexPage />} />
+            <Route path="/paths/:pathId" element={<PathPage />} />
             <Route path="/diagnose" element={<DiagnosePage />} />
             <Route path="/methods/:methodId" element={<MethodPage />} />
             <Route path="/traces/:traceId" element={<TraceDemoPage />} />
@@ -392,6 +427,7 @@ function AppShell() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
+        <PathStepNavigation placement="bottom" />
       </main>
       <footer className="site-footer">
         <Link aria-live="polite" to="/data">Dataset {datasetVersion ?? "…"}</Link>

@@ -7,101 +7,125 @@ title_en: Covariance Matrix Adaptation Evolution Strategy
 summary: 関数値の順位から探索分布の平均・global step size・共分散を更新し、連続black-boxの有望な方向とscaleを学ぶpopulation法です。
 source_ids: [S032, S058]
 prerequisites: [concept.derivative-free]
-related_ids: [concept.derivative-free, multi-objective, differential-evolution, particle-swarm]
+related_ids: [concept.derivative-free, multi-objective, differential-evolution, particle-swarm, family.global-search]
 visualization_ids: []
 comparison_ids: []
 aliases: [/learn/cma-es]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
 関数値の順位から探索分布の平均・global step size・共分散を更新し、連続black-boxの有望な方向とscaleを学ぶpopulation法です。
 
-## 点ではなく分布を更新する
+## 30秒でつかむ
 
-CMA-ESは概念的に
+暗い部屋で、目標を狙って小石を投げるところを想像してください。
+最初は、狙いをつけた点の周りに、円を描くように投げます。よく当たった数個の位置を見て、狙う中心を寄せます。
+当たりが細長く並んでいれば、次はその向きに沿って細長く投げます。
+
+- **見るもの**: 集団（population）の各個体の目的関数値の順位
+- **動かすもの**: 個体を生む正規分布の平均・全体の歩幅・共分散
+- **前進の判断**: 集団の最良値と中央値が下がり、歩幅が早く潰れないこと
+
+点を一つずつ動かす手法ではありません。動かすのは「どこを、どれだけの広さで、どの向きに探すか」という分布です。
+
+## 一手の意味
+
+一世代（generation）では、正規分布から個体をまとめて生み、順位の良い個体で分布を作り直します。
+分布は概念的に次のように書けます。
 
 $$
 x_i \sim \mathcal{N}(m,\sigma^2 C)
 $$
 
-からpopulationをsampleし、目的値の良い個体を使って、
+この式は「平均 $m$ の周りに、全体の歩幅 $\sigma$ と共分散 $C$ で決まる広がりで、個体 $x_i$ を生む」と読みます。
+$C$ は変数間の相関と、探索楕円の向きを表します。$\sigma$ は全体の探索の尺度（scale）を表します。
 
-- mean $m$
-- step size $\sigma$
-- covariance $C$
+1. $\lambda$ 個の個体を生み、目的関数を評価する
+2. 値の良い順に並べ、上位 $\mu$ 個を選ぶ
+3. 上位の重み付き平均で、平均 $m$ を動かす
+4. 平均が動いた方向の履歴も使って、$\sigma$ と $C$ を更新する
 
-を更新します。$C$が変数間の相関と探索ellipseの向きを、$\sigma$が全体の探索scaleを表します。
+上位個体の重みは、値そのものでなく順位で決まります。
+そのため、目的関数に単調変換をかけても順位は変わらず、比較的頑健です。ただし、制約・noise・評価の失敗・上下限の扱いは別に必要です。
+$\sigma$ と $C$ の更新式の細部は、原論文とチュートリアルにあります。
 
-function valueの絶対差よりrankingを主に使うため、単調変換に比較的頑健です。ただし、constraint、noise、failure、boundsの扱いは別途必要です。
+## 小さな例
 
-## 可視化で見るもの
+目的関数 $f(x_1,x_2)=(x_1-1)^2+9(x_2-2)^2$ を、初期の平均 $(0,0)$、$\sigma=0.5$ から最小化します。最小点は $(1,2)$ で、値は $0$ です。
+`cma` の標準では、2変数の集団は $\lambda=6$ 個体、上位 $\mu=3$ 個体です。上位の重みは順に $0.637$、$0.285$、$0.078$ です。
+乱数の seed は 7 に固定しました。
 
-2Dでは、
+世代1で生まれた6個体を、値の良い順に並べます。
 
-- population points
-- selected elite
-- mean
-- covariance ellipse
-- step-size history
-- best-so-far
-- population diversity
+| 順位 | 個体 $(x_1,x_2)$ | $f$ | 重み |
+|---:|---|---:|---:|
+| 1 | $(0.509,\ 0.300)$ | 26.243 | 0.637 |
+| 2 | $(0.016,\ 0.204)$ | 30.006 | 0.285 |
+| 3 | $(-0.394,\ 0.001)$ | 37.907 | 0.078 |
+| 4 | $(-0.313,\ -0.086)$ | 40.877 | 0 |
+| 5 | $(0.845,\ -0.233)$ | 44.900 | 0 |
+| 6 | $(0.000,\ -0.877)$ | 75.515 | 0 |
 
-を同期すると、地形の谷に合わせてellipseが回転・伸縮する様子を読めます。ellipseが小さくなったことは大域最適性の証明ではありません。
+新しい平均は、上位3個体の重み付き平均です。
+計算すると、次のようになります。
 
-## 初期sigmaの意味
+$$
+0.637\begin{pmatrix}0.509\\0.300\end{pmatrix}+0.285\begin{pmatrix}0.016\\0.204\end{pmatrix}+0.078\begin{pmatrix}-0.394\\0.001\end{pmatrix}\approx\begin{pmatrix}0.298\\0.249\end{pmatrix}
+$$
 
-- 小さすぎる: 初期mean近傍だけを局所探索しやすい
-- 大きすぎる: boundsやinvalid領域へ多数sampleしやすい
-- variable scaleが違う: 単一sigmaでは一部座標に不適切
+平均の値は $f=37$ から $28.08$ へ下がりました。
 
-変数を無次元化する、初期covarianceを設計する、bounds handlingを確認することが重要です。
+数世代の推移です。
 
-## Constraint handling
+| 世代 | 平均 $m$ | $f(m)$ | 歩幅 $\sigma$ | 共分散の非対角成分 $C_{12}$ |
+|---:|---|---:|---:|---:|
+| 0 | $(0,\ 0)$ | 37.00 | 0.500 | 0 |
+| 1 | $(0.298,\ 0.249)$ | 28.08 | 0.462 | 0.135 |
+| 2 | $(0.826,\ 0.623)$ | 17.08 | 0.592 | 0.599 |
+| 3 | $(1.237,\ 1.668)$ | 1.05 | 0.972 | 0.783 |
 
-代表的な方法:
+平均は、最小点 $(1,2)$ の方向へ寄っていきます。
+最小点は初期の平均から見て右上にあります。$C_{12}$ が正になり、探索楕円が右上がりに傾いたことと対応します。
+歩幅は世代2以降、平均が同じ向きへ進むあいだ広がっています。
 
-- penalty
-- repair / projection
-- rejection / resampling
-- feasibility ranking
-- augmented Lagrangian variant
-- constrained transformation
+平均の値は単調には下がりません。この seed では、世代4に $f(m)$ が $1.05$ から $1.58$ へ上がります。
+平均は最良の個体でなく、上位個体の重み付き平均だからです。この数値は seed 固定の一例で、別の seed では変わります。
 
-penaltyで低目的値のinfeasible点を誤ってbestにしないよう、objectiveとconstraint violationを別に記録します。
+## 向く条件・避ける条件
 
-## Noiseとrestart
-
-noiseによりrankingが入れ替わる場合、
-
-- resampling
-- repeated evaluation
-- larger population
-- noise handling option
-- uncertainty-aware stopping
-
-を検討します。multimodal problemではIPOP / BIPOPなどrestart strategyがありますが、総evaluation budgetを分割して報告します。
-
-## 向いている条件
+向く条件です。
 
 - 連続・非凸・black-box
-- 勾配がない、信用できない、または不連続がある
-- moderate dimension
-- population evaluationを並列化できる
-- 局所的な勾配法の初期値依存を緩和したい
-- 最適性certificateより良いcandidateが必要
+- 勾配がない、信用できない、または目的関数に不連続がある
+- 中程度の次元
+- 集団の評価を並列にできる
+- 局所的な勾配法の、初期値への依存を和らげたい
+- 最適性の証明より、良い候補が必要
 
-## Alternative-first
+避ける、または切り替える条件です。
 
-- 勾配が信頼できる → BFGS / L-BFGS-B
-- 残差Jacobianがある → nonlinear least squares
-- 1評価が極端に高価 → Bayesian Optimization
-- 離散・論理変数 → CP-SAT / MIP / GA encoding
-- low-dimensional local DFO → Nelder–Mead / MADS
+- 勾配が信頼できる → [BFGS](#/learn/bfgs)や[L-BFGS-B](#/learn/lbfgsb)
+- 残差のJacobianがある → [非線形最小二乗](#/learn/concept.nonlinear-least-squares)
+- 一回の評価が極端に高価 → [ベイズ最適化](#/learn/bayesian-optimization)。[高価な低次元評価（PA014）](#/formulations/PA014)を確認する
+- 離散変数や論理変数 → [CP-SAT](#/learn/cp-sat)、混合整数計画、または[遺伝的アルゴリズム](#/learn/genetic-algorithm)の符号化
+- 低次元の局所的な微分なし探索で十分 → [Nelder–Mead](#/learn/method.nelder-mead)や[MADS](#/learn/mads)
+
+### 初期の歩幅 $\sigma$ の意味
+
+初期の $\sigma$ は、最初にどこまで探すかを決めます。
+
+- 小さすぎる: 初期の平均の近くだけを局所探索しやすい
+- 大きすぎる: 上下限や無効な領域へ、多くの個体が落ちやすい
+- 変数の尺度が違う: 一つの $\sigma$ では、一部の座標に合わない
+
+変数を無次元化する、初期の共分散を設計する、上下限の扱いを確認することが大切です。
 
 ## Python
+
+Rosenbrock関数を、上下限つきで `cma.fmin` により解きます。
 
 ```python
 import cma
@@ -125,33 +149,115 @@ result = cma.fmin(
 )
 
 print(result[0], result[1], result[2])
+# [1. 1.] 1.8647220628407115e-17 787
 ```
 
-`x0`、`sigma0`、bounds、seed、population size、restartを再現条件として保存します。`fmin`の返却構造やoptionは実装versionの公式documentationで確認します。
+出力は cma 4.5.0 で確認しました。実装のversionが変わると、値も変わることがあります。
+次の設定を、再現条件として保存します。
+
+- 初期点 `x0` と初期の歩幅 `sigma0`
+- 上下限と seed
+- 集団の大きさと restart の設定
+
+`fmin` の返却構造やoptionは、実装versionの公式documentationで確認します。
+
+「小さな例」は、`ask` と `tell` を一世代ずつ呼ぶと再現できます。
+
+```python
+import cma
+import numpy as np
+
+
+def f(x: np.ndarray) -> float:
+    return float((x[0] - 1.0) ** 2 + 9.0 * (x[1] - 2.0) ** 2)
+
+
+es = cma.CMAEvolutionStrategy([0.0, 0.0], 0.5, {"seed": 7, "verbose": -9})
+for generation in range(1, 4):
+    population = es.ask()
+    es.tell(population, [f(x) for x in population])
+    print(generation, es.mean.round(3), round(f(es.mean), 2), round(es.sigma, 3))
+# 1 [0.298 0.249] 28.08 0.462
+# 2 [0.826 0.623] 17.08 0.592
+# 3 [1.237 1.668] 1.05 0.972
+```
 
 ## 診断値
 
-- best / median objective
-- mean trajectory
-- sigma
-- covariance eigenvalues / condition number
-- population diversity
-- feasible fraction
-- invalid evaluation数
-- restart count
-- evaluation budget
-- seed間の結果分散
+平均の動きと、分布の広がりを分けて記録します。
+
+| 診断値 | 見方 | 判断 |
+|---|---|---|
+| 最良値と中央値 | 集団全体が下がっているか | 中央値も下がっていれば継続。最良値だけ動くなら、分布が細くなっていないか見る |
+| 平均の軌跡 | 平均が一定の向きへ進んでいるか | 往復するなら、歩幅か集団の大きさを見直す |
+| $\sigma$ | 全体の探索の広さ | 早期に極小になったら、restartか初期の $\sigma$ の見直し |
+| 共分散の固有値・条件数 | 探索楕円の細長さ | 条件数が巨大なら、変数の尺度を見直す |
+| 集団の多様性 | 個体が一つの谷に集まっていないか | 一つの谷へ潰れたら、別の谷は探せていない |
+| 実行可能な個体の割合、無効な評価の数 | 個体が有効な領域へ落ちているか | 低いなら、上下限の扱いや初期の $\sigma$ を見直す |
+| restartの回数と評価予算 | 予算をどう分割したか | 分割した予算を合計して報告する |
+| seed間の結果のばらつき | 結果が偶然の成功でないか | 一回の成功で性能を判断しない |
 
 ## 失敗・切替の兆候
 
-- sigmaが早期に極小化
-- covariance condition numberが巨大化
-- populationが同一basinへcollapse
-- bounds / failure regionでsampleを浪費
-- 高次元でcovariance更新・population評価が重い
-- penaltyによりfeasible解が生成されない
-- 一回の成功runだけで性能を判断
+| 症状 | 考えられる原因 | 対処・切替先 |
+|---|---|---|
+| $\sigma$ が早期に極小になる | 局所解や平らな領域に集団が閉じ込められた | 初期の $\sigma$ を見直す。restartを使い、予算を分割して報告する |
+| 共分散の条件数が巨大になる | 変数の尺度が揃っていない、または谷が極端に細い | 変数を無次元化する。初期の共分散を設計する |
+| 集団が一つの谷へ潰れる | 多峰性の目的関数で、他の谷へ届かなかった | restartか、[Differential Evolution](#/learn/differential-evolution)を比べる |
+| 上下限や失敗領域で、個体を浪費する | 初期の $\sigma$ が大きすぎる、または有効領域が狭い | 上下限の扱い（切り詰め・再サンプリング）を確認する |
+| 高次元で、共分散の更新や集団の評価が重い | 共分散は次元の二乗で増える | [高次元のblack-box最適化（PA015）](#/formulations/PA015)の別手法を確認する |
+| penaltyのせいで、実行可能な解が生まれない | 目的値と制約違反を混ぜた | 目的値と制約違反を別に記録する。順位づけの方式を見直す |
+| noiseで順位が入れ替わる | 評価のばらつきが目的値の差より大きい | 反復評価や集団の拡大を検討する。[noiseを含むblack-box（PA013）](#/formulations/PA013)を確認する |
+| 一回の成功だけで性能を判断している | seedによる偶然の可能性 | 複数のseedで、同じ評価予算と上下限で比べる |
 
 ::: warning
-CMA-ESはglobal candidate探索として有力ですが、有限budgetで大域最適性を証明する手法ではありません。複数seed、同じevaluation budget、同じboundsで比較します。
+CMA-ESは大域的な候補の探索として有力ですが、有限の予算で大域最適性を証明する手法ではありません。複数のseed、同じ評価予算、同じ上下限で比較します。
 :::
+
+## コラム: 可視化で見るもの
+
+2次元では、次の表示を同期して見ます。
+
+- 集団の各個体
+- 選ばれた上位個体
+- 平均
+- 共分散の楕円
+- 全体の歩幅の推移
+- 最良値
+- 集団の多様性
+
+地形の谷に合わせて、楕円が回り、伸び縮みする様子を読めます。
+楕円が小さくなったことは、大域最適性の証明ではありません。
+
+## コラム: 制約の扱い
+
+代表的な方法です。
+
+- penalty
+- 修復・射影（repair / projection）
+- 棄却と再サンプリング
+- 実行可能性を優先する順位づけ
+- 拡張Lagrange関数（augmented Lagrangian）の変種
+- 制約つきの変数変換
+
+penaltyのせいで、目的値が低い実行不可能な点を最良と誤らないように、目的値と制約違反を別に記録します。
+
+## コラム: noiseとrestart
+
+noiseで順位が入れ替わるときは、次を検討します。
+
+- 再サンプリング
+- 反復評価
+- 集団の拡大
+- 実装が持つnoise対応のoption
+- 不確かさを考慮した停止
+
+多峰性の問題には、IPOPやBIPOPなどのrestart戦略があります。
+その場合は、評価予算の総量を分割して報告します。
+
+## 次に読む
+
+- [高次元のblack-box最適化（PA015）](#/formulations/PA015)：勾配なしで多くの変数を決めるとき、何が難しくなるか
+- [noiseを含むblack-box（PA013）](#/formulations/PA013)：順位がぶれる評価をどう扱うか
+- [Differential Evolution](#/learn/differential-evolution)：もう一つの集団法。差分ベクトルで候補を作る
+- [大域探索・多峰性問題の選び分け](#/learn/family.global-search)：条件から手法を比べる

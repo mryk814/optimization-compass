@@ -6,11 +6,11 @@ title_ja: 離散・組合せ最適化の選び分け
 title_en: Choosing a Discrete Optimization Strategy
 summary: 離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。
 source_ids: [S005, S016, S021, S022, S023, S054, S079]
-related_ids: [dynamic-programming, dijkstra-astar, cp-sat, branch-and-bound, branch-and-cut]
+related_ids: [dynamic-programming, dijkstra-astar, cp-sat, branch-and-bound, branch-and-cut, concept.mixed-integer-linear-program]
 visualization_ids: [binary-knapsack-bnb-complete, binary-knapsack-bnb-budget]
 comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
 離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。
@@ -31,7 +31,7 @@ last_reviewed: 2026-07-26
 
 ![4変数0-1 knapsackを9 nodeまで決定論的に探索したBranch-and-Bound木。部分割当ごとのvalueとboundを使い、実行不能または改善不能な枝を除き、gap 0で最適性を証明する。](./media/search-tree-proof-execution.svg "離散探索で候補を全列挙せずに減らす一例です。固定Branch-and-Bound教材であり、CP-SAT、MILP、local searchの一般性能rankingではありません。")
 
-木の大きさより、各枝を残す理由と切る理由に注目します。専用graph法、constraint propagation、relaxationでも、「調べなくてよい候補を何で判定するか」が選択の軸です。
+木の大きさより、各枝を残す理由と切る理由に注目します。専用graph法・constraint propagation・relaxationでも、「調べなくてよい候補を何で判定するか」が選択の軸です。
 
 ## まず確認すること
 
@@ -45,7 +45,7 @@ last_reviewed: 2026-07-26
 | 時間制限 | proofまで待つか、incumbentを早く得るか |
 | problem scale | 変数数だけでなくdomain、constraint graph、relaxation強度 |
 
-整数化や時間離散化では、scaleが現実の精度を保つか確認します。係数を大きくするだけでは精度問題は解決しません。
+整数化や時間離散化では、尺度（scale）が現実の精度を保つか確認します。係数を大きくするだけでは精度問題は解決しません。
 
 ## 条件付きの選び分け
 
@@ -105,7 +105,12 @@ CP-SAT／MILP／routing手法の一般性能rankingにも使いません。
 - 可行解が長時間出ない → heuristic、warm start、constraint debugging
 - gapは小さいがproofが遅い → 許容gapと運用要件を確認
 
-## 小さな選択ブリーフ
+## 小さな比較の型
+
+実装や定式化を比べるときは、node数やiteration数だけを揃えません。
+同じ問題instance・時間制限・gapの許容値・求める成果物を揃え、何を記録するかを先に決めます。
+
+### 比較の前に構造と成果物を記録する
 
 解法を指定する前に、構造と必要な成果物を記録します。
 
@@ -122,6 +127,28 @@ problem_brief = {
 assert problem_brief["time_limit_seconds"] > 0
 ```
 
+### 比較の実験条件
+
+上の記録をもとに、固定するものと変えるものを分けます。ここで変えるのは、モデルの表現だけです。
+
+```python
+experiment = {
+    "problem_instance": "same-discrete-instance",
+    "required_output": problem_brief["required_output"],
+    "time_limit_seconds": problem_brief["time_limit_seconds"],
+    "relative_gap_tolerance": 1e-4,
+    "random_seed": 0,
+    "compared": ["CP-SAT model", "MILP model"],
+    "record": ["incumbent", "best_bound", "gap", "first_feasible_time", "termination_reason"],
+}
+
+assert experiment["time_limit_seconds"] > 0
+assert experiment["required_output"] == problem_brief["required_output"]
+```
+
+これは手法の順位を決める型ではありません。
+時間内に見つかった暫定解・最良の界・gap・停止した理由を並べます。どの成果物がどの条件で得られたかを読みます。
+
 ## コラム: 変数数だけでは難しさは分からない
 
 同じ1万binary変数でも、問題構造によって難しさは異なります。
@@ -129,10 +156,12 @@ network matrix、強い伝播を持つscheduling、弱いBig-Mのmodelを同列�
 
 離散最適化では、変数数だけでなくdomain sizeとconstraint graphも記録します。
 symmetry／relaxation gap／可行解密度／decomposition可能性も確認します。
-solverを替える前にmodel formulationを見直す価値が大きい領域です。
+ソルバー（solver）を替える前に、model formulationを見直す価値が大きい領域です。
 
 ## 次に読む
 
 論理・resource制約が中心なら[CP-SAT](#/learn/cp-sat)を確認します。
 線形modelとgapが重要なら[Branch-and-Cut](#/learn/branch-and-cut)へ進みます。
 専用構造があるなら[Dynamic Programming](#/learn/dynamic-programming)と[Dijkstra / A*](#/learn/dijkstra-astar)を確認します。
+
+定式化から入るなら、[混合整数線形計画](#/learn/concept.mixed-integer-linear-program)・[最短路問題](#/formulations/PA029)・[knapsack・set cover](#/formulations/PA032)のページで、標準形と見分け方を確かめられます。

@@ -125,7 +125,7 @@ test("Pareto result comparisonでpreferenceだけを変えられる", async ({ p
 
 test("Learn検索からmethod detailとrelated visualizationへ進む", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn");
-  await page.getByRole("textbox", { name: "検索" }).fill("Nelder");
+  await page.getByRole("searchbox", { name: "教材を検索" }).fill("Nelder");
   await page.getByRole("link", { name: /Nelder–Mead単体法/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Nelder–Mead単体法" })).toBeVisible();
   const traceRelations = page.getByRole("heading", { level: 2, name: "Method Theater / Trace" }).locator("..");
@@ -143,12 +143,13 @@ test("Learn検索からmethod detailとrelated visualizationへ進む", async ({
 
 test("追加教材を検索しcanonical methodと実行例を読める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn");
-  await page.getByRole("textbox", { name: "検索" }).fill("CP-SAT");
+  await page.getByRole("button", { name: /^すべて/u }).click();
+  await page.getByRole("searchbox", { name: "教材を検索" }).fill("CP-SAT");
   await page.getByRole("link", { name: /CP-SATと制約プログラミング/u }).click();
 
   await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
   await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "現実の問いをmodelへ移す" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "現実の問いをモデルへ移す" })).toBeVisible();
   await expect(page.locator("pre code")).toContainText("cp_model.CpModel");
   const milpAlternative = page.getByRole("listitem").filter({ hasText: "強い線形緩和を持つMILP" });
   await expect(milpAlternative.getByRole("link", { name: "Branch-and-Cut" })).toHaveAttribute(

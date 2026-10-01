@@ -14,6 +14,7 @@ from optimization_compass.content_quality import (
     require_published_concept_quality,
     style_warnings,
 )
+from optimization_compass.formulation_atlas import authored_route_ids
 
 
 def _published_pages() -> list[ContentPage]:
@@ -27,10 +28,13 @@ def _public_routes(pages: list[ContentPage]) -> frozenset[str]:
     comparisons = json.loads(
         (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
     )
+    formulation_ids, path_ids = authored_route_ids(root)
     return public_content_routes(
         pages,
         gallery_ids=(item["case_id"] for item in gallery["cases"]),
         comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
+        formulation_ids=formulation_ids,
+        path_ids=path_ids,
     )
 
 
@@ -114,3 +118,58 @@ def test_language_contract_detects_bare_mixed_prose() -> None:
         ("prose.language-mixing", "costを"),
         ("prose.language-mixing", "状態field"),
     ]
+
+
+def _with_body(body: str) -> ContentPage:
+    page = next(page for page in _published_pages() if page.kind == "concept")
+    return replace(page, body=body)
+
+
+def _codes(body: str) -> list[str]:
+    return [warning.code for warning in style_warnings(_with_body(body))]
+
+
+def test_work_report_phrases_are_warned() -> None:
+    warnings = style_warnings(
+        _with_body("数値積分でも同じ値を確かめました。\n\n単位は、この教材のために揃えています。")
+    )
+
+    assert [(warning.code, warning.detail) for warning in warnings] == [
+        ("prose.work-report", "確かめました"),
+        ("prose.work-report", "この教材のため"),
+    ]
+    assert _codes("係数を回して、頂点が切り替わる瞬間を確かめてください。") == []
+
+
+def test_overprecise_numbers_are_warned_in_prose_and_tables_only() -> None:
+    body = (
+        "普通に平均すると 2.500000 です。\n\n"
+        "| 方法 | 推定値 |\n|---|---:|\n| 平均 | 2.500000 |\n| Huber | 0.333 |\n\n"
+        "式では $x=0.3333333$ と書けます。`print(2.500000)` の出力は 2.5 です。\n\n"
+        "```text\n2.500000\n```\n\n$$\nx = 0.3333333\n$$\n"
+    )
+
+    warnings = style_warnings(_with_body(body))
+
+    assert [(warning.code, warning.line) for warning in warnings] == [
+        ("number.overprecise", 1),
+        ("number.overprecise", 5),
+    ]
+    assert _codes("収束までに 0.1234 秒かかりました。") == []
+
+
+def test_choppy_runs_of_one_sentence_lines_are_warned() -> None:
+    choppy = "\n".join(f"{index}番目の短い文です。" for index in range(6))
+    linked = choppy.replace("3番目", "つまり3番目")
+    shorter = "\n".join(f"{index}番目の短い文です。" for index in range(5))
+
+    assert _codes(choppy) == ["prose.choppy"]
+    assert _codes(linked) == []
+    assert _codes(shorter) == []
+    assert _codes(choppy.replace("\n3番目", "\n\n3番目")) == []
+
+
+def test_linear_program_model_article_is_not_choppy() -> None:
+    page = next(page for page in _published_pages() if page.content_id == "concept.linear-program")
+
+    assert "prose.choppy" not in {warning.code for warning in style_warnings(page)}

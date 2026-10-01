@@ -7991,13 +7991,31 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.constrained-nlp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.constraint-class",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.convex-quadratic-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.convexity",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.cp-scheduling",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8021,13 +8039,61 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.expensive-black-box",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.knapsack-set-cover",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.linear-least-squares",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.linear-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.manifold",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.mixed-integer-linear-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.multiobjective-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.nested-equilibrium-complementarity-hybrid",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.nonlinear-least-squares",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.optimal-control",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8045,13 +8111,43 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.pde-constrained-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.receding-horizon",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.robust-regression",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.root-finding",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.semidefinite-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.simplex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.simplex-optimization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

@@ -4,145 +4,224 @@ kind: method
 method_id: M_SLSQP
 title_ja: SLSQP
 title_en: Sequential Least Squares Programming
-summary: 一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。
+summary: 一般制約付きの滑らかな問題を逐次二次近似し、QP部分問題・直線探索・KKT診断で局所解を探すSQPの実装です。
 source_ids: [S002, S056, S064]
 prerequisites: [constrained-continuous]
-related_ids: [constrained-continuous, interior-point-nlp, augmented-lagrangian]
+related_ids: [constrained-continuous, interior-point-nlp, augmented-lagrangian, sqp, concept.convex-quadratic-program]
 visualization_ids: [constrained-disk-feasible-region]
 comparison_ids: [COMPARE_CONSTRAINED_FAILURE]
 aliases: [/learn/slsqp]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。
+一般制約付きの滑らかな問題を逐次二次近似し、QP部分問題・直線探索・KKT診断で局所解を探すSQPの実装です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、目的と制約を現在点の近くで簡単なQPに置き換え、実行可能性と目的改善を一緒に進めることです。
+霧の中で、柵に囲まれた庭を歩くところを想像してください。
+足元の傾きと柵までの距離を見て、「この方向へこれだけ進めば、柵を越えずに下れる」という簡単な見積もりを作ります。進んだあとは、傾きが予想とどれだけ違ったかを書き留め、次の見積もりに生かします。
+SLSQPは、この見積もりをQPの形で作り、実行可能性と目的の改善を一緒に進めます。
 
-- **見るもの**: 目的関数値、勾配、制約値、constraint Jacobian
-- **動かすもの**: 現在点とQP subproblemが提案するstep
-- **前進の判断**: 実装のmerit functionやfilterなどが目的改善とconstraint violationのtrade-offを評価し、stepを受理すること
-- **収束の判断**: feasibility、KKT stationarity、必要なcomplementarityなどが、それぞれのtolerance内にあること
+- **見るもの**: 目的関数値、勾配、制約値、制約のJacobian
+- **動かすもの**: 現在点と、QP部分問題が提案する一歩
+- **前進の判断**: 実装のmerit関数やフィルターなどが、目的改善と制約違反のトレードオフを評価して一歩を受理すること
+- **収束の判断**: 実行可能性・KKTの停留性・必要な相補性が、それぞれの許容誤差の中にあること
 
-## 一反復で解くもの
+SLSQPという名前はKraftのソフトウェア系統を指し、一般的なSQP系のすべてと同一ではありません。
 
-現在点で目的と制約を線形化し、Lagrangian Hessianまたはその近似を使ってquadratic programming subproblemを作ります。subproblemのstepをline searchやmerit functionで調整し、
+## 一手の意味
 
-- objective improvement
-- constraint violation
-- stationarity
+一手は、現在点で目的と制約を近似して二次計画（QP）の部分問題を作り、その一歩を直線探索とmerit関数で調整して受け入れる操作です。
+次の式は、目的をLagrangianの曲率の近似 $B_k$ で二次にし、制約を線形にした部分問題です。
 
-を同時に進めます。
+$$
+\min_{p}\ \nabla f(x_k)^\top p+\tfrac12\,p^\top B_k\,p
+\quad\text{s.t.}\quad \text{線形化した等式・不等式制約}
+$$
 
-SLSQPという名前はKraftのsoftware系統を指し、一般的なSQP familyすべてと同一ではありません。
+$B_k$ は、最初は単位行列で、一歩ごとに準Newton法の考え方で更新されます。
+動いた量 $s_k=x_{k+1}-x_k$ と、Lagrangianの勾配の変化 $y_k$ を記録します。
+そして、$B_{k+1}s_k=y_k$ という条件（セカント条件）を満たすように $B_k$ を直します。「$s_k$ 方向の曲率は、$y_k$ が示す値だ」という条件です。
 
-## 可行性と目的値を分けて見る
+調整の対象は、次の三つを同時に進めることです。
 
-![同じ初期点から、制約を評価する経路は円内へ戻って境界上の既知最適点へ到達し、制約を無視する経路は円外の実行不能点へ進む固定2次元実行結果。](./media/constrained-feasibility-execution.svg "SLSQPに対応する制約評価経路と、制約を無視するfailure contrastです。実装内部や一般性能を再現するbenchmarkではありません。")
+- 目的関数値の改善
+- 制約違反の減少
+- 停留性の改善
+
+[SQP一般の説明](#/learn/sqp)と重なる部分は、そちらで読めます。ここでは、SLSQPという実装の側から、$B_k$ が曲率を学ぶ様子を小さな例で追います。
+
+### 可行性と目的値を分けて見る
+
+![同じ初期点から、制約を評価する経路は円内へ戻って境界上の既知最適点へ到達し、制約を無視する経路は円外の実行不能点へ進む固定2次元実行結果。](./media/constrained-feasibility-execution.svg "SLSQPに対応する制約評価経路と、制約を無視するfailure contrastです。可行性と目的改善を別々に読む固定教材であり、実装内部を再現するbenchmarkではなく、solverの一般性能rankingには使いません。")
 
 終了点の目的値だけを比べると、橙の経路が良く見えます。
-しかし、violationが0でない点は解として採用できません。
+しかし、制約違反が0でない点は、解として採用できません。目的値だけが良いinfeasibleな点を成功と数えません。
 
-[制約付きdiskのTheater](#/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH)では、まず制約違反量を見ます。
-次に可行領域へ戻る動きと、境界に沿った目的改善を追います。
-[制約を守るrunと無視するrunの比較](#/compare/COMPARE_CONSTRAINED_FAILURE)では、目的値だけが良いinfeasibleな点を成功と数えません。
+[制約付き円盤のTheater](#/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH)では、まず制約違反量を見ます。
+次に、実行可能領域へ戻る動きと、境界に沿った目的改善を追います。
+[制約を守る実行と無視する実行のCompare](#/compare/COMPARE_CONSTRAINED_FAILURE)は、同じ目的・円盤の制約・初期点・12回の教材用予算を使います。変えるのは、制約を評価するかどうかだけです。
 
-この2次元traceは、SLSQPやBFGSの実装内部を再現するbenchmarkではありません。
-可行性と目的改善を別々に読むための固定教材であり、solverの一般性能rankingには使いません。
+この2次元の軌跡（trace）は、SLSQPやBFGSの実装内部を再現するものではありません。
+図の目的は、可行性と目的の改善を、別々の値として読む練習です。
 
-## まず確認すること
+## 小さな例
 
-SLSQPはobjectiveの勾配とconstraint Jacobianの品質に敏感です。有限差分を使う場合、
+[凸二次計画](#/learn/concept.convex-quadratic-program)の小さな例を、SLSQPの考え方で解きます。
 
-- step size
-- variable bounds
-- noise
-- unit scale
-- nondifferentiable branch
+$$
+\min_{x}\; (x_1-3)^2+(x_2-2)^2 \quad \text{s.t.}\quad x_1+x_2\le 3,\; x\ge 0
+$$
 
-を確認します。constraint値のscaleが大きく違うとmerit functionとQPが悪条件になります。
+目標 $(3,2)$ に最も近い点を、範囲の中から選ぶ問題です。答えは $(2,1)$ で、目的値は $2$、乗数は $2$ です。
+目的の本当の曲率は $2I$ ですが、SLSQPは最初、これを知りません。$B_0=I$ から出発して、原点から進みます。
 
-## 向いている条件
+| 反復 $k$ | 現在点 $x_k$ | 目的値 | $x_1+x_2-3$ | QPの乗数 | 一歩 $p_k$ |
+|---:|---|---:|---:|---:|---|
+| 0 | $(0,\,0)$ | 13 | −3 | 3.5 | $(2.5,\,0.5)$ |
+| 1 | $(2.5,\,0.5)$ | 2.5 | 0 | 2.353 | $(-0.765,\,0.765)$ |
+| 2 | $(1.735,\,1.265)$ | 2.140 | 0 | 2.000 | $(0.265,\,-0.265)$ |
+| 3 | $(2,\,1)$ | 2.0 | 0 | 2 | ほぼ $0$ |
 
-- 低〜中規模のsmooth NLP
-- bounds・等式・不等式が混在
-- gradient / Jacobianが利用可能
-- local solutionでよい
-- warm start可能な近いproblemを繰り返す
+反復0では $B_0=I$ なので、QPは「$\nabla f=(-6,-4)$ の反対へ進む、最も短い一歩」を求めます。
+行きたい先は $(6,4)$ ですが、予算の制約 $x_1+x_2\le3$ が先に効きます。
+制約に当たるまで進んだ点が $(2.5,\,0.5)$ で、目的値は $13$ から $2.5$ へ下がります。この点は制約の縁の上です。
 
-## 避ける／切り替える条件
+ここで $B$ が更新されます。動いた量は $s_0=(2.5,\,0.5)$ で、勾配の変化は $y_0=(5,\,1)$ です。真の曲率 $2I$ のもとで $y_0=2s_0$ だからです。
+更新後の $B_1$ は、$B_1s_0=y_0$ を満たします。$s_0$ の方向の曲率は、これで正しく学べました。直交する方向の曲率は、最初の $1$ のままです。
 
-- 強いnoiseや不連続constraint
-- sparseな巨大NLPでdense処理が支配
-- infeasible modelをalgorithm tuningで解決しようとする
-- Jacobian rank deficiency
-- scaleが極端
-- discrete variable
-- global certificateが必要
+反復1では、更新した $B_1$ を使ってQPを解き直します。縁に沿って $(-0.765,\,0.765)$ へ動き、目的値は $2.140$ です。
+二度目の更新では、縁に沿う方向 $(1,-1)$ の曲率が、正しく $2$ になります。反復2の一歩 $(0.265,\,-0.265)$ で、$(2,\,1)$ に着きます。乗数の推定も $3.5\to2.353\to2.000$ と、真の値 $2$ に近づきました。
+
+この表は、歩幅1の手計算版です。小さなQPを作業集合の列挙で解き、上の更新式で $B_k$ を直しました。
+SciPyのSLSQPが返す反復点とは、小数第4位まで一致しました。
+制約が線形なので、線形化による制約のずれはありません。円盤のような曲がった制約では、[SQP](#/learn/sqp)の小さな例が示すように、一歩の受け入れ方が効いてきます。
+
+## 向く条件・避ける条件
+
+SLSQPは、変数が低〜中規模で、目的と制約が滑らかな問題の局所解を求めるときに向きます（[制約付きNLP](#/formulations/PA009)）。
+
+| 条件 | 理由 |
+|---|---|
+| 低〜中規模の滑らかなNLP | 部分問題が密な行列を使うため |
+| 上下限・等式・不等式が混在する | 部分問題が、その混在をそのまま扱えるため |
+| 勾配とJacobianを使える | 一歩の質が、微分の精度に直結するため |
+| 局所解でよい | 大域最適性を保証する手法ではないため |
+| 近い問題を繰り返し解き、warm startを使える | 前回の解を出発点にできるため |
+
+避ける、または切り替える条件です。
+
+- 強いノイズや、不連続な制約がある → 微分を使う手法の前提が崩れる
+- 疎で巨大なNLPで、密な処理が支配する → [非線形内点法](#/learn/interior-point-nlp)を検討する
+- 実行不能なモデルを、アルゴリズムの調整で解決しようとしている → モデルの制約を見直す
+- 制約のJacobianの階数が落ちている → 冗長な制約を除く
+- 尺度が極端に違う → 先に尺度を揃える
+- 離散変数がある → 別の定式化を検討する
+- 大域最適性の証明が必要 → 局所解の手法では足りない
+
+制約を分離して外側の反復で扱いたいなら、[拡張Lagrangian法](#/learn/augmented-lagrangian)も比べます。
+
+### 先に確認すること
+
+SLSQPは、目的の勾配と制約のJacobianの質に敏感です。有限差分で微分を作る場合は、次の項目を確認します。
+
+- 差分の刻み幅
+- 変数の上下限
+- ノイズ
+- 単位と尺度
+- 微分できない分岐
+
+制約の値の尺度が大きく違うと、merit関数とQPが悪条件になります。
 
 ## Python
+
+次の例は、小さな例の問題を、`scipy.optimize.minimize` のSLSQP（`method="SLSQP"`）で解きます。`callback` で、各反復の点を記録しています。
 
 ```python
 import numpy as np
 from scipy.optimize import minimize
 
+target = np.array([3.0, 2.0])
+
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 1.0) ** 2 + 2.0 * (x[1] - 2.0) ** 2)
+    return float((x - target) @ (x - target))
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 1.0), 4.0 * (x[1] - 2.0)])
+    return 2.0 * (x - target)
 
 
-def inequality(x: np.ndarray) -> float:
-    return float(x[0] + x[1] - 2.0)
+def budget(x: np.ndarray) -> float:
+    """SciPyの規約: ineq は関数値が 0 以上で実行可能。x1 + x2 <= 3 を表す。"""
+    return float(3.0 - x[0] - x[1])
 
 
-def equality(x: np.ndarray) -> float:
-    return float(x[0] - 0.5 * x[1])
-
-
+path = [np.array([0.0, 0.0])]
 result = minimize(
     objective,
-    x0=np.array([0.8, 1.6]),
+    x0=path[0],
     jac=gradient,
     method="SLSQP",
-    bounds=[(-1.0, 3.0), (-1.0, 3.0)],
-    constraints=[
-        {"type": "ineq", "fun": inequality},
-        {"type": "eq", "fun": equality},
-    ],
-    options={"ftol": 1e-10, "maxiter": 500},
+    bounds=[(0.0, None), (0.0, None)],
+    constraints=[{"type": "ineq", "fun": budget, "jac": lambda x: np.array([-1.0, -1.0])}],
+    options={"ftol": 1e-12},
+    callback=lambda xk: path.append(xk.copy()),
 )
 
-violations = [max(0.0, -inequality(result.x)), abs(equality(result.x))]
-print(result.success, result.x, result.fun, max(violations), result.message)
+for k, x in enumerate(path):
+    print(k, x.round(4), round(objective(x), 4), round(budget(x), 6) + 0.0)
+print(result.success, result.x.round(5), round(result.fun, 5), result.nit)
 ```
 
-SciPyのinequality conventionは関数値が0以上です。modeling toolにより符号が逆なので確認します。
+```text
+0 [0. 0.] 13.0 3.0
+1 [2.5 0.5] 2.5 0.0
+2 [1.7353 1.2647] 2.1401 0.0
+3 [2. 1.] 2.0 0.0
+4 [2. 1.] 2.0 0.0
+True [2. 1.] 2.0 4
+```
+
+各行は、反復番号・点・目的値・予算の余り $3-x_1-x_2$ です。表の反復0〜3と一致します。最後の行は、収束を確認した反復です。
+SciPyの不等式の規約は、関数値が0以上を実行可能とみなします。モデリングツールによっては符号が逆なので、必ず確認します。
+等式制約は `{"type": "eq", "fun": ...}` で渡し、上下限は `bounds` で渡します。オプション名と既定値は、利用中のバージョンの[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html)で確認します。
 
 ## 診断値
 
-- maximum constraint violation
-- equality residual
-- objective value
-- projected / Lagrangian gradient
-- step norm
-- QP subproblem status
-- function / gradient / Jacobian evaluation数
-- active constraints
-- iteration limit / line-search failure
-- termination message
+- 最大制約違反
+- 等式制約の残差
+- 目的関数値
+- 射影した勾配、またはLagrangianの勾配
+- 一歩のノルム
+- QP部分問題の状態
+- 関数・勾配・Jacobianの評価回数
+- 有効な制約（active constraints）
+- 反復回数の上限、または直線探索の失敗
+- 終了メッセージ
 
-`success=True`だけでなく、実際のconstraint residualを再計算します。
+判断の目安です。最大制約違反と停留性が、どちらも許容誤差の中に入れば止めます。
+どちらかが停滞するなら、終了メッセージと有効な制約の入れ替わりを確認します。`success=True` だけで受け入れず、実際の制約残差を再計算します。
 
 ::: warning
-`ftol`は実装の複数停止判定へ影響します。異なるsolverの`tol=1e-6`を同じ精度だと見なさず、KKT residualとconstraint violationを比較します。
+`ftol` は、実装が持つ複数の停止判定に影響します。異なるソルバーの `tol=1e-6` を同じ精度と見なさず、KKT残差と制約違反で比べます。
 :::
+
+## 失敗・切替の兆候
+
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 反復回数の上限に達する | 尺度が悪い、または微分が不正確 | 変数と制約の尺度を揃える。微分を有限差分と照合する |
+| 直線探索が失敗する | 微分の誤り、ノイズ、不連続な制約 | 目的と制約の滑らかさを確認する |
+| 成功と出ても、制約違反が許容誤差を超える | ソルバー内部の許容誤差と、求める許容誤差が違う | 制約残差を自分で再計算する。許容誤差を見直す |
+| 制約のJacobianの階数が落ちる | 冗長な制約、制約想定の崩れ | 冗長な制約を除く。[拡張Lagrangian法](#/learn/augmented-lagrangian)を検討する |
+| 密な処理が時間を支配する | 疎で巨大な問題 | [非線形内点法](#/learn/interior-point-nlp)へ切り替える |
+| 実行可能な点が見つからない | モデルが実行不能 | アルゴリズムを替えず、制約を見直す |
 
 ## 次に読む
 
-大規模疎NLPでは[Interior-point NLP](#/learn/interior-point-nlp)、constraint分離やouter loopを使う場合は[Augmented Lagrangian](#/learn/augmented-lagrangian)を比較します。
+- [SQP](#/learn/sqp)：SQP一般の仕組みと、一歩を受け入れる基準
+- [非線形内点法](#/learn/interior-point-nlp)：大規模で疎な問題への別の系統
+- [拡張Lagrangian法](#/learn/augmented-lagrangian)：制約を分離して外側の反復で扱う方法
+- [制約付きNLP](#/formulations/PA009)：この手法が解く問題の標準形

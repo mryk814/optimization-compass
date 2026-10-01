@@ -16,6 +16,13 @@ import {
 
 const content = parseContentIndex(structuredClone(rawContent));
 const entityLinks = parseEntityLinkIndex(structuredClone(rawEntityLinks));
+// Counts come from the generated data so that adding an article does not break this test.
+const expected = {
+  all: content.pages.length,
+  method: content.pages.filter((page) => page.kind === "method").length,
+  concept: content.pages.filter((page) => page.kind === "concept").length,
+  connected: content.pages.filter((page) => page.visualization_ids.length > 0 || page.comparison_ids.length > 0).length,
+};
 
 function renderPage() {
   return render(
@@ -55,15 +62,15 @@ describe("ContentIndexPage", () => {
   test("starts with connected learning and keeps the complete catalog available", async () => {
     renderPage();
 
-    expect(await screen.findByText("43件")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "動き・比較で学ぶ 43件" }))
+    expect(await screen.findByText(`${expected.connected}件`)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: `動き・比較で学ぶ ${expected.connected}件` }))
       .toHaveAttribute("aria-pressed", "true");
     expect(screen.getAllByRole("article")).toHaveLength(12);
-    expect(screen.getByText("12 / 43件")).toBeVisible();
+    expect(screen.getByText(`12 / ${expected.connected}件`)).toBeVisible();
     expect(screen.getByRole("button", { name: "次の12件を見る" })).toBeVisible();
-    expect(screen.getByRole("button", { name: "すべて 128件" })).toBeVisible();
-    expect(screen.getByRole("button", { name: "手法 106件" })).toBeVisible();
-    expect(screen.getByRole("button", { name: "概念 22件" })).toBeVisible();
+    expect(screen.getByRole("button", { name: `すべて ${expected.all}件` })).toBeVisible();
+    expect(screen.getByRole("button", { name: `手法 ${expected.method}件` })).toBeVisible();
+    expect(screen.getByRole("button", { name: `概念 ${expected.concept}件` })).toBeVisible();
 
     const firstCard = screen.getAllByRole("article")[0];
     expect(within(firstCard).getByText("手法")).toBeVisible();
@@ -76,17 +83,17 @@ describe("ContentIndexPage", () => {
 
   test("filters by kind, connected learning, query, and empty results", async () => {
     renderPage();
-    await screen.findByText("43件");
+    await screen.findByText(`${expected.connected}件`);
 
-    fireEvent.click(screen.getByRole("button", { name: "概念 22件" }));
-    expect(screen.getByText("22件")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: `概念 ${expected.concept}件` }));
+    expect(screen.getByText(`${expected.concept}件`)).toBeInTheDocument();
     expect(screen.getAllByRole("article")).toHaveLength(12);
 
-    fireEvent.click(screen.getByRole("button", { name: "動き・比較で学ぶ 43件" }));
-    expect(screen.getByText("43件")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: `動き・比較で学ぶ ${expected.connected}件` }));
+    expect(screen.getByText(`${expected.connected}件`)).toBeInTheDocument();
     expect(screen.getAllByRole("article")).toHaveLength(12);
 
-    fireEvent.click(screen.getByRole("button", { name: "すべて 128件" }));
+    fireEvent.click(screen.getByRole("button", { name: `すべて ${expected.all}件` }));
     fireEvent.change(screen.getByRole("searchbox", { name: "教材を検索" }), {
       target: { value: "Chance constraint・CVaR・robustness" },
     });
@@ -128,10 +135,10 @@ describe("ContentIndexPage", () => {
 describe("content index ranking", () => {
   test("counts filters and ranks connected methods before disconnected content", () => {
     expect(contentFilterCounts(content.pages)).toEqual({
-      all: 128,
-      method: 106,
-      concept: 22,
-      connected: 43,
+      all: expected.all,
+      method: expected.method,
+      concept: expected.concept,
+      connected: expected.connected,
     });
 
     const ranked = filterAndRankContentPages(content.pages, "", "all");

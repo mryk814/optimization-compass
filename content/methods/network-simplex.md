@@ -4,80 +4,117 @@ kind: method
 method_id: M_NETWORK_SIMPLEX
 title_ja: Network Simplex法
 title_en: Network Simplex
-summary: 最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
+summary: 最小費用流のnetwork構造を使い、基底を全域木として扱うことで一般のsimplex法より高速に解く専用法です。
 source_ids: [S054]
 prerequisites: []
 related_ids: [primal-simplex, dijkstra-astar, family.discrete-structure]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
+最小費用流のnetwork構造を使い、基底を全域木として扱うことで一般のsimplex法より高速に解く専用法です。
 
-## 何を解いているか
+## 30秒でつかむ
 
-最小費用流問題では、各nodeでflowの保存則を満たします。
-そのうえで容量制約の範囲内にflowを流し、edgeごとの単位費用の合計を最小化します。
+輸送路を一本足すとできる輪に沿って荷物を振り替え、各地点の需給を保ちます。
+
+- 見るもの: 非基底辺の被約費用
+- 動かすもの: 木の辺と流量
+- 前進の判断: 需給を保ったまま費用が下がること
+
+## 一手の意味
+
+辺を木へ加えてできる輪に沿い、流量を増減します。
+
+$$
+f_a^{new}=f_a^{old}+d_a\theta,\qquad d_a\in\{-1,1\}
+$$
+
+$\theta$ は輪のすべての辺が容量の上下限を守る最大の振替量です。
+
+### 何を解いているか
+
+最小費用流問題では、各節点で流量の保存則を満たします。
+そのうえで容量制約の範囲内に流量を流し、辺ごとの単位費用の合計を最小化します。
 これは線形計画問題として定式化でき、[Primal simplex法](#/learn/primal-simplex)でも解けます。
-ただし、node-arc接続行列の多くの成分は0です。
+ただし、節点-arc接続行列の多くの成分は0です。
 非零成分も$+1$と$-1$だけという特殊な構造を持ちます。
-Network Simplex法は、basisを一般の行列ではなくgraph上の全域木として扱います。
+Network Simplex法は、基底を一般の行列ではなくgraph上の全域木として扱います。
 この構造を使い、汎用simplex法より軽い更新で同じ最適解を求めます。
 
-## Basisが全域木に対応する理由
+### Basisが全域木に対応する理由
 
-線形計画のsimplex法では、basisは基底変数に対応する列の集合です。
-最小費用流では、実行可能なbasisがnetworkの全域木（spanning tree）に対応します。
-木の外にあるnon-basic edgeは、flowを0または容量上限に固定します。
-残るnode数$-1$本のbasic edgeを決めれば、flow保存則からnetwork全体のflowが定まります。
+線形計画のsimplex法では、基底は基底変数に対応する列の集合です。
+最小費用流では、実行可能な基底がネットワークの全域木（spanning tree）に対応します。
+木の外にあるnon-basic 辺は、流量を0または容量上限に固定します。
+残る節点数$-1$本のbasic 辺を決めれば、流量保存則からnetwork全体の流量が定まります。
 
-1回のbasis変換（pivot操作）は、graph上で次のように見えます。
+1回の基底変換（pivot操作）は、graph上で次のように見えます。
 
-1. 被約費用から、改善方向へ入れるnon-basic edgeを選ぶ
-2. そのedgeを木へ加え、ただ1つできるcycleに沿ってflowを動かす
-3. 容量の上限または下限へ最初に達するedgeを木から外す
+1. 被約費用から、改善方向へ入れるnon-basic 辺を選ぶ
+2. その辺を木へ加え、ただ1つできるcycleに沿って流量を動かす
+3. 容量の上限または下限へ最初に達する辺を木から外す
 
-上段の太線4本が、5 nodeを結ぶ初期treeです。
-橙の`A → Z`を加えるとcycleが1つだけでき、flowを1単位動かせます。
+上段の太線4本が、5 節点を結ぶ初期木です。
+橙の`A → Z`を加えるとcycleが1つだけでき、流量を1単位動かせます。
 
 ![供給node AとBから需要node X、Y、Zへ9単位を輸送する固定最小費用流。上段の初期treeはA-Xに3、A-Yに1、B-Yに1、B-Zに4を流し、総費用は20。被約費用がマイナス2のA-Zを加え、cycleに1単位を流す。下段ではA-Yが0になってtreeを離れ、A-Zが1、B-Yが2、B-Zが3となり、全nodeの需給を保ったまま総費用が18へ下がる。](./media/network-simplex-pivot-execution.svg "2供給×3需要の固定輸送問題で、Network Simplexのentering edge、cycle、leaving edgeを1回のpivotとして読む実行結果")
 
-cycle上で増やすedgeと減らすedgeを交互にたどります。
-この例では`A → Y`が最初に0へ達するため、treeから外れます。
-全nodeの需給は変えず、総費用だけが`20 → 18`へ下がります。
+cycle上で増やす辺と減らす辺を交互にたどります。
+この例では`A → Y`が最初に0へ達するため、木から外れます。
+全節点の需給は変えず、総費用だけが`20 → 18`へ下がります。
 
-> 固定した2供給×3需要の整数flow教材です。
+> 固定した2供給×3需要の整数流量教材です。
 > `A → Z`の被約費用は`-2`、cycleへ流す量は1です。
 > degeneracy、容量上限、負費用cycleは含みません。
 > 大規模networkやNetwork Simplex実装一般の性能も示していません。
 
-被約費用は、edge costと両端のnode potentialから計算できます。
+被約費用は、辺 費用と両端の節点 ポテンシャルから計算できます。
 したがって、一般のsimplex法が使う行列演算をgraph上の更新へ置き換えられます。
 
-## 整数性という構造の恩恵
+### 整数性という構造の恩恵
 
-最小費用流問題のnode-arc接続行列はtotally unimodularです。
-edgeの容量とnodeの需給量が整数なら、最適basic feasible solutionも整数になります。
+最小費用流問題の節点-arc接続行列はtotally unimodularです。
+辺の容量と節点の需給量が整数なら、最適basic 実行可能 solutionも整数になります。
 整数解を得るためだけに、分枝限定法を加える必要はありません。
 [Hungarian algorithm](#/learn/hungarian-algorithm)のような他のnetwork専用法にも、同じ構造由来の整数性が現れます。
 
 この保証はnetwork構造に由来します。
-複数edgeにまたがる論理条件やresource制約などのside constraintsを足すと、totally unimodularとは限りません。
+複数辺にまたがる論理条件やresource制約などの追加制約を足すと、totally unimodularとは限りません。
 その場合、線形緩和から整数解が得られる保証も失われます。
 
-## 向いている条件
+## 小さな例
 
-- 問題が最小費用流として定式化でき、node-arc接続行列がnetwork構造を保っている
-- flow保存則と容量制約以外のside constraintsがない、または後で分離できる
+Python節の初期流量は、$A\to X$ が3、$A\to Y$ が1です。
+$B\to Y$ は1、$B\to Z$ は4です。
+総費用は20です。
+木に $A\to Z$ を加え、輪に沿って1単位を振り替えます。
+
+| 操作 | 変わる辺 | 流量 |
+|---|---|---:|
+| 1 | $A\to Z$ を増やす | $0\to1$ |
+| 2 | $B\to Z$ を減らし、$B\to Y$ を増やす | $4\to3$、$1\to2$ |
+| 3 | $A\to Y$ を減らす | $1\to0$ |
+
+輪全体の振替で各地点の需給が保存されます。
+この3操作は一つのピボットを分解したものです。
+被約費用 $-2$ に1単位を掛け、総費用は18になります。
+
+## 向く条件・避ける条件
+
+### 向いている条件
+
+- 問題が最小費用流として定式化でき、節点-arc接続行列がnetwork構造を保っている
+- 流量保存則と容量制約以外の追加制約がない、または後で分離できる
 - 整数容量・整数需給量に対して整数最適解が必要
-- 大規模なnetworkで汎用simplex法より高速な専用solverを使いたい
+- 大規模なnetworkで汎用simplex法より高速な専用ソルバーを使いたい
 
-## 避ける／切り替える条件
+### 避ける／切り替える条件
 
-side constraintsでnode-arc接続行列のnetwork構造が崩れると、専用法の前提が成り立ちません。
+追加制約で節点-arc接続行列のnetwork構造が崩れると、専用法の前提が成り立ちません。
 この場合は、一般のLPへ戻ることを検討します。
 離散変数を含むなら、MILPやCP-SATが候補です。
-[Primal simplex法](#/learn/primal-simplex)など、LP・QP・錐最適化solverとの役割を分けて選びます。
+[Primal simplex法](#/learn/primal-simplex)など、LP・QP・錐最適化ソルバーとの役割を分けて選びます。
 
 ## Python
 
@@ -116,29 +153,32 @@ print(before, after)
 出力では`A → Z`の被約費用が`-2`、cycleへ流す量が1になります。
 `A → Y`は0へ達し、総費用は20から18へ下がります。
 
-このコードは、固定した実行可能treeから1回だけpivotする教育用の例です。
-大規模な実務問題では、node-arc構造を直接使うNetwork Simplex実装を検討します。
-対応範囲は、公式の[NEOS Guide: Optimization Problem Types](https://neos-guide.org/guide/types/)と利用versionのsolverドキュメントで確認します。
+このコードは、固定した実行可能木から1回だけpivotする教育用の例です。
+大規模な実務問題では、節点-arc構造を直接使うNetwork Simplex実装を検討します。
+対応範囲は、公式の[NEOS Guide: Optimization Problem Types](https://neos-guide.org/guide/types/)と利用versionのソルバードキュメントで確認します。
 
 ## 診断値
 
-network構造を保てているかと、basis更新が最適性条件へ近づいているかを確認します。
+network構造を保てているかと、基底更新が最適性条件へ近づいているかを確認します。
 
-- states（basisに対応する全域木の構造）
-- edges（networkのedge数と容量制約の有無）
-- labels（node potentialの値）
-- memory（全域木構造と補助配列が使うmemory量）
-- feasibility（需給量の総和が0で、全nodeの需要を満たせるか）
-- optimality condition（すべてのnon-basic edgeで被約費用の符号条件が満たされているか）
+- states（基底に対応する全域木の構造）
+- edges（networkの辺数と容量制約の有無）
+- labels（節点ポテンシャルの値）
+- メモリ（全域木構造と補助配列が使うメモリ量）
+- feasibility（需給量の総和が0で、全節点の需要を満たせるか）
+- optimality condition（すべてのnon-basic 辺で被約費用の符号条件が満たされているか）
 
 ## 失敗・切替の兆候
 
-- side constraintsの追加でnode-arc接続行列がnetwork構造を保てなくなっている
+- 追加制約の追加で節点-arc接続行列がnetwork構造を保てなくなっている
 - 需給量や容量が整数でなく、整数解を前提とした後段処理と食い違う
-- 需給量の総和が0でない、または容量不足で全nodeの需要を満たせない
+- 需給量の総和が0でない、または容量不足で全節点の需要を満たせない
 - 無限容量の負費用cycleがあり、目的値を下げ続けられる
-- 問題規模に対してnode数・edge数が巨大で、汎用LPとして解くと遅い
+- 問題規模に対して節点数・辺数が巨大で、汎用LPとして解くと遅い
 
 ## 次に読む
 
-同じ「node-arc構造を専用法で使う」という考え方は[Primal simplex法](#/learn/primal-simplex)や[Dijkstra法とA*](#/learn/dijkstra-astar)にも共通します。離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。
+同じ「節点-arc構造を専用法で使う」という考え方は[Primal simplex法](#/learn/primal-simplex)や[Dijkstra法とA*](#/learn/dijkstra-astar)にも共通します。
+離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。
+
+- 問題の形を確認する: [最小費用流](#/formulations/PA028)

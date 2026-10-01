@@ -4,83 +4,86 @@ kind: method
 method_id: M_NSGA_III
 title_ja: NSGA-III
 title_en: NSGA-III
-summary: 多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。
+summary: 多数目的で混雑距離だけでは分布を保ちにくいとき、参照方向へ解を対応付けてPareto候補の広がりを維持する進化的手法です。
 source_ids: [S039]
 related_ids: [multi-objective, epsilon-constraint]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。
+多数目的で混雑距離だけでは分布を保ちにくいとき、参照方向へ解を対応付けてPareto候補の広がりを維持する進化的手法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**目的が3個、5個、10個と増えて「混んでいる場所」が分かりにくくなっても、あらかじめ置いた方向ごとに代表候補を残してtrade-off全体を広く見たい**というものです。
+棚の区画ごとに代表商品を残すと、人気の一区画だけで棚が埋まるのを防げます。NSGA-IIIは、目的空間の参照方向ごとに候補を対応付けます。
 
-- 見ているもの: objective vector、Pareto rank、reference directionとの距離
-- 動かしているもの: population、association、selection
-- 前進の判断: 非支配候補の質とreference方向のcoverage
-- 別に確認するもの: direction数、generation数、total evaluation budget
-- 恐れていること: objective scaling、方向数の爆発、実行不可能解の偏り
+目的が3個から5個、10個と増えると「混んでいる場所」が分かりにくくなります。あらかじめ置いた方向ごとに代表候補を残し、交換関係全体を広く調べます。
+
+- 見るもの: 目的ベクトル、Pareto順位、参照方向との距離
+- 動かすもの: 集団、関連付け、選択
+- 前進の判断: 非支配候補の質と参照方向の被覆範囲
 
 NSGA-IIの単純な上位版ではありません。目的数と意思決定上必要な分布に応じて選びます。
 
-## まず確認すること
+## 一手の意味
 
-| 項目 | 確認内容 |
-|---|---|
-| objective count | 2目的か、many-objectiveか |
-| direction | 各目的がminimize / maximizeのどちらか |
-| scaling | objectiveの単位とrangeを揃えられるか |
-| reference directions | 必要な方向数と関心領域を定義できるか |
-| constraints | feasible populationを維持できるか |
-| budget | population × generationの評価数を許容できるか |
+正規化した目的ベクトル $y$ と単位参照方向 $d$ の対応は、方向への垂直距離で決めます。
 
-2目的ならNSGA-IIやε-constraintの方が説明しやすく、少ない評価で済む場合があります。
+$$
+\operatorname{dist}(y,d)=\|y-(y^\top d)d\|_2
+$$
 
-## 仕組み
+部分的に残す最後の非支配層では、方向ごとの占有数を使って候補を選びます。
 
-まずPareto dominanceでfrontを分けます。最後に一部だけ選ぶfrontでは、objective vectorを正規化し、各解を最も近いreference directionへ対応付けます。候補が不足している方向を優先し、population全体の広がりを保ちます。
+### 仕組み
 
-reference directionは「真のPareto front」ではありません。どのtrade-off方向を均等に見たいかという探索上の設計です。
+まずPareto支配でフロントを分けます。最後に一部だけ選ぶフロントでは、目的ベクトルを正規化し、各解を最も近い参照方向へ対応付けます。候補が不足している方向を優先し、集団全体の広がりを保ちます。
+
+参照方向は「真のParetoフロント」ではありません。どの交換関係方向を均等に見たいかという探索上の設計です。
+
+## 小さな例
+
+方向への対応付けだけを、2目的の平面で確かめます。
+参照方向を横・斜め45度・縦の3本とし、目的値は正規化済みとします。
+3点の距離計算を実行すると、次の対応になります。
+
+| 追加する点 | 最も近い方向 | 垂直距離 | 占有数（横,斜め,縦） |
+|---|---|---:|---|
+| $(0.1,0.9)$ | 縦 | 0.1 | $(0,0,1)$ |
+| $(0.5,0.5)$ | 斜め | 0.0 | $(0,1,1)$ |
+| $(0.9,0.1)$ | 横 | 0.1 | $(1,1,1)$ |
+
+方向を置く操作と、解をその方向へ対応付ける操作を分けて読めます。
+これは関連付けの教材です。多数目的での世代更新や性能は示しません。
 
 ## 向く条件・避ける条件
 
+### まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| 目的数 | 2目的か、多数目的か |
+| 方向 | 各目的が最小化 / 最大化のどちらか |
+| 尺度調整 | 目的の単位と範囲を揃えられるか |
+| 参照方向 | 必要な方向数と関心領域を定義できるか |
+| 制約 | 可行な集団を維持できるか |
+| 予算 | 集団 × 世代の評価数を許容できるか |
+
+2目的ならNSGA-IIやε-制約の方が説明しやすく、少ない評価で済む場合があります。
+
 向きやすい条件:
 
-- 3目的以上のmany-objective問題
-- 非凸・black-boxでgradientを使いにくい
+- 3目的以上の多数目的問題
+- 非凸・ブラックボックスで勾配を使いにくい
 - 一つの解ではなく多様な候補集合が必要
-- parallel evaluationを利用できる
+- 並列評価を利用できる
 
 避ける条件:
 
 - 目的が2個で関心領域も狭い
-- 一評価が高価でpopulationを維持できない
-- objective scaleやdirectionが未整理
-- 最終選択のpreferenceを全く議論しない
-
-## 診断値
-
-見る値:
-
-- occupied reference direction数
-- non-dominated solution数
-- hypervolumeやIGDなどの指標
-- feasible fraction
-- objective normalizationの範囲
-- seed間のcoverage差
-- population diversity
-
-## うまくいったサインと切替サイン
-
-切替サイン:
-
-- 多くの方向が空のまま → population、方向数、variation operatorを見直す
-- 極端解だけ残る → normalizationとconstraint handlingを確認
-- 関心のない領域へ評価を使う → preference-aware directionへ絞る
-- 目的数が2〜3でbackend solverが強い → ε-constraintへ
-- 評価budgetが不足 → surrogate-assisted multi-objective法を検討
+- 一評価が高価で集団を維持できない
+- 目的尺度や方向が未整理
+- 最終選択の選好を全く議論しない
 
 ## Python
 
@@ -97,11 +100,44 @@ result = minimize(problem, algorithm, ("n_gen", 100), seed=7, verbose=False)
 print(result.F.shape)
 ```
 
-実務ではproblem、reference directions、population、seed、evaluation budgetを保存します。
-reference directionのcoverageと、最終的なpreferenceによる選択は別に評価します。
+実務では問題と参照方向を保存します。集団の大きさ・乱数種・評価予算も残します。
+参照方向の被覆範囲と、最終的な選好による選択は別に評価します。
 
-## コラム: 可視化できないことを前提にする
+## 診断値
 
-4目的以上ではPareto集合を一枚の散布図へ正確に置けません。pair plot、parallel coordinates、reference direction occupancy、選択中の解のtableを組み合わせます。3Dを使っても目的数そのものは減りません。
+見る値:
 
-[多目的最適化とPareto front](#/learn/multi-objective)でdominanceを確認し、preferenceを閾値で表せる場合は[ε-constraint法](#/learn/epsilon-constraint)も比較してください。
+- 占有された参照方向数
+- 非支配解数
+- ハイパーボリュームやIGDなどの指標
+- 可行な候補の割合
+- 目的値の正規化の範囲
+- 乱数種間の被覆範囲差
+- 集団の多様性
+
+- 別に確認するもの: 方向数、世代数、総評価予算
+- 恐れていること: 目的尺度調整、方向数の爆発、実行不可能解の偏り
+
+## 失敗・切替の兆候
+
+### うまくいったサインと切替サイン
+
+切替サイン:
+
+- 多くの方向が空のまま → 集団、方向数、交叉・突然変異操作を見直す
+- 極端解だけ残る → 正規化と制約の処理を確認
+- 関心のない領域へ評価を使う → 選好を反映した方向へ絞る
+- 目的数が2〜3で内部ソルバーが強い → ε-制約へ
+- 評価予算が不足 → 予測モデルを使う多目的法を検討
+
+### コラム: 可視化できないことを前提にする
+
+4目的以上ではPareto集合を一枚の散布図へ正確に置けません。目的対ごとの図と平行座標を組み合わせます。参照方向の占有数や選択中の解の表も使います。3Dを使っても目的数そのものは減りません。
+
+[多目的最適化とParetoフロント](#/learn/multi-objective)で支配を確認し、選好を閾値で表せる場合は[ε-constraint法](#/learn/epsilon-constraint)も比較してください。
+
+## 次に読む
+
+- [関連する手法の記事](#/learn/multi-objective)：一手の意味と選び分けを比べます。
+
+- [この手法を使う問題の定式化](#/formulations/PA038)：決定変数と目的を確認します。

@@ -6372,6 +6372,16 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
         },
@@ -6391,7 +6401,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "解で等号になる制約集合を推定し、そのface上の等式制約problemを解きながらactive setを追加・削除する方法です。"
+      "summary": "解で等号になる制約の集合（active set）を推定し、その面の上の等式制約付き問題を解きながら、制約を追加・削除する方法です。"
     },
     {
       "aliases": [],
@@ -6443,6 +6453,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.convexity",
           "target_type": "content"
         },
@@ -6452,7 +6467,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
+      "summary": "凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表す作業集合（working set）を推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
     },
     {
       "aliases": [],
@@ -6499,6 +6514,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "adamw",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "bfgs",
           "target_type": "content"
         },
@@ -6510,6 +6530,11 @@
         {
           "relation_type": "related_content",
           "target_id": "momentum-sgd",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
           "target_type": "content"
         },
         {
@@ -6564,7 +6589,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離し、勾配（gradient）による更新とパラメータを縮める正則化（regularization）を別の操作として扱う学習optimizerです。"
+      "summary": "Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。"
     },
     {
       "aliases": [],
@@ -6640,7 +6665,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "adjoint sensitivityは、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加solveで計算する方法です。"
+      "summary": "随伴 感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。"
     },
     {
       "aliases": [],
@@ -6696,7 +6721,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。"
+      "summary": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らして一致を作る分割最適化法です。"
     },
     {
       "aliases": [],
@@ -6767,7 +6792,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "凸二次計画（convex QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。"
+      "summary": "凸二次計画（凸 QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用ソルバーの方式です。"
     },
     {
       "aliases": [],
@@ -6809,6 +6834,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
         },
@@ -6823,7 +6853,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。"
+      "summary": "制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。"
     },
     {
       "aliases": [],
@@ -6860,7 +6890,17 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
           "target_type": "content"
         },
         {
@@ -6884,7 +6924,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約を対数障壁（log barrier）へ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。"
+      "summary": "不等式制約を対数障壁（log barrier）へ置き換え、中心パス（central path）に沿ってNewton法で進む、LP/QP専用の内点法です。"
     },
     {
       "aliases": [],
@@ -6986,6 +7026,21 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "tpe",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
           "target_type": "trace"
@@ -7006,7 +7061,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
+      "summary": "高価なblack-box評価を節約するため、観測履歴から代理モデル（surrogate model）と不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
     },
     {
       "aliases": [],
@@ -7129,6 +7184,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "cp-sat",
           "target_type": "content"
         },
@@ -7148,7 +7208,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。"
+      "summary": "離散問題を部分問題へ分け、暫定解（incumbent）と緩和の界で改善できない枝を除きながら、最適性の証明まで進める厳密な探索法です。"
     },
     {
       "aliases": [],
@@ -7205,7 +7265,17 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
           "target_type": "content"
         },
         {
@@ -7224,7 +7294,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。"
+      "summary": "MILPを分枝限定法で探索しながら、cutで連続緩和を締め、暫定解（incumbent）と界のgapを詰めて最適性を証明する厳密な探索法です。"
     },
     {
       "aliases": [],
@@ -7306,7 +7376,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Boolean制約のconflictからclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。"
+      "summary": "真偽値制約の衝突からclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。"
     },
     {
       "aliases": [],
@@ -7339,6 +7409,11 @@
         {
           "relation_type": "related_content",
           "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.global-search",
           "target_type": "content"
         },
         {
@@ -7403,7 +7478,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "目的関数と制約の値だけから局所線形modelを作り、trust-region半径内で一般不等式制約付きの局所解を探す微分不要法です。"
+      "summary": "目的関数と制約の値だけから局所線形モデルを作り、信頼領域半径内で一般不等式制約付きの局所解を探す微分不要法です。"
     },
     {
       "aliases": [],
@@ -7444,7 +7519,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "関数値と制約値から局所的な二次近似modelを育て、微分なしでboundsや一般制約を扱うtrust-region型の局所法です。"
+      "summary": "関数値と制約値から局所的な二次近似モデルを育て、微分なしでboundsや一般制約を扱う信頼領域型の局所法です。"
     },
     {
       "aliases": [],
@@ -7519,6 +7594,97 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.constrained-nlp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "一般滑らか制約付きNLP",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA009",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cobyla",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constrained-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一般滑らか制約付きNLPは、滑らかな非線形の目的を、滑らかな不等式・等式制約を守りながら最小にする定式化です。得られるのは局所解で、その点が満たす目安がKKT条件です。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.constraint-class",
       "entity_id": "concept.constraint-class",
       "entity_type": "content",
@@ -7575,6 +7741,72 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.convex-quadratic-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "凸二次計画（凸QP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA018",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "凸二次計画は、お椀の形をした二次の目的を、線形の等式・不等式を守りながら最小にする定式化です。線形計画と違い、最適解は頂点とは限らず、辺の途中や領域の内部にも現れます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.convexity",
       "entity_id": "concept.convexity",
       "entity_type": "content",
@@ -7598,6 +7830,52 @@
         }
       ],
       "summary": "凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.cp-scheduling",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約プログラミングによるスケジューリング",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA026",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "制約プログラミングによるスケジューリングは、作業の順序や資源の競合を制約として表し、開始時刻を決める定式化です。実行できる予定を探すことと、最も早く終わる予定を証明することを区別します。"
     },
     {
       "aliases": [],
@@ -7754,6 +8032,260 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.expensive-black-box",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非常に高価な低次元評価",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S008",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S073",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-global",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "turbo-saasbo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "非常に高価な低次元評価は、1回の評価に時間や費用がかかり、試せる回数が数十回ほどしかない最小化の定式化です。式も勾配も見えないため、これまでの観測から次に試す点を選ぶ手順そのものが主題になります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.knapsack-set-cover",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "knapsack・set cover",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
+        }
+      ],
+      "summary": "knapsack と set cover は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。knapsack は容量の上限のもとで価値を最大にし、set cover は全部を覆う条件のもとで費用を最小にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.linear-least-squares",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "線形最小二乗",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA005",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        }
+      ],
+      "summary": "線形最小二乗は、パラメータ（parameter）について線形なモデルと観測のずれの二乗和を最小にする定式化です。凸で、反復的な最適化を使わず、線形代数の分解だけで大域解が求まります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.linear-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "線形計画（LP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA017",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "線形計画は、決める量に比例する費用の合計を、同じく比例と足し算だけで書ける不等式を守りながら最小にする定式化です。最適解は可行領域の頂点に現れ、双対によって大域最適を確かめられます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.manifold",
       "entity_id": "concept.manifold",
       "entity_type": "content",
@@ -7802,6 +8334,133 @@
         }
       ],
       "summary": "多様体値変数では、球面・直交行列・回転などの集合を解空間として扱い、接空間のstepとretractionで幾何構造を保ちます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.mixed-integer-linear-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "混合整数線形計画（MILP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA023",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "混合整数線形計画は、線形計画の一部の変数に「整数であること」を加えた定式化です。この一条件で凸性が失われるため、緩和で得た界と見つけた解の差（gap）を詰めながら最適性を証明します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.multiobjective-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "多目的連続最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "moead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "nsga-iii",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "weighted-sum",
+          "target_type": "content"
+        }
+      ],
+      "summary": "多目的連続最適化は、コストと性能のように複数の目的を同時に小さくする定式化です。答えは一点ではなく、どれかを良くすると別のどれかが悪くなる点の集合（Pareto集合）です。"
     },
     {
       "aliases": [],
@@ -7878,6 +8537,118 @@
         }
       ],
       "summary": "入れ子の最適化／均衡条件／相補性／hybridのmode切替を読み分ける語彙です。目的関数の種類ではなく、内側の解法／残差／離散状態を区別します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.nonlinear-least-squares",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非線形最小二乗",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA033",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "非線形最小二乗は、パラメータ（parameter）について非線形なモデルと観測のずれの二乗和を最小にする定式化です。凸性は失われますが、残差のJacobianを使うと一般の最小化より速く安定に解けます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.optimal-control",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "最適制御",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA042",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "最適制御は、時間とともに変える操作量を選び、状態の動きを通じて累積費用を最小にする定式化です。操作と状態は動力学で結び付いています。時間を離散化した問題の成功と、連続時間での実行可能性を分けて確かめます。"
     },
     {
       "aliases": [],
@@ -8033,6 +8804,82 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.pde-constrained-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "PDE制約付き最適化の定式化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA045",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.pde-constrained-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        }
+      ],
+      "summary": "PDE制約付き最適化は、設計を変えたときの温度や変位を偏微分方程式で求め、その状態を通して目的を評価する定式化です。状態計算の収束と設計の可行性を分け、離散化した問題の解を連続モデルの保証と混同しません。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.receding-horizon",
       "entity_id": "concept.receding-horizon",
       "entity_type": "content",
@@ -8084,6 +8931,179 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.robust-regression",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "外れ値を含むロバスト回帰",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA034",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bundle-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ロバスト回帰は残差が大きい観測の影響を抑える損失を使い、データに合う係数を推定する定式化です。損失と尺度の選び方によってどの観測を重く扱うかが変わります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.root-finding",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "方程式の求根",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA004",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        }
+      ],
+      "summary": "方程式の求根は、残差がゼロになる未知量を探す定式化です。目的値を小さくする最適化へ書き換えることもできますが、小さな二乗和や停止の成功だけでは、方程式を要求精度で満たしたとは言えません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.semidefinite-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "半正定値計画（SDP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S013",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S015",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA021",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-dual-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "半正定値計画は、対称行列を変数にし、行列全体が半正定値であることを守りながら線形の目的を最小にする定式化です。共分散の整合性や非凸問題の緩和を扱えますが、緩和の解が元の問題の解とは限りません。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.simplex",
       "entity_id": "concept.simplex",
       "entity_type": "content",
@@ -8122,6 +9142,62 @@
         }
       ],
       "summary": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.simplex-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "単体上の最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA036",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "単体上の最適化は、非負で合計が1になる割合や確率を決める定式化です。可行集合は凸ですが、目的関数まで凸とは限りません。割合を保つ更新と、目的の性質に応じた保証を分けて考えます。"
     },
     {
       "aliases": [],
@@ -8504,12 +9580,22 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.convexity",
           "target_type": "content"
         },
         {
           "relation_type": "related_content",
           "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constrained-nlp",
           "target_type": "content"
         },
         {
@@ -8523,12 +9609,17 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
           "target_type": "trace"
         }
       ],
-      "summary": "目的値だけでなくprimal feasibility・stationarity・active constraint・停止理由を同時に追い、実行可能な連続解を求める最適化familyです。"
+      "summary": "目的値だけでなく、実行可能性・停留性・有効な制約・停止理由を同時に追い、実行可能な連続解を求める最適化の手法群（family）です。"
     },
     {
       "aliases": [],
@@ -8630,7 +9721,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "Boolean・整数・論理・scheduling制約を、伝播・SAT学習・探索の組合せで解き、実行可能解とboundから停止statusを読む離散最適化法です。"
+      "summary": "真偽値・整数・論理・スケジューリング制約を、伝播・SAT学習・探索の組合せで解き、実行可能解と界から停止状態を読む離散最適化法です。"
     },
     {
       "aliases": [],
@@ -8671,7 +9762,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。"
+      "summary": "有限候補集合の変数から伝播で候補を削り、分岐で残った探索を分ける制約プログラミングの探索法です。"
     },
     {
       "aliases": [],
@@ -8732,7 +9823,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。"
+      "summary": "density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。"
     },
     {
       "aliases": [],
@@ -8759,12 +9850,22 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "cma-es",
           "target_type": "content"
         },
         {
           "relation_type": "related_content",
           "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.evolutionary",
           "target_type": "content"
         },
         {
@@ -8809,7 +9910,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "非負の重みを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。"
+      "summary": "非負の重みを持つ有向・無向グラフで、確定済みの距離と過大評価しない見積り（admissible heuristic）を使い、最短路を厳密に求める探索法です。"
     },
     {
       "aliases": [],
@@ -8905,7 +10006,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。"
+      "summary": "状態と制御入力を時間格子上の変数にし、動力学の残差を制約として同時に解く軌道最適化法です。"
     },
     {
       "aliases": [],
@@ -8956,7 +10057,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "bounded boxをhyperrectangleへ分割し、局所性定数を事前固定せずpotentially optimalな領域を選んで細分化する決定的大域探索法です。"
+      "summary": "有界な矩形領域を分割し、Lipschitz定数を事前固定せず潜在的に最適な領域を選んで細分化する決定的大域探索法です。"
     },
     {
       "aliases": [],
@@ -9022,7 +10123,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "時間ごとのcontrolを最適化変数にし、初期状態からdynamicsを前進simulationして得たtrajectoryのcostと制約を改善する最適制御法です。"
+      "summary": "時間ごとの制御入力を最適化変数にし、初期状態から動力学を前進シミュレーションして得た軌道の費用と制約を改善する最適制御法です。"
     },
     {
       "aliases": [],
@@ -9068,7 +10169,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。"
+      "summary": "温度付きの確率的飛び移りで有界非凸空間を探索し、再加熱と局所探索を組み合わせて複数谷から良い候補を探します。"
     },
     {
       "aliases": [],
@@ -9105,11 +10206,21 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "lp-qp-conic",
           "target_type": "content"
         }
       ],
-      "summary": "双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。"
+      "summary": "双対可行性（dual feasibility）を保ったまま、実行不能な基底を直し、LPの基底を効率よく再最適化するsimplex法の変種です。"
     },
     {
       "aliases": [],
@@ -9427,6 +10538,11 @@
         {
           "relation_type": "related_content",
           "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
           "target_type": "content"
         },
         {
@@ -10324,7 +11440,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。"
+      "summary": "個体の表現と選択・交叉・突然変異を組み合わせる集団法です。離散・混合・ブラックボックス空間から良い候補を探索します。"
     },
     {
       "aliases": [],
@@ -10441,7 +11557,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "二部グラフの完全matchingとして表せる割当問題を、専用構造を使って多項式時間で厳密に解くアルゴリズムです。"
+      "summary": "二部グラフの完全マッチングとして表せる割当問題を、専用構造を使って多項式時間で厳密に解くアルゴリズムです。"
     },
     {
       "aliases": [],
@@ -10487,7 +11603,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "多数のtrialを小さなresourceで始め、中間成績が悪いtrialを早期終了して有望なtrialへbudgetを移すmulti-fidelity探索です。"
+      "summary": "多数の試行を小さな資源で始め、中間成績が悪い試行を早期終了して有望な試行へ予算を移す複数の忠実度を使う探索です。"
     },
     {
       "aliases": [],
@@ -10568,7 +11684,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "現在の軌道の周りでdynamicsとcostを二次近似する軌道最適化法です。backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新します。"
+      "summary": "現在の軌道の周りで動力学を局所展開し、費用を二次近似する軌道最適化法です。後退計算でRiccati型のフィードバック係数を求め、前進計算で軌道を更新します。"
     },
     {
       "aliases": [],
@@ -10610,6 +11726,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
         },
@@ -10617,9 +11738,14 @@
           "relation_type": "related_content",
           "target_id": "slsqp",
           "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
         }
       ],
-      "summary": "不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかなNLPを解く方法です。"
+      "summary": "不等式制約にバリア（barrier）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。"
     },
     {
       "aliases": [],
@@ -10919,7 +12045,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。"
+      "summary": "線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主・双対・gap・infeasibility情報まで利用する凸最適化familyです。"
     },
     {
       "aliases": [],
@@ -10980,7 +12106,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。"
+      "summary": "格子上の近傍調査方向を適応させ、微分を使わずにブラックボックス目的と制約の局所停留点を探す直接探索法です。"
     },
     {
       "aliases": [],
@@ -11088,6 +12214,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "family.local-dfo",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "mads",
           "target_type": "content"
         },
@@ -11148,7 +12279,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "ユークリッド距離ではなく問題に合うBregman幾何（Bregman geometry）を使い、単体（simplex）、確率分布、非一様なscale上で劣勾配stepを行う一次法です。"
+      "summary": "ユークリッド距離ではなく、問題に合うBregman幾何（Bregman geometry）を使う一次法です。単体（simplex）と確率分布、非一様なscale上で劣勾配stepを行います。"
     },
     {
       "aliases": [],
@@ -11235,7 +12366,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。"
+      "summary": "多目的問題を異なる重みや参照方向を持つ多数の単目的部分問題へ分け、近い部分問題同士で候補を共有する進化的手法です。"
     },
     {
       "aliases": [],
@@ -11352,7 +12483,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。"
+      "summary": "複数目的を根拠なく一つの得点へ潰さず、支配・Pareto集合・選好を分けて交換関係候補を作る最適化です。"
     },
     {
       "aliases": [],
@@ -11474,7 +12605,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "時間区間をsegmentに分け、各segmentでdynamicsを積分します。境界の連続性をNLPの等式制約として課す軌道最適化です。"
+      "summary": "時間区間を区間に分け、各区間で動力学を積分します。境界の連続性をNLPの等式制約として課す軌道最適化です。"
     },
     {
       "aliases": [],
@@ -11510,7 +12641,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
+      "summary": "最小費用流のnetwork構造を使い、基底を全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
     },
     {
       "aliases": [],
@@ -11674,7 +12805,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。"
+      "summary": "多数目的で混雑距離だけでは分布を保ちにくいとき、参照方向へ解を対応付けてPareto候補の広がりを維持する進化的手法です。"
     },
     {
       "aliases": [],
@@ -11735,7 +12866,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "Optimality Criteriaは、密度感度と体積率制約から要素密度を乗法的に更新し、minimum-complianceの設計fieldを効率よく改善する更新則です。"
+      "summary": "Optimality Criteriaは、密度感度と体積率制約から要素密度を乗法的に更新し、コンプライアンス最小化の設計場を効率よく改善する更新則です。"
     },
     {
       "aliases": [],
@@ -11781,7 +12912,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "整数変数を扱うmaster問題と、整数を固定した連続NLPを交互に解き、凸な非線形情報をcutとしてmasterへ戻す厳密探索法です。"
+      "summary": "整数変数を扱うmaster問題と、整数を固定した連続NLPを交互に解き、凸な非線形情報を切除平面としてmasterへ戻す厳密探索法です。"
     },
     {
       "aliases": [],
@@ -11827,7 +12958,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。"
+      "summary": "各粒子の最良経験と群全体の最良を使って速度を更新し、連続ブラックボックス空間を集団で探索する手法です。"
     },
     {
       "aliases": [],
@@ -11878,7 +13009,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。"
+      "summary": "現在点の周囲へ配置方向の近傍調査点を配置し、改善の有無に応じて一歩の大きさを拡大・縮小する微分不要局所探索法です。"
     },
     {
       "aliases": [],
@@ -11919,7 +13050,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。"
+      "summary": "並走する作業者の途中成績を比較し、良い作業者の学習状態を継承してハイパーパラメータを変える継続学習型HPOです。"
     },
     {
       "aliases": [],
@@ -12021,7 +13152,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。"
+      "summary": "勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向で方向集合を更新する局所法です。"
     },
     {
       "aliases": [],
@@ -12082,7 +13213,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新してconic標準形の凸問題を解く内点法です。"
+      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、主・双対・slackを同時に更新してconic標準形の凸問題を解く内点法です。"
     },
     {
       "aliases": [],
@@ -12119,6 +13250,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "dual-simplex",
           "target_type": "content"
         },
@@ -12133,7 +13269,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。"
+      "summary": "線形計画（LP）の実行可能な基底（basis）を保ちながら、被約費用（reduced cost）が示す隣の基底へピボット（pivot）し、目的値を改善するsimplex法です。"
     },
     {
       "aliases": [],
@@ -12180,6 +13316,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "method.gradient-descent",
           "target_type": "content"
         },
@@ -12194,12 +13335,17 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "so3-projected-alignment",
           "target_type": "trace"
         }
       ],
-      "summary": "勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
+      "summary": "勾配の一歩のあとで実行可能集合へ射影（projection）し、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
     },
     {
       "aliases": [],
@@ -12245,7 +13391,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。"
+      "summary": "滑らかな項には勾配一歩を使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。"
     },
     {
       "aliases": [],
@@ -12306,7 +13452,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。"
+      "summary": "探索空間の同じ分布から独立に点を引いて評価するだけの、ハイパーパラメータ最適化（hyperparameter optimization）で最も単純なbaselineです。"
     },
     {
       "aliases": [],
@@ -12367,7 +13513,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。"
+      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んで多様体へ戻す写像で多様体上に戻す一次法です。"
     },
     {
       "aliases": [],
@@ -12418,7 +13564,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。"
+      "summary": "接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。"
     },
     {
       "aliases": [],
@@ -12692,7 +13838,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。"
+      "summary": "有界 探索空間を単体複体で標本し、位相の情報から局所最小候補を抽出して局所ソルバーへ渡す大域探索法です。"
     },
     {
       "aliases": [],
@@ -12773,7 +13919,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "SIMP密度法は、要素密度を連続変数にして剛性を密度のべき乗で補間し、体積率制約のもとでcomplianceを下げるトポロジー最適化手法です。"
+      "summary": "SIMP密度法は、要素密度を連続変数にして剛性を密度のべき乗で補間し、体積率制約のもとでコンプライアンスを下げるトポロジー最適化手法です。"
     },
     {
       "aliases": [],
@@ -12861,6 +14007,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
         },
@@ -12870,12 +14021,17 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
           "target_type": "trace"
         }
       ],
-      "summary": "一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。"
+      "summary": "一般制約付きの滑らかな問題を逐次二次近似し、QP部分問題・直線探索・KKT診断で局所解を探すSQPの実装です。"
     },
     {
       "aliases": [],
@@ -12926,7 +14082,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "SMACは、ガウス過程（Gaussian process）の代わりにランダムフォレスト（random forest）を予測用のsurrogateとして使う、逐次モデルベース最適化（sequential model-based optimization）です。カテゴリ変数（categorical）や条件付きparameterを含むsearch spaceを扱いやすい点に特徴があります。"
+      "summary": "SMACは、ランダムフォレストを予測モデルに使う逐次モデルベース最適化です。カテゴリ変数や条件付きパラメータを含む探索空間を扱いやすい点に特徴があります。"
     },
     {
       "aliases": [],
@@ -13045,6 +14201,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "family.constrained-nlp",
           "target_type": "content"
         },
@@ -13059,7 +14220,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。"
+      "summary": "各反復で、目的関数の二次近似と制約の線形近似から二次計画（QP）の部分問題を作り、その解を探索方向にする制約付きNLPのアルゴリズム枠組みです。"
     },
     {
       "aliases": [],
@@ -13083,6 +14244,11 @@
           "relation_type": "explains",
           "target_id": "M_SUBGRADIENT",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bundle-method",
+          "target_type": "content"
         },
         {
           "relation_type": "related_content",
@@ -13217,7 +14383,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "観測済みtrialを良い群と悪い群に分け、条件付きsearch spaceでも良い群に現れやすいparameterを提案する逐次探索です。"
+      "summary": "観測済み試行を良い群と悪い群に分け、条件付き探索空間でも良い群に現れやすいパラメータを提案する逐次探索です。"
     },
     {
       "aliases": [],
@@ -13341,11 +14507,16 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "newton-method",
           "target_type": "content"
         }
       ],
-      "summary": "局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。"
+      "summary": "局所的な二次近似を信頼半径の内側だけで使い、共役勾配法（CG）でNewton方向を近似する、大域化された二階法です。"
     },
     {
       "aliases": [],
@@ -13457,7 +14628,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
+      "summary": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
     },
     {
       "aliases": [],
@@ -13518,7 +14689,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。"
+      "summary": "複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的ソルバーを繰り返し解いてPareto候補を集める方法です。"
     },
     {
       "aliases": [],
@@ -29670,7 +30841,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA001",
       "entity_id": "PA001",
       "entity_type": "problem",
       "external_url": null,
@@ -29680,7 +30851,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA002",
       "entity_id": "PA002",
       "entity_type": "problem",
       "external_url": null,
@@ -29690,7 +30861,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA003",
       "entity_id": "PA003",
       "entity_type": "problem",
       "external_url": null,
@@ -29699,8 +30870,10 @@
       "summary": "固有値・特異値問題。変数=matrix、目的=quadratic、制約=manifold。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.root-finding"
+      ],
+      "canonical_url": "/formulations/PA004",
       "entity_id": "PA004",
       "entity_type": "problem",
       "external_url": null,
@@ -29712,6 +30885,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC028",
           "target_type": "journey"
@@ -29720,18 +30898,26 @@
       "summary": "方程式の求根。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.linear-least-squares"
+      ],
+      "canonical_url": "/formulations/PA005",
       "entity_id": "PA005",
       "entity_type": "problem",
       "external_url": null,
       "label": "線形最小二乗",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        }
+      ],
       "summary": "線形最小二乗。変数=continuous、目的=sum_of_squares、制約=unconstrained。"
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA006",
       "entity_id": "PA006",
       "entity_type": "problem",
       "external_url": null,
@@ -29752,7 +30938,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA007",
       "entity_id": "PA007",
       "entity_type": "problem",
       "external_url": null,
@@ -29762,7 +30948,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA008",
       "entity_id": "PA008",
       "entity_type": "problem",
       "external_url": null,
@@ -29771,8 +30957,10 @@
       "summary": "上下限制約付き滑らか。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.constrained-nlp"
+      ],
+      "canonical_url": "/formulations/PA009",
       "entity_id": "PA009",
       "entity_type": "problem",
       "external_url": null,
@@ -29784,6 +30972,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.constrained-nlp",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "constrained-design",
           "target_type": "journey"
@@ -29793,7 +30986,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA010",
       "entity_id": "PA010",
       "entity_type": "problem",
       "external_url": null,
@@ -29803,7 +30996,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA011",
       "entity_id": "PA011",
       "entity_type": "problem",
       "external_url": null,
@@ -29813,7 +31006,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA012",
       "entity_id": "PA012",
       "entity_type": "problem",
       "external_url": null,
@@ -29823,7 +31016,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA013",
       "entity_id": "PA013",
       "entity_type": "problem",
       "external_url": null,
@@ -29832,8 +31025,10 @@
       "summary": "noiseを含むblack-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.expensive-black-box"
+      ],
+      "canonical_url": "/formulations/PA014",
       "entity_id": "PA014",
       "entity_type": "problem",
       "external_url": null,
@@ -29860,6 +31055,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "formulation-experiment-tuning",
           "target_type": "journey"
@@ -29884,7 +31084,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA015",
       "entity_id": "PA015",
       "entity_type": "problem",
       "external_url": null,
@@ -29894,7 +31094,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA016",
       "entity_id": "PA016",
       "entity_type": "problem",
       "external_url": null,
@@ -29914,18 +31114,28 @@
       "summary": "失敗・NaNを伴うsimulation。変数=mixed、目的=simulation、制約=implicit。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.linear-program"
+      ],
+      "canonical_url": "/formulations/PA017",
       "entity_id": "PA017",
       "entity_type": "problem",
       "external_url": null,
       "label": "線形計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        }
+      ],
       "summary": "線形計画。変数=continuous、目的=linear、制約=linear。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.convex-quadratic-program"
+      ],
+      "canonical_url": "/formulations/PA018",
       "entity_id": "PA018",
       "entity_type": "problem",
       "external_url": null,
@@ -29937,6 +31147,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "portfolio-allocation",
           "target_type": "journey"
@@ -29946,7 +31161,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA019",
       "entity_id": "PA019",
       "entity_type": "problem",
       "external_url": null,
@@ -29956,7 +31171,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA020",
       "entity_id": "PA020",
       "entity_type": "problem",
       "external_url": null,
@@ -29965,18 +31180,26 @@
       "summary": "二次錐計画。変数=continuous、目的=linear、制約=conic。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.semidefinite-program"
+      ],
+      "canonical_url": "/formulations/PA021",
       "entity_id": "PA021",
       "entity_type": "problem",
       "external_url": null,
       "label": "半正定値計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        }
+      ],
       "summary": "半正定値計画。変数=psd_matrix、目的=linear、制約=semidefinite。"
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA022",
       "entity_id": "PA022",
       "entity_type": "problem",
       "external_url": null,
@@ -29985,8 +31208,10 @@
       "summary": "一般錐最適化。変数=continuous、目的=quadratic、制約=conic。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.mixed-integer-linear-program"
+      ],
+      "canonical_url": "/formulations/PA023",
       "entity_id": "PA023",
       "entity_type": "problem",
       "external_url": null,
@@ -29998,6 +31223,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "production-mix-planning",
           "target_type": "journey"
@@ -30007,7 +31237,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA024",
       "entity_id": "PA024",
       "entity_type": "problem",
       "external_url": null,
@@ -30017,7 +31247,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA025",
       "entity_id": "PA025",
       "entity_type": "problem",
       "external_url": null,
@@ -30026,8 +31256,10 @@
       "summary": "混合整数非線形計画。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.cp-scheduling"
+      ],
+      "canonical_url": "/formulations/PA026",
       "entity_id": "PA026",
       "entity_type": "problem",
       "external_url": null,
@@ -30044,6 +31276,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.cp-scheduling",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "course-timetabling",
           "target_type": "journey"
@@ -30058,7 +31295,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA027",
       "entity_id": "PA027",
       "entity_type": "problem",
       "external_url": null,
@@ -30068,7 +31305,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA028",
       "entity_id": "PA028",
       "entity_type": "problem",
       "external_url": null,
@@ -30078,7 +31315,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA029",
       "entity_id": "PA029",
       "entity_type": "problem",
       "external_url": null,
@@ -30088,7 +31325,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA030",
       "entity_id": "PA030",
       "entity_type": "problem",
       "external_url": null,
@@ -30098,7 +31335,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA031",
       "entity_id": "PA031",
       "entity_type": "problem",
       "external_url": null,
@@ -30118,8 +31355,10 @@
       "summary": "配送routing。変数=graph、目的=discrete、制約=combinatorial。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.knapsack-set-cover"
+      ],
+      "canonical_url": "/formulations/PA032",
       "entity_id": "PA032",
       "entity_type": "problem",
       "external_url": null,
@@ -30161,6 +31400,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.knapsack-set-cover",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "budget-allocation",
           "target_type": "journey"
@@ -30199,8 +31443,10 @@
       "summary": "knapsack・set cover。変数=binary、目的=linear、制約=combinatorial。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.nonlinear-least-squares"
+      ],
+      "canonical_url": "/formulations/PA033",
       "entity_id": "PA033",
       "entity_type": "problem",
       "external_url": null,
@@ -30217,6 +31463,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC013",
           "target_type": "journey"
@@ -30230,18 +31481,26 @@
       "summary": "非線形最小二乗。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.robust-regression"
+      ],
+      "canonical_url": "/formulations/PA034",
       "entity_id": "PA034",
       "entity_type": "problem",
       "external_url": null,
       "label": "外れ値を含むrobust regression",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.robust-regression",
+          "target_type": "content"
+        }
+      ],
       "summary": "外れ値を含むrobust regression。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA035",
       "entity_id": "PA035",
       "entity_type": "problem",
       "external_url": null,
@@ -30250,8 +31509,10 @@
       "summary": "L1・sparse regularization。変数=continuous、目的=composite、制約=unconstrained。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.simplex-optimization"
+      ],
+      "canonical_url": "/formulations/PA036",
       "entity_id": "PA036",
       "entity_type": "problem",
       "external_url": null,
@@ -30268,6 +31529,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.simplex-optimization",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "energy-cvar-procurement",
           "target_type": "journey"
@@ -30282,7 +31548,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA037",
       "entity_id": "PA037",
       "entity_type": "problem",
       "external_url": null,
@@ -30302,8 +31568,10 @@
       "summary": "SO(3)/SE(3)上の最適化。変数=manifold、目的=sum_of_squares、制約=manifold。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.multiobjective-optimization"
+      ],
+      "canonical_url": "/formulations/PA038",
       "entity_id": "PA038",
       "entity_type": "problem",
       "external_url": null,
@@ -30325,6 +31593,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.multiobjective-optimization",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC017",
           "target_type": "journey"
@@ -30344,7 +31617,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA039",
       "entity_id": "PA039",
       "entity_type": "problem",
       "external_url": null,
@@ -30365,7 +31638,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA040",
       "entity_id": "PA040",
       "entity_type": "problem",
       "external_url": null,
@@ -30386,7 +31659,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA041",
       "entity_id": "PA041",
       "entity_type": "problem",
       "external_url": null,
@@ -30395,8 +31668,10 @@
       "summary": "大規模確率的ERM。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.optimal-control"
+      ],
+      "canonical_url": "/formulations/PA042",
       "entity_id": "PA042",
       "entity_type": "problem",
       "external_url": null,
@@ -30413,6 +31688,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.optimal-control",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC020",
           "target_type": "journey"
@@ -30427,7 +31707,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA043",
       "entity_id": "PA043",
       "entity_type": "problem",
       "external_url": null,
@@ -30448,7 +31728,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA044",
       "entity_id": "PA044",
       "entity_type": "problem",
       "external_url": null,
@@ -30457,8 +31737,10 @@
       "summary": "軌道最適化。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
     },
     {
-      "aliases": [],
-      "canonical_url": null,
+      "aliases": [
+        "/learn/concept.pde-constrained-program"
+      ],
+      "canonical_url": "/formulations/PA045",
       "entity_id": "PA045",
       "entity_type": "problem",
       "external_url": null,
@@ -30475,6 +31757,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "learning",
+          "target_id": "concept.pde-constrained-program",
+          "target_type": "content"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC026",
           "target_type": "journey"
@@ -30489,7 +31776,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA046",
       "entity_id": "PA046",
       "entity_type": "problem",
       "external_url": null,
@@ -30499,7 +31786,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA047",
       "entity_id": "PA047",
       "entity_type": "problem",
       "external_url": null,
@@ -30509,7 +31796,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA048",
       "entity_id": "PA048",
       "entity_type": "problem",
       "external_url": null,
@@ -30519,7 +31806,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA049",
       "entity_id": "PA049",
       "entity_type": "problem",
       "external_url": null,
@@ -30529,7 +31816,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA050",
       "entity_id": "PA050",
       "entity_type": "problem",
       "external_url": null,
@@ -30539,7 +31826,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA051",
       "entity_id": "PA051",
       "entity_type": "problem",
       "external_url": null,
@@ -30549,7 +31836,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA052",
       "entity_id": "PA052",
       "entity_type": "problem",
       "external_url": null,
@@ -30559,7 +31846,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA053",
       "entity_id": "PA053",
       "entity_type": "problem",
       "external_url": null,
@@ -30569,7 +31856,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA054",
       "entity_id": "PA054",
       "entity_type": "problem",
       "external_url": null,
@@ -30579,7 +31866,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA055",
       "entity_id": "PA055",
       "entity_type": "problem",
       "external_url": null,
@@ -30589,7 +31876,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA056",
       "entity_id": "PA056",
       "entity_type": "problem",
       "external_url": null,
@@ -30599,7 +31886,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/formulations/PA057",
       "entity_id": "PA057",
       "entity_type": "problem",
       "external_url": null,

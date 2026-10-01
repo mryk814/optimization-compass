@@ -1,10 +1,13 @@
 import type { AtlasContentPage } from "../../contracts/atlas-content";
 import { useLayoutEffect, useRef, type MouseEvent } from "react";
 
+import { ExplorableMounts } from "../explorable/ExplorableMounts";
+
 export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" | "toc"> }) {
   const contentRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    contentRef.current?.querySelectorAll("pre").forEach((region) => {
+    // Code blocks and tables scroll inside themselves on narrow screens, so keyboard users need focus.
+    contentRef.current?.querySelectorAll<HTMLElement>("pre, table").forEach((region) => {
       region.tabIndex = 0;
     });
   }, [page.html]);
@@ -35,6 +38,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
         </nav>
       )}
       <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />
+      <ExplorableMounts container={contentRef} html={page.html} />
     </div>
   );
 }

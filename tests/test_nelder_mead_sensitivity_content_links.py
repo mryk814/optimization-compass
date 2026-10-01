@@ -19,5 +19,5 @@ def test_nelder_mead_lessons_connect_initial_simplex_sensitivity() -> None:
         assert "#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX" in page.body
         assert "一般性能ranking" in page.body
 
-    assert "変えるのは初期simplexの位置だけです" in method.body
+    assert "変えるのは初期単体の位置だけです" in method.body
     assert "derivative-free family全体" in concept.body

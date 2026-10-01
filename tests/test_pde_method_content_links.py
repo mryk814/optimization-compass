@@ -21,5 +21,5 @@ def test_adjoint_sensitivity_exposes_primary_pde_lessons_before_loose_run() -> N
     ):
         assert route in adjoint.body
 
-    assert "loose toleranceの個別runは比較が引き受け" in adjoint.body
-    assert "実runtimeやmesh independenceを示しません" in adjoint.body
+    assert "緩い許容誤差の個別実行は比較が引き受け" in adjoint.body
+    assert "実行時間や格子変更への安定性を示しません" in adjoint.body

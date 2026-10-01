@@ -1,5 +1,10 @@
 # Method content density
 
+> The reading order of a method article is now fixed by the section skeleton in
+> `src/optimization_compass/content_skeletons.py` (see `docs/content-reading-principles.md` §3 and
+> ADR 0017). The levels below remain an inventory of what exists for a method; they do not decide
+> the order in which a learner reads it.
+
 Optimization Compass separates structured method facts from human-facing educational prose.
 
 ## Authority

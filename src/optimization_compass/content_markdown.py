@@ -17,6 +17,14 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
+from optimization_compass.explorables import is_valid_explorable_id, load_explorables
+
+_EXPLORABLE_OPEN = "container_explorable_open"
+_EXPLORABLE_CLOSE = "container_explorable_close"
+_EXPLORABLE_FALLBACK = (
+    "動かして確かめる図です。JavaScriptが有効なブラウザで表示されます。"
+    "読み込めない場合は、下の説明で内容を確認してください。"
+)
 _ALLOWED_CODE_LANGUAGES = {"bash", "json", "python", "text", "yaml"}
 _CALLOUTS = {"note": "Note", "tip": "Tip", "warning": "Warning"}
 _HEADING_ID_PATTERN = re.compile(r"[^a-z0-9\u3040-\u30ff\u3400-\u9fff]+")
@@ -45,6 +53,7 @@ def render_markdown(source: str, *, path: Path) -> RenderedMarkdown:
     tokens = parser.parse(source)
     _reject_raw_html(tokens, path)
     headings = _prepare_headings(tokens, path)
+    _validate_explorables(tokens, path)
     _validate_figures_are_standalone(tokens, path)
     _validate_and_prepare_links(tokens, headings, path)
     _validate_code_languages(tokens, path)
@@ -81,6 +90,7 @@ def _markdown_parser() -> MarkdownIt:
     parser.use(dollarmath_plugin, allow_space=False, allow_digits=False)
     for name, label in _CALLOUTS.items():
         parser.use(container_plugin, name, render=_callout_renderer(name, label))
+    parser.use(container_plugin, "explorable", render=_render_explorable)
     parser.add_render_rule("fence", _render_fence)
     parser.add_render_rule("code_block", _render_code_block)
     parser.add_render_rule("math_inline", _render_inline_math)
@@ -101,6 +111,55 @@ def _callout_renderer(name: str, label: str) -> Any:
         return "</aside>\n"
 
     return render
+
+
+def _render_explorable(_renderer: object, tokens: list[Token], index: int, *_: object) -> str:
+    token = tokens[index]
+    if token.nesting == -1:
+        return "</figcaption></figure>\n"
+    explorable_id = token.info.split()[1]
+    entry = load_explorables()[explorable_id]
+    return (
+        f'<figure class="explorable" role="group" data-explorable-id="{explorable_id}"'
+        f' aria-label="{html.escape(entry.title_ja, quote=True)}">'
+        f'<div class="explorable-mount" data-explorable-mount>'
+        f'<p class="explorable-fallback">{_EXPLORABLE_FALLBACK}</p></div>'
+        '<figcaption class="explorable-caption">'
+    )
+
+
+def _validate_explorables(tokens: list[Token], path: Path) -> None:
+    """An explorable is a top-level block: a registered id and exactly one caption paragraph."""
+    registry = load_explorables()
+    seen: set[str] = set()
+    for index, token in enumerate(tokens):
+        if token.type != _EXPLORABLE_OPEN:
+            continue
+        parts = token.info.split()
+        if len(parts) != 2 or not is_valid_explorable_id(parts[1]):
+            raise ValueError(f"{path}: explorable requires exactly one kebab-case id")
+        explorable_id = parts[1]
+        if explorable_id not in registry:
+            raise ValueError(f"{path}: unknown explorable id: {explorable_id}")
+        if explorable_id in seen:
+            raise ValueError(f"{path}: explorable is used more than once: {explorable_id}")
+        seen.add(explorable_id)
+        if token.level != 0:
+            raise ValueError(f"{path}: explorable must be a top-level block: {explorable_id}")
+        body = tokens[index + 1 : index + 4]
+        closes = index + 4 < len(tokens) and tokens[index + 4].type == _EXPLORABLE_CLOSE
+        if not (
+            closes
+            and [item.type for item in body] == ["paragraph_open", "inline", "paragraph_close"]
+        ):
+            raise ValueError(
+                f"{path}: explorable {explorable_id} requires exactly one caption paragraph"
+            )
+        inline = body[1]
+        if any(child.type == "image" for child in inline.children or []):
+            raise ValueError(f"{path}: explorable caption must be text: {explorable_id}")
+        if not _inline_text(inline).strip():
+            raise ValueError(f"{path}: explorable caption must not be blank: {explorable_id}")
 
 
 def _walk(tokens: list[Token]) -> list[Token]:

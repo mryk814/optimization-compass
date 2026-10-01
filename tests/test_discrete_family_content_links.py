@@ -41,7 +41,7 @@ def test_network_simplex_keeps_graph_pivot_and_failure_conditions_visible() -> N
     for concept in (
         "全域木（spanning tree）",
         "被約費用",
-        "node potential",
+        "節点ポテンシャル",
         "無限容量の負費用cycle",
     ):
         assert concept in network_simplex.body

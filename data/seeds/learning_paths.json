@@ -1,0 +1,108 @@
+{
+  "contract_version": "1.0.0",
+  "paths": [
+    {
+      "path_id": "formulation-basics",
+      "title_ja": "定式化の最初の一歩",
+      "summary_ja": "線形計画を起点に、二次・整数・データへの当てはめへ形を一つずつ広げ、形が変わると解き方と保証がどう変わるかをたどります。",
+      "goal_ja": "問題文を読んで「何を決め、何を良くし、何を守るか」を式に書き、その形からおおよその解き方と保証の強さを言えるようになります。",
+      "audience_ja": "微分と行列の積は分かるが、最適化は初めて学ぶ人",
+      "steps": [
+        {
+          "target_type": "content",
+          "target_id": "concept.variable-domain",
+          "question_ja": "決めるものが連続か、整数か、選択かで、なぜ使える道具が変わるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA017",
+          "question_ja": "費用も制約も足し算と定数倍で書ける問題は、どんな形をしているか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "concept.convexity",
+          "question_ja": "近くで一番低い点が、全体でも一番低いと言えるのはどんなときか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "primal-simplex",
+          "question_ja": "線形計画の答えは、なぜ頂点を順にたどれば見つかるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA018",
+          "question_ja": "目的に二乗が入ると、答えの位置と解き方はどう変わるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA023",
+          "question_ja": "「整数であること」を一つ足すだけで、何が難しくなるのか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "branch-and-bound",
+          "question_ja": "整数の問題を、緩和による下界と分岐でどう絞り込むのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA005",
+          "question_ja": "データに直線を合わせる問題は、どんな最適化になるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA033",
+          "question_ja": "モデルが非線形になると、何が失われ、何が残るのか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "gauss-newton",
+          "question_ja": "残差の構造を使うと、なぜ一般の最小化より速く進めるのか。"
+        }
+      ]
+    },
+    {
+      "path_id": "fit-to-data",
+      "title_ja": "データに合わせる",
+      "summary_ja": "線形最小二乗から出発し、非線形モデル、外れ値、疎性、逆問題へと、当てはめの問題を一段ずつ広げます。",
+      "goal_ja": "当てはめの問題を見て、残差の形・損失の選び方・正則化の要否を判断し、対応する解き方を選べるようになります。",
+      "audience_ja": "回帰やfittingを使ったことがあり、うまくいかない理由を知りたい人",
+      "steps": [
+        {
+          "target_type": "formulation",
+          "target_id": "PA005",
+          "question_ja": "二乗誤差の最小化は、なぜ線形代数だけで解けるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA033",
+          "question_ja": "モデルが parameter について非線形になると、何が変わるのか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "gauss-newton",
+          "question_ja": "残差を線形化して解く一手は、どんなときに信用できるのか。"
+        },
+        {
+          "target_type": "content",
+          "target_id": "least-squares",
+          "question_ja": "Gauss–Newton法が不安定なとき、減衰項は何を補うのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA034",
+          "question_ja": "外れ値が混ざると、二乗損失の何が問題になるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA035",
+          "question_ja": "L1 罰則を足すと、なぜ係数がちょうど0になるのか。"
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA055",
+          "question_ja": "データだけで答えが決まらないとき、正則化は何を仮定しているのか。"
+        }
+      ]
+    }
+  ]
+}

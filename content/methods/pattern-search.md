@@ -4,43 +4,87 @@ kind: method
 method_id: M_PATTERN_SEARCH
 title_ja: Pattern Search
 title_en: Pattern Search
-summary: 現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。
+summary: 現在点の周囲へ配置方向の近傍調査点を配置し、改善の有無に応じて一歩の大きさを拡大・縮小する微分不要局所探索法です。
 source_ids: [S018, S056, S060]
 prerequisites: [concept.derivative-free]
 related_ids: [powell, mads, method.nelder-mead]
 aliases: [/learn/pattern-search]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。
+現在点の周囲へ配置方向の近傍調査点を配置し、改善の有無に応じて一歩の大きさを拡大・縮小する微分不要局所探索法です。
 
-## Pollの考え方
+## 30秒でつかむ
 
-現在点 $x_k$、step size $\Delta_k$、方向集合 $D_k$ に対し、
+暗い部屋で、前後左右の足場を試しながら低い方へ進む感覚です。
+
+- **見るもの**：現在点と近傍候補の目的値
+- **動かすもの**：採用点と近傍を調べる間隔
+- **前進の判断**：候補が改善するか、非改善時に間隔を縮められるか
+
+## 一手の意味
+
+### 近傍調査の考え方
+
+現在点 $x_k$、一歩の大きさ $\Delta_k$、方向集合 $D_k$ に対し、
 
 $$
 x_k+\Delta_k d,\quad d\in D_k
 $$
 
-を評価します。改善点があればincumbentを更新し、なければ$\Delta_k$を縮小します。
+を評価します。改善点があれば現在の採用点を更新し、なければ$\Delta_k$を縮小します。
 
-coordinate directions $\{\pm e_i\}$ は単純なpatternですが、positive spanning setを使う理論的変種や、search stepを加える実装もあります。
+座標方向 $\{\pm e_i\}$ は単純な配置ですが、正に張る方向集合を使う理論的変種や、探索段階を加える実装もあります。
 
-## Complete pollとopportunistic poll
+### 全候補を調べるか、最初の改善で打ち切るか
 
-- complete poll: 全候補を評価して最良点を選ぶ
-- opportunistic: 最初の改善で残りを省略
+- 全候補の近傍調査: 全候補を評価して最良点を選ぶ
+- 最初の改善で打ち切る: 最初の改善で残りを省略
 
-opportunisticは評価数を減らせますが、方向順序に依存します。並列評価ではcomplete pollが自然な場合があります。
+最初の改善で打ち切れば評価数を減らせますが、方向順序に依存します。
+並列評価では全候補を調べる方が自然な場合があります。
 
-## 向いている条件
+## 小さな例
 
-- 低〜中次元のblack-box
-- derivativeがない、信用できない
+1変数 $f(x)=(x-1)^2$ を初期点0から調べます。
+左右の候補をすべて評価し、改善時に間隔を2倍、非改善時に半分へ変える骨格を実行しました。
+
+| 調査 | 間隔 | 候補 | 採用点 | 目的値 |
+|---|---:|---|---:|---:|
+| 1回目 | 1.0 | $1,-1$ | 1 | 0 |
+| 2回目 | 2.0 | $3,-1$ | 1 | 0 |
+| 3回目 | 1.0 | $2,0$ | 1 | 0 |
+
+1回目で目的値は1から0へ下がります。
+その後は点を動かさず、間隔を縮めます。
+間隔が小さくなることと、最良値が改善することは別です。
+Python例の2変数問題では、改善時の倍率を1.2にしています。
+
+## 向く条件・避ける条件
+
+### 向いている条件
+
+- 低〜中次元のブラックボックス
+- 微分がない、信用できない
 - 軽い非滑らかさ
-- poll点を並列評価できる
-- 局所stationarityの目安が欲しい
+- 近傍調査点を並列評価できる
+- 局所停留性の目安が欲しい
+
+### 避ける／切り替える条件
+
+- 高次元で近傍調査点数が予算を圧迫
+- 評価が極端に高価
+- 雑音で改善判定が揺れる
+- 変数 尺度が悪い
+- ブラックボックス制約を単純penaltyだけで扱う
+- 離散 / カテゴリ 定義域を無理に連続方向へ埋め込む
+
+[MADS](#/learn/mads)は近傍調査方向と格子をより一般化し、ブラックボックス制約を扱う実装もあります。
+
+::: warning
+同じ「配置 探索」でも探索段階、近傍の方向集合、最初の改善で打ち切る規則、格子の更新、制約処理が異なります。実装と設定を明記します。
+:::
 
 ## Python
 
@@ -70,33 +114,31 @@ while step > minimum_step:
 print(x, objective(x), step)
 ```
 
-これは教育用のopportunistic coordinate searchです。正式なpattern-search / generalized pattern-searchの方向条件や停止理論をすべて実装してはいません。
+これは全候補を評価する教育用の座標方向探索です。正式な配置-探索 / 一般化された 配置-探索の方向条件や停止理論をすべて実装してはいません。
 
 ## 診断値
 
-- incumbent objective
-- step / mesh size
-- successful / unsuccessful poll数
-- poll direction別の成功率
-- evaluation count
-- parallel batch size
-- bounds hit率
-- constraint violation
-- stopping reason
+- 現在の採用点 目的関数
+- 一歩 / 格子の間隔
+- 成功した / 改善しなかった 近傍調査数
+- 近傍を調べる方向別の成功率
+- 評価回数
+- 並列 一括評価 大きさ
+- 上下限 到達率
+- 制約違反
+- 停止理由
 
-stepが小さいだけでglobal optimumは保証されません。noise floorより小さなstepを続けても改善判定が不安定になります。
+一歩が小さいだけで大域最適解は保証されません。雑音の大きさより小さな一歩を続けても改善判定が不安定になります。
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- 高次元でpoll点数が予算を圧迫
-- 評価が極端に高価
-- noiseで改善判定が揺れる
-- variable scaleが悪い
-- black-box constraintを単純penaltyだけで扱う
-- discrete / categorical domainを無理に連続方向へ埋め込む
+- 間隔だけが縮み、改善判定が揺れる → 評価の雑音と反復評価を確認します。
+- 候補の評価数が大きい → 次元と方向数、並列評価の費用を確認します。
+- 制約違反が減らない → [MADS](#/learn/mads)などの制約処理を検討します。
+- 初期点によって別の谷へ止まる → [Multi-start](#/learn/multi-start)と比較します。
 
-[MADS](#/learn/mads)はpoll方向とmeshをより一般化し、black-box constraintを扱う実装もあります。
+## 次に読む
 
-::: warning
-同じ「pattern search」でもsearch step、poll set、opportunism、mesh update、constraint handlingが異なります。implementationとoptionを明記します。
-:::
+- [微分なし局所探索](#/formulations/PA012)：値だけで局所改善する問題
+- [MADS](#/learn/mads)：格子と方向集合を一般化
+- [Powell法](#/learn/powell)：方向ごとの直線最小化

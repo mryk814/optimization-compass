@@ -3,7 +3,19 @@
 This file is the first entry point for humans and automated agents changing this repository.
 For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
 
-Task-shaped authoring skills for growing the dataset live in [`.claude/skills/`](.claude/skills/) (Claude Code loads them automatically): `grow-data` (triage/routing), `add-content-article`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
+Task-shaped authoring skills for growing the dataset live in [`.agents/skills/`](.agents/skills/): `grow-data` (triage/routing), `add-formulation`, `add-content-article`, `add-explorable`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
+
+## What we are building for the learner
+
+Read this before any rule below. Every change should make one of these better for a reader:
+
+1. **引ける（dictionary）** — every optimization formulation has a page at `/formulations/<PROBLEM_ID>` with its standard form, a plain reading, recognition cues, its place on the formulation compass (more general / more special / relaxed or rewritten / look-alikes), and candidate methods.
+2. **進める（paths）** — `/paths/<path_id>` orders formulations and articles by the question each answers. Every step page shows "this step's question" on top and "the next question" at the bottom.
+3. **当てはめる（solve）** — Diagnose and Gallery apply the same knowledge to the reader's own problem.
+
+The structure is **skeleton → lessons → projections**: the skeleton (released database + `data/seeds/formulation_atlas.json`) makes every entity visible from day one; lessons (`content/**/*.md`, one fixed section skeleton per kind) are added one at a time; the app screens are projections generated from both. Pick what to write next with `uv run python scripts/formulation_backlog.py` instead of guessing. Direction and the rules review: [`docs/product-direction/learning-atlas.md`](docs/product-direction/learning-atlas.md); decision: [ADR 0017](docs/adr/0017-formulation-atlas-and-learning-paths.md); recipes: [`docs/formulation-atlas.md`](docs/formulation-atlas.md).
+
+A change that only adds pages, rows, or characters without improving one of the three reader actions above is not progress.
 
 ## Product boundary
 
@@ -12,11 +24,14 @@ Optimization Compass is a versioned, data-driven Optimization Atlas. Keep these 
 | Responsibility | Authority / editable input |
 |---|---|
 | Stable IDs, structured relations, support scope, evidence, canonical knowledge | SQL migrations and validated seed/catalog inputs used to build the released SQLite database |
-| Human-readable method and concept explanations | `content/**/*.md` frontmatter and Markdown body |
+| Human-readable method, concept, and formulation explanations | `content/**/*.md` frontmatter and Markdown body |
+| Formulation families, standard forms, readings, cues, and formulation relations | `data/seeds/formulation_atlas.json` (must cover every problem archetype; see [`docs/formulation-atlas.md`](docs/formulation-atlas.md)) |
+| Learning paths (ordered questions) | `data/seeds/learning_paths.json` |
 | Gallery cases | `data/seeds/site_gallery.json` |
 | Comparison definitions | `data/seeds/site_comparisons.json` |
 | Problem definitions and instances | `src/optimization_compass/resources/problem-suite.json` |
 | Executable problem behavior | `src/optimization_compass/problem_registry.py` |
+| Interactive teaching figures (explorables) | `src/optimization_compass/resources/explorables.json` and `site/src/features/explorable/` (see [`docs/explorables.md`](docs/explorables.md)) |
 | View and visualization metadata | validated seeds and Python contracts under `data/seeds/` and `src/optimization_compass/` |
 | Generated site indexes and distributions | generated from the inputs above; never treated as editable authority |
 
@@ -40,9 +55,13 @@ Find and change the canonical input instead. Generated artifacts may appear in a
 |---|---|---:|
 | Correct prose, examples, limitations, or citations on an existing page | `content/**/*.md` | low |
 | Add a method or concept article for an existing canonical entity | `content/**/*.md` | low |
+| Add a formulation article (8-section skeleton) for an existing problem archetype | `content/concepts/*.md` with `canonical_entity_type: problem`; recipe A in `docs/formulation-atlas.md` | low |
+| Add or correct a standard form, cue, or formulation relation | `data/seeds/formulation_atlas.json`; recipe B | low–medium |
+| Add or reorder a learning path | `data/seeds/learning_paths.json`; recipe C | low |
 | Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
 | Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
 | Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
+| Add an interactive explorable figure to an article | `docs/explorables.md` recipe: registry JSON, `math/` core with tests, figure component, `::: explorable` block | medium |
 | Add a new method, implementation, source, evidence relation, or controlled vocabulary | dataset migration/build inputs plus content | high |
 | Add a scenario, generator, artifact contract, or renderer family | Python contracts/generators plus site implementation | high |
 | Change recommendation behavior, schema, release identity, or publishing | dedicated design and release flow | critical |
@@ -64,6 +83,9 @@ For high or critical changes, inspect similar merged work and document the autho
 - PDE-constrained data keeps decision variables, derived state, residual constraints, evaluation failures, and solver cost distinguishable. Detailed modeling guidance belongs in the PDE article and ADR, not in this entry point.
 - UI code does not gain per-entity routing crosswalks when canonical relations can generate the route.
 - Generated JSON is regenerated from the latest branch state; it is not manually merged.
+- Every problem archetype appears exactly once in the formulation atlas; `special_case_of` and `relaxes_to` never form cycles, and every relation states its condition in `note_ja`.
+- Formulation, method, and family articles follow their fixed section skeleton (`src/optimization_compass/content_skeletons.py`); worked examples are computed, not estimated. Articles written before the skeleton are listed in `data/seeds/content_skeleton_pending.json`, which only shrinks.
+- Every learning-path step carries the question it answers, and no step comes before its own prerequisites.
 
 ## Lightweight workflow
 

@@ -42,10 +42,11 @@ function MapAction({ methodId, view }: { methodId: string; view: ViewSpec }) {
   const atlasNavigation = useAtlasNavigation();
   const nodeId = resolveRelatedNodeId(view.nodes, "method", methodId);
   if (atlas.error) return <p role="alert">{atlas.error.message}</p>;
+  // A disabled control teaches nothing; the map link appears only when the method is on the map.
+  if (!nodeId) return null;
   return (
     <>
     <button
-      disabled={!nodeId}
       onClick={() => {
         if (nodeId) atlasNavigation.navigateWithState("/map", { ...atlas.state, selectedNodeId: nodeId });
       }}
@@ -144,10 +145,10 @@ export function MethodPage() {
 
   return (
     <section className="page-panel method-detail-page">
-      <p className="eyebrow">手法 (Method)</p>
-      <h1>{method?.label ?? "手法を読み込み中…"}</h1>
-      {method?.summary && <p className="content-lead">{method.summary}</p>}
-      <p className="route-parameter">手法ID (Method ID): <strong>{methodId}</strong></p>
+      <p className="eyebrow">手法</p>
+      {/* The article's title is the learner-facing name; its first paragraph already states the summary. */}
+      <h1>{content?.title_ja ?? method?.label ?? "手法を読み込み中…"}</h1>
+      {!content && method?.summary && <p className="content-lead">{method.summary}</p>}
       <PageOrientation
         limits="教材は手法の考え方と登録済みの前提を説明します。データセットや実装、問題条件によって適否は変わります。"
         next={[{ label: "Mapで関連する問題型を見る", to: "/map" }, { label: "Compareで動きを比べる", to: "/compare" }, { label: "Theaterで一手を再生する", to: "/theater" }]}
@@ -169,6 +170,7 @@ export function MethodPage() {
       <LearningRelations entityId={methodId} entityType="method" />
       {groups && <MethodRelations groups={groups} />}
       <MethodTechnicalDetails data={siteData} failures={failureModes} methodId={methodId} />
+      <p className="route-parameter">手法ID: <code>{methodId}</code></p>
     </section>
   );
 }

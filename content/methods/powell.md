@@ -4,26 +4,28 @@ kind: method
 method_id: M_POWELL
 title_ja: Powell方向集合法
 title_en: Powell Direction-Set Method
-summary: 勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。
+summary: 勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向で方向集合を更新する局所法です。
 source_ids: [S002, S018, S056]
 prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, pattern-search, mads]
 aliases: [/learn/powell]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-30
 ---
 
-勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。
+勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向で方向集合を更新する局所法です。
 
 ## 30秒でつかむ
+
+縦と横に物を動かして位置を調整し、進みやすかった斜めの向きも残す感覚です。
 
 この手法の気持ちは、いくつかの方向を一本ずつ試し、よく進めた向きを次の一巡へ残すことです。
 
 - **見るもの**: 各探索方向に沿った目的関数値の変化
-- **動かすもの**: 現在点とdirection set
-- **前進の判断**: 一巡ごとに目的関数値とbest-so-farが改善すること
+- **動かすもの**: 現在点と方向集合
+- **前進の判断**: 一巡ごとに目的関数値とこれまでの最良値が改善すること
 
-## 一巡の流れ
+## 一手の意味
 
 $n$次元で$n$本程度の方向 $d_1,\ldots,d_n$ を持ち、各方向について
 
@@ -31,9 +33,46 @@ $$
 \min_\alpha f(x+\alpha d_i)
 $$
 
-というline minimizationを行います。一巡の始点と終点の差から新しい方向を作り、改善の小さい方向と交換します。
+という直線に沿う最小化を行います。一巡の始点と終点の差から新しい方向を作り、改善の小さい方向と交換します。
 
-quadratic problemではconjugate directionsに近づく直感がありますが、一般非線形problemで有限回厳密解を保証するわけではありません。
+二次 問題では共役方向に近づく直感がありますが、一般非線形問題で有限回厳密解を保証するわけではありません。
+
+## 小さな例
+
+Python例の $f(x)=(1-x_1)^2+30(x_2-x_1^2)^2$ を実行しました。
+初期点 $(-1.2,1)$ の目的値は10.648です。
+最初の3巡のコールバックは次のとおりでした。
+
+| 巡回 | 巡回後の点 | 目的値 |
+|---|---|---:|
+| 1巡目 | $(1.0000000145,1.0000000290)$ | $2.1045\times10^{-16}$ |
+| 2巡目 | $(1.0000000144,1.0000000288)$ | $2.0758\times10^{-16}$ |
+| 3巡目 | $(1.0000000000,1.0000000000)$ | $4.9304\times10^{-32}$ |
+
+この実行では最初の一巡で解の近くへ進み、その後は数値的な詰めを行いました。
+一巡には複数の直線最小化が含まれます。
+3巡で少なく見えても、関数評価は69回でした。
+
+## 向く条件・避ける条件
+
+### Direction setと尺度合わせ
+
+初期方向が座標軸だけの場合、変数尺度が大きく違うと直線探索 範囲と改善量が偏ります。
+
+- 変数を無次元化
+- 定義域に合う初期方向
+- 上下限と可行 区間
+- 直線上の最小化を行う処理の許容誤差
+
+を確認します。方向がほぼ線形従属になると探索配置が劣化します。
+
+### 向いている条件
+
+- 低〜中次元の連続 ブラックボックス
+- 目的関数が比較的滑らかだが勾配を得られない
+- 1次元直線探索が有効
+- 上下限を持つ局所改善
+- Nelder–Mead以外の配置を試したい
 
 ## Python
 
@@ -57,50 +96,37 @@ result = minimize(
 print(result.success, result.x, result.fun, result.nfev, result.message)
 ```
 
-SciPy実装のbounds、初期方向、line search、停止条件はversionの公式documentationで確認します。
+SciPy実装の上下限、初期方向、直線探索、停止条件は版の公式文書で確認します。
 
-## Direction setとscaling
+## 診断値
 
-初期方向が座標軸だけの場合、変数scaleが大きく違うとline search rangeと改善量が偏ります。
+- 目的関数評価数
+- 巡回数
+- 方向ごとの改善量
+- 直線探索 評価数
+- 方向行列の条件
+- 一歩 ノルム
+- 目的関数 / これまでの最良値
+- 上下限 到達率
+- 停止理由
 
-- 変数を無次元化
-- domainに合う初期direction
-- boundsとfeasible interval
-- line minimizerのtolerance
-
-を確認します。方向がほぼ線形従属になると探索geometryが劣化します。
-
-## 最初に見る診断値
-
-- function evaluation数
-- cycle数
-- directionごとの改善量
-- line-search evaluation数
-- direction matrixのcondition
-- step norm
-- objective / best-so-far
-- bounds hit率
-- termination reason
-
-iteration数だけでは各iteration内のline evaluation数が分かりません。
-
-## 向いている条件
-
-- 低〜中次元のcontinuous black-box
-- objectiveが比較的滑らかだがgradientを得られない
-- 1次元line searchが有効
-- boundsを持つ局所改善
-- Nelder–Mead以外のgeometryを試したい
+反復数だけでは各反復内のline 評価数が分かりません。
 
 ## 失敗・切替の兆候
 
-- 高次元で各cycleの評価数が大きい → 1 cycleのevaluation budgetを確認し、別の手法と比較する
-- noiseでline minimizationが不安定 → repeated evaluationやnoise-aware methodを検討する
-- discontinuityや評価失敗が多い → line searchを前提にしないderivative-free法を比較する
-- general constraintをboundsだけで代用 → 制約を扱えるsolverへ移行する
-- global optimumやcertificateが必要 → local methodの保証範囲を超えるため、別のsolverを検討する
-- direction setが退化し改善が止まる → 初期方向、scaling、方向集合を見直す
+- 高次元で各巡回の評価数が大きい → 1 巡回の評価予算を確認し、別の手法と比較する
+- 雑音で直線に沿う最小化が不安定 → 繰り返し評価や雑音を考慮する手法を検討する
+- 不連続や評価失敗が多い → 直線探索を前提にしない微分不要法を比較する
+- 一般制約を上下限だけで代用 → 制約を扱えるソルバーへ移行する
+- 大域最適解や証明が必要 → 局所 手法の保証範囲を超えるため、別のソルバーを検討する
+- 方向集合が退化し改善が止まる → 初期方向、尺度合わせ、方向集合を見直す
 
 ::: warning
-Powell法はgradient-freeですが、function evaluation budgetを多く使う場合があります。Nelder–Mead、Pattern Search、MADSと同じ初期点・bounds・evaluation budgetで比較します。
+Powell法は勾配-不要ですが、目的関数評価 予算を多く使う場合があります。Nelder–Mead、Pattern 探索、MADSと同じ初期点・上下限・評価予算で比較します。
 :::
+
+## 次に読む
+
+- [微分なし局所探索](#/formulations/PA012)：関数値から局所改善する形
+- [Pattern 探索](#/learn/pattern-search)：近傍を調べる方法
+- [MADS](#/learn/mads)：制約と格子を管理する方法

@@ -4,59 +4,203 @@ kind: method
 method_id: M_DIJKSTRA_ASTAR
 title_ja: Dijkstra法とA*探索
 title_en: Dijkstra's Algorithm and A* Search
-summary: 非負の重みを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。
+summary: 非負の重みを持つ有向・無向グラフで、確定済みの距離と過大評価しない見積り（admissible heuristic）を使い、最短路を厳密に求める探索法です。
 source_ids: [S054]
 prerequisites: [dynamic-programming]
 related_ids: [dynamic-programming, cp-sat]
 aliases: [/learn/dijkstra-astar]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
-非負の重みを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。
+非負の重みを持つ有向・無向グラフで、確定済みの距離と過大評価しない見積り（admissible heuristic）を使い、最短路を厳密に求める探索法です。
 
-## まず確認すること
+## 30秒でつかむ
 
-- edge weightは非負か
-- コスト（cost）の単位は揃い、path上で加算できるか
-- nodeとedgeは、問題の状態と遷移を表しているか
-- `side constraint`は`path state`へ含まれているか
+池に石を投げると、波紋が石のまわりに広がります。
+Dijkstra法は、始点から近い順に、波紋のように探索の範囲を広げます。
+A*探索は、ゴールの方向へ、波紋を偏らせて広げます。
 
-## 選ぶnodeのpriorityが違う
+- **見るもの**: 各nodeの暫定距離 $g(n)$。A*では、ゴールまでの残りコストの見積り $h(n)$ も
+- **動かすもの**: 優先度付きキュー（priority queue）。優先度が最も小さいnodeを一つ取り出して確定し、隣の辺を緩める（relax）
+- **前進の判断**: ゴールを取り出した時点で、ゴールまでの最短距離が確定する
 
-Dijkstra法は、始点からの暫定距離$g(n)$が最小のnodeを取り出します。
-そのnodeから伸びるedgeをrelaxし、goalへ届くまで確定領域を広げます。
-`edge cost`が非負なら、priority queueから確定した距離は後から改善されません。
+ゴールに初めて届いた時点では、まだ確定しません。取り出すまで、より短い経路が見つかる可能性が残っています。
 
-A*探索は、現在までのcostとgoalまでの残りcostの推定を足したpriorityでnodeを選びます。
+## 一手の意味
+
+一手は、キューから優先度が最小のnodeを一つ取り出して確定し、そこから伸びる辺で隣のnodeの暫定距離を更新する操作です。
+
+Dijkstra法は、始点からの暫定距離 $g(n)$ が最小のnodeを取り出します。
+そのnodeから伸びる辺を緩め、ゴールへ届くまで確定した領域を広げます。
+辺のコスト（edge cost）が非負なら、キューから取り出して確定した距離は、後から改善されません。
+
+辺を緩めるとは、次の比較です。取り出したnode $u$ から辺 $(u,v)$ で $v$ へ行くとき、いまの暫定距離より短ければ更新します。
+
+$$
+g(v)\leftarrow \min\bigl(g(v),\; g(u)+w(u,v)\bigr)
+$$
+
+A*探索は、現在までのコストと、ゴールまでの残りコストの見積りを足した優先度でnodeを選びます。
 
 $$
 f(n)=g(n)+h(n)
 $$
 
-- $g(n)$: 始点から現在nodeまでに支払ったcost
-- $h(n)$: 現在nodeからgoalまでに必要な残りcostの推定
+- $g(n)$: 始点から現在のnodeまでに支払ったコスト
+- $h(n)$: 現在のnodeからゴールまでに必要な残りコストの見積り
 
-$h(n)=0$ならDijkstra法と同じpriorityです。
-$h$が真の残りcostを過大評価しないadmissible heuristicなら、A*も最適性を維持できます。
-consistent heuristicなら、確定済みnodeの再展開を抑えやすくなります。
+$h(n)=0$ なら、Dijkstra法と同じ優先度です。
+$h$ が真の残りコストを過大評価しないなら（admissible）、A*も最適性を維持できます。
+さらに、どの辺 $(u,v)$ でも $h(u)\le w(u,v)+h(v)$ が成り立つなら（consistent）、確定済みのnodeの再展開を抑えやすくなります。
 
-## 同じ最短costへ、違う範囲を探す
+## 小さな例
 
-次の固定gridでは、どちらもcost 24の最短路を返します。
-違うのは、goalへ着くまでに展開したcellの範囲です。
+始点 S からゴール G までの最短路を、次の小さなグラフで求めます。数字は辺の重みで、辺は両向きに通れます。
+
+| 辺 | S-A | S-C | S-B | C-G | B-G |
+|---|---:|---:|---:|---:|---:|
+| 重み | 1 | 2 | 4 | 6 | 3 |
+
+A*で使う見積り $h$ は、ゴールまでの残りコストのおおよその値で、次の表のとおりとします。
+
+| node | S | A | C | B | G |
+|---|---:|---:|---:|---:|---:|
+| 見積り $h$ | 6 | 7 | 5 | 3 | 0 |
+
+どの辺でも $h(u)\le w(u,v)+h(v)$ が成り立つ（consistent）ことを確かめてあります。
+
+### Dijkstra法
+
+暫定距離 $g$ が小さい順にnodeを取り出します。
+
+| 順 | 取り出すnode | $g$ | 辺を緩めた結果 |
+|---:|---|---:|---|
+| 1 | S | 0 | A=1、C=2、B=4 を記録 |
+| 2 | A | 1 | 先に進む辺なし（Aの隣はSだけで、確定済み） |
+| 3 | C | 2 | G=2+6=8 を記録 |
+| 4 | B | 4 | G=4+3=7 に更新（8より短い） |
+| 5 | G | 7 | ゴールを取り出した。最短距離は7 |
+
+順3でGに届いていますが、その時点の距離8は暫定です。順4で、Bを経由する距離7が見つかりました。ゴールを取り出すまで待つ理由が、ここにあります。
+最短路は S→B→G で、コストは 7 です。取り出したnodeは 5 個でした。
+
+### A*探索
+
+優先度 $f=g+h$ が小さい順に取り出します。
+
+| 順 | 取り出すnode | $g$ | $f=g+h$ | 辺を緩めた結果 |
+|---:|---|---:|---:|---|
+| 1 | S | 0 | 6 | A: $f=1+7=8$、C: $f=2+5=7$、B: $f=4+3=7$ を記録 |
+| 2 | B | 4 | 7 | G: $g=7$、$f=7$ を記録 |
+| 3 | G | 7 | 7 | ゴールを取り出した。最短距離は7 |
+
+順2では、CとBの優先度が $f=7$ で同点です。同点のときは $h$ が小さい方（B）を先に取り出します。
+順3でも、Cとゴールが $f=7$ で同点です。ゴールは $h=0$ なので先に取り出され、Cは展開されずに終わります。
+
+同じ最短距離 7 が、取り出したnode 3個で求まりました。A（優先度8）は取り出されず、C（優先度7）は同点の処理で後回しになりました。どちらも展開されずに、ゴールが確定しています。
+見積りが真の残りコスト以下（admissible）でなければ、この省略は最適な経路を落とすことがあります。
+
+### 格子で見る
+
+次の固定した格子では、どちらもコスト24の最短路を返します。違うのは、ゴールに着くまでに展開したセルの範囲です。
 
 ![17列11行の固定gridをDijkstra法とManhattan heuristic付きA*探索で解いた実行結果。上段のDijkstra法は始点から全方向へ広がり168 cellを展開する。下段のA*はgoal方向へ探索を絞り92 cellを展開する。障害物を避ける経路は異なるが、どちらの最短path costも24である。](./media/dijkstra-astar-grid-execution.svg "固定したunit-cost 4近傍gridのpure Python実行です。A*の展開数はDijkstra法より45%少なくなりますが、別graph、重み、tie-break、heuristic一般の削減率や実行時間は示しません。")
 
-淡い橙が展開済みcell、青緑が返された最短路です。
-A*は168 cellから92 cellへ展開範囲を減らしました。
-これは、このgridとManhattan heuristicで得た固定結果です。
+淡い橙が展開済みのセル、青緑が返された最短路です。
+A*は168セルから92セルへ、展開の範囲を減らしました。
+これは、この格子とManhattan距離の見積りで得た固定の結果です。
 
-> 両者の最短costは同じ24です。
-> 経路そのものは複数あるため、返されたpathの形が同じである必要はありません。
+> 両者の最短コストは同じ24です。
+> 経路そのものは複数あるため、返された経路の形が同じである必要はありません。
 > 展開数の45%削減は一般性能rankingではありません。
 
+## 向く条件・避ける条件
+
+使う前に、次を確認します。
+
+- 辺の重みは非負か
+- コストの単位は揃い、経路上で加算できるか
+- nodeと辺は、問題の`state`と遷移を表しているか
+- `side constraint`は、`path state`へ含まれているか
+
+単純な最短路（[最短路問題](#/formulations/PA029)）は、MIPへ変換しても解けます。
+専用の方法はグラフの構造を直接利用するので、保証と診断値を対応づけやすくなります。
+
+ただし、次の`side constraint`が増えると、専用の構造が崩れる場合があります。
+
+- 複数の資源の容量
+- 時間窓（time window）
+- 経路全体に依存する論理条件
+- 集荷と配達（pickup and delivery）
+- 複数車両の相互作用
+- 負の辺や、閉路に関する条件
+
+この場合は、`state`を拡張したDPや、資源制約付き最短路（resource-constrained shortest path）を検討します。[CP-SAT](#/learn/cp-sat)やMIPも候補です。
+
 ## Python
+
+小さな例を、Dijkstra法（$h=0$）とA*探索で解きます。表の取り出し順が、出力に対応します。
+
+```python
+import heapq
+
+graph = {  # 辺の重み（無向）
+    "S": {"A": 1, "C": 2, "B": 4},
+    "A": {"S": 1},
+    "C": {"S": 2, "G": 6},
+    "B": {"S": 4, "G": 3},
+    "G": {"C": 6, "B": 3},
+}
+estimate = {"S": 6, "A": 7, "C": 5, "B": 3, "G": 0}  # goal までの残りコストの見積り h
+# 一貫性（consistency）の確認: h(u) <= w(u, v) + h(v)
+assert all(estimate[u] <= w + estimate[v] for u in graph for v, w in graph[u].items())
+
+
+def search(h, start="S", goal="G"):
+    distance = {start: 0}
+    queue = [(h[start], h[start], start)]  # (優先度 f, 同点のときの h, node)
+    closed = []
+    while queue:
+        priority, _, node = heapq.heappop(queue)
+        if node in closed:
+            continue
+        closed.append(node)
+        print(f"  取り出す {node}: g={distance[node]}, f={priority}")
+        if node == goal:
+            break
+        for neighbor, weight in graph[node].items():
+            candidate = distance[node] + weight
+            if candidate < distance.get(neighbor, float("inf")):
+                distance[neighbor] = candidate
+                heapq.heappush(queue, (candidate + h[neighbor], h[neighbor], neighbor))
+    return distance[goal], closed
+
+
+print("Dijkstra法（h = 0）")
+print(search({node: 0 for node in graph}))
+print("A*探索")
+print(search(estimate))
+```
+
+```text
+Dijkstra法（h = 0）
+  取り出す S: g=0, f=0
+  取り出す A: g=1, f=1
+  取り出す C: g=2, f=2
+  取り出す B: g=4, f=4
+  取り出す G: g=7, f=7
+(7, ['S', 'A', 'C', 'B', 'G'])
+A*探索
+  取り出す S: g=0, f=6
+  取り出す B: g=4, f=7
+  取り出す G: g=7, f=7
+(7, ['S', 'B', 'G'])
+```
+
+### 格子の実行
+
+図と同じ格子を解きます。`use_heuristic=False` がDijkstra法、`True` がManhattan距離の見積り付きA*です。
 
 ```python
 import heapq
@@ -124,51 +268,40 @@ Dijkstra: cost=24, expanded=168, path nodes=25
 A*: cost=24, expanded=92, path nodes=25
 ```
 
-`use_heuristic=False`がDijkstra法、`True`がManhattan heuristic付きA*です。
-図と出力は、この同じ条件とtie-breakで生成しています。
-
-## 汎用最適化より先に確認する理由
-
-単純なshortest pathはMIPへ変換しても解けます。
-専用algorithmはgraph構造を直接利用するため、保証と診断値を対応づけやすくなります。
-
-ただし、次の`side constraint`が増えると専用構造が崩れる場合があります。
-
-- 複数resource capacity
-- time window
-- path全体に依存する論理条件
-- pickup and delivery
-- 複数車両の相互作用
-- negative edgeやcycle condition
-
-この場合は、`state`拡張DPやresource-constrained shortest pathを検討します。
-CP-SATやMIPも候補です。
+図と出力は、この同じ条件と同点の処理（tie-break）で生成しています。
 
 ## 診断値
 
-- expanded node数
-- relaxed edge数
-- priority queue size
-- reopened node数（A*）
-- heuristic error / consistency
+- 展開したnode数
+- 緩めた辺の数
+- priority queueの大きさ
+- 再展開したnode数（A*）
+- 見積りの誤差と一貫性（heuristic error / consistency）
 - memory
-- `goal cost`とlower bound
+- ゴールのコストと下界
+
+判断の目安は次のとおりです。
+展開数がDijkstra法とほとんど変わらないなら、見積りが弱いと考えます。
+再展開が多いなら、見積りが一貫していない可能性があります。
 
 ::: warning
-地図上の直線距離は常に安全なheuristicとは限りません。
-discountやteleport edgeで実costが地理距離より小さくなる場合は、admissibilityを確認します。
+地図上の直線距離は、常に安全な見積りとは限りません。
+割引や瞬間移動の辺（teleport edge）で、実際のコストが地理的な距離より小さくなる場合は、過大評価しないこと（admissibility）を確認します。
 :::
 
 ## 失敗・切替の兆候
 
-- state explosionでmemoryが増大
-- heuristicが弱くDijkstraと同程度に展開
-- heuristicが過大で最適解を失う
-- `side constraint`を`node state`へ入れ忘れる
-- negative edgeをDijkstraで処理する
-- `path cost`が加法的でないのに単純`edge sum`へ落とす
+| 症状 | 考えられる原因 | 対処 |
+|---|---|---|
+| 状態が爆発してmemoryが増える | `state`にため込む情報が多い | `state`の設計を見直す。dominanceで刈る。[動的計画法](#/learn/dynamic-programming)の考え方を使う |
+| Dijkstra法と同程度に展開する | 見積りが弱い | より強い（ただし過大評価しない）見積りを探す |
+| 最適でない経路を返す | 見積りが過大評価している | 見積りが真の残りコスト以下かを確かめる |
+| 経路が制約を破っている | `side constraint`を`node state`に入れ忘れた | `state`を拡張する。[CP-SAT](#/learn/cp-sat)やMIPを検討する |
+| 負の辺があって結果がおかしい | 負の辺にはDijkstra法が使えない | 負の辺を扱える別の最短路法を使う |
+| 経路のコストが加法的でない | 単純な辺の和に落とせない | `state`を拡張するか、別の定式化にする |
 
 ## 次に読む
 
-- `state`を拡張して履歴を扱う: [動的計画法](#/learn/dynamic-programming)
-- 論理制約やschedulingを含む: [CP-SAT](#/learn/cp-sat)
+- [最短路問題](#/formulations/PA029)：小さな例の問題を定式化から読み直す
+- [動的計画法](#/learn/dynamic-programming)：`state`を拡張して履歴を扱う
+- [CP-SAT](#/learn/cp-sat)：論理制約やschedulingを含む場合

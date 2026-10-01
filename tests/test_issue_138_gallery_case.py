@@ -54,10 +54,10 @@ def test_bo_guidance_separates_method_defaults_evaluation_policy_and_recommendat
 
     for term in ("method", "implementation", "evaluation policy", "recommendation"):
         assert term in method
-    assert "library versionとdefault値" in method
-    for term in ("cost model", "target fidelity", "補正model"):
+    assert "libraryのversionと既定値" in method
+    for term in ("評価費用（cost）のモデル", "目標のfidelity", "補正するモデル"):
         assert term in method
-    assert "low/highで反転" in method
-    assert "failed領域の近傍を繰り返し提案" in method
+    assert "低fidelityと高fidelityで反転" in method
+    assert "失敗した領域の近傍を選び続けている" in method
     assert "high-fidelity-equivalent cost" in family
     assert "一般的なpolicy順位は決めません" in family

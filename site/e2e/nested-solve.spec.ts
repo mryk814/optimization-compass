@@ -47,7 +47,7 @@ test("bilevel Compareはcomplementarity treatmentだけを変え、順位づけ�
   ).toBeVisible();
   const conditions = page.getByRole("region", { name: "比較条件" });
   await expect(conditions.getByText("inner tolerance 1e-8 and maximum 100 iterations")).toBeVisible();
-  await expect(conditions.getByText(/complementarity treatment only/u)).toBeVisible();
+  await expect(page.getByLabel("比較条件の要約").getByText(/complementarity treatment only/u)).toBeVisible();
   await conditions.getByText("評価条件の詳細を開く", { exact: true }).click();
   await expect(conditions.getByText("順位づけ", { exact: true }).locator("..")).toContainText(
     "しない",

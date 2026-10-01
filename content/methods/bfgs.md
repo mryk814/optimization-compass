@@ -12,76 +12,107 @@ visualization_ids: [constrained-disk-feasible-region]
 comparison_ids: [COMPARE_CONSTRAINED_FAILURE]
 aliases: [/learn/bfgs]
 status: published
-last_reviewed: 2026-07-26
+last_reviewed: 2026-09-30
 ---
 
 勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、勾配の変化から地形の曲がり方を覚え、下りやすい方向を賢く選ぶことです。
+坂道を歩きながら、進んだ距離と傾きの変化を書き留めるところを想像してください。
+「これだけ進んだら、傾きがこれだけ変わった」という記録がたまると、地面の曲がり方が推測できます。BFGS法は、この推測を使って、次に進む方向を整えます。
 
-進んだ前後の勾配の変化から地形の曲がり方を学び、次の探索方向を整えます。
-
-- **見るもの**: 目的関数値、勾配の変化、line searchの結果
+- **見るもの**: 目的関数値、勾配の変化、直線探索（line search）の結果
 - **動かすもの**: 現在点、探索方向、逆Hessianの近似
-- **前進の判断**: 目的関数値とgradient normが下がり、line searchが安定してstepを受け入れること
+- **前進の判断**: 目的関数値と勾配の大きさ（gradient norm）が下がり、直線探索が安定して一手を受け入れること
 
-## 仕組み
+Hessian（二階微分の行列）は計算しません。必要なのは勾配だけです。
 
-勾配降下法が常に $-\nabla f(x_k)$ へ進むのに対し、BFGSは正定値行列 $H_k$ を使って方向を変形します。
+## 一手の意味
+
+勾配降下法は、常に $-\nabla f(x_k)$ へ進みます。BFGS法は、正定値行列 $H_k$ で勾配を変形してから進みます。
+次の式は、勾配に逆Hessianの近似を掛けたものを、探索方向にするという意味です。
 
 $$
 p_k = -H_k \nabla f(x_k)
 $$
 
-新しい点へ移動した後、
+$H_k$ が単位行列なら勾配降下法と同じ向きです。$H_k$ が真の逆Hessianに近づくほど、Newton法の向きに近づきます。
 
-- $s_k = x_{k+1} - x_k$
-- $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$
+新しい点へ移動したら、動きと勾配の変化を記録します。
 
-を使って $H_k$ を更新します。曲率条件 $y_k^T s_k > 0$ が満たされると、正定値性を保ちやすく、下り方向を作れます。
+- $s_k = x_{k+1} - x_k$（動いた量）
+- $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$（勾配の変化）
 
-## 向いている条件
+この二つのベクトルで $H_k$ を更新します。$\rho_k = 1/(y_k^T s_k)$ として、更新式は次のとおりです。
+
+$$
+H_{k+1} = (I - \rho_k s_k y_k^T)\,H_k\,(I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T
+$$
+
+更新後の $H_{k+1}$ は、$H_{k+1}\,y_k = s_k$ を満たします（セカント条件、secant condition）。
+観測した勾配の変化 $y_k$ から、実際に動いた量 $s_k$ を説明できる近似になる、という条件です。
+曲率条件 $y_k^T s_k > 0$ が満たされると、正定値性を保ちやすく、下り方向を作れます。
+
+### 直線探索の役割
+
+BFGSの名前は更新式を表しますが、実用上は一手の長さ（step length）を決める直線探索と組み合わせます。一手が大きすぎると目的値が悪化し、小さすぎると曲率の情報を十分に得られません。
+
+::: warning
+「BFGSを使った」だけでは、再現条件として不十分です。
+次を一緒に記録します。初期点・勾配の実装・直線探索の条件・停止許容値・尺度（scaling）です。
+:::
+
+## 小さな例
+
+[勾配降下法](#/learn/method.gradient-descent)、[Newton法](#/learn/newton-method)と同じ関数 $f(x,y)=(x-1)^2+20(y+2)^2$ を、初期点 $(4,\,3)$ から解きます。
+真の逆Hessianは $\mathrm{diag}(0.5,\,0.025)$ です。BFGS法はこの値を知らないまま、勾配だけで近づけます。
+
+手で追いやすいように、直線探索は二次関数用の厳密な式で長さを決めます。実際のライブラリはWolfe条件などで近似的に決めるので、途中の数値は一致しません。
+初期の近似は $H_0=I$ とします。
+
+| 反復 | 現在点 | 勾配 | 探索方向 $p$ | 一手の長さ | 次の点 | 目的値 |
+|---:|---|---|---|---:|---|---:|
+| 0 | $(4,\,3)$ | $(6,\,200)$ | $(-6,\,-200)$ | 0.02502 | $(3.850,\,-2.004)$ | 509 → 8.12 |
+| 1 | $(3.850,\,-2.004)$ | $(5.700,\,-0.171)$ | $(-5.705,\,0.009)$ | 0.4996 | $(1,\,-2)$ | 8.12 → 0 |
+
+反復0の向きは、勾配降下法と同じ最急降下の向きです。$H_0=I$ なので、まだ曲率を知りません。
+$s_0=(-0.150,\,-5.004)$、$y_0=(-0.300,\,-200.17)$ が得られ、$y_0^T s_0\approx 1001.8$ です。これで更新した近似は次の値になります。
+
+$$
+H_1\approx\begin{pmatrix}1.0008&-0.0008\\-0.0008&0.0250\end{pmatrix}
+$$
+
+$y$ 方向の $0.0250$ は、真の逆Hessianの $0.025$ に一致しました。$y$ 方向の曲率は、一回の記録で学べたことになります。
+$x$ 方向の $1.0008$ は、真の $0.5$ とまだ違います。この方向は、一回目の動きが小さかったため、情報が足りません。
+
+反復1では、この $H_1$ が探索方向を $(-5.705,\,0.009)$ に整えます。最急降下なら $(-5.70,\,0.17)$ の向きでしたが、$y$ 方向の成分が $0.17$ から $0.009$ へ小さくなります。
+二回目の更新で、近似は真の逆Hessian $\mathrm{diag}(0.5,\,0.025)$ に一致し、最小点 $(1,\,-2)$ に着きます。
+
+数を比べてみます。勾配降下法は同じ問題に243回の更新が必要でした。Newton法は1回で、ただしHessianが必要でした。BFGS法は、Hessianなしで2回です。
+厳密な直線探索を使うと、正定値の二次関数は高々 $n$ 回の反復で解けることが知られています。今回は $n=2$ です。
+
+## 向く条件・避ける条件
+
+BFGS法は、勾配が信頼でき、変数が中程度の滑らかな問題で高精度の局所解を少ない反復で得たいときに有力です（[滑らかな無制約の最小化](#/formulations/PA006)）。
 
 | 条件 | 理由 |
 |---|---|
 | 連続・滑らか | 勾配差を曲率情報として利用するため |
-| 中小規模 | 密な（dense）近似行列は概ね $O(n^2)$ memoryを使うため |
+| 中小規模 | 密な（dense）近似行列は概ね $O(n^2)$ のメモリを使うため |
 | 勾配が信頼できる | 誤った勾配は更新行列を壊すため |
 | 局所解でよい | 非凸問題で大域最適性を保証する手法ではないため |
 
-高精度な局所解を少ない反復で得たいときに有力です。変数が多い場合は[L-BFGS-B](#/learn/lbfgsb)などlimited-memory法を検討します。
+避ける、または切り替える条件です。
 
-## 制約処理はBFGSの外にある
-
-BFGSの更新式は、一般の制約を自動では扱いません。
-目的関数値が下がっても、制約違反が残る点は解ではありません。
-
-![円内の実行可能領域に対し、制約を無視するBFGS対応のfailure経路が目的値0へ進みながら円外で終了する固定2次元実行結果。](./media/constrained-feasibility-execution.svg "BFGSそのものの性能ではなく、制約を評価しない更新を成功と数えられない理由を示すfailure contrastです。")
-
-橙の終了点は目的関数だけなら最小です。
-円の外にあるため、この制約付き問題の解ではありません。
-
-[制約を無視するfailure Theater](#/theater/learning/SCENARIO_CONSTRAINED_DISK)では、円内の可行領域とBFGSのfailure pathを同じ図で確認できます。
-[SLSQPとのfailure Compare](#/compare/COMPARE_CONSTRAINED_FAILURE)は、同じ目的・disk制約・初期点・12回のteaching budgetを使います。
-変えるのは制約を評価するかどうかです。
-
-これは可行性と目的改善を分けて読む固定教材です。
-BFGSやSLSQPの実装内部を再現するbenchmarkではなく、solverの一般性能rankingにも使いません。
-
-## 直線探索（line search）の役割
-
-BFGSの名前は更新式を表しますが、実用上はstepの長さ（step length）を決めるline searchと組み合わせます。stepが大きすぎると目的値が悪化し、小さすぎると曲率情報を十分に得られません。
-
-::: warning
-「BFGSを使った」だけでは再現条件として不十分です。
-初期点／勾配の実装／line-search条件／停止許容値／scalingを一緒に記録します。
-:::
+- 変数が多く、$n\times n$ の行列を持てない → [L-BFGS](#/learn/lbfgs)などメモリを限った方法を検討する（[大規模な無制約の最小化](#/formulations/PA007)）
+- 上下限がある → [L-BFGS-B](#/learn/lbfgsb)を検討する（[上下限つきの滑らかな最小化](#/formulations/PA008)）
+- 一般の制約がある → BFGS単体では制約を扱えません。目的関数値が下がっても、制約違反が残る点は解ではありません。[SLSQP](#/learn/slsqp)や[非線形内点法](#/learn/interior-point-nlp)へ切り替える（[制約付きNLP](#/formulations/PA009)、下のコラム）
+- Hessianを直接計算できる → [Newton法](#/learn/newton-method)と比べる
 
 ## Python
 
-次の例は、解析的なgradientを渡してBFGSを実行する最小例です。
+次の例は、解析的な勾配を渡してBFGS法を実行する最小例です。上の小さな例と同じ関数を使います。
 
 ```python
 import numpy as np
@@ -89,41 +120,69 @@ from scipy.optimize import minimize
 
 
 def objective(x: np.ndarray) -> float:
-    return float((x[0] - 1.0) ** 2 + 10.0 * (x[1] + 2.0) ** 2)
+    return float((x[0] - 1.0) ** 2 + 20.0 * (x[1] + 2.0) ** 2)
 
 
 def gradient(x: np.ndarray) -> np.ndarray:
-    return np.array([2.0 * (x[0] - 1.0), 20.0 * (x[1] + 2.0)])
+    return np.array([2.0 * (x[0] - 1.0), 40.0 * (x[1] + 2.0)])
 
 
 result = minimize(
     objective,
-    x0=np.array([4.0, 4.0]),
+    x0=np.array([4.0, 3.0]),
     jac=gradient,
     method="BFGS",
     options={"gtol": 1e-8, "maxiter": 200},
 )
 
-print(result.success, result.x, result.fun, result.nfev, result.njev)
+print(result.success, result.x, result.fun, result.nit, result.nfev, result.njev)
+# True [ 1. -2.] 6.8e-21 9 10 10
+print(result.hess_inv)
+# 概数: [[0.5, 1.4e-05], [1.4e-05, 0.025]]
 ```
+
+SciPyの直線探索は厳密ではないので、反復は9回になります。上の手計算の2回とは違います。
+`hess_inv` は、最後の逆Hessianの近似です。真の $\mathrm{diag}(0.5,\,0.025)$ にほぼ一致していることを確認できます。
+利用中のSciPyのオプション名や既定値は、[scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)の公式リファレンスで確認します。
 
 ## 診断値
 
-- gradient norm
-- line-search iteration数
-- function / gradient evaluation数
-- step norm
-- $y_k^T s_k$ が十分正か
-- objective change
+- 勾配のノルム（gradient norm）
+- 直線探索の反復回数
+- 関数評価と勾配評価の回数
+- 一手のノルム
+- $y_k^T s_k$ が十分に正か
+- 目的値の変化
 
 ## 失敗・切替の兆候
 
-- gradient checkが有限差分と一致するか
-- 変数・目的値のscaleが極端に違わないか
-- line search failureが発生していないか
-- 非滑らかな分岐やclip処理が目的関数内にないか
-- 異なる初期点で別の局所解へ入っていないか
+- 勾配チェックが有限差分と一致しない → 勾配の実装が誤っている → 先に勾配を直す
+- 変数や目的値の尺度が極端に違う → 近似が曲率を学べない → 尺度を揃える
+- 直線探索が失敗する → 勾配の誤り、非滑らかな分岐、クリップ（clip）処理が目的関数内にある → 目的関数の滑らかさを確認する
+- $y_k^T s_k$ が0に近いか負 → 曲率条件が崩れている → 直線探索がWolfe条件を満たす点を返しているか確認する
+- 初期点によって別の局所解へ入る → 非凸である → 複数の初期点で試す
+- メモリが足りない → $n\times n$ の行列が大きすぎる → L-BFGSへ切り替える
+
+## コラム: 制約処理はBFGSの外にある
+
+BFGSの更新式は、一般の制約を自動では扱いません。
+目的関数値が下がっても、制約違反が残る点は解ではありません。
+
+![円内の実行可能領域に対し、制約を無視するBFGS対応のfailure経路が目的値0へ進みながら円外で終了する固定2次元実行結果。](./media/constrained-feasibility-execution.svg "BFGSそのものの性能ではなく、制約を評価しない更新を成功と数えられない理由を示すfailure contrastです。")
+
+橙の終了点は、目的関数だけなら最小です。
+円の外にあるため、この制約付き問題の解ではありません。
+
+[制約を無視した場合のTheater](#/theater/learning/SCENARIO_CONSTRAINED_DISK)では、円内の可行領域とBFGSの失敗の経路を同じ図で確認できます。
+[SLSQPとのCompare](#/compare/COMPARE_CONSTRAINED_FAILURE)は、同じ目的・円盤の制約・初期点・12回の教材用予算を使います。
+変えるのは、制約を評価するかどうかです。
+
+これは、可行性と目的の改善を分けて読む固定の教材です。
+BFGSやSLSQPの実装内部を再現するbenchmarkではなく、ソルバーの一般的な性能ランキングにも使いません。
 
 ## 次に読む
 
-Hessianを直接利用できる場合との違いは[Newton法](#/learn/newton-method)、局所modelを信頼できる範囲だけ使う考え方は[trust-region Newton-CG](#/learn/trust-region-newton-cg)で確認できます。
+- [Newton法](#/learn/newton-method)：Hessianを直接使える場合との違い
+- [L-BFGS](#/learn/lbfgs)：逆Hessianの行列を持たずに、同じ考え方を大規模へ広げる方法
+- [trust-region Newton-CG](#/learn/trust-region-newton-cg)：局所モデルを信頼できる範囲だけ使う考え方
+- [滑らかな無制約の最小化](#/formulations/PA006)：この手法が解く問題の標準形
