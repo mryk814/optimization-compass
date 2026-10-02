@@ -13,7 +13,7 @@ visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA]
 aliases: [/learn/topology-optimization]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-10-02
 ---
 
 トポロジー最適化は、設計領域内の材料分布を変数にして、状態方程式と体積制約のもとで剛性やcomplianceを改善する設計問題です。
@@ -32,6 +32,10 @@ $$
 したがって、普通の連続変数の目的関数に見えても、実際には「設計fieldを更新する問題」です。
 
 ## 実行結果を先に見る
+
+[3Dで材料の配置を見る](#/theater/physical/topology)では、左端を固定した領域に荷重をかけ、同じ材料量のまま配置を更新します。
+表示を最初に戻し、固定面と荷重の間に残る材料を追ってください。
+この例は3D線形弾性の有限要素法で計算しています。表示する密度の下限や変形倍率を変えても、元の密度場で求めた目的値と体積率は変わりません。
 
 ![8×4要素の固定教材を12反復実行したdensity field。初期field、filterありの反復6と反復12、filterなしの反復12を並べ、compliance、gray fraction、checkerboard scoreを同じ反復から表示している。](./media/topology-field-execution.svg "Optimization CompassのPython teaching generatorを実行した結果です。filterありでは滑らかな材料経路が現れ、filterなしではcheckerboardが強く残ります。実FEMの妥当性や製造性は示しません。")
 

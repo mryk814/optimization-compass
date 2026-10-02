@@ -10,7 +10,7 @@
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
 | `concept.chance-risk-contract` | 80 | 5351 | 8 | 4 | 0 | pass |
-| `concept.constrained-nlp` | 84 | 7372 | 10 | 4 | 0 | pass |
+| `concept.constrained-nlp` | 84 | 7545 | 10 | 4 | 0 | pass |
 | `concept.constraint-class` | 68 | 2089 | 5 | 2 | 0 | pass |
 | `concept.convex-quadratic-program` | 84 | 3359 | 9 | 4 | 0 | pass |
 | `concept.convexity` | 61 | 2236 | 8 | 2 | 0 | pass |
@@ -27,7 +27,7 @@
 | `concept.multiobjective-optimization` | 86 | 8103 | 12 | 4 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 6092 | 9 | 5 | 0 | pass |
 | `concept.nonlinear-least-squares` | 101 | 3580 | 9 | 4 | 0 | pass |
-| `concept.optimal-control` | 102 | 5485 | 9 | 4 | 0 | pass |
+| `concept.optimal-control` | 102 | 5645 | 9 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 72 | 4738 | 9 | 5 | 0 | pass |
 | `concept.pde-constrained-program` | 102 | 4619 | 8 | 4 | 0 | pass |
@@ -46,7 +46,7 @@
 | `geometry-update-failure-modes` | 61 | 2289 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2627 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 100 | 2635 | 7 | 3 | 0 | pass |
-| `topology-optimization` | 66 | 2058 | 7 | 3 | 0 | pass |
+| `topology-optimization` | 66 | 2240 | 7 | 3 | 0 | pass |
 
 ## Prose warning summary
 

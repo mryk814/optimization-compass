@@ -10,7 +10,7 @@ prerequisites: [concept.convexity]
 related_ids: [sqp, slsqp, interior-point-nlp, augmented-lagrangian, cobyla, family.constrained-nlp, constrained-continuous]
 source_ids: [S056, S017, S029, S030, S064, S055, S002]
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-02
 ---
 
 一般滑らか制約付きNLPは、滑らかな非線形の目的を、滑らかな不等式・等式制約を守りながら最小にする定式化です。得られるのは局所解で、その点が満たす目安がKKT条件です。
@@ -28,6 +28,10 @@ last_reviewed: 2026-09-30
 - **守ること**: 強度や安全率のような滑らかな不等式 $g(x)\le0$ と、つり合いのような等式 $h(x)=0$
 
 「滑らか」は、目的と制約の勾配を計算できることを指します。この情報を使う方法が、この型の主役です。
+
+[ロボットアームの障害物回避を3Dで見る](#/theater/physical/arm)では、時刻ごとの関節角を選び、腕全体の離隔と関節速度を制約にします。
+同じ始点と終点でも、手先の移動距離と関節の滑らかさの重みを変えると、得られる軌道が変わります。
+この教材は幾何学的な軌道を求めるもので、関節torqueや実機の追従誤差は含みません。
 
 ## 標準形を読む
 

@@ -10,7 +10,7 @@ prerequisites: [concept.variable-domain]
 related_ids: [direct-shooting, multiple-shooting, direct-collocation, concept.time-discretization]
 source_ids: [S042, S043, S076, S056]
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-02
 ---
 
 最適制御は、時間とともに変える操作量を選び、状態の動きを通じて累積費用を最小にする定式化です。操作と状態は動力学で結び付いています。時間を離散化した問題の成功と、連続時間での実行可能性を分けて確かめます。
@@ -27,6 +27,10 @@ last_reviewed: 2026-09-30
 
 操作を変えると、その後の状態も変わります。
 現在の操作だけを見て良し悪しを決めず、未来の状態への影響を含めて選ぶのが最適制御です。
+
+[ドローンの未来と実行軌道を3Dで見る](#/theater/physical/drone)では、並進運動のmodelで未来の加速度列を求め、その先頭の入力だけを実行します。
+橙の予測軌道と青緑の実行軌道を重ね、次の時刻で予測が解き直される様子を追えます。
+実機の姿勢応答や状態推定は含まない、質点のMPC教材です。
 
 ## 標準形を読む
 
