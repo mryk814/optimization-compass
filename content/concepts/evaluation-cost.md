@@ -5,19 +5,19 @@ canonical_entity_type: feature
 canonical_entity_id: F_EVALUATION_COST
 title_ja: 評価費と予算
 title_en: Evaluation Cost and Budget
-summary: 評価費と予算は、目的関数を何回・どの並列度・どのfidelityで測れるかを記録し、評価ledgerから探索と比較の公平性を決めます。
+summary: 評価費と予算は、目的関数を何回・どの並列度・どの評価精度で測れるかを記録し、評価台帳から探索と比較の公平性を決めます。
 source_ids: [S035, S038, S059, S069, S075]
 related_ids: [family.expensive-black-box, bayesian-optimization, random-search, hyperband-asha]
 status: published
 last_reviewed: 2026-07-24
 ---
 
-評価費と予算は、目的関数を何回・どの並列度・どのfidelityで測れるかを記録し、評価ledgerから探索と比較の公平性を決めます。
+評価費と予算は、目的関数を何回・どの並列度・どの評価精度で測れるかを記録し、評価台帳から探索と比較の公平性を決めます。
 
-## 評価費は1回のwall-clock時間だけでは決まらない
+## 評価費は1回の実経過時間だけでは決まらない
 
-simulationを1回実行する時間は、評価費の一部です。
-実験試料を作る費用／GPU queueの待ち時間／失敗trialの後始末も、探索に使える予算を減らします。
+シミュレーションを1回実行する時間は、評価費の一部です。
+実験試料を作る費用／GPUの順番待ち／失敗試行の後始末も、探索に使える予算を減らします。
 担当者が結果を確認できる回数も、使える予算を制約します。
 同じ10分の評価でも、適した探索の形は異なります。100台で並列に回せる計算と、装置を占有して逐次にしか測れない実験を区別します。
 
@@ -25,30 +25,30 @@ simulationを1回実行する時間は、評価費の一部です。
 
 | 予算 | 例 | 手法選択への影響 |
 | --- | --- | --- |
-| 評価回数 | 実験50回、simulation 1,000回 | surrogateを学習する余地、baselineの強さ |
+| 評価回数 | 実験50回、シミュレーション 1,000回 | 代理モデルを学習する余地、比較の基準の強さ |
 | 逐次時間 | 装置1日、締切まで6時間 | 次の点を待って選ぶ価値 |
-| 並列枠 | GPU 8枚、試験片4本 | batch / asynchronous探索、idle時間 |
-| fidelity | epoch、mesh、試料量 | early stoppingやmulti-fidelityが使えるか |
-| 再評価枠 | 同一点を何回測るか | noise推定、外れ値確認、比較の公平性 |
-| 失敗枠 | timeout、破損、infeasible | retry・停止・欠測の扱い |
+| 並列枠 | GPU 8枚、試験片4本 | 一括 / 非同期探索、待機時間 |
+| 評価精度 | 学習の周回数、メッシュ、試料量 | 早期停止や多精度評価が使えるか |
+| 再評価枠 | 同一点を何回測るか | ノイズ推定、外れ値確認、比較の公平性 |
+| 失敗枠 | 時間切れ、破損、実行不能 | 再試行・停止・欠測の扱い |
 
 `cheap`や`very_expensive`は、普遍的な秒数を表す分類ではありません。
 評価回数／並列性／必要精度／実験の不可逆性に対する相対的な分類です。
 
-## まず評価ledgerを作る
+## まず評価台帳を作る
 
-高価なsimulationでは、最終的なbest-so-farだけを残すと、どの評価に予算を使ったかが消えます。1回の呼び出しを1行として、少なくとも次を記録します。
+高価なシミュレーションでは、最終的な最良値だけを残すと、どの評価に予算を使ったかが消えます。1回の呼び出しを1行として、少なくとも次を記録します。
 
 | 項目 | 記録するもの | 読み方 |
 | --- | --- | --- |
-| `call_id` | simulator callの一意な番号 | 再試行や重複評価を追う |
-| `x` / configuration | 設計変数またはtrialの設定 | 同じ候補の再評価を区別する |
-| `fidelity` | low / high、epoch、meshなど | どの精度の観測かを区別する |
-| `cost` | そのcallが消費した相対費または実費 | 予算の累計を計算する |
+| `call_id` | シミュレータ呼び出しの一意な番号 | 再試行や重複評価を追う |
+| `x` / 設定 | 設計変数または試行の設定 | 同じ候補の再評価を区別する |
+| `fidelity` | 低精度 / 高精度、学習の周回数、メッシュなど | どの精度の観測かを区別する |
+| `cost` | その呼び出しが消費した相対費または実費 | 予算の累計を計算する |
 | `status` | `ok`、`failed`、`censored`、`timeout` など | 値がない理由を残す |
 | `observed_value` | 成功時の観測値。失敗時は`null` | 目的値と状態を混ぜない |
 
-`started_at`／`finished_at`／worker／seedを追加できる場合は、wall-clockと並列性も追跡できます。重要なのは、失敗したcallもledgerから消さないことです。評価をやり直したなら、新しい`call_id`を割り当てます。
+`started_at`／`finished_at`／並列実行枠／乱数シードを追加できる場合は、実経過時間と並列性も追跡できます。重要なのは、失敗した呼び出しも台帳から消さないことです。評価をやり直したなら、新しい`call_id`を割り当てます。
 
 ```python
 ledger = [
@@ -64,49 +64,49 @@ spent = sum(row["cost"] for row in ledger)
 successful = [row for row in ledger if row["status"] == "ok"]
 ```
 
-`best-so-far`は通常、成功した同一fidelityの観測を対象に計算します。low fidelityで得た値をhigh fidelityの最終品質へそのまま混ぜると、探索の進展と評価精度の差が分からなくなります。
+`best-so-far`は通常、成功した同一評価精度の観測を対象に計算します。低精度評価で得た値を高精度評価の最終品質へそのまま混ぜると、探索の進展と評価精度の差が分からなくなります。
 
-## fidelityが違えば、同じ評価とは限らない
+## 評価精度が違えば、同じ評価とは限らない
 
-low fidelityは安価な近似、high fidelityはより高価で精度の高い評価です。ただし、low fidelityの順位がhigh fidelityと一致する保証はありません。安い評価を増やすことは、high fidelityを1回増やすことと同じではないのです。
+低精度評価は安価な近似、高精度評価はより高価で精度の高い評価です。ただし、低精度評価の順位が高精度評価と一致する保証はありません。安い評価を増やすことは、高精度評価を1回増やすことと同じではないのです。
 
-固定した教材でこの違いを追うため、設計変数を$x\in[-3,3]$とします。fidelityは$\ell\in\{L,H\}$です。costは$c_L=1$、$c_H=12$とします。high fidelity相当の予算は、次のように換算できます。
+固定した教材でこの違いを追うため、設計変数を$x\in[-3,3]$とします。評価精度は$\ell\in\{L,H\}$です。費用は$c_L=1$、$c_H=12$とします。高精度評価相当の予算は、次のように換算できます。
 
 $$
 C_H=\sum_k \frac{c_{\ell_k}}{c_H}.
 $$
 
-たとえばlowを12回使っても、highを1回使った費用に相当するだけです。low fidelityの観測は、surrogateの学習や候補の絞り込みに役立つ場合があります。一方、最終候補の品質をhigh fidelityで確認した記録は別に残します。
+たとえば低精度評価を12回使っても、高精度評価を1回使った費用に相当するだけです。低精度評価の観測は、代理モデルの学習や候補の絞り込みに役立つ場合があります。一方、最終候補の品質を高精度評価で確認した記録は別に残します。
 
-[Bayesian Optimization](#/learn/bayesian-optimization)は、履歴と不確実性から次の評価点を選ぶ候補です。[Hyperband / ASHA](#/learn/hyperband-asha)は、中間resourceから継続・停止を判断するresource allocationです。両者を使う場合も、fidelityの意味と費用を同じledgerへ書きます。
+[Bayesian Optimization](#/learn/bayesian-optimization)は、履歴と不確実性から次の評価点を選ぶ候補です。[Hyperband / ASHA](#/learn/hyperband-asha)は、中間計算資源から継続・停止を判断する計算資源の配分です。両者を使う場合も、評価精度の意味と費用を同じ台帳へ書きます。
 
-## 失敗とcensoredを目的値に置き換えない
+## 失敗と打ち切り観測を目的値に置き換えない
 
-simulationがcrashした、timeoutした、計測上限に達して値が確定しなかった。この3つは、低い目的値が観測されたこととは違います。
+シミュレーションが異常終了した、時間切れになった、計測上限に達して値が確定しなかった。この3つは、低い目的値が観測されたこととは違います。
 
 - `failed`: 計算や実験が完了せず、値を得られなかった
 - `censored`: 上限・観測窓・停止条件のため、値がある範囲までしか分からない
 - `timeout`: 時間上限に達した。`failed`と同じ扱いにするかは、事前に決める
 
-いずれも少なくともstatusと消費costを記録し、`observed_value`を`null`にします。失敗を目的値へ一律に大きな罰則として代入すると、失敗領域と本当に悪い領域を区別できません。feasibility model／censoring model／retry policyを使うなら、その採用条件と再試行分のcostを比較条件に明記します。
+いずれも少なくとも終了状態と消費費用を記録し、`observed_value`を`null`にします。失敗を目的値へ一律に大きな罰則として代入すると、失敗領域と本当に悪い領域を区別できません。可行性を予測するモデル／打ち切りを扱うモデル／再試行方針を使うなら、その採用条件と再試行分の費用を比較条件に明記します。
 
-この区別は、失敗率を隠さないためだけのものではありません。失敗が特定の領域に偏っているなら、探索空間／制約／simulationの前処理／fidelity policyのどこかを見直す必要があります。
+この区別は、失敗率を隠さないためだけのものではありません。失敗が特定の領域に偏っているなら、探索空間／制約／シミュレーションの前処理／評価精度の選択方針のどこかを見直す必要があります。
 
 ## 評価回数と並列度で候補手法が変わる
 
 数十〜数百回しか評価できず、1回ごとの結果を待てるなら、観測履歴と不確実性から次の点を選ぶ[Bayesian Optimization](#/learn/bayesian-optimization)が候補になります。
 これは「必ず最少回数で最適解へ着く」ことを意味しません。
-surrogateの仮定／initial design／noise／acquisition最適化が合わなければ、単純な[Random Search](#/learn/random-search)より悪くなることもあります。
+代理モデルの仮定／初期評価点／ノイズ／獲得関数最適化が合わなければ、単純な[Random Search](#/learn/random-search)より悪くなることもあります。
 
-評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試すbaselineが強いことがあります。
-途中の低コスト評価が最終性能をある程度予測するなら、[Hyperband / ASHA](#/learn/hyperband-asha)のようにresourceを段階配分する設計も検討できます。
+評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試す比較の基準が強いことがあります。
+途中の低コスト評価が最終性能をある程度予測するなら、[Hyperband / ASHA](#/learn/hyperband-asha)のように計算資源を段階配分する設計も検討できます。
 ただし、途中指標と最終指標の順位相関が弱いと、良い候補を早く落とします。
 
-## budgetには停止規則も含める
+## 予算には停止規則も含める
 
 手法比較や実運用では、評価回数だけでなく停止規則を先に決めます。
-たとえば「80 trial／4 worker／wall-clock 6時間」のように上限を書きます。さらに「failed trialは記録して再試行しない」「同一点の再評価は最大2回」と定めます。
-後から一方の手法だけに追加budgetを与えると、性能差と予算差を分けられません。
+たとえば「80試行／並列実行数4／実経過時間6時間」のように上限を書きます。さらに「失敗した試行は記録して再試行しない」「同一点の再評価は最大2回」と定めます。
+後から一方の手法だけに追加予算を与えると、性能差と予算差を分けられません。
 
 ```python
 experiment_budget = {
@@ -122,48 +122,48 @@ assert experiment_budget["max_evaluations"] > 0
 assert experiment_budget["parallel_workers"] > 0
 ```
 
-このようなcontract（契約）があると、best-so-far以外の記録も並べて読めます。対象は評価開始・完了時刻／idle時間／失敗率／実際に使ったbudgetです。fidelityを複数使う場合は、trial数とは別にhigh-fidelity-equivalent costも報告します。
+このような条件の取り決めがあると、最良値以外の記録も並べて読めます。対象は評価開始・完了時刻／待機時間／失敗率／実際に使った予算です。評価精度を複数使う場合は、試行数とは別に高精度評価に換算した費用も報告します。
 
 ## 比較は同じ予算の物差しで読む
 
-multi-fidelityの比較でiteration数だけを揃えると、low fidelityを多く使った手法とhigh fidelityを多く使った手法を公平に比べられません。少なくとも次を固定します。
+多精度評価の比較で反復数だけを揃えると、低精度評価を多く使った手法と高精度評価を多く使った手法を公平に比べられません。少なくとも次を固定します。
 
 | 比較軸 | 揃える内容 |
 | --- | --- |
-| 初期条件 | initial design、bounds、seed、同一点の再評価規則 |
-| 評価予算 | total cost、high-fidelity-equivalent cost、wall-clock上限 |
-| 実行条件 | 並列worker数、batch / asynchronousの方針、停止規則 |
-| fidelity | 各fidelityの定義、cost、切替条件、最終確認のfidelity |
-| 失敗処理 | `failed` / `censored` / `timeout`の記録、retry、modelへの入力方法 |
-| 指標 | 成功したhigh fidelityのbest-so-far、成功率、status別件数 |
+| 初期条件 | 初期評価点、上下限、乱数シード、同一点の再評価規則 |
+| 評価予算 | 総費用、高精度評価に換算した費用、実経過時間の上限 |
+| 実行条件 | 並列実行数、一括 / 非同期の方針、停止規則 |
+| 評価精度 | 各評価精度の定義、費用、切替条件、最終確認の評価精度 |
+| 失敗処理 | `failed` / `censored` / `timeout`の記録、再試行、モデルへの入力方法 |
+| 指標 | 成功した高精度評価のこれまでの最良値、成功率、終了状態別件数 |
 
-「同じ80 trial」だけでは不十分です。ある手法が12回のlow fidelityで候補を絞り、別の手法が1回のhigh fidelityに相当する費用を使っているなら、その差をcost軸に戻して表示します。single runの勝敗を一般的なrankingへ拡張せず、固定条件と未確認の前提を添えて読みます。
+「同じ80試行」だけでは不十分です。ある手法が12回の低精度評価で候補を絞り、別の手法が1回の高精度評価に相当する費用を使っているなら、その差を費用軸に戻して表示します。単一実行の勝敗を一般的な順位付けへ拡張せず、固定条件と未確認の前提を添えて読みます。
 
-[high-fidelity-equivalent costを揃えたCompare](#/compare/COMPARE_BO_MULTIFIDELITY_COST)では、次の条件を固定します。
+[高精度評価に換算した費用を揃えた比較](#/compare/COMPARE_BO_MULTIFIDELITY_COST)では、次の条件を固定します。
 
-- 初期designとnoise
-- low/high cost
-- parallel workers=1
-- tuning
-- 失敗をnullで記録し、costを課してretryしないpolicy
+- 初期設計とノイズ
+- 低精度・高精度評価の費用
+- 並列実行数1
+- 調整
+- 失敗をnullで記録し、費用を課して再試行しない方針
 
-変更するのはfidelity配分だけです。
+変更するのは評価精度配分だけです。
 
-[low-fidelity biasのfailure Theater](#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS)では、同じ2候補を両fidelityで確認すると順位が反転します。Compareは公平な物差しを示します。failure Theaterは、discrepancyを見逃したfailure signalです。どちらも一般的な手法順位ではありません。
+[低精度評価の偏りを示す失敗例](#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS)では、同じ2候補を両評価精度で確認すると順位が反転します。比較は公平な物差しを示します。失敗例の可視化は、評価の食い違いを見逃した失敗の兆候です。どちらも一般的な手法順位ではありません。
 
 ## 高価な評価で混同しやすい失敗
 
-- 初期designを省くと、surrogateや局所探索が偏った場所から始まる
-- noiseがあるのに再評価枠をゼロにすると、偶然の良い値を改善と誤認しやすい
-- batchを大きくしすぎると、同じ情報を得る前に似た候補を消費する
-- timeoutや実験失敗を黙って悪い目的値へ置換すると、失敗領域と低性能領域を区別できない
-- fidelityを下げた結果だけで最終品質を判断すると、早期停止のbiasを見落とす
+- 初期設計を省くと、代理モデルや局所探索が偏った場所から始まる
+- ノイズがあるのに再評価枠をゼロにすると、偶然の良い値を改善と誤認しやすい
+- 一括評価数を大きくしすぎると、同じ情報を得る前に似た候補を消費する
+- 時間切れや実験失敗を黙って悪い目的値へ置換すると、失敗領域と低性能領域を区別できない
+- 評価精度を下げた結果だけで最終品質を判断すると、早期停止の偏りを見落とす
 
 ::: warning
 評価費が高いことだけで、Bayesian Optimizationを第一選択にはできません。
-変数のdomain／条件付き空間／noise／並列度／失敗の意味／利用できるfidelityを一緒に見ます。
+変数の定義域／条件付き空間／ノイズ／並列度／失敗の意味／利用できる評価精度を一緒に見ます。
 :::
 
 ## 次に読む
 
-high/low fidelityの固定例を実際の候補選択へつなぐには、[低／高 fidelityシミュレータのGalleryケース](#/gallery/multi-fidelity-simulator)を確認してください。高価なblack-box全体の条件付き選択は、[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。評価不能・失敗を含む可行性の扱いは、[制約class](#/learn/concept.constraint-class)へ進みます。
+高精度/低精度評価の固定例を実際の候補選択へつなぐには、[低精度／高精度シミュレータの事例](#/gallery/multi-fidelity-simulator)を確認してください。高価なブラックボックス全体の条件付き選択は、[高価なブラックボックス・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。評価不能・失敗を含む可行性の扱いは、[制約の分類](#/learn/concept.constraint-class)へ進みます。

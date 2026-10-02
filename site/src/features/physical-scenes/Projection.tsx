@@ -36,6 +36,6 @@ export function Projection({ drawing, plane = "xz" }: { drawing: SceneDrawing; p
         y={py(p) - drawing.voxels!.size[axis] * 52.5 / r} width={drawing.voxels!.size[0] * 140 / r}
         height={drawing.voxels!.size[axis] * 105 / r} fill={drawing.voxels!.colors[i]} opacity="0.75" />)}
     </svg>
-    <p>同じframeを射影しています。奥行き方向に重なる部分は、この図だけでは区別できません。</p>
+    <p>3D図と同じ時点を横から見ています。奥行き方向に重なる部分は、この図だけでは区別できません。</p>
   </figure>;
 }

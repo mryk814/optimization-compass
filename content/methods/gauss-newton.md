@@ -4,7 +4,7 @@ kind: method
 method_id: M_GAUSS_NEWTON
 title_ja: Gauss–Newton法
 title_en: Gauss-Newton Method
-summary: 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
+summary: 非線形最小二乗の残差ヤコビ行列から曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
 source_ids: [S003, S041, S056]
 related_ids: [least-squares, newton-method, trust-region-newton-cg]
 visualization_ids: [root-finding-component-tolerance, root-finding-small-squared-residual]
@@ -13,22 +13,22 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
+非線形最小二乗の残差ヤコビ行列から曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
 
 ## 30秒でつかむ
 
 複数の観測点で、モデルの予測が観測とずれています。ずれの合計だけを見るのではなく、観測ごとのずれを並べて見ます。
 パラメータを少し動かすと、各観測のずれがどれだけ動くかが分かります。その動きを使い、全部のずれを同時に小さくする向きを、一度の線形の計算で決めます。これがGauss–Newton法です。
 
-- **見るもの**: 残差ベクトル（観測ごとのずれ）とヤコビ行列（Jacobian）
+- **見るもの**: 残差ベクトル（観測ごとのずれ）とヤコビ行列
 - **動かすもの**: パラメータ。一手は、線形化した最小二乗問題の解で決める
 - **前進の判断**: 二乗和、残差の分布、勾配に相当する量 $J^\top r$ が下がること
 
-一般のNewton法は、Hessianをそのまま使います。Gauss–Newton法は、目的が残差の二乗和であることを利用して、Hessianの一部だけを近似します。
+一般のNewton法は、ヘッセ行列をそのまま使います。Gauss–Newton法は、目的が残差の二乗和であることを利用して、ヘッセ行列の一部だけを近似します。
 
 ## 一手の意味
 
-残差 $r(x)$ を現在点の近くで線形化します。次の式は、パラメータを $p$ だけ動かしたときの残差を、Jacobianで見積もるものです。
+残差 $r(x)$ を現在点の近くで線形化します。次の式は、パラメータを $p$ だけ動かしたときの残差を、ヤコビ行列で見積もるものです。
 
 $$
 r(x+p) \approx r(x) + J(x)p
@@ -40,7 +40,7 @@ $$
 J^T J\, p = -J^T r
 $$
 
-Newton法との関係を見ます。二乗和 $\tfrac12\|r\|^2$ の勾配は $J^T r$ で、Hessianは $J^T J$ に、残差と二階微分の項を足したものです。Gauss–Newton法は、その足す項を落とします。
+Newton法との関係を見ます。二乗和 $\tfrac12\|r\|^2$ の勾配は $J^T r$ で、ヘッセ行列は $J^T J$ に、残差と二階微分の項を足したものです。Gauss–Newton法は、その足す項を落とします。
 残差が小さいほど落とす項も小さいので、解の近くで残差が小さい問題ほど、この近似は良く効きます。
 
 $J^T J$ を直接作ると、条件数が悪化する場合があります。実装では、QR分解や特異値分解（SVD）を使います。疎な線形代数や信頼領域を使う実装もあります。
@@ -51,7 +51,7 @@ $J^T J$ を直接作ると、条件数が悪化する場合があります。実
 時刻 $t=0,1,2,3,4$ で量 $y=5.1,\,3.0,\,1.9,\,1.1,\,0.7$ を観測しました。
 モデル $y=a\,e^{-kt}$ の $(a,\,k)$ を求めます。初期値は $(a,k)=(1,\,0.1)$ とします。
 
-初期値での残差 $r_i=a\,e^{-kt_i}-y_i$ とJacobianです。
+初期値での残差 $r_i=a\,e^{-kt_i}-y_i$ とヤコビ行列です。
 
 | $t_i$ | 残差 $r_i$ | $\partial r_i/\partial a$ | $\partial r_i/\partial k$ |
 |---:|---:|---:|---:|
@@ -93,18 +93,18 @@ $J^T J\,p=-J^T r$ を解くと、一手は $p\approx(3.746,\,1.052)$ です。�
 |---|---|
 | 定式化 | 目的が、本当に残差の二乗和として意味を持つか |
 | 残差 | 観測ごとの残差を返せるか |
-| Jacobian | 正確に、または安定に計算できるか |
+| ヤコビ行列 | 正確に、または安定に計算できるか |
 | 重み | 単位やノイズの分散に応じた重みが必要か |
 | 識別可能性 | パラメータがデータから区別できるか |
 | 制約 | 上下限や一般制約をどう扱うか |
 
 線形最小二乗なら、反復法より先にQR分解やSVDを検討します（[線形最小二乗](#/learn/concept.linear-least-squares)）。
-外れ値がある場合は、頑健な損失（robust loss）の意味を明示します。
+外れ値がある場合は、頑健な損失の意味を明示します。
 
 向く条件です。
 
 - 曲線の当てはめ、パラメータ推定、バンドル調整などの非線形最小二乗である（[非線形最小二乗](#/learn/concept.nonlinear-least-squares)）
-- 残差のJacobianを利用できる
+- 残差のヤコビ行列を利用できる
 - 解の近くで残差が小さい、またはモデルがよく合う
 - 観測ごとの残差を診断したい
 
@@ -114,8 +114,8 @@ $J^T J\,p=-J^T r$ を解くと、一手は $p\approx(3.746,\,1.052)$ です。�
 - 一手が大きく振動する、初期値が遠い → 減衰や信頼領域のある[Levenberg–Marquardt法](#/learn/least-squares)へ切り替える
 - 上下限が本質である → [Trust Region Reflective](#/learn/trust-region-reflective)
 - 不連続、離散変数、強い外れ値を未処理のまま扱っている
-- Jacobianのランクが低く、パラメータが識別できない
-- 大域最適性の証明（certificate）が必要である
+- ヤコビ行列のランクが低く、パラメータが識別できない
+- 大域最適性の証明が必要である
 
 ## Python
 
@@ -163,7 +163,7 @@ for start in ([1.0, 0.1], [5.0, 0.3]):
 残差を一つのノルムにまとめるだけでなく、観測ごとの偏りとパラメータの安定性を分けて確認します。
 
 - 残差のノルムと、観測ごとの残差のパターン
-- Jacobianのランクと特異値
+- ヤコビ行列のランクと特異値
 - 一手のノルム
 - 勾配に相当する $J^T r$
 - 信頼半径、または減衰の大きさ
@@ -183,19 +183,19 @@ for start in ([1.0, 0.1], [5.0, 0.3]):
 
 ### 残差ベクトルと二乗和を分けて見る
 
-[各残差を確認するTrace](#/traces/root-finding-component-tolerance)と[二乗残差だけで止めるTrace](#/traces/root-finding-small-squared-residual)は、同じ固定問題を使います。
+[各残差を確認する実行記録](#/traces/root-finding-component-tolerance)と[二乗残差だけで止める実行記録](#/traces/root-finding-small-squared-residual)は、同じ固定問題を使います。
 変えるのは、停止規則だけです。
 [残差の比較](#/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE)では、二乗和が小さくても、一つの成分が要求精度を満たさない状態を確認します。
 
 これは、`root solver` と `least-squares solver` の性能比較ではありません。
-Gauss–Newton法の実装、Jacobianの近似、収束速度も順位付けしません。
+Gauss–Newton法の実装、ヤコビ行列の近似、収束速度も順位付けしません。
 残差の尺度と成分別の許容値を、終了判定へ残すための対比です。
 
 ## 次に読む
 
-- [非線形最小二乗とLevenberg–Marquardt法](#/learn/least-squares)：一手が大きすぎる、Jacobianが悪条件、初期点が遠い場合の安定化
+- [非線形最小二乗とLevenberg–Marquardt法](#/learn/least-squares)：一手が大きすぎる、ヤコビ行列が悪条件、初期点が遠い場合の安定化
 - [非線形最小二乗](#/learn/concept.nonlinear-least-squares)：この手法が解く問題の標準形と見分け方
 - [線形最小二乗](#/learn/concept.linear-least-squares)：各反復の中で解かれている問題
-- [Newton法](#/learn/newton-method)：Hessianをそのまま使う場合との違い
+- [Newton法](#/learn/newton-method)：ヘッセ行列をそのまま使う場合との違い
 
-実務では、次の四つを一緒に保存してください。残差・Jacobian・ランク・停止時の状態（status）です。
+実務では、次の四つを一緒に保存してください。残差・ヤコビ行列・ランク・停止時の状態です。

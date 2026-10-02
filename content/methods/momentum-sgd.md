@@ -49,7 +49,7 @@ $$
 - $\beta$: モーメンタム係数
 - $v_k$: 過去の勾配を含む更新状態
 
-### なぜzig-zagを抑えられるか
+### なぜジグザグを抑えられるか
 
 細長い谷では、急な方向の勾配符号が反復ごとに入れ替わり、緩い方向の符号は比較的一貫します。Momentumは符号が交互に変わる成分を相殺し、同じ方向の成分を蓄積します。
 
@@ -143,13 +143,13 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 
 ### 実行結果を先に見る
 
-![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Momentumは谷を横切る往復を残しながら、蓄積した速度で進む。](./media/gradient-family-execution.svg "固定Python generatorの実行結果です。橙のMomentum軌跡では、谷を横切る振動と進行方向への蓄積を同時に読めます。この一例は一般性能rankingではありません。")
+![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Momentumは谷を横切る往復を残しながら、蓄積した速度で進む。](./media/gradient-family-execution.svg "固定Python生成プログラムの実行結果です。橙のMomentum軌跡では、谷を横切る振動と進行方向への蓄積を同時に読めます。この一例は一般的な性能の順位付けではありません。")
 
 橙の線が谷を何度も横切る形を見ます。速度を持つことは振動を即座に消すのではなく、符号が入れ替わる更新を反復の中でならす設計です。
 
 ### 比較で揃えること
 
-[Gradient family 比較](#/compare/gradient-quadratic)では、同じ初期点・勾配予算・停止条件で比較します。
+[勾配法の比較](#/compare/gradient-quadratic)では、同じ初期点・勾配予算・停止条件で比較します。
 機械学習ではさらに、
 
 - データの順序 / ミニバッチ
@@ -163,8 +163,8 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 
 ### 蓄積した速度が発散するとき
 
-[Momentumの失敗 Trace](#/theater/learning/SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE)では、高い学習率と固定モーメンタムで目的と終了終了状態を追えます。
-[勾配降下法・Adamとの感度Compare](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回の取得手段評価予算を使います。
+[Momentumの失敗時の計算履歴](#/theater/learning/SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE)では、高い学習率と固定モーメンタムで目的と終了状態を追えます。
+[勾配降下法・Adamとの感度比較](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回の取得手段評価予算を使います。
 
 各手法には発散を説明する固定設定を使っています。
 良いパラメータを探索する比較でも、手法の一般性能順位でもありません。

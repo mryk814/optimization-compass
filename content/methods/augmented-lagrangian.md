@@ -4,7 +4,7 @@ kind: method
 method_id: M_AUGMENTED_LAGRANGIAN
 title_ja: 拡張Lagrangian法
 title_en: Augmented Lagrangian Method
-summary: 制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
+summary: 制約違反にペナルティを加えつつ乗数を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
 source_ids: [S018, S029, S055, S056]
 prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, slsqp, interior-point-nlp, admm, concept.convex-quadratic-program]
@@ -13,7 +13,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
+制約違反にペナルティを加えつつ乗数を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。
 
 ## 30秒でつかむ
 
@@ -108,7 +108,7 @@ $$
 | 等式や一般の制約を、外側と内側の二重の構造で扱いたい | 制約は乗数の更新で扱い、内側は制約なしの問題になるため |
 | 制約を分離し、既存の制約なしのソルバーを再利用したい | 内側の問題を、別のソルバーに任せられるため |
 | 純粋なペナルティ法の悪条件を和らげたい | $\rho$ を無限に大きくしなくてよいため |
-| 近い問題を繰り返し解き、warm startを使える | 前回の乗数と解を出発点にできるため |
+| 近い問題を繰り返し解き、ウォームスタートを使える | 前回の乗数と解を出発点にできるため |
 | 微分を使わない内側のソルバーと組み合わせたい | 内側の問題が、制約なしの目的関数になるため |
 
 避ける、または切り替える条件です。

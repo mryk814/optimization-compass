@@ -2,7 +2,7 @@
 content_id: weighted-sum
 kind: method
 method_id: M_WEIGHTED_SUM
-title_ja: 重み付き和scalarization
+title_ja: 重み付き和によるスカラー化
 title_en: Weighted-sum Scalarization
 summary: 複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的ソルバーを繰り返し解いてPareto候補を集める方法です。
 source_ids: [S039, S055, S068]
@@ -136,16 +136,16 @@ print(candidates)
 多目的最適化全体の枠組みは[多目的最適化とParetoフロント](#/learn/multi-objective)で確認できます。
 目的数が多く重み格子が重くなる場合の分解的な代替は、[MOEA/D](#/learn/moead)で確認できます。
 
-### Frontを作る計算と選ぶ判断を分ける
+### フロントを作る計算と選ぶ判断を分ける
 
-![81個の2目的候補から得たParetoフロント上で、重みw1を0.2、0.5、0.8へ変えると選択点が移動する固定実行結果。左下の理想点は二つの目的で同時には到達できない。](./media/pareto-preference-execution.svg "同じ解析的Pareto frontからweightで1点を選ぶ固定2目的教材です。weightの客観性や非凸frontの網羅性は示しません。")
+![81個の2目的候補から得たParetoフロント上で、重みw1を0.2、0.5、0.8へ変えると選択点が移動する固定実行結果。左下の理想点は二つの目的で同時には到達できない。](./media/pareto-preference-execution.svg "同じ解析的なParetoフロントから重みで1点を選ぶ固定2目的教材です。重みの客観性や非凸フロントの網羅性は示しません。")
 
 青緑のフロントは計算で得る候補集合です。
 橙の一点は、重みを与えた後の選択です。
 フロントの生成と最終判断は同じ処理ではありません。
 
-[選好感度のTheater](#/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY)では、同じParetoフロントから重みで1点を選びます。
-[選好を変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)は、81点の結果集合・目的方向・Pareto支配を固定します。
+[選好の影響を見る再生ページ](#/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY)では、同じParetoフロントから重みで1点を選びます。
+[選好を変える比較](#/compare/COMPARE_PARETO_PREFERENCE)は、81点の結果集合・目的方向・Pareto支配を固定します。
 重みを0.2／0.5／0.8へ変え、フロント上の選択点だけを動かします。
 
 このCompareはソルバーを再実行してフロントを改善する実験ではありません。

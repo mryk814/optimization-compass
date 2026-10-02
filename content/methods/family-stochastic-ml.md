@@ -2,80 +2,80 @@
 content_id: family.stochastic-ml
 kind: method
 method_id: MF_STOCHASTIC_ML
-title_ja: 確率勾配・機械学習optimizerの選び分け
+title_ja: 確率勾配・機械学習最適化手法の選び分け
 title_en: Choosing a Stochastic ML Optimizer
-summary: mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。
+summary: ミニバッチ勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWと全データを使う方法を選び分ける入口です。
 source_ids: [S047, S048, S049, S070]
 related_ids: [method.gradient-descent, momentum-sgd, adam, bfgs]
 status: published
 last_reviewed: 2026-07-16
 ---
 
-mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。
+ミニバッチ勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWと全データを使う方法を選び分ける入口です。
 
 ## 30秒でつかむ
 
-このfamilyの気持ちは、**全データで正確な勾配を毎回計算せず、mini-batchから得る揺れる方向を何度も積み重ねて、学習目的を改善すること**です。
+この手法群の気持ちは、**全データで正確な勾配を毎回計算せず、ミニバッチから得る揺れる方向を何度も積み重ねて、学習目的を改善すること**です。
 
-- 見ているもの: mini-batch gradient、training loss、validation metric、learning rate
-- 動かすもの: parameter、momentum、一次・二次moment、weight decay
-- 前進の判断: validation改善、loss低下、gradientやupdateの安定
-- 主な弱点: learning-rate依存、seed variance、overfitting、plateau、gradient explosion
+- 見ているもの: ミニバッチ勾配、学習損失、検証指標、学習率
+- 動かすもの: パラメータ、慣性項、一次・二次モーメント、重み減衰
+- 前進の判断: 検証改善、損失低下、勾配や更新の安定
+- 主な弱点: 学習率依存、乱数シードによるばらつき、過学習、停滞、勾配の発散
 
-optimizerのtraining lossが最も低いことと、未知データで最も良いことは別です。validationと運用metricを停止判断へ含めます。
+最適化器の学習損失が最も低いことと、未知データで最も良いことは別です。検証と運用評価指標を停止判断へ含めます。
 
 ## まず確認すること
 
 | 確認項目 | 選択への影響 |
 |---|---|
-| dataset / model規模 | full-batchが可能か、mini-batchが必要か |
-| gradient sparsity | 座標ごとのadaptive stepが有効か |
-| batch noise | momentumやaveragingで安定化できるか |
-| hardware | GPU、distributed、mixed precisionを使うか |
-| regularization | weight decay、dropout、data augmentationとの関係 |
-| training budget | epoch、step、wall time、energyのどれを制約にするか |
-| generalization | training objective以外のvalidation指標があるか |
+| データセット / モデル規模 | 全データでの計算が可能か、ミニバッチが必要か |
+| 勾配の疎性 | 座標ごとの適応的な歩幅が有効か |
+| バッチノイズ | 慣性項や平均化で安定化できるか |
+| 計算機環境 | GPU、分散計算、混合精度を使うか |
+| 正則化 | 重み減衰、ドロップアウト、データ拡張との関係 |
+| 学習の計算予算 | エポック、ステップ、実時間、エネルギーのどれを制約にするか |
+| 汎化 | 学習目的値以外の検証指標があるか |
 
-小規模で高精度な凸問題なら、stochastic optimizerよりL-BFGSや専用solverが適する場合があります。
+小規模で高精度な凸問題なら、確率的な最適化器よりL-BFGSや専用ソルバーが適する場合があります。
 
 ## 条件付きの選び分け
 
 | 役割 | 手法 | 優先しやすい条件 | 切り替えを考える条件 |
 |---|---|---|---|
-| 基準となる単純更新 | SGD | tuningに時間を使える、generalizationを重視、十分なtraining budget | 振動が強い、収束が遅すぎる |
-| 方向を蓄積 | [Momentum SGD](#/learn/momentum-sgd) | 細長い谷、mini-batch noise、SGDの振動を抑えたい | momentumが大きくovershootする |
-| adaptiveな標準候補 | [Adam](#/learn/adam) | sparse/noisy gradient、初期の立ち上がりを速くしたい | validationがSGD系より悪い、stepが不安定 |
-| weight decayを分離 | [AdamW](#/methods/M_ADAMW) | weight decayをregularizationとして明示したい | decayとlearning-rate scheduleの調整が曖昧 |
-| full-batch曲率利用 | [BFGS](#/learn/bfgs) / L-BFGS | 小〜中規模、deterministic loss、full gradientが安価 | data全体のgradientが重い、online更新が必要 |
-| 座標更新 | [Coordinate Descent](#/learn/coordinate-descent) | convex・sparse・座標subproblemが安価 | deep modelの一般trainingには自然でない |
+| 基準となる単純更新 | SGD | 調整に時間を使える、汎化を重視、十分な学習の計算予算 | 振動が強い、収束が遅すぎる |
+| 方向を蓄積 | [Momentum SGD](#/learn/momentum-sgd) | 細長い谷、ミニバッチノイズ、SGDの振動を抑えたい | 慣性項が大きく行き過ぎする |
+| 適応的な標準候補 | [Adam](#/learn/adam) | 疎な勾配やノイズを含む勾配、初期の立ち上がりを速くしたい | 検証がSGD系より悪い、ステップが不安定 |
+| 重み減衰を分離 | [AdamW](#/methods/M_ADAMW) | 重み減衰を正則化として明示したい | 減衰と学習率の変更規則の調整が曖昧 |
+| 全データの勾配で曲率を利用 | [BFGS](#/learn/bfgs) / L-BFGS | 小〜中規模、決定論的損失、全データの勾配が安価 | データ全体の勾配が重い、逐次的な更新が必要 |
+| 座標更新 | [Coordinate Descent](#/learn/coordinate-descent) | 凸・疎な・座標部分問題が安価 | 深層モデルの一般学習には自然でない |
 
-AdamとSGDのどちらが「上」かではなく、初期改善、最終validation、wall time、memory、tuning budgetで判断します。
+AdamとSGDのどちらが「上」かではなく、初期改善、最終検証、実時間、メモリ、調整に使う評価予算で判断します。
 
 ## うまくいったサインと切替サイン
 
 追うべき値:
 
-- training lossとvalidation loss
-- primary business / scientific metric
-- learning rateとupdate norm
-- gradient normまたはgradient clipping率
-- epoch / step / wall time
-- seed間のばらつき
-- data throughputとhardware utilization
-- early stopping時点
+- 学習損失と検証損失
+- 主要な業務・科学的評価指標
+- 学習率と更新量のノルム
+- 勾配ノルムまたは勾配の切り詰め率
+- エポック / ステップ / 実時間
+- 乱数シード間のばらつき
+- データの処理量と計算機の稼働率
+- 早期停止時点
 
 切替サイン:
 
-- lossが発散・NaN → learning rate、normalization、mixed precision、gradient clippingを確認
-- trainingは改善しvalidationが悪化 → optimizerよりregularizationと停止時点を見直す
-- Adamが早くplateau → schedule変更、SGD+momentumへの切替を比較
-- SGDの振動が大きい → momentum、batch size、preconditioningを検討
-- optimizer stateがmemoryを圧迫 → SGD、低memory法、parameter shardingを検討
-- seed差が大きい → 複数runで中央値・分散を報告
+- 損失が発散・NaN → 学習率、正規化、混合精度、勾配の切り詰めを確認
+- 学習は改善し検証が悪化 → 最適化器より正則化と停止時点を見直す
+- Adamが早く停滞 → 予定変更、SGD+慣性項への切替を比較
+- SGDの振動が大きい → 慣性項、バッチの大きさ、前処理を検討
+- 最適化器の内部状態がメモリを圧迫 → SGD、低メモリ法、パラメータの分散配置を検討
+- 乱数シード差が大きい → 複数実行で中央値・分散を報告
 
 ## 小さな比較の型
 
-同じepoch数だけでなく、data accessとwall timeも揃えます。
+同じエポック数だけでなく、データへのアクセスと実時間も揃えます。
 
 ```python
 training_contract = {
@@ -92,12 +92,12 @@ training_contract = {
 assert training_contract["maximum_epochs"] > 0
 ```
 
-## コラム: optimizerとtraining recipe
+## コラム: 最適化器と学習の設定と手順
 
-実際の結果はoptimizer名だけで決まりません。learning-rate schedule、warmup、batch size、normalization、weight decay、gradient clipping、data augmentation、mixed precisionが一つのtraining recipeを作ります。
+実際の結果は最適化器名だけで決まりません。学習率の変更規則、学習率を徐々に上げる準備期間、バッチの大きさ、正規化、重み減衰、勾配の切り詰め、データ拡張、混合精度が一つの学習の設定と手順を作ります。
 
-比較では、optimizerだけ変更したのか、recipe全体を各手法向けに調整したのかを明記します。公平性は「parameterを全部同じにすること」ではなく、調整方針とbudgetを事前に決めることです。
+比較では、最適化器だけ変更したのか、設定と手順全体を各手法向けに調整したのかを明記します。公平性は「パラメータを全部同じにすること」ではなく、調整方針と評価予算を事前に決めることです。
 
 ## 次に読む
 
-deterministicな滑らか問題なら[滑らかな局所最適化](#/learn/family.smooth-local)、trial自体が高価なhyperparameter探索なら[高価なblack-box・HPO](#/learn/family.expensive-black-box)へ進みます。
+決定論的な滑らか問題なら[滑らかな局所最適化](#/learn/family.smooth-local)、試行自体が高価なハイパーパラメータ探索なら[高価なブラックボックス・HPO](#/learn/family.expensive-black-box)へ進みます。

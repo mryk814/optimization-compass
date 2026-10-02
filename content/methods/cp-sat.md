@@ -41,30 +41,30 @@ $$
 
 | 項目 | 例 |
 |---|---|
-| decision variables | 人・仕事・時間帯の割当、順序、optional task |
-| 目的値 | 費用、遅延、希望違反、makespan |
-| hard constraints | 必要人数、資格、相互排他、precedence、time window |
-| soft constraints | 希望、安定性、変更量をpenaltyとして表す |
-| problem features | 有限候補集合、論理関係、global スケジューリング 制約 |
+| 決定変数 | 人・仕事・時間帯の割当、順序、任意参加の作業 |
+| 目的値 | 費用、遅延、希望違反、全作業の完了時刻 |
+| 必ず守る制約 | 必要人数、資格、相互排他、先行関係、時間窓 |
+| 違反を許す制約 | 希望、安定性、変更量をペナルティとして表す |
+| 問題の特徴 | 有限候補集合、論理関係、全体のスケジューリング制約 |
 
 必須制約と罰則を分けます。
-すべてを大きなpenaltyへ押し込むと、本当に禁止したい条件と単に避けたい条件を区別しにくくなります。
+すべてを大きなペナルティへ押し込むと、本当に禁止したい条件と単に避けたい条件を区別しにくくなります。
 
 ### 探索で何が起きるか
 
-CP-SATは単純な木 enumerationではありません。
+CP-SATは単純な木の列挙ではありません。
 実装は、
 
-- 候補集合 伝播
-- 真偽値 符号化
-- 衝突 analysis / 学習節
+- 候補集合伝播
+- 真偽値符号化
+- 衝突分析 / 学習節
 - 前処理
 - 線形緩和や切除平面の利用
 - 可行解探索ヒューリスティック
 - 分岐 / 再始動
 
 などを統合します。
-したがって教育用Search Treeは最良可行解・界・gap・pruneの概念を示しますが、実ソルバー内部を完全再現する図ではありません。
+したがって教育用探索木は最良可行解・界・ギャップ・枝刈りの概念を示しますが、実ソルバー内部を完全再現する図ではありません。
 
 ## 小さな例
 
@@ -90,7 +90,7 @@ Python節の3人、4仕事、各人の容量2という割当を使います。
 - 通貨を円・銭のどちらで持つか
 - 時間を秒・分のどちらで離散化するか
 - 小数係数を何倍して整数化するか
-- overflowや巨大係数で伝播が弱くならないか
+- オーバーフローや巨大係数で伝播が弱くならないか
 
 「整数化できた」ことと、現実の精度を保ったことは別です。
 
@@ -104,15 +104,15 @@ Python節の3人、4仕事、各人の容量2という割当を使います。
 ### 向いている条件
 
 - 真偽値・整数・有限候補集合変数
-- 論理含意、optional interval、no-overlap、cumulativeなど
-- スケジューリング・assignment・packing
-- feasibility自体が難しい
+- 論理含意、任意参加の区間、no-overlap、cumulativeなど
+- スケジューリング・割当・詰込み
+- 実行可能性自体が難しい
 - 制限時間内の良い解と界が欲しい
 
-### Alternative-first
+### 専用構造から先に検討する
 
-- pure shortest path / マッチング / 流量 → 専用graph algorithm
-- small state DP → [動的計画法](#/learn/dynamic-programming)
+- 純粋な最短路 / マッチング / 流量 → 専用グラフアルゴリズム
+- 小さな状態の DP → [動的計画法](#/learn/dynamic-programming)
 - 強い線形緩和を持つMILP → [Branch-and-Cut](#/learn/branch-and-cut)
 - 本質的に連続・滑らか → NLP/QP系
 
@@ -154,7 +154,7 @@ status = solver.solve(model)
 print(status, solver.objective_value, solver.best_objective_bound)
 ```
 
-実行後は状態を確認してからvalueを読みます。
+実行後は状態を確認してから値を読みます。
 `FEASIBLE`は実行可能解を得たが、最適性は未証明です。
 `OPTIMAL`は設定した許容誤差のもとで最適性を証明済みです。
 `INFEASIBLE`はモデルが矛盾し、`UNKNOWN`は計算予算などの理由で結論がない状態です。
@@ -162,18 +162,18 @@ print(status, solver.objective_value, solver.best_objective_bound)
 ## 診断値
 
 - 状態
-- 目的値 / best 界 / gap
-- conflicts
-- branches
-- propagations
-- restarts
+- 目的値 / 最良界 / ギャップ
+- 矛盾件数
+- 分岐数
+- 伝播数
+- 再始動回数
 - 実時間
-- first 実行可能までの時間
-- solution count
-- 前処理 簡約
-- random seed / worker count
+- 最初の実行可能解までの時間
+- 解の数
+- 前処理簡約
+- 乱数シード / 並列ワーカー数
 
-並列worker数を変えると探索順と再現性が変わる場合があります。
+並列ワーカー数を変えると探索順と再現性が変わる場合があります。
 
 ## 失敗・切替の兆候
 
@@ -181,9 +181,9 @@ print(status, solver.objective_value, solver.best_objective_bound)
 - 対称性により同等解を反復
 - 罰則の尺度が目的値を歪める
 - 係数の整数尺度が過大
-- 実行可能 solutionが長時間見つからない
+- 実行可能解が長時間見つからない
 - `UNKNOWN`を`INFEASIBLE`と誤読
-- 連続 物理現象を粗い整数gridへ無理に離散化
+- 連続物理現象を粗い整数格子へ無理に離散化
 
 ::: warning
 CP-SAT、MIP、専用DPは同じ離散問題を異なる表現で解けます。
@@ -193,6 +193,6 @@ CP-SAT、MIP、専用DPは同じ離散問題を異なる表現で解けます。
 
 ## 次に読む
 
-強い線形緩和を使うMILPなら[Branch-and-Cut](#/learn/branch-and-cut)、state再利用が中心なら[動的計画法](#/learn/dynamic-programming)と比較します。
+強い線形緩和を使うMILPなら[Branch-and-Cut](#/learn/branch-and-cut)、状態再利用が中心なら[動的計画法](#/learn/dynamic-programming)と比較します。
 
 - 問題の形を確認する: [混合整数線形計画](#/formulations/PA023)

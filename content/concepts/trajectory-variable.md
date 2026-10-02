@@ -3,54 +3,54 @@ content_id: concept.trajectory-variable
 kind: concept
 canonical_entity_type: feature
 canonical_entity_id: F_VARIABLE_TRAJECTORY
-title_ja: trajectory variable
+title_ja: 軌道変数
 title_en: Trajectory Variables
-summary: trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。
+summary: 軌道変数は、時刻ごとの状態や操作量をまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。
 source_ids: [S042, S043, S050, S076]
 related_ids: [family.optimal-control, direct-shooting, multiple-shooting, direct-collocation, ilqr-ddp]
 status: published
 last_reviewed: 2026-07-18
 ---
 
-trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。
+軌道変数は、時刻ごとの状態や操作量をまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。
 
 ## 1個の点ではなく、時間に並んだ決定
 
-通常の最適化では、変数は$x\in\mathbb{R}^n$のような1本のベクトルです。軌道最適化では、状態$x_k$とcontrol $u_k$を時刻$k=0,\ldots,N$に並べ、次のような**列**として扱います。
+通常の最適化では、変数は$x\in\mathbb{R}^n$のような1本のベクトルです。軌道最適化では、状態$x_k$と操作量 $u_k$を時刻$k=0,\ldots,N$に並べ、次のような**列**として扱います。
 
 $$
 X=(x_0,x_1,\ldots,x_N),\qquad U=(u_0,u_1,\ldots,u_{N-1}).
 $$
 
-この列がtrajectory variableです。ロボットなら$x_k$は位置・速度・姿勢など、$u_k$は力・トルク・操舵などを表します。最適化は「次の入力を1個選ぶ」だけでなく、futureの状態と入力が矛盾しない並びを選びます。
+この列が軌道変数です。ロボットなら$x_k$は位置・速度・姿勢など、$u_k$は力・トルク・操舵などを表します。最適化は「次の入力を1個選ぶ」だけでなく、未来の状態と入力が矛盾しない並びを選びます。
 
-## state列とcontrol列を混同しない
+## 状態列と操作量列を混同しない
 
-stateは系が実際にたどる量、controlは系へ与える量です。両方を変数に置くか、controlだけを置いてstateをsimulationで作るかが、定式化の大きな違いになります。
+状態は系が実際にたどる量、操作量は系へ与える量です。両方を変数に置くか、操作量だけを置いて状態をシミュレーションで作るかが、定式化の大きな違いになります。
 
-| 定式化 | 主な最適化変数 | stateの作り方 | 最初に疑う点 |
+| 定式化 | 主な最適化変数 | 状態の作り方 | 最初に疑う点 |
 | --- | --- | --- | --- |
-| Direct Shooting | control列 | 初期stateからforward rollout | 長いhorizonで感度が悪化していないか |
-| Direct Multiple Shooting | control列とsegment境界state | segmentごとにrolloutし連続性を制約化 | 境界でstateがつながっているか |
-| Direct Collocation | mesh上のstate列とcontrol列 | dynamics defectを制約化 | meshが粗すぎないか |
-| iLQR / DDP | nominal trajectoryの周りのupdate | rolloutとlocal modelを往復 | local近似の外へ出ていないか |
+| Direct Shooting | 操作量列 | 初期状態から順方向の軌道計算 | 長い予測区間で感度が悪化していないか |
+| Direct Multiple Shooting | 操作量列と区間境界状態 | 区間ごとに軌道計算し連続性を制約化 | 境界で状態がつながっているか |
+| Direct Collocation | メッシュ上の状態列と操作量列 | 動力学残差を制約化 | メッシュが粗すぎないか |
+| iLQR / DDP | 基準軌道の周りの更新 | 軌道計算と局所モデルを往復 | 局所的な近似の外へ出ていないか |
 
-変数数だけを見て「少ないほうが良い」とは決められません。stateを明示的に持つと変数は増えますが、path制約や途中の状態を直接見られる利点があります。controlだけにすると形は小さくなりますが、rolloutの感度がすべてcontrol列へ集まります。
+変数数だけを見て「少ないほうが良い」とは決められません。状態を明示的に持つと変数は増えますが、経路制約や途中の状態を直接見られる利点があります。操作量だけにすると形は小さくなりますが、軌道計算の感度がすべて操作量列へ集まります。
 
 ## まず描くべき4本の線
 
 実装や結果を読む前に、少なくとも次を別々に描きます。
 
-- state trajectory: 位置、速度、温度などがどう変わるか
-- control trajectory: 入力が飽和・振動していないか
-- reference: 追従したい目標軌道や終端目標
-- constraint boundary: 許容範囲、障害物、入力上限
+- 状態軌道: 位置、速度、温度などがどう変わるか
+- 操作量軌道: 入力が飽和・振動していないか
+- 参照軌道: 追従したい目標軌道や終端目標
+- 制約境界: 許容範囲、障害物、入力上限
 
-objectiveが下がっていても、controlが細かく振動する、stateが制約境界をかすめる、終端だけを合わせて途中が不自然になる、といった違和感はこの4本を分けると見つけやすくなります。
+目的が下がっていても、操作量が細かく振動する、状態が制約境界をかすめる、終端だけを合わせて途中が不自然になる、といった違和感はこの4本を分けると見つけやすくなります。
 
-## 変数の意味はdynamicsで閉じる
+## 変数の意味は動力学で閉じる
 
-stateとcontrolを自由に並べただけではtrajectoryになりません。離散化したdynamics
+状態と操作量を自由に並べただけでは軌道になりません。離散化した動力学
 
 $$
 x_{k+1}=f_d(x_k,u_k)
@@ -59,9 +59,9 @@ $$
 またはそれに対応する残差が、隣り合う時刻を結びます。この結び目をどのように扱うかが、[Direct Shooting](#/learn/direct-shooting)、[Direct Multiple Shooting](#/learn/multiple-shooting)、[Direct Collocation](#/learn/direct-collocation)の差になります。
 
 ::: warning
-trajectory variableは離散時刻上の表現です。solverがこの列に対して成功したことだけから、連続時間の実機・高精度simulationでも同じ軌道になるとは結論付けません。controlを再simulationし、時刻刻みを変えても重要な判断が変わらないかを確認します。
+軌道変数は離散時刻上の表現です。ソルバーがこの列に対して成功したことだけから、連続時間の実機・高精度シミュレーションでも同じ軌道になるとは結論付けません。操作量を再シミュレーションし、時刻刻みを変えても重要な判断が変わらないかを確認します。
 :::
 
 ## 次に読む
 
-trajectoryの隣り合う点がdynamicsと整合しているかは[dynamics defect](#/learn/concept.dynamics-defect)、制約をどの時刻で確認するかは[path・terminal制約](#/learn/concept.path-terminal-constraints)へ進みます。変数をどう置くかの比較は[最適制御・軌道最適化の選び分け](#/learn/family.optimal-control)が入口です。
+軌道の隣り合う点が動力学と整合しているかは[動力学残差](#/learn/concept.dynamics-defect)、制約をどの時刻で確認するかは[経路・終端制約](#/learn/concept.path-terminal-constraints)へ進みます。変数をどう置くかの比較は[最適制御・軌道最適化の選び分け](#/learn/family.optimal-control)が入口です。

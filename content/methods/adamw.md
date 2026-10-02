@@ -4,14 +4,14 @@ kind: method
 method_id: M_ADAMW
 title_ja: AdamW
 title_en: AdamW
-summary: Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
+summary: Adamの適応的な更新と重み減衰を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
 source_ids: [S047, S048, S049]
 related_ids: [family.stochastic-ml, adam, momentum-sgd]
 status: published
 last_reviewed: 2026-09-30
 ---
 
-Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
+Adamの適応的な更新と重み減衰を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。
 
 ## 30秒でつかむ
 
@@ -21,7 +21,7 @@ Adamの適応的な更新（adaptive update）と重み減衰（weight decay）�
 
 座標ごとの適応的な一歩を使いながら、パラメータを小さく保つ操作を勾配へ混ぜ込まず、正則化として独立に調整します。
 
-- 見るもの: 確率勾配（stochastic gradient）、一次モーメントと二次モーメント、学習率
+- 見るもの: 確率勾配、一次モーメントと二次モーメント、学習率
 - 動かすもの: パラメータ、モーメントの状態、重み減衰
 - 前進の判断: 学習だけでなく検証指標の改善
 

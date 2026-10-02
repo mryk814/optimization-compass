@@ -45,14 +45,14 @@ ASHAでは試行完了を待って同期せず、結果が届いた時点で継�
 
 ### 資源配分を図で見る
 
-![12 trialをresource 1、3、9のrungで12件、4件、1件へ絞る固定Successive Halving実行。](./media/hyperband-rungs-execution.svg "Hyperband / ASHAのresource配分")
+![12 試行を計算資源 1、3、9の資源配分の段階で12件、4件、1件へ絞る固定Successive Halving実行。](./media/hyperband-rungs-execution.svg "Hyperband / ASHAの計算資源配分")
 
-灰色のtrialはresource 1で止まり、緑は3、橙は9まで進みます。
-途中結果を見て「どのtrialへresourceを残すか」を読み取ります。
+灰色の試行は計算資源 1で止まり、緑は3、橙は9まで進みます。
+途中結果を見て「どの試行へ計算資源を残すか」を読み取ります。
 
 > **この図の範囲**
-> 次の9候補の数値例とは異なり、12候補の滑らかな固定learning curveを使います。
-> promotionだけを同期的に再現し、遅咲きtrial、noise、ASHAのasynchronousなworker待ちは省略しています。
+> 次の9候補の数値例とは異なり、12候補の滑らかな固定学習曲線を使います。
+> 昇格だけを同期的に再現し、遅咲き試行、ノイズ、ASHAの非同期なワーカー待ちは省略しています。
 
 ### 9候補の昇格を数値で追う
 
@@ -153,7 +153,7 @@ print(len(study.trials), study.best_value)
 
 ### コラム: 最適化器ではなく資源配分器
 
-Hyperband / ASHAはパラメータをどう提案するかと、試行へどれだけ資源を与えるかを分けて考えます。Random、TPE、BOなどの提案器と組み合わせられます。
+Hyperband / ASHAはパラメータをどう提案するかと、試行へどれだけ資源を与えるかを分けて考えます。ランダム探索、TPE、BOなどの提案器と組み合わせられます。
 
 [高価なブラックボックス・HPOの選び分け](#/learn/family.expensive-black-box)でTPEやGP-BOと役割を分けて確認してください。
 

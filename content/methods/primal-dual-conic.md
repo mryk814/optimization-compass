@@ -2,9 +2,9 @@
 content_id: primal-dual-conic
 kind: method
 method_id: M_PRIMAL_DUAL_CONIC
-title_ja: Primal-dual錐内点法
+title_ja: 主双対錐内点法
 title_en: Primal-Dual Conic Interior-Point
-summary: LPのbarrier法を二次錐や半正定値錐へ一般化し、主・双対・slackを同時に更新してconic標準形の凸問題を解く内点法です。
+summary: LPのバリア法を二次錐や半正定値錐へ一般化し、主変数・双対変数・スラック変数を同時に更新して錐の標準形の凸問題を解く内点法です。
 source_ids: [S013, S014, S028, S010, S055]
 prerequisites: [concept.convexity]
 related_ids: [barrier-lp-qp, lp-qp-conic, interior-point-nlp]
@@ -12,7 +12,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-LPのbarrier法を二次錐や半正定値錐へ一般化し、主・双対・slackを同時に更新してconic標準形の凸問題を解く内点法です。
+LPのバリア法を二次錐や半正定値錐へ一般化し、主変数・双対変数・スラック変数を同時に更新して錐の標準形の凸問題を解く内点法です。
 
 ## 30秒でつかむ
 
@@ -33,56 +33,56 @@ $$
 主残差と双対残差も同時に小さくするNewton方向を求めます。
 一般の錐では、単純な成分積をそのまま使いません。
 
-### Coneで表現できる凸問題の広さ
+### 錐で表現できる凸問題の広さ
 
-[LP/QP専用のbarrier法](#/learn/barrier-lp-qp)は非負orthant $x\ge0$ を対象にしますが、主-双対錐内点法はより一般のconic標準形
+[LP/QP専用のバリア法](#/learn/barrier-lp-qp)は非負象限 $x\ge0$ を対象にしますが、主-双対錐内点法はより一般の錐の標準形
 
 $$
 \min_x\; c^Tx \quad\text{subject to}\quad Ax+s=b,\ \ s\in K
 $$
 
 を扱います。
-$K$には、非負orthant／second-order cone／positive semidefinite coneなどを組み合わせます。
+$K$には、非負象限／二次錐／半正定値錐などを組み合わせます。
 これにより、一見異なる次の問題を同じ枠組みで表現できます。
 
-- normやrobust制約（second-order cone）
-- 行列の固有値やtraceに関する制約（semidefinite cone）
-- LP・凸QP（非負orthantとその上の二次項）
+- ノルムや頑健な制約（二次錐）
+- 行列の固有値やトレースに関する制約（半正定値錐）
+- LP・凸QP（非負象限とその上の二次項）
 
-「凸性を持つ問題をどこまでconeとして書けるか」というmodeling上の表現力が、この手法群の中心的な価値です。
+「凸性を持つ問題をどこまで錐として書けるか」というモデル化上の表現力が、この手法群の中心的な価値です。
 
-### Primal-双対 KKT系を同時に更新する仕組み
+### 主双対KKT系を同時に更新する仕組み
 
-各反復では、主変数$x$／双対変数$y$／slack変数$s$を同時に更新します。
-そのためのNewton方程式を、barrier パラメータを下げながら解きます。
+各反復では、主変数$x$／双対変数$y$／スラック変数$s$を同時に更新します。
+そのためのNewton方程式を、バリアパラメータを下げながら解きます。
 
-[LP/QP barrier法](#/learn/barrier-lp-qp)と同じく、中心pathに沿って進みます。
-違いは、complementarity条件がcone $K$上のbarrier関数に応じた形になる点です。
+[LP/QP バリア法](#/learn/barrier-lp-qp)と同じく、中心経路に沿って進みます。
+違いは、相補性条件が錐 $K$上のバリア関数に応じた形になる点です。
 この関数は対数障壁の一般化です。
 
-反復ごとに、主 feasibility 残差／双対 feasibility 残差／duality gapが得られます。
+反復ごとに、主問題の実行可能性の残差／双対問題の実行可能性の残差／双対ギャップが得られます。
 これらを停止判定と精度確認に使えます。
 
-### Self-双対 embeddingとinfeasibility証明
+### 自己双対埋め込みと実行不可能性証明
 
-conic ソルバーの多くは、self-双対 embeddingという技法で元の問題を拡張した自己双対問題に埋め込みます。
-この embeddingを解くと、元の問題が実行不可能か非有界かを目的値だけに頼らず、証明として得られる場合があります。
+錐ソルバーの多くは、自己双対埋め込みという技法で元の問題を拡張した自己双対問題に埋め込みます。
+この埋め込みを解くと、元の問題が実行不可能か非有界かを目的値だけに頼らず、証明として得られる場合があります。
 これは「解が見つからなかった」ことと「問題自体に解が存在しない」ことを区別したい場面で重要です。
 
-### Modeling層とソルバー層を分ける
+### モデル化層とソルバー層を分ける
 
-実務では、CVXPY（[S010](https://www.cvxpy.org/)）のようなmodeling層を使います。
-modeling層は、norm／固有値／robust制約などを人が読みやすい形式で受け取ります。
-これをconic標準形へ変換（canonicalization）してからソルバー層へ渡します。
+実務では、CVXPY（[S010](https://www.cvxpy.org/)）のようなモデル化層を使います。
+モデル化層は、ノルム／固有値／頑健な制約などを人が読みやすい形式で受け取ります。
+これを錐の標準形へ変換してからソルバー層へ渡します。
 
 ソルバー層にはClarabel／SCS／MOSEKなど複数の実装があり、
 
-- 得意とするcone（LP・QPのみか、semidefiniteまで扱うか）
-- 収束の速さと精度のtrade-off
-- 初期解の再利用やsparsity対応の有無
+- 得意とする錐（LP・QPのみか、半正定値まで扱うか）
+- 収束の速さと精度のトレードオフ
+- 初期解の再利用や疎性対応の有無
 
 が異なります。
-modeling層とソルバー層は役割が別であり、どちらのversionを使ったかを区別して記録する必要があります。
+モデル化層とソルバー層は役割が別であり、どちらのバージョンを使ったかを区別して記録する必要があります。
 
 ## 小さな例
 
@@ -106,18 +106,18 @@ $\mu$ を下げると、可行性を保って境界 $x=1$ へ近づきます。
 
 | 条件 | 理由 |
 |---|---|
-| norm・固有値・robust制約などconic標準形で表現できる | この手法の適用範囲がconeの表現力に依存するため |
-| 主/双対・duality gap・infeasibility 証明が重要 | 主-双対 KKT系を同時に解くことでこれらが得られるため |
-| modeling層で問題を組み、backend ソルバーへ任せたい | CVXPY等がcanonicalizationとソルバー呼び出しを分離しているため |
-| 高精度な解や証明が必要 | barrier型内点法は反復ごとにfeasibilityとgapを追えるため |
+| ノルム・固有値・頑健な制約など錐の標準形で表現できる | この手法の適用範囲が錐の表現力に依存するため |
+| 主/双対・双対ギャップ・実行不可能性証明が重要 | 主-双対 KKT系を同時に解くことでこれらが得られるため |
+| モデル化層で問題を組み、バックエンドソルバーへ任せたい | CVXPY等が標準形への変換とソルバー呼び出しを分離しているため |
+| 高精度な解や証明が必要 | バリア型内点法は反復ごとに実行可能性とギャップを追えるため |
 
-modeling層に収まらない非凸な制約や、ブラックボックスな評価しかできない目的関数には向きません。
+モデル化層に収まらない非凸な制約や、ブラックボックスな評価しかできない目的関数には向きません。
 そうした場合は非線形内点法や大域探索を検討します。
 
 ## Python
 
-次はsecond-order cone制約 $\lVert Ax-b\rVert_2 \leq t$ をCVXPYで記述する最小例です。
-modeling層がconic標準形へ変換し、対応ソルバーへ渡します。
+次は二次錐制約 $\lVert Ax-b\rVert_2 \leq t$ をCVXPYで記述する最小例です。
+モデル化層が錐の標準形へ変換し、対応ソルバーへ渡します。
 
 ```python
 import cvxpy as cp
@@ -139,31 +139,31 @@ print(problem.status, value)
 print("x:", x.value, "cone radius:", t.value)
 ```
 
-実装は[CVXPYの公式ドキュメント](https://www.cvxpy.org/)でconic標準形への変換方法を、ソルバーの反復挙動やoptionは[Clarabelの公式ドキュメント](https://clarabel.org/stable/)で確認します。
-利用versionによってdefault パラメータやbackendの対応coneが異なるため、必ず該当versionのreferenceを参照します。
+実装は[CVXPYの公式ドキュメント](https://www.cvxpy.org/)で錐の標準形への変換方法を、ソルバーの反復挙動やオプションは[Clarabelの公式ドキュメント](https://clarabel.org/stable/)で確認します。
+利用バージョンによって既定パラメータやバックエンドの対応錐が異なるため、必ず該当バージョンの公式文書を参照します。
 
 ## 診断値
 
-- 主 feasibility 残差
-- 双対 feasibility 残差
-- duality gap（absolute / relative）
-- barrier パラメータ
-- complementarity
-- infeasibility 証明の有無
-- 反復数とNewton system 求解のcondition
+- 主問題の実行可能性の残差
+- 双対問題の実行可能性の残差
+- 双対ギャップ（絶対 / 相対）
+- バリアパラメータ
+- 相補性
+- 実行不可能性証明の有無
+- 反復数とNewton方程式の求解の条件数
 
 ## 失敗・切替の兆候
 
-- barrier パラメータを下げてもduality gapが縮まらない
+- バリアパラメータを下げても双対ギャップが縮まらない
 - 実行不可能/非有界の証明が返るのに目的値だけで成功と誤判定する
-- coneの選び方が問題の凸構造を正しく表現できていない
-- 係数の尺度が極端でNewton system 求解にnumerical warningが出る
-- modeling層のcanonicalizationがソルバーの対応coneと合わない
+- 錐の選び方が問題の凸構造を正しく表現できていない
+- 係数の尺度が極端でNewton方程式の求解に数値計算上の警告が出る
+- モデル化層の標準形への変換がソルバーの対応錐と合わない
 
 ## 次に読む
 
-LP/QP専用のbarrier法との対比は、[Primal-双対 barrier法（LP/QP）](#/learn/barrier-lp-qp)で確認できます。
-conic問題を含む全体の位置付けは、[LP・QP・錐最適化](#/learn/lp-qp-conic)へ進みます。
+LP/QP専用のバリア法との対比は、[主双対バリア法（LP/QP）](#/learn/barrier-lp-qp)で確認できます。
+錐問題を含む全体の位置付けは、[LP・QP・錐最適化](#/learn/lp-qp-conic)へ進みます。
 非線形制約への一般化は[非線形内点法](#/learn/interior-point-nlp)で確認できます。
 
 - 問題の形を確認する: [二次錐計画](#/formulations/PA020)

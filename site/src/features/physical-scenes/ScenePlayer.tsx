@@ -89,7 +89,7 @@ export function ScenePlayer({ scene, embedded = false }: { scene: Loaded; embedd
     {scene.id === "topology" && <p className="physical-model-note">左面を固定し、右下端に荷重をかけています。変形表示は最大変位を高さの12%に揃えます。</p>}
     <p className="physical-sr-only" aria-live="polite">{summary}</p>
     <PlayerBar timeline={timeline} stepLabel={scene.id === "topology" ? "記録した反復" : "時刻"}
-      positionText={`${position} ／ ${run.frames.length} frame`} />
+      positionText={`${position} ／ ${run.frames.length} コマ`} />
     {!embedded && <Reading scene={scene} variant={variant} step={step} />}
     {!embedded && <ResultComparison scene={scene} />}
     <details className="physical-details">

@@ -2,9 +2,9 @@
 content_id: turbo-saasbo
 kind: method
 method_id: M_TURBO_SAASBO
-title_ja: 高次元Bayesian最適化（TuRBO / SAASBO）
+title_ja: 高次元ベイズ最適化（TuRBO / SAASBO）
 title_en: TuRBO / SAASBO
-summary: 高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
+summary: 高次元では、ガウス過程を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
 source_ids: [S035, S036, S059]
 prerequisites: []
 related_ids: [bayesian-optimization, smac, family.expensive-black-box]
@@ -12,7 +12,7 @@ status: published
 last_reviewed: 2026-10-01
 ---
 
-高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
+高次元では、ガウス過程を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
 
 ## 30秒でつかむ
 
@@ -65,7 +65,7 @@ TuRBOは、探索全体を1つの大域の予測モデルに任せません。
 
 SAASBOは、探索空間の次元が多くても、**実際に目的関数へ効く次元は少数**だと仮定します。
 この仮定をGPのカーネルに直接組み込みます。
-各次元の長さ尺度（またはその逆数）に強い疎性を促す事前分布（horseshoe事前分布など）を与え、完全ベイズ推論で事後分布を求めます。
+各次元の長さ尺度（またはその逆数）に強い疎性を促す事前分布（ホースシュー事前分布など）を与え、完全ベイズ推論で事後分布を求めます。
 関係の薄い次元は長さ尺度が大きく（＝影響が小さく）推定され、有効な次元だけが予測モデルの予測に強く寄与します。
 
 TuRBOは探索領域を局所化し、SAASBOは予測モデルの構造そのものに次元選択的な仮定を入れます。
@@ -76,7 +76,7 @@ TuRBOは探索領域を局所化し、SAASBOは予測モデルの構造そのも
 
 ### 局所箱の変化を図で見る
 
-![固定seedの二次元objectiveでtrust regionの中心移動と縮小を示す教材。](./media/turbo-trust-region-execution.svg "TuRBO型trust regionの拡大と縮小")
+![固定乱数種の二次元目的関数で信頼領域の中心移動と縮小を示す教材。](./media/turbo-trust-region-execution.svg "TuRBO型信頼領域の拡大と縮小")
 
 左は時点の異なる局所箱、右は箱の長さと最良値の改善量の履歴です。
 改善した点へ中心を移し、停滞が続くと探索範囲を狭める制御を読み取れます。

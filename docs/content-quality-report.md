@@ -3,58 +3,58 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `185`
+- Prose review warnings: `179`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
-| `concept.chance-risk-contract` | 80 | 5351 | 8 | 4 | 0 | pass |
-| `concept.constrained-nlp` | 84 | 7543 | 10 | 4 | 0 | pass |
-| `concept.constraint-class` | 68 | 2089 | 5 | 2 | 0 | pass |
-| `concept.convex-quadratic-program` | 84 | 3359 | 9 | 4 | 0 | pass |
-| `concept.convexity` | 61 | 2236 | 8 | 2 | 0 | pass |
+| `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
+| `concept.constrained-nlp` | 84 | 7481 | 10 | 4 | 0 | pass |
+| `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
+| `concept.convex-quadratic-program` | 84 | 3338 | 9 | 4 | 0 | pass |
+| `concept.convexity` | 61 | 2155 | 8 | 2 | 0 | pass |
 | `concept.cp-scheduling` | 93 | 3647 | 8 | 4 | 0 | pass |
-| `concept.derivative-free` | 81 | 2385 | 8 | 4 | 0 | pass |
-| `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
-| `concept.evaluation-cost` | 67 | 6013 | 9 | 3 | 0 | pass |
-| `concept.expensive-black-box` | 98 | 7699 | 10 | 4 | 0 | pass |
-| `concept.knapsack-set-cover` | 111 | 7042 | 12 | 4 | 0 | pass |
-| `concept.linear-least-squares` | 91 | 3010 | 9 | 4 | 0 | pass |
-| `concept.linear-program` | 91 | 4101 | 9 | 4 | 0 | pass |
-| `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
-| `concept.mixed-integer-linear-program` | 91 | 3343 | 9 | 4 | 0 | pass |
-| `concept.multiobjective-optimization` | 86 | 8103 | 12 | 4 | 0 | pass |
-| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 6092 | 9 | 5 | 0 | pass |
-| `concept.nonlinear-least-squares` | 101 | 3580 | 9 | 4 | 0 | pass |
-| `concept.optimal-control` | 102 | 5643 | 9 | 4 | 0 | pass |
-| `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
-| `concept.pde-constrained-optimization` | 72 | 4738 | 9 | 5 | 0 | pass |
-| `concept.pde-constrained-program` | 102 | 4619 | 8 | 4 | 0 | pass |
-| `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
+| `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
+| `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
+| `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
+| `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
+| `concept.knapsack-set-cover` | 100 | 6947 | 12 | 4 | 0 | pass |
+| `concept.linear-least-squares` | 80 | 2957 | 9 | 4 | 0 | pass |
+| `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
+| `concept.manifold` | 61 | 3394 | 6 | 3 | 0 | pass |
+| `concept.mixed-integer-linear-program` | 95 | 3295 | 9 | 4 | 0 | pass |
+| `concept.multiobjective-optimization` | 86 | 8047 | 12 | 4 | 0 | pass |
+| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4444 | 9 | 5 | 0 | pass |
+| `concept.nonlinear-least-squares` | 87 | 3533 | 9 | 4 | 0 | pass |
+| `concept.optimal-control` | 102 | 5641 | 9 | 4 | 0 | pass |
+| `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
+| `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
+| `concept.pde-constrained-program` | 102 | 4598 | 8 | 4 | 0 | pass |
+| `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
 | `concept.robust-regression` | 77 | 3626 | 8 | 4 | 0 | pass |
-| `concept.root-finding` | 93 | 4274 | 8 | 4 | 0 | pass |
-| `concept.semidefinite-program` | 96 | 4383 | 8 | 4 | 0 | pass |
-| `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
-| `concept.simplex-optimization` | 88 | 4151 | 8 | 4 | 0 | pass |
-| `concept.so3-rotation-representation` | 92 | 3062 | 8 | 4 | 0 | pass |
-| `concept.spd-matrix-geometry` | 49 | 3322 | 10 | 3 | 0 | pass |
-| `concept.time-discretization` | 74 | 1945 | 5 | 3 | 0 | pass |
-| `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |
-| `concept.uncertainty-models` | 57 | 4511 | 16 | 3 | 0 | pass |
-| `concept.variable-domain` | 56 | 2196 | 5 | 2 | 0 | pass |
-| `geometry-update-failure-modes` | 61 | 2289 | 5 | 3 | 0 | pass |
-| `shape-optimization` | 54 | 2627 | 6 | 3 | 0 | pass |
-| `shape-parameter-sensitivity` | 100 | 2635 | 7 | 3 | 0 | pass |
-| `topology-optimization` | 66 | 2243 | 7 | 3 | 0 | pass |
+| `concept.root-finding` | 93 | 4253 | 8 | 4 | 0 | pass |
+| `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
+| `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
+| `concept.simplex-optimization` | 88 | 4130 | 8 | 4 | 0 | pass |
+| `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
+| `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
+| `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
+| `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
+| `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
+| `concept.variable-domain` | 51 | 1934 | 5 | 2 | 0 | pass |
+| `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
+| `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
+| `shape-parameter-sensitivity` | 80 | 2156 | 7 | 3 | 0 | pass |
+| `topology-optimization` | 64 | 1948 | 7 | 3 | 0 | pass |
 
 ## Prose warning summary
 
 - `number.overprecise`: 95
 - `prose.choppy`: 7
-- `prose.work-report`: 6
+- `prose.work-report`: 10
 - `sentence.commas`: 64
-- `sentence.long`: 13
+- `sentence.long`: 3
 
 | Content | Warnings |
 |---|---:|
@@ -103,12 +103,12 @@
 | `concept.robust-regression` | 10 |
 | `concept.root-finding` | 6 |
 | `concept.semidefinite-program` | 0 |
-| `concept.simplex` | 5 |
+| `concept.simplex` | 4 |
 | `concept.simplex-optimization` | 0 |
 | `concept.so3-rotation-representation` | 1 |
 | `concept.spd-matrix-geometry` | 0 |
-| `concept.time-discretization` | 2 |
-| `concept.trajectory-variable` | 3 |
+| `concept.time-discretization` | 1 |
+| `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
 | `concept.variable-domain` | 0 |
 | `constrained-continuous` | 0 |
@@ -129,17 +129,17 @@
 | `family.constrained-nlp` | 0 |
 | `family.constraint-programming` | 2 |
 | `family.discrete-structure` | 0 |
-| `family.evolutionary` | 6 |
+| `family.evolutionary` | 5 |
 | `family.expensive-black-box` | 0 |
-| `family.global-search` | 5 |
+| `family.global-search` | 4 |
 | `family.graph-dp` | 6 |
 | `family.local-dfo` | 5 |
 | `family.manifold` | 0 |
-| `family.multi-objective` | 4 |
+| `family.multi-objective` | 2 |
 | `family.optimal-control` | 0 |
-| `family.smooth-local` | 6 |
-| `family.stochastic-ml` | 5 |
-| `family.trust-region` | 2 |
+| `family.smooth-local` | 7 |
+| `family.stochastic-ml` | 4 |
+| `family.trust-region` | 3 |
 | `fista` | 0 |
 | `gauss-newton` | 2 |
 | `genetic-algorithm` | 0 |
@@ -186,7 +186,7 @@
 | `shape-optimization` | 0 |
 | `shape-parameter-sensitivity` | 0 |
 | `shgo` | 1 |
-| `simp-topology` | 1 |
+| `simp-topology` | 2 |
 | `simulated-annealing` | 0 |
 | `slsqp` | 0 |
 | `smac` | 3 |
@@ -194,7 +194,7 @@
 | `spsa` | 0 |
 | `sqp` | 1 |
 | `subgradient` | 0 |
-| `topology-optimization` | 5 |
+| `topology-optimization` | 4 |
 | `tpe` | 9 |
 | `trust-exact` | 0 |
 | `trust-krylov` | 0 |

@@ -16,7 +16,7 @@
           "step": 1,
           "target_id": "concept.variable-domain",
           "target_type": "content",
-          "title_ja": "変数のdomain"
+          "title_ja": "変数の定義域"
         },
         {
           "content_id": "concept.linear-program",
@@ -46,7 +46,7 @@
           "step": 4,
           "target_id": "primal-simplex",
           "target_type": "content",
-          "title_ja": "Primal simplex法"
+          "title_ja": "主単体法"
         },
         {
           "content_id": "concept.convex-quadratic-program",
