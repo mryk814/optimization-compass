@@ -579,3 +579,58 @@
 .ex-record .ex-readout .ex-hint,
 .ex-record .ex-limits,
 .ex-record .ex-button-row { display: none; }
+
+/* Two linked panels side by side (least squares: data plane and parameter plane). */
+.ex-twin {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+.ex-panel { margin: 0; min-width: 0; }
+.ex-panel-title,
+.markdown-body .ex-frame .ex-panel-title {
+  margin: 0 0 0.3rem;
+  color: var(--ex-ink);
+  font-size: var(--type-label);
+  font-weight: 700;
+}
+.live-math .mx-navy { color: var(--ex-ink); }
+
+/* Least squares */
+.ex-square { fill: var(--ex-orange); fill-opacity: 0.16; stroke: var(--ex-orange-ink); stroke-width: 1.2; }
+.ex-fit-line { stroke: var(--ex-ink); stroke-width: 2.5; }
+.ex-residual { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 4 3; }
+.ex-observation { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; }
+.ex-handle:hover .ex-observation,
+.ex-handle:focus-visible .ex-observation { fill: #fff3e6; stroke: var(--ex-orange-ink); }
+
+/* Adam */
+.ex-step-box { fill: var(--ex-orange); fill-opacity: 0.08; stroke: var(--ex-orange-ink); stroke-width: 1; stroke-dasharray: 3 3; }
+.ex-compare { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 6 4; }
+.ex-compare-dot { fill: var(--ex-ink-soft); }
+.ex-ratio-x { fill: none; stroke: var(--ex-ink); stroke-width: 2.2; }
+.ex-ratio-y { fill: none; stroke: var(--ex-orange); stroke-width: 2.2; }
+.ex-ratio-x-dot { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.ex-ratio-y-dot { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
+.ex-ratio-x-label { fill: var(--ex-ink); font-weight: 700; }
+.ex-ratio-y-label { fill: var(--ex-orange-ink); font-weight: 700; }
+
+/* Bayesian optimisation */
+.ex-band { fill: var(--ex-teal); fill-opacity: 0.14; stroke: none; }
+.ex-mean { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.ex-truth { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 2 4; }
+.ex-observation.is-initial { fill: var(--ex-panel); stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.ex-observation.is-latest { fill: var(--ex-orange); stroke: var(--ex-ink); }
+.ex-incumbent { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2.5; stroke-dasharray: 3 2; }
+.ex-next-line { stroke: var(--ex-orange-ink); stroke-width: 1.8; stroke-dasharray: 5 4; }
+.ex-acq { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.ex-acq-fill { fill: var(--ex-orange); fill-opacity: 0.12; }
+
+/* Least squares: the handle communicates its movable direction in the figure. */
+[data-explorable-id="least-squares-bowl"] .ex-handle { touch-action: none; cursor: grab; }
+[data-explorable-id="least-squares-bowl"] .ex-handle:active { cursor: grabbing; }
+[data-explorable-id="least-squares-bowl"] .ex-handle:focus-visible .ex-handle-ring,
+[data-explorable-id="least-squares-bowl"] .ex-handle:hover .ex-handle-ring { stroke-width: 3; }
+.lsq-drag-cue { fill: #315c48; font-size: 16px; font-weight: 700; pointer-events: none; }
+.lsq-point-controls { width: 100%; }
+.lsq-point-controls summary { min-height: 44px; cursor: pointer; }

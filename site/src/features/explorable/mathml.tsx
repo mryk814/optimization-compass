@@ -15,6 +15,8 @@ export const mo = (symbol: string) => `<mo>${escapeText(symbol)}</mo>`;
 export const row = (...parts: string[]) => `<mrow>${parts.join("")}</mrow>`;
 export const sub = (base: string, script: string) => `<msub>${base}${script}</msub>`;
 export const sup = (base: string, script: string) => `<msup>${base}${script}</msup>`;
+/** A letter with a hat accent, e.g. the bias-corrected m̂. */
+export const hat = (name: string) => `<mover accent="true">${mi(name)}<mo>^</mo></mover>`;
 export const frac = (top: string, bottom: string) => `<mfrac>${top}${bottom}</mfrac>`;
 export const paren = (...parts: string[]) => row(mo("("), ...parts, mo(")"));
 /** A number that may be negative, with its sign split out so the layout stays aligned. */

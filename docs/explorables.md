@@ -116,6 +116,9 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `gradient-descent-valley` | `method.gradient-descent` | learning rate と谷の細長さで、方向ごとの誤差の倍率がどう決まるか。安定限界 `2/L` |
 | `lp-vertex-walk` | `primal-simplex` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
 | `convexity-chord` | `concept.convexity` | 定義の不等式を、2点と混合比で数値として確かめる。局所解と全体の最小の違い |
+| `least-squares-bowl` | `concept.linear-least-squares` | 残差の二乗を正方形の面積で見せ、データの平面とパラメータの平面（お椀）をつなぐ。外れ値1点の引っ張り |
+| `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |
+| `bayes-opt-acquisition` | `bayesian-optimization` | GPの予測平均と不確実性、獲得関数で次の点が決まる様子。β・長さの尺度・EIによる探索と活用の違い |
 
 ## 次の候補
 

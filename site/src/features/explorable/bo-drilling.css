@@ -1,0 +1,14 @@
+.bo-drilling { display: grid; gap: 1rem; min-width: 0; }
+.bo-drilling p { margin: 0; }
+.bo-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.bo-drilling .ex-action { min-height: 44px; }
+.bo-drilling .ex-action:disabled { opacity: .5; cursor: default; }
+.bo-drilling input[type="range"] { min-height: 44px; width: 100%; }
+.bo-drilling .ex-choice label { min-height: 44px; display: inline-flex; align-items: center; }
+.bo-model { display: grid; gap: 1rem; min-width: 0; }
+.bo-model h3 { margin: 0; }
+.bo-observations { min-width: 0; }
+.bo-result { padding: .8rem; border-left: 3px solid var(--ex-teal, #087f78); }
+.bo-answer { display: flex; align-items: center; gap: .5rem; min-height: 44px; }
+.bo-replay { margin-top: 1.5rem; }
+.bo-replay > summary { cursor: pointer; min-height: 44px; }
