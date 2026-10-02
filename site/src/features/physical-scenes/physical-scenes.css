@@ -11,9 +11,6 @@
   --ex-orange-ink: #8a4108;
 }
 .physical-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.physical-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 1.5rem; }
-.physical-tabs a { padding: 0.6rem 1rem; border: 1px solid #cedbdd; border-radius: 6px; text-decoration: none; color: #233d55; }
-.physical-tabs a[aria-current="page"] { background: #e1f1ef; border-color: #177e82; font-weight: 700; }
 .physical-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem 1.5rem; margin: 1rem 0; }
 .physical-controls > label:first-child { display: grid; gap: 0.4rem; font-size: 0.9rem; font-weight: 600; }
 .physical-controls select { width: min(100%, 24rem); padding: 0.65rem; font: inherit; background: white; border: 1px solid #9aaeb5; border-radius: 4px; }
@@ -66,10 +63,26 @@
 .physical-diagnostics dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .physical-next { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin: 2rem 0; }
 .physical-webgl-fallback { padding: 2rem; }
-.physical-entry-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0 2rem; }
-.physical-entry-grid a { border: 1px solid #cedbdd; border-radius: 6px; padding: 1rem; color: #233d55; text-decoration: none; }
-.physical-entry-grid h3 { font-size: 1.05rem; }
-.physical-entry-grid p { font-size: 0.9rem; line-height: 1.7; }
+.physical-embedded { margin: 1.2rem 0; min-width: 0; }
+.physical-figure-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem 1rem; align-items: baseline; }
+.physical-figure-heading strong { flex: 1; min-width: 220px; font-size: 1rem; }
+.physical-figure-heading a { white-space: nowrap; }
+.physical-embedded .physical-stage { grid-template-columns: minmax(0, 1.7fr) minmax(190px, 1fr); }
+.physical-embedded .physical-viewport { height: 300px; }
+.markdown-body .physical-embedded .physical-legend { list-style: none; padding: 0; }
+.markdown-body .physical-embedded .physical-legend li { margin: 0; font-size: 0.85rem; }
+.markdown-body .physical-embedded .physical-camera-hint,
+.markdown-body .physical-embedded .physical-projection p,
+.markdown-body .physical-embedded .physical-model-note { font-size: 0.85rem; line-height: 1.6; }
+.markdown-body .physical-embedded .physical-projection figcaption { font-size: 0.9rem; }
+.markdown-body .physical-embedded .physical-details p,
+.markdown-body .physical-embedded .physical-details li { font-size: 0.9rem; }
+@media (max-width: 1000px) {
+  .physical-embedded .physical-stage { grid-template-columns: 1fr; }
+  .physical-embedded .physical-side { border-left: 0; border-top: 1px solid #d2e0e1; display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .physical-embedded .physical-projection p { display: none; }
+  .physical-embedded .physical-readout { margin: 0; }
+}
 @media (max-width: 760px) {
   .physical-stage { grid-template-columns: 1fr; }
   .physical-viewport { height: 330px; }
@@ -78,11 +91,9 @@
   .physical-readout { margin: 0; }
   .physical-readout dd { font-size: 1.05rem; }
   .physical-reading { grid-template-columns: 1fr; gap: 1rem; }
-  .physical-entry-grid { grid-template-columns: 1fr; }
   .physical-diagnostics { grid-template-columns: 1fr; }
 }
 @media (max-width: 430px) {
-  .physical-tabs a { padding: 0.5rem 0.6rem; font-size: 0.85rem; }
   .physical-stage-heading { padding: 0.6rem; font-size: 0.85rem; }
   .physical-controls .ex-slider { min-width: 0; flex-basis: 100%; max-width: none; }
   .physical-controls > label:first-child { min-width: 0; width: 100%; }

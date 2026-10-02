@@ -2,6 +2,37 @@ import { expect, test } from "./fixtures/test";
 import { expectNoHighImpactViolations } from "./helpers/accessibility";
 import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation";
 
+for (const [id, article] of [
+  ["topology", "topology-optimization"],
+  ["arm", "concept.constrained-nlp"],
+  ["drone", "concept.optimal-control"],
+]) {
+  test(`${id}を記事の説明の中で再生し、大きく見て記事へ戻れる`, async ({ page, baseURL }, testInfo) => {
+    if (!baseURL) throw new Error("baseURL required");
+    await gotoAtlasRoute(page, baseURL, `/learn/${article}`);
+    await page.locator(".physical-article-mount").scrollIntoViewIfNeeded();
+    const figure = page.locator(".physical-embedded");
+    await expect(figure.locator("canvas")).toBeVisible();
+    const articleUrl = page.url();
+    await page.screenshot({ path: `output/playwright/physical-${id}-article.png` });
+    if (id !== "topology") await figure.getByRole("button", { name: "最後まで進める" }).click();
+    await figure.getByRole("button", { name: "1つ戻る" }).click();
+    await expect(figure.getByRole("button", { name: "最後まで進める" })).toBeEnabled();
+    await expectNoHighImpactViolations(page, testInfo, `physical-${id}-article`);
+    await page.setViewportSize({ width: 375, height: 812 });
+    await expectNoHorizontalOverflow(page);
+    await figure.screenshot({ path: `output/playwright/physical-${id}-article-mobile.png` });
+    await figure.getByRole("link", { name: "大きく見る →" }).click();
+    await expect(page).toHaveURL(new RegExp(`#/theater/physical/${id}$`));
+    await page.getByRole("button", { name: "← 記事に戻る" }).click();
+    await expect(page).toHaveURL(`${articleUrl}?figure=${id}`);
+    await expect(page.locator(".physical-viewport")).toBeFocused();
+    const restored = await figure.boundingBox();
+    expect(restored?.y).toBeGreaterThanOrEqual(-1);
+    expect(restored?.y).toBeLessThan(180);
+  });
+}
+
 for (const id of ["topology", "arm", "drone"]) {
   test(`${id}の3D計算結果を再生し、条件と視点を変えられる`, async ({ page, baseURL }, testInfo) => {
     if (!baseURL) throw new Error("baseURL required");

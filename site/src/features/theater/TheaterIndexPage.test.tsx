@@ -14,6 +14,10 @@ describe("TheaterIndexPage", () => {
     render(<MemoryRouter><EntityLinkProvider initialIndex={parseEntityLinkIndex(entityLinks)}><TheaterIndexPage /></EntityLinkProvider></MemoryRouter>);
 
     expect(screen.getByRole("heading", { level: 1, name: "手法の動きを見る" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "形と動きを3Dで読む" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "トポロジー最適化を読む" })).toHaveAttribute("href", "/learn/topology-optimization");
+    expect(screen.getByRole("link", { name: "制約付き非線形計画を読む" })).toHaveAttribute("href", "/learn/concept.constrained-nlp");
+    expect(screen.getByRole("link", { name: "最適制御を読む" })).toHaveAttribute("href", "/learn/concept.optimal-control");
     const scenarioCount = scenarios.scenarios.length;
     const representativeCount = new Set(scenarios.scenarios.map((scenario) => scenario.artifact.renderer_family)).size;
     expect(await screen.findByText(`${representativeCount}件を表示 · 条件一致 ${scenarioCount}件 · 公開 ${scenarioCount}件`)).toBeVisible();

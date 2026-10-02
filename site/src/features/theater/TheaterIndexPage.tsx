@@ -8,8 +8,7 @@ import {
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
-import { PHYSICAL_SCENES, physicalSceneRoute } from "../physical-scenes/catalog";
-import "../physical-scenes/physical-scenes.css";
+import { PHYSICAL_SCENES } from "../physical-scenes/catalog";
 import {
   buildTheaterCatalog,
   primaryObservableLabels,
@@ -88,15 +87,6 @@ export function TheaterIndexPage() {
         purpose="シナリオごとの一手を再生し、何を観測し、なぜ停止したかを追います。"
         readingSteps={["まず代表例を1つ開きます。", "再生して、観測・更新・停止の順に追います。", "条件を変えた違いを見たいときは、比較ページへ進みます。"]}
       />
-      <section aria-labelledby="physical-scenes-heading">
-        <h2 id="physical-scenes-heading">形と動きを3Dで読む</h2>
-        <p>材料、関節、未来の軌道を、実際に計算した結果から見ます。</p>
-        <div className="physical-entry-grid">
-          {PHYSICAL_SCENES.map(scene => <Link key={scene.id} to={physicalSceneRoute(scene.id)}>
-            <h3>{scene.title}</h3><p>{scene.description}</p><strong>3Dで見る →</strong>
-          </Link>)}
-        </div>
-      </section>
       {featured && (
         <section className="theater-first-action" aria-labelledby="theater-first-action-title">
           <div>
@@ -144,6 +134,13 @@ export function TheaterIndexPage() {
           <button type="button" onClick={() => { setScope("representative"); setPurpose("all"); setDomain("all"); }}>絞り込みを戻す</button>
         </div>
       )}
+      <section className="theater-article-examples" aria-labelledby="article-examples-heading">
+        <h2 id="article-examples-heading">記事の図から考え方を確かめる</h2>
+        <p>材料の配置や軌道を、定式化・制約・制御の説明と一緒に読みます。図は記事の中で再生できます。</p>
+        <ul>{PHYSICAL_SCENES.map(scene => <li key={scene.id}>
+          <Link to={scene.article}>{scene.articleLabel}</Link> — {scene.question}
+        </li>)}</ul>
+      </section>
       <details className="theater-structure-guide">
         <summary>
           <span>読み方を深める</span>

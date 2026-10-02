@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 
 import { CompiledContent } from "./CompiledContent";
 
@@ -7,13 +8,13 @@ describe("CompiledContent", () => {
   it("renders compiled content and keyboard-operable table of contents", () => {
     const scrollIntoView = vi.fn();
     const focus = vi.fn();
-    render(<CompiledContent page={{
+    render(<MemoryRouter><CompiledContent page={{
       html: '<h2 id="overview" tabindex="-1">Overview</h2><p>Compiled body.</p>',
       toc: [
         { heading_id: "overview", label: "Overview", level: 2 },
         { heading_id: "details", label: "Details", level: 2 },
       ],
-    }} />);
+    }} /></MemoryRouter>);
     const heading = screen.getByRole("heading", { name: "Overview" });
     Object.defineProperties(heading, {
       scrollIntoView: { value: scrollIntoView },
@@ -31,10 +32,10 @@ describe("CompiledContent", () => {
   });
 
   it("makes generated scrollable code regions keyboard focusable", () => {
-    render(<CompiledContent page={{
+    render(<MemoryRouter><CompiledContent page={{
       html: "<pre><code>print('hello')</code></pre>",
       toc: [],
-    }} />);
+    }} /></MemoryRouter>);
 
     const region = screen.getByText("print('hello')").closest("pre");
     expect(region).toHaveAttribute("tabindex", "0");

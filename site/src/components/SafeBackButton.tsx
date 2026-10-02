@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { buildAtlasNavigation } from "../state/atlas-navigation";
 import { atlasStateFromSearch } from "../state/journey-navigation";
+import { PHYSICAL_SCENES, physicalSceneRoute } from "../features/physical-scenes/catalog";
 
 function safeFallback(pathname: string): string {
   if (pathname.startsWith("/methods/") || pathname.startsWith("/learn/")) return "/learn";
@@ -27,18 +28,20 @@ export function SafeBackButton() {
   if (pathname === "/") return null;
 
   const state = atlasStateFromSearch(search);
+  const scene = PHYSICAL_SCENES.find(scene => physicalSceneRoute(scene.id) === pathname);
+  const article = scene ? `${scene.article}?figure=${scene.id}` : undefined;
   const caseDestination = state?.journey
     ? buildAtlasNavigation(`/gallery/${state.journey.caseId}`, search, state)
     : undefined;
 
   const goBack = () => {
-    navigate(caseDestination?.ok ? caseDestination.to : safeFallback(pathname), { replace: true });
+    navigate(caseDestination?.ok ? caseDestination.to : article ?? safeFallback(pathname), { replace: true });
   };
 
   return (
     <nav aria-label="関連する入口へ戻る" className="page-back-row">
       <button onClick={goBack} type="button">
-        {caseDestination?.ok ? "← このCaseへ戻る" : `← ${safeFallbackLabel(pathname)}`}
+        {caseDestination?.ok ? "← このCaseへ戻る" : article ? "← 記事に戻る" : `← ${safeFallbackLabel(pathname)}`}
       </button>
     </nav>
   );
