@@ -16,7 +16,7 @@ MINIMUM_CONCEPT_BODY_CHARACTERS = 1_200
 MINIMUM_CONCEPT_TOC_ENTRIES = 4
 
 _NEXT_SECTION_PATTERN = re.compile(
-    r"(?:\A|\n)## 次に読む\s*\n(?P<body>.*?)(?=\n## |\Z)",
+    r"(?:\A|\n)## (?:次に読む|困りごとから関連する問題へ)\s*\n(?P<body>.*?)(?=\n## |\Z)",
     re.DOTALL,
 )
 _LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")

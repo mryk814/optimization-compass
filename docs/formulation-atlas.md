@@ -105,3 +105,12 @@ uv run optimization-compass validate content
 uv run python -m pytest tests/test_formulation_atlas.py tests/test_content_quality.py
 npm --prefix site test -- --run src/contracts/formulation-atlas.test.ts
 ```
+
+
+### 理解してから選ぶ記事の読み順
+
+線形最小二乗の記事は、理解 → 小さな例 → つまずき → 課題からの定式化 → 関連する問題 → 数値計算、の順に読む。
+`content_skeletons.py` の `FORMULATION_LEARNER_FIRST` がこの完全な構成を検証する。
+既存記事の8節構成は引き続き有効で、他記事を一括で並べ替える必要はない。
+関連手法へのリンクは「困りごとから関連する問題へ」で検証し、重複する「次に読む」は置かない。
+共通UIのコンパスは記事の後に表示し、詳細なソルバー一覧は折りたたむ。

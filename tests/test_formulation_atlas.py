@@ -190,6 +190,16 @@ def test_formulation_articles_follow_the_skeleton(pages) -> None:  # type: ignor
     assert len(articles) >= 5
     assert all(formulation_skeleton_gaps(page) == () for page in articles)
 
+    lsq = next(page for page in articles if page.canonical_entity_id == "PA005")
+    from optimization_compass.content_skeletons import skeleton_gaps
+
+    assert skeleton_gaps(lsq) == ()
+    headings = list(lsq.toc)
+    limits = next(i for i, h in enumerate(headings) if h.label == "つまずきやすい点")
+    related = next(i for i, h in enumerate(headings) if h.label == "困りごとから関連する問題へ")
+    headings[limits], headings[related] = headings[related], headings[limits]
+    assert skeleton_gaps(replace(lsq, toc=tuple(headings))) == ("order",)
+
     lp = next(page for page in articles if page.canonical_entity_id == "PA017")
     reordered = replace(lp, toc=(lp.toc[1], lp.toc[0], *lp.toc[2:]))
     assert formulation_skeleton_gaps(reordered) == ("order",)

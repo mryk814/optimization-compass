@@ -57,6 +57,18 @@ SKELETONS: dict[SkeletonKind, tuple[str, ...]] = {
     ),
 }
 
+# An alternative complete reading order: understand, inspect limitations, then choose.
+# Legacy articles retain their existing skeleton; this is not a pending-list exemption.
+FORMULATION_LEARNER_FIRST = (
+    "30秒でつかむ",
+    "標準形を読む",
+    "小さな例",
+    "つまずきやすい点",
+    "課題から定式化する",
+    "困りごとから関連する問題へ",
+    "数値計算の方法を選ぶ",
+)
+
 PENDING_PATH = Path("data/seeds/content_skeleton_pending.json")
 _ARCHETYPE_ID_PATTERN = re.compile(r"^PA\d{3}$")
 
@@ -76,8 +88,12 @@ def skeleton_gaps(page: ContentPage) -> tuple[str, ...]:
     kind = skeleton_kind(page)
     if kind is None:
         return ()
-    sections = SKELETONS[kind]
     headings = [heading.label for heading in page.toc if heading.level == 2]
+    sections = (
+        FORMULATION_LEARNER_FIRST
+        if kind == "formulation" and "課題から定式化する" in headings
+        else SKELETONS[kind]
+    )
     missing = tuple(f"missing:{section}" for section in sections if section not in headings)
     if missing:
         return missing

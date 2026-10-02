@@ -173,3 +173,15 @@ def test_linear_program_model_article_is_not_choppy() -> None:
     page = next(page for page in _published_pages() if page.content_id == "concept.linear-program")
 
     assert "prose.choppy" not in {warning.code for warning in style_warnings(page)}
+
+
+def test_learner_first_article_keeps_next_route_validation() -> None:
+    pages = _published_pages()
+    page = next(page for page in pages if page.content_id == "concept.linear-least-squares")
+    routes = _public_routes(pages)
+    assert inspect_concept(page, routes).meets_floor
+    broken = replace(
+        page,
+        body=page.body.replace("#/formulations/PA035", "#/learn/missing-concept"),
+    )
+    assert inspect_concept(broken, routes).invalid_next_links == ("#/learn/missing-concept",)

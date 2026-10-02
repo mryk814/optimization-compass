@@ -499,3 +499,26 @@
     min-height: 0;
   }
 }
+
+/* Relations form a diagram; full conditions are available without dominating it. */
+.formulation-compass-grid { gap: 2.5rem; }
+.formulation-compass-cell { position: relative; background: var(--fx-soft); }
+.formulation-compass-origin { display: none; }
+.formulation-compass-condition summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; color: var(--fx-accent); }
+.formulation-compass-north::after { content: "↑"; position: absolute; bottom: -2.2rem; left: 50%; font-size: 1.7rem; color: var(--fx-accent); }
+.formulation-compass-south::before { content: "↓"; position: absolute; top: -2.2rem; left: 50%; font-size: 1.7rem; color: var(--fx-accent); }
+.formulation-compass-east::before { content: "→"; position: absolute; left: -2.2rem; top: 50%; font-size: 1.7rem; color: var(--fx-accent); }
+.formulation-compass-west::after { content: "→"; position: absolute; right: -2.2rem; top: 50%; font-size: 1.7rem; color: var(--fx-accent); }
+.formulation-methods > summary { font-size: 1.15rem; font-weight: 700; cursor: pointer; padding: 0.75rem 0; }
+.formulation-article .markdown-body h3 { font-size: 1.15rem; color: var(--fx-accent); border-left: 3px solid var(--fx-accent); padding-left: 0.7rem; }
+.markdown-body figure img { max-width: 100%; height: auto; }
+@media (max-width: 60rem) {
+  .formulation-compass-grid { grid-template-areas: "center" "north" "south" "west" "east"; grid-template-columns: 1fr; gap: 0.75rem; }
+  .formulation-compass-center { border-radius: 0.75rem; min-height: 0; }
+  .formulation-compass-origin { display: block; font-size: 0.875rem; color: var(--fx-muted); margin-bottom: 0.5rem; }
+  .formulation-compass-north::after, .formulation-compass-west::after,
+  .formulation-compass-east::before, .formulation-compass-south::before { content: none; }
+  .formulation-compass-cell[data-empty] { display: none; }
+}
+
+.formulation-compass-cell[data-empty] { display: none; }

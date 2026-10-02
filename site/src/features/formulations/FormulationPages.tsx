@@ -225,13 +225,6 @@ export function FormulationPage() {
         </dl>
       </header>
 
-      <section aria-labelledby="formulation-cues" className="formulation-cues">
-        <h2 id="formulation-cues">こんな問題文なら、この形を疑う</h2>
-        <ul>{formulation.cues_ja.map((cue) => <li key={cue}>{cue}</li>)}</ul>
-      </section>
-
-      {neighbors.length > 0 && <FormulationCompass current={formulation} neighbors={neighbors} />}
-
       {articleError && <p className="atlas-error" role="alert">解説の読み込みに失敗しました。ページを再読み込みしてください。</p>}
       {article === undefined && !articleError && <p role="status">解説を読み込んでいます…</p>}
       {article && (
@@ -249,8 +242,18 @@ export function FormulationPage() {
         </section>
       )}
 
-      <section aria-labelledby="formulation-methods" className="formulation-methods">
-        <h2 id="formulation-methods">解き方の候補</h2>
+      {!article && article !== undefined && (
+      <section aria-labelledby="formulation-cues" className="formulation-cues">
+        <h2 id="formulation-cues">この定式化を検討する課題</h2>
+        <ul>{formulation.cues_ja.map((cue) => <li key={cue}>{cue}</li>)}</ul>
+      </section>
+
+
+      )}
+      {neighbors.length > 0 && <FormulationCompass current={formulation} neighbors={neighbors} />}
+
+      <details className="formulation-methods">
+        <summary>この問題に対応するソルバー・手法</summary>
         {formulation.alternatives.length > 0 && (
           <p className="formulation-alternatives">
             <strong>汎用の最適化より先に確かめる:</strong>{" "}
@@ -281,7 +284,7 @@ export function FormulationPage() {
           </>
         )}
         <p className="formulation-note">適合度は、この形の典型的な条件での目安です。一般的な手法の順位ではありません。</p>
-      </section>
+      </details>
 
       {formulation.cases.length > 0 && (
         <section aria-labelledby="formulation-cases" className="formulation-cases">
@@ -303,11 +306,11 @@ export function FormulationPage() {
 }
 
 const DIRECTION_TITLES: Record<CompassDirection, string> = {
-  north: "より一般の形",
-  west: "ここへ来る元の形",
-  east: "緩和・書き換えの行き先",
-  south: "より特別な形",
-  contrast: "似て非なる形",
+  north: "一般化：条件を広げる",
+  west: "元の問題からの変換",
+  east: "緩和・等価な書き換え",
+  south: "特殊化：条件を絞る",
+  contrast: "比較：異なる目的・条件",
 };
 
 function FormulationCompass({ current, neighbors }: { current: Formulation; neighbors: CompassNeighbor[] }) {
@@ -317,6 +320,7 @@ function FormulationCompass({ current, neighbors }: { current: Formulation; neig
     return (
       <div className={`formulation-compass-cell formulation-compass-${direction}`} data-empty={items.length === 0 || undefined}>
         <h3>{DIRECTION_TITLES[direction]}</h3>
+        <span className="formulation-compass-origin">{current.name_ja} {direction === "contrast" ? "≠" : direction === "west" ? "←" : "→"}</span>
         {items.length === 0 ? null : (
           <ul>
             {items.map(({ formulation, relation }) => {
@@ -327,7 +331,7 @@ function FormulationCompass({ current, neighbors }: { current: Formulation; neig
                   <span className="formulation-compass-verb">
                     {relationSentence(relation.type, outgoing, formulation.name_ja)}
                   </span>
-                  <span className="formulation-compass-note">{relation.note_ja}</span>
+                  <details className="formulation-compass-condition"><summary>関係が成り立つ条件</summary><span className="formulation-compass-note">{relation.note_ja}</span></details>
                 </li>
               );
             })}
@@ -340,13 +344,13 @@ function FormulationCompass({ current, neighbors }: { current: Formulation; neig
     <section aria-labelledby="formulation-compass-title" className="formulation-compass">
       <h2 id="formulation-compass-title">定式化のコンパス</h2>
       <p className="formulation-compass-lead">
-        北へ行くほど一般的な形、南へ行くほど特別な形です。東は、この形を緩めたり書き換えたりした先です。
+        学んだ問題を中心に、条件を広げる・絞る・書き換える関係をたどれます。各リンクの「条件」で、関係が成り立つ範囲を確認できます。
       </p>
       <div className="formulation-compass-grid">
         {cell("north")}
         {cell("west")}
         <div className="formulation-compass-center" aria-hidden="true">
-          <span>いまの形</span>
+          <span>いま学んだ問題</span>
           <strong>{current.name_ja}</strong>
         </div>
         {cell("east")}
