@@ -104,6 +104,7 @@ const BayesianOptimizationPage = lazy(
 const TheaterIndexPage = lazy(() => import("./features/theater/TheaterIndexPage").then(
   (module) => ({ default: module.TheaterIndexPage }),
 ));
+const PhysicalScenePage = lazy(() => import("./features/physical-scenes/PhysicalScenePage"));
 
 // Short nouns keep all primary destinations visible at 375px: learn first, then solve.
 const primaryNavigation = [
@@ -411,6 +412,7 @@ function AppShell() {
             <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
             <Route path="/theater/bayesian-optimization/:scenarioId" element={<BayesianOptimizationPage />} />
             <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
+            <Route path="/theater/physical/:sceneId" element={<PhysicalScenePage />} />
             <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
             <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
             <Route path="/gallery" element={<GalleryPage />} />

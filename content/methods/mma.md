@@ -4,7 +4,7 @@ kind: method
 method_id: M_MMA
 title_ja: MMA
 title_en: Method of Moving Asymptotes
-summary: MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、moving asymptotesで更新幅を制御する逐次近似手法です。
+summary: MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、移動漸近線で更新幅を制御する逐次近似手法です。
 source_ids: [S100]
 prerequisites: [topology-optimization, concept.constraint-class]
 related_ids: [optimality-criteria-topology, simp-topology]
@@ -15,7 +15,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、moving asymptotesで更新幅を制御する逐次近似手法です。
+MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、移動漸近線で更新幅を制御する逐次近似手法です。
 
 ## 30秒でつかむ
 

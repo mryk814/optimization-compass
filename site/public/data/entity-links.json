@@ -6467,7 +6467,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表す作業集合（working set）を推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
+      "summary": "凸二次計画（凸 QP）で「どの不等式制約が解で等号になるか」を表す作業集合（working set）を推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
     },
     {
       "aliases": [],
@@ -6589,7 +6589,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。"
+      "summary": "Adamの適応的な更新と重み減衰を分離する学習最適化器です。勾配による更新とパラメータを縮める正則化を、別の操作として扱います。"
     },
     {
       "aliases": [],
@@ -6597,7 +6597,7 @@
       "entity_id": "adjoint-sensitivity",
       "entity_type": "content",
       "external_url": null,
-      "label": "adjoint sensitivity",
+      "label": "随伴感度",
       "relations": [
         {
           "relation_type": "comparison",
@@ -6665,7 +6665,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "随伴 感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。"
+      "summary": "随伴感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。"
     },
     {
       "aliases": [],
@@ -6792,7 +6792,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "凸二次計画（凸 QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用ソルバーの方式です。"
+      "summary": "凸二次計画（凸 QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながら作用素分割で解く専用ソルバーの方式です。"
     },
     {
       "aliases": [],
@@ -6853,7 +6853,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "制約違反にペナルティ（penalty）を加えつつ乗数（multiplier）を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。"
+      "summary": "制約違反にペナルティを加えつつ乗数を更新し、極端に大きなペナルティだけに頼らずに、実行可能性と目的の改善を両立する方法です。"
     },
     {
       "aliases": [],
@@ -6861,7 +6861,7 @@
       "entity_id": "barrier-lp-qp",
       "entity_type": "content",
       "external_url": null,
-      "label": "Primal-dual barrier法（LP/QP）",
+      "label": "主双対バリア法（LP/QP）",
       "relations": [
         {
           "relation_type": "evidence",
@@ -6924,7 +6924,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約を対数障壁（log barrier）へ置き換え、中心パス（central path）に沿ってNewton法で進む、LP/QP専用の内点法です。"
+      "summary": "不等式制約を対数障壁へ置き換え、中心パスに沿ってNewton法で進む、LP/QP専用の内点法です。"
     },
     {
       "aliases": [],
@@ -7142,7 +7142,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
+      "summary": "勾配の変化から逆ヘッセ行列の近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
     },
     {
       "aliases": [],
@@ -7208,7 +7208,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "離散問題を部分問題へ分け、暫定解（incumbent）と緩和の界で改善できない枝を除きながら、最適性の証明まで進める厳密な探索法です。"
+      "summary": "離散問題を部分問題へ分け、暫定解と緩和の界で改善できない枝を除きながら、最適性の証明まで進める厳密な探索法です。"
     },
     {
       "aliases": [],
@@ -7294,7 +7294,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "MILPを分枝限定法で探索しながら、cutで連続緩和を締め、暫定解（incumbent）と界のgapを詰めて最適性を証明する厳密な探索法です。"
+      "summary": "MILPを分枝限定法で探索しながら、カットで連続緩和を締め、暫定解と界のギャップを詰めて最適性を証明する厳密な探索法です。"
     },
     {
       "aliases": [],
@@ -7335,7 +7335,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。"
+      "summary": "非滑らか凸関数で過去の劣勾配を捨てずカットの束として蓄え、単一の劣勾配による一歩より安定した局所モデルを作る方法です。"
     },
     {
       "aliases": [],
@@ -7376,7 +7376,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "真偽値制約の衝突からclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。"
+      "summary": "真偽値制約の衝突から節を学習し、SATまたはUNSATの判定を証明まで進める探索法です。"
     },
     {
       "aliases": [],
@@ -7427,7 +7427,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "関数値の順位から探索分布の平均・global step size・共分散を更新し、連続black-boxの有望な方向とscaleを学ぶpopulation法です。"
+      "summary": "関数値の順位から探索分布の平均・全体のステップサイズ・共分散を更新し、連続ブラックボックスの有望な方向と尺度を学ぶ集団法です。"
     },
     {
       "aliases": [],
@@ -7519,7 +7519,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "関数値と制約値から局所的な二次近似モデルを育て、微分なしでboundsや一般制約を扱う信頼領域型の局所法です。"
+      "summary": "関数値と制約値から局所的な二次近似モデルを育て、微分なしで上下限や一般制約を扱う信頼領域型の局所法です。"
     },
     {
       "aliases": [],
@@ -7527,7 +7527,7 @@
       "entity_id": "concept.chance-risk-contract",
       "entity_type": "content",
       "external_url": null,
-      "label": "Chance constraint・CVaR・robustness",
+      "label": "確率制約・CVaR・ロバスト性",
       "relations": [
         {
           "relation_type": "comparison",
@@ -7590,7 +7590,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。"
+      "summary": "確率制約は制約違反の確率を扱います。CVaR・ロバスト最適化・確率計画・DROとの違いを、目的・制約・保証範囲で整理します。"
     },
     {
       "aliases": [],
@@ -7689,7 +7689,7 @@
       "entity_id": "concept.constraint-class",
       "entity_type": "content",
       "external_url": null,
-      "label": "制約class",
+      "label": "制約の分類",
       "relations": [
         {
           "relation_type": "evidence",
@@ -7737,7 +7737,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。"
+      "summary": "制約分類は、解として許される領域をどの式・論理・シミュレーションで定めるかを表し、可行性の扱いとソルバー選択を左右します。"
     },
     {
       "aliases": [],
@@ -7921,7 +7921,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。"
+      "summary": "微分を使わない最適化は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。"
     },
     {
       "aliases": [],
@@ -7929,7 +7929,7 @@
       "entity_id": "concept.dynamics-defect",
       "entity_type": "content",
       "external_url": null,
-      "label": "dynamics defect",
+      "label": "動力学残差",
       "relations": [
         {
           "relation_type": "evidence",
@@ -7972,7 +7972,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。"
+      "summary": "動力学残差は、離散化した軌道がモデルの時間発展とどれだけずれているかを表す残差で、費用とは別に可行性として追う指標です。"
     },
     {
       "aliases": [],
@@ -8028,7 +8028,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "評価費と予算は、目的関数を何回・どの並列度・どのfidelityで測れるかを記録し、評価ledgerから探索と比較の公平性を決めます。"
+      "summary": "評価費と予算は、目的関数を何回・どの並列度・どの評価精度で測れるかを記録し、評価台帳から探索と比較の公平性を決めます。"
     },
     {
       "aliases": [],
@@ -8117,7 +8117,7 @@
       "entity_id": "concept.knapsack-set-cover",
       "entity_type": "content",
       "external_url": null,
-      "label": "knapsack・set cover",
+      "label": "ナップサック問題・集合被覆問題",
       "relations": [
         {
           "relation_type": "evidence",
@@ -8175,7 +8175,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "knapsack と set cover は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。knapsack は容量の上限のもとで価値を最大にし、set cover は全部を覆う条件のもとで費用を最小にします。"
+      "summary": "ナップサック問題と集合被覆問題は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。ナップサック問題は容量の上限のもとで価値を最大にし、集合被覆問題は全部を覆う条件のもとで費用を最小にします。"
     },
     {
       "aliases": [],
@@ -8333,7 +8333,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "多様体値変数では、球面・直交行列・回転などの集合を解空間として扱い、接空間のstepとretractionで幾何構造を保ちます。"
+      "summary": "多様体値変数では、球面・直交行列・回転などの集合を解空間として扱い、接空間のステップとレトラクションで幾何構造を保ちます。"
     },
     {
       "aliases": [],
@@ -8394,7 +8394,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "混合整数線形計画は、線形計画の一部の変数に「整数であること」を加えた定式化です。この一条件で凸性が失われるため、緩和で得た界と見つけた解の差（gap）を詰めながら最適性を証明します。"
+      "summary": "混合整数線形計画は、線形計画の一部の変数に「整数であること」を加えた定式化です。この一条件で凸性が失われるため、緩和で得た界と見つけた解の差（最適性ギャップ）を詰めながら最適性を証明します。"
     },
     {
       "aliases": [],
@@ -8468,7 +8468,7 @@
       "entity_id": "concept.nested-equilibrium-complementarity-hybrid",
       "entity_type": "content",
       "external_url": null,
-      "label": "入れ子・均衡・相補性・hybrid構造",
+      "label": "入れ子・均衡・相補性・ハイブリッド構造",
       "relations": [
         {
           "relation_type": "comparison",
@@ -8536,7 +8536,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "入れ子の最適化／均衡条件／相補性／hybridのmode切替を読み分ける語彙です。目的関数の種類ではなく、内側の解法／残差／離散状態を区別します。"
+      "summary": "入れ子の最適化／均衡条件／相補性／ハイブリッド系のモード切替を読み分ける語彙です。目的関数の種類ではなく、内側の解法／残差／離散状態を区別します。"
     },
     {
       "aliases": [],
@@ -8587,7 +8587,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "非線形最小二乗は、パラメータ（parameter）について非線形なモデルと観測のずれの二乗和を最小にする定式化です。凸性は失われますが、残差のJacobianを使うと一般の最小化より速く安定に解けます。"
+      "summary": "非線形最小二乗は、パラメータについて非線形なモデルと観測のずれの二乗和を最小にする定式化です。凸性は失われますが、残差のヤコビアンを使うと一般の最小化より速く安定に解けます。"
     },
     {
       "aliases": [],
@@ -8656,7 +8656,7 @@
       "entity_id": "concept.path-terminal-constraints",
       "entity_type": "content",
       "external_url": null,
-      "label": "path・terminal制約",
+      "label": "経路制約と終端制約",
       "relations": [
         {
           "relation_type": "evidence",
@@ -8704,7 +8704,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。"
+      "summary": "経路制約は軌道の途中で守る条件、終端制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。"
     },
     {
       "aliases": [],
@@ -8800,7 +8800,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "PDE制約付き最適化では、設計変数から状態場（state field）を解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。"
+      "summary": "PDE制約付き最適化では、設計変数から状態場を解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。"
     },
     {
       "aliases": [],
@@ -8884,7 +8884,7 @@
       "entity_id": "concept.receding-horizon",
       "entity_type": "content",
       "external_url": null,
-      "label": "receding horizon",
+      "label": "移動予測区間",
       "relations": [
         {
           "relation_type": "evidence",
@@ -8927,7 +8927,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。"
+      "summary": "移動予測区間は有限予測区間の軌道最適化を観測のたびに解き直し、計画した操作量列の先頭だけを実行する運用の考え方です。"
     },
     {
       "aliases": [],
@@ -9108,7 +9108,7 @@
       "entity_id": "concept.simplex",
       "entity_type": "content",
       "external_url": null,
-      "label": "Simplex・確率ベクトル",
+      "label": "単体・確率ベクトル",
       "relations": [
         {
           "relation_type": "evidence",
@@ -9141,7 +9141,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。"
+      "summary": "単体は非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。"
     },
     {
       "aliases": [],
@@ -9268,7 +9268,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。"
+      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のステップを分けて扱います。射影、レトラクション、指数写像は同じ更新ではありません。"
     },
     {
       "aliases": [],
@@ -9276,7 +9276,7 @@
       "entity_id": "concept.spd-matrix-geometry",
       "entity_type": "content",
       "external_url": null,
-      "label": "SPD matrixの表現と境界",
+      "label": "SPD行列の表現と境界",
       "relations": [
         {
           "relation_type": "evidence",
@@ -9319,7 +9319,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "SPD matrixでは、正定値の内部とPSD境界を分け、表現方法と更新則が保つ範囲を診断します。"
+      "summary": "SPD 行列では、正定値の内部とPSD境界を分け、表現方法と更新則が保つ範囲を診断します。"
     },
     {
       "aliases": [],
@@ -9327,7 +9327,7 @@
       "entity_id": "concept.time-discretization",
       "entity_type": "content",
       "external_url": null,
-      "label": "時間discretization",
+      "label": "時間離散化",
       "relations": [
         {
           "relation_type": "evidence",
@@ -9375,7 +9375,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。"
+      "summary": "時間離散化は連続時間の動力学と制約を有限個の時刻点へ写す設計で、メッシュの粗さは計算量だけでなく解の意味を変えます。"
     },
     {
       "aliases": [],
@@ -9383,7 +9383,7 @@
       "entity_id": "concept.trajectory-variable",
       "entity_type": "content",
       "external_url": null,
-      "label": "trajectory variable",
+      "label": "軌道変数",
       "relations": [
         {
           "relation_type": "evidence",
@@ -9431,7 +9431,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。"
+      "summary": "軌道変数は、時刻ごとの状態や操作量をまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。"
     },
     {
       "aliases": [],
@@ -9510,7 +9510,7 @@
       "entity_id": "concept.variable-domain",
       "entity_type": "content",
       "external_url": null,
-      "label": "変数のdomain",
+      "label": "変数の定義域",
       "relations": [
         {
           "relation_type": "evidence",
@@ -9543,7 +9543,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。"
+      "summary": "変数の定義域は、最適化で何を動かせるかを決め、使える定式化・ソルバー・保証の範囲を最初に絞る分類です。"
     },
     {
       "aliases": [],
@@ -9619,7 +9619,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "目的値だけでなく、実行可能性・停留性・有効な制約・停止理由を同時に追い、実行可能な連続解を求める最適化の手法群（family）です。"
+      "summary": "目的値だけでなく、実行可能性・停留性・有効な制約・停止理由を同時に追い、実行可能な連続解を求める最適化の手法群です。"
     },
     {
       "aliases": [],
@@ -9670,7 +9670,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "全変数を同時に動かさず、一つまたは小さなblockだけを更新して安価な部分問題を反復する大規模最適化法です。"
+      "summary": "全変数を同時に動かさず、一つまたは小さなブロックだけを更新して安価な部分問題を反復する大規模最適化法です。"
     },
     {
       "aliases": [],
@@ -9770,7 +9770,7 @@
       "entity_id": "density-filter",
       "entity_type": "content",
       "external_url": null,
-      "label": "density filter",
+      "label": "密度フィルタ",
       "relations": [
         {
           "relation_type": "comparison",
@@ -9823,7 +9823,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。"
+      "summary": "密度フィルターは、要素近傍の密度や感度を重み付き平均し、チェッカーボードとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。"
     },
     {
       "aliases": [],
@@ -9879,7 +9879,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。"
+      "summary": "個体間の差分ベクトルから候補を作り、交叉と選択で上下限付きの連続空間を探索する集団法です。"
     },
     {
       "aliases": [],
@@ -10220,7 +10220,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "双対可行性（dual feasibility）を保ったまま、実行不能な基底を直し、LPの基底を効率よく再最適化するsimplex法の変種です。"
+      "summary": "双対可行性（双対実行可能性）を保ったまま、実行不能な基底を直し、LPの基底を効率よく再最適化する単体法の変種です。"
     },
     {
       "aliases": [],
@@ -10256,7 +10256,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "問題を状態（state）と段階（stage）に分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。"
+      "summary": "問題を状態と段階に分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。"
     },
     {
       "aliases": [],
@@ -10287,7 +10287,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらPareto候補を集める方法です。"
+      "summary": "一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらパレート候補を集める方法です。"
     },
     {
       "aliases": [],
@@ -10475,7 +10475,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "domain propagation、learning、searchを用いて論理・組合せ制約の可行性と最適化を扱う手法群の入口です。"
+      "summary": "変数の候補範囲の伝播、学習、探索を用いて論理・組合せ制約の可行性と最適化を扱う手法群の入口です。"
     },
     {
       "aliases": [],
@@ -10571,7 +10571,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。"
+      "summary": "離散変数を含む問題で、グラフ・動的計画法・CP-SAT・MILP・局所探索を構造と必要な保証から選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -10579,7 +10579,7 @@
       "entity_id": "family.evolutionary",
       "entity_type": "content",
       "external_url": null,
-      "label": "進化計算・population探索の選び分け",
+      "label": "進化計算・集団探索の選び分け",
       "relations": [
         {
           "relation_type": "evidence",
@@ -10637,7 +10637,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "個体群を選択・変異・交叉・共分散適応などで更新しながら評価予算を使って改善する進化計算・population探索手法を条件に応じて選び分けるための入口です。"
+      "summary": "個体群を選択・変異・交叉・共分散適応などで更新しながら評価予算を使って改善する進化計算・集団探索手法を条件に応じて選び分けるための入口です。"
     },
     {
       "aliases": [],
@@ -10645,7 +10645,7 @@
       "entity_id": "family.expensive-black-box",
       "entity_type": "content",
       "external_url": null,
-      "label": "高価なblack-box・HPOの選び分け",
+      "label": "高価なブラックボックス・HPOの選び分け",
       "relations": [
         {
           "relation_type": "evidence",
@@ -10708,7 +10708,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "一回の実験やsimulationが高価な問題の入口です。Bayesian Optimization／TPE／multi-fidelity／random・evolutionary baselineを選び分けます。"
+      "summary": "一回の実験やシミュレーションが高価な問題の入口です。Bayesian Optimization／TPE／複数の忠実度／ランダム探索・進化計算による比較基準を選び分けます。"
     },
     {
       "aliases": [],
@@ -10799,7 +10799,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "bounds内に複数の谷や良い候補があるとき、multi-start、領域分割、annealing、population探索を選び分ける入口です。"
+      "summary": "上下限内に複数の谷や良い候補があるとき、複数の初期点を使う探索、領域分割、焼きなまし、集団探索を選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -10807,7 +10807,7 @@
       "entity_id": "family.graph-dp",
       "entity_type": "content",
       "external_url": null,
-      "label": "Graph専用法・動的計画法の選び分け",
+      "label": "グラフ専用法・動的計画法の選び分け",
       "relations": [
         {
           "relation_type": "evidence",
@@ -10845,7 +10845,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "問題が既知のgraph・DP構造に一致するかを確認し、一致するなら汎用最適化より先に専用法を検討するための入口です。"
+      "summary": "問題が既知のグラフ・DP構造に一致するかを確認し、一致するなら汎用最適化より先に専用法を検討するための入口です。"
     },
     {
       "aliases": [],
@@ -10853,7 +10853,7 @@
       "entity_id": "family.local-dfo",
       "entity_type": "content",
       "external_url": null,
-      "label": "局所Derivative-free最適化の選び分け",
+      "label": "局所的な微分不要最適化の選び分け",
       "relations": [
         {
           "relation_type": "evidence",
@@ -10957,7 +10957,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "球面／直交行列／固定rank行列／回転群などの多様体構造を持つ変数に対し、Riemann勾配法とRiemann trust-region法を選び分ける入口です。"
+      "summary": "球面／直交行列／固定階数行列／回転群などの多様体構造を持つ変数に対し、Riemann勾配法とRiemann trust-region法を選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -11008,7 +11008,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、単一の最適解ではなくPareto解集合の近似を得るための多目的最適化手法を条件に応じて選び分ける入口です。"
+      "summary": "複数目的のトレードオフを単一目的への変換または集団で探索し、単一の最適解ではなくパレート解集合の近似を得るための多目的最適化手法を条件に応じて選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -11114,7 +11114,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題を、変数・離散化・制約・実行頻度から各手法へつなぐ入口です。"
+      "summary": "時間発展する動力学の下で軌道と制御入力を選ぶ問題を、変数・離散化・制約・実行頻度から各手法へつなぐ入口です。"
     },
     {
       "aliases": [],
@@ -11178,7 +11178,7 @@
       "entity_id": "family.stochastic-ml",
       "entity_type": "content",
       "external_url": null,
-      "label": "確率勾配・機械学習optimizerの選び分け",
+      "label": "確率勾配・機械学習最適化手法の選び分け",
       "relations": [
         {
           "relation_type": "evidence",
@@ -11226,7 +11226,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。"
+      "summary": "ミニバッチ勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWと全データを使う方法を選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -11287,7 +11287,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "局所二次modelを信頼できる半径の中だけで最小化し、実測改善と予測改善の比で半径を更新するtrust-region法群を条件に応じて選び分けるための入口です。"
+      "summary": "局所二次モデルを信頼できる半径の中だけで最小化し、実測改善と予測改善の比で半径を更新する信頼領域法群を条件に応じて選び分けるための入口です。"
     },
     {
       "aliases": [],
@@ -11328,7 +11328,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。"
+      "summary": "近接勾配法へNesterov型の外挿を加え、凸複合問題の目的ギャップをより速く減らす加速一次法です。"
     },
     {
       "aliases": [],
@@ -11389,7 +11389,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。"
+      "summary": "非線形最小二乗の残差ヤコビ行列から曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。"
     },
     {
       "aliases": [],
@@ -11521,7 +11521,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "形状更新の失敗は、目的関数の悪化とは分け、geometry・mesh・state solveのどこで壊れたかを診断します。"
+      "summary": "形状更新の失敗は、目的関数の悪化とは分け、形状・メッシュ・状態計算のどこで壊れたかを診断します。"
     },
     {
       "aliases": [],
@@ -11745,7 +11745,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約にバリア（barrier）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。"
+      "summary": "不等式制約にバリア（障壁）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。"
     },
     {
       "aliases": [],
@@ -11796,7 +11796,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "直近m組の曲率更新だけを保持し、two-loop recursionで逆Hessianの作用を計算する大規模無制約向けの準Newton法です。"
+      "summary": "直近m組の曲率更新だけを保持し、二重ループの再帰計算で逆ヘッセ行列の作用を計算する大規模無制約向けの準Newton法です。"
     },
     {
       "aliases": [],
@@ -11903,7 +11903,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。"
+      "summary": "観測ごとの残差ベクトルとヤコビ行列構造を保ち、二乗和・減衰・信頼領域診断を使ってパラメータを局所推定する方法です。"
     },
     {
       "aliases": [],
@@ -11911,7 +11911,7 @@
       "entity_id": "local-search-combinatorial",
       "entity_type": "content",
       "external_url": null,
-      "label": "組合せlocal search",
+      "label": "組合せ局所探索",
       "relations": [
         {
           "relation_type": "comparison",
@@ -11959,7 +11959,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。"
+      "summary": "離散的な近傍への移動操作を定義し、改善が見つかる間は可行解を更新するヒューリスティクスです。大域最適性は保証しません。"
     },
     {
       "aliases": [],
@@ -12045,7 +12045,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主・双対・gap・infeasibility情報まで利用する凸最適化familyです。"
+      "summary": "線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主問題・双対問題・ギャップ・実行不能性情報まで利用する凸最適化手法群です。"
     },
     {
       "aliases": [],
@@ -12167,7 +12167,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。"
+      "summary": "現在点の勾配が示す局所的な上り方向と反対へステップを取り、滑らかな目的関数の値を反復的に下げる一次法です。"
     },
     {
       "aliases": [],
@@ -12279,7 +12279,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "ユークリッド距離ではなく、問題に合うBregman幾何（Bregman geometry）を使う一次法です。単体（simplex）と確率分布、非一様なscale上で劣勾配stepを行います。"
+      "summary": "ユークリッド距離ではなく、問題に合うBregman幾何を使う一次法です。単体と確率分布、尺度が非一様な領域で劣勾配による更新を行います。"
     },
     {
       "aliases": [],
@@ -12330,7 +12330,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、moving asymptotesで更新幅を制御する逐次近似手法です。"
+      "summary": "MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、移動漸近線で更新幅を制御する逐次近似手法です。"
     },
     {
       "aliases": [],
@@ -12435,7 +12435,7 @@
       "entity_id": "multi-objective",
       "entity_type": "content",
       "external_url": null,
-      "label": "多目的最適化とPareto front",
+      "label": "多目的最適化とParetoフロント",
       "relations": [
         {
           "relation_type": "comparison",
@@ -12641,7 +12641,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "最小費用流のnetwork構造を使い、基底を全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
+      "summary": "最小費用流のネットワーク構造を使い、基底を全域木として扱うことで一般の単体法より高速に解く専用法です。"
     },
     {
       "aliases": [],
@@ -12682,7 +12682,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Hessian全体を保持せずHessian-vector積と共役勾配法でNewton方向を近似し、滑らかな大規模問題へ二階情報を使う局所法です。"
+      "summary": "ヘッセ行列全体を保持せず、ベクトルとの積と共役勾配法でNewton方向を近似し、滑らかな大規模問題へ二階情報を使う局所法です。"
     },
     {
       "aliases": [],
@@ -12733,7 +12733,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。"
+      "summary": "勾配とヘッセ行列から局所二次モデルを作り、その停留点へ進む二階最適化法です。"
     },
     {
       "aliases": [],
@@ -12774,7 +12774,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "現在の勾配だけでなく直前までの探索方向も再利用し、少ないmemoryで大規模な滑らかな無制約問題を解く局所法です。"
+      "summary": "現在の勾配だけでなく直前までの探索方向も再利用し、少ないメモリで大規模な滑らかな無制約問題を解く局所法です。"
     },
     {
       "aliases": [],
@@ -12912,7 +12912,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "整数変数を扱うmaster問題と、整数を固定した連続NLPを交互に解き、凸な非線形情報を切除平面としてmasterへ戻す厳密探索法です。"
+      "summary": "整数変数を扱う主問題と、整数を固定した連続NLPを交互に解き、凸な非線形情報を切除平面として主問題へ戻す厳密探索法です。"
     },
     {
       "aliases": [],
@@ -13160,7 +13160,7 @@
       "entity_id": "primal-dual-conic",
       "entity_type": "content",
       "external_url": null,
-      "label": "Primal-dual錐内点法",
+      "label": "主双対錐内点法",
       "relations": [
         {
           "relation_type": "evidence",
@@ -13213,7 +13213,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、主・双対・slackを同時に更新してconic標準形の凸問題を解く内点法です。"
+      "summary": "LPのバリア法を二次錐や半正定値錐へ一般化し、主変数・双対変数・スラック変数を同時に更新して錐の標準形の凸問題を解く内点法です。"
     },
     {
       "aliases": [],
@@ -13221,7 +13221,7 @@
       "entity_id": "primal-simplex",
       "entity_type": "content",
       "external_url": null,
-      "label": "Primal simplex法",
+      "label": "主単体法",
       "relations": [
         {
           "relation_type": "evidence",
@@ -13269,7 +13269,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "線形計画（LP）の実行可能な基底（basis）を保ちながら、被約費用（reduced cost）が示す隣の基底へピボット（pivot）し、目的値を改善するsimplex法です。"
+      "summary": "線形計画（LP）の実行可能な基底を保ちながら、被約費用が示す隣の基底へピボットし、目的値を改善する単体法です。"
     },
     {
       "aliases": [],
@@ -13345,7 +13345,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "勾配の一歩のあとで実行可能集合へ射影（projection）し、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
+      "summary": "勾配の一歩のあとで実行可能集合へ射影し、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
     },
     {
       "aliases": [],
@@ -13391,7 +13391,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "滑らかな項には勾配一歩を使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。"
+      "summary": "滑らかな項には勾配による一歩を使い、非滑らかな項には近接作用素を使う複合凸最適化法です。"
     },
     {
       "aliases": [],
@@ -13452,7 +13452,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "探索空間の同じ分布から独立に点を引いて評価するだけの、ハイパーパラメータ最適化（hyperparameter optimization）で最も単純なbaselineです。"
+      "summary": "探索空間の同じ分布から独立に点を引いて評価するだけの、ハイパーパラメータ最適化で最も単純な比較基準です。"
     },
     {
       "aliases": [],
@@ -13513,7 +13513,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んで多様体へ戻す写像で多様体上に戻す一次法です。"
+      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んで写像で多様体上に戻す一次法です。"
     },
     {
       "aliases": [],
@@ -13521,7 +13521,7 @@
       "entity_id": "riemannian-trust-region",
       "entity_type": "content",
       "external_url": null,
-      "label": "Riemann trust-region法",
+      "label": "Riemann信頼領域法",
       "relations": [
         {
           "relation_type": "evidence",
@@ -13564,7 +13564,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。"
+      "summary": "接空間上に二次モデルを作り信頼半径の内側だけで最小化し、写像で多様体上に戻す大域化された二階法です。"
     },
     {
       "aliases": [],
@@ -13615,7 +13615,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "全dataではなく、一様にsampleしたmini-batchの勾配でparameterを更新します。各stepはfull-data勾配の不偏推定ですが、samplingによるvarianceを持つ一次法です。"
+      "summary": "全データではなく、一様に抽出したミニバッチの勾配でパラメータを更新します。各更新は全データの勾配の不偏推定ですが、標本抽出による分散を持つ一次法です。"
     },
     {
       "aliases": [],
@@ -13714,7 +13714,7 @@
       "entity_id": "shape-parameter-sensitivity",
       "entity_type": "content",
       "external_url": null,
-      "label": "形状parameterと縮約感度",
+      "label": "形状パラメータと縮約感度",
       "relations": [
         {
           "relation_type": "comparison",
@@ -13787,7 +13787,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。"
+      "summary": "形状パラメータを更新する最適化では、形状とメッシュの妥当性をPDE 状態の収束と分けて確認します。目的感度はパラメータの直接効果と状態を介した効果に分解します。"
     },
     {
       "aliases": [],
@@ -13965,7 +13965,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "温度parameterに応じて悪化する移動も確率的に受理し、局所解からの脱出を狙う確率的大域探索heuristicです。"
+      "summary": "温度パラメータに応じて悪化する移動も確率的に受理し、局所解からの脱出を狙う確率的大域探索ヒューリスティックです。"
     },
     {
       "aliases": [],
@@ -14039,7 +14039,7 @@
       "entity_id": "smac",
       "entity_type": "content",
       "external_url": null,
-      "label": "SMAC（random forest surrogate）",
+      "label": "SMAC（ランダムフォレストによる代理モデル）",
       "relations": [
         {
           "relation_type": "evidence",
@@ -14090,7 +14090,7 @@
       "entity_id": "spatial-branch-and-bound",
       "entity_type": "content",
       "external_url": null,
-      "label": "空間branch-and-bound",
+      "label": "空間分枝限定法",
       "relations": [
         {
           "relation_type": "evidence",
@@ -14128,7 +14128,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のgapを閉じながら、大域最適性を確かめる厳密探索法です。"
+      "summary": "非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のギャップを閉じながら、大域最適性を確かめる厳密探索法です。"
     },
     {
       "aliases": [],
@@ -14276,7 +14276,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。"
+      "summary": "凸だが非微分可能な点でも利用できる劣勾配を使い、歩幅の予定表とこれまでの最良値を管理して目的値を改善する一次法です。"
     },
     {
       "aliases": [],
@@ -14352,7 +14352,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "トポロジー最適化は、設計領域内の材料分布を変数にして、状態方程式と体積制約のもとで剛性やcomplianceを改善する設計問題です。"
+      "summary": "トポロジー最適化は、設計領域内の材料分布を変数にして、状態方程式と体積制約のもとで剛性やコンプライアンスを改善する設計問題です。"
     },
     {
       "aliases": [],
@@ -14391,7 +14391,7 @@
       "entity_id": "trust-exact",
       "entity_type": "content",
       "external_url": null,
-      "label": "厳密trust-region Newton法",
+      "label": "厳密信頼領域Newton法",
       "relations": [
         {
           "relation_type": "evidence",
@@ -14429,7 +14429,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "trust-region部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。"
+      "summary": "信頼領域の部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。"
     },
     {
       "aliases": [],
@@ -14470,7 +14470,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。"
+      "summary": "ヘッセ行列とベクトルの積から作るKrylov部分空間で信頼領域の部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。"
     },
     {
       "aliases": [],
@@ -14582,7 +14582,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法です。"
+      "summary": "上下限付き非線形最小二乗で、境界までの距離に応じて信頼領域を変形し、反射方向も使って局所解を探すGauss–Newton系手法です。"
     },
     {
       "aliases": [],
@@ -14590,7 +14590,7 @@
       "entity_id": "turbo-saasbo",
       "entity_type": "content",
       "external_url": null,
-      "label": "高次元Bayesian最適化（TuRBO / SAASBO）",
+      "label": "高次元ベイズ最適化（TuRBO / SAASBO）",
       "relations": [
         {
           "relation_type": "evidence",
@@ -14628,7 +14628,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
+      "summary": "高次元では、ガウス過程を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（信頼領域）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
     },
     {
       "aliases": [],
@@ -14636,7 +14636,7 @@
       "entity_id": "weighted-sum",
       "entity_type": "content",
       "external_url": null,
-      "label": "重み付き和scalarization",
+      "label": "重み付き和によるスカラー化",
       "relations": [
         {
           "relation_type": "comparison",

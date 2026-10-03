@@ -4,14 +4,14 @@ kind: method
 method_id: M_TRUST_KRYLOV
 title_ja: Trust-region Krylov法
 title_en: Trust-Region Krylov
-summary: Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
+summary: ヘッセ行列とベクトルの積から作るKrylov部分空間で信頼領域の部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
 source_ids: [S002, S056]
 related_ids: [family.smooth-local, newton-cg, trust-region-newton-cg]
 status: published
 last_reviewed: 2026-09-30
 ---
 
-Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
+ヘッセ行列とベクトルの積から作るKrylov部分空間で信頼領域の部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
 
 ## 30秒でつかむ
 
@@ -19,8 +19,8 @@ Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近
 そこから数本の方向を選び、その方向が張る小さな平面の中だけで、信用できる一歩を探します。
 平面の外は見ません。
 
-- **見るもの**: 勾配、Hessianとベクトルの積（Hessian-vector product、HVP）、局所モデルが予測した改善
-- **動かすもの**: Krylov部分空間、信頼半径（trust radius）、候補の一手
+- **見るもの**: 勾配、ヘッセ行列とベクトルの積（Hessian-vector product、HVP）、局所モデルが予測した改善
+- **動かすもの**: Krylov部分空間、信頼半径、候補の一手
 - **前進の判断**: 実際の減少とモデルが予測した減少の比
 
 [Newton-CG法](#/learn/newton-cg)と似ていますが、一手の長さの決め方が違います。Newton-CG法は、向きを決めてから直線探索で長さを決めました。
@@ -44,7 +44,7 @@ $$
 \mathcal{K}_j=\mathrm{span}\{g_k,\ H_k g_k,\ H_k^2 g_k,\ \dots,\ H_k^{j-1} g_k\}
 $$
 
-式は「勾配と、それにHessianを繰り返し掛けた向きが張る空間」と言っています。HVPを1回計算するごとに、部分空間の次元が1つ増えます。
+式は「勾配と、それにヘッセ行列を繰り返し掛けた向きが張る空間」と言っています。HVPを1回計算するごとに、部分空間の次元が1つ増えます。
 $j$ が小さければ、部分問題は小さな問題になり、安く解けます。
 
 候補の一手を得たら、実際の減少とモデルの予測の減少の比 $\rho_k$ を見て、採否と半径の更新を決めます。この部分は[厳密なtrust-region Newton法](#/learn/trust-exact)と同じです。
@@ -75,14 +75,14 @@ Rosenbrock関数 $f(x,y)=100(y-x^2)^2+(1-x)^2$ も、同じ手法で解けます
 
 ## 向く条件・避ける条件
 
-Trust-region Krylov法は、Hessianを作れない大きな問題で、曲率と信頼領域の安全性を両立させたいときの手法です。
+Trust-region Krylov法は、ヘッセ行列を作れない大きな問題で、曲率と信頼領域の安全性を両立させたいときの手法です。
 先に、次の項目を確認します。
 
 | 項目 | 確認すること |
 |---|---|
 | 目的関数 | 二階近似が意味を持つ程度に滑らかか |
 | 勾配とHVP | 高い精度で、効率よく計算できるか |
-| 次元 | 密なHessianを作らずに済む価値があるか |
+| 次元 | 密なヘッセ行列を作らずに済む価値があるか |
 | 非凸性 | 負の曲率を見つける意味があるか |
 | 制約 | 無制約か。制約があれば対応する別の版が必要 |
 
@@ -92,7 +92,7 @@ Trust-region Krylov法は、Hessianを作れない大きな問題で、曲率と
 
 - 大規模で滑らかな無制約問題である（[大規模な無制約の最小化](#/formulations/PA007)）
 - HVPを、自動微分や問題の構造から得られる
-- 不定なHessianや負の曲率を、無視したくない
+- 不定なヘッセ行列や負の曲率を、無視したくない
 - 直線探索より、局所モデルの信頼度を明示したい
 
 避ける、または切り替える条件です。
@@ -101,7 +101,7 @@ Trust-region Krylov法は、Hessianを作れない大きな問題で、曲率と
 - 不連続、離散変数、ブラックボックス評価しかない
 - 部分問題の求解が、目的関数の評価より支配的である
 - 一般制約や、大域最適性の証明が必要である
-- 変数が少なく、密なHessianを分解できる → [厳密なtrust-region Newton法](#/learn/trust-exact)と比べる（[滑らかな無制約の最小化](#/formulations/PA006)）
+- 変数が少なく、密なヘッセ行列を分解できる → [厳密なtrust-region Newton法](#/learn/trust-exact)と比べる（[滑らかな無制約の最小化](#/formulations/PA006)）
 - より単純な内側のCGで足りる → [Trust-region Newton-CG](#/learn/trust-region-newton-cg)と比べる
 
 ## Python
@@ -166,7 +166,7 @@ print(result.success, result.x, result.nit, result.nhev)
 - 実際の減少と予測の減少の比 $\rho$
 - 受理した一手の数と、却下した一手の数
 - Krylov部分空間の反復回数
-- 勾配のノルム（gradient norm）
+- 勾配のノルム
 - 負の曲率が検出されたか
 
 半径が縮み続ける、または却下が続くときは、局所モデルが地形と合っていません。HVPの回数は、外側の反復とは別に数えます。
@@ -175,11 +175,11 @@ print(result.success, result.x, result.nit, result.nhev)
 
 - 半径が縮み続ける → モデル、尺度、HVPのいずれかが地形と合っていない → 尺度とHVPを確認する
 - 一手の却下が多い → 二次近似が通用する範囲が狭い、またはノイズがある → 微分の精度と、ノイズの有無を疑う
-- Krylov部分空間の反復が上限に張り付く → 条件数が悪い → 前処理（preconditioning）や、精度を下げた求解を検討する
+- Krylov部分空間の反復が上限に張り付く → 条件数が悪い → 前処理や、精度を下げた求解を検討する
 - 曲率を使っても改善しない → 曲率の情報が費用に見合わない → L-BFGSや一階法と費用を比較する
 - 初期点で解が変わる → 局所解が複数ある → 局所法であることを受け入れるか、大域探索へ切り替える
 
-## コラム: Krylov空間は全Hessianを作らない
+## コラム: Krylov空間は全ヘッセ行列を作らない
 
 Krylov法は、全固有ベクトルを先に求めるのではありません。現在の勾配と曲率に関係する方向を、反復的に作ります。
 HVPの費用と内側の反復まで含めて、Trust-region Newton-CGやNewton-CGと比較します。

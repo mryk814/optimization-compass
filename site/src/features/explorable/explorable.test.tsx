@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 
 import { CompiledContent } from "../content/CompiledContent";
 import ConvexityChord from "./ConvexityChord";
@@ -65,7 +66,7 @@ describe("ExplorableMounts inside compiled content", () => {
     + '<figcaption class="explorable-caption"><p>説明</p></figcaption></figure>';
 
   it("replaces the static fallback with the live figure and keeps the caption", async () => {
-    render(<CompiledContent page={{ html: figure("convexity-chord"), toc: [] }} />);
+    render(<MemoryRouter><CompiledContent page={{ html: figure("convexity-chord"), toc: [] }} /></MemoryRouter>);
 
     expect(await screen.findByText("見る問い")).toBeInTheDocument();
     expect(screen.queryByText("静的な代替")).not.toBeInTheDocument();
@@ -73,7 +74,7 @@ describe("ExplorableMounts inside compiled content", () => {
   });
 
   it("leaves the fallback for an id the site does not know", () => {
-    render(<CompiledContent page={{ html: figure("not-registered"), toc: [] }} />);
+    render(<MemoryRouter><CompiledContent page={{ html: figure("not-registered"), toc: [] }} /></MemoryRouter>);
 
     expect(screen.getByText("静的な代替")).toBeInTheDocument();
   });

@@ -2,9 +2,9 @@
 content_id: density-filter
 kind: method
 method_id: M_DENSITY_FILTER
-title_ja: density filter
+title_ja: 密度フィルタ
 title_en: Density Filter
-summary: density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
+summary: 密度フィルターは、要素近傍の密度や感度を重み付き平均し、チェッカーボードとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
 source_ids: [S099]
 prerequisites: [topology-optimization, simp-topology]
 related_ids: [shape-optimization, geometry-update-failure-modes, optimality-criteria-topology, adjoint-sensitivity]
@@ -15,7 +15,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-density フィルターは、要素近傍の密度や感度を重み付き平均し、checkerboardとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
+密度フィルターは、要素近傍の密度や感度を重み付き平均し、チェッカーボードとメッシュ依存性を抑えるトポロジー最適化の正則化手法です。
 
 ## 30秒でつかむ
 
@@ -30,7 +30,7 @@ density フィルターは、要素近傍の密度や感度を重み付き平均
 ### 隣接要素を独立に更新しない
 
 有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。
-density フィルターは近傍半径と距離重みを使い、各要素の更新を周囲の場と結びます。
+密度フィルターは近傍半径と距離重みを使い、各要素の更新を周囲の場と結びます。
 
 典型的な平均は、
 
@@ -49,8 +49,8 @@ $$
 交互模様の指標だけを下げることを成功条件にしません。
 コンプライアンスと中間密度率に加え、メッシュ細分化後の挙動を並べて読みます。
 
-メッシュ 節点を直接動かす形状更新とは、artifactの抑え方が違います。
-density フィルターは場の近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。
+メッシュ節点を直接動かす形状更新とは、離散化による見かけの結果の抑え方が違います。
+密度フィルターは場の近傍を平滑化しますが、要素の反転や自己交差した形状を修復する検査ではありません。
 
 ### 何を直しているか
 
@@ -81,7 +81,7 @@ density フィルターは場の近傍を平滑化しますが、要素のinvers
 
 ### フィルターの有無を先に比べる
 
-![8×4要素の固定教材で、filterありの反復6と反復12、filterなしの反復12を並べたdensity field。filterなしでは交互模様が強く、checkerboard scoreも大きい。](./media/topology-field-execution.svg "同じ教育用更新をfilterあり・なしで実行した結果です。filter radiusの一般的な最適値や実部材の製造可能性は示しません。")
+![8×4要素の固定教材で、フィルターありの反復6と反復12、フィルターなしの反復12を並べた密度場。フィルターなしでは交互模様が強く、チェッカーボード評価値も大きい。](./media/topology-field-execution.svg "同じ教育用更新をフィルターあり・なしで実行した結果です。フィルター半径の一般的な最適値や実部材の製造可能性は示しません。")
 
 右下のフィルターなし場では、濃淡が細かく交互に残ります。
 形が滑らかに見えるかだけでなく、交互模様の指標と中間密度率を対応させます。
@@ -96,7 +96,7 @@ filtered_sensitivity = weighted_average(raw_sensitivity, weights)
 
 ### 向く条件・避ける条件
 
-要素近傍に意味があり、メッシュ上の短いartifactを抑えたい問題に向きます。
+要素近傍に意味があり、メッシュ上の短周期の人工的な構造を抑えたい問題に向きます。
 物理的な最小部材寸法や製造制約をフィルター半径だけで表せるとは限りません。
 
 ## Python
@@ -123,8 +123,8 @@ for iteration in range(1, 4):
 フィルター半径で結果が大きく変わる場合は、メッシュ／射影／罰則化の影響を分けて確認します。
 フィルターを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。
 
-目的値が改善しても、メッシュ refinementで荷重経路や境界が変わるならメッシュ dependenceが残っています。
-[形状更新の失敗モード](#/learn/geometry-update-failure-modes)でgeometry validityとメッシュ 品質を先に確認してください。
+目的値が改善しても、メッシュ細分化で荷重経路や境界が変わるならメッシュ依存性が残っています。
+[形状更新の失敗モード](#/learn/geometry-update-failure-modes)で形状の妥当性とメッシュ品質を先に確認してください。
 
 ## 次に読む
 

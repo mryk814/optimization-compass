@@ -3,9 +3,9 @@ content_id: concept.chance-risk-contract
 kind: concept
 canonical_entity_type: feature
 canonical_entity_id: F_CONSTRAINT_CHANCE
-title_ja: Chance constraint・CVaR・robustness
+title_ja: 確率制約・CVaR・ロバスト性
 title_en: Chance Constraints, CVaR, and Robustness
-summary: Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。
+summary: 確率制約は制約違反の確率を扱います。CVaR・ロバスト最適化・確率計画・DROとの違いを、目的・制約・保証範囲で整理します。
 source_ids: [S054, S055, S056, S103]
 prerequisites: [concept.uncertainty-models, concept.constraint-class]
 related_ids: [concept.simplex, family.stochastic-ml, lp-qp-conic]
@@ -15,7 +15,7 @@ status: published
 last_reviewed: 2026-07-26
 ---
 
-Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。
+確率制約は制約違反の確率を扱います。CVaR・ロバスト最適化・確率計画・DROとの違いを、目的・制約・保証範囲で整理します。
 
 ## 30秒でつかむ
 
@@ -23,23 +23,23 @@ Chance constraintは制約違反の確率を扱います。CVaR・robust・stoch
 
 | 語彙 | 主に置く場所 | 問い | 依存する前提 |
 | --- | --- | --- | --- |
-| stochastic | 目的・制約 | 分布やscenarioの平均的な結果をどう扱うか | 分布・生成規則・sample |
-| robust | 制約・目的 | 指定したuncertainty setのどの値でも守るか | setの範囲・形・根拠 |
-| chance constraint | 制約 | 違反確率を目標以下にできるか | 分布・確率水準・推定 |
-| CVaR | 目的・場合によっては制約 | 悪い側のtailをどれだけ抑えるか | lossの向き・tail水準・sample |
-| distributionally robust optimization (DRO) | 目的・制約 | 許容した分布集合の中で結果を抑えられるか | ambiguity set・距離・半径 |
+| 確率計画 | 目的・制約 | 分布やシナリオの平均的な結果をどう扱うか | 分布・生成規則・標本 |
+| ロバスト最適化 | 制約・目的 | 指定した不確実性集合のどの値でも守るか | 集合の範囲・形・根拠 |
+| 確率制約 | 制約 | 違反確率を目標以下にできるか | 分布・確率水準・推定 |
+| CVaR | 目的・場合によっては制約 | 悪い側の裾をどれだけ抑えるか | 損失の向き・裾の水準・標本 |
+| 分布ロバスト最適化 (DRO) | 目的・制約 | 許容した分布集合の中で結果を抑えられるか | 分布の候補集合・距離・半径 |
 
-「stochastic」は一つのsolver名ではありません。確率分布や有限scenarioを使う問題の表現です。`robust`は不確実性をsetで囲む考え方であり、`chance constraint`は確率を制約の判定へ入れる考え方です。CVaRはtail riskの測り方で、これらと同じ分類軸ではありません。
+「確率計画」は一つのソルバー名ではありません。確率分布や有限シナリオを使う問題の表現です。ロバスト最適化は不確実性を集合で囲む考え方であり、確率制約は確率を制約の判定へ入れる考え方です。CVaRは裾のリスクの測り方で、これらと同じ分類軸ではありません。
 
 ## 実行結果を先に見る
 
-![同じ4資産、training 8件、held-out 4件を使い、nominal目的とCVaRを含む目的で得た配分を比較した実行結果。各配分についてtrainingとheld-outのmean loss、CVaR 75%、worst lossを別々に表示する。](./media/portfolio-risk-execution.svg "固定Python generatorの実行結果です。risk treatmentだけを変えた二つの配分を、trainingとheld-outに分けて読みます。固定sampleの結果であり、将来returnを保証しません。")
+![同じ4資産、学習用データ 8件、評価用データ 4件を使い、公称目的とCVaRを含む目的で得た配分を比較した実行結果。各配分について学習用データと評価用データの平均損失、CVaR 75%、最大損失を別々に表示する。](./media/portfolio-risk-execution.svg "固定Python生成プログラムの実行結果です。リスクの扱いだけを変えた二つの配分を、学習用データと評価用データに分けて読みます。固定標本の結果であり、将来収益を保証しません。")
 
-上段と下段では、変数domainとsampleを固定しています。配分が変わるだけでなく、trainingで見えたriskとheld-outのriskを分けて読むことが要点です。
+上段と下段では、変数定義域と標本を固定しています。配分が変わるだけでなく、学習用データで見えたリスクと評価用データのリスクを分けて読むことが要点です。
 
-## chance constraintは制約違反の確率を指定する
+## 確率制約は制約違反の確率を指定する
 
-不確実な値を`ξ`、制約関数を`g(x, ξ)`とすると、代表的なchance constraintは次の形です。
+不確実な値を`ξ`、制約関数を`g(x, ξ)`とすると、代表的な確率制約は次の形です。
 
 $$
 \Pr\{g(x,\xi)\leq 0\}\geq 1-\alpha.
@@ -47,75 +47,75 @@ $$
 
 `α`は許容する違反確率です。ここで指定しているのは、明示した分布と確率モデルのもとでの制約充足です。`α=0.05`と書いただけで、未知の分布や将来の全データに対する安全保証になるわけではありません。
 
-実装やCaseでは、少なくとも次を一緒に残します。
+実装や事例では、少なくとも次を一緒に残します。
 
-- 何が揺らぐか。parameter、observation noise、process disturbanceの区別
+- 何が揺らぐか。パラメータ、観測ノイズ、外乱の区別
 - `ξ`の分布、推定方法、独立性や定常性の仮定
 - `α`の値と、確率を評価する単位
-- 分布を推定したsampleと、性能を確認するheld-out sampleの分割
-- violationの定義、tolerance、未観測条件への外挿範囲
+- 分布を推定した標本と、性能を確認する評価用標本の分割
+- 違反の定義、許容誤差、未観測条件への外挿範囲
 
-有限scenarioのうち何件で制約を満たしたかを数えるだけなら、まずはempirical scenario satisfactionです。scenarioの生成規則と評価データが別に固定されていない限り、それを確率保証と呼びません。
+有限シナリオのうち何件で制約を満たしたかを数えるだけなら、まずは標本上での制約充足率です。シナリオの生成規則と評価データが別に固定されていない限り、それを確率保証と呼びません。
 
-## CVaRは悪い側のtailを目的へ入れる
+## CVaRは悪い側の裾を目的へ入れる
 
-損失`L(x, ξ)`を小さくしたいとき、平均だけでなく悪い側のtailを重く見るためにCVaR（Conditional Value at Risk）を使う場合があります。CVaRは、指定したquantileより悪い損失の平均を表すtail-riskの指標です。
+損失`L(x, ξ)`を小さくしたいとき、平均だけでなく悪い側の裾を重く見るためにCVaR（Conditional Value at Risk）を使う場合があります。CVaRは、指定した分位点より悪い損失の平均を表す裾のリスクの指標です。
 
-chance constraintが「制約違反の頻度をどこまで許すか」を問うのに対して、CVaRは「悪い損失が起きたとき、その大きさをどれだけ抑えるか」を問います。そのため、CVaRを目的関数へ加えても、制約違反確率を直接`1-α`以下にしたことにはなりません。反対に、chance constraintを置いても、違反したときの損失額やtailの厚さは制御しません。
+確率制約が「制約違反の頻度をどこまで許すか」を問うのに対して、CVaRは「悪い損失が起きたとき、その大きさをどれだけ抑えるか」を問います。そのため、CVaRを目的関数へ加えても、制約違反確率を直接`1-α`以下にしたことにはなりません。反対に、確率制約を置いても、違反したときの損失額や裾の厚さは制御しません。
 
 目的と制約の両方へ不確実性を入れるなら、次のように別々に記録します。
 
 | 記録する場所 | 例 | 読み方 |
 | --- | --- | --- |
-| 目的 | 期待損失 + CVaRの重み付き和 | 平均性能とtail riskの交換を読む |
-| 制約 | chance constraint | 違反の頻度に上限を置く |
-| 両方 | CVaR objective + robust constraint | tailの大きさとset内の最悪可行性を別々に読む |
+| 目的 | 期待損失 + CVaRの重み付き和 | 平均性能と裾のリスクの交換を読む |
+| 制約 | 確率制約 | 違反の頻度に上限を置く |
+| 両方 | CVaRを含む目的 + ロバスト制約 | 裾の大きさと集合内の最悪可行性を別々に読む |
 
-CVaRを比較するときは、lossの向き／tail水準／sample数／scenarioの重みを固定します。
-最適化用sampleと評価用sampleの分割もそろえます。
-値が小さいことだけで、異なる分布やtail水準の結果を順位付けしません。
+CVaRを比較するときは、損失の向き／裾の水準／標本数／シナリオの重みを固定します。
+最適化用標本と評価用標本の分割もそろえます。
+値が小さいことだけで、異なる分布や裾の水準の結果を順位付けしません。
 
-chance constraintの`α`を違反確率、CVaRの`α`をquantileまたはtail levelとして書く流儀があります。同じ記号でも意味は別です。さらに、どちらも推定値のconfidence levelとは限りません。Case・Theater・Compareでは`violation_probability`、`tail_level`、`confidence_level`を別fieldとして読みます。
+確率制約の`α`を違反確率、CVaRの`α`を分位点または裾の水準として書く流儀があります。同じ記号でも意味は別です。さらに、どちらも推定値の信頼水準とは限りません。事例・可視化・比較では`violation_probability`、`tail_level`、`confidence_level`を別項目として読みます。
 
-## robust・stochastic・DROを同じ軸で混ぜない
+## ロバスト最適化・確率計画・DROを同じ軸で混ぜない
 
-| formulation | 揺らぎの表現 | 代表的な主張 | 外側へ言えないこと |
+| 定式化 | 揺らぎの表現 | 代表的な主張 | 外側へ言えないこと |
 | --- | --- | --- | --- |
-| robust optimization | uncertainty set `U` | `U`の中の全ての値で制約を守る | `U`の外側の値への保証 |
-| stochastic programming | distributionまたはscenario | 指定した分布・scenarioで期待値や制約を評価する | 分布外・未観測データでの同じ結果 |
-| chance-constrained optimization | distributionと許容確率 | 指定した確率モデルで違反確率を抑える | 分布推定の誤差やmodel misspecificationを無視した保証 |
-| DRO | 分布の集合（ambiguity set） | 許容した分布集合の中でworst-caseを抑える | ambiguity setの外側の分布 |
+| ロバスト最適化 | 不確実性集合 `U` | `U`の中の全ての値で制約を守る | `U`の外側の値への保証 |
+| 確率計画 | 分布またはシナリオ | 指定した分布・シナリオで期待値や制約を評価する | 分布外・未観測データでの同じ結果 |
+| 確率制約付き最適化 | 分布と許容確率 | 指定した確率モデルで違反確率を抑える | 分布推定の誤差やモデルの誤指定を無視した保証 |
+| DRO | 分布の候補集合 | 許容した分布集合の中で最悪の場合を抑える | 分布の候補集合の外側の分布 |
 
-robust optimizationのsetは、parameterが取りうる範囲を表します。DROのambiguity setは、確率分布そのものの候補集合を表します。どちらも「不確実なものを集合で扱う」と説明できますが、集合の要素がparameterなのか分布なのかを省略しません。
+ロバスト最適化の集合は、パラメータが取りうる範囲を表します。DROの分布の候補集合は、確率分布そのものの候補集合を表します。どちらも「不確実なものを集合で扱う」と説明できますが、集合の要素がパラメータなのか分布なのかを省略しません。
 
-stochastic programmingでscenarioを増やすと、計算問題の表現は細かくなります。
-しかし、sample sizeだけでout-of-sample性能や確率保証は得られません。
-scenarioの生成／重み／seed／評価用データを固定し、in-sampleとheld-outを分けます。
+確率計画でシナリオを増やすと、計算問題の表現は細かくなります。
+しかし、標本数だけで標本外の性能や確率保証は得られません。
+シナリオの生成／重み／乱数シード／評価用データを固定し、学習用データと評価用データを分けます。
 
-## simplex配分での読み方
+## 単体配分での読み方
 
-ポートフォリオや資源配分では、配分`x`をsimplex上に置き、scenarioごとの損失`L_s(x)`を評価する形がよく現れます。
+ポートフォリオや資源配分では、配分`x`を単体上に置き、シナリオごとの損失`L_s(x)`を評価する形がよく現れます。
 
 $$
 x_i\geq 0,\qquad \sum_i x_i=1.
 $$
 
-このsimplex制約は、配分のdomainを定めます。不確実性の扱いは別に、たとえば次のように追加します。
+この単体制約は、配分の定義域を定めます。不確実性の扱いは別に、たとえば次のように追加します。
 
-- stochastic: `L_s(x)`の期待損失を目的にする
-- CVaR: 大きい`L_s(x)`のtailを目的に加える
-- chance constraint: 予算超過などの制約をscenarioで許容確率までに抑える
-- robust: 定めた損失・需要のsetの全てで制約を守る
-- DRO: scenario分布の候補集合に対するworst-caseを抑える
+- 確率計画: `L_s(x)`の期待損失を目的にする
+- CVaR: 大きい`L_s(x)`の裾を目的に加える
+- 確率制約: 予算超過などの制約をシナリオで許容確率までに抑える
+- ロバスト最適化: 定めた損失・需要の集合の全てで制約を守る
+- DRO: シナリオ分布の候補集合に対する最悪の場合を抑える
 
 同じ配分変数でも、目的・制約・保証範囲が変われば別の問題です。
-nominalな共分散riskの結果を、CVaR／chance constraint／robust／DROの結果として表示しません。
+公称条件の共分散リスクの結果を、CVaR／確率制約／ロバスト／DROの結果として表示しません。
 
-[nominal目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
-[nominal／CVaR Compare](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、変数とsample contractを固定し、risk treatmentだけをcontrast-onlyで読みます。
-これは一般性能rankingや将来分布への保証ではありません。
+[公称目的の実行履歴](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的の実行履歴](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+[公称／CVaR 比較](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、変数と標本の評価条件を固定し、リスクの扱いの違いだけを比較します。
+これは一般的な性能の順位付けや将来分布への保証ではありません。
 
-## 仕様に残す最小contract
+## 仕様に残す最小限の条件
 
 不確実性を含む問題では、次の項目を空欄にしません。
 
@@ -132,15 +132,15 @@ uncertainty_contract = {
 ```
 
 `unknown`は、未確認の前提を`nominal`や`not_applicable`へ変換する値ではありません。
-分布／set／tail水準／評価データのうち、未確定な対象をそのまま残します。
-追加で必要な観測やsourceも記録します。
+分布／集合／裾の水準／評価データのうち、未確定な対象をそのまま残します。
+追加で必要な観測や出典も記録します。
 
 ::: warning
-scenario上の可行性／chance constraintの確率計算／robust set内の可行性は、保証範囲が異なります。
-DROのambiguity set内で評価するworst-caseも、別の範囲です。
-結果には、対象のscenario・分布・setと評価時のtoleranceを添えます。
+シナリオ上の可行性／確率制約の確率計算／ロバスト集合内の可行性は、保証範囲が異なります。
+DROの分布の候補集合内で評価する最悪の場合も、別の範囲です。
+結果には、対象のシナリオ・分布・集合と評価時の許容誤差を添えます。
 :::
 
 ## 次に読む
 
-[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)で、uncertainty sourceとguarantee scopeの分解を確認してください。配分変数のdomainは[Simplex・確率ベクトル](#/learn/concept.simplex)、一般の可行性判定は[制約class](#/learn/concept.constraint-class)で確認できます。確率的gradientのnoiseと確率制約は別の話なので、optimizerの選択は[確率勾配・機械学習optimizerの選び分け](#/learn/family.stochastic-ml)へ分けて進みます。
+[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)で、不確実性の要因と保証範囲の分解を確認してください。配分変数の定義域は[単体・確率ベクトル](#/learn/concept.simplex)、一般の可行性判定は[制約の分類](#/learn/concept.constraint-class)で確認できます。確率的勾配のノイズと確率制約は別の話なので、最適化手法の選択は[確率勾配・機械学習最適化手法の選び分け](#/learn/family.stochastic-ml)へ分けて進みます。

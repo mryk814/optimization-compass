@@ -15,66 +15,66 @@ last_reviewed: 2026-07-16
 
 ## 30秒でつかむ
 
-このfamilyの気持ちは、**全部を一つの難しい関数として扱わず、滑らかな部分、非滑らかな正則化、単純な制約、分離可能な部分へ分け、それぞれに合う操作を交互に使うこと**です。
+この手法群の気持ちは、**全部を一つの難しい関数として扱わず、滑らかな部分、非滑らかな正則化、単純な制約、分離可能な部分へ分け、それぞれに合う操作を交互に使うこと**です。
 
-- 見ているもの: gradient、proximal mapping、primal/dual residual、objective gap
-- 動かすもの: 現在点、補助変数、dual変数、座標、momentum
-- 前進の判断: objective・fixed-point residual・primal/dual residualの低下
-- 主な弱点: step size、proxの難しさ、残差balance、多数反復
+- 見ているもの: 勾配、近接写像、主残差・双対残差、目的値ギャップ
+- 動かすもの: 現在点、補助変数、双対の変数、座標、慣性項
+- 前進の判断: 目的値・不動点残差・主残差・双対残差の低下
+- 主な弱点: 歩幅、近接演算の難しさ、残差均衡、多数反復
 
-非滑らかな項があるからといって、すぐsubgradient法を選ぶ必要はありません。proxや座標更新を計算できるなら、より強い構造を使えます。
+非滑らかな項があるからといって、すぐ劣勾配法を選ぶ必要はありません。近接演算や座標更新を計算できるなら、より強い構造を使えます。
 
 ## まず確認すること
 
 | 確認項目 | 選択への影響 |
 |---|---|
-| 分解形 | `smooth + nonsmooth`、separable、consensusのどれか |
-| prox・projection | 閉形式または安価に計算できるか |
-| convexity | 大域gapや収束率を解釈できるか |
-| sparsity | 座標更新や疎解の利点があるか |
-| 分散性 | 複数block・machineへ分ける必要があるか |
-| 必要精度 | 粗い解か、高精度なprimal-dual残差か |
+| 分解形 | `smooth + nonsmooth`、分離可能、変数の一致のどれか |
+| 近接演算・射影 | 閉形式または安価に計算できるか |
+| 凸性 | 大域ギャップや収束率を解釈できるか |
+| 疎性 | 座標更新や疎解の利点があるか |
+| 分散性 | 複数ブロック・計算機へ分ける必要があるか |
+| 必要精度 | 粗い解か、高精度な主双対残差か |
 
-一般NLPへそのまま渡す前に、L1、box、simplex、norm、indicator functionなどが既知のprox・projectionを持つか確認します。
+一般NLPへそのまま渡す前に、L1、箱型制約、単体、ノルム、指示関数などが既知の近接演算・射影を持つか確認します。
 
 ## 条件付きの選び分け
 
 | 役割 | 手法 | 優先しやすい条件 | 切り替えを考える条件 |
 |---|---|---|---|
-| 基本の分離更新 | [Proximal Gradient](#/learn/proximal-gradient) | smooth loss + 安価なprox、凸複合問題 | step sizeが保守的で遅い、proxが高価 |
-| 加速されたprox | [FISTA](#/learn/fista) | 凸問題で目的gapを早く下げたい | 振動が強い、restartが頻繁 |
-| 変数ごとの更新 | [Coordinate Descent](#/learn/coordinate-descent) | 座標更新が安価、疎な高次元問題 | feature相関が強く一座標ずつでは遅い |
-| 最小限の構造 | [Subgradient](#/learn/subgradient) | proxが使えず、粗い凸解でよい | step scheduleに敏感、改善が非常に遅い |
-| 問題幾何を使う | [Mirror Descent](#/learn/mirror-descent) | simplex、確率分布、online convex optimization | mirror mapが問題に合わない |
-| 分離・consensus | [ADMM](#/learn/admm) | block分解、distributed、prox部分問題が解きやすい | primal/dual residualが不均衡、部分問題が重い |
-| 非滑らかmodelを蓄積 | [Bundle method](#/methods/M_BUNDLE) | subgradientより安定した凸非滑らか解法が必要 | bundle管理・部分問題が支配的 |
+| 基本の分離更新 | [Proximal Gradient](#/learn/proximal-gradient) | 滑らかな損失 + 安価な近接演算、凸複合問題 | 歩幅が保守的で遅い、近接演算が高価 |
+| 加速された近接演算 | [FISTA](#/learn/fista) | 凸問題で目的ギャップを早く下げたい | 振動が強い、再始動が頻繁 |
+| 変数ごとの更新 | [Coordinate Descent](#/learn/coordinate-descent) | 座標更新が安価、疎な高次元問題 | 特徴相関が強く一座標ずつでは遅い |
+| 最小限の構造 | [Subgradient](#/learn/subgradient) | 近接演算が使えず、粗い凸解でよい | 歩幅の変更規則に敏感、改善が非常に遅い |
+| 問題幾何を使う | [Mirror Descent](#/learn/mirror-descent) | 単体、確率分布、逐次的な凸最適化 | 鏡写像が問題に合わない |
+| 分離・変数の一致 | [ADMM](#/learn/admm) | ブロック分解、分散計算、近接演算部分問題が解きやすい | 主残差・双対残差が不均衡、部分問題が重い |
+| 非滑らかモデルを蓄積 | [Bundle method](#/methods/M_BUNDLE) | 劣勾配より安定した凸非滑らか解法が必要 | 束の管理・部分問題が支配的 |
 
-同じiteration数で比較しません。gradient、prox、通信、部分問題のcostが手法ごとに違います。
+同じ反復数で比較しません。勾配、近接演算、通信、部分問題の費用が手法ごとに違います。
 
 ## うまくいったサインと切替サイン
 
 追うべき値:
 
-- objective valueとbest-so-far
-- gradient mapping / fixed-point residual
-- primal / dual residual
-- sparsity patternの安定
-- step sizeとbacktracking回数
-- ADMM penalty parameter
-- prox time、通信time、座標sweep数
+- 目的関数値とそれまでの最良値
+- 勾配写像 / 不動点残差
+- 主残差・双対残差
+- 疎性パターンの安定
+- 歩幅と後戻り回数
+- ADMM ペナルティパラメータ
+- 近接演算時間、通信時間、座標一巡数
 
 切替サイン:
 
-- subgradientが長時間ほぼ改善しない → prox、bundle、smooth approximationを検討
-- FISTAが振動する → adaptive restartまたはproximal gradientへ
-- coordinate descentが相関変数で停滞 → block更新やquasi-Newtonへ
-- ADMMの一方の残差だけ大きい → penalty調整・scalingを見直す
-- prox計算が本体より高価 → 定式化または別splittingを検討
+- 劣勾配が長時間ほぼ改善しない → 近接演算、bundle、滑らかな近似を検討
+- FISTAが振動する → 適応的な再始動または近接勾配法へ
+- 座標降下法が相関変数で停滞 → ブロック更新や準Newton法へ
+- ADMMの一方の残差だけ大きい → ペナルティ調整・尺度の調整を見直す
+- 近接演算計算が本体より高価 → 定式化または別分割を検討
 - 非凸項が入った → 凸保証をそのまま適用しない
 
 ## 小さな比較の型
 
-operation costを分けて記録します。
+各操作の費用を分けて記録します。
 
 ```python
 comparison = {
@@ -90,11 +90,11 @@ comparison = {
 assert comparison["gradient_budget"] == comparison["prox_budget"]
 ```
 
-## コラム: proxは何をしているか
+## コラム: 近接演算は何をしているか
 
-proximal operatorは、非滑らかな項を単に微分する代わりに、現在点から離れすぎない範囲でその項を含む小問題を解きます。L1正則化のsoft-thresholdingは代表例です。
+近接操作は、非滑らかな項を単に微分する代わりに、現在点から離れすぎない範囲でその項を含む小問題を解きます。L1正則化のsoft-thresholdingは代表例です。
 
-「proxが存在する」ことと「実装上安価に計算できる」ことは別です。大規模な内部solveが必要なら、分解した意味が薄れる場合があります。
+「近接演算が存在する」ことと「実装上安価に計算できる」ことは別です。大規模な内部求解が必要なら、分解した意味が薄れる場合があります。
 
 ## 次に読む
 

@@ -2,7 +2,7 @@
 content_id: multi-objective
 kind: method
 method_id: M_NSGA_II
-title_ja: 多目的最適化とPareto front
+title_ja: 多目的最適化とParetoフロント
 title_en: Multi-objective Optimization and the Pareto Front
 summary: 複数目的を根拠なく一つの得点へ潰さず、支配・Pareto集合・選好を分けて交換関係候補を作る最適化です。
 source_ids: [S039, S055, S068]
@@ -34,7 +34,7 @@ last_reviewed: 2026-09-30
 
 非支配候補のフロントと、フロントの内側にある支配される候補を分けてから、選好に合う一点を選びます。
 
-![青緑の非支配候補が右下がりのフロントを作り、その内側に濃紺の支配される候補が散らばり、フロント上の一点だけが橙で選ばれた模式図](./media/multi-objective-pareto-front.png "非支配候補、dominated候補、preferenceで選ぶ一点を区別する教育用模式図です。目的の尺度、frontの凸性、橙の点の普遍的な優位は示しません。")
+![青緑の非支配候補が右下がりのフロントを作り、その内側に濃紺の支配される候補が散らばり、フロント上の一点だけが橙で選ばれた模式図](./media/multi-objective-pareto-front.png "非支配候補、支配される候補、選好で選ぶ一点を区別する教育用模式図です。目的の尺度、フロントの凸性、橙の点の普遍的な優位は示しません。")
 
 ## 一手の意味
 
@@ -201,7 +201,7 @@ print(pareto_decisions[[0, -1]], pareto_values[[0, -1]])
 
 目的空間で近い二点でも、決定空間では全く異なる設計かもしれません。可視化では両空間の選択を連動させると理解しやすくなります。
 
-### Normalizationと参照
+### 正規化と参照
 
 コスト（コスト）が数千、リスクが0.01のように尺度が違うと、図や重み付き和が一方に支配されます。
 
@@ -214,11 +214,11 @@ print(pareto_decisions[[0, -1]], pareto_values[[0, -1]])
 
 を明示します。理想点は各目的を別々に最適化した値で、同時に実現できる解とは限りません。
 
-### Frontと最終選択を分けて見る
+### フロントと最終選択を分けて見る
 
-[Pareto Theater](#/theater/multi-objective)では、支配されると非支配を区別します。
+[パレートフロントの再生ページ](#/theater/multi-objective)では、支配されると非支配を区別します。
 理想点／ナディア参照も同じ目的空間で確認します。
-[選好を変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)では、同じフロント上で重みと選んだ解の対応を読みます。
+[選好を変える比較](#/compare/COMPARE_PARETO_PREFERENCE)では、同じフロント上で重みと選んだ解の対応を読みます。
 
 この比較は手法性能のベンチマークではなく、意思決定上の交換関係を読む固定教材です。
 解析的な凸フロントを使うため、一般の非凸フロントで重み付き和が全非劣点を取得できるとは主張しません。

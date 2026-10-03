@@ -2,22 +2,22 @@
 content_id: riemannian-trust-region
 kind: method
 method_id: M_RIEMANNIAN_TRUST_REGION
-title_ja: Riemann trust-region法
+title_ja: Riemann信頼領域法
 title_en: Riemannian Trust-Region
-summary: 接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。
+summary: 接空間上に二次モデルを作り信頼半径の内側だけで最小化し、写像で多様体上に戻す大域化された二階法です。
 source_ids: [S044, S045, S071]
 related_ids: [riemannian-gradient, trust-region-newton-cg, family.manifold, family.trust-region]
 status: published
 last_reviewed: 2026-09-30
 ---
 
-接空間上に二次モデルを作りtrust radiusの内側だけで最小化し、多様体へ戻す写像で多様体上に戻す大域化された二階法です。
+接空間上に二次モデルを作り信頼半径の内側だけで最小化し、写像で多様体上に戻す大域化された二階法です。
 
 ## 30秒でつかむ
 
 球面上で近くの地図を信用する範囲を決め、予想した下り具合と実際の下り具合を比べます。
 
-Riemann trust-region法は、接空間上の二次モデルをtrust radius内で解き、多様体へ戻す写像で多様体上へ戻す二階法です。
+Riemann信頼領域法は、接空間上の二次モデルを信頼半径内で解き、多様体へ戻す写像で多様体上へ戻す二階法です。
 
 ## 一手の意味
 
@@ -29,34 +29,34 @@ $$
 
 分母が正の候補でこの比を計算し、採用と半径更新を決めます。
 
-### Euclid版trust-regionとの対応
+### ユークリッド版の信頼領域法との対応
 
-[Trust-region Newton-CG](#/learn/trust-region-newton-cg)は、現在点まわりの二次モデルをEuclid空間で作ります。
+[Trust-region Newton-CG](#/learn/trust-region-newton-cg)は、現在点まわりの二次モデルをユークリッド空間で作ります。
 信頼半径 $\Delta_k$ の内側だけを信用し、打切り共役勾配法で近似解を求めます。
-Riemann trust-region法はこの考え方を多様体上へそのまま持ち込みます。
-二次モデルを作る場となる空間が、Euclid空間ではなく現在点の接空間に置き換わる点だけが違います。
-接空間は局所的に平坦なので、Euclid版の部分問題の解法や採用判定の枠組みをほぼそのまま流用できます。
+Riemann信頼領域法はこの考え方を多様体上へそのまま持ち込みます。
+二次モデルを作る場となる空間が、ユークリッド空間ではなく現在点の接空間に置き換わる点だけが違います。
+接空間は局所的に平坦なので、ユークリッド版の部分問題の解法や採用判定の枠組みをほぼそのまま流用できます。
 
 ### 接空間上で何を解いているか
 
-各一歩では、Riemann勾配とRiemann Hessian（接空間上の二次形式）を使って部分問題
+各一歩では、Riemann勾配とリーマンヘッセ行列（接空間上の二次形式）を使って部分問題
 
 $$
 \min_{\|p\|\le \Delta_k,\, p \in T_x M} \; m_k(p)
 $$
 
-をtruncated CGで近似的に解きます。
+を打ち切りCGで近似的に解きます。
 $T_xM$ は現在点$x$における接空間です。
 候補の一歩を、多様体へ戻す写像で多様体上の点へ写します。
 実際の改善とモデルが予測した改善の比 $\rho_k$ を確認します。
 この比から候補の採否と信頼半径の更新を判断します。
-この流れはEuclid版trust-regionの判定ロジックと同じで、幾何の分だけ「二次モデルを作る場所」と「一歩を多様体へ戻す操作」が追加されています。
+この流れはユークリッド版の信頼領域法の判定ロジックと同じで、幾何の分だけ「二次モデルを作る場所」と「一歩を多様体へ戻す操作」が追加されています。
 
-### Riemann Hessianの入手性という課題
+### リーマンヘッセ行列の入手性という課題
 
-Riemann Hessianは、Euclid Hessianを接空間へ射影し、さらに多様体の曲率に由来する補正項を加えて得られます。
-この補正項は多様体ごとに異なる幾何量で、Euclid Hessianをそのまま接空間へ落とすだけでは正しいRiemann Hessian-vector積になりません。
-多くの実務ではこの計算を手で導出せず、Pymanopt（S044）やManopt（S045）が提供する自動微分ベースのRiemann Hessian近似を利用します。
+リーマンヘッセ行列は、ユークリッドヘッセ行列を接空間へ射影し、さらに多様体の曲率に由来する補正項を加えて得られます。
+この補正項は多様体ごとに異なる幾何量で、ユークリッドヘッセ行列をそのまま接空間へ落とすだけでは正しいリーマンヘッセ行列とベクトルの積になりません。
+多くの実務ではこの計算を手で導出せず、Pymanopt（S044）やManopt（S045）が提供する自動微分ベースのリーマンヘッセ行列近似を利用します。
 
 ## 小さな例
 
@@ -78,23 +78,23 @@ Python節の $A=\operatorname{diag}(1,2,4)$、$x=(1,1,1)/\sqrt3$ を使います
 ### 一次法から乗り換える理由
 
 [Riemann勾配法](#/learn/riemannian-gradient)は実装が単純で初期の収束が速いことがありますが、局所解付近での収束が遅くなったり、鞍点付近で長く停滞したりすることがあります。
-Riemann trust-region法は二次情報を使うため、良い近傍では収束が速くなります。
+Riemann信頼領域法は二次情報を使うため、良い近傍では収束が速くなります。
 負の曲率方向も検出しやすく、鞍点からの脱出にも使われます。
 一次法で目的値の減少が長時間止まったときに、高精度化の手段として検討する位置づけです。
 
 ### 向いている条件
 
 - 変数が既知の多様体構造を持つ（球面、Stiefel、Grassmann、SO(3)など）
-- Riemann勾配に加えてRiemann Hessianまたはそのvector積が利用できる
+- Riemann勾配に加えてリーマンヘッセ行列またはそのベクトルとの積が利用できる
 - Riemann勾配法が停滞し、局所解近傍での高精度化や鞍点脱出が必要
-- 多様体上での頑健な大域化（trust radiusによる棄却）を使いたい
+- 多様体上での頑健な大域化（信頼半径による棄却）を使いたい
 
-Hessian情報が得られない、または多様体構造自体が本質でない場合は、[Riemann勾配法](#/learn/riemannian-gradient)や[Riemann多様体最適化の選び分け](#/learn/family.manifold)から検討します。
+ヘッセ行列情報が得られない、または多様体構造自体が本質でない場合は、[Riemann勾配法](#/learn/riemannian-gradient)や[Riemann多様体最適化の選び分け](#/learn/family.manifold)から検討します。
 
 ## Python
 
-次は単位球面を多様体として、Euclid勾配を接空間へ射影し、trust radius内の一歩を正規化多様体へ戻す写像で戻す最小例です。
-完全なtrust-region法ではHessianとtruncated CGも使います。
+次は単位球面を多様体として、ユークリッド勾配を接空間へ射影し、信頼半径内の一歩を正規化して多様体へ戻す最小例です。
+完全な信頼領域法ではヘッセ行列と打ち切りCGも使います。
 
 ```python
 import numpy as np
@@ -119,25 +119,25 @@ for _ in range(30):
 print("point:", x, "cost:", x @ matrix @ x)
 ```
 
-勾配、Hessian-vector product、多様体へ戻す写像は多様体ごとに異なる幾何演算です。
-実務では[Pymanopt](https://pymanopt.org/)の公式referenceでtrust-region ソルバーの利用versionに対応する説明を確認します。
+勾配、ヘッセ行列とベクトルの積、多様体へ戻す写像は多様体ごとに異なる幾何演算です。
+実務では[Pymanopt](https://pymanopt.org/)の公式リファレンスで信頼領域法のソルバーについて、利用バージョンに対応する説明を確認します。
 
 ## 診断値
 
 - Riemann勾配ノルム
-- trust radius $\Delta_k$
-- actual / predicted 簡約 ratio $\rho_k$
-- inner truncated CG 反復数
-- 多様体へ戻す写像 error
-- accepted / rejected 一歩数
+- 信頼半径 $\Delta_k$
+- 実際の減少と予測した減少の比 $\rho_k$
+- 内側の打ち切りCG 反復数
+- 多様体へ戻す写像の誤差
+- 受理／棄却した一歩の数
 
 ## 失敗・切替の兆候
 
-- Riemann 勾配検査（有限差分との一致確認）が合わない
-- 多様体へ戻す写像後に多様体制約からのずれが大きい
-- chart依存の特異点付近で一歩の挙動が不安定になる
-- trust radiusが縮み続け候補の一歩がほぼ採用されない
-- Riemann Hessian近似の質がソルバーによって大きく違う
+- Riemann勾配検査（有限差分との一致確認）が合わない
+- 多様体へ戻した後に多様体制約からのずれが大きい
+- 座標近傍依存の特異点付近で一歩の挙動が不安定になる
+- 信頼半径が縮み続け候補の一歩がほぼ採用されない
+- リーマンヘッセ行列近似の質がソルバーによって大きく違う
 
 ## 次に読む
 

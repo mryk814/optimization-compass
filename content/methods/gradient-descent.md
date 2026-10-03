@@ -4,7 +4,7 @@ kind: method
 method_id: M_GRADIENT_DESCENT
 title_ja: 勾配降下法
 title_en: Gradient Descent
-summary: 現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
+summary: 現在点の勾配が示す局所的な上り方向と反対へステップを取り、滑らかな目的関数の値を反復的に下げる一次法です。
 prerequisites: [concept.convexity]
 related_ids: [bfgs, proximal-gradient, trust-region-newton-cg]
 visualization_ids: [gradient_descent-quadratic-divergence]
@@ -16,21 +16,21 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
+現在点の勾配が示す局所的な上り方向と反対へステップを取り、滑らかな目的関数の値を反復的に下げる一次法です。
 
 ## 30秒でつかむ
 
 霧の中で山を下りる場面を思い浮かべてください。見えるのは足元の傾きだけです。
 いちばん急な下り方向へ一歩進み、また足元の傾きを測ります。この繰り返しが勾配降下法です。
 
-- **見るもの**: 現在の目的関数値、勾配、試した一手（step）の結果
-- **動かすもの**: 現在点と、一手の長さを決める係数（学習率、learning rate）
-- **前進の判断**: 目的関数値が下がり、勾配の大きさ（gradient norm）が小さくなること
+- **見るもの**: 現在の目的関数値、勾配、試した一手の結果
+- **動かすもの**: 現在点と、一手の長さを決める係数（学習率）
+- **前進の判断**: 目的関数値が下がり、勾配の大きさが小さくなること
 
 足元の傾きが正しいのは、足元の近くだけです。一手を長く取りすぎると、下っているつもりで谷の反対側を登ります。
 挙動を左右する最初の要因は、この一手の長さです。
 
-勾配を使えることが、この手法を選ぶ出発点です。目的関数が滑らかでも、勾配の尺度（scale）や制約の扱いが合わなければ、一手は安定しません。
+勾配を使えることが、この手法を選ぶ出発点です。目的関数が滑らかでも、勾配の尺度や制約の扱いが合わなければ、一手は安定しません。
 
 ## 一手の意味
 
@@ -97,12 +97,12 @@ $y$ は $3,\,-9,\,7.8,\,-15.7,\,17.2$ と振れ幅を広げ、目的値は $509,
 
 ### 実行結果で見る
 
-![同じ二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Gradient Descentは細長い谷をゆっくり進み、Momentumは谷を横切って振動し、Adamは座標ごとのstepで別の経路を取る。](./media/gradient-family-execution.svg "Optimization Compassの固定Python generatorを実行した結果です。軌跡と最終目的値は同じrunから描画しています。一般的な性能rankingではありません。")
+![同じ二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Gradient Descentは細長い谷をゆっくり進み、Momentumは谷を横切って振動し、Adamは座標ごとのステップで別の経路を取る。](./media/gradient-family-execution.svg "Optimization Compassの固定Python 生成プログラムを実行した結果です。軌跡と最終目的値は同じ実行から描画しています。一般的な性能順位付けではありません。")
 
 図では、勾配を下るという同じ目的でも、更新則によって点の運び方が変わります。まず線の形を見てから、上の式と診断値へ戻ってください。
 
 細長い谷でジグザグ（zig-zag）する現象は、勾配方向が最適点への直線方向とは限らないことを示します。
-[Gradient family comparison](#/compare/gradient-quadratic)では、MomentumやAdamと同じ初期点・budgetで確認できます。固定の学習率が難しい場合は、直線探索（line search）を足します。学習率を反復ごとに下げる方法（スケジュール）もあります。それでも遅いなら、前処理（preconditioning）を考えます。
+[Gradient family comparison](#/compare/gradient-quadratic)では、MomentumやAdamと同じ初期点・評価予算で確認できます。固定の学習率が難しい場合は、直線探索を足します。学習率を反復ごとに下げる方法（スケジュール）もあります。それでも遅いなら、前処理を考えます。
 
 ## 向く条件・避ける条件
 
@@ -136,12 +136,12 @@ $y$ は $3,\,-9,\,7.8,\,-15.7,\,17.2$ と振れ幅を広げ、目的値は $509,
 - 条件数が悪く極端に遅い → 尺度合わせ、前処理、[BFGS](#/learn/bfgs)系を検討する
 - 上下限がある → [L-BFGS-B](#/learn/lbfgsb)のような上下限つきの手法へ切り替える（[上下限つきの滑らかな最小化](#/formulations/PA008)）
 - 非滑らかな正則化がある → [近接勾配法](#/learn/proximal-gradient)へ切り替える
-- 曲率情報を使える → [BFGS](#/learn/bfgs)や信頼領域法（trust-region法）と比べる
+- 曲率情報を使える → [BFGS](#/learn/bfgs)や信頼領域法と比べる
 
 ## Python
 
 次の例は、上の二次関数に対して勾配降下法を実行する最小例です。
-簡易な後退探索（backtracking）で、候補点の目的関数値が増えたときだけ学習率を半分にします。
+簡易な後退探索（後戻り）で、候補点の目的関数値が増えたときだけ学習率を半分にします。
 
 ```python
 import numpy as np
@@ -180,7 +180,7 @@ print(iteration, x, objective(x), np.linalg.norm(gradient(x)))
 
 目的値の変化だけで停止すると、尺度が小さいだけの点を収束と誤認することがあります。最低限、次を記録します。
 
-- 勾配のノルム（gradient norm）
+- 勾配のノルム
 - 上下限がある場合は、射影した勾配のノルム
 - 一手のノルム
 - 目的関数値と、これまでの最良値
@@ -201,8 +201,8 @@ print(iteration, x, objective(x), np.linalg.norm(gradient(x)))
 
 ## コラム: 大きい学習率の失敗を見る
 
-[勾配降下法の失敗Trace](#/theater/learning/SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE)では、固定した二次目的で大きい学習率の軌跡と終了状態（status）を追えます。
-[Momentum・Adamとの感度Compare](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回のoracle evaluationの予算を使います。
+[勾配降下法の失敗実行記録](#/theater/learning/SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE)では、固定した二次目的で大きい学習率の軌跡と終了状態を追えます。
+[Momentum・Adamとの感度比較](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回の関数評価の予算を使います。
 
 各手法には発散を説明する固定の設定を使っています。
 良い設定を探索する比較でも、手法の一般的な性能ランキングでもありません。
@@ -215,6 +215,6 @@ print(iteration, x, objective(x), np.linalg.norm(gradient(x)))
 ## 次に読む
 
 - [BFGS](#/learn/bfgs)：勾配の変化から曲率を学び、ジグザグを抑える
-- [Newton法](#/learn/newton-method)：Hessianを使うと、二次関数は何手で解けるか
+- [Newton法](#/learn/newton-method)：ヘッセ行列を使うと、二次関数は何手で解けるか
 - [近接勾配法](#/learn/proximal-gradient)：非滑らかな正則化があるときの一手
 - [滑らかな無制約の最小化](#/formulations/PA006)：この手法が解く問題の標準形

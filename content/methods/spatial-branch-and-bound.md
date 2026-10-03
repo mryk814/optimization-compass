@@ -2,9 +2,9 @@
 content_id: spatial-branch-and-bound
 kind: method
 method_id: M_SPATIAL_BRANCH_BOUND
-title_ja: 空間branch-and-bound
+title_ja: 空間分枝限定法
 title_en: Spatial Branch and Bound
-summary: 非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のgapを閉じながら、大域最適性を確かめる厳密探索法です。
+summary: 非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のギャップを閉じながら、大域最適性を確かめる厳密探索法です。
 source_ids: [S021, S024, S025]
 prerequisites: []
 related_ids: [branch-and-bound, outer-approximation-minlp, family.discrete-structure]
@@ -12,7 +12,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のgapを閉じながら、大域最適性を確かめる厳密探索法です。
+非凸MINLPで連続変数の区間も分岐し、各領域の凸緩和から下界を作ります。下界と実行可能解のギャップを閉じながら、大域最適性を確かめる厳密探索法です。
 
 ## 30秒でつかむ
 
@@ -27,7 +27,7 @@ last_reviewed: 2026-09-30
 ### 何を分岐しているか
 
 [整数B&B](#/learn/branch-and-bound)は、整数変数の値を固定または分割して節点を作ります。
-空間枝-and-界は、非凸な非線形項を含む連続変数の**区間**でも分岐します。
+空間分枝限定法は、非凸な非線形項を含む連続変数の**区間**でも分岐します。
 
 たとえば非凸項 $xy$（双線形項）があるとします。
 $x$の区間$[x_L, x_U]$を、$[x_L, m]$と$[m, x_U]$へ分けます。
@@ -35,7 +35,7 @@ $x$の区間$[x_L, x_U]$を、$[x_L, m]$と$[m, x_U]$へ分けます。
 
 ### 各領域で下界をどう作るか
 
-分岐で得られた各区間では、非凸な非線形項を凸 relaxationへ置き換えて下界を計算します。
+分岐で得られた各区間では、非凸な非線形項を凸緩和へ置き換えて下界を計算します。
 代表例はMcCormick包絡です。
 双線形項 $xy$ を区間$[x_L,x_U]\times[y_L,y_U]$上で線形不等式の組により挟みます。
 
@@ -44,31 +44,31 @@ w \ge x_Ly + xy_L - x_Ly_L,\qquad w \ge x_Uy + xy_U - x_Uy_U
 $$
 
 このような不等式で$w\approx xy$を緩和します。
-region上のLPまたは凸QPを解くと、元の非凸問題に対する下界が得られます。
-区間が狭くなるほど緩和はきつくなり、下界と実行可能解（最良可行解）のgapが縮みます。
+領域上のLPまたは凸QPを解くと、元の非凸問題に対する下界が得られます。
+区間が狭くなるほど緩和はきつくなり、下界と実行可能解（最良可行解）のギャップが縮みます。
 
-### 界 gapで大域性を判断する
+### 界ギャップで大域性を判断する
 
 整数B&Bでは、整数割当が尽きれば探索が完了します。
-空間枝-and-界が扱う連続区間は、どこまでも細分できます。
+空間分枝限定法が扱う連続区間は、どこまでも細分できます。
 有限回で探索が尽きるとは限りません。
 
-大域最適性は「区間をすべて分けた」ことではなく、次の界 gapで判断します。
+大域最適性は「区間をすべて分けた」ことではなく、次の界ギャップで判断します。
 
 $$
 \text{global bound} \le \text{incumbent} \le \text{global bound} + \text{gap tolerance}
 $$
 
-**界 gapが許容範囲に収まったこと**が、指定した許容誤差での大域最適性証明になります。
+**界ギャップが許容範囲に収まったこと**が、指定した許容誤差での大域最適性証明になります。
 ただし、緩い緩和は下界を悪化させます。
 区間を狭めれば緩和の質は上がりますが、木の節点数が増えます。
 
 次の図は、後半のPython例と同じ固定多項式を実行した結果です。
 赤い区間は、区間下界が最良可行解以上になったため捨てられました。
 
-![固定1変数多項式をinterval arithmetic lower boundで空間branch-and-boundした結果。目的関数ではx=1のincumbentが得られ、停止時の区間partitionではboundで捨てた区間と未確定のopen区間を分けている。70 nodeの処理でglobal lower boundが-4から-1.010まで上がり、incumbent -1との差が0.0095になった。](./media/spatial-branch-bound-execution.svg "pure Pythonで生成した固定1変数教材です。妥当なinterval lower boundによる枝刈りとgapの推移を示します。McCormick relaxation、多変数MINLP、solver一般の性能やgap 0の厳密解は示しません。")
+![固定1変数多項式を区間演算による下界で空間分枝限定法で探索した結果。目的関数ではx=1の暫定最良解が得られ、停止時の区間分割では下界によって捨てた区間と未確定区間を分けている。70節点の処理で大域下界が-4から-1.010まで上がり、暫定最良値-1との差が0.0095になった。](./media/spatial-branch-bound-execution.svg "外部数値ライブラリを使わないPythonで生成した固定1変数教材です。妥当な区間演算の下界に基づく枝刈りとギャップの推移を示します。McCormick緩和、多変数MINLP、ソルバー一般の性能やギャップ0の厳密解は示しません。")
 
-緑のopen区間が残っていても、最良の下界と最良可行解の差は0.01未満です。
+緑の未確定区間が残っていても、最良の下界と最良可行解の差は0.01未満です。
 「すべての区間を消す」のではなく、「残った区間でも0.01以上は改善できない」と読めます。
 
 ### 木が爆発する限界
@@ -101,18 +101,18 @@ Python節の $x^2\{1+0.5(x-1)^2\}-2x$ を区間 $[0,2]$ で最小化します。
 
 ### 向いている条件
 
-- 非凸MINLPで大域最適性の証明（gap付きの証明）が必要な場合
+- 非凸MINLPで大域最適性の証明（ギャップ付きの証明）が必要な場合
 - 非線形項がMcCormick包絡などの凸緩和で扱える構造を持つ場合
 - 変数次元や非凸項の数が、ソルバーが現実的な時間で扱える範囲に収まる場合
 - ブラックボックスではなく、緩和に使える関数の代数的な形が分かっている場合
 
-ノイズを含むブラックボックス評価しかできない問題や、緩和のしようがない極端な非凸性を持つ問題では、gapを閉じるまでの木が非現実的に大きくなることがあります。
-その場合はheuristicや[Outer Approximation](#/learn/outer-approximation-minlp)（対象が凸 MINLPの場合）を検討します。
+ノイズを含むブラックボックス評価しかできない問題や、緩和のしようがない極端な非凸性を持つ問題では、ギャップを閉じるまでの木が非現実的に大きくなることがあります。
+その場合はヒューリスティックや[Outer Approximation](#/learn/outer-approximation-minlp)（対象が凸MINLPの場合）を検討します。
 
 ## Python
 
 次は図を生成した1変数の教育用ループです。
-区間演算（interval arithmetic）で**必ず目的関数以下になる下界**を作り、gapが0.01以下になるまでbest-界 searchを続けます。
+区間演算で**必ず目的関数以下になる下界**を作り、ギャップが0.01以下になるまで最良下界優先の探索を続けます。
 
 ```python
 def nonconvex_objective(x: float) -> float:
@@ -168,24 +168,24 @@ print(spatial_branch_and_bound())
 ```
 
 この下界は、$x^2$と$(x-1)^2$が非負であることを使った区間演算です。
-probe値ではないため、枝刈りの根拠にできます。
+試験的な評価値ではないため、枝刈りの根拠にできます。
 ただし変数の依存関係を重複して評価するため、McCormick包絡などより緩くなる場合があります。
 
-実務で凸緩和ソルバーを使う場合は、[SCIP](https://www.scipopt.org/doc/html/)や[Gurobi](https://docs.gurobi.com/projects/optimizer/en/current/)の公式文書で対応する非線形項とrelaxation設定を確認します。
+実務で凸緩和ソルバーを使う場合は、[SCIP](https://www.scipopt.org/doc/html/)や[Gurobi](https://docs.gurobi.com/projects/optimizer/en/current/)の公式文書で対応する非線形項と緩和設定を確認します。
 
 ## 診断値
 
-- 最良可行解 / global 界 / relative and absolute gap
-- 節点数、open 節点数
-- root relaxationのgap
+- 最良可行解 / 大域的な界 / 相対ギャップと絶対ギャップ
+- 節点数、未確定節点数
+- 根節点の緩和のギャップ
 - 区間の最小幅（分岐の細かさ）
-- prune理由別の節点数
+- 枝刈り理由別の節点数
 - メモリ
-- termination 理由（gap達成、制限時間、節点 limit）
+- 終了理由（ギャップ達成、制限時間、節点上限）
 
 ## 失敗・切替の兆候
 
-- 緩和が緩くroot 界 gapが大きい
+- 緩和が緩く根節点の界のギャップが大きい
 - 木の節点数が次元・非凸項の増加に対して急増する
 - 長時間最良可行解が得られない
 - 区間分割が特定の変数だけで進み他の非凸項の緩和が改善しない
@@ -194,7 +194,7 @@ probe値ではないため、枝刈りの根拠にできます。
 ## 次に読む
 
 整数変数だけを分岐する基本形は[Branch-and-Bound](#/learn/branch-and-bound)で確認できます。
-凸 MINLPで整数と連続を分ける方式は[MINLPのOuter Approximation](#/learn/outer-approximation-minlp)です。
+凸MINLPで整数と連続を分ける方式は[MINLPのOuter Approximation](#/learn/outer-approximation-minlp)です。
 [離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)では、問題構造から候補を比較できます。
 
 - 問題の形を確認する: [混合整数非線形計画](#/formulations/PA025)

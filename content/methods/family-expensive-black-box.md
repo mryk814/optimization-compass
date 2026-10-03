@@ -2,115 +2,115 @@
 content_id: family.expensive-black-box
 kind: method
 method_id: MF_SURROGATE_HPO
-title_ja: 高価なblack-box・HPOの選び分け
+title_ja: 高価なブラックボックス・HPOの選び分け
 title_en: Choosing an Expensive Black-Box Strategy
-summary: 一回の実験やsimulationが高価な問題の入口です。Bayesian Optimization／TPE／multi-fidelity／random・evolutionary baselineを選び分けます。
+summary: 一回の実験やシミュレーションが高価な問題の入口です。Bayesian Optimization／TPE／複数の忠実度／ランダム探索・進化計算による比較基準を選び分けます。
 source_ids: [S034, S035, S036, S037, S038, S059, S069, S075]
 related_ids: [bayesian-optimization, cma-es, differential-evolution]
 status: published
 last_reviewed: 2026-07-26
 ---
 
-一回の実験やsimulationが高価な問題の入口です。Bayesian Optimization／TPE／multi-fidelity／random・evolutionary baselineを選び分けます。
+一回の実験やシミュレーションが高価な問題の入口です。Bayesian Optimization／TPE／複数の忠実度／ランダム探索・進化計算による比較基準を選び分けます。
 
 ## 30秒でつかむ
 
-このfamilyの気持ちは、**少ない評価をどこへ使うかを学習し、良さそうな場所とまだ分からない場所の両方を意識して次の試行を選ぶこと**です。
+この手法群の気持ちは、**少ない評価をどこへ使うかを学習し、良さそうな場所とまだ分からない場所の両方を意識して次の試行を選ぶこと**です。
 
-- 見ているもの: 観測履歴、surrogate、uncertainty、trial status、resource
-- 動かすもの: 次の評価点、batch、探索空間、trialへ割り当てるbudget
-- 前進の判断: best-so-far改善と、次の評価が持つ情報価値
-- 主な弱点: model mismatch、高次元、条件付き空間、失敗trial、非定常性
+- 見ているもの: 観測履歴、代理モデル、不確実性、試行の終了状態、計算資源
+- 動かすもの: 次の評価点、バッチ、探索空間、試行へ割り当てる評価予算
+- 前進の判断: それまでの最良値改善と、次の評価が持つ情報価値
+- 主な弱点: モデルの不一致、高次元、条件付き空間、失敗試行、非定常性
 
-surrogateの予測平均やacquisitionの最大点は、真の最適点の証明ではありません。次に試す価値を表すmodel上の判断です。
+代理モデルの予測平均や獲得関数の最大点は、真の最適点の証明ではありません。次に試す価値を表すモデル上の判断です。
 
 少ない評価を履歴へ戻すと、次の候補はどう変わるのでしょうか。
-固定seedのGaussian-process BOでは、観測の追加とともに不確実性が縮み、Expected Improvementの山も移ります。
+固定乱数シードのガウス過程 BOでは、観測の追加とともに不確実性が縮み、Expected Improvementの山も移ります。
 
-![固定seedの1次元black-boxでGaussian-process Bayesian Optimizationを実行し、実評価3回後と6回後のsurrogate平均、不確実性帯、観測点、Expected Improvement、次の評価点を比較した結果。観測の追加後は不確実性帯が縮み、次の評価点がx=1.73からx=2.10へ移る。](./media/bayesian-optimization-execution.svg "高価な評価を履歴で選び直す一巡を示す固定Python実行結果です。1次元・noiseless・RBF kernelの教材であり、手法間の一般性能rankingや大域最適性は示しません。")
+![固定乱数シードの1次元ブラックボックスでガウス過程 Bayesian Optimizationを実行し、実評価3回後と6回後の代理モデル平均、不確実性帯、観測点、Expected Improvement、次の評価点を比較した結果。観測の追加後は不確実性帯が縮み、次の評価点がx=1.73からx=2.10へ移る。](./media/bayesian-optimization-execution.svg "高価な評価を履歴で選び直す一巡を示す固定Python実行結果です。1次元・ノイズのない・RBF カーネルの教材であり、手法間の一般性能順位付けや大域最適性は示しません。")
 
 上段の実評価3回から下段の6回へ進むと、次点の不確実性は1.57から0.22へ下がります。
-この値は固定教材内の診断であり、別のkernelやnoiseへ一般化しません。
+この値は固定教材内の診断であり、別のカーネルやノイズへ一般化しません。
 
 ## まず確認すること
 
 | 確認項目 | 選択への影響 |
 |---|---|
-| 1評価の時間・費用 | surrogate構築に価値があるほど高価か |
-| total budget | 数十、数百、数千trialのどれか |
+| 1評価の時間・費用 | 代理モデル構築に価値があるほど高価か |
+| 総評価予算 | 数十、数百、数千試行のどれか |
 | 変数型 | 連続、整数、カテゴリ、条件付きの混合 |
-| noise | 同じ点を再評価できるか |
-| parallelism | sequential、batch、asynchronousのどれか |
-| fidelity | epoch、sample数、meshなど途中budgetを変えられるか |
-| failure | timeout、crash、infeasibleをどう記録するか |
+| ノイズ | 同じ点を再評価できるか |
+| 並列性 | 逐次、バッチ、非同期のどれか |
+| 忠実度 | エポック、標本数、格子など途中評価予算を変えられるか |
+| 失敗 | 時間切れ、異常終了、実行不能をどう記録するか |
 
-評価が安価で大量に実行できるなら、複雑なsurrogateよりrandom searchやpopulation法が堅実なbaselineになることがあります。
+評価が安価で大量に実行できるなら、複雑な代理モデルよりランダム探索や集団法が堅実な比較基準になることがあります。
 
 ## 条件付きの選び分け
 
 | 役割 | 手法 | 優先しやすい条件 | 切り替えを考える条件 |
 |---|---|---|---|
-| uncertaintyを明示 | [Gaussian-process BO](#/learn/bayesian-optimization) | 低〜中次元、数十〜数百評価、連続変数中心 | 観測数・次元が増えfit/acquisitionが重い |
-| 条件付き・混合空間 | [TPE](#/methods/M_TPE) | HPO、カテゴリや条件付きparameterが多い | density modelが良い領域を分離できない |
-| 木系surrogate | [SMAC](#/methods/M_SMAC) | mixed space、algorithm configuration、失敗trial | surrogate calibrationが悪い、並列性が不足 |
-| 早期停止でresource配分 | [Hyperband](#/methods/M_HYPERBAND) | 中間評価が最終性能をある程度予測する | early metricが誤解を招き良いtrialを落とす |
-| 何も仮定しない基準 | Random Search | baseline、並列性、search space sanity check | budgetが小さく履歴活用が必要 |
-| 並列black-box探索 | [CMA-ES](#/learn/cma-es) / [DE](#/learn/differential-evolution) | 連続・多峰性、十分な並列budget | 一評価が極端に高価、populationを維持できない |
+| 不確実性を明示 | [Gaussian-process BO](#/learn/bayesian-optimization) | 低〜中次元、数十〜数百評価、連続変数中心 | 観測数・次元が増え当てはめと獲得関数の最適化が重い |
+| 条件付き・混合空間 | [TPE](#/methods/M_TPE) | HPO、カテゴリや条件付きパラメータが多い | 密度モデルが良い領域を分離できない |
+| 木系代理モデル | [SMAC](#/methods/M_SMAC) | 混合型の探索空間、アルゴリズムの設定調整、失敗試行 | 代理モデルの予測と実測の整合性が悪い、並列性が不足 |
+| 早期停止で計算資源配分 | [Hyperband](#/methods/M_HYPERBAND) | 中間評価が最終性能をある程度予測する | 早期の評価指標が誤解を招き良い試行を落とす |
+| 何も仮定しない基準 | Random Search | 比較基準、並列性、探索空間が妥当かの確認 | 評価予算が小さく履歴活用が必要 |
+| 並列ブラックボックス探索 | [CMA-ES](#/learn/cma-es) / [DE](#/learn/differential-evolution) | 連続・多峰性、十分な並列評価予算 | 一評価が極端に高価、集団を維持できない |
 
-「Bayesian Optimizationが常に最少評価」とは限りません。search space／noise model／initial design／acquisition optimizerが不適切なら、baselineに負けます。
+「Bayesian Optimizationが常に最少評価」とは限りません。探索空間／ノイズモデル／初期の評価点配置／獲得関数を最適化する解法が不適切なら、比較基準に負けます。
 
 ## 推薦の前に4つの層を監査する
 
-1. **method**: GP-BO、TPE、Hyperbandなどの更新原理と必要な仮定
-2. **implementation**: library version、kernel、transform、sampler、acquisition optimizerなどのdefault
-3. **evaluation policy**: initial design、fidelity cost、parallelism、batch / asynchronous、failure・retry、stopping
-4. **recommendation priority**: problem条件と、公平なbudgetで得た比較証拠に基づく候補順
+1. **手法**: GP-BO、TPE、Hyperbandなどの更新原理と必要な仮定
+2. **実装**: ライブラリのバージョン、カーネル、変換、標本を選ぶ処理、獲得関数を最適化する解法などの既定値
+3. **評価方針**: 初期の評価点配置、忠実度ごとの評価費用、並列性、バッチ / 非同期、失敗・再試行、停止条件
+4. **推薦の優先順位**: 問題条件と、公平な評価予算で得た比較証拠に基づく候補順
 
-implementation defaultは再現に必要ですが、手法の定義でも普遍的な推奨でもありません。evaluation policyが違うrunは、optimizer iterationだけで並べません。同じtotal costまたはhigh-fidelity-equivalent costへ同期します。推薦は固定教材の勝敗ではなく、変数型／budget／noise／failure構造／複数seedの証拠から更新します。
+実装の既定値は再現に必要ですが、手法の定義でも普遍的な推奨でもありません。評価方針が違う実行は、最適化器の反復数だけで並べません。同じ総費用または高忠実度評価に換算した費用へ同期します。推薦は固定教材の勝敗ではなく、変数型／評価予算／ノイズ／失敗構造／複数乱数シードの証拠から更新します。
 
-[同じcostでfidelity配分を読むCompare](#/compare/COMPARE_BO_MULTIFIDELITY_COST)では、次の条件を揃えます。
+[同じ費用で忠実度配分を読む比較](#/compare/COMPARE_BO_MULTIFIDELITY_COST)では、次の条件を揃えます。
 
-- initial designとdeterministic noise
-- fidelity cost
-- parallel workers=1
-- tuning
-- 失敗をnullのまま記録し、costを課してretryしないpolicy
+- 初期の評価点配置と決定論的ノイズ
+- 忠実度ごとの評価費用
+- 並列ワーカー数=1
+- 調整
+- 失敗をnullのまま記録し、費用を課して再試行しない方針
 
-変更するのはmixed low/highとhigh-onlyの配分だけです。この1次元・単一seedのcontrastから一般的なpolicy順位は決めません。
+変更するのは低忠実度と高忠実度の併用と高忠実度だけの配分だけです。この1次元・単一乱数シードの対比から一般的な方針順位は決めません。
 
 ## うまくいったサインと切替サイン
 
 追うべき値:
 
-- best-so-farとtrial数
-- surrogate cross-validation error
-- uncertainty calibration
-- acquisition valueとselected point
-- duplicate suggestion率
-- failed / infeasible trial率
-- batch idle time
-- fidelity別のranking correlation
+- それまでの最良値と試行数
+- 代理モデルの交差検証誤差
+- 不確実性の較正
+- 獲得関数値と選ばれた点
+- 重複提案率
+- 失敗した / 実行不能試行率
+- バッチの待ち時間
+- 忠実度別の順位相関
 
 切替サイン:
 
-- 同じ点や境界ばかり提案 → acquisition optimizer、kernel、encodingを見直す
-- uncertaintyが過小で探索しない → noise model、prior、exploration parameterを見直す
-- カテゴリ・条件付き空間が不自然 → TPE/SMACなど別surrogateへ
-- trialが大量に並列実行可能 → batch BOまたはrandom/evolutionary baselineへ
-- 途中metricと最終metricの相関が弱い → Hyperband型早期停止を弱める
-- search spaceが広すぎる → domain knowledgeでbounds・parameterizationを再設計
+- 同じ点や境界ばかり提案 → 獲得関数を最適化する解法、カーネル、符号化を見直す
+- 不確実性が過小で探索しない → ノイズモデル、事前分布、探索を調整するパラメータを見直す
+- カテゴリ・条件付き空間が不自然 → TPE/SMACなど別代理モデルへ
+- 試行が大量に並列実行可能 → バッチ BOまたはランダム探索や進化計算の比較基準へ
+- 途中評価指標と最終評価指標の相関が弱い → Hyperband型早期停止を弱める
+- 探索空間が広すぎる → 対象分野の知識で上下限・パラメータの表し方を再設計
 
-multi-fidelityでは、同じ候補をlow/highで照合した残差と順位相関も追います。次のsignalがあれば、discrepancy modelまたはkernelの仮定を見直します。
+複数の忠実度では、同じ候補を低忠実度と高忠実度で照合した残差と順位相関も追います。次の兆候があれば、食い違いを表すモデルまたはカーネルの仮定を見直します。
 
-- low fidelityの順位が反転する
-- high fidelity residualが領域ごとに偏る
-- scaling変更で提案が不安定になる
+- 低忠実度の順位が反転する
+- 高忠実度評価の残差が領域ごとに偏る
+- 尺度の調整変更で提案が不安定になる
 
-failed領域の近傍を繰り返す場合は、目的値penaltyだけで隠しません。status／feasibility／retry／boundsを監査します。
+失敗した領域の近傍を繰り返す場合は、目的値ペナルティだけで隠しません。終了状態／実行可能性／再試行／上下限を監査します。
 
 ## 小さな比較の型
 
-比較ではinitial designと失敗trialの扱いを揃えます。
+比較では初期の評価点配置と失敗試行の扱いを揃えます。
 
 ```python
 study_contract = {
@@ -127,16 +127,16 @@ study_contract = {
 assert study_contract["trial_budget"] >= 1
 ```
 
-## コラム: 探索空間はmodelの一部
+## コラム: 探索空間はモデルの一部
 
-次のsearch space設計は、surrogateが学習する地形そのものを歪めます。
+次の探索空間設計は、代理モデルが学習する地形そのものを歪めます。
 
-- log-scaleにすべきparameterをlinearに置く
+- 対数尺度にすべきパラメータを線形尺度で置く
 - 無効な組合せを一つの箱へ押し込む
 - カテゴリへ架空の距離を与える
 
-AIやsolverへ渡す前に、parameterの意味／単位／条件付き関係／無効領域／default値を明示します。良いoptimizerを選ぶことより、良いsearch spaceを作ることが支配的な場合があります。
+AIやソルバーへ渡す前に、パラメータの意味／単位／条件付き関係／無効領域／既定値を明示します。良い最適化器を選ぶことより、良い探索空間を作ることが支配的な場合があります。
 
 ## 次に読む
 
-一評価が安価で多峰性を広く探せるなら[大域探索の選び分け](#/learn/family.global-search)、gradientをmini-batchで利用できる学習問題なら[確率勾配optimizerの選び分け](#/learn/family.stochastic-ml)へ進みます。
+一評価が安価で多峰性を広く探せるなら[大域探索の選び分け](#/learn/family.global-search)、勾配をミニバッチで利用できる学習問題なら[確率勾配最適化器の選び分け](#/learn/family.stochastic-ml)へ進みます。

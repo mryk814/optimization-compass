@@ -53,17 +53,17 @@ description: Optimization Compassの教材記事（content/methods, content/conc
 
 ## 2. 用語・表記
 
-### 2.1 英語で書く語（ASCII小文字、カタカナ化しない）
+### 2.1 説明は自然な日本語で書く
 
-実装・診断・実務の用語は英語表記が正準:
+一般語や日本語で定着している専門用語は、日本語で文につなぐ。
+モデル、ソルバー、評価予算、反復回数、勾配ノルム、直線探索、信頼領域、許容誤差、
+ブラックボックス、代理モデル、実行可能性、順位付けなどを使う。
+stepは文脈に応じて「更新」「一歩」「反復」、scaleは「尺度」や「大きさ」とする。
+oracleは返す情報を具体的に書き、概念自体を説明する場合は「オラクル」と正式用語を初出で紹介する。
 
-step / step length / scale / scaling / memory / model / solver / budget /
-oracle / line search / trust region / gradient norm / ranking / family /
-warm start / restart / bounds / tolerance / black-box / surrogate /
-best-so-far / feasible / infeasible
-
-- ✕ ステップ、スケール、メモリ、モデル、ソルバー、ランキング
-- 「〜の回数」は「function evaluation数」「iteration数」のように **英語名詞+数** で書く（診断値リストで特に統一）。
+英語の正式用語は、論文・資料・APIとの対応が読者に必要な箇所で初出に併記する。
+一度紹介した語に毎回英語を添えず、本文だけで日本語の説明が完結するようにする。
+診断値も「関数評価回数」「反復回数」と書き、APIのフィールド名を示すときは別にコード表記を添える。
 
 ### 2.2 日本語で書く語
 
@@ -72,7 +72,7 @@ best-so-far / feasible / infeasible
 勾配、曲率、目的関数、制約、凸性、局所解、大域最適、収束、反復（地の文）、
 初期点、停止条件、探索方向、正定値
 
-- ✕ gradient（地の文の単独名詞として）。ただし「gradient norm」「gradient check」「gradient oracle」など複合語は英語のまま。
+- 「勾配ノルム」「勾配の検査」「勾配を返す評価手段」など、複合語も意味が自然につながる日本語で書く。
 
 ### 2.3 固有名
 
@@ -126,7 +126,7 @@ best-so-far / feasible / infeasible
 - 1つのリスト内では文体を統一する（全項目を名詞止め、または全項目を文）。
 - 表のセルは名詞句を基本とし、「〜ため」で理由を書く列は全行で語尾を揃える。
 - calloutは1記事あたり合計2個まで。`warning` は「読者が実害を被る誤用」に限定する。
-- 「これは一般性能rankingではありません」のような公平性の但し書きは削らない。
+- 「この例だけで一般的な性能の順位付けはできません」のような公平性の但し書きは削らない。
 
 ## 5. 避ける書き癖
 
@@ -152,7 +152,7 @@ best-so-far / feasible / infeasible
 
 - [ ] 第1段落と frontmatter `summary` が完全一致している
 - [ ] `last_reviewed` を更新した
-- [ ] 2.1 / 2.2 の表記ゆれが残っていない（例: ステップ、モデル、勾配ノルム→gradient norm）
+- [ ] 一般語・診断値が日本語の文として自然につながり、英語の併記は必要な初出に絞られている
 - [ ] 3.1 の見出し置換表を適用した
 - [ ] 事実・数値・リンク・コード・数式を変えていない
 - [ ] 検証: `uv run python scripts/verify_content.py`（Tier A）

@@ -95,7 +95,7 @@ describe("ContentIndexPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: `すべて ${expected.all}件` }));
     fireEvent.change(screen.getByRole("searchbox", { name: "教材を検索" }), {
-      target: { value: "Chance constraint・CVaR・robustness" },
+      target: { value: "確率制約・CVaR・ロバスト性" },
     });
     expect(screen.getByText("1件")).toBeInTheDocument();
 
@@ -109,7 +109,7 @@ describe("ContentIndexPage", () => {
 
   test("hides an empty related-links row and labels connected routes for readers", async () => {
     renderDetail("concept.spd-matrix-geometry");
-    expect(await screen.findByRole("heading", { name: "SPD matrixの表現と境界" }))
+    expect(await screen.findByRole("heading", { name: "SPD行列の表現と境界" }))
       .toBeVisible();
     expect(screen.queryByText("関連する動き・比較")).not.toBeInTheDocument();
     cleanup();

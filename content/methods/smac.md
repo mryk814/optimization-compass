@@ -2,7 +2,7 @@
 content_id: smac
 kind: method
 method_id: M_SMAC_RF
-title_ja: SMAC（random forest surrogate）
+title_ja: SMAC（ランダムフォレストによる代理モデル）
 title_en: SMAC with Random Forest Surrogate
 summary: SMACは、ランダムフォレストを予測モデルに使う逐次モデルベース最適化です。カテゴリ変数や条件付きパラメータを含む探索空間を扱いやすい点に特徴があります。
 source_ids: [S037, S059, S075]
@@ -36,7 +36,7 @@ $$
 
 ### 何を予測モデルに使うか
 
-[Bayesian Optimization](#/learn/bayesian-optimization)では、多くの場合、ガウス過程（Gaussian process）を予測モデルに使います。
+[Bayesian Optimization](#/learn/bayesian-optimization)では、多くの場合、ガウス過程を予測モデルに使います。
 SMAC（Sequential Model-based Algorithm Configuration）は、ランダムフォレストを予測モデルとして使います。
 評価したパラメータと評価値の組は、評価履歴として蓄積されます。
 SMACはこの記録を使ってランダムフォレストを学習します。
@@ -119,7 +119,7 @@ print(dict(incumbent), objective(incumbent))
 ```
 
 実装については、[SMAC3](https://automl.github.io/SMAC3/latest/)の公式文書を参照してください。
-探索空間の定義方法と、シナリオの種類に対応するfacadeを確認します。評価履歴の保存形式も、利用する版に対応する説明で確認します。
+探索空間の定義方法と、シナリオの種類に対応するファサードを確認します。評価履歴の保存形式も、利用する版に対応する説明で確認します。
 
 実行すると作業ディレクトリに評価履歴を保存します。
 教材を試すときは空の一時ディレクトリで実行し、実験の保存先と分けます。

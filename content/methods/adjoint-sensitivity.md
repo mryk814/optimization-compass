@@ -2,9 +2,9 @@
 content_id: adjoint-sensitivity
 kind: method
 method_id: M_ADJOINT_SENSITIVITY
-title_ja: adjoint sensitivity
+title_ja: 随伴感度
 title_en: Adjoint Sensitivity Analysis
-summary: 随伴 感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。
+summary: 随伴感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。
 source_ids: [S101]
 prerequisites: [topology-optimization, concept.constraint-class]
 related_ids: [shape-optimization, geometry-update-failure-modes, simp-topology, density-filter, optimality-criteria-topology]
@@ -15,7 +15,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-随伴 感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。
+随伴感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。
 
 ## 30秒でつかむ
 
@@ -112,11 +112,11 @@ sensitivity = direct_derivative(state, design) - adjoint @ residual_derivative(s
 
 ## 診断値
 
-随伴 感度は、単独の更新則ではありません。
-状態求解が収束していること、残差とJacobianが正しく定義されていること、感度の符号が有限差分と整合することが前提です。
+随伴感度は、単独の更新則ではありません。
+状態求解が収束していること、残差とヤコビ行列が正しく定義されていること、感度の符号が有限差分と整合することが前提です。
 
-- 状態 残差
-- 随伴 残差
+- 状態残差
+- 随伴残差
 - 加工前の感度とフィルター後の感度
 - 有限差分または勾配検査
 
@@ -125,36 +125,36 @@ sensitivity = direct_derivative(state, design) - adjoint @ residual_derivative(s
 ### 失敗・切替の兆候
 
 勾配検査が合わない場合は、更新則より先に微分実装を点検します。
-状態 残差が大きい場合は、状態方程式と境界条件を確認します。
+状態残差が大きい場合は、状態方程式と境界条件を確認します。
 格子を変えたとき感度の分布だけが大きく変わる場合も、更新を続けません。
 コンプライアンスの値がもっともらしくても、感度が誤っていれば場更新は誤った方向へ進みます。
 
-形状変数を扱う場合は、感度の検査対象が密度場から境界や配置 パラメータへ移ります。
+形状変数を扱う場合は、感度の検査対象が密度場から境界や配置パラメータへ移ります。
 形状の更新と格子の品質を同じ反復に記録します。
 状態求解も対応付け、無効な格子を通った感度を物理的な勾配として扱いません。
 
 ### 可視化は正常系から失敗へ読む
 
-1. [場更新のtrace](#/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC)で、状態求解と感度が密度の更新へ入る位置を確認する
+1. [場更新の実行記録](#/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC)で、状態求解と感度が密度の更新へ入る位置を確認する
 2. [厳しい許容誤差の評価記録](#/theater/learning/SCENARIO_PDE_STATE_TOLERANCE_TIGHT)で、状態残差と随伴残差を同じシミュレーター呼び出し軸で追う
-3. [許容誤差/費用 Compare](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)で、許容誤差だけを変えた緩い許容誤差 実行を開く
-4. [状態-求解 失敗の評価記録](#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE)で、失敗を架空の目的値に置き換えず状態区分として読む
+3. [許容誤差/費用比較](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)で、許容誤差だけを変えた緩い許容誤差実行を開く
+4. [状態-求解失敗の評価記録](#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE)で、失敗を架空の目的値に置き換えず状態区分として読む
 
 前面に置く代表可視化は、全体像・正常系・失敗の3つです。
 緩い許容誤差の個別実行は比較が引き受け、同格の入口を増やしません。
-各画面は固定格子と固定予算の教育用traceであり、実行時間や格子変更への安定性を示しません。
+各画面は固定格子と固定予算の教育用実行記録であり、実行時間や格子変更への安定性を示しません。
 
 ### トポロジー最適化での読み方
 
 SIMPでは、まず密度場から剛性を作り、状態求解で変位を得ます。
-その後、随伴 感度を使って各要素の密度を増減したときのコンプライアンスの変化を計算します。
+その後、随伴感度を使って各要素の密度を増減したときのコンプライアンスの変化を計算します。
 この順番を分けて記録すると、更新が止まった原因が「状態方程式の収束」なのか「感度の符号」なのかを切り分けられます。
 
-教育用traceでは、加工前の感度とフィルター後の感度を同じ反復番号で並べます。
+教育用実行記録では、加工前の感度とフィルター後の感度を同じ反復番号で並べます。
 これは実装の実行時間性能を順位付けするためではなく、どの情報が次の密度の更新を決めるかを観察するためです。
 
 ## 次に読む
 
 [PDE制約付き最適化](#/formulations/PA045)で、設計変数と状態を分ける定式化を確認します。
 
-[形状最適化の設計変数](#/learn/shape-optimization)で変数の表現の意味を確認し、[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認します。[密度 フィルター](#/learn/density-filter)は離散場の正則化、[形状更新の失敗モード](#/learn/geometry-update-failure-modes)は格子と状態の切り分けを扱います。
+[形状最適化の設計変数](#/learn/shape-optimization)で変数の表現の意味を確認し、[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認します。[密度フィルター](#/learn/density-filter)は離散場の正則化、[形状更新の失敗モード](#/learn/geometry-update-failure-modes)は格子と状態の切り分けを扱います。

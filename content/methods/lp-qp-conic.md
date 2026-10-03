@@ -4,7 +4,7 @@ kind: method
 method_id: MF_LP_QP_CONIC
 title_ja: LP・QP・錐最適化
 title_en: Linear, Quadratic, and Conic Optimization
-summary: 線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主・双対・gap・infeasibility情報まで利用する凸最適化familyです。
+summary: 線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主問題・双対問題・ギャップ・実行不能性情報まで利用する凸最適化手法群です。
 source_ids: [S004, S010, S012, S014, S055, S103]
 prerequisites: [concept.convexity]
 related_ids: [concept.convexity, constrained-continuous, dual-simplex, branch-and-cut]
@@ -17,7 +17,7 @@ status: published
 last_reviewed: 2026-09-30
 ---
 
-線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主・双対・gap・infeasibility情報まで利用する凸最適化familyです。
+線形・凸二次・錐構造を明示したモデルを専用ソルバーへ渡し、主問題・双対問題・ギャップ・実行不能性情報まで利用する凸最適化手法群です。
 
 ## 30秒でつかむ
 
@@ -31,13 +31,13 @@ last_reviewed: 2026-09-30
 
 ### 三つの代表形
 
-#### Linear program
+#### 線形計画
 
 $$
 \min_x c^Tx\quad\text{subject to}\quad Ax\le b,　A_{eq}x=b_{eq}
 $$
 
-#### Convex quadratic program
+#### 凸二次計画
 
 $$
 \min_x \frac{1}{2}x^TPx+q^Tx\quad\text{subject to linear constraints},
@@ -45,51 +45,51 @@ $$
 
 ここで $P\succeq0$ なら目的関数は凸です。
 
-#### Conic program
+#### 錐計画
 
 $$
 \min_x c^Tx\quad\text{subject to}\quad Ax+s=b,　s\in K
 $$
 
-$K$として非負orthant、second-order cone、positive semidefinite coneなどを使います。
-norm、robust 界、semidefinite relaxationを共通形式で表現できます。
+$K$として非負象限、二次錐、半正定値錐などを使います。
+ノルム、頑健な界、半正定値緩和を共通形式で表現できます。
 
 ### 構造を隠さない理由
 
-凸構造をブラックボックス 目的値へ包むと、
+凸構造をブラックボックス目的値へ包むと、
 
-- 双対 variable
+- 双対変数
 - 最適性ギャップ
-- infeasibility 証明
+- 実行不能性証明
 - 感度
-- sparsity
+- 疎性
 - 初期解の再利用
 
 を利用しにくくなります。
 専用ソルバーが受け取れる係数モデルとして保つこと自体が重要です。
 
-### Solver family
+### 解法手法群
 
-- simplex / 双対 simplex: 基底、初期解の再利用、LP再最適化
-- interior-point / barrier: 大規模・疎な凸problem
-- operator splitting: QPやconic problemの反復求解
-- first-order conic: 中精度・巨大problem
-- modeling layer: CVXPY等がcanonicalizationしてbackendへ渡す
+- 主単体法 / 双対単体法: 基底、初期解の再利用、LP再最適化
+- 内点法 / 障壁: 大規模・疎な凸問題
+- 作用素分割: QPや錐問題の反復求解
+- 一次錐: 中精度・巨大問題
+- モデル化を担う層: CVXPY等が標準形へ変換して実行に使うソルバーへ渡す
 
-modeling libraryとソルバーを混同しません。
-どのbackend、version、optionが使われたかを保存します。
+モデル化ライブラリとソルバーを混同しません。
+どの実行に使うソルバー、バージョン、オプションが使われたかを保存します。
 
-### Primalと双対を読む
+### 主問題と双対を読む
 
-凸 problemで適切な正則性があれば、主 目的値と双対 目的値の差が最適性ギャップになります。
-双対 variableは、制約 界をわずかに変えたときの価値を表す感度として解釈できる場合があります。
+凸問題で適切な正則性があれば、主目的値と双対目的値の差が最適性ギャップになります。
+双対変数は、制約界をわずかに変えたときの価値を表す感度として解釈できる場合があります。
 
 ただし、
 
 - 尺度調整
-- degeneracy
-- regularization
-- ソルバー 許容誤差
+- 退化
+- 正則化
+- ソルバー許容誤差
 - 前処理変換
 
 により、数値的な双対値の読み方は変わります。
@@ -111,22 +111,22 @@ Python節の生産LPは、$2x_1+x_2\le8$ と $x_1+2x_2\le8$ のもとで利益 $
 
 ## 向く条件・避ける条件
 
-### Alternative-first
+### 専用構造から先に検討する
 
-- linear least squares → QR / SVD
-- shortest path / max 流量 / マッチング → graph algorithm
-- separable closed form → 解析解
-- pure linear system → 因数分解
-- LP relaxationだけでは整数条件を満たさない → MILP / CP-SAT
+- 線形最小二乗 → QR / SVD
+- 最短路 / 最大流 / マッチング → グラフアルゴリズム
+- 変数分離で閉形式が得られる問題 → 解析解
+- 純粋な線形方程式系 → 因数分解
+- LP 緩和だけでは整数条件を満たさない → MILP / CP-SAT
 
 ### 向いている条件
 
-- 係数・matrixとしてモデル化できる
+- 係数・行列としてモデル化できる
 - 凸性が成立する
 - 証明や双対情報が重要
-- 疎な structureを使いたい
-- repeated 求解や初期解の再利用がある
-- high accuracyまたは明確な状態が必要
+- 疎な構造を使いたい
+- 反復する求解や初期解の再利用がある
+- 高精度または明確な状態が必要
 
 ## Python
 
@@ -154,21 +154,21 @@ if not result.success:
 print(result.x, -result.fun, result.status, result.message)
 ```
 
-maximizationを`-profit`のminimizationへ変換したため、出力時に符号を戻しています。
-単位、目的方向、制約 signをモデル reviewで明示します。
+最大化を`-profit`の最小化へ変換したため、出力時に符号を戻しています。
+単位、目的方向、制約の符号をモデルの点検で明示します。
 
 ## 診断値
 
-- 主 feasibility 残差
-- 双対 feasibility 残差
-- absolute / relative gap
-- complementarity
-- 反復 / 因数分解 time
-- 前処理 簡約
-- active constraints
-- 実行不可能 / 非有界 証明
-- numerical warning
-- warm-start reuse
+- 主実行可能性残差
+- 双対実行可能性残差
+- 絶対 / 相対ギャップ
+- 相補性
+- 反復 / 因数分解時間
+- 前処理簡約
+- 有効な制約
+- 実行不可能 / 非有界証明
+- 数値計算の警告
+- 初期解の再利用
 
 `infeasible`／`unbounded`／`infeasible_or_unbounded`／`iteration_limit`は異なる状態です。
 目的値だけを読みません。
@@ -177,34 +177,34 @@ maximizationを`-profit`のminimizationへ変換したため、出力時に符�
 
 - $P$が非正半定値なのに凸 QPとして扱う
 - Big-Mが巨大で数値不安定
-- unit 尺度が何桁も異なる
-- cone relaxationが現実の条件を緩めすぎる
-- 整数 decisionを連続解の丸めだけで済ませる
-- ソルバー 状態を成功／失敗の二値へ潰す
-- ブラックボックス simulationを無理に係数モデルへ置換
+- 単位の尺度が何桁も異なる
+- 錐緩和が現実の条件を緩めすぎる
+- 整数決定変数を連続解の丸めだけで済ませる
+- ソルバー状態を成功／失敗の二値へ潰す
+- ブラックボックスシミュレーションを無理に係数モデルへ置換
 
 ::: warning
-ソルバー間比較ではモデル canonicalization／許容誤差／前処理／hardware／初期解の再利用を揃えます。
+ソルバー間比較ではモデル標準形への変換／許容誤差／前処理／計算機環境／初期解の再利用を揃えます。
 反復回数だけでは一反復の仕事量が違うため公平ではありません。
 :::
 
-### NominalとCVaRを二分野で読む
+### 平均目的とCVaRを二分野で読む
 
-scenarioの平均だけを見る目的と、tail riskを加える目的を二つの分野で読み分けます。
+シナリオの平均だけを見る目的と、裾のリスクを加える目的を二つの分野で読み分けます。
 
-| 分野 | Case | Compareで変えるもの |
+| 分野 | 事例 | 比較で変えるもの |
 |---|---|---|
-| 金融 | [scenarioのtail riskを抑えて配分する](#/gallery/portfolio-cvar-allocation) | [training 目的値のrisk treatment](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4) |
-| エネルギー | [価格scenarioのtail 費用を抑えて電力を調達する](#/gallery/energy-cvar-procurement) | [同じ構造を調達問題として読む](#/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4) |
+| 金融 | [シナリオの裾のリスクを抑えて配分する](#/gallery/portfolio-cvar-allocation) | [学習目的値のリスクの扱い](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4) |
+| エネルギー | [価格シナリオの裾の費用を抑えて電力を調達する](#/gallery/energy-cvar-procurement) | [同じ構造を調達問題として読む](#/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4) |
 
-[nominal目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
-4変数のcapped simplexとrisk level 0.75を共有します。
-sampleは8件のtrainingと4件のheld-outに固定します。
-0.05刻みのgridと12回のloss evaluation 計算予算も固定し、risk treatmentだけを変えます。
+[平均目的の実行記録](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的の実行記録](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+4変数の各成分に上限を持つ単体とリスク水準 0.75を共有します。
+標本は8件の学習用と4件の評価用に固定します。
+0.05刻みの格子と12回の損失の評価計算予算も固定し、リスクの扱いだけを変えます。
 
-実行Traceは固定4資産の教材です。
-エネルギー比較はsimplex・scenario・tail riskの読み方だけを再利用し、電力市場／需要／送電網／契約を再現しません。
-4件のheld-out結果から一般性能rankingや確率保証を導きません。
+実行記録は固定4資産の教材です。
+エネルギー比較は単体・シナリオ・裾のリスクの読み方だけを再利用し、電力市場／需要／送電網／契約を再現しません。
+4件の評価用に分けた結果から一般性能順位付けや確率保証を導きません。
 
 ## 次に読む
 

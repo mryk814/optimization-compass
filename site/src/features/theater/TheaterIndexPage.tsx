@@ -8,6 +8,7 @@ import {
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
+import { PHYSICAL_SCENES } from "../physical-scenes/catalog";
 import {
   buildTheaterCatalog,
   primaryObservableLabels,
@@ -133,6 +134,13 @@ export function TheaterIndexPage() {
           <button type="button" onClick={() => { setScope("representative"); setPurpose("all"); setDomain("all"); }}>絞り込みを戻す</button>
         </div>
       )}
+      <section className="theater-article-examples" aria-labelledby="article-examples-heading">
+        <h2 id="article-examples-heading">記事の図から考え方を確かめる</h2>
+        <p>材料の配置や軌道を、定式化・制約・制御の説明と一緒に読みます。図は記事の中で再生できます。</p>
+        <ul>{PHYSICAL_SCENES.map(scene => <li key={scene.id}>
+          <Link to={scene.article}>{scene.articleLabel}</Link> — {scene.question}
+        </li>)}</ul>
+      </section>
       <details className="theater-structure-guide">
         <summary>
           <span>読み方を深める</span>
