@@ -588,7 +588,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -629,7 +629,7 @@
       "name_en": "Linear least squares",
       "name_ja": "線形最小二乗",
       "problem_id": "PA005",
-      "reading_ja": "線形モデル Ax と観測 b のずれの二乗和を最小にします。凸で、線形代数だけで大域解が求まります。",
+      "reading_ja": "モデルの予測と観測値のずれを二乗して足し、その合計が最小になるパラメータを求めます。",
       "source_ids": [
         "S003",
         "S054",
