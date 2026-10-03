@@ -8,7 +8,7 @@
 |---|---|---:|---:|---:|---:|---|
 | `active-set` | `M_ACTIVE_SET` | 65 | 6981 | 10 | 1 | pass |
 | `active-set-qp` | `M_ACTIVE_SET_QP` | 81 | 8253 | 9 | 1 | pass |
-| `adam` | `M_ADAM` | 115 | 7686 | 15 | 1 | pass |
+| `adam` | `M_ADAM` | 115 | 7662 | 15 | 1 | pass |
 | `adamw` | `M_ADAMW` | 64 | 3035 | 12 | 1 | pass |
 | `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 51 | 3585 | 11 | 2 | pass |
 | `admm` | `M_ADMM` | 44 | 2655 | 12 | 1 | pass |
@@ -16,7 +16,7 @@
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 62 | 5927 | 10 | 1 | pass |
 | `barrier-lp-qp` | `M_BARRIER_LP_QP` | 49 | 6381 | 9 | 1 | pass |
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2504 | 12 | 1 | pass |
-| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9587 | 16 | 1 | pass |
+| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9562 | 16 | 1 | pass |
 | `bfgs` | `M_BFGS` | 49 | 5358 | 10 | 1 | pass |
 | `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 8485 | 13 | 2 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |

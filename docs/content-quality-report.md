@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `191`
+- Prose review warnings: `190`
 
 ## Concept publication floor
 
@@ -20,7 +20,7 @@
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 6947 | 12 | 4 | 0 | pass |
-| `concept.linear-least-squares` | 119 | 9024 | 16 | 10 | 0 | pass |
+| `concept.linear-least-squares` | 108 | 8972 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 3394 | 6 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 95 | 3295 | 9 | 4 | 0 | pass |
@@ -53,7 +53,7 @@
 - `number.overprecise`: 95
 - `prose.choppy`: 6
 - `prose.work-report`: 10
-- `sentence.commas`: 76
+- `sentence.commas`: 75
 - `sentence.long`: 4
 
 | Content | Warnings |
@@ -88,7 +88,7 @@
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.knapsack-set-cover` | 0 |
-| `concept.linear-least-squares` | 6 |
+| `concept.linear-least-squares` | 5 |
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 5 |
 | `concept.mixed-integer-linear-program` | 0 |
