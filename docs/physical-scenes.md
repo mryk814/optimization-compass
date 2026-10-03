@@ -50,6 +50,14 @@ reduced motionでは自動再生しません。
 
 ## 再生成と検証
 
+ドローンのSLSQPは `ftol=1e-12` で解き、JSONは小数6桁に丸めます。
+[SciPyのSLSQP仕様](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html)にある `ftol` は目的関数・最適性・ステップなどの停止判定であり、座標の誤差上限ではありません。
+同じ `uv.lock` でもOSやBLASの演算順序により停止点と反復回数は変わります。
+保存値の比較は丸め誤差 `0.5e-6` と数値解の差 `5e-6` を合わせて許容し、時刻と参照軌道には丸め誤差だけを許容します。
+この数値差の予算は追従誤差の表示単位1 mmの1/200で、加速度の表示単位0.01 m/s²よりも十分小さく設定しています。
+加えて丸め後の保存軌道にも運動式、入力制限、連続時間の障害物余裕を検査します。
+丸め前の計算に対する既存の力学・予測・制約検査は維持し、反復回数の一致は要求しません。
+
 `uv sync --all-extras` の後、各generatorを実行します。
 依存の版は `uv.lock` と `site/package-lock.json` で固定します。
 数値moduleの単体検査、生成結果の契約検査、siteの型検査とbuild、再生操作と375pxのbrowser検査を行います。

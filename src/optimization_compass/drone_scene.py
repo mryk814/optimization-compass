@@ -14,6 +14,9 @@ STEPS = 90
 HORIZON = 16
 BODY_RADIUS = 0.12
 ACCELERATION_BOUND = 2.0
+# Reduce platform-dependent stopping drift in the offline JSON projection.
+# ftol is an objective/optimality stopping target, not a coordinate tolerance.
+SOLVER_FTOL = 1e-12
 OBSTACLES = [(np.array([0.0, 0.0, 1.8]), 0.48)]
 
 
@@ -151,7 +154,7 @@ def simulate_variant(identifier: str, label: str, smooth_weight: float) -> dict[
             method="SLSQP",
             bounds=[(-ACCELERATION_BOUND, ACCELERATION_BOUND)] * (3 * n),
             constraints={"type": "ineq", "fun": obstacle_constraints, "jac": obstacle_jacobian},
-            options={"ftol": 1e-8, "maxiter": 160},
+            options={"ftol": SOLVER_FTOL, "maxiter": 160},
         )
         if not solved.success or np.min(obstacle_constraints(solved.x)) < -1e-6:
             raise RuntimeError(f"MPC failed at {identifier}:{step}: {solved.message}")

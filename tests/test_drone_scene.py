@@ -89,8 +89,47 @@ def test_committed_projection_matches_computation(scene: dict[str, Any]) -> None
     path = root / "site/src/features/physical-scenes/data/drone.json"
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert path.stat().st_size < 200_000
+    for key in scene.keys() - {"variants"}:
+        if key in {"reference", "target"}:
+            np.testing.assert_allclose(payload[key], scene[key], atol=5.1e-7, rtol=0)
+        else:
+            assert payload[key] == scene[key]
     for actual, expected in zip(payload["variants"], scene["variants"], strict=True):
+        assert actual["id"] == expected["id"]
+        assert actual["label"] == expected["label"]
         for saved, computed in zip(actual["frames"], expected["frames"], strict=True):
+            assert saved.keys() == computed.keys()
             for key in saved:
-                np.testing.assert_allclose(saved[key], computed[key], atol=5.1e-7, rtol=0)
-        assert actual["metrics"]["solveCount"] == drone_scene.STEPS
+                # JSON rounding contributes at most 0.5e-6. SLSQP/BLAS stopping
+                # points also differ: ftol is not an error bound on coordinates.
+                # The 5e-6 numerical budget is 1/200 of the displayed 1 mm
+                # tracking resolution (and far below the 0.01 m/s² input display).
+                tolerance = 5.1e-7 if key == "time" else 5.5e-6
+                np.testing.assert_allclose(saved[key], computed[key], atol=tolerance, rtol=0)
+        for key, value in actual["metrics"].items():
+            if key == "solverIterations":
+                continue  # Work counts can change with the platform's stopping point.
+            if key in {"solverSuccess", "solveCount", "horizonSteps", "smoothWeight"}:
+                assert value == expected["metrics"][key]
+            else:
+                assert value == pytest.approx(expected["metrics"][key], abs=5.5e-6, rel=0)
+
+
+def test_committed_motion_preserves_physics_and_clearance() -> None:
+    root = Path(__file__).resolve().parents[1]
+    payload = json.loads(
+        (root / "site/src/features/physical-scenes/data/drone.json").read_text(encoding="utf-8")
+    )
+    for variant in payload["variants"]:
+        for frame, following in zip(variant["frames"], variant["frames"][1:], strict=False):
+            p, v, a = (np.array(frame[key]) for key in ("position", "velocity", "acceleration"))
+            expected = p + drone_scene.DT * v + 0.5 * drone_scene.DT**2 * a
+            # Each operand is rounded by <=0.5e-6; propagation stays below 1.1e-6.
+            np.testing.assert_allclose(following["position"], expected, atol=1.1e-6, rtol=0)
+            np.testing.assert_allclose(
+                following["velocity"], v + drone_scene.DT * a, atol=1.1e-6, rtol=0
+            )
+            np.testing.assert_array_equal(frame["prediction"][0], p)
+            np.testing.assert_allclose(frame["prediction"][1], expected, atol=1.1e-6, rtol=0)
+            assert np.max(np.abs(a)) <= drone_scene.ACCELERATION_BOUND + 5e-7
+            assert drone_scene.interval_clearance(p, v, a) >= 0.02
