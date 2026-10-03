@@ -128,7 +128,7 @@ describe("GradientDescentValley guided scene", () => {
     render(<GradientDescentValley />);
 
     fireEvent.click(screen.getByRole("button", { name: /解説付きで見る/ }));
-    expect(screen.queryByRole("slider", { name: /learning rate/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("slider", { name: /学習率/ })).not.toBeInTheDocument();
     expect(screen.getByText(beats[0].captionJa)).toBeInTheDocument();
     expect(screen.queryByRole("group", { name: /初期点/ })).not.toBeInTheDocument();
 
@@ -136,7 +136,7 @@ describe("GradientDescentValley guided scene", () => {
     expect(screen.getByText(beats[1].captionJa)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "解説を終えて、自分で動かす" }));
-    expect(slider(/learning rate/)).toHaveValue("0.045");
+    expect(slider(/学習率/)).toHaveValue("0.045");
     expect(screen.getByRole("button", { name: /解説付きで見る/ })).toBeInTheDocument();
   });
 });
@@ -154,7 +154,7 @@ describe("GradientDescentValley", () => {
   it("reports divergence when the step crosses the stability limit", () => {
     render(<GradientDescentValley />);
 
-    fireEvent.change(slider(/learning rate/), { target: { value: "0.06" } });
+    fireEvent.change(slider(/学習率/), { target: { value: "0.06" } });
 
     expect(screen.getAllByText(/発散しました/).length).toBeGreaterThan(0);
     expect(screen.getByText("誤差が増える（発散）")).toBeInTheDocument();
@@ -163,14 +163,14 @@ describe("GradientDescentValley", () => {
   it("converges when a smaller step is chosen", () => {
     render(<GradientDescentValley />);
 
-    fireEvent.change(slider(/learning rate/), { target: { value: "0.045" } });
+    fireEvent.change(slider(/学習率/), { target: { value: "0.045" } });
 
     expect(screen.getAllByText(/収束しました/).length).toBeGreaterThan(0);
   });
 
   it("reports undamped error at the stability boundary instead of divergence", () => {
     render(<GradientDescentValley />);
-    fireEvent.change(slider(/learning rate/), { target: { value: "0.05" } });
+    fireEvent.change(slider(/学習率/), { target: { value: "0.05" } });
 
     expect(screen.getByText("誤差が縮まない（非減衰）")).toBeInTheDocument();
     expect(screen.queryByText("誤差が増える（発散）")).not.toBeInTheDocument();

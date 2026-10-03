@@ -10,6 +10,7 @@ description: Grow the formulation dictionary and learning paths (定式化の辞
 1. `docs/formulation-atlas.md` — レシピ A（記事）/ B（関係）/ C（道筋）と検証コマンド
 2. `docs/adr/0017-formulation-atlas-and-learning-paths.md` — authority の境界と関係の意味
 3. `.agents/skills/article-style/SKILL.md` — 本文の文体
+4. `docs/teaching-article-playbook.md` — 一つの題材で教え切る書き方と図の水準（見本は線形最小二乗）
 
 ## 手順
 

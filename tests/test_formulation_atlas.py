@@ -221,3 +221,19 @@ def test_articles_outside_the_pending_list_follow_their_skeleton(pages) -> None:
     assert require_content_skeletons([method], frozenset({"primal-simplex"})) == ("primal-simplex",)
     with pytest.raises(ValueError, match="unknown articles: no-such-article"):
         require_content_skeletons(pages, frozenset({"no-such-article"}))
+
+
+def test_method_articles_may_close_with_a_trouble_route(pages) -> None:  # type: ignore[no-untyped-def]
+    from optimization_compass.content_skeletons import METHOD_TROUBLE_ROUTE, skeleton_gaps
+
+    method = next(page for page in pages if page.content_id == "adam")
+    routed = replace(
+        method,
+        toc=tuple(
+            replace(h, label=METHOD_TROUBLE_ROUTE) if h.label == "次に読む" else h
+            for h in method.toc
+        ),
+    )
+    assert skeleton_gaps(routed) == ()
+    misplaced = replace(routed, toc=(*routed.toc[-1:], *routed.toc[:-1]))
+    assert skeleton_gaps(misplaced) == ("order",)

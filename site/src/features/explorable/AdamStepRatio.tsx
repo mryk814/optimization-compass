@@ -95,7 +95,7 @@ export default function AdamStepRatio() {
           <Slider
             display={fmt(eta, 2)}
             hint="Adam では、各座標が1回に動く距離のおよその上限です。"
-            label="learning rate η"
+            label="学習率 η"
             max={0.4}
             min={0.02}
             onChange={set("eta")}
@@ -138,34 +138,40 @@ export default function AdamStepRatio() {
       readout={<Readout current={current} eta={eta} step={step} verdict={verdict} />}
       stage={
         <>
-          <div className="ex-canvas" ref={stageRef}>
-            <svg className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
-              <rect className="ex-ground" height={viewport.height} width={viewport.width} />
-              <ValleyAxes scale={scale} viewport={viewport} />
-              <Contours scale={scale} />
-              {compare === "gd" && (
-                <>
-                  <path className="ex-compare" d={polylinePath(plainShown, scale)} />
-                  {plainShown.map(([x, y], index) => (
-                    <circle className="ex-compare-dot" cx={scale.px(x)} cy={scale.py(y)} key={index} r={3} />
-                  ))}
-                </>
-              )}
-              <path className="ex-ghost" d={polylinePath(path, scale)} />
-              <path className="ex-trail" d={polylinePath(trail, scale)} />
-              <g className="ex-minimum">
-                <circle cx={scale.px(PROBLEM.cx)} cy={scale.py(PROBLEM.cy)} r={6} />
-                <text x={scale.px(PROBLEM.cx) + 10} y={scale.py(PROBLEM.cy) + 22}>最小点 (1, −2)</text>
-              </g>
-              <StepBox current={current} eta={eta} head={head} scale={scale} />
-              <circle className="ex-head" cx={scale.px(head[0])} cy={scale.py(head[1])} r={7} />
-              <text className="ex-label" x={scale.px(START[0]) + 12} y={scale.py(START[1]) - 10}>初期点 (4, 3)</text>
-              {compare === "gd" && plain.diverged && (
-                <text className="ex-label ex-label-strong" x={12} y={22}>灰色の破線：同じ η の勾配降下法（発散）</text>
-              )}
-            </svg>
-          </div>
-          <RatioChart position={position} steps={run.steps} width={viewport.width} />
+          <figure className="ex-panel">
+            <figcaption className="ex-panel-title">谷と軌跡</figcaption>
+            <div className="ex-canvas" ref={stageRef}>
+              <svg className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+                <rect className="ex-ground" height={viewport.height} width={viewport.width} />
+                <ValleyAxes scale={scale} viewport={viewport} />
+                <Contours scale={scale} />
+                {compare === "gd" && (
+                  <>
+                    <path className="ex-compare" d={polylinePath(plainShown, scale)} />
+                    {plainShown.map(([x, y], index) => (
+                      <circle className="ex-compare-dot" cx={scale.px(x)} cy={scale.py(y)} key={index} r={3} />
+                    ))}
+                  </>
+                )}
+                <path className="ex-ghost" d={polylinePath(path, scale)} />
+                <path className="ex-trail" d={polylinePath(trail, scale)} />
+                <g className="ex-minimum">
+                  <circle cx={scale.px(PROBLEM.cx)} cy={scale.py(PROBLEM.cy)} r={6} />
+                  <text x={scale.px(PROBLEM.cx) + 10} y={scale.py(PROBLEM.cy) + 22}>最小点 (1, −2)</text>
+                </g>
+                <StepBox current={current} eta={eta} head={head} scale={scale} />
+                <circle className="ex-head" cx={scale.px(head[0])} cy={scale.py(head[1])} r={7} />
+                <text className="ex-label" textAnchor="end" x={scale.px(START[0]) - 12} y={scale.py(START[1]) + 5}>初期点 (4, 3)</text>
+                {compare === "gd" && plain.diverged && (
+                  <text className="ex-label ex-label-strong" x={12} y={22}>灰色の破線：同じ η の勾配降下法（発散）</text>
+                )}
+              </svg>
+            </div>
+          </figure>
+          <figure className="ex-panel">
+            <figcaption className="ex-panel-title">座標ごとの比</figcaption>
+            <RatioChart position={position} steps={run.steps} width={viewport.width} />
+          </figure>
         </>
       }
       summary={summary}

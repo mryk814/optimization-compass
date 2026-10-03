@@ -98,6 +98,10 @@ oracleは返す情報を具体的に書き、概念自体を説明する場合�
 
 ### 3.2 method記事（標準型）
 
+新規執筆と型への移行では、`content_skeletons.py` の8節の型と、節ごとの中身を定めた
+[`docs/teaching-article-playbook.md`](../../../docs/teaching-article-playbook.md) に従う。
+次の構成は、型より前に書かれた記事を推敲するときの目安として残す。
+
 構成順序:
 
 1. 導入段落（frontmatter `summary` と完全一致。カード・SEO説明文として単独で成立させる）

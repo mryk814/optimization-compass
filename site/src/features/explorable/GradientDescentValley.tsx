@@ -146,7 +146,7 @@ export default function GradientDescentValley() {
 
   const verdict = describeRun(run.outcome, points, limit, eta);
   const summary = [
-    `${method === "gd" ? "勾配降下法" : "Momentum"}、learning rate ${fmt(eta, 3)}、谷の細長さ κ=${kappa}、初期点${fmtPair(start[0], start[1])}。`,
+    `${method === "gd" ? "勾配降下法" : "Momentum"}、学習率 ${fmt(eta, 3)}、谷の細長さ κ=${kappa}、初期点${fmtPair(start[0], start[1])}。`,
     verdict.text,
     `${method === "gd" ? "1回の誤差倍率" : "漸近的な収束率の目安"}は、x方向${fmt(gentleRate.factor)}、y方向${fmt(steepRate.factor)}です。`,
   ].join("");
@@ -158,7 +158,7 @@ export default function GradientDescentValley() {
           <Slider
             display={fmt(eta, 3)}
             hint={<>安定限界は <strong>{fmt(limit, 3)}</strong>。この値を超えると誤差が増えます。</>}
-            label="learning rate η"
+            label="学習率 η"
             max={0.25}
             min={0.005}
             onChange={setEta}

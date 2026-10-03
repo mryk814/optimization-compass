@@ -510,7 +510,6 @@
 .formulation-compass-east::before { content: "→"; position: absolute; left: -2.2rem; top: 50%; font-size: 1.7rem; color: var(--fx-accent); }
 .formulation-compass-west::after { content: "→"; position: absolute; right: -2.2rem; top: 50%; font-size: 1.7rem; color: var(--fx-accent); }
 .formulation-methods > summary { font-size: 1.15rem; font-weight: 700; cursor: pointer; padding: 0.75rem 0; }
-.formulation-article .markdown-body h3 { font-size: 1.15rem; color: var(--fx-accent); border-left: 3px solid var(--fx-accent); padding-left: 0.7rem; }
 .markdown-body figure img { max-width: 100%; height: auto; }
 @media (max-width: 60rem) {
   .formulation-compass-grid { grid-template-areas: "center" "north" "south" "west" "east"; grid-template-columns: 1fr; gap: 0.75rem; }

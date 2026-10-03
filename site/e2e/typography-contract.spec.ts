@@ -145,3 +145,73 @@ test(
     }
   },
 );
+
+// Linear least squares is the reference article. Every other kind of article renders its body
+// with exactly the same typography and reading column (docs/content-reading-principles.md §11),
+// so a page-specific stylesheet cannot quietly restyle one kind of article.
+const referenceArticle = "/learn/concept.linear-least-squares";
+const articleKinds = [
+  { kind: "method with explorable", route: "/learn/adam" },
+  { kind: "method without explorable", route: "/learn/bfgs" },
+  { kind: "method family", route: "/learn/family.trust-region" },
+  { kind: "formulation without explorable", route: "/learn/concept.nonlinear-least-squares" },
+  { kind: "concept", route: "/learn/concept.time-discretization" },
+] as const;
+const articleRoles = {
+  h2: ":scope > h2",
+  h3: ":scope > h3",
+  paragraph: ":scope > p",
+  list: ":scope > ul",
+  listItem: ":scope > ul > li",
+  link: ":scope > p a",
+  inlineCode: ":scope > p code",
+  codeBlock: ":scope pre",
+  tableHeader: ":scope > table th, :scope > div > table th",
+  tableCell: ":scope > table td, :scope > div > table td",
+  figureCaption: ":scope > figure > figcaption",
+} as const;
+const articleProperties = [
+  "fontSize", "fontWeight", "lineHeight", "color", "fontFamily", "marginTop", "marginBottom",
+  "paddingLeft", "borderLeftWidth", "borderLeftColor", "backgroundColor", "borderRadius",
+] as const;
+
+async function articleSignature(page: Page) {
+  await expect(page.locator(".markdown-body > p").first()).toBeVisible();
+  await expect(page.locator(".content-toc")).toBeVisible();
+  return page.locator(".markdown-body").first().evaluate(
+    (body, { roles, properties }) => {
+      const result: Record<string, string | null> = {};
+      for (const [role, selector] of Object.entries(roles)) {
+        const element = body.querySelector<HTMLElement>(selector);
+        if (!element) {
+          result[role] = null;
+          continue;
+        }
+        const style = getComputedStyle(element);
+        result[role] = properties.map((property) => `${property}=${style[property]}`).join(" ");
+      }
+      const paragraph = body.querySelector<HTMLElement>(":scope > p")!.getBoundingClientRect();
+      result.readingColumn = `left=${Math.round(paragraph.left)} width=${Math.round(paragraph.width)}`;
+      result.toc = body.parentElement?.querySelector(".content-toc details") ? "folded above" : "other";
+      return result;
+    },
+    { roles: articleRoles, properties: articleProperties },
+  );
+}
+
+for (const width of [1280, 375]) {
+  test(`${width}pxで全種類の記事本文が線形最小二乗と同じ見た目になる`, async ({ page, baseURL }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoAtlasRoute(page, requiredBaseURL(baseURL), referenceArticle);
+    const reference = await articleSignature(page);
+    expect(reference.toc).toBe("folded above");
+    for (const article of articleKinds) {
+      await gotoAtlasRoute(page, requiredBaseURL(baseURL), article.route);
+      const signature = await articleSignature(page);
+      for (const [role, value] of Object.entries(signature)) {
+        if (value === null || reference[role] === null) continue;
+        expect(value, `${article.kind} (${article.route}) ${role}`).toBe(reference[role]);
+      }
+    }
+  });
+}

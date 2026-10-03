@@ -57,7 +57,9 @@ summary の段落のあと、次の8節をこの順で置きます。見出し�
 5. `Python`
 6. `診断値`
 7. `失敗・切替の兆候`
-8. `次に読む`
+8. `次に読む`（代わりに `困りごとから関連する手法へ` で締めてもよい）
+
+節ごとの中身、一つの題材で教え切る方法、図の水準は [`docs/teaching-article-playbook.md`](teaching-article-playbook.md) に従います。
 
 family の選び分け記事は `30秒でつかむ → まず確認すること → 条件付きの選び分け → うまくいったサインと切替サイン → 小さな比較の型 → 次に読む` です。定式化記事の型は [`docs/formulation-atlas.md`](formulation-atlas.md) にあります。
 型にない節（`コラム: …` など）は型の節の間に置けます。型より前に書かれた記事は `data/seeds/content_skeleton_pending.json` に載り、移行するとリストから外します（`uv run python scripts/content_skeleton_report.py --prune`）。
@@ -146,3 +148,18 @@ family の選び分け記事は `30秒でつかむ → まず確認すること 
 
 変更前後にPCとスマホ幅の実ブラウザ画面を見て、本文・図・操作のまとまりまで検収します。
 文字を縮めたり、説明を増やしたりして狭い画面を埋めません。実機が使えない場合は、ブラウザでの代替確認と実機未確認を分けて記録します。
+
+## 11. 記事本文の見た目は一つにする
+
+記事本文の見た目は、記事の種類（formulation、method、family、concept）や、explorableの有無で変えません。
+基準は線形最小二乗の記事（`#/learn/concept.linear-least-squares`）です。
+
+- 目次は本文の上に折りたたんで置き、本文は42remの列で読ませます。図だけがこの列より広がれます（`CompiledContent.tsx` の `compiled-content-layout--lesson`）。
+- 見出し、段落、リスト、リンク、コード、表、図のキャプションの見た目は、`site/src/styles.css` の `.markdown-body` の共通指定だけで決めます。
+- ページの種類ごとのCSS（`.formulation-article`、`.method-learning` など）から `.markdown-body` の中を指定しません。違いが必要に見えたら、共通指定を変えて全記事に効かせます。
+- ページの枠のCSSが本文へ漏れないようにします（例：`.page-panel p` は `:not(.markdown-body p)` で本文を除く）。
+
+この規則は二つのテストで守ります。
+
+- `site/src/features/content/article-style-contract.test.ts`：共通レイアウト以外のclassが `.markdown-body` を指定したら失敗します。
+- `site/e2e/typography-contract.spec.ts`：1280pxと375pxで、各種類の記事の見出し・段落・リスト・リンク・コード・表・キャプションの計算済みスタイルと本文の列の位置が、線形最小二乗と一致するかを比べます。

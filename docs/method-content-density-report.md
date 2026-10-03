@@ -8,7 +8,7 @@
 |---|---|---:|---:|---:|---:|---|
 | `active-set` | `M_ACTIVE_SET` | 65 | 6981 | 10 | 1 | pass |
 | `active-set-qp` | `M_ACTIVE_SET_QP` | 81 | 8253 | 9 | 1 | pass |
-| `adam` | `M_ADAM` | 115 | 7662 | 15 | 1 | pass |
+| `adam` | `M_ADAM` | 115 | 7778 | 15 | 1 | pass |
 | `adamw` | `M_ADAMW` | 64 | 3035 | 12 | 1 | pass |
 | `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 51 | 3585 | 11 | 2 | pass |
 | `admm` | `M_ADMM` | 44 | 2655 | 12 | 1 | pass |
@@ -18,7 +18,7 @@
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2504 | 12 | 1 | pass |
 | `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9562 | 16 | 1 | pass |
 | `bfgs` | `M_BFGS` | 49 | 5358 | 10 | 1 | pass |
-| `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 8485 | 13 | 2 | pass |
+| `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 10030 | 14 | 2 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |
 | `bundle-method` | `M_BUNDLE` | 59 | 5739 | 9 | 1 | pass |
 | `cdcl-sat` | `M_CDCL_SAT` | 44 | 3791 | 12 | 1 | pass |
@@ -26,7 +26,7 @@
 | `cobyla` | `M_COBYLA` | 56 | 2988 | 14 | 1 | pass |
 | `cobyqa` | `M_COBYQA` | 52 | 2800 | 12 | 1 | pass |
 | `constrained-continuous` | `MF_CONSTRAINED_NLP` | 58 | 6737 | 12 | 1 | pass |
-| `coordinate-descent` | `M_COORDINATE_DESCENT` | 53 | 6072 | 10 | 2 | pass |
+| `coordinate-descent` | `M_COORDINATE_DESCENT` | 53 | 6899 | 10 | 2 | pass |
 | `cp-sat` | `M_CP_SAT` | 66 | 3309 | 14 | 1 | pass |
 | `cp-search` | `M_CP_SEARCH` | 48 | 4801 | 13 | 1 | pass |
 | `density-filter` | `M_DENSITY_FILTER` | 65 | 2810 | 12 | 1 | pass |

@@ -27,9 +27,9 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
     beats: [],
   },
   "gradient-descent-valley": {
-    question: "同じ更新式でも、learning rateと谷の細長さで、収束・遅い収束・振動・発散が切り替わるのはなぜか。",
+    question: "同じ更新式でも、学習率と谷の細長さで、収束・遅い収束・振動・発散が切り替わるのはなぜか。",
     fixedConditions: "目的関数は f(x,y)=(x-1)^2+κ(y+2)^2 に固定し、勾配は解析式で厳密に与える。",
-    notImplied: "一般的な手法の優劣や、実問題で良いlearning rateを示すものではない。",
+    notImplied: "一般的な手法の優劣や、実問題で良い学習率を示すものではない。",
     beats: [
       {
         settings: { method: "gd", eta: 0.02, kappa: 20 },
@@ -103,7 +103,7 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
   "adam-step-ratio": {
     question: "Adamの一歩は、勾配の大きさが座標ごとに大きく違っても、なぜどの座標でもおよそη以下に収まり、どんなときに縮むのか。",
     fixedConditions: "目的関数は f(x,y)=(x-1)^2+20(y+2)^2、初期点は(4,3)、β2=0.999、ε=1e-8に固定する。ノイズは固定seedの正規乱数で、120歩まで計算する。",
-    notImplied: "ニューラルネットワークの学習でのAdamの性能、汎化、良いlearning rateを示すものではない。勾配降下法との優劣も示さない。",
+    notImplied: "ニューラルネットワークの学習でのAdamの性能、汎化、良い学習率を示すものではない。勾配降下法との優劣も示さない。",
     beats: [
       {
         settings: { eta: 0.1, noise: 0, beta1: 0.9, compare: "none" },

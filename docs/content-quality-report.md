@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `190`
+- Prose review warnings: `189`
 
 ## Concept publication floor
 
@@ -20,7 +20,7 @@
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 6947 | 12 | 4 | 0 | pass |
-| `concept.linear-least-squares` | 108 | 8972 | 16 | 10 | 0 | pass |
+| `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 3394 | 6 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 95 | 3295 | 9 | 4 | 0 | pass |
@@ -51,10 +51,10 @@
 ## Prose warning summary
 
 - `number.overprecise`: 95
-- `prose.choppy`: 6
+- `prose.choppy`: 7
 - `prose.work-report`: 10
-- `sentence.commas`: 75
-- `sentence.long`: 4
+- `sentence.commas`: 74
+- `sentence.long`: 3
 
 | Content | Warnings |
 |---|---:|
@@ -70,7 +70,7 @@
 | `basin-hopping` | 0 |
 | `bayesian-optimization` | 2 |
 | `bfgs` | 1 |
-| `branch-and-bound` | 0 |
+| `branch-and-bound` | 4 |
 | `branch-and-cut` | 0 |
 | `bundle-method` | 0 |
 | `cdcl-sat` | 1 |
@@ -88,7 +88,7 @@
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.knapsack-set-cover` | 0 |
-| `concept.linear-least-squares` | 5 |
+| `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 5 |
 | `concept.mixed-integer-linear-program` | 0 |
