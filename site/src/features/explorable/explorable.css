@@ -674,3 +674,14 @@
 .ex-surface-path { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; stroke-linejoin: round; }
 .ex-surface-dot { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 1; }
 .ex-surface-axes text { fill: var(--ex-ink); font-size: var(--type-label); font-weight: 700; }
+
+/* Newton's method: the fitted parabola, its stationary point, and the digits bars. */
+.newton-model { fill: none; stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.newton-vertex line { stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.newton-vertex circle { fill: var(--ex-panel); stroke: var(--ex-orange-ink); stroke-width: 2; }
+.newton-escape line { stroke: var(--ex-red); stroke-width: 2.5; }
+.newton-escape text { fill: var(--ex-red-ink); font-size: var(--type-label); font-weight: 700; }
+.newton-bar { fill: var(--ex-orange); }
+.newton-bar.is-hill { fill: var(--ex-red); }
+.newton-bar-gd { fill: var(--ex-ink-soft); fill-opacity: 0.45; }
+.newton-legend text { fill: var(--ex-ink); font-size: var(--type-label); }
