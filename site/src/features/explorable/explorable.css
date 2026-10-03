@@ -696,3 +696,10 @@
 .cma-line-f { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
 .cma-line-ratio { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
 .cma-now { stroke: var(--ex-ink-soft); stroke-width: 1; stroke-dasharray: 3 3; }
+
+/* Interior point: feasible disk, central path, and the barrier's level sets. */
+.ipm-feasible { fill: var(--ex-teal-wash); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.ipm-path { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.ipm-barrier-contour path { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.ipm-free circle { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
+.ipm-free text { fill: var(--ex-ink); font-size: var(--type-label); }

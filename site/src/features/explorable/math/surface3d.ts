@@ -20,6 +20,11 @@ export interface SurfaceSpec {
    * a deep, narrow valley stays visible; "linear" keeps differences between shallow valleys.
    */
   heightMode?: "log" | "linear";
+  /**
+   * Where the function is defined. Cells whose four corners all lie outside are not drawn, so a
+   * disk-shaped domain shows as a bowl with a wall rather than a bowl sunk in a square plateau.
+   */
+  domain?: (x: number, y: number) => boolean;
 }
 
 export interface Camera {
@@ -108,9 +113,15 @@ export function surfaceQuads(spec: SurfaceSpec, camera: Camera): SurfaceQuad[] {
     heights[i][j],
     bounds,
   );
+  const at = (i: number, j: number) => [
+    bounds.xMin + ((bounds.xMax - bounds.xMin) * i) / n,
+    bounds.yMin + ((bounds.yMax - bounds.yMin) * j) / n,
+  ] as const;
+  const inDomain = (i: number, j: number) => !spec.domain || spec.domain(...at(i, j));
   const quads: SurfaceQuad[] = [];
   for (let i = 0; i < n; i += 1) {
     for (let j = 0; j < n; j += 1) {
+      if (![inDomain(i, j), inDomain(i + 1, j), inDomain(i + 1, j + 1), inDomain(i, j + 1)].some(Boolean)) continue;
       const points = [cube(i, j), cube(i + 1, j), cube(i + 1, j + 1), cube(i, j + 1)];
       const normal = normalize(cross(subtract(points[2], points[0]), subtract(points[3], points[1])));
       const corners = points.map((point) => view(point, camera));

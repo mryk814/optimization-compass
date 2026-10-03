@@ -11706,6 +11706,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
@@ -11745,7 +11750,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約にバリア（障壁）を課して境界の内側を進み、主変数・双対変数・スラック変数・相補性を同時に更新して、大規模で滑らかなNLPを解く方法です。"
+      "summary": "非線形内点法は、不等式制約の縁の手前に対数の壁（バリア）を立て、境界の内側だけを通って答えに近づく方法です。壁の強さμを少しずつ小さくすると、壁つきの問題の最小点は中心パスに沿って縁の上の答えへ進み、μがそのまま残りの誤差の目安になります。"
     },
     {
       "aliases": [],
@@ -23774,6 +23779,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
@@ -27801,6 +27811,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
           "target_type": "source"
         },
         {

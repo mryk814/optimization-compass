@@ -6810,7 +6810,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6825,6 +6825,7 @@
             "S017",
             "S029",
             "S030",
+            "S055",
             "S056",
             "S064",
             "S087",
@@ -6850,13 +6851,14 @@
           ]
         },
         "source": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S017",
             "S029",
             "S030",
+            "S055",
             "S056",
             "S064",
             "S087"
