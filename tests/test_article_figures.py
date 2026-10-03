@@ -446,10 +446,10 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
 def test_articles_place_execution_results_before_long_diagnostic_sections() -> None:
     expected = {
         "content/methods/active-set-qp.md": "active-set-qp-execution.svg",
-        "content/methods/bayesian-optimization.md": "bayesian-optimization-execution.svg",
+        "content/methods/bayesian-optimization.md": "::: explorable bayes-opt-acquisition",
         "content/methods/family-expensive-black-box.md": "bayesian-optimization-execution.svg",
         "content/methods/gradient-descent.md": "gradient-family-execution.svg",
-        "content/methods/adam.md": "gradient-family-execution.svg",
+        "content/methods/adam.md": "::: explorable adam-step-ratio",
         "content/methods/momentum-sgd.md": "gradient-family-execution.svg",
         "content/methods/ilqr-ddp.md": "lqr-backward-forward-execution.svg",
         "content/methods/least-squares.md": "least-squares-fit-diagnostic.svg",

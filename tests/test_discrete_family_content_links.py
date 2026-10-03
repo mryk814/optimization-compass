@@ -23,8 +23,8 @@ def test_discrete_family_guide_connects_cases_and_search_tree_lessons() -> None:
     ):
         assert route in discrete.body
 
-    assert "実務Caseそのものではありません" in discrete.body
-    assert "一般性能ranking" in discrete.body
+    assert "実務事例そのものではありません" in discrete.body
+    assert "一般性能順位付け" in discrete.body
 
 
 def test_network_simplex_keeps_graph_pivot_and_failure_conditions_visible() -> None:
@@ -39,10 +39,10 @@ def test_network_simplex_keeps_graph_pivot_and_failure_conditions_visible() -> N
         assert route in network_simplex.body
 
     for concept in (
-        "全域木（spanning tree）",
+        "全域木",
         "被約費用",
         "節点ポテンシャル",
-        "無限容量の負費用cycle",
+        "無限容量の負費用閉路",
     ):
         assert concept in network_simplex.body
 

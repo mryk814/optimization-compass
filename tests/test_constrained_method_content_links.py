@@ -11,5 +11,5 @@ def test_slsqp_guide_keeps_the_general_feasibility_lesson_primary() -> None:
     assert slsqp.comparison_ids == ("COMPARE_CONSTRAINED_FAILURE",)
     assert "#/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH" in slsqp.body
     assert "#/compare/COMPARE_CONSTRAINED_FAILURE" in slsqp.body
-    assert "目的値だけが良いinfeasibleな点を成功と数えません" in slsqp.body
-    assert "solverの一般性能rankingには使いません" in slsqp.body
+    assert "目的値だけが良い実行不可能な点を成功と数えません" in slsqp.body
+    assert "ソルバーの一般的な性能の順位付けには使いません" in slsqp.body

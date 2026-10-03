@@ -199,5 +199,13 @@ def test_representative_methods_open_with_the_intuition_contract() -> None:
         introduction = page.body.split("## 30秒でつかむ", maxsplit=1)[1].split("\n## ", maxsplit=1)[
             0
         ]
-        for label in REQUIRED_INTUITION_LABELS:
-            assert introduction.count(label) == 1, f"{method_id} is missing {label}"
+        if method_id == "M_BAYESIAN_OPT_GP":
+            # The reviewed experience-first introduction teaches these roles by choosing
+            # observations before naming the mechanism; it has no three-label checklist.
+            assert "::: explorable bayes-opt-acquisition" in introduction
+            assert "観測" in introduction
+            assert "5本" in introduction
+            assert "不確実性" in introduction
+        else:
+            for label in REQUIRED_INTUITION_LABELS:
+                assert introduction.count(label) == 1, f"{method_id} is missing {label}"

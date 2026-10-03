@@ -21,10 +21,10 @@ def test_manifold_concept_covers_existing_geometry_relations() -> None:
     } <= set(page.related_ids)
     assert {
         "## 直感: 解は曲がった集合の上にある",
-        "## Euclidean updateで壊れるもの",
+        "## ユークリッド空間での更新で壊れるもの",
         "## 接空間から集合へ戻す",
         "## 表現の非一意性と特異点",
-        "## feasible iterateと収束は別の判定",
+        "## 可行な反復点と収束は別の判定",
         "## 次に読む",
     } <= set(page.body.splitlines())
 

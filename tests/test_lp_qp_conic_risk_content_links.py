@@ -28,7 +28,7 @@ def test_lp_qp_conic_guide_connects_cross_domain_risk_lessons() -> None:
         assert route in guide.body
 
     assert "電力市場／需要／送電網／契約を再現しません" in guide.body
-    assert "一般性能rankingや確率保証" in guide.body
+    assert "一般性能順位付けや確率保証" in guide.body
 
 
 def test_active_set_qp_separates_working_set_and_operator_splitting() -> None:
@@ -43,7 +43,7 @@ def test_active_set_qp_separates_working_set_and_operator_splitting() -> None:
     ):
         assert route in guide.body
 
-    assert "OSQPのようなoperator-splitting型" in guide.body
+    assert "OSQPのような作用素分割型" in guide.body
     assert "作業集合とは別の反復を使います" in guide.body
     assert "作業集合（working set）" in guide.body
     assert style_warnings(guide) == ()
@@ -61,9 +61,9 @@ def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
         assert route in guide.body
 
     for diagnostic in (
-        "主 feasibility 残差",
-        "双対 feasibility 残差",
-        "duality gap",
+        "主問題の実行可能性の残差",
+        "双対問題の実行可能性の残差",
+        "双対ギャップ",
     ):
         assert diagnostic in guide.body
 
@@ -83,10 +83,10 @@ def test_pdlp_keeps_first_order_stopping_contract_and_accuracy_scope_visible() -
         assert route in guide.body
 
     for diagnostic in (
-        "主 feasibility 残差",
-        "双対 feasibility 残差",
-        "duality gap",
-        "absolute／relative 尺度調整",
+        "主問題の実行可能性の残差",
+        "双対問題の実行可能性の残差",
+        "双対ギャップ",
+        "絶対値／相対値の尺度調整",
     ):
         assert diagnostic in guide.body
 

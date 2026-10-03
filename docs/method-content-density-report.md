@@ -16,7 +16,7 @@
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 62 | 5927 | 10 | 1 | pass |
 | `barrier-lp-qp` | `M_BARRIER_LP_QP` | 49 | 6381 | 9 | 1 | pass |
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2504 | 12 | 1 | pass |
-| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9249 | 15 | 1 | pass |
+| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9587 | 16 | 1 | pass |
 | `bfgs` | `M_BFGS` | 49 | 5358 | 10 | 1 | pass |
 | `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 8485 | 13 | 2 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |

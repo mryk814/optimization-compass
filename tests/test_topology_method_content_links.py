@@ -24,4 +24,4 @@ def test_simp_guide_separates_representation_and_update_rule_comparisons() -> No
 
     assert "設計表現" in simp.body
     assert "更新則" in simp.body
-    assert "一般性能のrankingには使いません" in simp.body
+    assert "一般性能の順位付けには使いません" in simp.body

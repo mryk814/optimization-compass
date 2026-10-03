@@ -36,6 +36,7 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     content_directory = tmp_path / "content"
     shutil.copytree(repository_root / "content", content_directory)
     shutil.copytree(repository_root / "site/public/media", tmp_path / "site/public/media")
+    shutil.copytree(repository_root / "site/public/figures", tmp_path / "site/public/figures")
     draft = (content_directory / "concepts/convexity.md").read_text(encoding="utf-8")
     draft = draft.replace(
         "content_id: concept.convexity",

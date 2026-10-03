@@ -34,9 +34,9 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     shape_body = shape.body
     failure_body = pages["geometry-update-failure-modes"].body
 
-    for phrase in ("geometry validity", "mesh quality", "state residual", "mesh refinement"):
+    for phrase in ("形状の妥当性", "メッシュ品質", "状態残差", "メッシュ細分化"):
         assert phrase in shape_body
-    for phrase in ("inversion", "負のJacobian", "checkerboard", "mesh dependence"):
+    for phrase in ("反転", "負のヤコビアン", "チェッカーボード", "メッシュ依存性"):
         assert phrase in failure_body
     assert "連続体の可行性" in failure_body
     assert "::: warning" in shape_body
@@ -49,7 +49,7 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     assert shape.comparison_ids == ("COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",)
     assert "#/gallery/shape-diffuser" in shape_body
     assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in shape_body
-    assert "parameter → geometry → mesh → physical state" in shape_body
+    assert "パラメータ → 形状 → メッシュ → 物理状態" in shape_body
     assert style_warnings(shape) == ()
     failure = pages["geometry-update-failure-modes"]
     assert failure.visualization_ids == (

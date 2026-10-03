@@ -17,7 +17,7 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
         "concept.path-terminal-constraints",
         "concept.time-discretization",
     ]
-    assert "## Roboticsでの読み替え" in family.body
+    assert "## ロボティクスでの読み替え" in family.body
     assert "#/learn/concept.receding-horizon" in family.body
     assert family.body.index("## 30秒でつかむ") < family.body.index("## まず読む: 5つの概念")
     assert family.visualization_ids == (

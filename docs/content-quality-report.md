@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `190`
+- Prose review warnings: `191`
 
 ## Concept publication floor
 
@@ -53,7 +53,7 @@
 - `number.overprecise`: 95
 - `prose.choppy`: 6
 - `prose.work-report`: 10
-- `sentence.commas`: 75
+- `sentence.commas`: 76
 - `sentence.long`: 4
 
 | Content | Warnings |
@@ -68,7 +68,7 @@
 | `augmented-lagrangian` | 0 |
 | `barrier-lp-qp` | 0 |
 | `basin-hopping` | 0 |
-| `bayesian-optimization` | 1 |
+| `bayesian-optimization` | 2 |
 | `bfgs` | 1 |
 | `branch-and-bound` | 0 |
 | `branch-and-cut` | 0 |

@@ -262,7 +262,16 @@ print(x_obs[np.argmin(y_obs)], y_obs.min().round(3))
 
 [Bayesian Optimization Theater](#/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS)では、固定seedの実行で、観測・代理モデル・獲得関数・次の点の関係を1コマずつ追えます。
 [獲得関数・ノイズ・Random Searchの比較](#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE)は、変えた条件を一つずつ並べます。評価のコストが場所によって違う場合は、[同一costのmulti-fidelity比較](#/compare/COMPARE_BO_MULTIFIDELITY_COST)で、反復回数ではなく支払ったコストをそろえて比べます。
+感度を変えた実行と基準となる実行は、比較ページから開けます。
 どれも決めた条件での一例で、手法の一般的な順位ではありません。
+
+### 費用や評価精度が違う場合
+
+手法の更新則、ライブラリの実装、比較の評価方針、実務での推奨は、別々に判断します。
+評価費用のモデルと目標の評価精度を先に決め、失敗した評価も同じ予算へ数えます。
+安い低精度の評価を使うなら、高精度の評価との差を補正するモデルも必要です。
+候補の良し悪しが低精度と高精度で反転する場合を、[低精度評価の偏りの教材](#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS)で確かめられます。
+失敗した領域の近傍を選び続けている場合は、悪い目的値と評価失敗を分けて記録し、探索範囲とモデルを見直します。
 
 ## 次に読む
 

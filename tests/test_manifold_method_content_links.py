@@ -13,7 +13,7 @@ def test_manifold_method_guides_link_each_run_and_the_shared_contrast() -> None:
     for page in (projected, riemannian):
         assert page.comparison_ids == ("COMPARE_SO3_PROJECTED_RIEMANNIAN",)
         assert "#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN" in page.body
-        assert "一般的な速度ranking" in page.body
+        assert "一般的な速度の順位" in page.body
 
     assert "#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT" in projected.body
     assert "#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT" in riemannian.body

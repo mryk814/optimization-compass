@@ -17,7 +17,7 @@ def test_nelder_mead_lessons_connect_initial_simplex_sensitivity() -> None:
         assert "#/theater/learning/SCENARIO_NM_QUADRATIC" in page.body
         assert "#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED" in page.body
         assert "#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX" in page.body
-        assert "一般性能ranking" in page.body
+        assert any(term in page.body for term in ("一般性能順位付け", "一般的な性能の順位付け"))
 
     assert "変えるのは初期単体の位置だけです" in method.body
-    assert "derivative-free family全体" in concept.body
+    assert "微分を使わない系統全体" in concept.body

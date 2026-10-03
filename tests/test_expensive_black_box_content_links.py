@@ -20,7 +20,7 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     )
     assert "#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE" in bayesian_optimization.body
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in bayesian_optimization.body
-    caveat = "個別のsensitivity runとbaselineは、比較ページから開けます"
+    caveat = "感度を変えた実行と基準となる実行は、比較ページから開けます"
     assert caveat in bayesian_optimization.body
 
     family = pages["family.expensive-black-box"]
@@ -31,7 +31,7 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     assert random_search.visualization_ids == ("ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",)
     assert random_search.comparison_ids == ("COMPARE_BO_ACQUISITION_NOISE_BASELINE",)
     assert "#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE" in random_search.body
-    assert "一般的なrankingは決めません" in random_search.body
+    assert "一般的な順位付けは決めません" in random_search.body
 
     pbt = pages["pbt"]
     for route in (

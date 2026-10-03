@@ -52,12 +52,12 @@ def test_bo_guidance_separates_method_defaults_evaluation_policy_and_recommendat
     method = (ROOT / "content/methods/bayesian-optimization.md").read_text(encoding="utf-8")
     family = (ROOT / "content/methods/family-expensive-black-box.md").read_text(encoding="utf-8")
 
-    for term in ("method", "implementation", "evaluation policy", "recommendation"):
+    for term in ("手法", "実装", "評価方針", "推奨"):
         assert term in method
-    assert "libraryのversionと既定値" in method
-    for term in ("評価費用（cost）のモデル", "目標のfidelity", "補正するモデル"):
+    assert "設定とversionを記録" in method
+    for term in ("評価費用のモデル", "目標の評価精度", "補正するモデル"):
         assert term in method
-    assert "低fidelityと高fidelityで反転" in method
+    assert "低精度と高精度で反転" in method
     assert "失敗した領域の近傍を選び続けている" in method
-    assert "high-fidelity-equivalent cost" in family
-    assert "一般的なpolicy順位は決めません" in family
+    assert "高忠実度評価に換算した費用" in family
+    assert "一般的な方針順位は決めません" in family

@@ -61,8 +61,8 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
     ):
         assert route in chance_risk.body
-    assert "risk treatmentだけをcontrast-onlyで読みます" in chance_risk.body
-    assert "一般性能rankingや将来分布への保証ではありません" in chance_risk.body
+    assert "リスクの扱いの違いだけを比較します" in chance_risk.body
+    assert "一般的な性能の順位付けや将来分布への保証ではありません" in chance_risk.body
     assert style_warnings(chance_risk) == ()
 
     constraint_class = pages["concept.constraint-class"]
@@ -74,12 +74,12 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         assert route in constraint_class.body
     for constraint_oracle in (
         "`g(x)`の値",
-        "Jacobian",
-        "Boolean論理",
-        "simulationが失敗した後",
+        "ヤコビアン",
+        "ブール論理",
+        "シミュレーションが失敗した後",
     ):
         assert constraint_oracle in constraint_class.body
-    assert "式／単位／tolerance／判定時点" in constraint_class.body
+    assert "式／単位／許容誤差／判定時点" in constraint_class.body
     assert style_warnings(constraint_class) == ()
 
     variable_domain = pages["concept.variable-domain"]
@@ -108,7 +108,7 @@ def test_concepts_scope_failed_evaluations_and_quotient_ambiguity() -> None:
     pages = _pages()
 
     pde = pages["concept.pde-constrained-optimization"]
-    assert "この教材の縮約定式化（reduced formulation）では" in pde.body
+    assert "この教材の縮約定式化では" in pde.body
     assert "状態計算が停止した評価を有効な観測として扱いません" in pde.body
     assert "状態に依存する目的値を確定できないためです" in pde.body
 

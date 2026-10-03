@@ -174,10 +174,10 @@ def test_so3_case_problem_and_secondary_spd_content_close_the_declared_slice() -
     spd = (ROOT / "content/concepts/spd-matrix-geometry.md").read_text(encoding="utf-8")
     for distinction in (
         "Cholesky",
-        "matrix exponential",
+        "行列指数",
         "PSD境界",
-        "minimum eigenvalue",
-        "condition number",
+        "最小固有値",
+        "条件数",
     ):
         assert distinction in spd
     assert "S108" in spd
