@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from xml.etree import ElementTree
 
@@ -452,6 +453,21 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
         assert root.find("svg:title", namespace).text
         assert root.find("svg:desc", namespace).text
         assert "実行生成:" in payload.decode("utf-8")
+
+
+def test_article_figures_keep_text_readable_on_phone_and_pc() -> None:
+    # docs/teaching-article-playbook.md §5.4: drawn 440 wide and shown 1:1 on a PC and at
+    # 353/440 on a 375 px phone, so 15-18 unit text reads 12-14.4 px and never above 18 px.
+    font_size = re.compile(r'font-size(?:="|:\s*)([\d.]+)|font:[^;"]*?([\d.]+)px')
+    for name, payload in generate_article_figures(VERSION).items():
+        svg = payload.decode("utf-8")
+        root = ElementTree.fromstring(payload)
+        assert root.attrib["width"] == "440", name
+        assert root.attrib["viewBox"] == f"0 0 440 {root.attrib['height']}", name
+        sizes = [float(a or b) for a, b in font_size.findall(svg)]
+        assert sizes, name
+        assert min(sizes) * 353 / 440 >= 12, name
+        assert max(sizes) <= 18, name
 
 
 def test_articles_place_execution_results_before_long_diagnostic_sections() -> None:
