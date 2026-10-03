@@ -2113,6 +2113,9 @@ caption {
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
 .markdown-body figure img { display: block; width: 100%; height: auto; border: 1px solid #d9dbd4; border-radius: .45rem; }
+/* Execution figures (site/public/media, scripts/generate_article_figures.py) carry width/height
+   attributes and are drawn for that size; never stretch them past it, or their text grows. */
+.markdown-body figure img[src*="media/"] { width: auto; max-width: 100%; }
 .markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }

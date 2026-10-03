@@ -5806,8 +5806,11 @@ def _gradient_family_svg(dataset_version: str) -> str:
         "momentum": ("Momentum", "#c56b32"),
         "adam": ("Adam", "#456b92"),
     }
-    plot_x, plot_y, plot_width, plot_height = 60.0, 120.0, 680.0, 420.0
+    title = "同じ谷でも、更新則で軌跡が変わる"
+    body, y = _figure_heading(title, "f(x,y)=100x²+y²・同じ初期点・評価40回・固定設定")
     x_bounds, y_bounds = (-1.8, 1.6), (-0.2, 1.8)
+    plot_x, plot_y, plot_width = float(FIGURE_MARGIN), y + 8, float(CONTENT_WIDTH)
+    plot_height = round(plot_width * 0.62)
 
     def project(point: tuple[float, float] | list[float]) -> tuple[float, float]:
         x, y = point
@@ -5816,57 +5819,53 @@ def _gradient_family_svg(dataset_version: str) -> str:
             plot_y + plot_height - (y - y_bounds[0]) / (y_bounds[1] - y_bounds[0]) * plot_height,
         )
 
-    elements = [
-        _svg_open(
-            "同じ谷でも、更新則で軌跡が変わる",
-            (
-                "f(x,y)=100x²+y²を同じ初期点と40回の評価予算で実行した結果です。"
-                "Gradient Descent、Momentum、Adamの軌跡と最終目的値を示します。"
-            ),
-            height=900,
-        ),
-        '<rect width="800" height="900" rx="24" fill="#f7f6f1"/>',
-        '<text x="60" y="54" class="title">同じ谷でも、更新則で軌跡が変わる</text>',
-        (
-            '<text x="60" y="84" class="subtitle">'
-            "f(x,y)=100x²+y² · 同じ初期点 · 40 oracle evaluations · fixed preset"
-            "</text>"
-        ),
-        (
-            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
-            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-    ]
+    body.append(
+        f'<rect x="{plot_x:g}" y="{plot_y:g}" width="{plot_width:g}" height="{plot_height:g}" '
+        'rx="12" fill="#fff" stroke="#cfd8d1"/>'
+    )
+    body.append(
+        f'<clipPath id="gradient-plot"><rect x="{plot_x:g}" y="{plot_y:g}" '
+        f'width="{plot_width:g}" height="{plot_height:g}" rx="12"/></clipPath>'
+    )
+    contours = []
+    center = project((0.0, 0.0))
     for level in (1.0, 4.0, 16.0, 64.0, 256.0):
         radius_x, radius_y = math.sqrt(level / 100.0), math.sqrt(level)
-        center = project((0.0, 0.0))
         rx = radius_x / (x_bounds[1] - x_bounds[0]) * plot_width
         ry = radius_y / (y_bounds[1] - y_bounds[0]) * plot_height
-        elements.append(
+        contours.append(
             f'<ellipse cx="{center[0]:.2f}" cy="{center[1]:.2f}" rx="{rx:.2f}" '
             f'ry="{ry:.2f}" fill="none" stroke="#d9dfda" stroke-width="1.5"/>'
         )
+    body.append(f'<g clip-path="url(#gradient-plot)">{"".join(contours)}</g>')
     optimum = project((0.0, 0.0))
-    elements.extend(
+    body.extend(
         [
             (
-                f'<line x1="{optimum[0]:.2f}" y1="{plot_y}" x2="{optimum[0]:.2f}" '
-                f'y2="{plot_y + plot_height}" stroke="#e4e8e4"/>'
+                f'<line x1="{optimum[0]:.2f}" y1="{plot_y:g}" x2="{optimum[0]:.2f}" '
+                f'y2="{plot_y + plot_height:g}" stroke="#e4e8e4"/>'
             ),
             (
-                f'<line x1="{plot_x}" y1="{optimum[1]:.2f}" x2="{plot_x + plot_width}" '
+                f'<line x1="{plot_x:g}" y1="{optimum[1]:.2f}" x2="{plot_x + plot_width:g}" '
                 f'y2="{optimum[1]:.2f}" stroke="#e4e8e4"/>'
             ),
             (
-                f'<circle cx="{optimum[0]:.2f}" cy="{optimum[1]:.2f}" r="6" '
+                f'<circle cx="{optimum[0]:.2f}" cy="{optimum[1]:.2f}" r="5" '
                 'fill="#fff" stroke="#1f2924" stroke-width="2"/>'
             ),
             (
-                f'<text x="{optimum[0] + 12:.2f}" y="{optimum[1] - 10:.2f}" '
-                'class="axis">optimum</text>'
+                f'<text x="{optimum[0] + 10:.2f}" y="{optimum[1] + 20:.2f}" '
+                'class="axis halo">最適解</text>'
             ),
         ]
     )
+    rows: list[str] = []
+    row_y = plot_y + plot_height + 30
+    legend, row_y = _text_lines(
+        FIGURE_MARGIN, row_y, "○ 開始点　● 終了点　楕円は目的関数の等高線", "note"
+    )
+    rows.extend(legend)
+    row_y += 10
     for trace in traces:
         method = str(trace.frames[0].payload["method"])
         label, color = styles[method]
@@ -5876,58 +5875,58 @@ def _gradient_family_svg(dataset_version: str) -> str:
         point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
         start_x, start_y = points[0]
         end_x, end_y = points[-1]
-        elements.extend(
+        body.extend(
             [
                 (
                     f'<polyline points="{point_string}" fill="none" stroke="{color}" '
-                    'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
+                    'stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
                 ),
                 (
-                    f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="6" fill="#fff" '
-                    f'stroke="{color}" stroke-width="3"/>'
+                    f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="5" fill="#fff" '
+                    f'stroke="{color}" stroke-width="2.5"/>'
                 ),
-                f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="7" fill="{color}"/>',
+                f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="6" fill="{color}"/>',
             ]
         )
         terminal_value = _objective_value(trace.frames[-1])
-        row_y = 612 + list(styles).index(method) * 72
-        elements.extend(
+        status = TERMINAL_STATUS_JA[trace.terminal_status]
+        rows.extend(
             [
                 (
-                    f'<line x1="60" y1="{row_y}" x2="100" y2="{row_y}" '
-                    f'stroke="{color}" stroke-width="5"/>'
-                ),
-                f'<text x="116" y="{row_y + 6}" class="method">{html.escape(label)}</text>',
-                (
-                    f'<text x="414" y="{row_y + 6}" class="metric">'
-                    f"final f = {_metric(terminal_value)}</text>"
+                    f'<line x1="{FIGURE_MARGIN}" y1="{row_y - 5}" x2="{FIGURE_MARGIN + 28}" '
+                    f'y2="{row_y - 5}" stroke="{color}" stroke-width="4"/>'
                 ),
                 (
-                    f'<text x="740" y="{row_y + 6}" text-anchor="end" class="status">'
-                    f"{html.escape(trace.terminal_status)} · "
-                    f"{trace.frames[-1].oracle_evaluations} evals"
-                    "</text>"
+                    f'<text x="{FIGURE_MARGIN + 38}" y="{row_y}" class="method">'
+                    f"{html.escape(label)}</text>"
+                ),
+                (
+                    f'<text x="{FIGURE_WIDTH - FIGURE_MARGIN}" y="{row_y}" text-anchor="end" '
+                    f'class="metric">最終 f = {_metric(terminal_value)}</text>'
+                ),
+                (
+                    f'<text x="{FIGURE_MARGIN + 38}" y="{row_y + 22}" class="status">'
+                    f"評価{trace.frames[-1].oracle_evaluations}回 · {status}</text>"
                 ),
             ]
         )
-    elements.extend(
-        [
-            '<text x="60" y="570" class="note">○ start　● terminal　等高線は目的関数値</text>',
-            (
-                '<text x="60" y="838" class="caption">'
-                "実行生成: optimization_compass.traces.generate_gradient_bundle"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="60" y="870" class="caveat">'
-                "この固定presetの軌跡であり、一般的な性能rankingではありません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        row_y += 54
+    body.extend(rows)
+    footer, height = _figure_footer(
+        row_y + 4,
+        f"optimization_compass.traces.generate_gradient_bundle · dataset {dataset_version}",
+        "この固定設定での軌跡で、一般的な性能の順位ではありません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "f(x,y)=100x²+y²を同じ初期点と40回の評価予算で実行した結果です。"
+            "Gradient Descent、Momentum、Adamの軌跡と最終目的値を示します。"
+        ),
+        height,
+        body,
+    )
 
 
 def _portfolio_risk_svg(dataset_version: str) -> str:
@@ -6850,6 +6849,166 @@ def _svg_open(title: str, description: str, *, width: int = 800, height: int) ->
         'role="img" aria-labelledby="figure-title figure-description">'
         f'<title id="figure-title">{html.escape(title)}</title>'
         f'<desc id="figure-description">{html.escape(description)}</desc>'
+    )
+
+
+# Execution figures are drawn FIGURE_WIDTH units wide with width/height attributes equal to the
+# viewBox, so a PC shows them 1:1 and a 375 px phone (353 px of article width) at about 0.8.
+# Text is drawn at 15-18 units: >= 12 px on the phone and <= 18 px on a PC
+# (docs/teaching-article-playbook.md §5.4). Side-by-side panels are stacked instead of shrunk.
+FIGURE_WIDTH = 440
+FIGURE_MARGIN = 20
+CONTENT_WIDTH = FIGURE_WIDTH - 2 * FIGURE_MARGIN
+TEXT_SIZE = {"title": 18, "panel-title": 17, "method": 16, "metric": 16, "body": 15}
+TERMINAL_STATUS_JA = {
+    "completed": "完了",
+    "converged": "収束",
+    "budget_exhausted": "評価予算を使い切り",
+    "diverged": "発散",
+    "stopped": "停止",
+    "failed": "失敗",
+}
+_BREAK_AFTER = set(" 、。，,・·/=")
+
+
+def _is_wide(character: str) -> bool:
+    return bool(character) and (ord(character) >= 0x2E80 or character in "○●□■△▲◇◆→←↑↓")
+
+
+def _text_width(text: str, size: float) -> float:
+    """Conservative width estimate for system-ui text, used only to wrap and place labels."""
+    return sum(size * (1.0 if _is_wide(character) else 0.6) for character in text)
+
+
+def _wrap(text: str, size: float, width: float = CONTENT_WIDTH) -> list[str]:
+    """Wrap into as few lines as fit ``width`` and even out their lengths.
+
+    Breaks after punctuation, spaces and script changes are preferred; a break between two
+    Japanese characters is used only when a line cannot fit otherwise. ``\\n`` forces a break.
+    """
+    lines: list[str] = []
+    for part in text.split("\n"):
+        for strong_only in (True, False):
+            segments = _wrap_segments(part, strong_only=strong_only)
+            greedy = _pack_segments(segments, size, width)
+            if not strong_only or all(_text_width(line, size) <= width for line in greedy):
+                break
+        low, high = width / max(1, len(greedy)), width
+        while len(greedy) > 1 and high - low > 1:
+            middle = (low + high) / 2
+            if len(_pack_segments(segments, size, middle)) == len(greedy):
+                high = middle
+            else:
+                low = middle
+        lines.extend(_pack_segments(segments, size, high) if len(greedy) > 1 else greedy)
+    return lines
+
+
+def _wrap_segments(text: str, *, strong_only: bool) -> list[str]:
+    segments: list[str] = []
+    current = ""
+    for index, character in enumerate(text):
+        current += character
+        following = text[index + 1] if index + 1 < len(text) else ""
+        strong = (
+            character in _BREAK_AFTER
+            or (character == "." and following.isalpha())
+            or (bool(following) and _is_wide(character) != _is_wide(following))
+        )
+        if strong or (not strong_only and _is_wide(character) and _is_wide(following)):
+            segments.append(current)
+            current = ""
+    if current:
+        segments.append(current)
+    return segments
+
+
+def _pack_segments(segments: list[str], size: float, width: float) -> list[str]:
+    lines: list[str] = []
+    line = ""
+    for segment in segments:
+        if line and _text_width((line + segment).rstrip(), size) > width:
+            lines.append(line.rstrip())
+            line = segment.lstrip()
+        else:
+            line += segment
+    if line.strip():
+        lines.append(line.rstrip())
+    return lines
+
+
+def _text_lines(
+    x: float,
+    y: float,
+    text: str,
+    css_class: str,
+    *,
+    size: float = TEXT_SIZE["body"],
+    width: float = CONTENT_WIDTH,
+    line_height: float | None = None,
+    anchor: str | None = None,
+) -> tuple[list[str], float]:
+    """Wrapped text whose first baseline is ``y``; returns the elements and the next baseline."""
+    step = line_height if line_height is not None else round(size * 1.4)
+    anchor_attribute = f' text-anchor="{anchor}"' if anchor else ""
+    elements = []
+    for line in _wrap(text, size, width):
+        elements.append(
+            f'<text x="{x:g}" y="{y:g}"{anchor_attribute} class="{css_class}">'
+            f"{html.escape(line)}</text>"
+        )
+        y += step
+    return elements, y
+
+
+def _figure_heading(title: str, subtitle: str) -> tuple[list[str], float]:
+    """Title and subtitle at the top of a figure; returns the elements and the next free y."""
+    elements, y = _text_lines(FIGURE_MARGIN, 34, title, "title", size=TEXT_SIZE["title"])
+    subtitle_elements, y = _text_lines(FIGURE_MARGIN, y, subtitle, "subtitle")
+    return elements + subtitle_elements, y - 4
+
+
+def _figure_footer(y: float, provenance: str, caveat: str) -> tuple[list[str], float]:
+    """Provenance (``実行生成: ...``) and caveat lines; returns the elements and figure height."""
+    elements, y = _text_lines(FIGURE_MARGIN, y, f"実行生成: {provenance}", "caption")
+    caveat_elements, y = _text_lines(FIGURE_MARGIN, y + 4, caveat, "caveat")
+    return elements + caveat_elements, y - 2
+
+
+def _figure_document(title: str, description: str, height: float, body: list[str]) -> str:
+    height = math.ceil(height)
+    return "".join(
+        [
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {FIGURE_WIDTH} {height}" '
+            f'width="{FIGURE_WIDTH}" height="{height}" '
+            'role="img" aria-labelledby="figure-title figure-description">'
+            f'<title id="figure-title">{html.escape(title)}</title>'
+            f'<desc id="figure-description">{html.escape(description)}</desc>',
+            f'<rect width="{FIGURE_WIDTH}" height="{height}" rx="16" fill="#f7f6f1"/>',
+            *body,
+            _figure_style(),
+            "</svg>\n",
+        ]
+    )
+
+
+def _figure_style() -> str:
+    return (
+        "<style>"
+        "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d;"
+        f"font-size:{TEXT_SIZE['body']}px}}"
+        f".title{{font-size:{TEXT_SIZE['title']}px;font-weight:750}}"
+        ".subtitle{fill:#617068}"
+        f".panel-title{{font-size:{TEXT_SIZE['panel-title']}px;font-weight:750}}"
+        f".method{{font-size:{TEXT_SIZE['method']}px;font-weight:750}}"
+        f".metric,.metric-value{{font-size:{TEXT_SIZE['metric']}px;"
+        "font-variant-numeric:tabular-nums}"
+        ".metric-value{font-weight:750}"
+        ".status,.axis,.note{fill:#617068}"
+        ".caption{fill:#46554d}"
+        ".caveat{fill:#7a4b38}"
+        ".halo{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}"
+        "</style>"
     )
 
 
