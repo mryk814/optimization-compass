@@ -9,7 +9,7 @@ import re
 from pathlib import Path
 
 from optimization_compass.constraint_geometry import generate_so3_traces
-from optimization_compass.derived_media import render_nelder_mead_static_svg
+from optimization_compass.derived_media import _best_trajectory, _plot_bounds
 from optimization_compass.learning_slices import (
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
@@ -76,7 +76,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "network-simplex-pivot-execution.svg": _network_simplex_pivot_svg(dataset_version).encode(
             "utf-8"
         ),
-        "nelder-mead-execution.svg": _nelder_mead_svg(dataset_version),
+        "nelder-mead-execution.svg": _nelder_mead_svg(dataset_version).encode("utf-8"),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -105,27 +105,131 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     }
 
 
-def _nelder_mead_svg(dataset_version: str) -> bytes:
+def _nelder_mead_svg(dataset_version: str) -> str:
     trace = generate_nelder_mead_trace(
         problem_instance_id="OBJECTIVE_QUADRATIC_2D",
         trace_id="nelder-mead-quadratic",
         dataset_version=dataset_version,
     )
-    rendered = render_nelder_mead_static_svg(
-        scenario=_visualization_scenario(trace),
-        trace=trace,
-    ).decode("utf-8")
-    return (
-        rendered.replace(
-            'aria-labelledby="title description"',
-            'aria-labelledby="figure-title figure-description"',
-            1,
-        )
-        .replace('id="title"', 'id="figure-title"', 1)
-        .replace('id="description"', 'id="figure-description"', 1)
-        .replace(">Scenario SCENARIO_NM_QUADRATIC", ">実行生成: Scenario SCENARIO_NM_QUADRATIC", 1)
-        .encode("utf-8")
+    scenario = _visualization_scenario(trace)
+    if scenario.guided_story is None:
+        raise ValueError("the Nelder-Mead article figure requires an authored guided story")
+    terminal = trace.frames[scenario.guided_story.steps[-1].frame_index]
+    simplex = [point.coordinates for point in terminal.points if point.role == "simplex-vertex"]
+    if len(simplex) != 3:
+        raise ValueError("Nelder-Mead article figure requires three terminal simplex vertices")
+    x_min, x_max, y_min, y_max = _plot_bounds(trace)
+    trajectory = _best_trajectory(trace.frames)
+
+    initial_x, initial_y = (float(value) for value in trace.frames[0].points[0].coordinates)
+    title = scenario.title_ja
+    body, y = _figure_heading(
+        title, f"f(x,y)=100x²+y²・初期点 ({initial_x:g}, {initial_y:g})・決定論的な実行"
     )
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 26}" '
+            f'y2="{legend_y - 5:g}" stroke="#9a462b" stroke-width="3.5"/>',
+            f'<text x="{FIGURE_MARGIN + 34}" y="{legend_y:g}" class="note">最良点の軌跡</text>',
+            f'<polygon points="{FIGURE_MARGIN + 150},{legend_y + 1:g} {FIGURE_MARGIN + 164},'
+            f'{legend_y - 13:g} {FIGURE_MARGIN + 176},{legend_y + 1:g}" fill="#9fc2ad" '
+            'stroke="#245c42" stroke-width="2"/>',
+            f'<text x="{FIGURE_MARGIN + 184}" y="{legend_y:g}" class="note">終了時のsimplex</text>',
+        ]
+    )
+    plot_size = 320.0
+    panel, top, panel_bottom = _panel(legend_y + 14, "等高線の上で最良点が動く", plot_size + 30)
+    body.extend(panel)
+    plot_x, plot_y = (FIGURE_WIDTH - plot_size) / 2 + 10, top
+
+    def project(point: list[float] | tuple[float, float]) -> tuple[float, float]:
+        return (
+            plot_x + (float(point[0]) - x_min) / (x_max - x_min) * plot_size,
+            plot_y + plot_size - (float(point[1]) - y_min) / (y_max - y_min) * plot_size,
+        )
+
+    body.append(
+        f'<rect x="{plot_x:g}" y="{plot_y:g}" width="{plot_size:g}" height="{plot_size:g}" '
+        'fill="#f1f5f0" stroke="#d4ddd6"/>'
+    )
+    body.append(
+        f'<clipPath id="nm-plot"><rect x="{plot_x:g}" y="{plot_y:g}" width="{plot_size:g}" '
+        f'height="{plot_size:g}"/></clipPath>'
+    )
+    center_x, center_y = project((0.0, 0.0))
+    contours = []
+    for level in (1.0, 4.0, 16.0, 64.0, 256.0):
+        radius_x = math.sqrt(level / 100.0) / (x_max - x_min) * plot_size
+        radius_y = math.sqrt(level) / (y_max - y_min) * plot_size
+        contours.append(
+            f'<ellipse cx="{center_x:.2f}" cy="{center_y:.2f}" rx="{radius_x:.2f}" '
+            f'ry="{radius_y:.2f}" fill="none" stroke="#b9c9bd" stroke-width="1.5"/>'
+        )
+    body.append(f'<g clip-path="url(#nm-plot)">{"".join(contours)}</g>')
+    for tick in (-4, -2, 0, 2, 4):
+        tick_x, _ = project((float(tick), 0.0))
+        _, tick_y = project((0.0, float(tick)))
+        body.extend(
+            [
+                f'<text x="{tick_x:.2f}" y="{plot_y + plot_size + 20:g}" text-anchor="middle" '
+                f'class="axis">{tick}</text>',
+                f'<text x="{plot_x - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{tick}</text>',
+            ]
+        )
+    path = " ".join("{:.2f},{:.2f}".format(*project(point)) for point in trajectory)
+    vertices = " ".join("{:.2f},{:.2f}".format(*project(point)) for point in simplex)
+    start_x, start_y = project(trajectory[0])
+    body.extend(
+        [
+            f'<polyline points="{path}" fill="none" stroke="#9a462b" stroke-width="3.5" '
+            'stroke-linejoin="round" stroke-linecap="round"/>',
+            f'<polygon points="{vertices}" fill="#9fc2ad" fill-opacity="0.55" '
+            'stroke="#245c42" stroke-width="3"/>',
+            f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="5" fill="#fff" '
+            'stroke="#9a462b" stroke-width="2.5"/>',
+            f'<text x="{start_x:.2f}" y="{start_y - 12:.2f}" text-anchor="middle" '
+            'class="method halo">最初の最良点</text>',
+            f'<path d="M {center_x - 9:.2f} {center_y:.2f} H {center_x + 9:.2f} '
+            f'M {center_x:.2f} {center_y - 9:.2f} V {center_y + 9:.2f}" stroke="#245c42" '
+            'stroke-width="2.5"/>',
+            f'<text x="{center_x + 14:.2f}" y="{center_y + 24:.2f}" class="method halo" '
+            'fill="#245c42">最適解 (0, 0)</text>',
+        ]
+    )
+    summary, y = _text_lines(
+        FIGURE_MARGIN,
+        panel_bottom + 30,
+        "線は各反復の最良点をつないだものです。終了時のsimplexは最適解のすぐ近くにあり、"
+        "この縮尺では点に見えます。",
+        "note",
+    )
+    body.extend(summary)
+    rows, y = _metric_rows(
+        y + 12,
+        (
+            (
+                "目的値",
+                f"{_objective_value(trace.frames[0]):g} → "
+                f"{_metric(_objective_value(trace.frames[-1]))}",
+            ),
+            (
+                "評価回数",
+                f"{trace.frames[-1].oracle_evaluations}回 · "
+                f"{TERMINAL_STATUS_JA[trace.terminal_status]}",
+            ),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"Scenario {scenario.scenario_id} · optimization_compass.traces."
+        f"generate_nelder_mead_trace · dataset {dataset_version}",
+        scenario.lesson.limitations_ja,
+    )
+    body.extend(footer)
+    return _figure_document(title, scenario.lesson.text_alternative.ja, height, body)
 
 
 def _active_set_qp_objective(point: tuple[float, float]) -> float:
@@ -2245,12 +2349,41 @@ def _simulated_annealing_svg(dataset_version: str) -> str:
     if not isinstance(history, tuple) or not isinstance(bounds, tuple):
         raise TypeError("simulated-annealing teaching probe collections must be tuples")
 
-    width, height = 640, 1080
-    plot_left, plot_right = 74.0, 594.0
-    landscape_top, landscape_bottom = 194.0, 470.0
-    trace_top, trace_bottom = 628.0, 894.0
+    title = "現在の点は悪化しても、最良点は手放さない"
+    body, y = _figure_heading(title, "1次元Rastrigin・seed 7・400反復・初期温度 5.0・冷却率 0.985")
+    legend_y = y + 14
+    legend = (
+        (
+            '<line x1="{x}" y1="{y}" x2="{x2}" y2="{y}" stroke="#d67835" stroke-width="3"/>',
+            "現在の点",
+        ),
+        (
+            '<line x1="{x}" y1="{y}" x2="{x2}" y2="{y}" stroke="#2c7564" stroke-width="4.5"/>',
+            "それまでの最良",
+        ),
+        (
+            '<line x1="{x}" y1="{y}" x2="{x2}" y2="{y}" stroke="#345d6b" stroke-width="2.5" '
+            'stroke-dasharray="6 5"/>',
+            "温度（初期値で正規化）",
+        ),
+        (
+            '<circle cx="{cx}" cy="{y}" r="5" fill="#fff" stroke="#9f552c" stroke-width="2"/>',
+            "受理した悪化",
+        ),
+    )
+    for index, (shape, label) in enumerate(legend):
+        key_x = FIGURE_MARGIN + (index % 2) * 190
+        key_y = legend_y + (index // 2) * 24
+        body.append(shape.format(x=key_x, x2=key_x + 24, cx=key_x + 12, y=f"{key_y - 5:g}"))
+        body.append(f'<text x="{key_x + 32}" y="{key_y:g}" class="note">{label}</text>')
+    plot_left, plot_right = 56.0, 404.0
     lower_bound, upper_bound = (float(value) for value in bounds)
     objective_max = 42.0
+    panel, top, panel_bottom = _panel(
+        legend_y + 24 + 14, "受理された状態は、いくつもの谷をまたぐ", 216
+    )
+    body.extend(panel)
+    landscape_top, landscape_bottom = top + 14, top + 184
 
     def position_x(value: float) -> float:
         return plot_left + (value - lower_bound) / (upper_bound - lower_bound) * (
@@ -2262,6 +2395,49 @@ def _simulated_annealing_svg(dataset_version: str) -> str:
             landscape_bottom - landscape_top
         )
 
+    landscape = " ".join(
+        f"{position_x(x):.2f},{landscape_y(_simulated_annealing_objective(x)):.2f}"
+        for x in (lower_bound + index / 320 * (upper_bound - lower_bound) for index in range(321))
+    )
+    body.append(
+        f'<polyline points="{landscape}" fill="none" stroke="#345d6b" '
+        'stroke-width="2" stroke-linejoin="round"/>'
+    )
+    for item in history[1:]:
+        if not bool(item["accepted"]):
+            continue
+        iteration = int(item["iteration"])
+        opacity = 0.28 + 0.52 * (1.0 - iteration / int(probe["iterations"]))
+        body.append(
+            f'<circle cx="{position_x(float(item["x"])):.2f}" '
+            f'cy="{landscape_y(float(item["objective"])):.2f}" r="3" '
+            f'fill="#d67835" opacity="{opacity:.2f}"/>'
+        )
+    start_x = position_x(float(probe["initial_x"]))
+    start_y = landscape_y(float(probe["initial_objective"]))
+    best_x = position_x(float(probe["best_x"]))
+    best_y = landscape_y(float(probe["best_objective"]))
+    body.extend(
+        [
+            f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="6" fill="#102a2e"/>',
+            f'<text x="{start_x - 9:.2f}" y="{start_y - 9:.2f}" text-anchor="end" '
+            'class="method halo">開始点</text>',
+            f'<circle cx="{best_x:.2f}" cy="{best_y:.2f}" r="6.5" fill="#2c7564"/>',
+            f'<text x="{best_x + 10:.2f}" y="{best_y - 8:.2f}" class="method halo" '
+            'fill="#2c7564">最良点</text>',
+        ]
+    )
+    for tick in (-5, -3, -1, 1, 3, 5):
+        body.append(
+            f'<text x="{position_x(float(tick)):.2f}" y="{landscape_bottom + 22:g}" '
+            f'text-anchor="middle" class="axis">{tick}</text>'
+        )
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "温度は下がる。それでも現在の点は上がりうる", 230
+    )
+    body.extend(panel)
+    trace_top, trace_bottom = top + 10, top + 190
+
     def iteration_x(iteration: int) -> float:
         return plot_left + iteration / int(probe["iterations"]) * (plot_right - plot_left)
 
@@ -2272,10 +2448,16 @@ def _simulated_annealing_svg(dataset_version: str) -> str:
         ratio = value / float(probe["initial_temperature"])
         return trace_bottom - ratio * (trace_bottom - trace_top)
 
-    landscape = " ".join(
-        f"{position_x(x):.2f},{landscape_y(_simulated_annealing_objective(x)):.2f}"
-        for x in (lower_bound + index / 320 * (upper_bound - lower_bound) for index in range(321))
-    )
+    for tick in (0, 10, 20, 30, 40):
+        tick_y = trace_y(float(tick))
+        body.extend(
+            [
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#e4ebe7" stroke-width="1"/>',
+                f'<text x="{plot_left - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{tick}</text>',
+            ]
+        )
     current_trace = " ".join(
         f"{iteration_x(int(item['iteration'])):.2f},{trace_y(float(item['objective'])):.2f}"
         for item in history
@@ -2288,170 +2470,67 @@ def _simulated_annealing_svg(dataset_version: str) -> str:
         f"{iteration_x(int(item['iteration'])):.2f},{temperature_y(float(item['temperature'])):.2f}"
         for item in history
     )
-    accepted_positions = [
-        (float(item["x"]), float(item["objective"]), int(item["iteration"]))
-        for item in history[1:]
-        if bool(item["accepted"])
-    ]
-    worsening_positions = [
-        (int(item["iteration"]), float(item["objective"]))
-        for item in history[1:]
-        if bool(item["accepted_worsening"])
-    ]
-
-    elements = [
-        (
-            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-            f'viewBox="0 0 {width} {height}" role="img" '
-            'aria-labelledby="figure-title figure-description">'
-        ),
-        '<title id="figure-title">Simulated Annealingで悪化移動を受理する固定実行</title>',
-        (
-            '<desc id="figure-description">1次元Rastrigin関数を初期点3.5から400反復探索する'
-            "固定seed実行。高温の序盤では悪化移動も受理して複数の谷を移動し、"
-            "best-so-farは悪化させず保持する。目的値は32.25から0.00076まで改善する。</desc>"
-        ),
-        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
-        '<text x="32" y="48" class="sa-title">currentは悪化しても、bestは手放さない</text>',
-        (
-            '<text x="32" y="80" class="sa-subtitle">'
-            "1D Rastrigin · seed 7 · 400 iterations · T₀ 5.0 · cooling 0.985</text>"
-        ),
-        '<line x1="32" y1="116" x2="58" y2="116" stroke="#d67835" stroke-width="5"/>',
-        '<text x="68" y="122" class="sa-legend">current</text>',
-        '<line x1="164" y1="116" x2="190" y2="116" stroke="#2c7564" stroke-width="6"/>',
-        '<text x="200" y="122" class="sa-legend">best-so-far</text>',
-        (
-            '<line x1="342" y1="116" x2="368" y2="116" stroke="#345d6b" '
-            'stroke-width="3" stroke-dasharray="8 6"/>'
-        ),
-        '<text x="378" y="122" class="sa-legend">temperature (scaled)</text>',
-        '<circle cx="516" cy="116" r="7" fill="#fff" stroke="#9f552c" stroke-width="3"/>',
-        '<text x="530" y="122" class="sa-legend">accepted worse</text>',
-        '<rect x="24" y="150" width="592" height="354" rx="18" fill="#fff" stroke="#cad8d2"/>',
-        '<text x="44" y="184" class="sa-panel">accepted states cross several basins</text>',
-        (
-            f'<polyline points="{landscape}" fill="none" stroke="#345d6b" '
-            'stroke-width="3" stroke-linejoin="round"/>'
-        ),
-    ]
-    for x, objective, iteration in accepted_positions:
-        opacity = 0.28 + 0.52 * (1.0 - iteration / int(probe["iterations"]))
-        elements.append(
-            f'<circle cx="{position_x(x):.2f}" cy="{landscape_y(objective):.2f}" r="3.5" '
-            f'fill="#d67835" opacity="{opacity:.2f}"/>'
-        )
-    start_x = position_x(float(probe["initial_x"]))
-    start_y = landscape_y(float(probe["initial_objective"]))
-    best_x = position_x(float(probe["best_x"]))
-    best_y = landscape_y(float(probe["best_objective"]))
-    elements.extend(
+    body.extend(
         [
-            f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="8" fill="#102a2e"/>',
-            f'<text x="{start_x - 10:.2f}" y="{start_y - 13:.2f}" text-anchor="end" '
-            'class="sa-label">start</text>',
-            f'<circle cx="{best_x:.2f}" cy="{best_y:.2f}" r="9" fill="#2c7564"/>',
-            f'<text x="{best_x + 12:.2f}" y="{best_y - 10:.2f}" class="sa-label">best</text>',
+            f'<polyline points="{temperature_trace}" fill="none" stroke="#345d6b" '
+            'stroke-width="2.5" stroke-dasharray="6 5"/>',
+            f'<polyline points="{current_trace}" fill="none" stroke="#d67835" '
+            'stroke-width="2" stroke-linejoin="round"/>',
+            f'<polyline points="{best_trace}" fill="none" stroke="#2c7564" '
+            'stroke-width="4.5" stroke-linejoin="round"/>',
         ]
     )
-    for tick in (-5, -3, -1, 1, 3, 5):
-        elements.append(
-            f'<text x="{position_x(float(tick)):.2f}" y="490" text-anchor="middle" '
-            f'class="sa-axis">{tick}</text>'
-        )
-    elements.extend(
-        [
-            '<rect x="24" y="538" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
-            (
-                '<text x="44" y="576" class="sa-panel">'
-                "temperature falls; current can still rise</text>"
-            ),
-        ]
-    )
-    for tick in (0, 10, 20, 30, 40):
-        y = trace_y(float(tick))
-        elements.extend(
-            [
-                f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                'stroke="#e4ebe7" stroke-width="1"/>',
-                f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                f'class="sa-axis">{tick}</text>',
-            ]
-        )
-    elements.extend(
-        [
-            (
-                f'<polyline points="{temperature_trace}" fill="none" stroke="#345d6b" '
-                'stroke-width="3" stroke-dasharray="8 6"/>'
-            ),
-            (
-                f'<polyline points="{current_trace}" fill="none" stroke="#d67835" '
-                'stroke-width="3" stroke-linejoin="round"/>'
-            ),
-            (
-                f'<polyline points="{best_trace}" fill="none" stroke="#2c7564" '
-                'stroke-width="6" stroke-linejoin="round"/>'
-            ),
-        ]
-    )
-    for iteration, objective in worsening_positions:
-        elements.append(
-            f'<circle cx="{iteration_x(iteration):.2f}" cy="{trace_y(objective):.2f}" r="4.5" '
-            'fill="#fff" stroke="#9f552c" stroke-width="2.5"/>'
-        )
+    for item in history[1:]:
+        if bool(item["accepted_worsening"]):
+            body.append(
+                f'<circle cx="{iteration_x(int(item["iteration"])):.2f}" '
+                f'cy="{trace_y(float(item["objective"])):.2f}" r="3.5" '
+                'fill="#fff" stroke="#9f552c" stroke-width="2"/>'
+            )
     for tick in (0, 100, 200, 300, 400):
-        elements.append(
-            f'<text x="{iteration_x(tick):.2f}" y="906" text-anchor="middle" '
-            f'class="sa-axis">{tick}</text>'
+        body.append(
+            f'<text x="{iteration_x(tick):.2f}" y="{trace_bottom + 22:g}" '
+            f'text-anchor="middle" class="axis">{tick}</text>'
         )
-    elements.extend(
-        [
-            '<text x="334" y="922" text-anchor="middle" class="sa-axis">iteration</text>',
-            '<text x="32" y="966" class="sa-metric-label">best objective</text>',
-            (
-                '<text x="32" y="994" class="sa-metric">'
-                f"{float(probe['initial_objective']):.2f} → "
-                f"{float(probe['best_objective']):.5f}</text>"
-            ),
-            '<text x="278" y="966" class="sa-metric-label">accepted worse</text>',
-            (
-                '<text x="278" y="994" class="sa-metric">'
-                f"{int(probe['accepted_worsening'])} / "
-                f"{int(probe['accepted_moves'])} moves</text>"
-            ),
-            '<text x="480" y="966" class="sa-metric-label">early / late</text>',
-            (
-                '<text x="480" y="994" class="sa-metric">'
-                f"{int(probe['early_worsening'])} / {int(probe['late_worsening'])}</text>"
-            ),
-            (
-                '<text x="32" y="1030" class="sa-meta">'
-                "実行生成: scripts.generate_article_figures._simulated_annealing_probe "
-                f"· dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1058" class="sa-limit">'
-                "固定1次元・1 seedの教材です。別seed・高次元・schedule一般の性能や"
-                "大域最適性は示しません。</text>"
-            ),
-            """
-<style>
-  .sa-title { font: 700 23px system-ui, sans-serif; fill: #102a2e; }
-  .sa-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
-  .sa-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
-  .sa-legend { font: 400 13px system-ui, sans-serif; fill: #45656a; }
-  .sa-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
-  .sa-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
-  .sa-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
-  .sa-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
-  .sa-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
-  .sa-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
-</style>
-""",
-            "</svg>\n",
-        ]
+    body.append(
+        f'<text x="{plot_right:g}" y="{panel_bottom + 22:g}" text-anchor="end" class="axis">'
+        "横軸: 反復</text>"
     )
-    return "".join(elements)
+    rows, y = _metric_rows(
+        panel_bottom + 54,
+        (
+            (
+                "最良の目的値",
+                f"{float(probe['initial_objective']):.2f} → {float(probe['best_objective']):.5f}",
+            ),
+            (
+                "受理した悪化 / 受理した移動",
+                f"{int(probe['accepted_worsening'])} / {int(probe['accepted_moves'])}",
+            ),
+            (
+                "悪化の受理（序盤 / 終盤）",
+                f"{int(probe['early_worsening'])} / {int(probe['late_worsening'])}",
+            ),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"scripts.generate_article_figures._simulated_annealing_probe · dataset {dataset_version}",
+        "固定した1次元・1 seedの教材です。別のseed、高次元、温度スケジュール一般での性能や、"
+        "大域最適性は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "Simulated Annealingで悪化する移動を受理する固定実行",
+        (
+            "1次元Rastrigin関数を初期点3.5から400反復探索する"
+            "固定seedの実行。高温の序盤では悪化する移動も受理して複数の谷を移動し、"
+            "それまでの最良値は悪化させずに保持する。目的値は32.25から0.00076まで改善する。"
+        ),
+        height,
+        body,
+    )
 
 
 def _network_simplex_transport_probe() -> dict[str, object]:
@@ -2563,28 +2642,34 @@ def _network_simplex_pivot_svg(dataset_version: str) -> str:
         )
     ):
         raise TypeError("network-simplex teaching probe mappings must be dictionaries")
+    entering = probe["entering"]
+    leaving = probe["leaving"]
+    if not isinstance(entering, tuple) or not isinstance(leaving, tuple):
+        raise TypeError("network-simplex entering and leaving arcs must be tuples")
 
-    width, height = 640, 1080
-    x_supply, x_demand = 104.0, 536.0
-    x_supply_edge, x_demand_edge = 135.0, 501.0
-    supply_y = {"A": 250.0, "B": 400.0}
-    demand_y = {"X": 205.0, "Y": 325.0, "Z": 445.0}
+    x_supply, x_demand = 76.0, 364.0
+    x_supply_edge, x_demand_edge = 98.0, 342.0
+    supply_y = {"A": 36.0, "B": 156.0}
+    demand_y = {"X": 0.0, "Y": 96.0, "Z": 192.0}
     label_offsets = {
-        ("A", "X"): -18.0,
-        ("A", "Y"): -13.0,
-        ("A", "Z"): -5.0,
-        ("B", "X"): -14.0,
-        ("B", "Y"): 28.0,
-        ("B", "Z"): 19.0,
+        ("A", "X"): -14.0,
+        ("A", "Y"): -10.0,
+        ("A", "Z"): -4.0,
+        ("B", "X"): -11.0,
+        ("B", "Y"): 22.0,
+        ("B", "Z"): 15.0,
     }
     label_x = {
-        ("A", "X"): 320.0,
-        ("A", "Y"): 286.0,
-        ("A", "Z"): 276.0,
-        ("B", "X"): 364.0,
-        ("B", "Y"): 372.0,
-        ("B", "Z"): 320.0,
+        ("A", "X"): 220.0,
+        ("A", "Y"): 196.0,
+        ("A", "Z"): 190.0,
+        ("B", "X"): 251.0,
+        ("B", "Y"): 256.0,
+        ("B", "Z"): 220.0,
     }
+
+    def arrow(start: str, end: str) -> str:
+        return f"{start} → {end}"
 
     def panel_graph(
         flows: dict[tuple[str, str], float],
@@ -2593,6 +2678,7 @@ def _network_simplex_pivot_svg(dataset_version: str) -> str:
         optimized: bool,
     ) -> list[str]:
         elements: list[str] = []
+        labels: list[str] = []
         active_color = "#2c7564" if optimized else "#102a2e"
         active_marker = "ns-arrow-active" if optimized else "ns-arrow-tree"
         for arc, cost in costs.items():
@@ -2601,149 +2687,140 @@ def _network_simplex_pivot_svg(dataset_version: str) -> str:
             y2 = demand_y[head] + y_offset
             flow = float(flows[arc])
             elements.append(
-                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
-                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
-                'stroke="#dfe7e3" stroke-width="2"/>'
+                f'<line x1="{x_supply_edge:g}" y1="{y1:.2f}" x2="{x_demand_edge:g}" '
+                f'y2="{y2:.2f}" stroke="#dfe7e3" stroke-width="1.5"/>'
             )
             if flow > 1e-12:
                 elements.append(
-                    f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
-                    f'x2="{x_demand_edge}" y2="{y2:.2f}" '
-                    f'stroke="{active_color}" stroke-width="{3.0 + 1.5 * flow:.2f}" '
-                    f'stroke-linecap="round" marker-end="url(#{active_marker})"/>'
+                    f'<line x1="{x_supply_edge:g}" y1="{y1:.2f}" x2="{x_demand_edge:g}" '
+                    f'y2="{y2:.2f}" stroke="{active_color}" '
+                    f'stroke-width="{2.0 + 1.2 * flow:.2f}" stroke-linecap="round" '
+                    f'marker-end="url(#{active_marker})"/>'
                 )
                 midpoint_y = (y1 + y2) / 2.0 + label_offsets[arc]
-                elements.append(
+                labels.append(
                     f'<text x="{label_x[arc]:.2f}" y="{midpoint_y:.2f}" text-anchor="middle" '
-                    f'class="ns-flow">{flow:g} × cost {float(cost):g}</text>'
+                    f'class="metric-value halo">{flow:g} × {float(cost):g}</text>'
                 )
-
-        highlighted_arc = probe["leaving"] if optimized else probe["entering"]
-        if not isinstance(highlighted_arc, tuple):
-            raise TypeError("network-simplex highlighted arc must be a tuple")
-        tail, head = highlighted_arc
+        tail, head = leaving if optimized else entering
         y1 = supply_y[tail] + y_offset
         y2 = demand_y[head] + y_offset
         if optimized:
             elements.append(
-                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
-                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
-                'stroke="#aebbb6" stroke-width="4" stroke-dasharray="8 7" '
+                f'<line x1="{x_supply_edge:g}" y1="{y1:.2f}" x2="{x_demand_edge:g}" '
+                f'y2="{y2:.2f}" stroke="#aebbb6" stroke-width="3" stroke-dasharray="7 6" '
                 'marker-end="url(#ns-arrow-muted)"/>'
             )
         else:
             elements.append(
-                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
-                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
-                'stroke="#d67835" stroke-width="5" stroke-dasharray="9 7" '
+                f'<line x1="{x_supply_edge:g}" y1="{y1:.2f}" x2="{x_demand_edge:g}" '
+                f'y2="{y2:.2f}" stroke="#d67835" stroke-width="3.5" stroke-dasharray="8 6" '
                 'marker-end="url(#ns-arrow-enter)"/>'
             )
-
+        elements.extend(labels)
         for node, amount in probe["supplies"].items():
             y = supply_y[node] + y_offset
             elements.extend(
                 [
-                    f'<circle cx="{x_supply}" cy="{y:.2f}" r="31" fill="#d67835"/>',
-                    f'<text x="{x_supply}" y="{y + 6:.2f}" text-anchor="middle" '
-                    f'class="ns-node">{node}</text>',
-                    f'<text x="46" y="{y + 5:.2f}" class="ns-balance">+{float(amount):g}</text>',
+                    f'<circle cx="{x_supply:g}" cy="{y:.2f}" r="20" fill="#d67835"/>',
+                    f'<text x="{x_supply:g}" y="{y + 6:.2f}" text-anchor="middle" '
+                    f'class="panel-title" fill="#fff">{node}</text>',
+                    f'<text x="{FIGURE_MARGIN + 12}" y="{y + 5:.2f}" class="metric-value">'
+                    f"+{float(amount):g}</text>",
                 ]
             )
         for node, amount in probe["demands"].items():
             y = demand_y[node] + y_offset
             elements.extend(
                 [
-                    f'<circle cx="{x_demand}" cy="{y:.2f}" r="31" fill="#2c7564"/>',
-                    f'<text x="{x_demand}" y="{y + 6:.2f}" text-anchor="middle" '
-                    f'class="ns-node">{node}</text>',
-                    f'<text x="582" y="{y + 5:.2f}" class="ns-balance">−{float(amount):g}</text>',
+                    f'<circle cx="{x_demand:g}" cy="{y:.2f}" r="20" fill="#2c7564"/>',
+                    f'<text x="{x_demand:g}" y="{y + 6:.2f}" text-anchor="middle" '
+                    f'class="panel-title" fill="#fff">{node}</text>',
+                    f'<text x="{x_demand + 26:g}" y="{y + 5:.2f}" class="metric-value">'
+                    f"−{float(amount):g}</text>",
                 ]
             )
         return elements
 
-    elements = [
+    title = "1本加えると、閉路が1つできる"
+    body, y = _figure_heading(title, "固定した輸送問題の流れ・全域木のpivot 1回・整数の供給量")
+    body.append(
+        "<defs>"
+        '<marker id="ns-arrow-muted" markerWidth="4" markerHeight="4" refX="3.4" refY="2" '
+        'orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#aebbb6"/></marker>'
+        '<marker id="ns-arrow-tree" markerWidth="4" markerHeight="4" refX="3.4" refY="2" '
+        'orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#102a2e"/></marker>'
+        '<marker id="ns-arrow-active" markerWidth="4" markerHeight="4" refX="3.4" refY="2" '
+        'orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#2c7564"/></marker>'
+        '<marker id="ns-arrow-enter" markerWidth="4" markerHeight="4" refX="3.4" refY="2" '
+        'orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#d67835"/></marker>'
+        "</defs>"
+    )
+    key, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 14,
+        "辺のラベルは 流量 × 単位費用。左の数は供給量、右の数は需要量です。",
+        "note",
+    )
+    body.extend(key)
+    initial_cost = float(probe["initial_cost"])
+    optimized_cost = float(probe["optimized_cost"])
+    entering_reduced = float(probe["initial_reduced_costs"][entering])
+    for name, cost, hint, flows, optimized in (
         (
-            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-            f'viewBox="0 0 {width} {height}" role="img" '
-            'aria-labelledby="figure-title figure-description">'
-        ),
-        '<title id="figure-title">Network Simplexの1回のpivotで輸送flowが変わる様子</title>',
-        (
-            '<desc id="figure-description">供給node AとBから需要node X、Y、Zへ9単位を'
-            "輸送する固定最小費用流。初期treeへAからZのedgeを加える。"
-            "できたcycleに1単位を流すとAからYのedgeがtreeを離れる。"
-            "全nodeの需給を保ったまま総費用が20から18へ下がる。</desc>"
-        ),
-        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
-        '<text x="32" y="48" class="ns-title">1本加えると、cycleが1つできる</text>',
-        (
-            '<text x="32" y="80" class="ns-subtitle">'
-            "fixed transportation flow · one tree pivot · integer supplies</text>"
-        ),
-        (
-            "<defs>"
-            '<marker id="ns-arrow-muted" markerWidth="6" markerHeight="6" refX="5" refY="3" '
-            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#aebbb6"/></marker>'
-            '<marker id="ns-arrow-tree" markerWidth="6" markerHeight="6" refX="5" refY="3" '
-            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#102a2e"/></marker>'
-            '<marker id="ns-arrow-active" markerWidth="6" markerHeight="6" refX="5" refY="3" '
-            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2c7564"/></marker>'
-            '<marker id="ns-arrow-enter" markerWidth="6" markerHeight="6" refX="5" refY="3" '
-            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#d67835"/></marker>'
-            "</defs>"
-        ),
-        '<rect x="24" y="112" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
-        '<text x="44" y="150" class="ns-panel">before · feasible spanning tree</text>',
-        '<text x="596" y="150" text-anchor="end" class="ns-cost">total cost 20</text>',
-        (
-            '<text x="44" y="184" class="ns-hint">'
-            "orange dashed: entering A → Z · reduced cost −2</text>"
-        ),
-        *panel_graph(initial_flows, y_offset=0.0, optimized=False),
-        '<rect x="24" y="526" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
-        '<text x="44" y="564" class="ns-panel">after · θ = 1 along the cycle</text>',
-        '<text x="596" y="564" text-anchor="end" class="ns-cost">total cost 18</text>',
-        '<text x="44" y="598" class="ns-hint">gray dashed: leaving A → Y · flow reaches 0</text>',
-        *panel_graph(optimized_flows, y_offset=414.0, optimized=True),
-        '<text x="32" y="956" class="ns-metric-label">pivot</text>',
-        '<text x="32" y="984" class="ns-metric">A→Z enters · A→Y leaves</text>',
-        '<text x="424" y="956" class="ns-metric-label">cost change</text>',
-        '<text x="424" y="984" class="ns-metric">20 → 18</text>',
-        (
-            '<text x="32" y="1022" class="ns-meta">'
-            "実行生成: scripts.generate_article_figures._network_simplex_transport_probe "
-            f"· dataset {html.escape(dataset_version)}</text>"
+            "前: 実行可能な全域木",
+            initial_cost,
+            f"橙の破線: 入る辺 {arrow(*entering)}（被約費用 {entering_reduced:g}）",
+            initial_flows,
+            False,
         ),
         (
-            '<text x="32" y="1052" class="ns-limit">'
-            "固定2供給×3需要教材です。degeneracy、capacity upper bound、"
-            "大規模networkの性能は示しません。</text>"
+            f"後: 閉路に沿って θ = {float(probe['theta']):g}",
+            optimized_cost,
+            f"灰色の破線: 出る辺 {arrow(*leaving)}（流量が0になる）",
+            optimized_flows,
+            True,
         ),
-        """
-<style>
-  .ns-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
-  .ns-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
-  .ns-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
-  .ns-cost { font: 700 17px system-ui, sans-serif; fill: #2c7564; }
-  .ns-hint { font: 400 15px system-ui, sans-serif; fill: #8b4c3d; }
-  .ns-node { font: 700 20px system-ui, sans-serif; fill: #fff; }
-  .ns-balance { font: 700 16px system-ui, sans-serif; fill: #45656a; }
-  .ns-flow {
-    font: 700 14px system-ui, sans-serif;
-    fill: #102a2e;
-    paint-order: stroke;
-    stroke: #fff;
-    stroke-width: 5px;
-  }
-  .ns-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
-  .ns-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
-  .ns-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
-  .ns-limit { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
-</style>
-""",
-        "</svg>\n",
-    ]
-    return "".join(elements)
+    ):
+        panel, top, panel_bottom = _panel(y + 2, name, 22 + 52 + 192 + 28)
+        body.extend(panel)
+        body.append(
+            f'<text x="{FIGURE_WIDTH - FIGURE_MARGIN - 14}" y="{top - 18:g}" text-anchor="end" '
+            f'class="metric-value" fill="#2c7564">総費用 {cost:g}</text>'
+        )
+        hint_color = "#8b4c3d" if not optimized else "#617068"
+        body.append(
+            f'<text x="{FIGURE_MARGIN + 14}" y="{top + 4:g}" class="status" '
+            f'fill="{hint_color}">{hint}</text>'
+        )
+        body.extend(panel_graph(flows, y_offset=top + 48, optimized=optimized))
+        y = panel_bottom + 10
+    rows, y = _metric_rows(
+        y + 24,
+        (
+            ("pivot", f"{arrow(*entering)} が入り、{arrow(*leaving)} が出る"),
+            ("総費用の変化", f"{initial_cost:g} → {optimized_cost:g}"),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        "scripts.generate_article_figures._network_simplex_transport_probe"
+        f" · dataset {dataset_version}",
+        "供給2点と需要3点の固定教材です。退化、容量の上限、大規模なnetworkでの性能は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "Network Simplexの1回のpivotで輸送の流れが変わる様子",
+        (
+            "供給ノードAとBから需要ノードX、Y、Zへ9単位を"
+            "輸送する固定した最小費用流。初期の全域木へAからZの辺を加える。"
+            "できた閉路に1単位を流すとAからYの辺が木を離れる。"
+            "全ノードの需給を保ったまま総費用が20から18へ下がる。"
+        ),
+        height,
+        body,
+    )
 
 
 def _particle_swarm_objective(point: list[float] | tuple[float, ...]) -> float:
@@ -3152,201 +3229,167 @@ def _pbt_lineage_svg(dataset_version: str) -> str:
     if not isinstance(snapshots, tuple) or not isinstance(events, tuple):
         raise TypeError("PBT teaching probe collections must be tuples")
 
-    width, height = 640, 1080
-    plot_left, plot_right = 78.0, 590.0
+    plot_left, plot_right = 62.0, 400.0
     worker_colors = ("#d67835", "#245c42", "#45656a", "#b08a3c", "#77647f", "#102a2e")
-    score_top, score_bottom = 218.0, 482.0
 
     def round_x(round_index: int) -> float:
         return plot_left + round_index / 10 * (plot_right - plot_left)
 
+    title = "scoreの線と系譜の継承を同時に追う"
+    body, y = _figure_heading(
+        title, "worker 6個・10ラウンド・2ラウンドごとにexploit・決定論的なtoy学習"
+    )
+    legend_y = y + 14
+    body.extend(
+        [
+            '<defs><marker id="pbt-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" '
+            'orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#d67835"/></marker></defs>',
+            f'<path d="M{FIGURE_MARGIN} {legend_y + 2:g} C{FIGURE_MARGIN + 10} {legend_y - 18:g}, '
+            f'{FIGURE_MARGIN + 24} {legend_y - 18:g}, {FIGURE_MARGIN + 32} {legend_y + 2:g}" '
+            'fill="none" stroke="#d67835" stroke-width="2.5" marker-end="url(#pbt-arrow)"/>',
+            f'<text x="{FIGURE_MARGIN + 42}" y="{legend_y:g}" class="note">exploitのコピー</text>',
+            f'<text x="{FIGURE_MARGIN + 180}" y="{legend_y:g}" class="note">'
+            "線の色 = 系譜の根</text>",
+        ]
+    )
+    panel, top, panel_bottom = _panel(
+        legend_y + 14, "同じworker IDでも、コピー後は別の系譜を継ぐ", 250
+    )
+    body.extend(panel)
+    body.append(
+        f'<text x="{FIGURE_WIDTH - FIGURE_MARGIN - 14}" y="{top + 4:g}" text-anchor="end" '
+        'class="status">scoreは高いほど良い</text>'
+    )
+    score_top, score_bottom = top + 22, top + 192
+
     def score_y(score: float) -> float:
         return score_bottom - (score + 1.05) / 1.1 * (score_bottom - score_top)
 
-    score_lines = []
-    for worker_id in range(6):
-        points = []
-        for round_index, rows in enumerate(snapshots):
-            row = rows[worker_id]
-            points.append(f"{round_x(round_index):.2f},{score_y(float(row[4])):.2f}")
-        score_lines.append(" ".join(points))
-
-    elements = [
-        _svg_open(
-            "scoreの線とlineageの継承を同時に追う",
-            (
-                "6 workerを10 round進め、2 roundごとに最良workerから最下位workerへ"
-                "stateをコピーし、learning rateを0.8倍または1.2倍した固定pure Python "
-                "PBT教材です。worker scoreとlineage rootの継承を示します。実model、"
-                "checkpoint cost、validation noise、並列実行、PBT一般の性能は示しません。"
-            ),
-            width=width,
-            height=height,
-        ),
-        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="50" class="pbt-title">scoreの線とlineageの継承を同時に追う</text>',
-        (
-            '<text x="32" y="82" class="pbt-subtitle">'
-            "6 workers · 10 rounds · exploit every 2 rounds · deterministic toy training</text>"
-        ),
-        '<defs><marker id="pbt-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" '
-        'orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#d67835"/></marker></defs>',
-        '<line x1="36" y1="118" x2="62" y2="118" stroke="#45656a" stroke-width="5"/>',
-        '<text x="72" y="124" class="pbt-legend">worker score</text>',
-        '<path d="M218 126 C230 104, 246 104, 258 126" fill="none" stroke="#d67835" '
-        'stroke-width="3" marker-end="url(#pbt-arrow)"/>',
-        '<text x="270" y="124" class="pbt-legend">exploit copy</text>',
-        '<text x="448" y="124" class="pbt-legend">line color = lineage root</text>',
-        '<rect x="24" y="150" width="592" height="382" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-        '<text x="44" y="188" class="pbt-panel">同じworker IDでもcopy後は別lineageを継ぐ</text>',
-        '<text x="596" y="188" text-anchor="end" class="pbt-status">score: higher is better</text>',
-    ]
-    for score in (-1.0, -0.75, -0.5, -0.25, 0.0):
-        y = score_y(score)
-        elements.extend(
+    for score in (-1.0, -0.5, 0.0):
+        tick_y = score_y(score)
+        body.extend(
             [
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="pbt-axis">{score:g}</text>'
-                ),
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_left - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{score:g}</text>',
             ]
         )
-    for worker_id, points in enumerate(score_lines):
-        elements.append(
+    for worker_id in range(6):
+        points = " ".join(
+            f"{round_x(round_index):.2f},{score_y(float(rows[worker_id][4])):.2f}"
+            for round_index, rows in enumerate(snapshots)
+        )
+        body.append(
             f'<polyline points="{points}" fill="none" stroke="{worker_colors[worker_id]}" '
-            'stroke-width="3" stroke-linejoin="round"/>'
+            'stroke-width="2.5" stroke-linejoin="round"/>'
         )
         for round_index, rows in enumerate(snapshots):
-            row = rows[worker_id]
-            elements.append(
-                f'<circle cx="{round_x(round_index):.2f}" cy="{score_y(float(row[4])):.2f}" '
-                f'r="3.5" fill="{worker_colors[worker_id]}"/>'
+            body.append(
+                f'<circle cx="{round_x(round_index):.2f}" '
+                f'cy="{score_y(float(rows[worker_id][4])):.2f}" r="2.8" '
+                f'fill="{worker_colors[worker_id]}"/>'
             )
     for worker_id, color in enumerate(worker_colors):
-        legend_x = 54 + worker_id * 94
-        elements.extend(
+        legend_x = FIGURE_MARGIN + 20 + worker_id * 64
+        body.extend(
             [
-                f'<circle cx="{legend_x}" cy="508" r="5" fill="{color}"/>',
-                f'<text x="{legend_x + 10}" y="513" class="pbt-axis">W{worker_id}</text>',
+                f'<circle cx="{legend_x}" cy="{score_bottom + 25:g}" r="5" fill="{color}"/>',
+                f'<text x="{legend_x + 9}" y="{score_bottom + 30:g}" class="axis">'
+                f"W{worker_id}</text>",
             ]
         )
-
-    lineage_top = 620.0
-    row_gap = 48.0
-    elements.extend(
-        [
-            '<rect x="24" y="554" width="592" height="388" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            '<text x="44" y="592" class="pbt-panel">copy元とlearning rate変更を残す</text>',
-        ]
+    row_gap = 36.0
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "コピー元と学習率の変更を残す", 18 + 5 * row_gap + 62
     )
+    body.extend(panel)
+    lineage_top = top + 18
     for round_index in range(11):
         x = round_x(round_index)
-        elements.extend(
+        body.extend(
             [
-                (
-                    f'<line x1="{x:.2f}" y1="{lineage_top - 18}" x2="{x:.2f}" '
-                    f'y2="{lineage_top + 5 * row_gap + 18}" stroke="#f0ede6"/>'
-                ),
-                (
-                    f'<text x="{x:.2f}" y="918" text-anchor="middle" '
-                    f'class="pbt-axis">{round_index}</text>'
-                ),
+                f'<line x1="{x:.2f}" y1="{lineage_top - 14:g}" x2="{x:.2f}" '
+                f'y2="{lineage_top + 5 * row_gap + 14:g}" stroke="#f0ede6"/>',
+                f'<text x="{x:.2f}" y="{lineage_top + 5 * row_gap + 36:g}" '
+                f'text-anchor="middle" class="axis">{round_index}</text>',
             ]
         )
     for worker_id in range(6):
-        y = lineage_top + worker_id * row_gap
-        elements.extend(
+        row_y = lineage_top + worker_id * row_gap
+        body.extend(
             [
-                (
-                    f'<text x="58" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="pbt-label">W{worker_id}</text>'
-                ),
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0" stroke-width="8" stroke-linecap="round"/>'
-                ),
+                f'<text x="{plot_left - 12:g}" y="{row_y + 5:.2f}" text-anchor="end" '
+                f'class="method">W{worker_id}</text>',
+                f'<line x1="{plot_left:g}" y1="{row_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{row_y:.2f}" stroke="#ebe8e0" stroke-width="6" stroke-linecap="round"/>',
             ]
         )
         for round_index in range(10):
             root = int(snapshots[round_index][worker_id][3])
-            elements.append(
-                f'<line x1="{round_x(round_index):.2f}" y1="{y:.2f}" '
-                f'x2="{round_x(round_index + 1):.2f}" y2="{y:.2f}" '
-                f'stroke="{worker_colors[root]}" stroke-width="8" stroke-linecap="round"/>'
+            body.append(
+                f'<line x1="{round_x(round_index):.2f}" y1="{row_y:.2f}" '
+                f'x2="{round_x(round_index + 1):.2f}" y2="{row_y:.2f}" '
+                f'stroke="{worker_colors[root]}" stroke-width="6" stroke-linecap="round"/>'
             )
+    labels = []
     for event_index, event in enumerate(events):
         round_index, source_id, target_id, source_root, _, learning_rate, _, _ = event
         x = round_x(int(round_index))
         source_y = lineage_top + int(source_id) * row_gap
         target_y = lineage_top + int(target_id) * row_gap
-        control_x = x + (12 if target_y >= source_y else -12)
-        elements.extend(
+        control_x = x + (10 if target_y >= source_y else -10)
+        body.extend(
             [
-                (
-                    f'<path d="M {x - 8:.2f} {source_y:.2f} Q {control_x:.2f} '
-                    f'{(source_y + target_y) / 2:.2f} {x:.2f} {target_y:.2f}" '
-                    'fill="none" stroke="#d67835" stroke-width="3" '
-                    'marker-end="url(#pbt-arrow)"/>'
-                ),
-                (
-                    f'<circle cx="{x:.2f}" cy="{target_y:.2f}" r="7" '
-                    f'fill="{worker_colors[int(source_root)]}" stroke="#fff" stroke-width="2"/>'
-                ),
+                f'<path d="M {x - 6:.2f} {source_y:.2f} Q {control_x:.2f} '
+                f'{(source_y + target_y) / 2:.2f} {x:.2f} {target_y:.2f}" '
+                'fill="none" stroke="#d67835" stroke-width="2.5" marker-end="url(#pbt-arrow)"/>',
+                f'<circle cx="{x:.2f}" cy="{target_y:.2f}" r="5.5" '
+                f'fill="{worker_colors[int(source_root)]}" stroke="#fff" stroke-width="2"/>',
             ]
         )
-        label_y = target_y - 12 if event_index % 2 == 0 else target_y + 22
+        label_y = target_y - 10 if event_index % 2 == 0 else target_y + 20
         anchor = "end" if round_index == 10 else "start"
         label_x = x - 8 if round_index == 10 else x + 8
-        elements.append(
+        labels.append(
             f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}" '
-            f'class="pbt-event">η={float(learning_rate):.3f}</text>'
+            f'class="method halo" fill="#8b4c3d">η={float(learning_rate):.3f}</text>'
         )
-    elements.extend(
-        [
-            '<text x="78" y="934" class="pbt-axis">round</text>',
-            (
-                '<text x="32" y="982" class="pbt-metric">'
-                f"best score {float(probe['initial_best']):.3f} → "
-                f"{float(probe['final_best']):.3f}</text>"
-            ),
-            (
-                '<text x="350" y="982" text-anchor="middle" class="pbt-metric">'
-                f"exploit events {len(events)}</text>"
-            ),
-            (
-                '<text x="608" y="982" text-anchor="end" class="pbt-metric">'
-                f"final lineage roots {len(probe['final_roots'])}</text>"
-            ),
-            (
-                '<text x="32" y="1026" class="pbt-meta">'
-                f"実行生成: fixed toy training + deterministic exploit/explore "
-                f"· dataset {html.escape(dataset_version)}</text>"
-            ),
-            '<text x="32" y="1054" class="pbt-note">'
-            "固定score教材です。実model、checkpoint cost、validation noise、"
-            "PBT一般の性能は示しません。</text>",
-            """
-<style>
-  .pbt-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
-  .pbt-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
-  .pbt-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
-  .pbt-status, .pbt-legend { font: 400 15px system-ui, sans-serif; fill: #45656a; }
-  .pbt-axis { font: 400 16px system-ui, sans-serif; fill: #45656a; }
-  .pbt-label { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
-  .pbt-event { font: 700 14px system-ui, sans-serif; fill: #8b4c3d; }
-  .pbt-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
-  .pbt-meta { font: 400 14px system-ui, sans-serif; fill: #45656a; }
-  .pbt-note { font: 400 14px system-ui, sans-serif; fill: #8b4c3d; }
-</style>
-""",
-            "</svg>\n",
-        ]
+    body.extend(labels)
+    body.append(
+        f'<text x="{plot_right:g}" y="{panel_bottom + 22:g}" text-anchor="end" class="axis">'
+        "横軸: ラウンド</text>"
     )
-    return "".join(elements)
+    rows, y = _metric_rows(
+        panel_bottom + 54,
+        (
+            (
+                "最良のscore",
+                f"{float(probe['initial_best']):.3f} → {float(probe['final_best']):.3f}",
+            ),
+            ("exploitの回数", f"{len(events)}"),
+            ("最後に残った系譜の根", f"{len(probe['final_roots'])}"),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"固定したtoy学習 + 決定論的なexploit/explore · dataset {dataset_version}",
+        "固定したscoreの教材です。実際のmodel、checkpointのコスト、検証のノイズ、"
+        "PBT一般の性能は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "scoreの線と系譜の継承を同時に追う",
+        (
+            "6個のworkerを10ラウンド進め、2ラウンドごとに最良のworkerから最下位のworkerへ"
+            "状態をコピーし、学習率を0.8倍または1.2倍した固定pure Python "
+            "PBT教材です。workerのscoreと系譜の根の継承を示します。実際のmodel、"
+            "checkpointのコスト、検証のノイズ、並列実行、PBT一般の性能は示しません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _sgd_samples() -> tuple[tuple[float, float, float], ...]:
@@ -3467,11 +3510,31 @@ def _sgd_mini_batch_svg(dataset_version: str) -> str:
     ):
         raise TypeError("SGD teaching probe collections must be tuples")
 
-    width, height = 640, 1080
-    plot_left, plot_right = 76.0, 590.0
-    parameter_top, parameter_bottom = 220.0, 526.0
+    title = "mini-batchの揺れと全データの損失を分けて読む"
+    body, y = _figure_heading(title, "標本32個・パラメータ2個・batch 4・η 0.3・8 epoch")
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 24}" '
+            f'y2="{legend_y - 5:g}" stroke="#245c42" stroke-width="4.5"/>',
+            f'<text x="{FIGURE_MARGIN + 32}" y="{legend_y:g}" class="note">全データ</text>',
+            f'<line x1="{FIGURE_MARGIN + 116}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 140}" '
+            f'y2="{legend_y - 5:g}" stroke="#d67835" stroke-width="3.5"/>',
+            f'<text x="{FIGURE_MARGIN + 148}" y="{legend_y:g}" class="note">'
+            "mini-batch／更新</text>",
+            f'<circle cx="{FIGURE_MARGIN + 6}" cy="{legend_y + 19:g}" r="6" fill="#245c42"/>',
+            f'<text x="{FIGURE_MARGIN + 18}" y="{legend_y + 24:g}" class="note">'
+            "全データでの最適解</text>",
+        ]
+    )
+    plot_left, plot_right = 56.0, 404.0
     parameter1_min, parameter1_max = -1.35, 2.15
     parameter2_min, parameter2_max = -1.2, 1.55
+    panel, top, panel_bottom = _panel(
+        legend_y + 24 + 14, "同じ損失の面でも、stepは小刻みに揺れる", 252
+    )
+    body.extend(panel)
+    parameter_top, parameter_bottom = top + 6, top + 196
 
     def parameter_x(value: float) -> float:
         return plot_left + (value - parameter1_min) / (parameter1_max - parameter1_min) * (
@@ -3491,8 +3554,11 @@ def _sgd_mini_batch_svg(dataset_version: str) -> str:
     angle = 0.5 * math.atan2(2.0 * hessian12, hessian11 - hessian22)
     cosine = math.cos(angle)
     sine = math.sin(angle)
-
-    contour_polylines = []
+    body.append(
+        f'<clipPath id="sgd-parameter-clip"><rect x="{plot_left:g}" y="{parameter_top:g}" '
+        f'width="{plot_right - plot_left:g}" height="{parameter_bottom - parameter_top:g}"/>'
+        "</clipPath>"
+    )
     for level in (0.03, 0.12, 0.4, 1.2, 2.4):
         radius1 = math.sqrt(2.0 * level / eigenvalue1)
         radius2 = math.sqrt(2.0 * level / eigenvalue2)
@@ -3504,13 +3570,65 @@ def _sgd_mini_batch_svg(dataset_version: str) -> str:
             parameter1 = float(optimum[0]) + cosine * local1 - sine * local2
             parameter2 = float(optimum[1]) + sine * local1 + cosine * local2
             points.append(f"{parameter_x(parameter1):.2f},{parameter_y(parameter2):.2f}")
-        contour_polylines.append(" ".join(points))
-
+        body.append(
+            f'<polyline points="{" ".join(points)}" fill="none" stroke="#d9e2dd" '
+            'stroke-width="1.5" clip-path="url(#sgd-parameter-clip)"/>'
+        )
+    for tick in (-1.0, 0.0, 1.0, 2.0):
+        x = parameter_x(tick)
+        body.extend(
+            [
+                f'<line x1="{x:.2f}" y1="{parameter_top:g}" x2="{x:.2f}" '
+                f'y2="{parameter_bottom:g}" stroke="#f0ede6"/>',
+                f'<text x="{x:.2f}" y="{parameter_bottom + 20:g}" text-anchor="middle" '
+                f'class="axis">{tick:g}</text>',
+            ]
+        )
+    for tick in (-1.0, 0.0, 1.0):
+        tick_y = parameter_y(tick)
+        body.extend(
+            [
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#f0ede6"/>',
+                f'<text x="{plot_left - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{tick:g}</text>',
+            ]
+        )
     path_points = " ".join(
         f"{parameter_x(float(point[0])):.2f},{parameter_y(float(point[1])):.2f}" for point in path
     )
-    loss_top, loss_bottom = 705.0, 900.0
+    body.append(
+        f'<polyline points="{path_points}" fill="none" stroke="#d67835" stroke-width="2.5" '
+        'stroke-linejoin="round" stroke-linecap="round"/>'
+    )
+    for index, point in enumerate(path):
+        if index % 8 == 0 or index == len(path) - 1:
+            body.append(
+                f'<circle cx="{parameter_x(float(point[0])):.2f}" '
+                f'cy="{parameter_y(float(point[1])):.2f}" r="3.5" '
+                'fill="#d67835" stroke="#fff" stroke-width="1.5"/>'
+            )
+    start = path[0]
+    optimum_x = parameter_x(float(optimum[0]))
+    optimum_y = parameter_y(float(optimum[1]))
+    body.extend(
+        [
+            f'<text x="{parameter_x(float(start[0])) + 10:.2f}" '
+            f'y="{parameter_y(float(start[1])) - 8:.2f}" class="method halo">開始点</text>',
+            f'<circle cx="{optimum_x:.2f}" cy="{optimum_y:.2f}" r="6" '
+            'fill="#245c42" stroke="#fff" stroke-width="2"/>',
+            f'<text x="{optimum_x - 10:.2f}" y="{optimum_y - 10:.2f}" text-anchor="end" '
+            'class="method halo" fill="#245c42">最適解</text>',
+            f'<text x="{plot_right:g}" y="{parameter_bottom + 40:g}" text-anchor="end" '
+            'class="axis">横軸 パラメータ1、縦軸 パラメータ2</text>',
+        ]
+    )
     max_update = int(history[-1][0])
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "batchの損失は揺れ、全データの損失が傾向を示す", 196
+    )
+    body.extend(panel)
+    loss_top, loss_bottom = top + 6, top + 156
 
     def update_x(update: int) -> float:
         return plot_left + update / max_update * (plot_right - plot_left)
@@ -3519,193 +3637,76 @@ def _sgd_mini_batch_svg(dataset_version: str) -> str:
         log_value = math.log10(max(value, 1e-4))
         return loss_bottom - (log_value + 4.0) / 4.5 * (loss_bottom - loss_top)
 
+    for tick, label in ((1.0, "1"), (0.1, "0.1"), (0.01, "0.01"), (0.001, "0.001")):
+        tick_y = loss_y(tick)
+        body.extend(
+            [
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_left - 6:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{label}</text>',
+            ]
+        )
+    for epoch in range(1, int(probe["epochs"])):
+        x = update_x(epoch * 8)
+        body.append(
+            f'<line x1="{x:.2f}" y1="{loss_top:g}" x2="{x:.2f}" y2="{loss_bottom:g}" '
+            'stroke="#d8d4ca" stroke-dasharray="4 6"/>'
+        )
     batch_loss_points = " ".join(
         f"{update_x(int(row[0])):.2f},{loss_y(float(row[2])):.2f}" for row in history
     )
     full_loss_points = " ".join(
         f"{update_x(int(row[0])):.2f},{loss_y(float(row[3])):.2f}" for row in history
     )
-
-    elements = [
-        _svg_open(
-            "mini-batchの揺れとfull-data lossを分けて読む",
-            (
-                "32 sample、2 parameterの固定線形回帰をbatch size 4、learning rate 0.3で"
-                "8 epoch実行したpure Python SGD結果です。parameter path、mini-batch loss、"
-                "full-data lossを同じrunから示します。validation、generalization、"
-                "neural network、framework実装、SGD一般の性能は示しません。"
-            ),
-            width=width,
-            height=height,
-        ),
-        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="50" class="sgd-title">mini-batchの揺れとfull-data lossを分けて読む</text>',
-        (
-            '<text x="32" y="82" class="sgd-subtitle">'
-            "32 samples · 2 parameters · batch 4 · η 0.3 · 8 epochs</text>"
-        ),
-        '<line x1="36" y1="118" x2="62" y2="118" stroke="#245c42" stroke-width="6"/>',
-        '<text x="72" y="124" class="sgd-legend">full-data</text>',
-        '<line x1="222" y1="118" x2="248" y2="118" stroke="#d67835" stroke-width="5"/>',
-        '<text x="258" y="124" class="sgd-legend">mini-batch / update</text>',
-        '<circle cx="500" cy="117" r="7" fill="#245c42"/>',
-        '<text x="514" y="124" class="sgd-legend">full-data optimum</text>',
-        '<rect x="24" y="150" width="592" height="424" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-        (
-            '<text x="44" y="188" class="sgd-panel">'
-            "同じfull-data loss面でもstepは小刻みに揺れる</text>"
-        ),
-        (
-            f'<clipPath id="sgd-parameter-clip"><rect x="{plot_left}" y="{parameter_top}" '
-            f'width="{plot_right - plot_left}" '
-            f'height="{parameter_bottom - parameter_top}"/></clipPath>'
-        ),
-    ]
-    for contour in contour_polylines:
-        elements.append(
-            f'<polyline points="{contour}" fill="none" stroke="#d9e2dd" stroke-width="2" '
-            'clip-path="url(#sgd-parameter-clip)"/>'
-        )
-    for tick in (-1.0, 0.0, 1.0, 2.0):
-        x = parameter_x(tick)
-        elements.extend(
-            [
-                (
-                    f'<line x1="{x:.2f}" y1="{parameter_top}" x2="{x:.2f}" '
-                    f'y2="{parameter_bottom}" stroke="#f0ede6"/>'
-                ),
-                (
-                    f'<text x="{x:.2f}" y="550" text-anchor="middle" '
-                    f'class="sgd-axis">{tick:g}</text>'
-                ),
-            ]
-        )
-    for tick in (-1.0, 0.0, 1.0):
-        y = parameter_y(tick)
-        elements.extend(
-            [
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#f0ede6"/>'
-                ),
-                (
-                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="sgd-axis">{tick:g}</text>'
-                ),
-            ]
-        )
-    elements.append(
-        f'<polyline points="{path_points}" fill="none" stroke="#d67835" stroke-width="4" '
-        'stroke-linejoin="round" stroke-linecap="round"/>'
-    )
-    start = path[0]
-    elements.append(
-        f'<text x="{parameter_x(float(start[0])) + 12:.2f}" '
-        f'y="{parameter_y(float(start[1])) - 10:.2f}" class="sgd-label">start</text>'
-    )
-    for index, point in enumerate(path):
-        if index % 8 == 0 or index == len(path) - 1:
-            elements.append(
-                f'<circle cx="{parameter_x(float(point[0])):.2f}" '
-                f'cy="{parameter_y(float(point[1])):.2f}" r="5" '
-                'fill="#d67835" stroke="#fff" stroke-width="2"/>'
-            )
-    elements.extend(
+    body.extend(
         [
-            (
-                f'<circle cx="{parameter_x(float(optimum[0])):.2f}" '
-                f'cy="{parameter_y(float(optimum[1])):.2f}" r="8" '
-                'fill="#245c42" stroke="#fff" stroke-width="3"/>'
-            ),
-            (
-                f'<text x="{parameter_x(float(optimum[0])) - 12:.2f}" '
-                f'y="{parameter_y(float(optimum[1])) - 14:.2f}" text-anchor="end" '
-                'class="sgd-label">full-data optimum</text>'
-            ),
-            '<text x="76" y="566" class="sgd-axis">parameter 1</text>',
-            '<rect x="24" y="600" width="592" height="348" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            (
-                '<text x="44" y="638" class="sgd-panel">'
-                "batch lossは揺れ、full-data lossは傾向を示す</text>"
-            ),
-        ]
-    )
-    for tick, label in ((1.0, "1"), (0.1, "0.1"), (0.01, "0.01"), (0.001, "0.001")):
-        y = loss_y(tick)
-        elements.extend(
-            [
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="sgd-axis">{label}</text>'
-                ),
-            ]
-        )
-    for epoch in range(1, int(probe["epochs"])):
-        x = update_x(epoch * 8)
-        elements.append(
-            f'<line x1="{x:.2f}" y1="{loss_top}" x2="{x:.2f}" y2="{loss_bottom}" '
-            'stroke="#d8d4ca" stroke-dasharray="4 6"/>'
-        )
-    elements.extend(
-        [
-            (
-                f'<polyline points="{batch_loss_points}" fill="none" stroke="#d67835" '
-                'stroke-width="3" stroke-linejoin="round" opacity="0.9"/>'
-            ),
-            (
-                f'<polyline points="{full_loss_points}" fill="none" stroke="#245c42" '
-                'stroke-width="6" stroke-linejoin="round"/>'
-            ),
+            f'<polyline points="{batch_loss_points}" fill="none" stroke="#d67835" '
+            'stroke-width="2" stroke-linejoin="round" opacity="0.9"/>',
+            f'<polyline points="{full_loss_points}" fill="none" stroke="#245c42" '
+            'stroke-width="4" stroke-linejoin="round"/>',
         ]
     )
     for update in (0, 16, 32, 48, 64):
-        elements.append(
-            f'<text x="{update_x(update):.2f}" y="928" text-anchor="middle" '
-            f'class="sgd-axis">{update}</text>'
+        body.append(
+            f'<text x="{update_x(update):.2f}" y="{loss_bottom + 20:g}" text-anchor="middle" '
+            f'class="axis">{update}</text>'
         )
-    elements.extend(
-        [
-            '<text x="76" y="942" class="sgd-axis">update</text>',
-            (
-                '<text x="32" y="990" class="sgd-metric">'
-                f"full loss {float(probe['initial_loss']):.3f} → "
-                f"{float(probe['final_loss']):.4f}</text>"
-            ),
-            (
-                '<text x="608" y="990" text-anchor="end" class="sgd-metric">'
-                f"full-loss upward steps {int(probe['upward_full_loss_steps'])} / 63</text>"
-            ),
-            (
-                '<text x="32" y="1032" class="sgd-meta">'
-                f"実行生成: fixed LCG shuffle + pure Python mini-batch SGD "
-                f"· dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1058" class="sgd-note">'
-                "固定線形回帰です。validation、汎化性能、neural network、"
-                "SGD一般の性能は示しません。</text>"
-            ),
-            """
-<style>
-  .sgd-title { font: 700 22px system-ui, sans-serif; fill: #102a2e; }
-  .sgd-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
-  .sgd-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
-  .sgd-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
-  .sgd-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
-  .sgd-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
-  .sgd-metric { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
-  .sgd-meta { font: 400 11px system-ui, sans-serif; fill: #45656a; }
-  .sgd-note { font: 400 11px system-ui, sans-serif; fill: #8b4c3d; }
-</style>
-""",
-            "</svg>\n",
-        ]
+    body.append(
+        f'<text x="{plot_right:g}" y="{panel_bottom + 22:g}" text-anchor="end" class="axis">'
+        "横軸: 更新の回数（破線はepochの区切り）</text>"
     )
-    return "".join(elements)
+    rows, y = _metric_rows(
+        panel_bottom + 54,
+        (
+            (
+                "全データの損失",
+                f"{float(probe['initial_loss']):.3f} → {float(probe['final_loss']):.4f}",
+            ),
+            (
+                "全データの損失が増えた更新",
+                f"{int(probe['upward_full_loss_steps'])} / {len(history) - 1}",
+            ),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"固定したLCGによるshuffle + pure Pythonのmini-batch SGD · dataset {dataset_version}",
+        "固定した線形回帰です。検証、汎化性能、neural network、SGD一般の性能は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "mini-batchの揺れと全データの損失を分けて読む",
+        (
+            "標本32個、パラメータ2個の固定線形回帰をbatch size 4、学習率0.3で"
+            "8 epoch実行したpure PythonのSGDの結果です。パラメータの経路、mini-batchの損失、"
+            "全データの損失を同じ実行から示します。検証、汎化、"
+            "neural network、frameworkの実装、SGD一般の性能は示しません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _spatial_objective(value: float) -> float:
@@ -3796,27 +3797,112 @@ def _spatial_branch_bound_svg(dataset_version: str) -> str:
     ):
         raise TypeError("spatial branch-and-bound probe collections must be tuples")
 
-    width, height = 640, 1080
-    plot_left, plot_right = 70.0, 594.0
+    plot_left, plot_right = 56.0, 404.0
 
     def x_project(value: float) -> float:
         return plot_left + (value - float(domain[0])) / (float(domain[1]) - float(domain[0])) * (
             plot_right - plot_left
         )
 
-    curve_top, curve_bottom = 180.0, 430.0
+    title = "下界が上がると、捨てられる区間が増える"
+    body, y = _figure_heading(title, "固定した多項式・x ∈ [0, 2]・gapの許容値 0.01")
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 22}" '
+            f'y2="{legend_y - 5:g}" stroke="#245c42" stroke-width="5"/>',
+            f'<text x="{FIGURE_MARGIN + 30}" y="{legend_y:g}" class="note">'
+            "目的関数／未処理の区間</text>",
+            f'<rect x="{FIGURE_MARGIN + 210}" y="{legend_y - 12:g}" width="18" height="12" '
+            'rx="3" fill="#bd6754"/>',
+            f'<text x="{FIGURE_MARGIN + 236}" y="{legend_y:g}" class="note">下界で枝刈り</text>',
+            f'<circle cx="{FIGURE_MARGIN + 6}" cy="{legend_y + 19:g}" r="6" fill="#d67835"/>',
+            f'<text x="{FIGURE_MARGIN + 18}" y="{legend_y + 24:g}" class="note">'
+            "暫定解（incumbent）</text>",
+        ]
+    )
+    panel, top, panel_bottom = _panel(legend_y + 24 + 14, "固定した目的関数と、得られた暫定解", 196)
+    body.extend(panel)
+    curve_top, curve_bottom = top + 6, top + 166
 
     def curve_y(value: float) -> float:
         return curve_bottom - (value + 1.2) / 3.4 * (curve_bottom - curve_top)
 
+    for value in (-1.0, 0.0, 1.0, 2.0):
+        tick_y = curve_y(value)
+        body.extend(
+            [
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_left - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{value:g}</text>',
+            ]
+        )
     curve_points = []
     for index in range(161):
         value = float(domain[0]) + index / 160 * (float(domain[1]) - float(domain[0]))
         curve_points.append(f"{x_project(value):.2f},{curve_y(_spatial_objective(value)):.2f}")
-
+    body.append(
+        f'<polyline points="{" ".join(curve_points)}" fill="none" stroke="#245c42" '
+        'stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'
+    )
+    best_point = float(probe["best_point"])
+    best_value = float(probe["best_value"])
+    body.extend(
+        [
+            f'<circle cx="{x_project(best_point):.2f}" cy="{curve_y(best_value):.2f}" '
+            'r="6.5" fill="#d67835" stroke="#fff" stroke-width="2"/>',
+            f'<text x="{x_project(best_point):.2f}" y="{curve_y(best_value) - 22:.2f}" '
+            'text-anchor="middle" '
+            f'class="method halo">x*={best_point:.2f} · f={best_value:.2f}</text>',
+        ]
+    )
+    for value in (0.0, 0.5, 1.0, 1.5, 2.0):
+        body.append(
+            f'<text x="{x_project(value):.2f}" y="{curve_bottom + 22:g}" text-anchor="middle" '
+            f'class="axis">{value:g}</text>'
+        )
+    panel, top, panel_bottom = _panel(panel_bottom + 12, "停止したときの区間の分割", 96)
+    body.extend(panel)
+    body.append(
+        f'<text x="{FIGURE_WIDTH - FIGURE_MARGIN - 14}" y="{top - 18:g}" text-anchor="end" '
+        f'class="status">未処理 {len(pending)} · 枝刈り {len(pruned)}</text>'
+    )
+    strip_y, strip_height = top + 8, 30.0
+    body.append(
+        f'<rect x="{plot_left:g}" y="{strip_y:g}" width="{plot_right - plot_left:g}" '
+        f'height="{strip_height:g}" rx="6" fill="#edf1ed"/>'
+    )
+    for lower, upper, _ in pruned:
+        x = x_project(float(lower))
+        region_width = max(1.0, x_project(float(upper)) - x)
+        body.append(
+            f'<rect x="{x:.2f}" y="{strip_y:g}" width="{region_width:.2f}" '
+            f'height="{strip_height:g}" fill="#bd6754" opacity="0.82"/>'
+        )
+    for _, lower, upper in pending:
+        x = x_project(float(lower))
+        region_width = max(1.0, x_project(float(upper)) - x)
+        body.append(
+            f'<rect x="{x:.2f}" y="{strip_y:g}" width="{region_width:.2f}" '
+            f'height="{strip_height:g}" fill="#245c42" opacity="0.9"/>'
+        )
+    body.extend(
+        [
+            f'<line x1="{x_project(best_point):.2f}" y1="{strip_y - 6:g}" '
+            f'x2="{x_project(best_point):.2f}" y2="{strip_y + strip_height + 6:g}" '
+            'stroke="#d67835" stroke-width="3.5"/>',
+            f'<text x="{x_project(best_point):.2f}" y="{strip_y + strip_height + 28:g}" '
+            f'text-anchor="middle" class="method">暫定解 x={best_point:g}</text>',
+        ]
+    )
     history_rows = [(int(row[0]), float(row[1]), float(row[2]), int(row[3])) for row in history]
-    convergence_top, convergence_bottom = 706.0, 925.0
     max_node = max(row[0] for row in history_rows)
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "ノードを処理するほど、全体の下界が上がる", 196
+    )
+    body.extend(panel)
+    convergence_top, convergence_bottom = top + 6, top + 156
 
     def history_x(node: int) -> float:
         return plot_left + node / max_node * (plot_right - plot_left)
@@ -3824,6 +3910,16 @@ def _spatial_branch_bound_svg(dataset_version: str) -> str:
     def history_y(value: float) -> float:
         return convergence_bottom - (value + 4.2) / 4.4 * (convergence_bottom - convergence_top)
 
+    for value in (-4.0, -3.0, -2.0, -1.0, 0.0):
+        tick_y = history_y(value)
+        body.extend(
+            [
+                f'<line x1="{plot_left:g}" y1="{tick_y:.2f}" x2="{plot_right:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_left - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{value:g}</text>',
+            ]
+        )
     bound_points = " ".join(
         f"{history_x(node):.2f},{history_y(bound):.2f}" for node, bound, _, _ in history_rows
     )
@@ -3831,181 +3927,50 @@ def _spatial_branch_bound_svg(dataset_version: str) -> str:
         f"{history_x(node):.2f},{history_y(incumbent):.2f}"
         for node, _, incumbent, _ in history_rows
     )
-
-    elements = [
-        _svg_open(
-            "下界が上がると、捨てられる区間が増える",
-            (
-                "固定1変数多項式をpure Pythonのinterval arithmetic lower boundで"
-                "空間branch-and-boundした実行結果です。目的関数、最終partition、"
-                "incumbentとglobal lower boundの履歴を示します。McCormick relaxation、"
-                "多変数MINLP、solver一般の性能や有限時間での厳密解を示す図ではありません。"
-            ),
-            width=width,
-            height=height,
-        ),
-        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
-        ('<text x="32" y="50" class="sbb-title">下界が上がると、捨てられる区間が増える</text>'),
-        (
-            '<text x="32" y="82" class="sbb-subtitle">'
-            "fixed polynomial · x ∈ [0, 2] · gap tolerance 0.01</text>"
-        ),
-        '<line x1="36" y1="118" x2="60" y2="118" stroke="#245c42" stroke-width="7"/>',
-        '<text x="70" y="124" class="sbb-legend">objective / open region</text>',
-        '<rect x="278" y="109" width="22" height="14" rx="3" fill="#bd6754"/>',
-        '<text x="310" y="124" class="sbb-legend">boundでprune</text>',
-        '<circle cx="468" cy="117" r="7" fill="#d67835"/>',
-        '<text x="482" y="124" class="sbb-legend">incumbent</text>',
-        '<rect x="24" y="150" width="592" height="330" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-        '<text x="44" y="185" class="sbb-panel">固定目的関数と得られたincumbent</text>',
-    ]
-    for value in (-1.0, 0.0, 1.0, 2.0):
-        y = curve_y(value)
-        elements.extend(
-            [
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="sbb-axis">{value:g}</text>'
-                ),
-            ]
-        )
-    elements.append(
-        f'<polyline points="{" ".join(curve_points)}" fill="none" stroke="#245c42" '
-        'stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>'
-    )
-    best_point = float(probe["best_point"])
-    best_value = float(probe["best_value"])
-    elements.extend(
+    body.extend(
         [
-            (
-                f'<circle cx="{x_project(best_point):.2f}" cy="{curve_y(best_value):.2f}" '
-                'r="9" fill="#d67835" stroke="#fff" stroke-width="3"/>'
-            ),
-            (
-                f'<text x="{x_project(best_point) + 14:.2f}" '
-                f'y="{curve_y(best_value) - 8:.2f}" class="sbb-label">'
-                f"x*={best_point:.2f} · f={best_value:.2f}</text>"
-            ),
-        ]
-    )
-    for value in (0.0, 0.5, 1.0, 1.5, 2.0):
-        elements.append(
-            f'<text x="{x_project(value):.2f}" y="458" text-anchor="middle" '
-            f'class="sbb-axis">{value:g}</text>'
-        )
-
-    elements.extend(
-        [
-            '<rect x="24" y="502" width="592" height="152" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            '<text x="44" y="538" class="sbb-panel">停止時の区間partition</text>',
-            '<text x="596" y="538" text-anchor="end" class="sbb-status">'
-            f"open {len(pending)} · pruned {len(pruned)}</text>",
-            '<rect x="70" y="566" width="524" height="38" rx="8" fill="#edf1ed"/>',
-        ]
-    )
-    for lower, upper, _ in pruned:
-        x = x_project(float(lower))
-        region_width = max(1.0, x_project(float(upper)) - x)
-        elements.append(
-            f'<rect x="{x:.2f}" y="566" width="{region_width:.2f}" height="38" '
-            'fill="#bd6754" opacity="0.82"/>'
-        )
-    for _, lower, upper in pending:
-        x = x_project(float(lower))
-        region_width = max(1.0, x_project(float(upper)) - x)
-        elements.append(
-            f'<rect x="{x:.2f}" y="566" width="{region_width:.2f}" height="38" '
-            'fill="#245c42" opacity="0.9"/>'
-        )
-    elements.extend(
-        [
-            (
-                f'<line x1="{x_project(best_point):.2f}" y1="558" '
-                f'x2="{x_project(best_point):.2f}" y2="614" '
-                'stroke="#d67835" stroke-width="5"/>'
-            ),
-            (
-                f'<text x="{x_project(best_point):.2f}" y="636" text-anchor="middle" '
-                'class="sbb-label">incumbent x=1</text>'
-            ),
-            '<rect x="24" y="676" width="592" height="302" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            '<text x="44" y="712" class="sbb-panel">nodeを処理するほどglobal boundが上がる</text>',
-        ]
-    )
-    for value in (-4.0, -3.0, -2.0, -1.0, 0.0):
-        y = history_y(value)
-        elements.extend(
-            [
-                (
-                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
-                    f'class="sbb-axis">{value:g}</text>'
-                ),
-            ]
-        )
-    elements.extend(
-        [
-            (
-                f'<polyline points="{bound_points}" fill="none" stroke="#245c42" '
-                'stroke-width="6" stroke-linejoin="round"/>'
-            ),
-            (
-                f'<polyline points="{incumbent_points}" fill="none" stroke="#d67835" '
-                'stroke-width="5" stroke-linejoin="round"/>'
-            ),
+            f'<polyline points="{bound_points}" fill="none" stroke="#245c42" '
+            'stroke-width="4" stroke-linejoin="round"/>',
+            f'<polyline points="{incumbent_points}" fill="none" stroke="#d67835" '
+            'stroke-width="3.5" stroke-linejoin="round"/>',
         ]
     )
     for node in (0, 20, 40, 60, max_node):
-        elements.append(
-            f'<text x="{history_x(node):.2f}" y="952" text-anchor="middle" '
-            f'class="sbb-axis">{node}</text>'
+        body.append(
+            f'<text x="{history_x(node):.2f}" y="{convergence_bottom + 22:g}" '
+            f'text-anchor="middle" class="axis">{node}</text>'
         )
-    elements.extend(
-        [
-            '<text x="70" y="968" class="sbb-axis">processed nodes</text>',
-            (f'<text x="32" y="1012" class="sbb-metric">incumbent {best_value:.3f}</text>'),
-            (
-                '<text x="320" y="1012" text-anchor="middle" class="sbb-metric">'
-                f"global bound {float(probe['global_bound']):.3f}</text>"
-            ),
-            (
-                '<text x="608" y="1012" text-anchor="end" class="sbb-metric">'
-                f"gap {float(probe['absolute_gap']):.4f}</text>"
-            ),
-            (
-                '<text x="32" y="1047" class="sbb-meta">'
-                f"実行生成: interval arithmetic lower bound + deterministic best-bound search "
-                f"· dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1070" class="sbb-note">'
-                "固定1変数教材です。McCormick relaxation、多変数MINLP、"
-                "solver一般の性能は示しません。</text>"
-            ),
-            """
-<style>
-  .sbb-title { font: 700 22px system-ui, sans-serif; fill: #102a2e; }
-  .sbb-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
-  .sbb-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
-  .sbb-status, .sbb-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
-  .sbb-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
-  .sbb-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
-  .sbb-metric { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
-  .sbb-meta { font: 400 11px system-ui, sans-serif; fill: #45656a; }
-  .sbb-note { font: 400 11px system-ui, sans-serif; fill: #8b4c3d; }
-</style>
-""",
-            "</svg>\n",
-        ]
+    body.append(
+        f'<text x="{plot_right:g}" y="{panel_bottom + 22:g}" text-anchor="end" class="axis">'
+        "横軸: 処理したノード数　緑: 全体の下界　橙: 暫定解</text>"
     )
-    return "".join(elements)
+    rows, y = _metric_rows(
+        panel_bottom + 54,
+        (
+            ("暫定解の値", f"{best_value:.3f}"),
+            ("全体の下界", f"{float(probe['global_bound']):.3f}"),
+            ("gap", f"{float(probe['absolute_gap']):.4f}"),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"区間演算による下界 + 決定論的なbest-bound探索 · dataset {dataset_version}",
+        "固定した1変数の教材です。McCormick relaxation、多変数のMINLP、solver一般の性能は"
+        "示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "下界が上がると、捨てられる区間が増える",
+        (
+            "固定した1変数の多項式を、pure Pythonの区間演算による下界で"
+            "空間branch-and-boundした実行結果です。目的関数、最終的な区間の分割、"
+            "暫定解と全体の下界の履歴を示します。McCormick relaxation、"
+            "多変数のMINLP、solver一般の性能や有限時間での厳密解を示す図ではありません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _solve_dense_linear_system(
@@ -4083,7 +4048,7 @@ def _multiple_shooting_svg(dataset_version: str) -> str:
     solved = probe["solved"]
     if not isinstance(initial, dict) or not isinstance(solved, dict):
         raise TypeError("multiple-shooting probe panels must be dictionaries")
-    plot_x, plot_width, plot_height = 76.0, 500.0, 205.0
+    plot_x, plot_width, plot_height = 74.0, 290.0, 170.0
     state_min, state_max = -0.1, 1.35
 
     def project_x(time: float) -> float:
@@ -4098,7 +4063,7 @@ def _multiple_shooting_svg(dataset_version: str) -> str:
         panel_y: float,
         *,
         show_defects: bool,
-    ) -> list[str]:
+    ) -> tuple[list[str], float]:
         vector = payload["vector"]
         endpoints = payload["endpoints"]
         defects = payload["defects"]
@@ -4111,7 +4076,13 @@ def _multiple_shooting_svg(dataset_version: str) -> str:
         state1, control0, control1 = (float(value) for value in vector)
         end0, end1 = (float(value) for value in endpoints)
         defect0, defect1 = (float(value) for value in defects)
-        plot_y = panel_y + 58
+        result, top, bottom = _panel(panel_y, title, 22 + 18 + plot_height + 34)
+        result.append(
+            f'<text x="{FIGURE_MARGIN + 14}" y="{top + 4:g}" class="status">'
+            f"u=[{control0:.2f}, {control1:.2f}] · "
+            f"‖defect‖={float(payload['defect_norm']):.3f}</text>"
+        )
+        plot_y = top + 28
         segment0 = (
             (project_x(0.0), project_y(float(probe["initial_state"]), plot_y)),
             (project_x(0.5), project_y(end0, plot_y)),
@@ -4120,70 +4091,51 @@ def _multiple_shooting_svg(dataset_version: str) -> str:
             (project_x(0.5), project_y(state1, plot_y)),
             (project_x(1.0), project_y(end1, plot_y)),
         )
-        result = [
-            (
-                f'<rect x="24" y="{panel_y}" width="592" height="338" rx="18" '
-                'fill="#fff" stroke="#cfd8d1"/>'
-            ),
-            f'<text x="44" y="{panel_y + 35}" class="ms-panel">{html.escape(title)}</text>',
-            (
-                f'<text x="596" y="{panel_y + 35}" text-anchor="end" class="ms-status">'
-                f"u=[{control0:.2f}, {control1:.2f}] · "
-                f"‖defect‖={float(payload['defect_norm']):.3f}</text>"
-            ),
-            (
-                f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
-                f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
-            ),
-        ]
+        result.append(
+            f'<rect x="{plot_x - 14:g}" y="{plot_y:g}" width="{plot_width + 28:g}" '
+            f'height="{plot_height:g}" rx="10" fill="#fbfcfa"/>'
+        )
         for value in (0.0, 0.5, 1.0, 1.25):
-            y = project_y(value, plot_y)
+            tick_y = project_y(value, plot_y)
             result.extend(
                 [
-                    (
-                        f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
-                        f'y2="{y:.2f}" stroke="#ebe8e0"/>'
-                    ),
-                    (
-                        f'<text x="{plot_x - 10}" y="{y + 6:.2f}" text-anchor="end" '
-                        f'class="ms-axis">{value:g}</text>'
-                    ),
+                    f'<line x1="{plot_x - 14:g}" y1="{tick_y:.2f}" '
+                    f'x2="{plot_x + plot_width + 14:g}" y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                    f'<text x="{plot_x - 20:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                    f'class="axis">{value:g}</text>',
                 ]
             )
-        for time, label in ((0.0, "t₀"), (0.5, "boundary"), (1.0, "target")):
+        for time, label in ((0.0, "t₀"), (0.5, "境界"), (1.0, "終端")):
             result.append(
-                f'<text x="{project_x(time):.2f}" y="{plot_y + plot_height + 27}" '
-                f'text-anchor="middle" class="ms-axis">{label}</text>'
+                f'<text x="{project_x(time):.2f}" y="{plot_y + plot_height + 22:g}" '
+                f'text-anchor="middle" class="axis">{label}</text>'
             )
         for points in (segment0, segment1):
             result.append(
                 f'<line x1="{points[0][0]:.2f}" y1="{points[0][1]:.2f}" '
                 f'x2="{points[1][0]:.2f}" y2="{points[1][1]:.2f}" '
-                'stroke="#245c42" stroke-width="7" stroke-linecap="round"/>'
+                'stroke="#245c42" stroke-width="5" stroke-linecap="round"/>'
             )
+        labels = []
         for time, state, label in (
             (0.0, float(probe["initial_state"]), "x₀"),
-            (0.5, state1, "decision x₁"),
-            (1.0, float(probe["target_state"]), "target"),
+            (0.5, state1, "決定変数 x₁"),
+            (1.0, float(probe["target_state"]), "目標"),
         ):
-            label_y = project_y(state, plot_y) - 15
+            label_y = project_y(state, plot_y) - 12
             label_anchor = "middle"
             label_x = project_x(time)
             if show_defects and time == 1.0:
-                label_y = project_y(state, plot_y) + 24
+                label_y = project_y(state, plot_y) + 22
                 label_anchor = "end"
-                label_x += 20
-            result.extend(
-                [
-                    (
-                        f'<circle cx="{project_x(time):.2f}" cy="{project_y(state, plot_y):.2f}" '
-                        'r="8" fill="#d67835" stroke="#fff" stroke-width="3"/>'
-                    ),
-                    (
-                        f'<text x="{label_x:.2f}" y="{label_y:.2f}" '
-                        f'text-anchor="{label_anchor}" class="ms-label">{label}</text>'
-                    ),
-                ]
+                label_x += 16
+            result.append(
+                f'<circle cx="{project_x(time):.2f}" cy="{project_y(state, plot_y):.2f}" '
+                'r="6" fill="#d67835" stroke="#fff" stroke-width="2"/>'
+            )
+            labels.append(
+                f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" '
+                f'class="method halo">{label}</text>'
             )
         if show_defects:
             for time, start, stop, label in (
@@ -4192,106 +4144,71 @@ def _multiple_shooting_svg(dataset_version: str) -> str:
             ):
                 x = project_x(time)
                 y1, y2 = project_y(start, plot_y), project_y(stop, plot_y)
-                result.extend(
-                    [
-                        (
-                            f'<line x1="{x:.2f}" y1="{y1:.2f}" x2="{x:.2f}" y2="{y2:.2f}" '
-                            'stroke="#bd6754" stroke-width="5" stroke-dasharray="7 5"/>'
-                        ),
-                        (
-                            f'<text x="{x - 12:.2f}" y="{(y1 + y2) / 2 + 5:.2f}" '
-                            f'text-anchor="end" class="ms-defect">{label}</text>'
-                        ),
-                    ]
+                result.append(
+                    f'<line x1="{x:.2f}" y1="{y1:.2f}" x2="{x:.2f}" y2="{y2:.2f}" '
+                    'stroke="#bd6754" stroke-width="3.5" stroke-dasharray="6 4"/>'
                 )
-        return result
+                labels.append(
+                    f'<text x="{x - 10:.2f}" y="{(y1 + y2) / 2 + 5:.2f}" text-anchor="end" '
+                    f'class="method halo" fill="#a33d30">{label}</text>'
+                )
+        return result + labels, bottom
 
-    elements = [
-        _svg_open(
-            "短いrolloutは、境界がつながって初めて一本の軌道になる",
-            (
-                "記事と同じ1 state、2 segment、segment duration 0.5の固定Multiple "
-                "Shooting問題です。初期guessと、同じlinear continuity constraintsを"
-                "exact equality KKTで解いた結果を比較します。segment rollout endpointと"
-                "境界state decisionのずれ、terminal targetのずれ、defect norm、control "
-                "costを示します。SciPy SLSQP自体の実行結果、非線形dynamics、path制約、"
-                "一般的な収束性能は示しません。"
-            ),
-            width=640,
-            height=1080,
-        ),
-        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
-        (
-            '<text x="32" y="50" class="ms-title">'
-            "短いrolloutは、境界がつながって初めて一本の軌道になる</text>"
-        ),
-        (
-            '<text x="32" y="82" class="ms-subtitle">'
-            "1 state · 2 segments · duration 0.5 · target 1.0"
-            "</text>"
-        ),
-        '<line x1="36" y1="116" x2="76" y2="116" stroke="#245c42" stroke-width="7"/>',
-        '<text x="86" y="122" class="ms-legend">segment rollout</text>',
-        '<circle cx="266" cy="116" r="8" fill="#d67835"/>',
-        '<text x="284" y="122" class="ms-legend">state decision</text>',
-        (
-            '<line x1="458" y1="102" x2="458" y2="128" stroke="#bd6754" '
-            'stroke-width="5" stroke-dasharray="7 5"/>'
-        ),
-        '<text x="474" y="122" class="ms-legend">defect</text>',
-    ]
-    elements.extend(panel("初期guess", initial, 148.0, show_defects=True))
-    elements.extend(panel("continuity solve後", solved, 510.0, show_defects=False))
-    elements.extend(
+    title = "短い区間の前進計算は、境界がつながって初めて一本の軌道になる"
+    body, y = _figure_heading(title, "状態1個・区間2個・区間の長さ 0.5・目標 1.0")
+    legend_y = y + 14
+    body.extend(
         [
-            (
-                '<text x="32" y="904" class="ms-result">'
-                f"objective {float(initial['objective']):.2f} → "
-                f"{float(solved['objective']):.2f}</text>"
-            ),
-            (
-                '<text x="608" y="904" text-anchor="end" class="ms-result">'
-                f"defect norm {float(initial['defect_norm']):.3f} → "
-                f"{float(solved['defect_norm']):.1f}</text>"
-            ),
-            (
-                '<text x="32" y="958" class="ms-provenance">'
-                "実行生成: fixed linear segment integration + exact equality KKT solve"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1002" class="ms-caveat">'
-                "記事と同じ2-segment定式化です。SciPy SLSQP自体の実行結果ではありません。"
-                "</text>"
-            ),
-            (
-                '<text x="32" y="1032" class="ms-caveat">'
-                "非線形dynamics、path制約、積分誤差、solverの一般性能を示しません。</text>"
-            ),
-            (
-                '<text x="32" y="1060" class="ms-caveat">'
-                "実務ではsegment分割と積分toleranceを変えて再検証します。</text>"
-            ),
-            (
-                "<style>"
-                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-                ".ms-title{font-size:25px;font-weight:760}"
-                ".ms-subtitle{font-size:17px;fill:#617068}"
-                ".ms-legend{font-size:16px;fill:#46554d}"
-                ".ms-panel{font-size:22px;font-weight:750}"
-                ".ms-status{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".ms-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".ms-label{font-size:15px;font-weight:700}"
-                ".ms-defect{font-size:15px;fill:#a33d30;font-weight:700}"
-                ".ms-result{font-size:18px;font-weight:750;font-variant-numeric:tabular-nums}"
-                ".ms-provenance{font-size:14px;fill:#617068}"
-                ".ms-caveat{font-size:14px;fill:#7a4b38}"
-                "</style>"
-            ),
-            "</svg>\n",
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 26}" '
+            f'y2="{legend_y - 5:g}" stroke="#245c42" stroke-width="5"/>',
+            f'<text x="{FIGURE_MARGIN + 34}" y="{legend_y:g}" class="note">区間の前進計算</text>',
+            f'<circle cx="{FIGURE_MARGIN + 162}" cy="{legend_y - 5:g}" r="6" fill="#d67835"/>',
+            f'<text x="{FIGURE_MARGIN + 174}" y="{legend_y:g}" class="note">状態の決定変数</text>',
+            f'<line x1="{FIGURE_MARGIN + 300}" y1="{legend_y - 15:g}" x2="{FIGURE_MARGIN + 300}" '
+            f'y2="{legend_y + 3:g}" stroke="#bd6754" stroke-width="3.5" '
+            'stroke-dasharray="6 4"/>',
+            f'<text x="{FIGURE_MARGIN + 310}" y="{legend_y:g}" class="note">defect</text>',
         ]
     )
-    return "".join(elements)
+    first, bottom = panel("初期の推定値", initial, legend_y + 14, show_defects=True)
+    body.extend(first)
+    second, bottom = panel("連続性の制約を解いた後", solved, bottom + 12, show_defects=False)
+    body.extend(second)
+    rows, y = _metric_rows(
+        bottom + 34,
+        (
+            (
+                "目的値",
+                f"{float(initial['objective']):.2f} → {float(solved['objective']):.2f}",
+            ),
+            (
+                "defectのノルム",
+                f"{float(initial['defect_norm']):.3f} → {float(solved['defect_norm']):.1f}",
+            ),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"固定した線形の区間積分 + 等式制約のKKTを厳密に解く · dataset {dataset_version}",
+        "記事と同じ2区間の定式化です。SciPy SLSQP自体の実行結果ではありません。"
+        "非線形のdynamics、経路制約、積分誤差、solverの一般的な性能は示しません。"
+        "実務では区間の分け方と積分のtoleranceを変えて再検証します。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "短い区間の前進計算は、境界がつながって初めて一本の軌道になる",
+        (
+            "記事と同じ状態1個、区間2個、区間の長さ0.5の固定Multiple "
+            "Shooting問題です。初期の推定値と、同じ線形の連続性制約を"
+            "等式制約のKKTで厳密に解いた結果を比較します。区間の前進計算の終点と"
+            "境界の状態の決定変数のずれ、終端の目標とのずれ、defectのノルム、制御の"
+            "costを示します。SciPy SLSQP自体の実行結果、非線形のdynamics、経路制約、"
+            "一般的な収束性能は示しません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _finite_horizon_lqr_probe() -> tuple[
@@ -4342,14 +4259,49 @@ def _finite_horizon_lqr_probe() -> tuple[
 
 def _lqr_backward_forward_svg(dataset_version: str) -> str:
     states, controls, gains = _finite_horizon_lqr_probe()
-    plot_x, plot_width = 68.0, 536.0
-    state_y, state_height = 318.0, 285.0
+    plot_x, plot_width = 58.0, 346.0
     state_min, state_max = -2.8, 2.1
-    control_y, control_height = 760.0, 145.0
     control_limit = max(abs(value) for value in controls)
 
     def project_x(step: int) -> float:
         return plot_x + step / 40 * plot_width
+
+    def polyline(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
+        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        return (
+            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
+            'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"'
+            f"{dash_attribute}/>"
+        )
+
+    terminal_position, terminal_velocity = states[-1]
+    first_gain, middle_gain, final_gain = gains[0], gains[20], gains[-1]
+    title = "backward passのgainが、forwardの前進計算を変える"
+    body, y = _figure_heading(title, "状態2個・制御1個・horizon 40・dt 0.1・目標 [0, 0]")
+    panel, top, panel_bottom = _panel(y + 8, "終端のcostから、時刻ごとのgainへ", 3 * 26 + 2)
+    body.extend(panel)
+    for index, (name, gain) in enumerate(
+        (("K₃₉（終端側）", final_gain), ("K₂₀", middle_gain), ("K₀（初期側）", first_gain))
+    ):
+        row_y = top + 6 + index * 26
+        body.extend(
+            [
+                f'<text x="{FIGURE_MARGIN + 14}" y="{row_y:g}" class="method">{name}</text>',
+                f'<text x="{FIGURE_WIDTH - FIGURE_MARGIN - 14}" y="{row_y:g}" '
+                f'text-anchor="end" class="metric">[{gain[0]:.3f}, {gain[1]:.3f}]</text>',
+            ]
+        )
+    body.append(
+        f'<text x="{FIGURE_MARGIN + 150}" y="{top + 6 + 26:g}" class="status">'
+        "↑ backwardに計算</text>"
+    )
+    state_height = 190.0
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "forwardの前進計算: 状態", state_height + 28 + 30
+    )
+    body.extend(panel)
+    state_y = top
 
     def project_state(value: float) -> float:
         bounded = min(state_max, max(state_min, value))
@@ -4357,190 +4309,114 @@ def _lqr_backward_forward_svg(dataset_version: str) -> str:
             state_y + state_height - (bounded - state_min) / (state_max - state_min) * state_height
         )
 
-    def project_control(value: float) -> float:
-        return control_y + control_height / 2 - value / control_limit * control_height * 0.43
-
-    position_points = [
-        (project_x(index), project_state(state[0])) for index, state in enumerate(states)
-    ]
-    velocity_points = [
-        (project_x(index), project_state(state[1])) for index, state in enumerate(states)
-    ]
-    uncontrolled_points = [(project_x(index), project_state(2.0)) for index in range(41)]
-    control_points = [
-        (project_x(index), project_control(value)) for index, value in enumerate(controls)
-    ]
-
-    def polyline(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
-        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
-        return (
-            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
-            'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"'
-            f"{dash_attribute}/>"
-        )
-
-    terminal_position, terminal_velocity = states[-1]
-    first_gain, middle_gain, final_gain = gains[0], gains[20], gains[-1]
-    elements = [
-        _svg_open(
-            "backward passのgainがforward rolloutを変える",
-            (
-                "記事のPython例と同じ2 state、1 control、40 stepの有限horizon linear LQR"
-                "部分問題をpure Pythonで実行した結果です。backward passで時刻別feedback "
-                "gainを求め、初期state [2, 0]からforward rolloutします。stateとcontrolの"
-                "履歴、terminal state、maximum controlを示します。非線形iLQR/DDP反復、"
-                "regularization、line search、一般制約、実時間性能は含みません。"
-            ),
-            width=640,
-            height=1080,
-        ),
-        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="50" class="lqr-title">backward passのgainがforward rolloutを変える</text>',
-        (
-            '<text x="32" y="82" class="lqr-subtitle">'
-            "2 state · 1 control · horizon 40 · dt 0.1 · target [0, 0]"
-            "</text>"
-        ),
-        '<text x="32" y="128" class="lqr-section">terminal costから時刻別gainへ</text>',
-        '<rect x="24" y="150" width="592" height="118" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-        '<text x="48" y="183" class="lqr-small-label">backward</text>',
-        '<text x="48" y="218" class="lqr-gain">K₃₉</text>',
-        (
-            '<text x="48" y="246" class="lqr-gain-value">'
-            f"[{final_gain[0]:.3f}, {final_gain[1]:.3f}]</text>"
-        ),
-        '<text x="201" y="225" class="lqr-arrow">→</text>',
-        '<text x="251" y="218" class="lqr-gain">K₂₀</text>',
-        (
-            '<text x="251" y="246" class="lqr-gain-value">'
-            f"[{middle_gain[0]:.3f}, {middle_gain[1]:.3f}]</text>"
-        ),
-        '<text x="404" y="225" class="lqr-arrow">→</text>',
-        '<text x="454" y="218" class="lqr-gain">K₀</text>',
-        (
-            '<text x="454" y="246" class="lqr-gain-value">'
-            f"[{first_gain[0]:.3f}, {first_gain[1]:.3f}]</text>"
-        ),
-        '<text x="32" y="302" class="lqr-section">forward rolloutのstate</text>',
-        (
-            f'<rect x="{plot_x}" y="{state_y}" width="{plot_width}" height="{state_height}" '
-            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-    ]
     for value in (-2.0, -1.0, 0.0, 1.0, 2.0):
-        y = project_state(value)
-        elements.extend(
+        tick_y = project_state(value)
+        body.extend(
             [
-                (
-                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
-                    f'y2="{y:.2f}" stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_x - 10}" y="{y + 6:.2f}" text-anchor="end" '
-                    f'class="lqr-axis">{value:g}</text>'
-                ),
+                f'<line x1="{plot_x:g}" y1="{tick_y:.2f}" x2="{plot_x + plot_width:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_x - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{value:g}</text>',
             ]
         )
     for step in (0, 10, 20, 30, 40):
-        x = project_x(step)
-        elements.append(
-            f'<text x="{x:.2f}" y="{state_y + state_height + 27}" '
-            f'text-anchor="middle" class="lqr-axis">{step}</text>'
+        body.append(
+            f'<text x="{project_x(step):.2f}" y="{state_y + state_height + 22:g}" '
+            f'text-anchor="middle" class="axis">{step}</text>'
         )
-    elements.extend(
+    body.extend(
         [
-            polyline(uncontrolled_points, "#9aa49e", "9 7"),
-            polyline(position_points, "#245c42"),
-            polyline(velocity_points, "#d67835"),
-            '<line x1="36" y1="658" x2="76" y2="658" stroke="#245c42" stroke-width="5"/>',
-            '<text x="84" y="664" class="lqr-legend">position</text>',
-            '<line x1="190" y1="658" x2="230" y2="658" stroke="#d67835" stroke-width="5"/>',
-            '<text x="238" y="664" class="lqr-legend">velocity</text>',
-            (
-                '<line x1="344" y1="658" x2="384" y2="658" stroke="#9aa49e" '
-                'stroke-width="4" stroke-dasharray="9 7"/>'
+            polyline(
+                [(project_x(index), project_state(2.0)) for index in range(41)], "#9aa49e", "7 6"
             ),
-            '<text x="392" y="664" class="lqr-legend">u=0 position</text>',
-            (
-                '<text x="32" y="708" class="lqr-result">'
-                f"terminal state [{terminal_position:.5f}, {terminal_velocity:.5f}]"
-                "</text>"
+            polyline(
+                [(project_x(index), project_state(state[0])) for index, state in enumerate(states)],
+                "#245c42",
             ),
-            (
-                '<text x="608" y="708" text-anchor="end" class="lqr-result">'
-                f"max |u| {control_limit:.3f}</text>"
+            polyline(
+                [(project_x(index), project_state(state[1])) for index, state in enumerate(states)],
+                "#d67835",
             ),
-            '<text x="32" y="746" class="lqr-section">forward rolloutのcontrol</text>',
-            (
-                f'<rect x="{plot_x}" y="{control_y}" width="{plot_width}" '
-                f'height="{control_height}" rx="14" fill="#fff" stroke="#cfd8d1"/>'
+        ]
+    )
+    key_y = state_y + state_height + 48
+    for offset, (color, label, dash) in zip(
+        (0, 100, 200),
+        (("#245c42", "位置", ""), ("#d67835", "速度", ""), ("#9aa49e", "u=0 の位置", "7 6")),
+        strict=True,
+    ):
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        body.extend(
+            [
+                f'<line x1="{FIGURE_MARGIN + 14 + offset}" y1="{key_y - 5:g}" '
+                f'x2="{FIGURE_MARGIN + 38 + offset}" y2="{key_y - 5:g}" stroke="{color}" '
+                f'stroke-width="3.5"{dash_attribute}/>',
+                f'<text x="{FIGURE_MARGIN + 46 + offset}" y="{key_y:g}" class="note">'
+                f"{label}</text>",
+            ]
+        )
+    control_height = 120.0
+    panel, top, panel_bottom = _panel(
+        panel_bottom + 12, "forwardの前進計算: feedback制御 uₖ", control_height + 32
+    )
+    body.extend(panel)
+    control_y = top
+
+    def project_control(value: float) -> float:
+        return control_y + control_height / 2 - value / control_limit * control_height * 0.43
+
+    body.extend(
+        [
+            f'<line x1="{plot_x:g}" y1="{project_control(0.0):.2f}" '
+            f'x2="{plot_x + plot_width:g}" y2="{project_control(0.0):.2f}" stroke="#cfd8d1"/>',
+            f'<text x="{plot_x - 8:g}" y="{project_control(control_limit) + 5:.2f}" '
+            f'text-anchor="end" class="axis">+{control_limit:.0f}</text>',
+            f'<text x="{plot_x - 8:g}" y="{project_control(0.0) + 5:.2f}" text-anchor="end" '
+            'class="axis">0</text>',
+            f'<text x="{plot_x - 8:g}" y="{project_control(-control_limit) + 5:.2f}" '
+            f'text-anchor="end" class="axis">−{control_limit:.0f}</text>',
+            polyline(
+                [
+                    (project_x(index), project_control(value))
+                    for index, value in enumerate(controls)
+                ],
+                "#7e5f98",
             ),
-            (
-                f'<line x1="{plot_x}" y1="{project_control(0.0):.2f}" '
-                f'x2="{plot_x + plot_width}" y2="{project_control(0.0):.2f}" '
-                'stroke="#cfd8d1"/>'
-            ),
-            (
-                f'<text x="{plot_x - 10}" y="{project_control(control_limit) + 6:.2f}" '
-                'text-anchor="end" class="lqr-axis">+15</text>'
-            ),
-            (
-                f'<text x="{plot_x - 10}" y="{project_control(0.0) + 6:.2f}" '
-                'text-anchor="end" class="lqr-axis">0</text>'
-            ),
-            (
-                f'<text x="{plot_x - 10}" y="{project_control(-control_limit) + 6:.2f}" '
-                'text-anchor="end" class="lqr-axis">−15</text>'
-            ),
-            polyline(control_points, "#7e5f98"),
         ]
     )
     for step in (0, 10, 20, 30, 39):
-        x = project_x(step)
-        elements.append(
-            f'<text x="{x:.2f}" y="{control_y + control_height + 27}" '
-            f'text-anchor="middle" class="lqr-axis">{step}</text>'
+        body.append(
+            f'<text x="{project_x(step):.2f}" y="{control_y + control_height + 22:g}" '
+            f'text-anchor="middle" class="axis">{step}</text>'
         )
-    elements.extend(
-        [
-            '<line x1="36" y1="954" x2="76" y2="954" stroke="#7e5f98" stroke-width="5"/>',
-            '<text x="84" y="960" class="lqr-legend">feedback control uₖ</text>',
-            (
-                '<text x="32" y="1002" class="lqr-provenance">'
-                "実行生成: finite-horizon Riccati backward pass + closed-loop forward rollout"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1032" class="lqr-caveat">'
-                "記事のlinear LQR部分問題です。非線形iLQR/DDP反復や制約処理は含みません。"
-                "</text>"
-            ),
-            (
-                '<text x="32" y="1058" class="lqr-caveat">'
-                "この1例から一般的な収束速度、安定性、real-time性能を判断できません。</text>"
-            ),
-            (
-                "<style>"
-                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-                ".lqr-title{font-size:26px;font-weight:760}"
-                ".lqr-subtitle{font-size:17px;fill:#617068}"
-                ".lqr-section{font-size:21px;font-weight:750}"
-                ".lqr-small-label{font-size:14px;fill:#617068}"
-                ".lqr-gain{font-size:20px;font-weight:750}"
-                ".lqr-gain-value{font-size:16px;fill:#46554d;font-variant-numeric:tabular-nums}"
-                ".lqr-arrow{font-size:24px;fill:#9a6b45}"
-                ".lqr-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".lqr-legend{font-size:16px;fill:#46554d}"
-                ".lqr-result{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}"
-                ".lqr-provenance{font-size:14px;fill:#617068}"
-                ".lqr-caveat{font-size:14px;fill:#7a4b38}"
-                "</style>"
-            ),
-            "</svg>\n",
-        ]
+    rows, y = _metric_rows(
+        panel_bottom + 34,
+        (
+            ("終端の状態", f"[{terminal_position:.5f}, {terminal_velocity:.5f}]"),
+            ("最大の |u|", f"{control_limit:.3f}"),
+        ),
     )
-    return "".join(elements)
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        "有限horizonのRiccati backward pass + 閉ループのforward前進計算"
+        f" · dataset {dataset_version}",
+        "記事の線形LQR部分問題です。非線形のiLQR/DDP反復や制約の処理は含みません。"
+        "この1例から一般的な収束速度、安定性、実時間での性能は判断できません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "backward passのgainが、forwardの前進計算を変える",
+        (
+            "記事のPython例と同じ状態2個、制御1個、40 stepの有限horizonの線形LQR"
+            "部分問題をpure Pythonで実行した結果です。backward passで時刻ごとのfeedback "
+            "gainを求め、初期状態 [2, 0] からforwardに前進計算します。状態と制御の"
+            "履歴、終端の状態、制御の最大値を示します。非線形のiLQR/DDP反復、"
+            "regularization、line search、一般の制約、実時間での性能は含みません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _so3_update_svg(dataset_version: str) -> str:
@@ -4550,8 +4426,45 @@ def _so3_update_svg(dataset_version: str) -> str:
     }
     projected = traces["projected"]
     riemannian = traces["riemannian"]
-    plot_x, plot_y, plot_width, plot_height = 70.0, 190.0, 520.0, 245.0
     angle_max = 2.8
+
+    def metric_max(trace: AlgorithmTrace, metric_id: str) -> float:
+        return max(_metric_value(frame, metric_id) for frame in trace.frames)
+
+    def line(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
+        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        return (
+            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
+            'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"'
+            f"{dash_attribute}/>"
+        )
+
+    projected_first = projected.frames[1]
+    riemannian_first = riemannian.frames[1]
+    projected_final = projected.frames[-1]
+    riemannian_final = riemannian.frames[-1]
+    title = "SO(3)へ戻る二つの一歩は、同じではない"
+    body, y = _figure_heading(title, "単位行列 → πに近い目標・固定step 0.35・更新12回")
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 28}" '
+            f'y2="{legend_y - 5:g}" stroke="#d67835" stroke-width="4"/>',
+            f'<text x="{FIGURE_MARGIN + 36}" y="{legend_y:g}" class="note">'
+            "外側の空間 + QRで射影</text>",
+            f'<line x1="{FIGURE_MARGIN + 210}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 238}" '
+            f'y2="{legend_y - 5:g}" stroke="#245c42" stroke-width="4" stroke-dasharray="8 6"/>',
+            f'<text x="{FIGURE_MARGIN + 246}" y="{legend_y:g}" class="note">'
+            "接空間 + exp map</text>",
+        ]
+    )
+    plot_x, plot_width, plot_height = 52.0, 352.0, 180.0
+    panel, top, panel_bottom = _panel(
+        legend_y + 14, "目標までのgeodesic残差（rad）", plot_height + 34
+    )
+    body.extend(panel)
+    plot_y = top
 
     def history_points(trace: AlgorithmTrace) -> list[tuple[float, float]]:
         return [
@@ -4564,185 +4477,135 @@ def _so3_update_svg(dataset_version: str) -> str:
             for frame in trace.frames
         ]
 
-    def metric_max(trace: AlgorithmTrace, metric_id: str) -> float:
-        return max(_metric_value(frame, metric_id) for frame in trace.frames)
-
-    def line(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
-        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
-        return (
-            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
-            'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"'
-            f"{dash_attribute}/>"
-        )
-
-    projected_history = history_points(projected)
-    riemannian_history = history_points(riemannian)
-    projected_first = projected.frames[1]
-    riemannian_first = riemannian.frames[1]
-    projected_final = projected.frames[-1]
-    riemannian_final = riemannian.frames[-1]
-    elements = [
-        _svg_open(
-            "SO(3)へ戻る二つの一歩は、同じではない",
-            (
-                "identityから同じnear-pi targetへ向かう固定Python実行です。"
-                "Projected Gradientはambient step後にQR projectionし、Riemann勾配法は"
-                "Lie algebra上の接空間stepをexponential mapで戻します。12 updateの"
-                "geodesic residual、最初のmap correction、accepted rotationの直交性と"
-                "determinant残差を比較します。固定3対応、noiseなし、固定stepの教材であり、"
-                "一般性能rankingではありません。"
-            ),
-            width=640,
-            height=1080,
-        ),
-        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="50" class="so-title">SO(3)へ戻る二つの一歩は、同じではない</text>',
-        (
-            '<text x="32" y="82" class="so-subtitle">'
-            "identity → near-π target · fixed step 0.35 · 12 updates"
-            "</text>"
-        ),
-        '<line x1="36" y1="116" x2="78" y2="116" stroke="#d67835" stroke-width="6"/>',
-        '<text x="88" y="122" class="so-legend">ambient + QR projection</text>',
-        (
-            '<line x1="336" y1="116" x2="378" y2="116" stroke="#245c42" '
-            'stroke-width="6" stroke-dasharray="10 7"/>'
-        ),
-        '<text x="388" y="122" class="so-legend">tangent + exp map</text>',
-        '<text x="32" y="162" class="so-section">targetまでのgeodesic residual</text>',
-        (
-            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
-            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-    ]
     for angle in (0.0, 1.0, 2.0, 2.8):
-        y = plot_y + plot_height - angle / angle_max * plot_height
-        elements.extend(
+        tick_y = plot_y + plot_height - angle / angle_max * plot_height
+        body.extend(
             [
-                (
-                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
-                    f'y2="{y:.2f}" stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{plot_x - 12}" y="{y + 6:.2f}" text-anchor="end" '
-                    f'class="so-axis">{angle:g}</text>'
-                ),
+                f'<line x1="{plot_x:g}" y1="{tick_y:.2f}" x2="{plot_x + plot_width:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{plot_x - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">{angle:g}</text>',
             ]
         )
     for evaluation in (0, 4, 8, 12):
         x = plot_x + evaluation / 12 * plot_width
-        elements.extend(
+        body.extend(
             [
-                (
-                    f'<line x1="{x:.2f}" y1="{plot_y}" x2="{x:.2f}" '
-                    f'y2="{plot_y + plot_height}" stroke="#f1efe9"/>'
-                ),
-                (
-                    f'<text x="{x:.2f}" y="{plot_y + plot_height + 28}" '
-                    f'text-anchor="middle" class="so-axis">{evaluation}</text>'
-                ),
+                f'<line x1="{x:.2f}" y1="{plot_y:g}" x2="{x:.2f}" y2="{plot_y + plot_height:g}" '
+                'stroke="#f1efe9"/>',
+                f'<text x="{x:.2f}" y="{plot_y + plot_height + 22:g}" text-anchor="middle" '
+                f'class="axis">{evaluation}</text>',
             ]
         )
-    elements.extend(
-        [
-            line(projected_history, "#d67835"),
-            line(riemannian_history, "#245c42", "10 7"),
-        ]
-    )
-    for points, color in (
-        (projected_history, "#d67835"),
-        (riemannian_history, "#245c42"),
-    ):
+    projected_history = history_points(projected)
+    riemannian_history = history_points(riemannian)
+    body.extend([line(projected_history, "#d67835"), line(riemannian_history, "#245c42", "8 6")])
+    for points, color in ((projected_history, "#d67835"), (riemannian_history, "#245c42")):
         for index in (0, 4, 12):
-            x, y = points[index]
-            elements.append(
-                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="6" fill="{color}" '
-                'stroke="#fff" stroke-width="3"/>'
+            x, point_y = points[index]
+            body.append(
+                f'<circle cx="{x:.2f}" cy="{point_y:.2f}" r="4.5" fill="{color}" '
+                'stroke="#fff" stroke-width="2"/>'
             )
-    elements.extend(
-        [
+    rows, y = _metric_rows(
+        panel_bottom + 30,
+        (
+            ("QR", f"2.800 → {_metric_value(projected_final, 'geodesic_residual'):.3f} rad"),
             (
-                '<text x="70" y="485" class="so-result">'
-                f"QR: 2.800 → {_metric_value(projected_final, 'geodesic_residual'):.3f} rad"
-                "</text>"
+                "Riemann",
+                f"2.800 → {_metric_value(riemannian_final, 'geodesic_residual'):.3f} rad",
             ),
-            (
-                '<text x="590" y="485" text-anchor="end" class="so-result">'
-                f"Riemann: 2.800 → {_metric_value(riemannian_final, 'geodesic_residual'):.3f} rad"
-                "</text>"
-            ),
-            '<text x="32" y="535" class="so-section">最初のupdateを分解する</text>',
-            '<rect x="24" y="558" width="592" height="154" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            '<circle cx="58" cy="600" r="13" fill="#d67835"/>',
-            '<text x="82" y="607" class="so-card-title">Projected Gradient</text>',
-            '<text x="82" y="638" class="so-card">ambient step ‖Δ‖ 0.976</text>',
-            '<text x="278" y="638" class="so-arrow">→</text>',
-            '<text x="312" y="638" class="so-card">QR correction 1.136</text>',
-            '<text x="504" y="638" class="so-arrow">→</text>',
-            '<text x="540" y="638" class="so-card">accepted R</text>',
-            (
-                '<text x="82" y="678" class="so-card-note">'
-                f"accepted angle {_metric_value(projected_first, 'geodesic_residual'):.3f} rad"
-                "</text>"
-            ),
-            '<rect x="24" y="730" width="592" height="154" rx="18" fill="#fff" stroke="#cfd8d1"/>',
-            '<circle cx="58" cy="772" r="13" fill="#245c42"/>',
-            '<text x="82" y="779" class="so-card-title">Riemannian Gradient</text>',
-            '<text x="82" y="810" class="so-card">tangent step ‖ξ‖ 0.980</text>',
-            '<text x="278" y="810" class="so-arrow">→</text>',
-            '<text x="312" y="810" class="so-card">1次近似との差 0.661</text>',
-            '<text x="504" y="810" class="so-arrow">→</text>',
-            '<text x="540" y="810" class="so-card">accepted R</text>',
-            (
-                '<text x="82" y="850" class="so-card-note">'
-                f"accepted angle {_metric_value(riemannian_first, 'geodesic_residual'):.3f} rad"
-                "</text>"
-            ),
-            '<text x="32" y="928" class="so-section">accepted rotationの構造残差</text>',
-            (
-                '<text x="32" y="962" class="so-structure">'
-                f"QR max: orthogonality {_metric(metric_max(projected, 'orthogonality_error'))}"
-                f" · determinant {_metric(metric_max(projected, 'determinant_error'))}</text>"
-            ),
-            (
-                '<text x="32" y="990" class="so-structure">'
-                "Riemann max: orthogonality "
-                f"{_metric(metric_max(riemannian, 'orthogonality_error'))}"
-                f" · determinant {_metric(metric_max(riemannian, 'determinant_error'))}</text>"
-            ),
-            (
-                '<text x="32" y="1026" class="so-provenance">'
-                "実行生成: optimization_compass.constraint_geometry.generate_so3_traces"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1056" class="so-caveat">'
-                "固定3対応・noiseなし・固定stepです。速度rankingや一般的な局所収束を示しません。"
-                "</text>"
-            ),
-            (
-                "<style>"
-                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-                ".so-title{font-size:27px;font-weight:760}"
-                ".so-subtitle{font-size:17px;fill:#617068}"
-                ".so-legend{font-size:16px;fill:#46554d}"
-                ".so-section{font-size:21px;font-weight:750}"
-                ".so-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".so-result{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}"
-                ".so-card-title{font-size:20px;font-weight:750}"
-                ".so-card{font-size:17px;font-variant-numeric:tabular-nums}"
-                ".so-card-note{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".so-arrow{font-size:22px;fill:#9a6b45}"
-                ".so-structure{font-size:16px;font-variant-numeric:tabular-nums}"
-                ".so-provenance{font-size:14px;fill:#617068}"
-                ".so-caveat{font-size:14px;fill:#7a4b38}"
-                "</style>"
-            ),
-            "</svg>\n",
-        ]
+        ),
     )
-    return "".join(elements)
+    body.extend(rows)
+    heading, y = _text_lines(
+        FIGURE_MARGIN, y + 16, "最初の更新を分解する", "panel-title", size=TEXT_SIZE["panel-title"]
+    )
+    body.extend(heading)
+    right = FIGURE_WIDTH - FIGURE_MARGIN - 14
+    for name, color, steps in (
+        (
+            "Projected Gradient",
+            "#d67835",
+            (
+                ("外側の空間でのstep ‖Δ‖", "0.976"),
+                ("→ QRで戻す補正", "1.136"),
+                (
+                    "→ 受理した回転の角度",
+                    f"{_metric_value(projected_first, 'geodesic_residual'):.3f} rad",
+                ),
+            ),
+        ),
+        (
+            "Riemannian Gradient",
+            "#245c42",
+            (
+                ("接空間でのstep ‖ξ‖", "0.980"),
+                ("→ 1次近似との差", "0.661"),
+                (
+                    "→ 受理した回転の角度",
+                    f"{_metric_value(riemannian_first, 'geodesic_residual'):.3f} rad",
+                ),
+            ),
+        ),
+    ):
+        card_y = y - 6
+        card_height = 40 + 26 * len(steps)
+        body.extend(
+            [
+                f'<rect x="{FIGURE_MARGIN}" y="{card_y:g}" width="{CONTENT_WIDTH}" '
+                f'height="{card_height:g}" rx="12" fill="#fff" stroke="#cfd8d1"/>',
+                f'<circle cx="{FIGURE_MARGIN + 24}" cy="{card_y + 22:g}" r="8" fill="{color}"/>',
+                f'<text x="{FIGURE_MARGIN + 40}" y="{card_y + 28:g}" class="method">{name}</text>',
+            ]
+        )
+        for index, (label, value) in enumerate(steps):
+            row_y = card_y + 56 + index * 26
+            body.extend(
+                [
+                    f'<text x="{FIGURE_MARGIN + 14}" y="{row_y:g}" class="metric">{label}</text>',
+                    f'<text x="{right}" y="{row_y:g}" text-anchor="end" class="metric-value">'
+                    f"{value}</text>",
+                ]
+            )
+        y = card_y + card_height + 18
+    heading, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 16,
+        "受理した回転の構造の残差（最大値）",
+        "panel-title",
+        size=TEXT_SIZE["panel-title"],
+    )
+    body.extend(heading)
+    for name, trace in (("QR", projected), ("Riemann", riemannian)):
+        detail, y = _text_lines(
+            FIGURE_MARGIN,
+            y,
+            f"{name}: 直交性 {_metric(metric_max(trace, 'orthogonality_error'))}"
+            f" · 行列式 {_metric(metric_max(trace, 'determinant_error'))}",
+            "metric",
+            size=TEXT_SIZE["metric"],
+        )
+        body.extend(detail)
+    footer, height = _figure_footer(
+        y + 8,
+        f"optimization_compass.constraint_geometry.generate_so3_traces · dataset {dataset_version}",
+        "固定した3対応・ノイズなし・固定stepです。速さの順位や、一般的な局所収束は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "SO(3)へ戻る二つの一歩は、同じではない",
+        (
+            "単位行列から同じπに近い目標へ向かう固定Python実行です。"
+            "Projected Gradientは外側の空間でstepを取った後にQRで射影し、Riemann勾配法は"
+            "Lie代数上の接空間でのstepをexponential mapで戻します。12回の更新の"
+            "geodesic残差、最初の更新での写像による補正、受理した回転の直交性と"
+            "行列式の残差を比較します。固定3対応、ノイズなし、固定stepの教材であり、"
+            "一般的な性能の順位ではありません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _least_squares_fit_svg(dataset_version: str) -> str:
@@ -4760,10 +4623,10 @@ def _least_squares_fit_svg(dataset_version: str) -> str:
     truth_a, truth_k, truth_c = (float(value) for value in trace.parameters["truth"])
     observations = [truth_a * math.exp(-truth_k * time) + truth_c for time in times]
     panel_specs = (
-        ("初期parameter", initial, "#d67835", ' stroke-dasharray="10 7"', 145.0),
-        ("12評価後", final, "#245c42", "", 435.0),
+        ("初期のパラメータ", initial, "#d67835", ' stroke-dasharray="8 6"'),
+        ("12回の評価の後", final, "#245c42", ""),
     )
-    plot_x, plot_width, plot_height = 64.0, 518.0, 190.0
+    plot_x, plot_width, plot_height = 52.0, 352.0, 150.0
     response_min, response_max = 0.0, 2.2
 
     def project_x(time: float) -> float:
@@ -4776,108 +4639,80 @@ def _least_squares_fit_svg(dataset_version: str) -> str:
             - (response - response_min) / (response_max - response_min) * plot_height
         )
 
-    elements = [
-        _svg_open(
-            "曲線が重なっても、診断は終わらない",
-            (
-                "20点のnoiseless合成dataに3 parameter指数減衰modelを当てる固定Python診断"
-                "probeです。初期parameterと12評価後の予測曲線、観測別residual、residual "
-                "norm、既知truthからのparameter距離を比較します。12評価後のcurveは観測へ"
-                "近づきますが、停止criterionには到達していません。LMやSciPy solverの実行"
-                "結果ではありません。"
-            ),
-            width=640,
-            height=1120,
-        ),
-        '<rect width="640" height="1120" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="48" class="ls-title">曲線が重なっても、診断は終わらない</text>',
-        (
-            '<text x="32" y="78" class="ls-subtitle">'
-            "20 observations · noiseless · a exp(-k t)+c · 12 evaluation budget"
-            "</text>"
-        ),
-        '<circle cx="42" cy="108" r="7" fill="#245c42" stroke="#fff" stroke-width="3"/>',
-        '<text x="58" y="114" class="ls-legend">observations</text>',
-        '<line x1="194" y1="108" x2="232" y2="108" stroke="#d67835" stroke-width="5"/>',
-        '<text x="240" y="114" class="ls-legend">model curve</text>',
-        '<line x1="382" y1="94" x2="382" y2="120" stroke="#bd6754" stroke-width="3"/>',
-        '<text x="394" y="114" class="ls-legend">point residual</text>',
-    ]
-
-    for panel_title, frame, color, dash, panel_y in panel_specs:
-        plot_y = panel_y + 57
+    title = "曲線が重なっても、診断は終わらない"
+    body, y = _figure_heading(title, "観測20点・ノイズなし・a exp(-k t)+c・評価予算12回")
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<circle cx="{FIGURE_MARGIN + 6}" cy="{legend_y - 5:g}" r="5.5" fill="#245c42" '
+            'stroke="#fff" stroke-width="2"/>',
+            f'<text x="{FIGURE_MARGIN + 18}" y="{legend_y:g}" class="note">観測</text>',
+            f'<line x1="{FIGURE_MARGIN + 74}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 100}" '
+            f'y2="{legend_y - 5:g}" stroke="#d67835" stroke-width="3.5"/>',
+            f'<text x="{FIGURE_MARGIN + 108}" y="{legend_y:g}" class="note">modelの曲線</text>',
+            f'<line x1="{FIGURE_MARGIN + 226}" y1="{legend_y - 15:g}" x2="{FIGURE_MARGIN + 226}" '
+            f'y2="{legend_y + 3:g}" stroke="#bd6754" stroke-width="2.5"/>',
+            f'<text x="{FIGURE_MARGIN + 236}" y="{legend_y:g}" class="note">点ごとの残差</text>',
+        ]
+    )
+    y = legend_y + 2
+    for panel_title, frame, color, dash in panel_specs:
         parameters = [float(value) for value in frame.points[0].coordinates]
         amplitude, rate, offset = parameters
+        metrics = {metric.metric_id: float(metric.value) for metric in frame.metrics}
+        panel, top, panel_bottom = _panel(y + 12, panel_title, 22 + 14 + plot_height + 30)
+        body.extend(panel)
+        body.append(
+            f'<text x="{FIGURE_MARGIN + 14}" y="{top + 4:g}" class="status">'
+            f"a={amplitude:.3f} · k={rate:.3f} · c={offset:.3f} · "
+            f"‖r‖={metrics['residual_norm']:.3f}</text>"
+        )
+        plot_y = top + 22
         predictions = [amplitude * math.exp(-rate * time) + offset for time in times]
         curve_points = " ".join(
             f"{project_x(time):.2f},{project_y(prediction, plot_y):.2f}"
             for time, prediction in zip(times, predictions, strict=True)
         )
-        metrics = {metric.metric_id: float(metric.value) for metric in frame.metrics}
-        elements.extend(
-            [
-                (
-                    f'<rect x="24" y="{panel_y}" width="592" height="272" rx="18" '
-                    'fill="#fff" stroke="#cfd8d1"/>'
-                ),
-                (
-                    f'<text x="44" y="{panel_y + 32}" class="ls-panel">'
-                    f"{html.escape(panel_title)}</text>"
-                ),
-                (
-                    f'<text x="596" y="{panel_y + 32}" text-anchor="end" class="ls-status">'
-                    f"a={amplitude:.3f} · k={rate:.3f} · c={offset:.3f} · "
-                    f"‖r‖={metrics['residual_norm']:.3f}</text>"
-                ),
-                (
-                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
-                    f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
-                ),
-            ]
+        body.append(
+            f'<rect x="{plot_x - 10:g}" y="{plot_y:g}" width="{plot_width + 20:g}" '
+            f'height="{plot_height:g}" rx="10" fill="#fbfcfa"/>'
         )
         for response in (0.0, 1.0, 2.0):
             tick_y = project_y(response, plot_y)
-            elements.extend(
+            body.extend(
                 [
-                    (
-                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
-                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
-                        'stroke="#ebe8e0"/>'
-                    ),
-                    (
-                        f'<text x="{plot_x - 10}" y="{tick_y + 6:.2f}" '
-                        f'text-anchor="end" class="ls-axis">{response:g}</text>'
-                    ),
+                    f'<line x1="{plot_x - 10:g}" y1="{tick_y:.2f}" '
+                    f'x2="{plot_x + plot_width + 10:g}" y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                    f'<text x="{plot_x - 16:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                    f'class="axis">{response:g}</text>',
                 ]
             )
         for time, observation, prediction in zip(times, observations, predictions, strict=True):
             x = project_x(time)
-            observation_y = project_y(observation, plot_y)
-            prediction_y = project_y(prediction, plot_y)
-            elements.append(
-                f'<line x1="{x:.2f}" y1="{observation_y:.2f}" '
-                f'x2="{x:.2f}" y2="{prediction_y:.2f}" '
-                'stroke="#bd6754" stroke-width="3" opacity="0.72"/>'
+            body.append(
+                f'<line x1="{x:.2f}" y1="{project_y(observation, plot_y):.2f}" '
+                f'x2="{x:.2f}" y2="{project_y(prediction, plot_y):.2f}" '
+                'stroke="#bd6754" stroke-width="2" opacity="0.72"/>'
             )
-        elements.append(
+        body.append(
             f'<polyline points="{curve_points}" fill="none" stroke="{color}" '
-            f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+            f'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
         )
         for time, observation in zip(times, observations, strict=True):
-            elements.append(
-                f'<circle cx="{project_x(time):.2f}" '
-                f'cy="{project_y(observation, plot_y):.2f}" r="6" '
-                'fill="#245c42" stroke="#fff" stroke-width="2"/>'
+            body.append(
+                f'<circle cx="{project_x(time):.2f}" cy="{project_y(observation, plot_y):.2f}" '
+                'r="4" fill="#245c42" stroke="#fff" stroke-width="1.5"/>'
             )
         for tick in (0.0, 2.5, 5.0):
-            tick_x = project_x(tick)
-            elements.append(
-                f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 25}" '
-                f'text-anchor="middle" class="ls-axis">{tick:g}</text>'
+            body.append(
+                f'<text x="{project_x(tick):.2f}" y="{plot_y + plot_height + 20:g}" '
+                f'text-anchor="middle" class="axis">{tick:g}</text>'
             )
-
-    history_y, history_height = 790.0, 120.0
-    history_x, history_width = 64.0, 518.0
+        y = panel_bottom
+    history_height = 120.0
+    panel, top, panel_bottom = _panel(y + 12, "曲線の下で追う診断値", history_height + 22)
+    body.extend(panel)
+    history_x, history_width, history_y = plot_x, plot_width, top + 4
     log_min, log_max = -2.0, 0.4
 
     def history_point(frame: TraceFrame, metric_id: str) -> tuple[float, float]:
@@ -4891,84 +4726,54 @@ def _least_squares_fit_svg(dataset_version: str) -> str:
             - (math.log10(bounded) - log_min) / (log_max - log_min) * history_height,
         )
 
-    residual_history = [history_point(frame, "residual_norm") for frame in trace.frames]
-    parameter_history = [history_point(frame, "parameter_error") for frame in trace.frames]
-    elements.extend(
-        [
-            '<text x="32" y="754" class="ls-summary">curveの下で追う診断値</text>',
-            (
-                f'<rect x="{history_x}" y="{history_y}" width="{history_width}" '
-                f'height="{history_height}" rx="12" fill="#fff" stroke="#cfd8d1"/>'
-            ),
-        ]
-    )
     for exponent in (-2, -1, 0):
-        y = history_y + history_height - (exponent - log_min) / (log_max - log_min) * history_height
-        elements.extend(
+        tick_y = (
+            history_y + history_height - (exponent - log_min) / (log_max - log_min) * history_height
+        )
+        body.extend(
             [
-                (
-                    f'<line x1="{history_x}" y1="{y:.2f}" '
-                    f'x2="{history_x + history_width}" y2="{y:.2f}" '
-                    'stroke="#ebe8e0"/>'
-                ),
-                (
-                    f'<text x="{history_x - 10}" y="{y + 6:.2f}" '
-                    f'text-anchor="end" class="ls-axis">1e{exponent}</text>'
-                ),
+                f'<line x1="{history_x:g}" y1="{tick_y:.2f}" x2="{history_x + history_width:g}" '
+                f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                f'<text x="{history_x - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                f'class="axis">1e{exponent}</text>',
             ]
         )
-    for points, color in (
-        (residual_history, "#245c42"),
-        (parameter_history, "#d67835"),
-    ):
+    for metric_id, color in (("residual_norm", "#245c42"), ("parameter_error", "#d67835")):
+        points = [history_point(frame, metric_id) for frame in trace.frames]
         point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-        elements.append(
+        body.append(
             f'<polyline points="{point_string}" fill="none" stroke="{color}" '
-            'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+            'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
         )
-        for x, y in points:
-            elements.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="{color}"/>')
-    elements.extend(
-        [
-            '<line x1="64" y1="944" x2="102" y2="944" stroke="#245c42" stroke-width="5"/>',
-            '<text x="112" y="950" class="ls-legend">residual norm 1.867 → 0.034</text>',
-            '<line x1="344" y1="944" x2="382" y2="944" stroke="#d67835" stroke-width="5"/>',
-            '<text x="392" y="950" class="ls-legend">parameter error 0.890 → 0.036</text>',
-            (
-                '<text x="32" y="990" class="ls-provenance">'
-                "実行生成: generate_parameter_estimation_traces</text>"
-            ),
-            (
-                '<text x="32" y="1018" class="ls-provenance">'
-                "solver-independent damped Gauss–Newton probe · "
-                f"dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1060" class="ls-caveat">'
-                "20点・noiseなしの合成dataです。LM／SciPyの実行結果ではありません。</text>"
-            ),
-            (
-                '<text x="32" y="1088" class="ls-caveat">'
-                "識別性、統計的妥当性、実dataへの適合を保証しません。</text>"
-            ),
-            (
-                "<style>"
-                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-                ".ls-title{font-size:30px;font-weight:760}"
-                ".ls-subtitle{font-size:17px;fill:#617068}"
-                ".ls-legend{font-size:17px;fill:#46554d}"
-                ".ls-panel{font-size:23px;font-weight:750}"
-                ".ls-status{font-size:17px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".ls-axis{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".ls-summary{font-size:21px;font-weight:750}"
-                ".ls-provenance{font-size:15px;fill:#617068}"
-                ".ls-caveat{font-size:15px;fill:#7a4b38}"
-                "</style>"
-            ),
-            "</svg>\n",
-        ]
+        for x, point_y in points:
+            body.append(f'<circle cx="{x:.2f}" cy="{point_y:.2f}" r="3" fill="{color}"/>')
+    y = panel_bottom + 34
+    for color, label, value in (
+        ("#245c42", "残差ノルム", "1.867 → 0.034"),
+        ("#d67835", "真値からのパラメータ距離", "0.890 → 0.036"),
+    ):
+        row, y = _legend_row(y, color, label, value)
+        body.extend(row)
+    footer, height = _figure_footer(
+        y + 4,
+        "generate_parameter_estimation_traces · solverに依存しないdamped Gauss–Newton probe"
+        f" · dataset {dataset_version}",
+        "20点・ノイズなしの合成データです。LMやSciPyの実行結果ではありません。"
+        "識別性、統計的な妥当性、実データへの適合は保証しません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(
+        "曲線が重なっても、診断は終わらない",
+        (
+            "20点のノイズなし合成データに3パラメータの指数減衰modelを当てる固定Python診断"
+            "probeです。初期のパラメータと12回の評価の後の予測曲線、観測ごとの残差、残差"
+            "ノルム、既知の真値からのパラメータ距離を比較します。12回の評価の後の曲線は観測へ"
+            "近づきますが、停止条件には到達していません。LMやSciPy solverの実行"
+            "結果ではありません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _bayesian_optimization_svg(dataset_version: str) -> str:
@@ -4979,13 +4784,13 @@ def _bayesian_optimization_svg(dataset_version: str) -> str:
     )
     frames = (generated.payload.frames[0], generated.payload.frames[3])
     panel_specs = (
-        ("初期観測の直後", frames[0], 145.0),
-        ("3点を追加した後", frames[1], 545.0),
+        ("初期観測の直後", frames[0]),
+        ("3点を追加した後", frames[1]),
     )
     domain_min, domain_max = generated.payload.domain
     value_min, value_max = -1.3, 4.0
-    plot_x, plot_width, plot_height = 58.0, 530.0, 200.0
-    acquisition_height = 72.0
+    plot_x, plot_width, plot_height = 52.0, 352.0, 160.0
+    acquisition_height = 56.0
 
     def project_x(value: float) -> float:
         return plot_x + (value - domain_min) / (domain_max - domain_min) * plot_width
@@ -4994,42 +4799,39 @@ def _bayesian_optimization_svg(dataset_version: str) -> str:
         bounded = min(value_max, max(value_min, value))
         return plot_y + plot_height - (bounded - value_min) / (value_max - value_min) * plot_height
 
-    elements = [
-        _svg_open(
-            "観測が増えると、次の評価点も動く",
-            (
-                "固定seedの1次元black-boxをGaussian-process Bayesian Optimizationで実行し、"
-                "3回評価後と6回評価後のsurrogate平均、不確実性、Expected Improvement、"
-                "次の評価点を比較します。真の目的関数は教材用の答え合わせであり、"
-                "optimizerは観測点以外の真値を参照しません。"
-            ),
-            width=640,
-            height=1100,
-        ),
-        '<rect width="640" height="1100" rx="24" fill="#f7f6f1"/>',
-        '<text x="32" y="48" class="bo-title">観測が増えると、次の評価点も動く</text>',
-        (
-            '<text x="32" y="78" class="bo-subtitle">'
-            "fixed seed · 1D · noiseless · RBF kernel · 10 evaluation budget"
-            "</text>"
-        ),
-        '<line x1="34" y1="108" x2="70" y2="108" stroke="#245c42" stroke-width="5"/>',
-        '<text x="78" y="114" class="bo-legend">surrogate</text>',
-        '<rect x="188" y="98" width="36" height="18" rx="5" fill="#cfe7dc"/>',
-        '<text x="232" y="114" class="bo-legend">uncertainty</text>',
-        (
-            '<line x1="368" y1="108" x2="404" y2="108" stroke="#617068" '
-            'stroke-width="3" stroke-dasharray="8 6"/>'
-        ),
-        '<text x="412" y="114" class="bo-legend">truth（教材のみ）</text>',
-    ]
-
-    for panel_title, frame, panel_y in panel_specs:
-        plot_y = panel_y + 50
-        acquisition_y = plot_y + plot_height + 35
+    title = "観測が増えると、次の評価点も動く"
+    body, y = _figure_heading(title, "固定seed・1次元・ノイズなし・RBF kernel・評価予算10回")
+    legend_y = y + 14
+    body.extend(
+        [
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y - 5:g}" x2="{FIGURE_MARGIN + 26}" '
+            f'y2="{legend_y - 5:g}" stroke="#245c42" stroke-width="3.5"/>',
+            f'<text x="{FIGURE_MARGIN + 34}" y="{legend_y:g}" class="note">surrogateの平均</text>',
+            f'<rect x="{FIGURE_MARGIN + 160}" y="{legend_y - 13:g}" width="26" height="15" '
+            'rx="4" fill="#cfe7dc"/>',
+            f'<text x="{FIGURE_MARGIN + 194}" y="{legend_y:g}" class="note">不確実性</text>',
+            f'<line x1="{FIGURE_MARGIN}" y1="{legend_y + 19:g}" x2="{FIGURE_MARGIN + 26}" '
+            f'y2="{legend_y + 19:g}" stroke="#617068" stroke-width="2.5" '
+            'stroke-dasharray="6 5"/>',
+            f'<text x="{FIGURE_MARGIN + 34}" y="{legend_y + 24:g}" class="note">'
+            "真の関数（教材の答え合わせ用）</text>",
+        ]
+    )
+    y = legend_y + 26
+    for panel_title, frame in panel_specs:
         selected_x = float(frame.selected_point)
-        selected_screen_x = project_x(selected_x)
         max_acquisition = max(point.acquisition for point in frame.predictive_summary)
+        panel, top, panel_bottom = _panel(
+            y + 12, panel_title, 22 + plot_height + 32 + acquisition_height + 30
+        )
+        body.extend(panel)
+        body.append(
+            f'<text x="{FIGURE_MARGIN + 14}" y="{top + 4:g}" class="status">'
+            f"実際の評価 {frame.oracle_evaluations}回 · 次の x={selected_x:.2f}</text>"
+        )
+        plot_y = top + 18
+        acquisition_y = plot_y + plot_height + 32
+        selected_screen_x = project_x(selected_x)
         uncertainty_points = [
             (project_x(point.x), project_y(point.upper, plot_y))
             for point in frame.predictive_summary
@@ -5071,140 +4873,98 @@ def _bayesian_optimization_svg(dataset_version: str) -> str:
                 f"{plot_x + plot_width:.2f},{acquisition_y + acquisition_height:.2f}",
             ]
         )
-        elements.extend(
-            [
-                (
-                    f'<rect x="24" y="{panel_y}" width="592" height="382" rx="18" '
-                    'fill="#fff" stroke="#cfd8d1"/>'
-                ),
-                (
-                    f'<text x="44" y="{panel_y + 31}" class="bo-panel">'
-                    f"{html.escape(panel_title)}</text>"
-                ),
-                (
-                    f'<text x="596" y="{panel_y + 31}" text-anchor="end" class="bo-status">'
-                    f"実評価 {frame.oracle_evaluations}回 · next x={selected_x:.2f}</text>"
-                ),
-                (
-                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
-                    f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
-                ),
-            ]
+        body.append(
+            f'<rect x="{plot_x:g}" y="{plot_y:g}" width="{plot_width:g}" '
+            f'height="{plot_height:g}" rx="10" fill="#fbfcfa"/>'
         )
         for tick in (-1.0, 0.0, 2.0, 4.0):
             tick_y = project_y(tick, plot_y)
-            elements.extend(
+            body.extend(
                 [
-                    (
-                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
-                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
-                        'stroke="#ebe8e0"/>'
-                    ),
-                    (
-                        f'<text x="{plot_x - 10}" y="{tick_y + 6:.2f}" '
-                        f'text-anchor="end" class="bo-axis">{tick:g}</text>'
-                    ),
+                    f'<line x1="{plot_x:g}" y1="{tick_y:.2f}" x2="{plot_x + plot_width:g}" '
+                    f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>',
+                    f'<text x="{plot_x - 8:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
+                    f'class="axis">{tick:g}</text>',
                 ]
             )
-        elements.extend(
+        body.extend(
             [
                 f'<polygon points="{uncertainty_polygon}" fill="#cfe7dc" opacity="0.82"/>',
-                (
-                    f'<polyline points="{truth_points}" fill="none" stroke="#617068" '
-                    'stroke-width="3" stroke-dasharray="8 6"/>'
-                ),
-                (
-                    f'<polyline points="{mean_points}" fill="none" stroke="#245c42" '
-                    'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
-                ),
-                (
-                    f'<line x1="{selected_screen_x:.2f}" y1="{plot_y}" '
-                    f'x2="{selected_screen_x:.2f}" '
-                    f'y2="{acquisition_y + acquisition_height}" stroke="#d67835" '
-                    'stroke-width="4" stroke-dasharray="7 6"/>'
-                ),
+                f'<polyline points="{truth_points}" fill="none" stroke="#617068" '
+                'stroke-width="2" stroke-dasharray="6 5"/>',
+                f'<polyline points="{mean_points}" fill="none" stroke="#245c42" '
+                'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>',
+                f'<line x1="{selected_screen_x:.2f}" y1="{plot_y:g}" '
+                f'x2="{selected_screen_x:.2f}" y2="{acquisition_y + acquisition_height:g}" '
+                'stroke="#d67835" stroke-width="2.5" stroke-dasharray="6 5"/>',
             ]
         )
         for observation in frame.observations:
-            elements.append(
+            body.append(
                 f'<circle cx="{project_x(observation.x):.2f}" '
-                f'cy="{project_y(observation.observed_value, plot_y):.2f}" r="8" '
-                'fill="#245c42" stroke="#fff" stroke-width="3"/>'
+                f'cy="{project_y(observation.observed_value, plot_y):.2f}" r="5.5" '
+                'fill="#245c42" stroke="#fff" stroke-width="2"/>'
             )
-        elements.extend(
+        body.extend(
             [
-                (
-                    f'<text x="{plot_x}" y="{acquisition_y - 9}" class="bo-axis">'
-                    "Expected Improvement</text>"
-                ),
-                (
-                    f'<text x="{plot_x + plot_width}" y="{acquisition_y - 9}" '
-                    'text-anchor="end" class="bo-axis">'
-                    f"max {max_acquisition:.3f}</text>"
-                ),
-                (
-                    f'<rect x="{plot_x}" y="{acquisition_y}" width="{plot_width}" '
-                    f'height="{acquisition_height}" rx="10" fill="#fbf4ed"/>'
-                ),
+                f'<text x="{plot_x:g}" y="{acquisition_y - 8:g}" class="axis">'
+                "Expected Improvement</text>",
+                f'<text x="{plot_x + plot_width:g}" y="{acquisition_y - 8:g}" '
+                f'text-anchor="end" class="axis">最大 {max_acquisition:.3f}</text>',
+                f'<rect x="{plot_x:g}" y="{acquisition_y:g}" width="{plot_width:g}" '
+                f'height="{acquisition_height:g}" rx="8" fill="#fbf4ed"/>',
                 f'<polygon points="{acquisition_path}" fill="#efc5a5" opacity="0.9"/>',
-                (
-                    f'<polyline points="{acquisition_point_string}" '
-                    'fill="none" stroke="#d67835" stroke-width="4" '
-                    'stroke-linecap="round" stroke-linejoin="round"/>'
-                ),
-                (
-                    f'<circle cx="{selected_screen_x:.2f}" '
-                    f'cy="{selected_acquisition_y:.2f}" '
-                    'r="7" fill="#d67835" stroke="#fff" stroke-width="3"/>'
-                ),
+                f'<polyline points="{acquisition_point_string}" fill="none" stroke="#d67835" '
+                'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
+                f'<circle cx="{selected_screen_x:.2f}" cy="{selected_acquisition_y:.2f}" '
+                'r="5" fill="#d67835" stroke="#fff" stroke-width="2"/>',
             ]
         )
         for tick in (-3.0, 0.0, 3.0):
-            tick_x = project_x(tick)
-            elements.append(
-                f'<text x="{tick_x:.2f}" y="{acquisition_y + acquisition_height + 25}" '
-                f'text-anchor="middle" class="bo-axis">{tick:g}</text>'
+            body.append(
+                f'<text x="{project_x(tick):.2f}" y="{acquisition_y + acquisition_height + 20:g}" '
+                f'text-anchor="middle" class="axis">{tick:g}</text>'
             )
-
+        y = panel_bottom
     first_uncertainty = float(frames[0].selected_uncertainty)
     later_uncertainty = float(frames[1].selected_uncertainty)
-    elements.extend(
-        [
-            '<text x="32" y="970" class="bo-summary">このrunで観測した変化</text>',
-            (
-                '<text x="32" y="1003" class="bo-metric">'
-                f"実評価 3 → 6　　next x 1.73 → 2.10　　"
-                f"next点の不確実性 {first_uncertainty:.2f} → {later_uncertainty:.2f}</text>"
-            ),
-            (
-                '<text x="32" y="1044" class="bo-provenance">'
-                "実行生成: generate_surrogate_scenario · explore / noiseless · "
-                f"dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="32" y="1077" class="bo-caveat">'
-                "固定seed・1次元・RBF kernelの教材です。大域最適性や一般性能を保証しません。"
-                "</text>"
-            ),
-            (
-                "<style>"
-                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-                ".bo-title{font-size:30px;font-weight:760}"
-                ".bo-subtitle{font-size:17px;fill:#617068}"
-                ".bo-legend{font-size:17px;fill:#46554d}"
-                ".bo-panel{font-size:23px;font-weight:750}"
-                ".bo-status{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".bo-axis{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
-                ".bo-summary{font-size:21px;font-weight:750}"
-                ".bo-metric{font-size:19px;font-weight:650;font-variant-numeric:tabular-nums}"
-                ".bo-provenance{font-size:15px;fill:#617068}"
-                ".bo-caveat{font-size:15px;fill:#7a4b38}"
-                "</style>"
-            ),
-            "</svg>\n",
-        ]
+    heading, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 34,
+        "この実行で観測した変化",
+        "panel-title",
+        size=TEXT_SIZE["panel-title"],
     )
-    return "".join(elements)
+    body.extend(heading)
+    rows, y = _metric_rows(
+        y,
+        (
+            ("実際の評価", f"{frames[0].oracle_evaluations} → {frames[1].oracle_evaluations}回"),
+            (
+                "次の x",
+                f"{float(frames[0].selected_point):.2f} → {float(frames[1].selected_point):.2f}",
+            ),
+            ("次の点の不確実性", f"{first_uncertainty:.2f} → {later_uncertainty:.2f}"),
+        ),
+    )
+    body.extend(rows)
+    footer, height = _figure_footer(
+        y + 8,
+        f"generate_surrogate_scenario · explore / noiseless · dataset {dataset_version}",
+        "固定seed・1次元・RBF kernelの教材です。大域最適性や一般的な性能は保証しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "観測が増えると、次の評価点も動く",
+        (
+            "固定seedの1次元black-boxをGaussian-process Bayesian Optimizationで実行し、"
+            "3回の評価後と6回の評価後のsurrogateの平均、不確実性、Expected Improvement、"
+            "次の評価点を比較します。真の目的関数は教材用の答え合わせであり、"
+            "optimizerは観測点以外の真値を参照しません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _optimal_control_mesh_svg(dataset_version: str) -> str:
@@ -6550,15 +6310,6 @@ def _turbo_trust_region_svg(dataset_version: str) -> str:
     )
 
 
-def _svg_open(title: str, description: str, *, width: int = 800, height: int) -> str:
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        'role="img" aria-labelledby="figure-title figure-description">'
-        f'<title id="figure-title">{html.escape(title)}</title>'
-        f'<desc id="figure-description">{html.escape(description)}</desc>'
-    )
-
-
 # Execution figures are drawn FIGURE_WIDTH units wide with width/height attributes equal to the
 # viewBox, so a PC shows them 1:1 and a 375 px phone (353 px of article width) at about 0.8.
 # Text is drawn at 15-18 units: >= 12 px on the phone and <= 18 px on a PC
@@ -6862,22 +6613,6 @@ def _figure_style() -> str:
         ".caption{fill:#46554d}"
         ".caveat{fill:#7a4b38}"
         ".halo{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}"
-        "</style>"
-    )
-
-
-def _svg_style() -> str:
-    return (
-        "<style>"
-        "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
-        ".title{font-size:28px;font-weight:750}"
-        ".subtitle{font-size:16px;fill:#617068}"
-        ".panel-title,.method{font-size:19px;font-weight:750}"
-        ".metric,.metric-value{font-size:16px;font-variant-numeric:tabular-nums}"
-        ".metric-value{font-weight:750}"
-        ".status,.axis,.note{font-size:14px;fill:#617068}"
-        ".caption{font-size:15px;fill:#46554d}"
-        ".caveat{font-size:14px;fill:#7a4b38}"
         "</style>"
     )
 
