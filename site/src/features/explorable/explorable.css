@@ -685,3 +685,14 @@
 .newton-bar.is-hill { fill: var(--ex-red); }
 .newton-bar-gd { fill: var(--ex-ink-soft); fill-opacity: 0.45; }
 .newton-legend text { fill: var(--ex-ink); font-size: var(--type-label); }
+
+/* CMA-ES: sampling ellipses, parents, the target shape, and the history charts. */
+.cma-ellipse { fill: var(--ex-orange); fill-opacity: 0.12; stroke: var(--ex-orange-ink); stroke-width: 2; }
+.cma-ellipse-wide { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.cma-parent { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 1.5; }
+.cma-sample { fill: var(--ex-panel); stroke: var(--ex-ink-soft); stroke-width: 1.5; }
+.cma-target { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.cma-shape-label, .cma-chart-label { fill: var(--ex-ink); font-size: var(--type-label); }
+.cma-line-f { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.cma-line-ratio { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
+.cma-now { stroke: var(--ex-ink-soft); stroke-width: 1; stroke-dasharray: 3 3; }

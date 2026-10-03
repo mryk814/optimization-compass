@@ -15,4 +15,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "coordinate-descent-walk": lazy(() => import("./CoordinateDescentWalk")),
   "nonlinear-least-squares-landscape": lazy(() => import("./NonlinearFitLandscape")),
   "newton-parabola-jump": lazy(() => import("./NewtonParabola")),
+  "cmaes-shape-learning": lazy(() => import("./CmaesShape")),
 };
