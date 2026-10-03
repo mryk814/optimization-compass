@@ -202,6 +202,40 @@ def test_mixed_changes_escalate_to_the_highest_required_gate() -> None:
     }
 
 
+@pytest.mark.parametrize(
+    ("deleted_paths", "expected_task"),
+    [
+        (["content/methods/removed.md"], "tier-a"),
+        (["src/optimization_compass/removed.py"], "tier-b"),
+        (["content/methods/removed.md", "src/optimization_compass/removed.py"], "tier-b"),
+    ],
+)
+def test_deleted_authority_paths_are_included_in_git_task_selection(
+    tmp_path: Path, deleted_paths: list[str], expected_task: str
+) -> None:
+    def git(*args: str) -> str:
+        return subprocess.run(
+            ["git", *args], cwd=tmp_path, capture_output=True, text=True, check=True
+        ).stdout.strip()
+
+    git("init")
+    for path in deleted_paths:
+        target = tmp_path / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("tracked input", encoding="utf-8")
+    git("add", ".")
+    identity = ("-c", "user.name=Validation Test", "-c", "user.email=test@example.invalid")
+    git(*identity, "commit", "-m", "base")
+    base = git("rev-parse", "HEAD")
+    for path in deleted_paths:
+        (tmp_path / path).unlink()
+    git("add", "-u")
+    git(*identity, "commit", "-m", "delete authority inputs")
+    paths = validation_tasks.changed_paths_from_git(base, tmp_path)
+    assert set(paths) == set(deleted_paths)
+    assert validation_task_for_paths(paths).task == expected_task
+
+
 def test_repository_contract_gate_runs_publication_checkpoint_tests() -> None:
     check = next(check for check in CHECKS if check.code == "repository.contract-tests")
 

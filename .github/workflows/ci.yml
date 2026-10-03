@@ -84,8 +84,8 @@ jobs:
           git diff --exit-code -- site/public/data
       - name: Run the selected authoritative validation task
         run: uv run optimization-compass validate "${{ steps.validation.outputs.task }}"
-      - name: Build browser artifact for Tier A
-        if: steps.validation.outputs.task == 'tier-a'
+      - name: Build browser artifact for content tasks
+        if: steps.validation.outputs.task == 'tier-a' || steps.validation.outputs.task == 'content-ready'
         run: npm --prefix site run build
       - name: Verify repository release facts
         run: |

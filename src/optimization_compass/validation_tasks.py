@@ -497,7 +497,7 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
 
 def changed_paths_from_git(base_ref: str, root: Path) -> list[str]:
     completed = subprocess.run(
-        ["git", "diff", "--name-only", "--diff-filter=ACMR", f"{base_ref}...HEAD"],
+        ["git", "diff", "--name-only", "--diff-filter=ACMRD", f"{base_ref}...HEAD"],
         cwd=root,
         capture_output=True,
         text=True,
