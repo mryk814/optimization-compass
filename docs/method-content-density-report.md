@@ -22,7 +22,7 @@
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |
 | `bundle-method` | `M_BUNDLE` | 59 | 5739 | 9 | 1 | pass |
 | `cdcl-sat` | `M_CDCL_SAT` | 44 | 3791 | 12 | 1 | pass |
-| `cma-es` | `M_CMA_ES` | 63 | 6303 | 12 | 2 | pass |
+| `cma-es` | `M_CMA_ES` | 110 | 6549 | 14 | 1 | pass |
 | `cobyla` | `M_COBYLA` | 56 | 2988 | 14 | 1 | pass |
 | `cobyqa` | `M_COBYQA` | 52 | 2800 | 12 | 1 | pass |
 | `constrained-continuous` | `MF_CONSTRAINED_NLP` | 58 | 6737 | 12 | 1 | pass |
@@ -60,7 +60,7 @@
 | `hungarian-algorithm` | `M_HUNGARIAN` | 53 | 3247 | 12 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 56 | 3221 | 14 | 1 | pass |
 | `ilqr-ddp` | `M_ILQR_DDP` | 78 | 5280 | 14 | 1 | pass |
-| `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 73 | 6506 | 10 | 1 | pass |
+| `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 120 | 6007 | 12 | 1 | pass |
 | `lbfgs` | `M_LBFGS` | 61 | 4731 | 9 | 1 | pass |
 | `lbfgsb` | `M_LBFGSB` | 49 | 4240 | 8 | 1 | pass |
 | `least-squares` | `M_LEVENBERG_MARQUARDT` | 57 | 6566 | 14 | 1 | pass |
@@ -78,7 +78,7 @@
 | `multiple-shooting` | `M_MULTIPLE_SHOOTING` | 53 | 5334 | 13 | 1 | pass |
 | `network-simplex` | `M_NETWORK_SIMPLEX` | 51 | 4263 | 13 | 1 | pass |
 | `newton-cg` | `M_NEWTON_CG` | 63 | 5717 | 12 | 1 | pass |
-| `newton-method` | `M_NEWTON` | 38 | 4649 | 10 | 1 | pass |
+| `newton-method` | `M_NEWTON` | 140 | 6742 | 13 | 1 | pass |
 | `nonlinear-cg` | `M_NLCG` | 54 | 5103 | 9 | 1 | pass |
 | `nsga-iii` | `M_NSGA_III` | 61 | 2719 | 12 | 1 | pass |
 | `optimality-criteria-topology` | `M_OC_TOPOLOGY` | 76 | 3297 | 12 | 1 | pass |
