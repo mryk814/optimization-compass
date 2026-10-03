@@ -9,7 +9,6 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
   const contentRef = useRef<HTMLDivElement>(null);
   const { search } = useLocation();
   const focusScene = new URLSearchParams(search).get("figure") ?? undefined;
-  const hasExplorable = page.html.includes("data-explorable-id=");
   useLayoutEffect(() => {
     // Code blocks and tables scroll inside themselves on narrow screens, so keyboard users need focus.
     contentRef.current?.querySelectorAll<HTMLElement>("pre, table").forEach((region) => {
@@ -38,15 +37,15 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
     </ol>
   );
   return (
-    <div className={`compiled-content-layout${hasExplorable ? " compiled-content-layout--explorable" : ""}`}>
+    // Every article uses the linear-least-squares layout: a folded table of contents above a
+    // 42rem reading column, with figures allowed to grow wider (docs/content-reading-principles.md §11).
+    <div className="compiled-content-layout compiled-content-layout--lesson">
       {page.toc.length > 1 && (
         <nav aria-label="この教材の目次" className="content-toc">
-          {hasExplorable ? (
-            <details>
-              <summary>このページの項目</summary>
-              {headings}
-            </details>
-          ) : <><strong>このページの項目</strong>{headings}</>}
+          <details>
+            <summary>このページの項目</summary>
+            {headings}
+          </details>
         </nav>
       )}
       <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />

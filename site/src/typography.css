@@ -261,13 +261,13 @@
   max-inline-size: var(--measure-reading);
 }
 
-/* Interactive articles give the main figure room without widening the prose. */
-.compiled-content-layout--explorable {
+/* Every article: the main figure gets room without widening the prose. */
+.compiled-content-layout--lesson {
   display: block;
   max-inline-size: 60rem;
 }
 
-.compiled-content-layout--explorable .content-toc {
+.compiled-content-layout--lesson .content-toc {
   position: static;
   max-inline-size: var(--measure-reading);
   margin-bottom: 1rem;
@@ -275,7 +275,7 @@
   border-radius: 0.35rem;
 }
 
-.compiled-content-layout--explorable .content-toc summary {
+.compiled-content-layout--lesson .content-toc summary {
   min-height: 2.75rem;
   align-content: center;
   cursor: pointer;
@@ -283,21 +283,24 @@
   line-height: var(--leading-support);
 }
 
-.compiled-content-layout--explorable .content-toc button {
+.compiled-content-layout--lesson .content-toc button {
   min-height: 2.75rem;
   font-size: var(--type-body);
   line-height: var(--leading-support);
 }
 
-.compiled-content-layout--explorable .markdown-body {
+.compiled-content-layout--lesson .markdown-body {
   max-inline-size: none;
 }
 
-.compiled-content-layout--explorable .markdown-body > :not(.explorable) {
+.compiled-content-layout--lesson .markdown-body > :not(.explorable) {
   max-inline-size: var(--measure-reading);
 }
 
-.compiled-content-layout--explorable .markdown-body > figure:not(.explorable) {
+/* Supporting lesson figures (site/public/figures, scripts/generate_lesson_figures.py) are drawn
+   440 px wide, so one SVG unit is one CSS pixel on a PC. Execution figures (site/public/media)
+   are drawn wider and keep the reading measure so their labels are not shrunk further. */
+.compiled-content-layout .markdown-body > figure:has(> img[src*="figures/"]) {
   max-inline-size: 27.5rem;
 }
 

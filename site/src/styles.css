@@ -2099,7 +2099,8 @@ caption {
 .markdown-body { grid-column: 1; grid-row: 1; width: 100%; min-width: 0; }
 .markdown-body h2, .gallery-section h2 { scroll-margin-top: 1rem; margin: 1.75rem 0 .5rem; color: #6b4a35; font-size: 1.2rem; line-height: 1.35; }
 .markdown-body h2:first-child { margin-top: 0; }
-.markdown-body h3 { scroll-margin-top: 1rem; margin: 1.25rem 0 .35rem; color: #6b4a35; font-size: 1rem; line-height: 1.45; }
+/* One subheading style for every article (formulation, method, concept). */
+.markdown-body h3 { scroll-margin-top: 1rem; margin: 1.25rem 0 .35rem; padding-left: .7rem; border-left: 3px solid #315c48; color: #315c48; font-size: 1.15rem; line-height: 1.45; }
 .markdown-body p, .markdown-body li, .gallery-section p { color: #46534b; font-size: 1rem; line-height: 1.85; }
 .markdown-body p { margin: .7rem 0; }
 .markdown-body ul, .markdown-body ol { margin: .45rem 0; padding-left: 1.35rem; }
@@ -2576,7 +2577,7 @@ main:focus {
   line-height: 1.12;
 }
 
-.page-panel p {
+.page-panel p:not(.markdown-body p) {
   max-width: 40rem;
   margin: 0.55rem 0;
   color: #4a574f;
