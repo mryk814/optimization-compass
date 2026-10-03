@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from optimization_compass.validation_tasks import TASKS
+
 PR_AND_MAIN_CONDITION = (
     "github.event_name == 'pull_request' || "
     "(github.event_name == 'push' && github.ref == 'refs/heads/main')"
@@ -116,6 +118,18 @@ def test_risk_selected_validation_and_generated_drift_share_one_authority() -> N
     assert (
         "git diff --exit-code -- data site/public/data src/optimization_compass/resources" in drift
     )
+
+
+def test_every_selected_browser_artifact_task_has_a_production_build() -> None:
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    build_step = _workflow_step(workflow, "Build browser artifact for content tasks")
+    assert (
+        "if: steps.validation.outputs.task == 'tier-a' || "
+        "steps.validation.outputs.task == 'content-ready'"
+    ) in build_step
+    assert "npm --prefix site run build" in build_step
+    for task in ("tier-a", "content-ready", "pr-fast", "main-fast", "tier-b"):
+        assert "site.build" in TASKS[task].check_codes or f"== '{task}'" in build_step
 
 
 def test_publication_and_deployment_steps_remain_main_only() -> None:
