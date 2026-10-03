@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -59,8 +60,7 @@ def test_tier_compositions_match_agents_documentation() -> None:
     )
     assert TASKS["tier-c"].check_codes == (
         *TASKS["tier-b"].check_codes,
-        "site.types",
-        "site.e2e",
+        "site.e2e-artifact",
     )
     assert TASKS["all"].check_codes == TASKS["tier-c"].check_codes
 
@@ -70,6 +70,74 @@ def test_tiers_are_strictly_nested() -> None:
     tier_b = set(TASKS["tier-b"].check_codes)
     tier_c = set(TASKS["tier-c"].check_codes)
     assert tier_a < tier_b < tier_c
+
+
+@pytest.mark.parametrize("task", ["tier-c", "all"])
+@pytest.mark.parametrize("build_succeeds", [True, False])
+def test_browser_gate_requires_this_runs_successful_build(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, task: str, build_succeeds: bool
+) -> None:
+    artifact = tmp_path / "site/dist/index.html"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_text("stale artifact", encoding="utf-8")
+    commands: list[list[str]] = []
+    original_execute = validation_tasks.execute_check
+
+    def fake_subprocess(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        assert kwargs["cwd"] == tmp_path
+        commands.append(argv[1:])
+        if argv[-1] == "build":
+            if not build_succeeds:
+                return subprocess.CompletedProcess(argv, 1, "", "build failed")
+            artifact.write_text("fresh artifact", encoding="utf-8")
+        else:
+            assert argv[-1] == "test:e2e:artifact"
+            assert artifact.read_text(encoding="utf-8") == "fresh artifact"
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    def execute(check: ValidationCheck, root: Path, capture: bool) -> CheckResult:
+        if check.code.startswith("site.") and check.code not in {"site.unit", "site.parity"}:
+            return original_execute(check, root, capture)
+        return CheckResult(
+            code=check.code,
+            status="pass",
+            command=check.display_command,
+            duration_seconds=0.0,
+            message="",
+            next_action="",
+        )
+
+    monkeypatch.setattr(validation_tasks.shutil, "which", lambda _name: "/tools/npm")
+    monkeypatch.setattr(validation_tasks.subprocess, "run", fake_subprocess)
+    monkeypatch.setattr(validation_tasks, "execute_check", execute)
+    result = run_task(task, tmp_path, capture=True)
+    expected_commands = [["--prefix", "site", "run", "build"]]
+    if build_succeeds:
+        expected_commands.append(["--prefix", "site", "run", "test:e2e:artifact"])
+    assert commands == expected_commands
+    assert result.status == ("pass" if build_succeeds else "fail")
+    assert result.checks[-1].status == ("pass" if build_succeeds else "skip")
+
+
+def test_independent_browser_check_still_builds_and_build_still_typechecks() -> None:
+    checks = {check.code: check for check in CHECKS}
+    assert checks["site.e2e"].command == ("{npm}", "--prefix", "site", "run", "test:e2e")
+    scripts = json.loads(
+        (Path(__file__).parents[1] / "site/package.json").read_text(encoding="utf-8")
+    )["scripts"]
+    assert scripts["build"] == "npm run typecheck && vite build"
+    assert scripts["test:e2e"] == "npm run build && npm run test:e2e:artifact"
+    assert scripts["test:e2e:artifact"] == "playwright test"
+
+
+@pytest.mark.parametrize("task", ["tier-c", "all"])
+def test_cli_plan_exposes_the_commands_used_for_artifact_reuse(task: str) -> None:
+    result = runner.invoke(app, ["validate", task, "--list", "--format", "json"])
+    assert result.exit_code == 0
+    checks = json.loads(result.stdout)["checks"]
+    assert [check["code"] for check in checks][-2:] == ["site.build", "site.e2e-artifact"]
+    assert checks[-2]["command"] == ["{npm}", "--prefix", "site", "run", "build"]
+    assert checks[-1]["command"] == ["{npm}", "--prefix", "site", "run", "test:e2e:artifact"]
 
 
 def test_main_fast_keeps_the_publishable_site_gate_without_full_python_regression() -> None:

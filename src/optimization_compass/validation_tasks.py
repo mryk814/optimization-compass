@@ -229,7 +229,7 @@ CHECKS: tuple[ValidationCheck, ...] = (
     ),
     ValidationCheck(
         code="site.build",
-        description="Production site build.",
+        description="Production site build, including the TypeScript type check.",
         next_action="Fix the reported build error under site/.",
         command=(_NPM_TOKEN, "--prefix", "site", "run", "build"),
     ),
@@ -244,6 +244,12 @@ CHECKS: tuple[ValidationCheck, ...] = (
         description="Browser E2E and accessibility tests.",
         next_action="Inspect the Playwright report under site/ for the failing journey.",
         command=(_NPM_TOKEN, "--prefix", "site", "run", "test:e2e"),
+    ),
+    ValidationCheck(
+        code="site.e2e-artifact",
+        description="Browser E2E and accessibility tests against this task's production build.",
+        next_action="Inspect the Playwright report under site/ for the failing journey.",
+        command=(_NPM_TOKEN, "--prefix", "site", "run", "test:e2e:artifact"),
     ),
 )
 
@@ -265,7 +271,9 @@ _TIER_B_CODES: tuple[str, ...] = (
     "site.unit",
     "site.build",
 )
-_TIER_C_CODES: tuple[str, ...] = (*_TIER_B_CODES, "site.types", "site.e2e")
+# site.build already typechecks. Reuse that successful build for browser tests;
+# the independent site.e2e check retains its build-before-testing contract.
+_TIER_C_CODES: tuple[str, ...] = (*_TIER_B_CODES, "site.e2e-artifact")
 _PR_FAST_CODES: tuple[str, ...] = (
     "python.lint",
     "python.format",
