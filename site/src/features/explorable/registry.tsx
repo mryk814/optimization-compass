@@ -5,6 +5,7 @@ import { lazy, type ComponentType, type LazyExoticComponent } from "react";
  * Each figure is its own chunk, so an article without one downloads none of this code.
  */
 export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<ComponentType>>> = {
+  "branch-bound-proof": lazy(() => import("./BranchBound")),
   "gradient-descent-valley": lazy(() => import("./GradientDescentValley")),
   "lp-vertex-walk": lazy(() => import("./LpVertexWalk")),
   "convexity-chord": lazy(() => import("./ConvexityChord")),

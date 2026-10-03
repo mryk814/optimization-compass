@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "branch-bound-proof": {
+    question: "良い組合せが見つかったあと、何を確かめれば最適だと言えるのか。",
+    fixedConditions: "各品を一つまで選ぶ0-1ナップサック。入門は容量8、A・D・B・Cの（重さ, 得点）が（4, 8）・（2, 4）・（3, 5）・（5, 6）。発展は容量10でE（4, 6）・F（5, 7）・G（3, 3）・H（2, 1）を追加する。分数ナップサックで各候補の上界を計算する。絵の大きさは重さを表さない。",
+    notImplied: "4品と8品で証明の仕組みを示す。大規模問題の速度や、一定の計算予算内での最適性保証、実務モデルが現実を正しく表すことは示さない。",
+    beats: [],
+  },
   "gradient-descent-valley": {
     question: "同じ更新式でも、learning rateと谷の細長さで、収束・遅い収束・振動・発散が切り替わるのはなぜか。",
     fixedConditions: "目的関数は f(x,y)=(x-1)^2+κ(y+2)^2 に固定し、勾配は解析式で厳密に与える。",
