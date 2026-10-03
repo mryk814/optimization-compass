@@ -361,6 +361,9 @@
   min-width: 0;
 }
 
+/* Let equations wrap and residual tables scroll within the readout grid. */
+.ex-readout > * { min-width: 0; }
+
 .ex-equation {
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--ex-line);
