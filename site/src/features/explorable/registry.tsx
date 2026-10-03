@@ -13,4 +13,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "adam-step-ratio": lazy(() => import("./AdamStepRatio")),
   "bayes-opt-acquisition": lazy(() => import("./BayesOptAcquisition")),
   "coordinate-descent-walk": lazy(() => import("./CoordinateDescentWalk")),
+  "nonlinear-least-squares-landscape": lazy(() => import("./NonlinearFitLandscape")),
 };

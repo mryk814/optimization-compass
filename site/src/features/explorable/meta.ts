@@ -168,4 +168,35 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
       },
     ],
   },
+  "nonlinear-least-squares-landscape": {
+    question: "パラメータが関数の中に入ると、二乗和の地形はどう変わり、下り方によって着く場所はなぜ変わるのか。",
+    fixedConditions: "ばねの位置を0.5秒おきに8回測った値（0, 1.9, 1.6, 0.4, −1.6, −1.7, −0.7, 1.4）に y=a sin(ωt) を当てはめる。Gauss–Newton法は毎回お椀の底まで進む。Levenberg–Marquardt法はλ=1から始め、二乗和が下がらなければλを2倍、下がればλを1/3にする。立体の高さは二乗和20で切っている。",
+    notImplied: "ライブラリのLevenberg–Marquardt法が同じ谷に着くとは限らない。実データでの推定精度、ノイズの影響、ほかのモデルでの振る舞いは示さない。",
+    beats: [
+      {
+        settings: {"w": 1.8, "a": 1, "method": "gn", "view": "contour", "descend": 1},
+        durationS: 9,
+        captionJa: "ω=1.8から始めると、Gauss–Newton法はお椀の底へ跳ぶ一歩を繰り返し、3回で二乗和が0.19まで下がる。",
+        narrationJa: "オメガ一・八から始めると、ガウス・ニュートン法は、破線のお椀の底へ跳ぶ一歩を繰り返します。三回で、二乗和は〇・一九まで下がります。",
+      },
+      {
+        settings: {"w": 3, "a": 1, "method": "gn", "view": "contour", "descend": 1},
+        durationS: 9,
+        captionJa: "ω=3から始めると、お椀の底が本当の地形と合わず、2回目でω=6.3、3回目で地図の外へ飛ぶ。",
+        narrationJa: "オメガ三から始めると、お椀の底は本当の地形と合いません。二回目でオメガは六・三、三回目では地図の外へ飛んでいきます。",
+      },
+      {
+        settings: {"w": 3, "a": 1, "method": "lm", "view": "contour", "descend": 1},
+        durationS: 10,
+        captionJa: "Levenberg–Marquardt法は、二乗和が下がらない一歩を縮めて試し直すので、同じ始点から最良の谷へ戻る。",
+        narrationJa: "レーベンバーグ・マーカート法は、二乗和が下がらない一歩を縮めて、試し直します。そのため、同じ始点からでも最良の谷へ戻ってきます。",
+      },
+      {
+        settings: {"w": 4, "a": 1, "method": "lm", "view": "surface", "azimuth": 35, "descend": 1},
+        durationS: 10,
+        captionJa: "ω=4から始めると、Levenberg–Marquardt法でも二乗和13.6の谷で止まる。立体で見ると、谷がいくつも並んでいる。",
+        narrationJa: "オメガ四から始めると、レーベンバーグ・マーカート法でも、二乗和十三・六の谷で止まります。立体で見ると、谷がいくつも並んでいるのが分かります。",
+      },
+    ],
+  },
 };
