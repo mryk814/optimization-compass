@@ -109,7 +109,7 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
         <button
           aria-pressed={playing}
           className="ex-play"
-          disabled={reducedMotion}
+          disabled={reducedMotion || timeline.length === 0}
           onClick={timeline.toggle}
           type="button"
         >

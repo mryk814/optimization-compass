@@ -9,6 +9,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
   const contentRef = useRef<HTMLDivElement>(null);
   const { search } = useLocation();
   const focusScene = new URLSearchParams(search).get("figure") ?? undefined;
+  const hasExplorable = page.html.includes("data-explorable-id=");
   useLayoutEffect(() => {
     // Code blocks and tables scroll inside themselves on narrow screens, so keyboard users need focus.
     contentRef.current?.querySelectorAll<HTMLElement>("pre, table").forEach((region) => {
@@ -27,18 +28,25 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
     event.preventDefault();
     goToHeading(anchor.dataset.headingTarget);
   };
+  const headings = (
+    <ol>
+      {page.toc.map((heading) => (
+        <li className={`toc-level-${heading.level}`} key={heading.heading_id}>
+          <button onClick={() => goToHeading(heading.heading_id)} type="button">{heading.label}</button>
+        </li>
+      ))}
+    </ol>
+  );
   return (
-    <div className="compiled-content-layout">
+    <div className={`compiled-content-layout${hasExplorable ? " compiled-content-layout--explorable" : ""}`}>
       {page.toc.length > 1 && (
         <nav aria-label="この教材の目次" className="content-toc">
-          <strong>このページの項目</strong>
-          <ol>
-            {page.toc.map((heading) => (
-              <li className={`toc-level-${heading.level}`} key={heading.heading_id}>
-                <button onClick={() => goToHeading(heading.heading_id)} type="button">{heading.label}</button>
-              </li>
-            ))}
-          </ol>
+          {hasExplorable ? (
+            <details>
+              <summary>このページの項目</summary>
+              {headings}
+            </details>
+          ) : <><strong>このページの項目</strong>{headings}</>}
         </nav>
       )}
       <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />

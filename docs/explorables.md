@@ -119,6 +119,7 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `least-squares-bowl` | `concept.linear-least-squares` | 残差の二乗を正方形の面積で見せ、データの平面とパラメータの平面（お椀）をつなぐ。外れ値1点の引っ張り |
 | `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |
 | `bayes-opt-acquisition` | `bayesian-optimization` | GPの予測平均と不確実性、獲得関数で次の点が決まる様子。β・長さの尺度・EIによる探索と活用の違い |
+| `coordinate-descent-walk` | `coordinate-descent` | 一座標の断面の最小と全体の収束の違い。谷の向き・曲率比・座標の結びつきによる軌跡、掃引ごとの停止と予算打ち切り |
 
 ## 次の候補
 

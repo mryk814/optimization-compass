@@ -11,4 +11,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "least-squares-bowl": lazy(() => import("./LeastSquaresBowl")),
   "adam-step-ratio": lazy(() => import("./AdamStepRatio")),
   "bayes-opt-acquisition": lazy(() => import("./BayesOptAcquisition")),
+  "coordinate-descent-walk": lazy(() => import("./CoordinateDescentWalk")),
 };
