@@ -379,11 +379,22 @@ def test_turbo_figure_clips_local_boxes_to_the_search_domain() -> None:
         for node in root.findall("{http://www.w3.org/2000/svg}rect")
         if node.attrib.get("fill") == "none"
     ]
+    domain = next(
+        node
+        for node in root.findall("{http://www.w3.org/2000/svg}rect")
+        if node.attrib.get("fill") == "#f5f8f4"
+    )
+    left, top, right, bottom = (
+        float(domain.attrib["x"]),
+        float(domain.attrib["y"]),
+        float(domain.attrib["x"]) + float(domain.attrib["width"]),
+        float(domain.attrib["y"]) + float(domain.attrib["height"]),
+    )
     assert len(boxes) == 4
     for box in boxes:
         x, y, width, height = (float(box.attrib[key]) for key in ("x", "y", "width", "height"))
-        assert 78 <= x < x + width <= 414.01
-        assert 170 <= y < y + height <= 490.01
+        assert left <= x < x + width <= right + 0.01
+        assert top <= y < y + height <= bottom + 0.01
 
 
 def test_article_figures_are_deterministic_and_current() -> None:

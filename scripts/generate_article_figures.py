@@ -1272,162 +1272,207 @@ def _cp_search_propagation_svg(dataset_version: str) -> str:
             "accent": "#2c7564",
         },
     )
-    elements = [
-        _svg_open(
-            "制約プログラミング探索の固定実行",
-            (
-                "4-Queensをforward checkingと最小domain優先のbranchingで解く。"
-                "全行が0から3の列候補を持つ初期状態から、Q1イコール0の枝で値を削り、"
-                "Q4のdomainが空になってbacktrackする。その後Q1イコール1の枝で"
-                "解1、3、0、2へ到達する。"
-            ),
-            height=1080,
-        ),
-        '<rect width="800" height="1080" fill="#fbfaf6"/>',
-        '<text x="36" y="50" class="title">値を消してから、残った枝だけを探す</text>',
+    title = "値を消してから、残った枝だけを探す"
+    body, y = _figure_heading(title, "4-Queens・forward checking・残りの候補が最少の変数から")
+    legend_y = y + 14
+    for index, (fill, stroke, label) in enumerate(
         (
-            '<text x="36" y="78" class="subtitle">'
-            "4-Queens · forward checking · minimum remaining values</text>"
-        ),
-        '<rect x="38" y="101" width="22" height="22" rx="7" fill="#2c7564"/>',
-        '<text x="70" y="117" class="axis">assigned</text>',
-        ('<rect x="169" y="101" width="22" height="22" rx="7" fill="#f5e4d7" stroke="#d77b42"/>'),
-        '<text x="201" y="117" class="axis">remaining domain</text>',
-        ('<rect x="370" y="101" width="22" height="22" rx="7" fill="#f4ded9" stroke="#a24c3d"/>'),
-        '<text x="402" y="117" class="axis">empty domain / conflict</text>',
-    ]
-
-    panel_origins = ((36, 148), (410, 148), (36, 416), (410, 416))
-    for stage, (panel_x, panel_y) in zip(stages, panel_origins, strict=True):
+            ("#2c7564", "#2c7564", "確定した値"),
+            ("#f5e4d7", "#d77b42", "残っている候補"),
+            ("#f4ded9", "#a24c3d", "空のdomain／矛盾"),
+        )
+    ):
+        key_x = FIGURE_MARGIN + (index % 2) * 190
+        key_y = legend_y + (index // 2) * 26
+        body.extend(
+            [
+                f'<rect x="{key_x}" y="{key_y - 14:g}" width="18" height="18" rx="5" '
+                f'fill="{fill}" stroke="{stroke}"/>',
+                f'<text x="{key_x + 26}" y="{key_y:g}" class="axis">{label}</text>',
+            ]
+        )
+    y = legend_y + 26 + 6
+    text_x = FIGURE_MARGIN + 14
+    grid_label_x, chip_x0, chip_step, chip_width, row_step = 226, 252, 38, 32, 30
+    for stage in stages:
         domains = stage["domains"]
         assignments = dict(stage["assignments"])
         conflict_row = stage["conflict_row"]
         assert isinstance(domains, tuple)
-        elements.extend(
-            [
-                (
-                    f'<rect x="{panel_x}" y="{panel_y}" width="354" height="238" '
-                    'rx="18" fill="#fff" stroke="#d8ded9"/>'
-                ),
-                (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 30}" '
-                    f'class="panel-title" fill="{stage["accent"]}">{stage["title"]}</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 54}" '
-                    f'class="status">{stage["subtitle"]}</text>'
-                ),
-            ]
+        panel_y = y + 10
+        panel_height = 24 + len(domains) * row_step
+        body.append(
+            f'<rect x="{FIGURE_MARGIN}" y="{panel_y:g}" width="{CONTENT_WIDTH}" '
+            f'height="{panel_height:g}" rx="12" fill="#fff" stroke="#d8ded9"/>'
         )
+        heading, heading_y = _text_lines(
+            text_x,
+            panel_y + 30,
+            str(stage["title"]),
+            "panel-title",
+            size=TEXT_SIZE["panel-title"],
+            width=grid_label_x - text_x - 12,
+            line_height=22,
+        )
+        for line in heading:
+            body.append(
+                line.replace('class="panel-title"', f'class="panel-title" fill="{stage["accent"]}"')
+            )
+        subtitle, _ = _text_lines(
+            text_x,
+            heading_y + 2,
+            str(stage["subtitle"]),
+            "status",
+            width=grid_label_x - text_x - 12,
+            line_height=20,
+        )
+        body.extend(subtitle)
         for row, domain in enumerate(domains):
-            row_y = panel_y + 83 + row * 35
-            elements.append(
-                f'<text x="{panel_x + 20}" y="{row_y + 19}" class="metric">Q{row + 1}</text>'
+            row_y = panel_y + 12 + row * row_step
+            body.append(
+                f'<text x="{grid_label_x}" y="{row_y + 17:g}" class="metric">Q{row + 1}</text>'
             )
             if row == conflict_row:
-                elements.extend(
+                span = 3 * chip_step + chip_width
+                body.extend(
                     [
                         (
-                            f'<rect x="{panel_x + 72}" y="{row_y}" width="202" height="27" '
-                            'rx="8" fill="#f4ded9" stroke="#a24c3d"/>'
+                            f'<rect x="{chip_x0}" y="{row_y:g}" width="{span}" height="24" '
+                            'rx="7" fill="#f4ded9" stroke="#a24c3d"/>'
                         ),
                         (
-                            f'<text x="{panel_x + 173}" y="{row_y + 19}" '
+                            f'<text x="{chip_x0 + span / 2:g}" y="{row_y + 17:g}" '
                             'text-anchor="middle" class="metric-value" fill="#a24c3d">∅</text>'
                         ),
                     ]
                 )
                 continue
             for column in range(4):
-                chip_x = panel_x + 72 + column * 50
+                chip_x = chip_x0 + column * chip_step
                 available = column in domain
                 assigned = assignments.get(row) == column
                 fill = "#2c7564" if assigned else "#f5e4d7" if available else "#f0f1ed"
                 stroke = "#2c7564" if assigned else "#d77b42" if available else "#d8ded9"
                 text_fill = "#fff" if assigned else "#26352d" if available else "#a8afa9"
-                elements.extend(
+                body.extend(
                     [
                         (
-                            f'<rect x="{chip_x}" y="{row_y}" width="40" height="27" '
-                            f'rx="8" fill="{fill}" stroke="{stroke}"/>'
+                            f'<rect x="{chip_x}" y="{row_y:g}" width="{chip_width}" height="24" '
+                            f'rx="7" fill="{fill}" stroke="{stroke}"/>'
                         ),
                         (
-                            f'<text x="{chip_x + 20}" y="{row_y + 19}" text-anchor="middle" '
-                            f'class="metric-value" fill="{text_fill}">{column}</text>'
+                            f'<text x="{chip_x + chip_width / 2:g}" y="{row_y + 17:g}" '
+                            f'text-anchor="middle" class="metric-value" fill="{text_fill}">'
+                            f"{column}</text>"
                         ),
                     ]
                 )
+        y = panel_y + panel_height
+    heading, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 36,
+        "探索木は、空domainの枝をその場で捨てる",
+        "panel-title",
+        size=TEXT_SIZE["panel-title"],
+    )
+    body.extend(heading)
 
-    elements.extend(
+    def node(
+        center_x: float,
+        top: float,
+        width: float,
+        lines: tuple[tuple[str, str, str], ...],
+        fill: str,
+        stroke: str,
+    ) -> list[str]:
+        height = 12 + 21 * len(lines)
+        parts = [
+            f'<rect x="{center_x - width / 2:g}" y="{top:g}" width="{width:g}" '
+            f'height="{height:g}" rx="12" fill="{fill}" stroke="{stroke}"/>'
+        ]
+        for index, (text, css_class, color) in enumerate(lines):
+            color_attribute = f' fill="{color}"' if color else ""
+            parts.append(
+                f'<text x="{center_x:g}" y="{top + 22 + 21 * index:g}" text-anchor="middle" '
+                f'class="{css_class}"{color_attribute}>{text}</text>'
+            )
+        return parts
+
+    root_top = y + 2
+    branch_top = root_top + 70
+    leaf_top = branch_top + 74
+    root_x, left_x, right_x = 220.0, 142.0, 340.0
+    leaf_left, leaf_middle = 80.0, 207.0
+    body.extend(
         [
-            (
-                '<text x="36" y="694" class="panel-title">'
-                "探索木は、空domainの枝をその場で捨てる</text>"
+            f'<line x1="{root_x:g}" y1="{root_top + 33:g}" x2="{left_x:g}" y2="{branch_top:g}" '
+            'stroke="#d77b42" stroke-width="2.5"/>',
+            f'<line x1="{root_x:g}" y1="{root_top + 33:g}" x2="{right_x:g}" y2="{branch_top:g}" '
+            'stroke="#2c7564" stroke-width="2.5"/>',
+            f'<line x1="{left_x:g}" y1="{branch_top + 33:g}" x2="{leaf_left:g}" '
+            f'y2="{leaf_top:g}" stroke="#a24c3d" stroke-width="2"/>',
+            f'<line x1="{left_x:g}" y1="{branch_top + 33:g}" x2="{leaf_middle:g}" '
+            f'y2="{leaf_top:g}" stroke="#a24c3d" stroke-width="2"/>',
+            f'<line x1="{right_x:g}" y1="{branch_top + 33:g}" x2="{right_x:g}" '
+            f'y2="{leaf_top:g}" stroke="#2c7564" stroke-width="2.5"/>',
+            *node(root_x, root_top, 88, (("Q1", "metric-value", ""),), "#fff", "#102a2e"),
+            *node(left_x, branch_top, 104, (("Q1 = 0", "metric-value", ""),), "#f5e4d7", "#d77b42"),
+            *node(
+                right_x, branch_top, 104, (("Q1 = 1", "metric-value", ""),), "#d8e5df", "#2c7564"
             ),
-            '<line x1="400" y1="735" x2="250" y2="804" stroke="#d77b42" stroke-width="3"/>',
-            '<line x1="400" y1="735" x2="550" y2="804" stroke="#2c7564" stroke-width="3"/>',
-            '<rect x="344" y="711" width="112" height="48" rx="16" fill="#fff" stroke="#102a2e"/>',
-            '<text x="400" y="741" text-anchor="middle" class="metric-value">Q1</text>',
-            (
-                '<rect x="192" y="786" width="116" height="48" rx="16" '
-                'fill="#f5e4d7" stroke="#d77b42"/>'
+            *node(
+                leaf_left,
+                leaf_top,
+                120,
+                (("Q2 = 2", "status", ""), ("Q3 = ∅", "metric-value", "#a24c3d")),
+                "#f4ded9",
+                "#a24c3d",
             ),
-            '<text x="250" y="816" text-anchor="middle" class="metric-value">Q1 = 0</text>',
-            (
-                '<rect x="492" y="786" width="116" height="48" rx="16" '
-                'fill="#d8e5df" stroke="#2c7564"/>'
+            *node(
+                leaf_middle,
+                leaf_top,
+                128,
+                (("Q2 = 3, Q3 = 1", "status", ""), ("Q4 = ∅", "metric-value", "#a24c3d")),
+                "#f4ded9",
+                "#a24c3d",
             ),
-            '<text x="550" y="816" text-anchor="middle" class="metric-value">Q1 = 1</text>',
-            '<line x1="250" y1="834" x2="176" y2="884" stroke="#a24c3d" stroke-width="2"/>',
-            '<line x1="250" y1="834" x2="324" y2="884" stroke="#a24c3d" stroke-width="2"/>',
-            '<line x1="550" y1="834" x2="550" y2="884" stroke="#2c7564" stroke-width="3"/>',
-            (
-                '<rect x="102" y="878" width="148" height="50" rx="14" '
-                'fill="#f4ded9" stroke="#a24c3d"/>'
+            *node(
+                right_x,
+                leaf_top,
+                140,
+                (("Q2 = 3 → Q3 = 0", "status", ""), ("Q4 = 2 · 解", "metric-value", "#2c7564")),
+                "#d8e5df",
+                "#2c7564",
             ),
-            '<text x="176" y="899" text-anchor="middle" class="status">Q2 = 2</text>',
-            (
-                '<text x="176" y="919" text-anchor="middle" '
-                'class="metric-value" fill="#a24c3d">Q3 = ∅</text>'
-            ),
-            (
-                '<rect x="250" y="878" width="148" height="50" rx="14" '
-                'fill="#f4ded9" stroke="#a24c3d"/>'
-            ),
-            '<text x="324" y="899" text-anchor="middle" class="status">Q2 = 3, Q3 = 1</text>',
-            (
-                '<text x="324" y="919" text-anchor="middle" '
-                'class="metric-value" fill="#a24c3d">Q4 = ∅</text>'
-            ),
-            (
-                '<rect x="452" y="878" width="196" height="50" rx="14" '
-                'fill="#d8e5df" stroke="#2c7564"/>'
-            ),
-            '<text x="550" y="899" text-anchor="middle" class="status">Q2 = 3 → Q3 = 0</text>',
-            (
-                '<text x="550" y="919" text-anchor="middle" '
-                'class="metric-value" fill="#2c7564">Q4 = 2 · solution</text>'
-            ),
-            (
-                '<text x="36" y="974" class="caption">'
-                f"attempted nodes {probe['nodes']} · pruned values {probe['pruned_values']} · "
-                f"conflicts {probe['conflicts']} · backtracks {probe['backtracks']}</text>"
-            ),
-            (
-                '<text x="36" y="1008" class="caption">'
-                "実行生成: scripts/generate_article_figures.py::_cp_search_probe"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="36" y="1042" class="caveat">'
-                "固定4-Queensのforward checkingです。実solverのglobal constraint、"
-                "学習、restart性能は示しません。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
         ]
     )
-    return "".join(elements)
+    stats, y = _text_lines(
+        FIGURE_MARGIN,
+        leaf_top + 54 + 34,
+        f"試したノード {probe['nodes']} · 削った値 {probe['pruned_values']} · "
+        f"矛盾 {probe['conflicts']} · 後戻り {probe['backtracks']}",
+        "metric",
+        size=TEXT_SIZE["metric"],
+    )
+    body.extend(stats)
+    footer, height = _figure_footer(
+        y + 4,
+        f"scripts/generate_article_figures.py::_cp_search_probe · dataset {dataset_version}",
+        "固定した4-Queensのforward checkingです。実際のsolverのglobal constraint、学習、"
+        "restartの性能は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "制約プログラミング探索の固定実行",
+        (
+            "4-Queensをforward checkingと、残りの候補が最少の変数から選ぶbranchingで解く。"
+            "全行が0から3の列候補を持つ初期状態から、Q1イコール0の枝で値を削り、"
+            "Q4のdomainが空になってbacktrackする。その後Q1イコール1の枝で"
+            "解1、3、0、2へ到達する。"
+        ),
+        height,
+        body,
+    )
 
 
 def _dynamic_programming_knapsack_probe() -> dict[str, object]:
@@ -3055,37 +3100,27 @@ def _particle_swarm_svg(dataset_version: str) -> str:
     assert isinstance(snapshots, tuple)
     assert isinstance(history, tuple)
 
-    elements = [
-        _svg_open(
-            "Particle Swarm Optimizationの固定実行",
-            (
-                "2次元Rastrigin関数上の30粒子をiteration 0、5、15、40で示す。"
-                "粒子は広い初期配置からglobal best付近へ集中し、下段では"
-                "best-so-farが低下する一方で位置多様性も縮小する。"
-                "淡い整数格子は周期的なbasin配置の目安であり、厳密な極小点ではない。"
-            ),
-            height=1080,
-        ),
-        '<rect width="800" height="1080" fill="#fbfaf6"/>',
-        '<text x="36" y="50" class="title">群は散らばりながら、best経験へ引かれる</text>',
-        (
-            '<text x="36" y="78" class="subtitle">'
-            "2D Rastrigin · 30 particles · seed 5 · global-best topology</text>"
-        ),
-        '<circle cx="48" cy="112" r="7" fill="#d77b42"/>',
-        '<text x="64" y="117" class="axis">current position</text>',
-        '<path d="M210 104 l5 10 11 1 -8 7 3 11 -11 -6 -10 6 3 -11 -8 -7 11 -1z" fill="#2c7564"/>',
-        '<text x="238" y="117" class="axis">global best</text>',
-        '<circle cx="365" cy="112" r="5" fill="#d8e5df" stroke="#6e8f83"/>',
-        '<text x="379" y="117" class="axis">periodic-basin guide</text>',
-    ]
-
-    panel_origins = ((36, 150), (410, 150), (36, 454), (410, 454))
-    panel_size = 270.0
-    plot_left = 30.0
-    plot_top = 44.0
-    plot_size = 210.0
+    title = "群は散らばりながら、最良の経験へ引かれる"
+    body, y = _figure_heading(title, "2次元Rastrigin・30粒子・seed 5・global-best型")
+    key_y = y + 16
+    body.extend(
+        [
+            f'<circle cx="{FIGURE_MARGIN + 7}" cy="{key_y - 5:g}" r="5.5" fill="#d77b42"/>',
+            f'<text x="{FIGURE_MARGIN + 20}" y="{key_y:g}" class="axis">現在の位置</text>',
+            f'<path d="M{FIGURE_MARGIN + 137} {key_y - 14:g} l4 8 9 1 -6.5 6 2 9 -8.5 -5 '
+            '-8 5 2 -9 -6.5 -6 9 -1z" fill="#2c7564"/>',
+            f'<text x="{FIGURE_MARGIN + 154}" y="{key_y:g}" class="axis">全体の最良点</text>',
+            f'<circle cx="{FIGURE_MARGIN + 7}" cy="{key_y + 21:g}" r="4" fill="#d8e5df" '
+            'stroke="#6e8f83"/>',
+            f'<text x="{FIGURE_MARGIN + 20}" y="{key_y + 26:g}" class="axis">'
+            "周期的な谷の目安（厳密な極小点ではない）</text>",
+        ]
+    )
+    panel_width, gap = (CONTENT_WIDTH - 12) / 2, 12.0
+    plot_left, plot_top, plot_size = 14.0, 34.0, panel_width - 28
+    panel_height = plot_top + plot_size + 52
     domain = 5.12
+    grid_top = key_y + 42
 
     def project(point: tuple[float, ...], panel_x: float, panel_y: float) -> tuple[float, float]:
         return (
@@ -3093,24 +3128,26 @@ def _particle_swarm_svg(dataset_version: str) -> str:
             panel_y + plot_top + (domain - point[1]) / (2.0 * domain) * plot_size,
         )
 
-    for snapshot_data, (panel_x, panel_y) in zip(snapshots, panel_origins, strict=True):
+    for index, snapshot_data in enumerate(snapshots):
         assert isinstance(snapshot_data, dict)
+        panel_x = FIGURE_MARGIN + (index % 2) * (panel_width + gap)
+        panel_y = grid_top + (index // 2) * (panel_height + gap)
         iteration = int(snapshot_data["iteration"])
         best_value = float(snapshot_data["global_best_value"])
         diversity = float(snapshot_data["diversity"])
-        elements.extend(
+        body.extend(
             [
                 (
-                    f'<rect x="{panel_x}" y="{panel_y}" width="{panel_size}" '
-                    f'height="{panel_size}" rx="18" fill="#fff" stroke="#d8ded9"/>'
+                    f'<rect x="{panel_x:g}" y="{panel_y:g}" width="{panel_width:g}" '
+                    f'height="{panel_height:g}" rx="12" fill="#fff" stroke="#d8ded9"/>'
                 ),
                 (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 28}" '
-                    f'class="panel-title">iteration {iteration}</text>'
+                    f'<text x="{panel_x + plot_left:g}" y="{panel_y + 24:g}" '
+                    f'class="panel-title">反復 {iteration}</text>'
                 ),
                 (
-                    f'<rect x="{panel_x + plot_left}" y="{panel_y + plot_top}" '
-                    f'width="{plot_size}" height="{plot_size}" fill="#f6f3eb" '
+                    f'<rect x="{panel_x + plot_left:g}" y="{panel_y + plot_top:g}" '
+                    f'width="{plot_size:g}" height="{plot_size:g}" fill="#f6f3eb" '
                     'stroke="#d8ded9"/>'
                 ),
             ]
@@ -3118,59 +3155,65 @@ def _particle_swarm_svg(dataset_version: str) -> str:
         for guide in range(-4, 5):
             guide_x, _ = project((float(guide), 0.0), panel_x, panel_y)
             _, guide_y = project((0.0, float(guide)), panel_x, panel_y)
-            elements.append(
-                f'<line x1="{guide_x:.2f}" y1="{panel_y + plot_top}" '
-                f'x2="{guide_x:.2f}" y2="{panel_y + plot_top + plot_size}" '
+            body.append(
+                f'<line x1="{guide_x:.2f}" y1="{panel_y + plot_top:g}" '
+                f'x2="{guide_x:.2f}" y2="{panel_y + plot_top + plot_size:g}" '
                 'stroke="#e8e5dd" stroke-width="1"/>'
             )
-            elements.append(
-                f'<line x1="{panel_x + plot_left}" y1="{guide_y:.2f}" '
-                f'x2="{panel_x + plot_left + plot_size}" y2="{guide_y:.2f}" '
+            body.append(
+                f'<line x1="{panel_x + plot_left:g}" y1="{guide_y:.2f}" '
+                f'x2="{panel_x + plot_left + plot_size:g}" y2="{guide_y:.2f}" '
                 'stroke="#e8e5dd" stroke-width="1"/>'
             )
             for other in range(-4, 5):
                 if guide == 0 and other == 0:
                     continue
                 local_x, local_y = project((float(guide), float(other)), panel_x, panel_y)
-                elements.append(
-                    f'<circle cx="{local_x:.2f}" cy="{local_y:.2f}" r="2.2" fill="#d8e5df"/>'
+                body.append(
+                    f'<circle cx="{local_x:.2f}" cy="{local_y:.2f}" r="1.6" fill="#d8e5df"/>'
                 )
 
         optimum_x, optimum_y = project((0.0, 0.0), panel_x, panel_y)
-        elements.append(
-            f'<circle cx="{optimum_x:.2f}" cy="{optimum_y:.2f}" r="5" '
-            'fill="#fff" stroke="#2c7564" stroke-width="2"/>'
+        body.append(
+            f'<circle cx="{optimum_x:.2f}" cy="{optimum_y:.2f}" r="4" '
+            'fill="#fff" stroke="#2c7564" stroke-width="1.5"/>'
         )
         positions = snapshot_data["positions"]
         assert isinstance(positions, tuple)
         for position in positions:
             particle_x, particle_y = project(position, panel_x, panel_y)
-            elements.append(
-                f'<circle cx="{particle_x:.2f}" cy="{particle_y:.2f}" r="4.2" '
-                'fill="#d77b42" fill-opacity=".82" stroke="#fff" stroke-width="1"/>'
+            body.append(
+                f'<circle cx="{particle_x:.2f}" cy="{particle_y:.2f}" r="3.2" '
+                'fill="#d77b42" fill-opacity=".82" stroke="#fff" stroke-width="0.8"/>'
             )
         best_x, best_y = project(snapshot_data["global_best"], panel_x, panel_y)
-        elements.append(
-            f'<path d="M{best_x:.2f} {best_y - 8:.2f} l3 6 7 1 -5 5 2 7 '
-            f'-7 -4 -6 4 2 -7 -5 -5 7 -1z" fill="#2c7564" stroke="#fff"/>'
+        body.append(
+            f'<path d="M{best_x:.2f} {best_y - 7:.2f} l2.6 5.2 6 0.9 -4.3 4.3 1.7 6 '
+            f'-6 -3.4 -5.2 3.4 1.7 -6 -4.3 -4.3 6 -0.9z" fill="#2c7564" stroke="#fff"/>'
         )
-        elements.append(
-            f'<text x="{panel_x + 18}" y="{panel_y + 263}" class="status">'
-            f"best {_metric(best_value)} · diversity {diversity:.2f}</text>"
+        stats_y = panel_y + plot_top + plot_size + 22
+        body.extend(
+            [
+                f'<text x="{panel_x + plot_left:g}" y="{stats_y:g}" class="status">'
+                f"最良 {_metric(best_value)}</text>",
+                f'<text x="{panel_x + plot_left:g}" y="{stats_y + 20:g}" class="status">'
+                f"広がり {diversity:.2f}</text>",
+            ]
         )
 
-    chart_x, chart_y, chart_width, chart_height = 56.0, 790.0, 688.0, 150.0
-    elements.extend(
-        [
-            (
-                '<text x="36" y="770" class="panel-title">'
-                "bestは下がる。同時に、群の広がりも失われる</text>"
-            ),
-            (
-                f'<rect x="{chart_x}" y="{chart_y}" width="{chart_width}" '
-                f'height="{chart_height}" rx="14" fill="#fff" stroke="#d8ded9"/>'
-            ),
-        ]
+    y = grid_top + 2 * panel_height + gap
+    heading, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 32,
+        "最良値は下がる。同時に、群の広がりも失われる",
+        "panel-title",
+        size=TEXT_SIZE["panel-title"],
+    )
+    body.extend(heading)
+    chart_x, chart_y, chart_width, chart_height = float(FIGURE_MARGIN), y - 6, 400.0, 150.0
+    body.append(
+        f'<rect x="{chart_x:g}" y="{chart_y:g}" width="{chart_width:g}" '
+        f'height="{chart_height:g}" rx="12" fill="#fff" stroke="#d8ded9"/>'
     )
     best_logs = [math.log10(max(float(item["global_best_value"]), 1.0e-8)) for item in history]
     diversities = [float(item["diversity"]) for item in history]
@@ -3178,9 +3221,9 @@ def _particle_swarm_svg(dataset_version: str) -> str:
     diversity_max = max(diversities)
 
     def chart_point(index: int, value: float, lower: float, upper: float) -> tuple[float, float]:
-        x = chart_x + 18.0 + index / 40.0 * (chart_width - 36.0)
+        x = chart_x + 16.0 + index / 40.0 * (chart_width - 32.0)
         ratio = (value - lower) / (upper - lower) if upper > lower else 0.0
-        y = chart_y + chart_height - 22.0 - ratio * (chart_height - 44.0)
+        y = chart_y + chart_height - 18.0 - ratio * (chart_height - 36.0)
         return x, y
 
     best_points = [
@@ -3189,45 +3232,61 @@ def _particle_swarm_svg(dataset_version: str) -> str:
     diversity_points = [
         chart_point(index, value, 0.0, diversity_max) for index, value in enumerate(diversities)
     ]
-    elements.extend(
+    body.extend(
         [
             (
                 '<polyline points="'
                 + " ".join(f"{x:.2f},{y:.2f}" for x, y in best_points)
-                + '" fill="none" stroke="#2c7564" stroke-width="4"/>'
+                + '" fill="none" stroke="#2c7564" stroke-width="3"/>'
             ),
             (
                 '<polyline points="'
                 + " ".join(f"{x:.2f},{y:.2f}" for x, y in diversity_points)
-                + '" fill="none" stroke="#d77b42" stroke-width="3" stroke-dasharray="8 6"/>'
+                + '" fill="none" stroke="#d77b42" stroke-width="2.5" stroke-dasharray="7 5"/>'
             ),
-            '<text x="72" y="815" class="axis" fill="#2c7564">log10(best-so-far)</text>',
-            '<text x="72" y="838" class="axis" fill="#d77b42">position diversity</text>',
-            '<text x="572" y="815" class="axis">independent y scales</text>',
-            '<text x="56" y="963" class="axis">0</text>',
-            '<text x="726" y="963" class="axis">iteration 40</text>',
-            (
-                '<text x="36" y="1002" class="caption">'
-                f"best {_metric(float(probe['initial_best_value']))} → "
-                f"{_metric(float(probe['final_best_value']))} · diversity "
-                f"{float(probe['initial_diversity']):.2f} → "
-                f"{float(probe['final_diversity']):.2f}</text>"
-            ),
-            (
-                '<text x="36" y="1028" class="caption">'
-                "実行生成: scripts/generate_article_figures.py::_particle_swarm_probe"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="36" y="1054" class="caveat">'
-                "固定2次元・1 seedのglobal-best PSOです。"
-                "大域最適性や他seedでの再現を保証しません。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
+            f'<text x="{chart_x:g}" y="{chart_y + chart_height + 20:g}" class="axis">0</text>',
+            f'<text x="{chart_x + chart_width:g}" y="{chart_y + chart_height + 20:g}" '
+            'text-anchor="end" class="axis">反復 40</text>',
         ]
     )
-    return "".join(elements)
+    y = chart_y + chart_height + 52
+    for color, label, value, dashed in (
+        (
+            "#2c7564",
+            "それまでの最良値（log10）",
+            f"{_metric(float(probe['initial_best_value']))} → "
+            f"{_metric(float(probe['final_best_value']))}",
+            False,
+        ),
+        (
+            "#d77b42",
+            "位置の広がり",
+            f"{float(probe['initial_diversity']):.2f} → {float(probe['final_diversity']):.2f}",
+            True,
+        ),
+    ):
+        row, y = _legend_row(y, color, label, value, dash=dashed)
+        body.extend(row)
+    note, y = _text_lines(FIGURE_MARGIN, y + 2, "2本の線の縦軸は別々の目盛です。", "note")
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        f"scripts/generate_article_figures.py::_particle_swarm_probe · dataset {dataset_version}",
+        "固定した2次元・1 seedのglobal-best PSOです。大域最適性や、他のseedでの再現は"
+        "保証しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "Particle Swarm Optimizationの固定実行",
+        (
+            "2次元Rastrigin関数上の30粒子を反復0、5、15、40で示す。"
+            "粒子は広い初期配置から全体の最良点付近へ集中し、下段では"
+            "それまでの最良値が下がる一方で、位置の広がりも縮小する。"
+            "淡い整数格子は周期的な谷の配置の目安であり、厳密な極小点ではない。"
+        ),
+        height,
+        body,
+    )
 
 
 def _pbt_validation_score(weight: float, learning_rate: float) -> float:
@@ -5382,19 +5441,19 @@ def _bayesian_optimization_svg(dataset_version: str) -> str:
 def _optimal_control_mesh_svg(dataset_version: str) -> str:
     traces = _generate_optimal_control_traces(dataset_version=dataset_version)
     trace_styles = {
-        "pendulum-collocation-coarse": ("N=20", "#245c42", ""),
-        "pendulum-collocation-refined": ("N=40", "#456b92", ""),
-        "pendulum-model-rollout-failure": (
-            "model mismatch",
-            "#a53d3d",
-            ' stroke-dasharray="14 9"',
-        ),
+        "pendulum-collocation-coarse": ("N=20", "#245c42", False),
+        "pendulum-collocation-refined": ("N=40", "#456b92", False),
+        "pendulum-model-rollout-failure": ("モデル不一致（重力 +10%）", "#a53d3d", True),
     }
     panels = (
-        ("mesh node上のpath violation", "node_path_violation", 130.0),
-        ("区間再構成 / validation rolloutのpath violation", "reconstructed_path_violation", 430.0),
+        ("mesh nodeでのpath制約違反", "node_path_violation"),
+        ("区間内の再構成と検証rolloutでの違反", "reconstructed_path_violation"),
     )
-    plot_x, plot_width, plot_height = 92.0, 620.0, 210.0
+    title = "mesh上で収束しても、区間内の違反は別に残る"
+    body, y = _figure_heading(title, "同じ振り子・時間幅2 s・同じ初期軌道・評価予算8回")
+    plot_x = FIGURE_MARGIN + 42.0
+    plot_width = FIGURE_WIDTH - FIGURE_MARGIN - 8 - plot_x
+    plot_height = 170.0
     log_min, log_max = -5.0, 0.0
 
     def project(
@@ -5412,79 +5471,48 @@ def _optimal_control_mesh_svg(dataset_version: str) -> str:
             - (math.log10(bounded) - log_min) / (log_max - log_min) * plot_height,
         )
 
-    elements = [
-        _svg_open(
-            "mesh上で収束しても、区間内の違反は別に残る",
-            (
-                "同じpendulum swing-up教材でN=20、N=40、gravityを10%変えたvalidation "
-                "rolloutを比較します。mesh node上のpath violationは許容値内まで下がりますが、"
-                "区間再構成とmodel mismatchでは別の違反が残ります。"
-            ),
-            height=920,
-        ),
-        '<rect width="800" height="920" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">mesh上で収束しても、区間内の違反は別に残る</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "same pendulum · 2 s horizon · same initial trajectory · 8 evaluation budget"
-            "</text>"
-        ),
-    ]
-    for panel_title, metric_key, plot_y in panels:
-        elements.extend(
-            [
-                (
-                    f'<text x="{plot_x}" y="{plot_y - 18}" class="panel-title">'
-                    f"{html.escape(panel_title)}</text>"
-                ),
-                (
-                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
-                    f'height="{plot_height}" rx="14" fill="#fff" stroke="#cfd8d1"/>'
-                ),
-            ]
+    for panel_index, (panel_title, metric_key) in enumerate(panels):
+        heading, y = _text_lines(
+            FIGURE_MARGIN, y + 22, panel_title, "panel-title", size=TEXT_SIZE["panel-title"]
+        )
+        body.extend(heading)
+        plot_y = y - 6
+        body.extend(
+            _plot_frame(
+                plot_x - 8, plot_y, plot_width + 16, plot_height, f"mesh-plot-{panel_index}"
+            )
         )
         for exponent in range(-5, 1):
-            value = 10.0**exponent
-            _, tick_y = project(
-                iteration=0,
-                value=value,
-                plot_y=plot_y,
-                max_iteration=8,
-            )
-            elements.extend(
+            _, tick_y = project(iteration=0, value=10.0**exponent, plot_y=plot_y, max_iteration=8)
+            body.extend(
                 [
                     (
-                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
-                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
-                        'stroke="#ebe8e0"/>'
+                        f'<line x1="{plot_x - 8:g}" y1="{tick_y:.2f}" '
+                        f'x2="{plot_x + plot_width + 8:g}" y2="{tick_y:.2f}" stroke="#ebe8e0"/>'
                     ),
                     (
-                        f'<text x="{plot_x - 16}" y="{tick_y + 5:.2f}" '
+                        f'<text x="{plot_x - 14:g}" y="{tick_y + 5:.2f}" '
                         f'text-anchor="end" class="axis">1e{exponent}</text>'
                     ),
                 ]
             )
-        _, tolerance_y = project(
-            iteration=0,
-            value=1e-4,
-            plot_y=plot_y,
-            max_iteration=8,
-        )
-        elements.extend(
+        _, tolerance_y = project(iteration=0, value=1e-4, plot_y=plot_y, max_iteration=8)
+        body.extend(
             [
                 (
-                    f'<line x1="{plot_x}" y1="{tolerance_y:.2f}" '
-                    f'x2="{plot_x + plot_width}" y2="{tolerance_y:.2f}" '
+                    f'<line x1="{plot_x - 8:g}" y1="{tolerance_y:.2f}" '
+                    f'x2="{plot_x + plot_width + 8:g}" y2="{tolerance_y:.2f}" '
                     'stroke="#c56b32" stroke-width="2" stroke-dasharray="5 5"/>'
                 ),
                 (
-                    f'<text x="{plot_x + 10}" y="{tolerance_y - 8:.2f}" '
-                    'class="axis" fill="#9a4f24">path tolerance 1e-4</text>'
+                    f'<text x="{plot_x + 4:g}" y="{tolerance_y + 20:.2f}" '
+                    'class="axis halo" fill="#9a4f24">許容値 1e-4</text>'
                 ),
             ]
         )
         for trace in traces:
-            _, color, dash = trace_styles[trace.trace_id]
+            _, color, dashed = trace_styles[trace.trace_id]
+            dash = ' stroke-dasharray="10 6"' if dashed else ""
             points = [
                 project(
                     iteration=frame.iteration,
@@ -5495,60 +5523,57 @@ def _optimal_control_mesh_svg(dataset_version: str) -> str:
                 for frame in trace.frames
             ]
             point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-            elements.append(
+            body.append(
                 f'<polyline points="{point_string}" fill="none" stroke="{color}" '
-                f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+                f'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
             )
-            for x, y in points:
-                elements.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="{color}"/>')
-        elements.append(
-            f'<text x="{plot_x + plot_width / 2}" y="{plot_y + plot_height + 28}" '
-            'text-anchor="middle" class="axis">iteration</text>'
+            for x, point_y in points:
+                body.append(f'<circle cx="{x:.2f}" cy="{point_y:.2f}" r="3" fill="{color}"/>')
+        body.append(
+            f'<text x="{plot_x + plot_width / 2:g}" y="{plot_y + plot_height + 22:g}" '
+            'text-anchor="middle" class="axis">反復 →</text>'
         )
-    for row, trace in enumerate(traces):
-        label, color, dash = trace_styles[trace.trace_id]
+        y = plot_y + plot_height + 26
+    y += 30
+    for trace in traces:
+        label, color, dashed = trace_styles[trace.trace_id]
         terminal = trace.frames[-1]
         node = float(terminal.payload["node_path_violation"])
         reconstructed = float(terminal.payload["reconstructed_path_violation"])
-        row_y = 718 + row * 42
-        elements.extend(
-            [
-                (
-                    f'<line x1="92" y1="{row_y}" x2="132" y2="{row_y}" '
-                    f'stroke="{color}" stroke-width="6"{dash}/>'
-                ),
-                (
-                    f'<text x="148" y="{row_y + 6}" class="method" fill="{color}">'
-                    f"{html.escape(label)}</text>"
-                ),
-                (
-                    f'<text x="712" y="{row_y + 6}" text-anchor="end" class="metric-value">'
-                    f"node {node:.1e} · rollout {reconstructed:.3g}</text>"
-                ),
-            ]
+        row, y = _legend_row(
+            y,
+            color,
+            label,
+            detail=f"終了時 node上 {node:.1e} · 区間内 {reconstructed:.3g}",
+            dash=dashed,
         )
-    elements.extend(
-        [
-            (
-                '<text x="42" y="858" class="caption">'
-                "実行生成: optimization_compass.site_export._generate_optimal_control_traces"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="42" y="892" class="caveat">'
-                "固定pendulum教材の診断履歴です。連続時間可行性・実機安全性・一般性能を保証しません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        body.extend(row)
+    footer, height = _figure_footer(
+        y + 4,
+        f"optimization_compass.site_export._generate_optimal_control_traces"
+        f" · dataset {dataset_version}",
+        "固定した振り子教材の診断履歴です。連続時間での実行可能性、実機の安全性、"
+        "一般的な性能は保証しません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "同じpendulum swing-up教材でN=20、N=40、重力を10%変えた検証rolloutを"
+            "比較します。mesh node上のpath制約違反は許容値内まで下がりますが、"
+            "区間内の再構成とモデル不一致では別の違反が残ります。"
+        ),
+        height,
+        body,
+    )
 
 
 def _constrained_feasibility_svg(dataset_version: str) -> str:
     artifact = generate_feasible_region_artifact(dataset_version)
-    plot_x, plot_y, plot_width, plot_height = 88.0, 126.0, 624.0, 500.0
+    title = "目的値が下がっても、制約違反なら解ではない"
+    body, y = _figure_heading(title, "min x²+y²・(x−1)²+(y−1)² ≤ 1・固定の教材用実行記録")
+    plot_x, plot_y, plot_width = float(FIGURE_MARGIN), y + 8, float(CONTENT_WIDTH)
+    plot_height = round(plot_width * 500 / 624)
     x_min, x_max = artifact.bounds.x
     y_min, y_max = artifact.bounds.y
 
@@ -5561,45 +5586,24 @@ def _constrained_feasibility_svg(dataset_version: str) -> str:
 
     center_x, center_y = project(artifact.constraint.center)
     radius = artifact.constraint.radius / (x_max - x_min) * plot_width
-    elements = [
-        _svg_open(
-            "目的値が下がっても、制約違反なら解ではない",
-            artifact.text_alternative_ja,
-            height=850,
-        ),
-        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">目的値が下がっても、制約違反なら解ではない</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "min x²+y² · (x−1)²+(y−1)² ≤ 1 · deterministic teaching trace"
-            "</text>"
-        ),
-        (
-            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
-            'rx="16" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-        (
-            f'<clipPath id="feasible-plot"><rect x="{plot_x}" y="{plot_y}" '
-            f'width="{plot_width}" height="{plot_height}" rx="16"/></clipPath>'
-        ),
-        '<g clip-path="url(#feasible-plot)">',
-    ]
+    body.extend(_plot_frame(plot_x, plot_y, plot_width, plot_height, "feasible-plot"))
+    body.append('<g clip-path="url(#feasible-plot)">')
+    origin_x, origin_y = project((0.0, 0.0))
     for level in artifact.contour_values:
         contour_radius = math.sqrt(level) / (x_max - x_min) * plot_width
-        origin_x, origin_y = project((0.0, 0.0))
-        elements.append(
+        body.append(
             f'<circle cx="{origin_x:.2f}" cy="{origin_y:.2f}" r="{contour_radius:.2f}" '
-            'fill="none" stroke="#dedbd2" stroke-width="2"/>'
+            'fill="none" stroke="#dedbd2" stroke-width="1.5"/>'
         )
-    elements.extend(
+    body.extend(
         [
             (
                 f'<circle cx="{center_x:.2f}" cy="{center_y:.2f}" r="{radius:.2f}" '
-                'fill="#dcefe4" fill-opacity="0.88" stroke="#245c42" stroke-width="4"/>'
+                'fill="#dcefe4" fill-opacity="0.88" stroke="#245c42" stroke-width="3"/>'
             ),
             "</g>",
             (
-                f'<text x="{center_x:.2f}" y="{center_y - radius + 30:.2f}" '
+                f'<text x="{center_x:.2f}" y="{center_y - radius + 26:.2f}" '
                 'text-anchor="middle" class="panel-title" fill="#245c42">実行可能領域</text>'
             ),
         ]
@@ -5608,73 +5612,60 @@ def _constrained_feasibility_svg(dataset_version: str) -> str:
         "constraint_aware": ("制約を評価", "#245c42"),
         "unconstrained_failure": ("制約を無視", "#c56b32"),
     }
-    summaries: list[tuple[str, str, float, float]] = []
+    summaries: list[tuple[str, str, float, float, bool]] = []
     for path in artifact.paths:
         label, color = path_styles[path.role]
         points = [project(step.point) for step in path.steps]
         point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-        dash = ' stroke-dasharray="14 9"' if path.role == "unconstrained_failure" else ""
-        elements.append(
+        dashed = path.role == "unconstrained_failure"
+        dash = ' stroke-dasharray="10 6"' if dashed else ""
+        body.append(
             f'<polyline points="{point_string}" fill="none" stroke="{color}" '
-            f'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+            f'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
         )
         for index, (x, y) in enumerate(points):
-            radius_value = 7 if index in {0, len(points) - 1} else 4
+            radius_value = 5.5 if index in {0, len(points) - 1} else 3
             fill = "#fff" if index == 0 else color
-            elements.append(
+            body.append(
                 f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{radius_value}" '
-                f'fill="{fill}" stroke="{color}" stroke-width="3"/>'
+                f'fill="{fill}" stroke="{color}" stroke-width="2.5"/>'
             )
         terminal = path.steps[-1]
-        summaries.append((label, color, terminal.objective, terminal.violation))
-    elements.extend(
-        [
-            (
-                '<text x="88" y="654" class="note">'
-                "○ 共通初期点　● 終了点　実線: 制約を評価　破線: 制約を無視</text>"
-            ),
-        ]
+        summaries.append((label, color, terminal.objective, terminal.violation, dashed))
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        plot_y + plot_height + 28,
+        "○ 共通の初期点　● 終了点　実線: 制約を評価　破線: 制約を無視",
+        "note",
     )
-    for row, (label, color, objective, violation) in enumerate(summaries):
-        row_y = 690 + row * 42
-        elements.extend(
-            [
-                (
-                    f'<line x1="88" y1="{row_y}" x2="124" y2="{row_y}" '
-                    f'stroke="{color}" stroke-width="6"/>'
-                ),
-                (
-                    f'<text x="140" y="{row_y + 6}" class="method" fill="{color}">'
-                    f"{html.escape(label)}</text>"
-                ),
-                (
-                    f'<text x="712" y="{row_y + 6}" text-anchor="end" class="metric-value">'
-                    f"f={objective:.3f} · violation={violation:.3f}</text>"
-                ),
-            ]
+    body.extend(note)
+    y += 10
+    for label, color, objective, violation, dashed in summaries:
+        row, y = _legend_row(
+            y, color, label, f"f={objective:.3f} · 違反量={violation:.3f}", dash=dashed
         )
-    elements.extend(
-        [
-            (
-                '<text x="42" y="790" class="caption">'
-                "実行生成: optimization_compass.learning_slices.generate_feasible_region_artifact"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="42" y="824" class="caveat">'
-                "固定2次元教材です。SLSQPやBFGSの実装性能・一般的な収束性は示しません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        body.extend(row)
+    footer, height = _figure_footer(
+        y + 4,
+        "optimization_compass.learning_slices.generate_feasible_region_artifact"
+        f" · dataset {dataset_version}",
+        "固定した2次元の教材です。SLSQPやBFGSの実装性能や、一般的な収束性は示しません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(title, artifact.text_alternative_ja, height, body)
 
 
 def _pareto_preference_svg(dataset_version: str) -> str:
     artifact = generate_pareto_front_artifact(dataset_version)
-    plot_x, plot_y, plot_width, plot_height = 96.0, 126.0, 600.0, 500.0
+    title = "同じPareto frontでも、重みで選ぶ点が動く"
+    body, y = _figure_heading(title, "2目的の二次関数・81点を標本化・教材用の厳密なfront")
+    axis_y, y = _text_lines(
+        FIGURE_MARGIN, y + 6, "縦軸 f₂: 点(2,2)からの距離²（小さいほど良い）", "axis"
+    )
+    body.extend(axis_y)
+    plot_x, plot_y = FIGURE_MARGIN + 26.0, y - 6
+    plot_width = FIGURE_WIDTH - FIGURE_MARGIN - plot_x
+    plot_height = round(plot_width * 500 / 600)
     lower, upper = -0.4, 8.4
 
     def project(objectives: tuple[float, float]) -> tuple[float, float]:
@@ -5684,43 +5675,26 @@ def _pareto_preference_svg(dataset_version: str) -> str:
             plot_y + plot_height - (second - lower) / (upper - lower) * plot_height,
         )
 
-    elements = [
-        _svg_open(
-            "同じfrontでも、weightで選ぶ点が動く",
-            artifact.text_alternative_ja,
-            height=850,
-        ),
-        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">同じfrontでも、weightで選ぶ点が動く</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "2-objective quadratic · 81 sampled points · exact teaching front"
-            "</text>"
-        ),
-        (
-            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
-            'rx="16" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-    ]
+    body.extend(_plot_frame(plot_x, plot_y, plot_width, plot_height, "pareto-plot"))
     for tick in (0, 2, 4, 6, 8):
         tick_x, _ = project((float(tick), 0.0))
         _, tick_y = project((0.0, float(tick)))
-        elements.extend(
+        body.extend(
             [
                 (
-                    f'<line x1="{tick_x:.2f}" y1="{plot_y}" x2="{tick_x:.2f}" '
-                    f'y2="{plot_y + plot_height}" stroke="#ebe8e0"/>'
+                    f'<line x1="{tick_x:.2f}" y1="{plot_y:g}" x2="{tick_x:.2f}" '
+                    f'y2="{plot_y + plot_height:g}" stroke="#ebe8e0"/>'
                 ),
                 (
-                    f'<line x1="{plot_x}" y1="{tick_y:.2f}" x2="{plot_x + plot_width}" '
+                    f'<line x1="{plot_x:g}" y1="{tick_y:.2f}" x2="{plot_x + plot_width:g}" '
                     f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>'
                 ),
                 (
-                    f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 28}" '
+                    f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 20:g}" '
                     f'text-anchor="middle" class="axis">{tick}</text>'
                 ),
                 (
-                    f'<text x="{plot_x - 18}" y="{tick_y + 5:.2f}" '
+                    f'<text x="{plot_x - 8:g}" y="{tick_y + 5:.2f}" '
                     f'text-anchor="end" class="axis">{tick}</text>'
                 ),
             ]
@@ -5729,73 +5703,64 @@ def _pareto_preference_svg(dataset_version: str) -> str:
         x, y = project(point.objectives)
         fill = "#b8b5ad" if point.dominated else "#7ca993"
         opacity = "0.55" if point.dominated else "0.8"
-        elements.append(
-            f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4.5" fill="{fill}" opacity="{opacity}"/>'
+        body.append(
+            f'<circle cx="{x:.2f}" cy="{y:.2f}" r="3.5" fill="{fill}" opacity="{opacity}"/>'
         )
     front_points = " ".join(
         f"{x:.2f},{y:.2f}"
         for x, y in (project(point.objectives) for point in artifact.pareto_front)
     )
-    elements.append(
+    body.append(
         f'<polyline points="{front_points}" fill="none" stroke="#245c42" '
-        'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'
+        'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
     )
     for selection in artifact.preference_selections:
         x, y = project(selection.objectives)
-        label_x = x + (16 if selection.weight_f1 < 0.5 else -16)
-        anchor = "start" if selection.weight_f1 < 0.5 else "end"
-        label_y = y - 14 if selection.weight_f1 != 0.8 else y + 30
-        elements.extend(
+        body.extend(
             [
                 (
-                    f'<circle cx="{x:.2f}" cy="{y:.2f}" r="10" fill="#c56b32" '
-                    'stroke="#fff" stroke-width="4"/>'
+                    f'<circle cx="{x:.2f}" cy="{y:.2f}" r="7" fill="#c56b32" '
+                    'stroke="#fff" stroke-width="3"/>'
                 ),
                 (
-                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}" '
-                    f'class="method" fill="#9a4f24">w₁={selection.weight_f1:.1f}</text>'
+                    f'<text x="{x + 12:.2f}" y="{y - 10:.2f}" class="method halo" '
+                    f'fill="#9a4f24">w₁={selection.weight_f1:.1f}</text>'
                 ),
             ]
         )
     ideal_x, ideal_y = project(artifact.reference.ideal)
-    elements.extend(
+    body.extend(
         [
             (
-                f'<path d="M {ideal_x - 8:.2f} {ideal_y:.2f} H {ideal_x + 8:.2f} '
-                f'M {ideal_x:.2f} {ideal_y - 8:.2f} V {ideal_y + 8:.2f}" '
-                'stroke="#a53d3d" stroke-width="3"/>'
+                f'<path d="M {ideal_x - 6:.2f} {ideal_y:.2f} H {ideal_x + 6:.2f} '
+                f'M {ideal_x:.2f} {ideal_y - 6:.2f} V {ideal_y + 6:.2f}" '
+                'stroke="#a53d3d" stroke-width="2.5"/>'
             ),
             (
-                f'<text x="{ideal_x + 16:.2f}" y="{ideal_y - 12:.2f}" '
-                'class="status" fill="#a53d3d">ideal（同時には到達不能）</text>'
+                f'<text x="{ideal_x + 12:.2f}" y="{ideal_y + 5:.2f}" '
+                'class="status halo" fill="#a53d3d">理想点（同時には到達不能）</text>'
             ),
-            (
-                '<text x="396" y="682" text-anchor="middle" class="axis">'
-                "f₁: originからの距離²（小さいほど良い）</text>"
-            ),
-            (
-                '<text x="28" y="376" text-anchor="middle" class="axis" '
-                'transform="rotate(-90 28 376)">f₂: (2,2)からの距離²（小さいほど良い）</text>'
-            ),
-            (
-                '<text x="96" y="722" class="note">'
-                "灰: dominated　青緑: Pareto front　橙: weightで選んだ点</text>"
-            ),
-            (
-                '<text x="42" y="780" class="caption">'
-                "実行生成: optimization_compass.learning_slices.generate_pareto_front_artifact"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="42" y="814" class="caveat">'
-                "凸な2目的固定教材です。weightは客観的な優先度や一般性能rankingではありません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
         ]
     )
-    return "".join(elements)
+    axis_x, y = _text_lines(
+        FIGURE_MARGIN,
+        plot_y + plot_height + 44,
+        "横軸 f₁: 原点からの距離²（小さいほど良い）",
+        "axis",
+    )
+    body.extend(axis_x)
+    note, y = _text_lines(
+        FIGURE_MARGIN, y + 6, "灰: 支配される点　青緑: Pareto front　橙: 重みで選んだ点", "note"
+    )
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 8,
+        "optimization_compass.learning_slices.generate_pareto_front_artifact"
+        f" · dataset {dataset_version}",
+        "凸な2目的の固定教材です。重みは客観的な優先度でも、一般的な性能の順位でもありません。",
+    )
+    body.extend(footer)
+    return _figure_document(title, artifact.text_alternative_ja, height, body)
 
 
 def _gradient_family_svg(dataset_version: str) -> str:
@@ -5932,120 +5897,115 @@ def _gradient_family_svg(dataset_version: str) -> str:
 def _portfolio_risk_svg(dataset_version: str) -> str:
     traces = generate_portfolio_uncertainty_traces(dataset_version=dataset_version)
     panels = (
-        ("nominal目的", traces[0], "#245c42"),
+        ("公称目的", traces[0], "#245c42"),
         ("CVaRを含む目的", traces[1], "#c56b32"),
     )
+    objective_labels = {
+        "training mean loss": "学習用データの平均損失",
+        "training mean loss + 0.5 CVaR_0.75": "学習用データの平均損失 + 0.5·CVaR 75%",
+    }
     asset_colors = ("#245c42", "#c56b32", "#456b92", "#8b7d58")
-    elements = [
-        _svg_open(
-            "同じ12 scenarioでも、riskの置き方で配分が変わる",
-            (
-                "4資産の配分を、同じtraining 8件とheld-out 4件で評価した固定教材です。"
-                "nominal目的とCVaRを含む目的について、配分とmean loss、CVaR 75%、"
-                "worst lossをtrainingとheld-outに分けて示します。"
-            ),
-            height=920,
-        ),
-        '<rect width="800" height="920" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">同じsampleでも、riskの置き方で配分が変わる</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "4 assets · training 8 + held-out 4 · same capped simplex · α = 0.75"
-            "</text>"
-        ),
-    ]
-    for panel_index, (label, trace, accent) in enumerate(panels):
-        panel_y = 116 + panel_index * 344
+    title = "同じ標本でも、リスクの置き方で配分が変わる"
+    body, y = _figure_heading(
+        title, "4資産・学習用データ8件と評価用データ4件・同じ上限付き単体・α = 0.75"
+    )
+    inner_x = FIGURE_MARGIN + 14
+    inner_right = FIGURE_WIDTH - FIGURE_MARGIN - 14
+    columns = (inner_right - 172, inner_right - 86, inner_right)
+    for label, trace, accent in panels:
+        panel_y = y + 8
         weights = trace.frames[0].points[0].coordinates
         training = trace.frames[1]
         held_out = trace.frames[2]
-        elements.extend(
-            [
-                (
-                    f'<rect x="42" y="{panel_y}" width="716" height="316" rx="16" '
-                    'fill="#fff" stroke="#cfd8d1"/>'
-                ),
-                (
-                    f'<text x="64" y="{panel_y + 38}" class="panel-title" '
-                    f'fill="{accent}">{html.escape(label)}</text>'
-                ),
-                (
-                    f'<text x="736" y="{panel_y + 38}" text-anchor="end" class="status">'
-                    f"{html.escape(str(trace.objective['definition']))}</text>"
-                ),
-                f'<text x="64" y="{panel_y + 72}" class="metric">配分</text>',
-            ]
+        content = [
+            (
+                f'<text x="{inner_x}" y="{panel_y + 30:g}" class="panel-title" '
+                f'fill="{accent}">{html.escape(label)}</text>'
+            ),
+        ]
+        definition, row_y = _text_lines(
+            inner_x,
+            panel_y + 52,
+            objective_labels[str(trace.objective["definition"])],
+            "status",
+            width=inner_right - inner_x,
         )
-        bar_x, bar_y, bar_width, bar_height = 126.0, panel_y + 52.0, 610.0, 34.0
-        cursor = bar_x
+        content.extend(definition)
+        bar_y, bar_width, bar_height = row_y - 4, inner_right - inner_x, 26.0
+        content.append(
+            f'<text x="{inner_x}" y="{bar_y + bar_height + 22:g}" class="metric">配分</text>'
+        )
+        cursor = float(inner_x)
         for asset_index, (weight, color) in enumerate(zip(weights, asset_colors, strict=True)):
             width = float(weight) * bar_width
             if width > 0:
-                elements.append(
+                content.append(
                     f'<rect x="{cursor:.2f}" y="{bar_y:.2f}" width="{width:.2f}" '
                     f'height="{bar_height}" fill="{color}"/>'
                 )
             cursor += width
-            elements.append(
-                f'<text x="{126 + asset_index * 150}" y="{panel_y + 112}" class="status">'
+            label_x = inner_x + 48 + (asset_index % 2) * 170
+            label_y = bar_y + bar_height + 22 + (asset_index // 2) * 22
+            content.append(
+                f'<text x="{label_x}" y="{label_y:g}" class="status">'
                 f'<tspan fill="{color}" font-weight="750">●</tspan> '
-                f"Asset {asset_index + 1}: {float(weight):.2f}</text>"
+                f"資産{asset_index + 1}: {float(weight):.2f}</text>"
             )
-        elements.extend(
-            [
-                f'<text x="64" y="{panel_y + 158}" class="method">評価split</text>',
-                f'<text x="310" y="{panel_y + 158}" class="method">mean loss</text>',
-                f'<text x="494" y="{panel_y + 158}" class="method">CVaR 75%</text>',
-                f'<text x="668" y="{panel_y + 158}" class="method">worst loss</text>',
-            ]
-        )
+        header_y = bar_y + bar_height + 84
+        content.append(f'<text x="{inner_x}" y="{header_y:g}" class="method">データ</text>')
+        for column_x, heading in zip(columns, ("平均損失", "CVaR 75%", "最悪損失"), strict=True):
+            content.append(
+                f'<text x="{column_x}" y="{header_y:g}" text-anchor="end" class="method">'
+                f"{heading}</text>"
+            )
         for row_index, (split_label, frame) in enumerate(
-            (("training 8", training), ("held-out 4", held_out))
+            (("学習用 8件", training), ("評価用 4件", held_out))
         ):
-            row_y = panel_y + 202 + row_index * 54
-            elements.extend(
-                [
-                    f'<text x="64" y="{row_y}" class="metric">{split_label}</text>',
-                    (
-                        f'<text x="310" y="{row_y}" class="metric-value">'
-                        f"{_metric(_metric_value(frame, 'mean_loss'))}</text>"
-                    ),
-                    (
-                        f'<text x="494" y="{row_y}" class="metric-value">'
-                        f"{_metric(_metric_value(frame, 'cvar_75'))}</text>"
-                    ),
-                    (
-                        f'<text x="668" y="{row_y}" class="metric-value">'
-                        f"{_metric(_metric_value(frame, 'worst_loss'))}</text>"
-                    ),
-                ]
-            )
-        elements.append(
-            f'<line x1="64" y1="{panel_y + 294}" x2="736" y2="{panel_y + 294}" '
-            f'stroke="{accent}" stroke-width="3"/>'
+            row_y = header_y + 30 + row_index * 28
+            content.append(f'<text x="{inner_x}" y="{row_y:g}" class="metric">{split_label}</text>')
+            for column_x, metric_id in zip(
+                columns, ("mean_loss", "cvar_75", "worst_loss"), strict=True
+            ):
+                content.append(
+                    f'<text x="{column_x}" y="{row_y:g}" text-anchor="end" class="metric-value">'
+                    f"{_metric(_metric_value(frame, metric_id))}</text>"
+                )
+        panel_bottom = header_y + 30 + 28 + 20
+        body.append(
+            f'<rect x="{FIGURE_MARGIN}" y="{panel_y:g}" width="{CONTENT_WIDTH}" '
+            f'height="{panel_bottom - panel_y:g}" rx="12" fill="#fff" stroke="#cfd8d1"/>'
         )
-    elements.extend(
-        [
-            (
-                '<text x="42" y="826" class="caption">'
-                "実行生成: optimization_compass.portfolio_uncertainty."
-                f"generate_portfolio_uncertainty_traces · dataset {html.escape(dataset_version)}"
-                "</text>"
-            ),
-            (
-                '<text x="42" y="860" class="caveat">'
-                "固定8/4 scenarioのempirical summaryであり、母集団riskや将来returnを保証しません。"
-                "</text>"
-            ),
-            (
-                '<text x="42" y="892" class="note">'
-                "lossは小さい側が良い。trainingとheld-outは別々に読みます。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        body.append(
+            f'<rect x="{FIGURE_MARGIN}" y="{panel_y + 12:g}" width="4" height="26" '
+            f'fill="{accent}"/>'
+        )
+        body.extend(content)
+        y = panel_bottom + 6
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 22,
+        "損失は小さいほど良い。学習用データと評価用データは別々に読みます。",
+        "note",
     )
-    return "".join(elements)
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        "optimization_compass.portfolio_uncertainty.generate_portfolio_uncertainty_traces"
+        f" · dataset {dataset_version}",
+        "固定した8件と4件のシナリオの経験的な要約です。母集団のリスクや将来のリターンは"
+        "保証しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "4資産の配分を、同じ学習用データ8件と評価用データ4件で評価した固定教材です。"
+            "公称目的とCVaRを含む目的について、配分と平均損失、CVaR 75%、"
+            "最悪損失を学習用データと評価用データに分けて示します。"
+        ),
+        height,
+        body,
+    )
 
 
 def _trf_probe_svg(dataset_version: str) -> str:
@@ -6054,10 +6014,16 @@ def _trf_probe_svg(dataset_version: str) -> str:
         for trace in generate_parameter_estimation_traces(dataset_version=dataset_version)
     }
     series = (
-        ("通常初期値", traces["exponential-fit-trf"], "#245c42", 486.0),
-        ("悪い初期値", traces["exponential-fit-trf-poor-init"], "#c56b32", 420.0),
+        ("通常の初期値", traces["exponential-fit-trf"], "#245c42"),
+        ("悪い初期値", traces["exponential-fit-trf-poor-init"], "#c56b32"),
     )
-    plot_x, plot_y, plot_width, plot_height = 76.0, 136.0, 648.0, 390.0
+    title = "同じ診断probeでも、初期値で残差の履歴が変わる"
+    body, y = _figure_heading(title, "指数減衰のfit・観測20点・評価12回")
+    axis_y, y = _text_lines(FIGURE_MARGIN, y + 6, "縦軸: 残差ノルム（対数目盛）", "axis")
+    body.extend(axis_y)
+    plot_x, plot_y = FIGURE_MARGIN + 34.0, y - 6
+    plot_width = FIGURE_WIDTH - FIGURE_MARGIN - 8 - plot_x
+    plot_height = 250.0
     log_min, log_max = math.log10(0.03), math.log10(4.0)
 
     def project(evaluation: int, residual: float) -> tuple[float, float]:
@@ -6065,58 +6031,42 @@ def _trf_probe_svg(dataset_version: str) -> str:
         y = plot_y + (log_max - math.log10(residual)) / (log_max - log_min) * plot_height
         return x, y
 
-    elements = [
-        _svg_open(
-            "同じ診断probeでも、初期値で残差履歴が変わる",
-            (
-                "20観測の指数減衰fitに対するsolver-independent damped Gauss–Newton"
-                "診断probeの実行結果です。通常初期値と悪い初期値について、"
-                "12 evaluationまでのresidual normを対数目盛で示します。"
-                "TRF本体の実行ではありません。"
-            ),
-            height=720,
-        ),
-        '<rect width="800" height="720" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">同じ診断probeでも、初期値で残差履歴が変わる</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "exponential fit · 20 observations · 12 evaluations · log residual scale"
-            "</text>"
-        ),
-        (
-            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
-            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
-        ),
-    ]
+    body.extend(_plot_frame(plot_x - 8, plot_y, plot_width + 16, plot_height, "trf-plot"))
     for tick in (3.0, 1.0, 0.3, 0.1, 0.03):
-        _, y = project(1, tick)
-        elements.extend(
+        _, tick_y = project(1, tick)
+        body.extend(
             [
                 (
-                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
-                    f'y2="{y:.2f}" stroke="#e2e7e2"/>'
+                    f'<line x1="{plot_x - 8:g}" y1="{tick_y:.2f}" x2="{plot_x + plot_width + 8:g}" '
+                    f'y2="{tick_y:.2f}" stroke="#e2e7e2"/>'
                 ),
                 (
-                    f'<text x="{plot_x - 12}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'<text x="{plot_x - 14:g}" y="{tick_y + 5:.2f}" text-anchor="end" '
                     f'class="axis">{tick:g}</text>'
                 ),
             ]
         )
     for evaluation in (1, 4, 8, 12):
-        x, _ = project(evaluation, 1.0)
-        elements.extend(
+        tick_x, _ = project(evaluation, 1.0)
+        body.extend(
             [
                 (
-                    f'<line x1="{x:.2f}" y1="{plot_y}" x2="{x:.2f}" '
-                    f'y2="{plot_y + plot_height}" stroke="#eef1ee"/>'
+                    f'<line x1="{tick_x:.2f}" y1="{plot_y:g}" x2="{tick_x:.2f}" '
+                    f'y2="{plot_y + plot_height:g}" stroke="#eef1ee"/>'
                 ),
                 (
-                    f'<text x="{x:.2f}" y="{plot_y + plot_height + 26}" '
+                    f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 20:g}" '
                     f'text-anchor="middle" class="axis">{evaluation}</text>'
                 ),
             ]
         )
-    for label, trace, color, label_y in series:
+    rows: list[str] = []
+    axis_x, row_y = _text_lines(
+        FIGURE_MARGIN, plot_y + plot_height + 44, "横軸: 評価回数　○ 開始　● 12回目", "axis"
+    )
+    rows.extend(axis_x)
+    row_y += 10
+    for label, trace, color in series:
         points = [
             project(frame.oracle_evaluations, _metric_value(frame, "residual_norm"))
             for frame in trace.frames
@@ -6125,109 +6075,91 @@ def _trf_probe_svg(dataset_version: str) -> str:
         start_value = _metric_value(trace.frames[0], "residual_norm")
         final_value = _metric_value(trace.frames[-1], "residual_norm")
         end_x, end_y = points[-1]
-        elements.extend(
+        body.extend(
             [
                 (
                     f'<polyline points="{point_string}" fill="none" stroke="{color}" '
-                    'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+                    'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
                 ),
                 (
-                    f'<circle cx="{points[0][0]:.2f}" cy="{points[0][1]:.2f}" r="6" '
-                    f'fill="#fff" stroke="{color}" stroke-width="3"/>'
+                    f'<circle cx="{points[0][0]:.2f}" cy="{points[0][1]:.2f}" r="5" '
+                    f'fill="#fff" stroke="{color}" stroke-width="2.5"/>'
                 ),
-                f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="7" fill="{color}"/>',
-                (
-                    f'<line x1="604" y1="{label_y - 5:.2f}" x2="{end_x - 10:.2f}" '
-                    f'y2="{end_y:.2f}" stroke="{color}" stroke-width="2"/>'
-                ),
-                (
-                    f'<text x="594" y="{label_y:.2f}" text-anchor="end" '
-                    f'class="method" fill="{color}">{html.escape(label)}</text>'
-                ),
-                (
-                    f'<text x="594" y="{label_y + 22:.2f}" text-anchor="end" '
-                    f'class="status">residual {_metric(start_value)}'
-                    f" → {_metric(final_value)}</text>"
-                ),
+                f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="5.5" fill="{color}"/>',
             ]
         )
-    elements.extend(
-        [
-            '<text x="400" y="584" text-anchor="middle" class="metric">oracle evaluations</text>',
-            (
-                '<text x="42" y="640" class="caption">'
-                "実行生成: optimization_compass.parameter_estimation."
-                f"generate_parameter_estimation_traces · dataset {html.escape(dataset_version)}"
-                "</text>"
-            ),
-            (
-                '<text x="42" y="674" class="caveat">'
-                "solver条件を読む固定診断probeです。"
-                "SciPy TRFの内部iterationや性能差ではありません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        row, row_y = _legend_row(
+            row_y, color, label, f"残差 {_metric(start_value)} → {_metric(final_value)}"
+        )
+        rows.extend(row)
+    body.extend(rows)
+    footer, height = _figure_footer(
+        row_y + 4,
+        "optimization_compass.parameter_estimation.generate_parameter_estimation_traces"
+        f" · dataset {dataset_version}",
+        "solverの条件を読むための固定した診断probeです。"
+        "SciPy TRFの内部反復や性能差ではありません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "20観測の指数減衰fitに対する、solverに依存しないdamped Gauss–Newton"
+            "診断probeの実行結果です。通常の初期値と悪い初期値について、"
+            "評価12回までの残差ノルムを対数目盛で示します。"
+            "TRF本体の実行ではありません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _search_tree_proof_svg(dataset_version: str) -> str:
     artifact = generate_search_tree_artifact(dataset_version=dataset_version)
     payload = SearchTreeFramePayload.model_validate(artifact.trace.frames[-1].payload)
+    title = "9ノードの探索で、最良値と上界が一致する"
+    body, y = _figure_heading(title, "0-1 knapsack・深さ優先で「入れる」側から・固定の教材用実行")
+    summary, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 4,
+        f"最良の実行可能値 {payload.best_feasible_value} · 上界 {payload.global_bound:.2f} · "
+        f"差 {payload.absolute_gap}",
+        "metric",
+        size=TEXT_SIZE["metric"],
+    )
+    body.extend(summary)
+    left, right, centre = 115.0, 325.0, FIGURE_WIDTH / 2
+    top, step = y + 34, 104.0
     positions = {
-        "root": (400.0, 146.0),
-        "root-0": (190.0, 272.0),
-        "root-1": (610.0, 272.0),
-        "root-1-0": (190.0, 398.0),
-        "root-1-1": (610.0, 398.0),
-        "root-1-1-0": (190.0, 524.0),
-        "root-1-1-1": (610.0, 524.0),
-        "root-1-1-0-0": (190.0, 650.0),
-        "root-1-1-0-1": (610.0, 650.0),
+        "root": (centre, top),
+        "root-0": (left, top + step),
+        "root-1": (right, top + step),
+        "root-1-0": (left, top + 2 * step),
+        "root-1-1": (right, top + 2 * step),
+        "root-1-1-0": (left, top + 3 * step),
+        "root-1-1-1": (right, top + 3 * step),
+        "root-1-1-0-0": (left, top + 4 * step),
+        "root-1-1-0-1": (right, top + 4 * step),
     }
     state_labels = {
         "branched": "分岐",
-        "bound_pruned": "bound枝刈り",
+        "bound_pruned": "上界で枝刈り",
         "infeasible_pruned": "実行不能",
         "optimal": "最適解",
         "open": "未探索",
         "active": "評価中",
         "feasible": "実行可能",
     }
-    elements = [
-        _svg_open(
-            "9 nodeの探索で、bestとboundが一致する",
-            (
-                "4変数0-1 knapsackの決定論的Branch-and-Boundを最後まで実行した探索木です。"
-                "各nodeの部分割当、value、bound、枝刈り理由を示し、最終的にbest feasible 15と"
-                "global bound 15が一致してgap 0になる過程を表します。cut生成は含みません。"
-            ),
-            height=850,
-        ),
-        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
-        '<text x="42" y="54" class="title">9 nodeの探索で、bestとboundが一致する</text>',
-        (
-            '<text x="42" y="84" class="subtitle">'
-            "0-1 knapsack · depth-first include-first · deterministic teaching run"
-            "</text>"
-        ),
-        (
-            '<text x="42" y="112" class="metric">'
-            f"best {payload.best_feasible_value} · bound {payload.global_bound:.2f} · "
-            f"gap {payload.absolute_gap}</text>"
-        ),
-    ]
+    half_width, half_height = 96.0, 38.0
     for node in payload.nodes:
         if node.parent_id is None:
             continue
         parent_x, parent_y = positions[node.parent_id]
         child_x, child_y = positions[node.node_id]
-        elements.append(
-            f'<line x1="{parent_x:.2f}" y1="{parent_y + 40:.2f}" '
-            f'x2="{child_x:.2f}" y2="{child_y - 40:.2f}" '
-            'stroke="#9a968d" stroke-width="3"/>'
+        body.append(
+            f'<line x1="{parent_x:.2f}" y1="{parent_y + half_height:.2f}" '
+            f'x2="{child_x:.2f}" y2="{child_y - half_height:.2f}" '
+            'stroke="#9a968d" stroke-width="2.5"/>'
         )
     for node in payload.nodes:
         x, y = positions[node.node_id]
@@ -6237,44 +6169,45 @@ def _search_tree_proof_svg(dataset_version: str) -> str:
             "bound_pruned": ("#e6e3dc", "#746f65"),
         }.get(node.state, ("#ffffff", "#49463f"))
         bound = "—" if node.bound is None else f"{node.bound:.2f}"
-        elements.extend(
+        body.extend(
             [
                 (
-                    f'<rect x="{x - 94:.2f}" y="{y - 40:.2f}" width="188" height="80" '
-                    f'rx="12" fill="{fill}" stroke="{stroke}" stroke-width="3"/>'
+                    f'<rect x="{x - half_width:.2f}" y="{y - half_height:.2f}" '
+                    f'width="{2 * half_width:g}" height="{2 * half_height:g}" '
+                    f'rx="10" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>'
                 ),
                 (
                     f'<text x="{x:.2f}" y="{y - 13:.2f}" text-anchor="middle" '
                     f'class="method">{html.escape(node.branch_label_ja)}</text>'
                 ),
                 (
-                    f'<text x="{x:.2f}" y="{y + 10:.2f}" text-anchor="middle" '
-                    f'class="status">value {node.objective_value} · bound {bound}</text>'
+                    f'<text x="{x:.2f}" y="{y + 7:.2f}" text-anchor="middle" '
+                    f'class="status">値 {node.objective_value} · 上界 {bound}</text>'
                 ),
                 (
-                    f'<text x="{x:.2f}" y="{y + 30:.2f}" text-anchor="middle" '
-                    f'fill="{stroke}" font-size="14" font-weight="750">'
+                    f'<text x="{x:.2f}" y="{y + 27:.2f}" text-anchor="middle" '
+                    f'fill="{stroke}" font-weight="750">'
                     f"{state_labels[node.state]}</text>"
                 ),
             ]
         )
-    elements.extend(
-        [
-            (
-                '<text x="42" y="780" class="caption">'
-                "実行生成: optimization_compass.search_tree.generate_search_tree_artifact"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="42" y="814" class="caveat">'
-                "Branch-and-Boundの固定教材です。cut separationやMILP solver性能は示しません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+    footer, height = _figure_footer(
+        top + 4 * step + half_height + 32,
+        "optimization_compass.search_tree.generate_search_tree_artifact"
+        f" · dataset {dataset_version}",
+        "Branch-and-Boundの固定教材です。cut separationやMILP solverの性能は示しません。",
     )
-    return "".join(elements)
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "4変数の0-1 knapsackに対する決定論的なBranch-and-Boundを最後まで実行した探索木です。"
+            "各ノードの部分割当、値、上界、枝刈りの理由を示し、最良の実行可能値15と"
+            "全体の上界15が一致して差が0になる過程を表します。cut生成は含みません。"
+        ),
+        height,
+        body,
+    )
 
 
 def _topology_field_svg(dataset_version: str) -> str:
@@ -6282,115 +6215,94 @@ def _topology_field_svg(dataset_version: str) -> str:
     primary = next(run for run in artifact.runs if run.role == "primary")
     failure = next(run for run in artifact.runs if run.role == "failure_contrast")
     panels = (
-        ("初期field", primary.steps[0]),
-        ("filterあり · 反復6", primary.steps[6]),
-        ("filterあり · 反復12", primary.steps[12]),
-        ("filterなし · 反復12", failure.steps[12]),
+        ("初期の密度場", primary.steps[0], False),
+        ("filterあり · 反復6", primary.steps[6], False),
+        ("filterあり · 反復12", primary.steps[12], False),
+        ("filterなし · 反復12", failure.steps[12], True),
     )
-    elements = [
-        _svg_open(
-            "同じ12反復でも、filterの有無でfieldが変わる",
-            (
-                "8×4要素のトポロジー最適化教育generatorの実行結果です。"
-                "初期field、filterありの中間と終端、filterなしの終端を、"
-                "compliance、gray fraction、checkerboard scoreとともに示します。"
-            ),
-            height=1000,
-        ),
-        '<rect width="800" height="1000" rx="24" fill="#f7f6f1"/>',
-        '<text x="36" y="54" class="title">同じ12反復でも、filterの有無でfieldが変わる</text>',
-        (
-            '<text x="36" y="84" class="subtitle">'
-            "8×4 density field · volume target 0.50 · deterministic teaching run"
-            "</text>"
-        ),
-    ]
-    panel_width = 350
-    panel_height = 360
-    cell_size = 36
+    title = "同じ12反復でも、filterの有無で密度場が変わる"
+    body, y = _figure_heading(title, "8×4要素の密度場・体積の目標 0.50・固定の教材用実行")
+    cell_size = 28
     grid_width = artifact.grid.columns * cell_size
-    for index, (label, step) in enumerate(panels):
-        panel_x = 36 + (index % 2) * 378
-        panel_y = 116 + (index // 2) * 386
-        grid_x = panel_x + (panel_width - grid_width) / 2
-        grid_y = panel_y + 54
-        accent = "#a33d30" if "filterなし" in label else "#245c42"
-        elements.extend(
+    grid_height = artifact.grid.rows * cell_size
+    inner_x = FIGURE_MARGIN + 14
+    metrics_x = inner_x + grid_width + 18
+    metrics_right = FIGURE_WIDTH - FIGURE_MARGIN - 14
+    for label, step, is_failure in panels:
+        panel_y = y + 8
+        accent = "#a33d30" if is_failure else "#245c42"
+        grid_y = panel_y + 46
+        panel_height = 46 + grid_height + 44
+        body.extend(
             [
                 (
-                    f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" '
-                    f'height="{panel_height}" rx="16" '
-                    'fill="#fff" stroke="#cfd8d1"/>'
+                    f'<rect x="{FIGURE_MARGIN}" y="{panel_y:g}" width="{CONTENT_WIDTH}" '
+                    f'height="{panel_height:g}" rx="12" fill="#fff" stroke="#cfd8d1"/>'
                 ),
                 (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 34}" class="panel-title" '
+                    f'<rect x="{FIGURE_MARGIN}" y="{panel_y + 12:g}" width="4" height="24" '
+                    f'fill="{accent}"/>'
+                ),
+                (
+                    f'<text x="{inner_x}" y="{panel_y + 30:g}" class="panel-title" '
                     f'fill="{accent}">{html.escape(label)}</text>'
                 ),
             ]
         )
         for cell_index, density in enumerate(step.density):
-            x = grid_x + (cell_index % artifact.grid.columns) * cell_size
-            y = grid_y + (cell_index // artifact.grid.columns) * cell_size
-            fill = _density_color(density)
-            elements.append(
-                f'<rect x="{x:.2f}" y="{y:.2f}" width="{cell_size}" height="{cell_size}" '
-                f'fill="{fill}" stroke="#eef1ed" stroke-width="1"/>'
+            x = inner_x + (cell_index % artifact.grid.columns) * cell_size
+            cell_y = grid_y + (cell_index // artifact.grid.columns) * cell_size
+            body.append(
+                f'<rect x="{x:.2f}" y="{cell_y:.2f}" width="{cell_size}" height="{cell_size}" '
+                f'fill="{_density_color(density)}" stroke="#eef1ed" stroke-width="1"/>'
             )
-        elements.extend(
-            [
-                (f'<text x="{panel_x + 18}" y="{panel_y + 230}" class="metric">compliance</text>'),
-                (
-                    f'<text x="{panel_x + 332}" y="{panel_y + 230}" text-anchor="end" '
-                    f'class="metric-value">{step.compliance:.2f}</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 268}" '
-                    'class="metric">gray fraction</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 332}" y="{panel_y + 268}" text-anchor="end" '
-                    f'class="metric-value">{step.gray_fraction:.3f}</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 306}" '
-                    'class="metric">checkerboard</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 332}" y="{panel_y + 306}" text-anchor="end" '
-                    f'class="metric-value">{step.checkerboard_score:.3f}</text>'
-                ),
-                (
-                    f'<text x="{panel_x + 18}" y="{panel_y + 340}" class="status">'
-                    f"iteration {step.iteration} · volume {step.volume_fraction:.3f}</text>"
-                ),
-                (
-                    f'<line x1="{panel_x + 18}" y1="{panel_y + 350}" '
-                    f'x2="{panel_x + 332}" y2="{panel_y + 350}" '
-                    f'stroke="{accent}" stroke-width="3"/>'
-                ),
-            ]
+        for row, (metric_label, value) in enumerate(
+            (
+                ("compliance", f"{step.compliance:.2f}"),
+                ("中間密度の割合", f"{step.gray_fraction:.3f}"),
+                ("市松模様の度合い", f"{step.checkerboard_score:.3f}"),
+            )
+        ):
+            label_y = grid_y + 14 + row * 40
+            body.extend(
+                [
+                    f'<text x="{metrics_x}" y="{label_y:g}" class="status">{metric_label}</text>',
+                    (
+                        f'<text x="{metrics_right}" y="{label_y + 19:g}" text-anchor="end" '
+                        f'class="metric-value">{value}</text>'
+                    ),
+                ]
+            )
+        body.append(
+            f'<text x="{inner_x}" y="{grid_y + grid_height + 28:g}" class="status">'
+            f"反復{step.iteration} · 体積率 {step.volume_fraction:.3f}</text>"
         )
-    elements.extend(
-        [
-            (
-                '<text x="36" y="912" class="caption">'
-                "濃いセルほどdensityが高い。指標はfieldと同じ反復から取得。</text>"
-            ),
-            (
-                '<text x="36" y="944" class="caption">'
-                "実行生成: optimization_compass.learning_slices.generate_topology_field_artifact"
-                f" · dataset {html.escape(dataset_version)}</text>"
-            ),
-            (
-                '<text x="36" y="976" class="caveat">'
-                "8×4の教育用referenceであり、実FEM・強度・座屈・製造性を保証しません。"
-                "</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
-        ]
+        y = panel_y + panel_height + 4
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 24,
+        "濃いセルほど密度が高い。指標は密度場と同じ反復から取得しています。",
+        "note",
     )
-    return "".join(elements)
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        "optimization_compass.learning_slices.generate_topology_field_artifact"
+        f" · dataset {dataset_version}",
+        "8×4の教育用referenceです。実際のFEM、強度、座屈、製造性は保証しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        title,
+        (
+            "8×4要素のトポロジー最適化の教育用generatorの実行結果です。"
+            "初期の密度場、filterありの中間と終端、filterなしの終端を、"
+            "compliance、中間密度の割合（gray fraction）、市松模様の度合い"
+            "（checkerboard score）とともに示します。"
+        ),
+        height,
+        body,
+    )
 
 
 def _random_search_probe() -> dict[str, object]:
@@ -6420,85 +6332,97 @@ def _random_search_svg(dataset_version: str) -> str:
     probe = _random_search_probe()
     points = probe["points"]
     history = probe["best_history"]
-    elements = [
-        _svg_open(
-            "Random Searchの48回をそのまま見る",
-            "固定seedで二次元search spaceを48回samplingした点とbest-so-farの推移。",
-            height=690,
-        ),
-        '<rect width="800" height="690" rx="24" fill="#f7f5ee"/>',
-        '<text x="36" y="52" class="title">Random Searchの48回をそのまま見る</text>',
-        '<text x="36" y="80" class="subtitle">2D search space · 48 trials · seed 7</text>',
-        '<rect x="36" y="112" width="350" height="350" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-        '<text x="54" y="142" class="panel-title">どこを試したか</text>',
-        '<rect x="70" y="166" width="280" height="260" fill="#f5f8f4" stroke="#c7d2ca"/>',
-    ]
+    title = "Random Searchの48回をそのまま見る"
+    body, y = _figure_heading(title, "2次元の探索空間・48試行・seed 7")
+    panel, top, bottom = _panel(y + 8, "どこを試したか", 262)
+    body.extend(panel)
+    box_x, box_y, box_width, box_height = 64.0, top, 330.0, 220.0
+    body.append(
+        f'<rect x="{box_x:g}" y="{box_y:g}" width="{box_width:g}" height="{box_height:g}" '
+        'fill="#f5f8f4" stroke="#c7d2ca"/>'
+    )
     for index in range(1, 4):
-        x = 70 + index * 70
-        y = 166 + index * 65
-        elements.extend(
+        grid_x = box_x + index * box_width / 4
+        grid_y = box_y + index * box_height / 4
+        body.extend(
             [
-                f'<line x1="{x}" y1="166" x2="{x}" y2="426" stroke="#e1e7e2"/>',
-                f'<line x1="70" y1="{y}" x2="350" y2="{y}" stroke="#e1e7e2"/>',
+                f'<line x1="{grid_x:g}" y1="{box_y:g}" x2="{grid_x:g}" '
+                f'y2="{box_y + box_height:g}" stroke="#e1e7e2"/>',
+                f'<line x1="{box_x:g}" y1="{grid_y:g}" x2="{box_x + box_width:g}" '
+                f'y2="{grid_y:g}" stroke="#e1e7e2"/>',
             ]
         )
     for index, (x_value, y_value, _) in enumerate(points):
-        x = 70 + 280 * x_value
-        y = 426 - 260 * y_value
+        x = box_x + box_width * x_value
+        point_y = box_y + box_height - box_height * y_value
         best = index == probe["best_index"]
-        elements.append(
-            f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{6 if best else 3.8}" '
+        body.append(
+            f'<circle cx="{x:.2f}" cy="{point_y:.2f}" r="{5 if best else 3.5}" '
             f'fill="{"#dc6b3f" if best else "#3a8062"}" '
             f'opacity="{1 if best else 0.72}"/>'
         )
-    elements.extend(
+    body.extend(
         [
-            '<text x="70" y="449" class="axis">0</text>',
-            '<text x="350" y="449" text-anchor="end" class="axis">1 · x</text>',
-            '<text x="54" y="172" class="axis">y</text>',
-            '<rect x="414" y="112" width="350" height="350" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-            '<text x="432" y="142" class="panel-title">best-so-farはどう下がったか</text>',
-            '<line x1="448" y1="426" x2="730" y2="426" stroke="#9caaa1"/>',
-            '<line x1="448" y1="170" x2="448" y2="426" stroke="#9caaa1"/>',
+            f'<text x="{box_x:g}" y="{box_y + box_height + 20:g}" class="axis">0</text>',
+            f'<text x="{box_x + box_width:g}" y="{box_y + box_height + 20:g}" '
+            'text-anchor="end" class="axis">1 · x</text>',
+            f'<text x="{box_x - 10:g}" y="{box_y + 12:g}" text-anchor="end" class="axis">y</text>',
+        ]
+    )
+    panel, top, bottom = _panel(bottom + 12, "それまでの最良値はどう下がったか", 196)
+    body.extend(panel)
+    chart_x, chart_y, chart_width, chart_height = 64.0, top + 6, 330.0, 150.0
+    body.extend(
+        [
+            f'<line x1="{chart_x:g}" y1="{chart_y + chart_height:g}" '
+            f'x2="{chart_x + chart_width:g}" y2="{chart_y + chart_height:g}" stroke="#9caaa1"/>',
+            f'<line x1="{chart_x:g}" y1="{chart_y:g}" x2="{chart_x:g}" '
+            f'y2="{chart_y + chart_height:g}" stroke="#9caaa1"/>',
         ]
     )
     maximum = max(history)
     path = []
     for index, value in enumerate(history):
-        x = 448 + 282 * index / (len(history) - 1)
-        y = 188 + 238 * (maximum - value) / maximum
-        path.append(f"{x:.2f},{y:.2f}")
-    elements.extend(
+        x = chart_x + chart_width * index / (len(history) - 1)
+        point_y = chart_y + chart_height * (maximum - value) / maximum
+        path.append(f"{x:.2f},{point_y:.2f}")
+    body.extend(
         [
             f'<polyline points="{" ".join(path)}" fill="none" stroke="#dc6b3f" '
-            'stroke-width="4" stroke-linejoin="round"/>',
-            '<text x="448" y="449" class="axis">trial 1</text>',
-            '<text x="730" y="449" text-anchor="end" class="axis">trial 48</text>',
-            '<text x="432" y="493" class="metric">16分割中の訪問cell</text>',
-            f'<text x="730" y="493" text-anchor="end" class="metric-value">'
-            f"{probe['occupied_cells']} / 16</text>",
-            '<text x="432" y="525" class="metric">最終best objective</text>',
-            f'<text x="730" y="525" text-anchor="end" class="metric-value">'
-            f"{history[-1]:.4f}</text>",
-            (
-                '<text x="36" y="574" class="caption">'
-                "点の散らばりと改善の停滞を、同じ48 evaluationsから読む。</text>"
-            ),
-            (
-                '<text x="36" y="608" class="caption">実行生成: '
-                "scripts/generate_article_figures.py::_random_search_probe"
-            ),
-            f" · dataset {html.escape(dataset_version)}</text>",
-            (
-                '<text x="36" y="642" class="caveat">'
-                "固定2D objective・単一seedの教材です。"
-                "高次元での被覆や手法rankingは示しません。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
+            'stroke-width="3" stroke-linejoin="round"/>',
+            f'<text x="{chart_x:g}" y="{chart_y + chart_height + 20:g}" class="axis">1回目</text>',
+            f'<text x="{chart_x + chart_width:g}" y="{chart_y + chart_height + 20:g}" '
+            'text-anchor="end" class="axis">48回目</text>',
         ]
     )
-    return "".join(elements)
+    y = bottom + 34
+    right = FIGURE_WIDTH - FIGURE_MARGIN
+    body.extend(
+        [
+            f'<text x="{FIGURE_MARGIN}" y="{y:g}" class="metric">16分割のうち訪れたセル</text>',
+            f'<text x="{right}" y="{y:g}" text-anchor="end" class="metric-value">'
+            f"{probe['occupied_cells']} / 16</text>",
+            f'<text x="{FIGURE_MARGIN}" y="{y + 28:g}" class="metric">最終の最良目的値</text>',
+            f'<text x="{right}" y="{y + 28:g}" text-anchor="end" class="metric-value">'
+            f"{history[-1]:.4f}</text>",
+        ]
+    )
+    note, y = _text_lines(
+        FIGURE_MARGIN, y + 62, "点の散らばりと改善の停滞を、同じ48回の評価から読みます。", "note"
+    )
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        f"scripts/generate_article_figures.py::_random_search_probe · dataset {dataset_version}",
+        "固定した2次元の目的関数と単一seedの教材です。高次元での被覆や手法の順位は示しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        title,
+        "固定seedで2次元の探索空間を48回サンプリングした点と、それまでの最良値の推移。",
+        height,
+        body,
+    )
 
 
 def _tpe_density_ratio_probe() -> dict[str, object]:
@@ -6543,73 +6467,82 @@ def _tpe_density_ratio_svg(dataset_version: str) -> str:
     probe = _tpe_density_ratio_probe()
     curves = probe["curves"]
     maximum = max(max(good, bad) for _, good, bad in curves)
+    title = "TPEは「良い群／悪い群」の差を見る"
+    body, y = _figure_heading(title, "観測済み12試行・良い4件／悪い8件・固定bandwidth 0.09")
+    panel, top, bottom = _panel(y + 8, "パラメータ x の密度モデル", 250)
+    body.extend(panel)
+    chart_x, chart_width = 44.0, 360.0
+    baseline, chart_height = top + 170, 160.0
 
     def curve_path(offset: int) -> str:
         return " ".join(
-            f"{70 + x * 660:.2f},{430 - 220 * values[offset] / maximum:.2f}"
+            f"{chart_x + x * chart_width:.2f},"
+            f"{baseline - chart_height * values[offset] / maximum:.2f}"
             for x, *values in curves
         )
 
-    elements = [
-        _svg_open(
-            "TPEは良い群と悪い群の密度差を見る",
-            "固定された12 trialを良い4件と悪い8件に分け、"
-            "Gaussian KDEの密度比から次候補を選ぶ教材。",
-            height=700,
-        ),
-        '<rect width="800" height="700" rx="24" fill="#f7f5ee"/>',
-        '<text x="36" y="52" class="title">TPEは「良い群 / 悪い群」の差を見る</text>',
-        (
-            '<text x="36" y="80" class="subtitle">'
-            "12 observed trials · good 4 / bad 8 · fixed bandwidth 0.09</text>"
-        ),
-        '<rect x="36" y="112" width="728" height="390" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-        '<text x="54" y="144" class="panel-title">parameter x のdensity model</text>',
-        '<line x1="70" y1="430" x2="730" y2="430" stroke="#9caaa1"/>',
-        '<line x1="70" y1="182" x2="70" y2="430" stroke="#9caaa1"/>',
-        f'<polyline points="{curve_path(0)}" fill="none" stroke="#28795b" stroke-width="4"/>',
-        f'<polyline points="{curve_path(1)}" fill="none" stroke="#a8a39b" stroke-width="4"/>',
-        '<line x1="566" y1="158" x2="594" y2="158" stroke="#28795b" stroke-width="4"/>',
-        '<text x="604" y="163" class="status">good density l(x)</text>',
-        '<line x1="566" y1="185" x2="594" y2="185" stroke="#a8a39b" stroke-width="4"/>',
-        '<text x="604" y="190" class="status">bad density g(x)</text>',
-    ]
-    for x, _ in probe["good"]:
-        elements.append(f'<circle cx="{70 + x * 660:.2f}" cy="450" r="5" fill="#28795b"/>')
-    for x, _ in probe["bad"]:
-        elements.append(f'<circle cx="{70 + x * 660:.2f}" cy="470" r="4" fill="#a8a39b"/>')
-    candidate_x = 70 + probe["candidate"] * 660
-    elements.extend(
+    body.extend(
         [
-            f'<line x1="{candidate_x:.2f}" y1="170" x2="{candidate_x:.2f}" y2="480" '
-            'stroke="#dc6b3f" stroke-width="3" stroke-dasharray="7 6"/>',
-            f'<text x="{candidate_x + 8:.2f}" y="205" class="metric-value" fill="#dc6b3f">'
-            f"next x ≈ {probe['candidate']:.2f}</text>",
-            '<text x="70" y="493" class="axis">0</text>',
-            '<text x="730" y="493" text-anchor="end" class="axis">1 · parameter x</text>',
-            (
-                '<text x="54" y="540" class="caption">'
-                "同じ履歴をobjective曲面ではなく、parameter densityの差として使う。</text>"
-            ),
-            (
-                '<text x="54" y="572" class="caption">'
-                "緑の山が高く、灰色の山が低い場所を次候補として優先する。</text>"
-            ),
-            (
-                '<text x="36" y="616" class="caption">実行生成: '
-                "scripts/generate_article_figures.py::_tpe_density_ratio_probe"
-            ),
-            f" · dataset {html.escape(dataset_version)}</text>",
-            (
-                '<text x="36" y="650" class="caveat">'
-                "1D Gaussian KDEによる概念図です。"
-                "Optuna内部実装や条件付きspace全体は再現しません。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
+            f'<line x1="{chart_x:g}" y1="{baseline:g}" x2="{chart_x + chart_width:g}" '
+            f'y2="{baseline:g}" stroke="#9caaa1"/>',
+            f'<line x1="{chart_x:g}" y1="{baseline - chart_height - 6:g}" x2="{chart_x:g}" '
+            f'y2="{baseline:g}" stroke="#9caaa1"/>',
+            f'<polyline points="{curve_path(0)}" fill="none" stroke="#28795b" stroke-width="3"/>',
+            f'<polyline points="{curve_path(1)}" fill="none" stroke="#a8a39b" stroke-width="3"/>',
         ]
     )
-    return "".join(elements)
+    for x, _ in probe["good"]:
+        body.append(
+            f'<circle cx="{chart_x + x * chart_width:.2f}" cy="{baseline + 16:g}" r="4.5" '
+            'fill="#28795b"/>'
+        )
+    for x, _ in probe["bad"]:
+        body.append(
+            f'<circle cx="{chart_x + x * chart_width:.2f}" cy="{baseline + 34:g}" r="3.5" '
+            'fill="#a8a39b"/>'
+        )
+    candidate_x = chart_x + probe["candidate"] * chart_width
+    body.extend(
+        [
+            f'<line x1="{candidate_x:.2f}" y1="{baseline - chart_height - 6:g}" '
+            f'x2="{candidate_x:.2f}" y2="{baseline + 42:g}" '
+            'stroke="#dc6b3f" stroke-width="2.5" stroke-dasharray="6 5"/>',
+            f'<text x="{candidate_x + 8:.2f}" y="{baseline - chart_height + 10:g}" '
+            f'class="metric-value halo" fill="#dc6b3f">次の x ≈ {probe["candidate"]:.2f}</text>',
+            f'<text x="{chart_x:g}" y="{baseline + 62:g}" class="axis">0</text>',
+            f'<text x="{chart_x + chart_width:g}" y="{baseline + 62:g}" text-anchor="end" '
+            'class="axis">1 · パラメータ x</text>',
+        ]
+    )
+    y = bottom + 34
+    for color, label, detail in (
+        ("#28795b", "良い群の密度 l(x)", "下の濃い点: 良い4件の x"),
+        ("#a8a39b", "悪い群の密度 g(x)", "下の薄い点: 悪い8件の x"),
+    ):
+        row, y = _legend_row(y, color, label, detail=detail)
+        body.extend(row)
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 6,
+        "同じ履歴を、目的関数の曲面ではなくパラメータの密度の差として使います。\n"
+        "緑の山が高く、灰色の山が低い場所を次の候補として優先します。",
+        "note",
+    )
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        "scripts/generate_article_figures.py::_tpe_density_ratio_probe"
+        f" · dataset {dataset_version}",
+        "1次元のGaussian KDEによる概念図です。Optunaの内部実装や、条件付きの探索空間全体は"
+        "再現しません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        title,
+        "固定した12試行を良い4件と悪い8件に分け、Gaussian KDEの密度比から次の候補を選ぶ教材。",
+        height,
+        body,
+    )
 
 
 def _hyperband_rungs_probe() -> dict[str, object]:
@@ -6641,29 +6574,20 @@ def _hyperband_rungs_svg(dataset_version: str) -> str:
     trials = probe["trials"]
     promoted_one = set(probe["promoted_at_one"])
     promoted_three = set(probe["promoted_at_three"])
-    elements = [
-        _svg_open(
-            "Successive Halvingのresource配分",
-            "12 trialをresource 1で評価し4 trial、さらに1 trialへ絞る固定実行。",
-            height=760,
-        ),
-        '<rect width="800" height="760" rx="24" fill="#f7f5ee"/>',
-        '<text x="36" y="52" class="title">全trialを最後まで育てない</text>',
-        (
-            '<text x="36" y="80" class="subtitle">'
-            "Successive Halving · 12 → 4 → 1 trials · resource 1 → 3 → 9</text>"
-        ),
-        '<rect x="36" y="112" width="728" height="430" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-        '<text x="54" y="144" class="panel-title">trialごとのmetricとpromotion</text>',
-    ]
-    x_positions = {1: 105, 3: 400, 9: 695}
+    title = "全試行を最後まで育てない"
+    body, y = _figure_heading(title, "Successive Halving・12 → 4 → 1試行・資源 1 → 3 → 9")
+    panel, top, bottom = _panel(y + 8, "試行ごとの指標と昇格", 300)
+    body.extend(panel)
+    x_positions = {1: 70, 3: 220, 9: 370}
+    lowest_y, span = top + 250, 236.0
     for resource, x in x_positions.items():
-        elements.extend(
+        body.extend(
             [
-                f'<line x1="{x}" y1="170" x2="{x}" y2="500" stroke="#dfe5e0" stroke-width="2"/>',
+                f'<line x1="{x}" y1="{top:g}" x2="{x}" y2="{lowest_y + 12:g}" '
+                'stroke="#dfe5e0" stroke-width="2"/>',
                 (
-                    f'<text x="{x}" y="526" text-anchor="middle" class="axis">'
-                    f"resource {resource}</text>"
+                    f'<text x="{x}" y="{lowest_y + 34:g}" text-anchor="middle" class="axis">'
+                    f"資源 {resource}</text>"
                 ),
             ]
         )
@@ -6671,7 +6595,7 @@ def _hyperband_rungs_svg(dataset_version: str) -> str:
     low, high = min(all_values), max(all_values)
 
     def project_y(value: float) -> float:
-        return 480 - 285 * (value - low) / (high - low)
+        return lowest_y - span * (value - low) / (high - low)
 
     for trial_index, trial in enumerate(trials):
         points = [(x_positions[1], project_y(trial[0]))]
@@ -6684,41 +6608,48 @@ def _hyperband_rungs_svg(dataset_version: str) -> str:
             if trial_index in promoted_three
             else ("#367e61" if trial_index in promoted_one else "#b8beb9")
         )
-        stroke_width = "4" if trial_index in promoted_three else "2"
-        elements.append(
+        stroke_width = "3.5" if trial_index in promoted_three else "2"
+        body.append(
             f'<polyline points="{" ".join(f"{x},{y:.2f}" for x, y in points)}" '
             f'fill="none" stroke="{color}" stroke-width="{stroke_width}"/>'
         )
-        for x, y in points:
-            elements.append(f'<circle cx="{x}" cy="{y:.2f}" r="4" fill="{color}"/>')
+        for x, point_y in points:
+            body.append(f'<circle cx="{x}" cy="{point_y:.2f}" r="3.5" fill="{color}"/>')
     saved = 1 - probe["used_resource"] / probe["full_resource"]
-    elements.extend(
+    y = bottom + 34
+    right = FIGURE_WIDTH - FIGURE_MARGIN
+    body.extend(
         [
-            '<text x="54" y="582" class="metric">消費resource</text>',
-            f'<text x="746" y="582" text-anchor="end" class="metric-value">'
-            f"{probe['used_resource']} / {probe['full_resource']}（全trial完走比）</text>",
-            '<text x="54" y="616" class="metric">この固定例で省いたresource</text>',
-            f'<text x="746" y="616" text-anchor="end" class="metric-value">{saved:.0%}</text>',
-            (
-                '<text x="36" y="662" class="caption">'
-                "灰色はresource 1、緑は3、橙は9まで進んだtrial。"
-                "allocatorの判断だけを描く。</text>"
-            ),
-            (
-                '<text x="36" y="694" class="caption">実行生成: '
-                "scripts/generate_article_figures.py::_hyperband_rungs_probe"
-            ),
-            f" · dataset {html.escape(dataset_version)}</text>",
-            (
-                '<text x="36" y="728" class="caveat">'
-                "固定の滑らかなlearning curveです。"
-                "遅咲きtrial・noise・asynchronous待ちは省略しています。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
+            f'<text x="{FIGURE_MARGIN}" y="{y:g}" class="metric">消費した資源</text>',
+            f'<text x="{right}" y="{y:g}" text-anchor="end" class="metric-value">'
+            f"{probe['used_resource']} / {probe['full_resource']}</text>",
+            f'<text x="{FIGURE_MARGIN}" y="{y + 22:g}" class="status">'
+            "分母は全試行を資源9まで進めた場合</text>",
+            f'<text x="{FIGURE_MARGIN}" y="{y + 52:g}" class="metric">'
+            "この固定例で省いた資源</text>",
+            f'<text x="{right}" y="{y + 52:g}" text-anchor="end" class="metric-value">'
+            f"{saved:.0%}</text>",
         ]
     )
-    return "".join(elements)
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 86,
+        "灰色は資源1、緑は資源3、橙は資源9まで進んだ試行。割り当ての判断だけを描いています。",
+        "note",
+    )
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        f"scripts/generate_article_figures.py::_hyperband_rungs_probe · dataset {dataset_version}",
+        "固定した滑らかな学習曲線です。遅咲きの試行、ノイズ、非同期の待ちは省略しています。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "Successive Halvingの資源配分",
+        "12試行を資源1で評価して4試行、さらに1試行へ絞る固定実行。",
+        height,
+        body,
+    )
 
 
 def _turbo_trust_region_probe() -> dict[str, object]:
@@ -6754,93 +6685,100 @@ def _turbo_trust_region_svg(dataset_version: str) -> str:
     probe = _turbo_trust_region_probe()
     steps = probe["steps"]
     selected = (0, 3, 7, 11)
-    elements = [
-        _svg_open(
-            "TuRBO型trust regionの拡大と縮小",
-            "固定seedの局所box探索で、改善時の中心移動と停滞時のbox縮小を示す。",
-            height=770,
-        ),
-        '<rect width="800" height="770" rx="24" fill="#f7f5ee"/>',
-        '<text x="36" y="52" class="title">探索範囲を局所boxへ絞る</text>',
-        (
-            '<text x="36" y="80" class="subtitle">'
-            "TuRBO-like controller · 2D objective · 12 evaluations · seed 7</text>"
-        ),
-        '<rect x="36" y="112" width="420" height="420" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-        '<text x="54" y="144" class="panel-title">trust regionとincumbent</text>',
-        '<rect x="78" y="170" width="336" height="320" fill="#f5f8f4" stroke="#c7d2ca"/>',
-    ]
+    title = "探索範囲を局所boxへ絞る"
+    body, y = _figure_heading(title, "TuRBO型の制御・2次元の目的関数・評価12回・seed 7")
+    panel, top, bottom = _panel(y + 8, "trust regionと暫定最良点", 314)
+    body.extend(panel)
+    box_x, box_y, box_width, box_height = 60.0, top, 320.0, 304.0
+    body.append(
+        f'<rect x="{box_x:g}" y="{box_y:g}" width="{box_width:g}" height="{box_height:g}" '
+        'fill="#f5f8f4" stroke="#c7d2ca"/>'
+    )
     palette = ("#b7c7be", "#79a58f", "#367e61", "#dc6b3f")
     path = []
     for color_index, step_index in enumerate(selected):
         _, center, length, _, _ = steps[step_index]
-        x = 78 + center[0] * 336
-        y = 490 - center[1] * 320
+        x = box_x + center[0] * box_width
+        point_y = box_y + box_height - center[1] * box_height
         lower = tuple(max(0.0, value - length / 2) for value in center)
         upper = tuple(min(1.0, value + length / 2) for value in center)
-        left = 78 + lower[0] * 336
-        top = 490 - upper[1] * 320
-        width = (upper[0] - lower[0]) * 336
-        height = (upper[1] - lower[1]) * 320
-        elements.extend(
+        left = box_x + lower[0] * box_width
+        top_edge = box_y + box_height - upper[1] * box_height
+        width = (upper[0] - lower[0]) * box_width
+        height = (upper[1] - lower[1]) * box_height
+        body.extend(
             [
-                f'<rect x="{left:.2f}" y="{top:.2f}" '
+                f'<rect x="{left:.2f}" y="{top_edge:.2f}" '
                 f'width="{width:.2f}" height="{height:.2f}" fill="none" '
-                f'stroke="{palette[color_index]}" stroke-width="3"/>',
-                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="5" fill="{palette[color_index]}"/>',
+                f'stroke="{palette[color_index]}" stroke-width="2.5"/>',
+                f'<circle cx="{x:.2f}" cy="{point_y:.2f}" r="4.5" fill="{palette[color_index]}"/>',
             ]
         )
-        path.append(f"{x:.2f},{y:.2f}")
-    elements.extend(
+        path.append(f"{x:.2f},{point_y:.2f}")
+    body.append(
+        f'<polyline points="{" ".join(path)}" fill="none" stroke="#6a756e" '
+        'stroke-width="2" stroke-dasharray="5 5"/>'
+    )
+    panel, top, bottom = _panel(bottom + 12, "12回の制御履歴", 200)
+    body.extend(panel)
+    chart_x, chart_y, chart_width, chart_height = 64.0, top + 6, 330.0, 150.0
+    body.extend(
         [
-            f'<polyline points="{" ".join(path)}" fill="none" stroke="#6a756e" '
-            'stroke-width="2" stroke-dasharray="5 5"/>',
-            '<rect x="484" y="112" width="280" height="420" rx="18" fill="#fff" stroke="#d6ddd7"/>',
-            '<text x="502" y="144" class="panel-title">12回の制御履歴</text>',
-            '<line x1="516" y1="470" x2="736" y2="470" stroke="#9caaa1"/>',
-            '<line x1="516" y1="180" x2="516" y2="470" stroke="#9caaa1"/>',
+            f'<line x1="{chart_x:g}" y1="{chart_y + chart_height:g}" '
+            f'x2="{chart_x + chart_width:g}" y2="{chart_y + chart_height:g}" stroke="#9caaa1"/>',
+            f'<line x1="{chart_x:g}" y1="{chart_y:g}" x2="{chart_x:g}" '
+            f'y2="{chart_y + chart_height:g}" stroke="#9caaa1"/>',
         ]
     )
     max_best = probe["initial_best"]
+    usable = chart_height - 12
     lengths = " ".join(
-        f"{516 + 220 * (index - 1) / 11:.2f},{450 - 230 * length / 0.8:.2f}"
+        f"{chart_x + chart_width * (index - 1) / 11:.2f},"
+        f"{chart_y + chart_height - usable * length / 0.8:.2f}"
         for index, _, length, _, _ in steps
     )
     bests = " ".join(
-        f"{516 + 220 * (index - 1) / 11:.2f},{450 - 230 * (max_best - best) / max_best:.2f}"
+        f"{chart_x + chart_width * (index - 1) / 11:.2f},"
+        f"{chart_y + chart_height - usable * (max_best - best) / max_best:.2f}"
         for index, _, _, best, _ in steps
     )
-    elements.extend(
+    body.extend(
         [
-            f'<polyline points="{lengths}" fill="none" stroke="#367e61" stroke-width="4"/>',
-            f'<polyline points="{bests}" fill="none" stroke="#dc6b3f" stroke-width="4"/>',
-            '<text x="532" y="198" class="status" fill="#367e61">box length</text>',
-            '<text x="532" y="224" class="status" fill="#dc6b3f">best improvement</text>',
-            '<text x="516" y="495" class="axis">1</text>',
-            '<text x="736" y="495" text-anchor="end" class="axis">evaluation 12</text>',
-            (
-                '<text x="36" y="578" class="caption">'
-                "改善した点へ中心を移し、2回停滞するとboxを縮小する。</text>"
-            ),
-            (
-                '<text x="36" y="610" class="caption">'
-                "SAASBOは別の発想で、少数の有効次元をpriorとして表現する。</text>"
-            ),
-            (
-                '<text x="36" y="654" class="caption">実行生成: '
-                "scripts/generate_article_figures.py::_turbo_trust_region_probe"
-            ),
-            f" · dataset {html.escape(dataset_version)}</text>",
-            (
-                '<text x="36" y="688" class="caveat">'
-                "trust-region制御だけの教材です。"
-                "GP・acquisition・SAAS priorは実装していません。</text>"
-            ),
-            _svg_style(),
-            "</svg>\n",
+            f'<polyline points="{lengths}" fill="none" stroke="#367e61" stroke-width="3"/>',
+            f'<polyline points="{bests}" fill="none" stroke="#dc6b3f" stroke-width="3"/>',
+            f'<text x="{chart_x:g}" y="{chart_y + chart_height + 20:g}" class="axis">1</text>',
+            f'<text x="{chart_x + chart_width:g}" y="{chart_y + chart_height + 20:g}" '
+            'text-anchor="end" class="axis">評価 12回目</text>',
         ]
     )
-    return "".join(elements)
+    y = bottom + 34
+    for color, label, detail in (
+        ("#367e61", "boxの一辺の長さ", "上の図の枠の大きさ（最大0.8で正規化）"),
+        ("#dc6b3f", "最良値の改善量", "初期点からの改善（初期値で正規化）"),
+    ):
+        row, y = _legend_row(y, color, label, detail=detail)
+        body.extend(row)
+    note, y = _text_lines(
+        FIGURE_MARGIN,
+        y + 6,
+        "改善した点へ中心を移し、2回停滞するとboxを縮めます。\n上の図の枠は薄い色ほど早い時点、"
+        "橙が最後です。\nSAASBOは別の発想で、少数の有効な次元を事前分布として表します。",
+        "note",
+    )
+    body.extend(note)
+    footer, height = _figure_footer(
+        y + 4,
+        "scripts/generate_article_figures.py::_turbo_trust_region_probe"
+        f" · dataset {dataset_version}",
+        "trust regionの制御だけの教材です。GP、獲得関数、SAAS priorは実装していません。",
+    )
+    body.extend(footer)
+    return _figure_document(
+        "TuRBO型trust regionの拡大と縮小",
+        "固定seedの局所box探索で、改善時の中心の移動と、停滞時のboxの縮小を示す。",
+        height,
+        body,
+    )
 
 
 def _svg_open(title: str, description: str, *, width: int = 800, height: int) -> str:
@@ -6868,7 +6806,12 @@ TERMINAL_STATUS_JA = {
     "stopped": "停止",
     "failed": "失敗",
 }
-_BREAK_AFTER = set(" 、。，,・·/=")
+# Line-break opportunities, best first (see _break_level): 0 after list separators and sentence
+# punctuation; 1 at spaces, "." and "/" in identifiers and Latin/Japanese changes; 2 after
+# hiragana before kanji or katakana; 3 between any two Japanese characters or after "_".
+_BREAK_AFTER = set("　、。，,・·")
+_NO_BREAK_BEFORE = set(":;,.)）]」、。・·=≤≥<>+−-²")
+_NO_BREAK_AFTER = set("(（[「=≤≥<>+−-")
 
 
 def _is_wide(character: str) -> bool:
@@ -6877,21 +6820,21 @@ def _is_wide(character: str) -> bool:
 
 def _text_width(text: str, size: float) -> float:
     """Conservative width estimate for system-ui text, used only to wrap and place labels."""
-    return sum(size * (1.0 if _is_wide(character) else 0.6) for character in text)
+    return sum(size * (1.0 if _is_wide(character) else 0.52) for character in text)
 
 
 def _wrap(text: str, size: float, width: float = CONTENT_WIDTH) -> list[str]:
     """Wrap into as few lines as fit ``width`` and even out their lengths.
 
-    Breaks after punctuation, spaces and script changes are preferred; a break between two
-    Japanese characters is used only when a line cannot fit otherwise. ``\\n`` forces a break.
+    Uses the best break level (see ``_BREAK_AFTER``) at which every line fits; ``\\n`` forces a
+    break.
     """
     lines: list[str] = []
     for part in text.split("\n"):
-        for strong_only in (True, False):
-            segments = _wrap_segments(part, strong_only=strong_only)
+        for level in (0, 1, 2, 3):
+            segments = _wrap_segments(part, level)
             greedy = _pack_segments(segments, size, width)
-            if not strong_only or all(_text_width(line, size) <= width for line in greedy):
+            if all(_text_width(line, size) <= width for line in greedy):
                 break
         low, high = width / max(1, len(greedy)), width
         while len(greedy) > 1 and high - low > 1:
@@ -6904,18 +6847,45 @@ def _wrap(text: str, size: float, width: float = CONTENT_WIDTH) -> list[str]:
     return lines
 
 
-def _wrap_segments(text: str, *, strong_only: bool) -> list[str]:
+def _break_level(character: str, rest: str) -> int:
+    following = rest[:1]
+    if not following or following in _NO_BREAK_BEFORE or character in _NO_BREAK_AFTER:
+        return 4
+    if character in _BREAK_AFTER:
+        return 0
+    if character == "." and rest.startswith(("py", "svg", "json")):
+        return 4
+    if character in " ./" or (character == ":" and following != ":"):
+        return 1
+    if _is_wide(character) != _is_wide(following):
+        return 1
+    kinds = (_kana_kind(character), _kana_kind(following))
+    if kinds in {("hiragana", "kanji"), ("hiragana", "katakana"), ("kanji", "katakana")} or (
+        kinds == ("katakana", "kanji")
+    ):
+        return 2
+    if character == "_" or (_is_wide(character) and _is_wide(following)):
+        return 3
+    return 4
+
+
+def _kana_kind(character: str) -> str:
+    code = ord(character) if character else 0
+    if 0x3040 <= code <= 0x309F:
+        return "hiragana"
+    if 0x30A0 <= code <= 0x30FF:
+        return "katakana"
+    if 0x4E00 <= code <= 0x9FFF or character == "々":
+        return "kanji"
+    return "other"
+
+
+def _wrap_segments(text: str, level: int) -> list[str]:
     segments: list[str] = []
     current = ""
     for index, character in enumerate(text):
         current += character
-        following = text[index + 1] if index + 1 < len(text) else ""
-        strong = (
-            character in _BREAK_AFTER
-            or (character == "." and following.isalpha())
-            or (bool(following) and _is_wide(character) != _is_wide(following))
-        )
-        if strong or (not strong_only and _is_wide(character) and _is_wide(following)):
+        if _break_level(character, text[index + 1 :]) <= level:
             segments.append(current)
             current = ""
     if current:
@@ -6973,6 +6943,99 @@ def _figure_footer(y: float, provenance: str, caveat: str) -> tuple[list[str], f
     elements, y = _text_lines(FIGURE_MARGIN, y, f"実行生成: {provenance}", "caption")
     caveat_elements, y = _text_lines(FIGURE_MARGIN, y + 4, caveat, "caveat")
     return elements + caveat_elements, y - 2
+
+
+def _plot_frame(x: float, y: float, width: float, height: float, clip_id: str) -> list[str]:
+    """White plot panel plus a clip path of the same shape (use ``clip-path="url(#id)"``)."""
+    return [
+        f'<rect x="{x:g}" y="{y:g}" width="{width:g}" height="{height:g}" rx="12" '
+        'fill="#fff" stroke="#cfd8d1"/>',
+        f'<clipPath id="{clip_id}"><rect x="{x:g}" y="{y:g}" width="{width:g}" '
+        f'height="{height:g}" rx="12"/></clipPath>',
+    ]
+
+
+def _panel(y: float, title: str, content_height: float) -> tuple[list[str], float, float]:
+    """Full-width white panel with a title; returns the elements, the y where content starts and
+    the y just below the panel."""
+    elements, content_y = _text_lines(
+        FIGURE_MARGIN + 14,
+        y + 28,
+        title,
+        "panel-title",
+        size=TEXT_SIZE["panel-title"],
+        width=CONTENT_WIDTH - 28,
+    )
+    bottom = content_y + content_height
+    return (
+        [
+            f'<rect x="{FIGURE_MARGIN}" y="{y:g}" width="{CONTENT_WIDTH}" '
+            f'height="{bottom - y:g}" rx="12" fill="#fff" stroke="#d6ddd7"/>',
+            *elements,
+        ],
+        content_y,
+        bottom,
+    )
+
+
+def _legend_row(
+    y: float,
+    color: str,
+    label: str,
+    value: str = "",
+    detail: str = "",
+    *,
+    dash: bool = False,
+    marker: str = "line",
+) -> tuple[list[str], float]:
+    """Colored key, bold label and right-aligned value; the value drops to its own line when the
+    two do not fit side by side. ``detail`` is a muted wrapped line underneath. Returns the
+    elements and the next row's baseline."""
+    text_x = FIGURE_MARGIN + 38
+    right = FIGURE_WIDTH - FIGURE_MARGIN
+    if marker == "line":
+        dash_attribute = ' stroke-dasharray="8 5"' if dash else ""
+        key = (
+            f'<line x1="{FIGURE_MARGIN}" y1="{y - 5:g}" x2="{FIGURE_MARGIN + 28}" '
+            f'y2="{y - 5:g}" stroke="{color}" stroke-width="4"{dash_attribute}/>'
+        )
+    else:
+        key = (
+            f'<rect x="{FIGURE_MARGIN + 6}" y="{y - 13:g}" width="16" height="16" rx="3" '
+            f'fill="{color}"/>'
+        )
+    elements = [
+        key,
+        f'<text x="{text_x}" y="{y:g}" class="method">{html.escape(label)}</text>',
+    ]
+    side_by_side = (
+        _text_width(label, TEXT_SIZE["method"]) + _text_width(value, TEXT_SIZE["metric"]) + 16
+        <= right - text_x
+    )
+    next_y = y + 22
+    if value:
+        if side_by_side:
+            elements.append(
+                f'<text x="{right}" y="{y:g}" text-anchor="end" class="metric">'
+                f"{html.escape(value)}</text>"
+            )
+        else:
+            value_lines, next_y = _text_lines(
+                text_x,
+                next_y,
+                value,
+                "metric",
+                size=TEXT_SIZE["metric"],
+                width=right - text_x,
+                line_height=21,
+            )
+            elements.extend(value_lines)
+    if detail:
+        detail_lines, next_y = _text_lines(
+            text_x, next_y, detail, "status", width=right - text_x, line_height=20
+        )
+        elements.extend(detail_lines)
+    return elements, next_y + 12
 
 
 def _figure_document(title: str, description: str, height: float, body: list[str]) -> str:
