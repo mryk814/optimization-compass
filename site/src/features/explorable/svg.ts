@@ -131,5 +131,8 @@ export function useDomainDrag({ svgRef, viewport, onDrag }: DragOptions) {
       dragging.current = false;
       event.currentTarget.releasePointerCapture?.(event.pointerId);
     },
+    onPointerCancel() {
+      dragging.current = false;
+    },
   };
 }

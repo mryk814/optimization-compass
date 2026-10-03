@@ -627,6 +627,7 @@
 .ex-acq-fill { fill: var(--ex-orange); fill-opacity: 0.12; }
 
 /* Least squares: the handle communicates its movable direction in the figure. */
+[data-explorable-id="least-squares-bowl"] .ex-svg { touch-action: none; }
 [data-explorable-id="least-squares-bowl"] .ex-handle { touch-action: none; cursor: grab; }
 [data-explorable-id="least-squares-bowl"] .ex-handle:active { cursor: grabbing; }
 [data-explorable-id="least-squares-bowl"] .ex-handle:focus-visible .ex-handle-ring,
