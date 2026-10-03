@@ -1,6 +1,6 @@
 # 記事体験と検証効率化のPC隔離試用
 
-候補branchは `codex/komori-20261003-integrated-trial`。公開サイトへ反映する前に、記事体験と検証タスクの合流をPCで確認するための保存点です。
+候補branchは `codex/komori-20261003-integrated-trial`。公開サイトへ反映する前に、記事体験・B&B v6・検証タスクの合流をPCで確認するための保存点です。
 
 ## 統合した保存点
 
@@ -9,8 +9,9 @@
 | 共通base | `8e91f04b06494cfbda148567d34173d48062594d` |
 | 記事の共通パターン・線形最小二乗・座標降下法 | `77638a5321e36bf4e5be75d483c5686c3135fc88` |
 | build/typecheckの重複削減・同じbuildを使うE2E | `4176d93639d315d09504c48869a04f222f42fccc` |
+| 受入済みB&B v6 | `ece4e1e81f5bd6437e814465c978fb63fa4ec566` |
 
-2候補の変更ファイルは重ならず、履歴を残すmergeで統合しました。通常repoと別のGit保管庫に専用worktreeを置き、通常main・未コミット状態・stashには書き込んでいません。別担当のB&B試用版は、この候補に含めていません。受け渡された完全SHAを確認してから合流対象を決めます。
+記事と検証効率化の変更ファイルは重ならず、履歴を残すmergeで統合しました。B&Bの完全SHAを受け取った後、共通registryとmetadataに両方の登録を保持し、生成検索データをcanonical入力からexportしました。通常repoと別のGit保管庫に専用worktreeを置き、通常main・未コミット状態・stashには書き込んでいません。別担当の既存B&B previewは保全しています。
 
 入力はrepository内の既存Markdown・registry・seed・migration・base SQLiteです。追加の第三者資料は取得していません。既存のMIT、CC BY 4.0、NOTICEと出典を保持しています。両lockfileは共通baseと同一です。
 
@@ -28,6 +29,8 @@
 | `npm --prefix site run build` | 成功。typecheckを含む。別のtypecheckを重ねていない |
 | 最終buildを使う狭幅E2E | 7件成功。最小二乗・座標降下法の375/320px、最小二乗の再計算/reset/axe、Adam・BOの375px目次操作 |
 | PC 1280px、375px、320pxの実ブラウザー表示 | 最小二乗と座標降下法の主要図を確認・画像保存 |
+
+B&B追加時は、[branch-bound-v6.md](branch-bound-v6.md) の受入結果を再利用しました。registryのPython 2件とsite登録・mountの3件だけを追加実行し、成功しています。B&B本体の83件のunitを繰り返していません。共有記事配置への接点として4品1280pxと8品375pxの2件を選び、今回専用previewの最終buildで成功しました。B&Bの追加でbuild対象が変わったため、その統合buildを1回更新しました。B&B固有の記事・component・CSS・math・testsは受け渡されたheadと同一です。
 
 実行環境はWindows、Python 3.12.10、uv 0.12.5、Node 24.4.1、npm 11.4.2、lockfileのPlaywright 1.61.1とChromium 149.0.7827.55です。既存の記事証跡のChromium 151とは区別しています。
 
