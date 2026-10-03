@@ -57,7 +57,12 @@ UNSATと判定された場合も、学習節の導出を遡ると空節（矛盾
 
 ## 小さな例
 
-$(a\lor b)\land(\neg a\lor c)\land(\neg b\lor\neg c)\land(a\lor\neg c)$ を使います。
+次の論理式を使います。
+
+$$
+(a\lor b)\land(\neg a\lor c)\land(\neg b\lor\neg c)\land(a\lor\neg c)
+$$
+
 Python節と同じ4節を真偽値で検査した例です。
 
 | 操作 | 割当 | 強制または判定 |
