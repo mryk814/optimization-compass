@@ -126,4 +126,4 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 - **曲面の3D表示**: 二変数の目的関数を回転できる曲面として見せ、軌跡を曲面上に重ねる。高さの圧縮などの表現上の加工を必ず開示する。
 - **既存の Theater の外枠**: 現在の Theater / Trace ページは、メタデータと操作が図より先に並び、図が画面の下に隠れる。`ExplorableFrame` と同じ「問い → 図 → 再生 → 読み取り」の順へ組み替える。Trace の契約は変えずに、ページの外枠だけを差し替えられる。
 - **動画の配信とナレーション**: 録画（上記）を Pages のデプロイで生成して配信する。ナレーションは手元で TTS 生成した音声を置く（ADR 0018 §5a）。
-- **手法ごとの図**: 各 method 記事について、第1候補（BFGS の曲率、Newton 法の接線、Nelder–Mead の単体、Adam の座標ごとの step など）を、この基準で選別する。
+- **手法ごとの図**: 第一候補の一覧は [`docs/teaching-article-playbook.md`](teaching-article-playbook.md) §5.6 にあります。各 method 記事について、第1候補（BFGS の曲率、Newton 法の接線、Nelder–Mead の単体、Adam の座標ごとの step など）を、この基準で選別する。
