@@ -292,4 +292,35 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
       },
     ],
   },
+  "multiobjective-pareto-weights": {
+    question: "重さとたわみのように二つの目的が引っ張り合うとき、どの設計が「改善の余地なし」で、なぜ重み付き和では凹んだ前線の途中を選べないのか。",
+    fixedConditions: "厚み x₁ と飾り x₂ はどちらも0〜1。重さ f₁=x₁、たわみ f₂=h(x₁)+x₂ で、h は「厚くするほど急に減る」なら 1−x₁²、「薄いうちに急に減る」なら 1−√x₁。重み付き和は w f₁+(1−w) f₂ を、ε制約は f₁≤ε のもとで f₂ を、この正方形の上で厳密に最小化する。",
+    notImplied: "実際の部品の重さやたわみの式ではない。3つ以上の目的、制約の多い問題、進化計算での前線の近似の質は示さない。",
+    beats: [
+      {
+        settings: {"mode": "manual", "shape": "concave", "x1": 0.5, "x2": 0.5},
+        durationS: 9,
+        captionJa: "厚み0.5・飾り0.5の設計は、飾りを外すだけで重さはそのまま、たわみが1.25から0.75に下がる。改善できる点はパレート最適ではない。",
+        narrationJa: "厚み〇・五、飾り〇・五の設計は、飾りを外すだけで、重さはそのままに、たわみが一・二五から〇・七五に下がります。改善できる点は、パレート最適ではありません。",
+      },
+      {
+        settings: {"mode": "weighted", "shape": "concave", "wFrom": 0.1, "wTo": 0.9},
+        durationS: 11,
+        captionJa: "重みを0.1から0.9まで動かしても、重み付き和は両端の点しか選ばず、w=0.5を境に端から端へ飛ぶ。凹んだ前線の途中には届かない。",
+        narrationJa: "重みを〇・一から〇・九まで動かしても、重み付き和は両端の点しか選びません。ダブリュー〇・五を境に、端から端へ飛びます。凹んだ前線の途中には届きません。",
+      },
+      {
+        settings: {"mode": "epsilon", "shape": "concave", "epsilonFrom": 0.05, "epsilonTo": 0.95},
+        durationS: 10,
+        captionJa: "重さに上限εを付けてたわみを最小にすると、εを動かすだけで前線のどの点も選べる。",
+        narrationJa: "重さに上限イプシロンを付けて、たわみを最小にします。イプシロンを動かすだけで、前線のどの点も選べます。",
+      },
+      {
+        settings: {"mode": "weighted", "shape": "convex", "wFrom": 0.35, "wTo": 0.9},
+        durationS: 9,
+        captionJa: "前線が凸なら、重み付き和でも重みを変えるたびに選ばれる点が前線に沿って動く。",
+        narrationJa: "前線が凸なら、重み付き和でも、重みを変えるたびに、選ばれる点が前線に沿って動きます。",
+      },
+    ],
+  },
 };

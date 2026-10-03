@@ -703,3 +703,12 @@
 .ipm-barrier-contour path { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .ipm-free circle { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
 .ipm-free text { fill: var(--ex-ink); font-size: var(--type-label); }
+
+/* Multiobjective: feasible regions, the Pareto set and front, the better quadrant, level lines. */
+.mo-feasible { fill: var(--ex-teal-wash); stroke: none; }
+.mo-pareto { stroke: var(--ex-teal-ink); stroke-width: 5; stroke-linecap: round; }
+.mo-front { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; }
+.mo-better { fill: var(--ex-orange); fill-opacity: 0.1; stroke: var(--ex-orange-ink); stroke-dasharray: 4 3; }
+.mo-level { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.mo-improve line { stroke: var(--ex-red); stroke-width: 2.5; }
+.mo-label { fill: var(--ex-ink); font-size: var(--type-label); }

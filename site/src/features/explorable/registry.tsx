@@ -17,4 +17,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "newton-parabola-jump": lazy(() => import("./NewtonParabola")),
   "cmaes-shape-learning": lazy(() => import("./CmaesShape")),
   "interior-point-barrier-path": lazy(() => import("./BarrierPath")),
+  "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
 };
