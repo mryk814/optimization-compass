@@ -13,4 +13,9 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "adam-step-ratio": lazy(() => import("./AdamStepRatio")),
   "bayes-opt-acquisition": lazy(() => import("./BayesOptAcquisition")),
   "coordinate-descent-walk": lazy(() => import("./CoordinateDescentWalk")),
+  "nonlinear-least-squares-landscape": lazy(() => import("./NonlinearFitLandscape")),
+  "newton-parabola-jump": lazy(() => import("./NewtonParabola")),
+  "cmaes-shape-learning": lazy(() => import("./CmaesShape")),
+  "interior-point-barrier-path": lazy(() => import("./BarrierPath")),
+  "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
 };

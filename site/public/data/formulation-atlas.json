@@ -3465,7 +3465,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3983,7 +3983,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",

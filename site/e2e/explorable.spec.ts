@@ -15,6 +15,11 @@ const figures = [
   },
   { label: "primal-simplex", route: "/learn/primal-simplex", id: "lp-vertex-walk" },
   { label: "convexity", route: "/learn/concept.convexity", id: "convexity-chord" },
+  { label: "nonlinear-least-squares", route: "/learn/concept.nonlinear-least-squares", id: "nonlinear-least-squares-landscape" },
+  { label: "newton-method", route: "/learn/newton-method", id: "newton-parabola-jump" },
+  { label: "cma-es", route: "/learn/cma-es", id: "cmaes-shape-learning" },
+  { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
+  { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
 ];
 
 for (const figure of figures) {

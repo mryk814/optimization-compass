@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `189`
+- Prose review warnings: `174`
 
 ## Concept publication floor
 
@@ -24,9 +24,9 @@
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 3394 | 6 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 95 | 3295 | 9 | 4 | 0 | pass |
-| `concept.multiobjective-optimization` | 86 | 8047 | 12 | 4 | 0 | pass |
+| `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4444 | 9 | 5 | 0 | pass |
-| `concept.nonlinear-least-squares` | 87 | 3533 | 9 | 4 | 0 | pass |
+| `concept.nonlinear-least-squares` | 119 | 8046 | 12 | 7 | 0 | pass |
 | `concept.optimal-control` | 102 | 5641 | 9 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
@@ -50,11 +50,11 @@
 
 ## Prose warning summary
 
-- `number.overprecise`: 95
+- `number.overprecise`: 80
 - `prose.choppy`: 7
-- `prose.work-report`: 10
+- `prose.work-report`: 9
 - `sentence.commas`: 74
-- `sentence.long`: 3
+- `sentence.long`: 4
 
 | Content | Warnings |
 |---|---:|
@@ -74,7 +74,7 @@
 | `branch-and-cut` | 0 |
 | `bundle-method` | 0 |
 | `cdcl-sat` | 1 |
-| `cma-es` | 1 |
+| `cma-es` | 0 |
 | `cobyla` | 0 |
 | `cobyqa` | 0 |
 | `concept.chance-risk-contract` | 0 |
@@ -94,7 +94,7 @@
 | `concept.mixed-integer-linear-program` | 0 |
 | `concept.multiobjective-optimization` | 0 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 0 |
-| `concept.nonlinear-least-squares` | 0 |
+| `concept.nonlinear-least-squares` | 1 |
 | `concept.optimal-control` | 8 |
 | `concept.path-terminal-constraints` | 1 |
 | `concept.pde-constrained-optimization` | 0 |
@@ -147,7 +147,7 @@
 | `hungarian-algorithm` | 1 |
 | `hyperband-asha` | 4 |
 | `ilqr-ddp` | 0 |
-| `interior-point-nlp` | 11 |
+| `interior-point-nlp` | 0 |
 | `lbfgs` | 0 |
 | `lbfgsb` | 0 |
 | `least-squares` | 0 |
@@ -165,7 +165,7 @@
 | `multiple-shooting` | 1 |
 | `network-simplex` | 0 |
 | `newton-cg` | 0 |
-| `newton-method` | 4 |
+| `newton-method` | 0 |
 | `nonlinear-cg` | 1 |
 | `nsga-iii` | 0 |
 | `optimality-criteria-topology` | 0 |
