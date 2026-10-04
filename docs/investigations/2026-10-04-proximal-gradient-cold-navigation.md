@@ -2,7 +2,7 @@
 
 ## 結果と範囲
 
-`main` の `b136e78af55c19d55bb5a821d8a18d7998fa3dbd` を取得し、production build を Cloud の Chromium 151.0.7922.173 で確認した。通常の初回遷移では再現しなかった。原因は未確定であり、runtime の修正は行わない。追加するのは初回の実リンク遷移と chunk 待機の回帰テストのみ。
+`main` の `b136e78af55c19d55bb5a821d8a18d7998fa3dbd` を取得し、production build を Cloud の Chromium 151.0.7922.173 で確認した。当初のローカル初回遷移では再現しなかった。しかし PR #288 の exact-head CI で phone の初回表示が初回・retry とも失敗し、変更のない本文の再 render が portal の DOM を失う defect を focused unit test で再現できた。以下の CI 証拠に基づく小さな修正と回帰テストを追加する。元の公開観測の原因との同一性は未確定。
 
 公開サイト、dataset 0.18.19、記事、数式、承認済み UI、workflow は変更しない。
 
@@ -34,6 +34,18 @@
 
 一時的な abort 診断では `net::ERR_FAILED` と `TypeError: Failed to fetch dynamically imported module: .../ProximalThreshold-BAFSPmRl.js` が console に出た。失敗図の screenshot も boundary の失敗文と caption のみだった。これは resource failure が「本文は表示、操作なし、reload で回復」を起こせる証拠であり、先行観測の原因の証明ではない。この診断 script は通常の回帰テストに混ぜない。
 
+## Exact-head CI で得た新しい証拠と修正
+
+[PR #288 run 807](https://github.com/mryk814/optimization-compass/actions/runs/37192990466) は head `7b1e27c09eef2d1a68362832113cbb10d2944ebf` と base `b136e78` の PR merge artifact を検証した。artifact validation は success。critical journeys は 22 pass / 1 fail で、新規 375px test が記事の最初の entry で `.ex-frame` 0 件となり、retry も同じ結果だった。desktop と controlled pending-chunk tests は pass。
+
+[失敗 artifact](https://github.com/mryk814/optimization-compass/actions/runs/37192990466/artifacts/11299866747) の DOM snapshot では `図を読み込んでいます…` や boundary 失敗文ではなく、compiler の `動かして確かめる図です。JavaScriptが有効なブラウザで表示されます。読み込めない場合は、下の説明で内容を確認してください。` が残っていた。console / pageerror / requestfailed は空、`ProximalThreshold` と依存 script は HTTP 200。trace は canonical method route と複数の非同期データ応答を記録している。これは単なる chunk download failure とは異なる。
+
+`CompiledContent` を mount して live figure を確認した後、**同じ HTML で再 render** する unit test は修正前に compiler fallback が戻るため fail した。`dangerouslySetInnerHTML` に毎回新しい object を渡すと React が HTML を再適用し、portal の mount node が切り離される。一方で `ExplorableMounts` の effect は HTML string が変わらない限り再実行されない。この組み合わせで、本文は正しいまま操作 DOM が失われる。
+
+`CompiledContent` で HTML insertion object を `useMemo` により HTML string ごとに保持する。変更のない parent render では live DOM を再挿入しない。追加 unit test は既存の live node の identity が保たれることと、**HTML が変更された場合は新しい本文と live figure へ更新される**ことの両方を確認する。数式、記事、UI、loader/retry behavior、portal registry は変更しない。
+
+これは実証された render defect の修正であり、元の公開 browser で同じ timing が起きたと断定するものではない。元の失敗時の記録がないため、公開観測の原因は引き続き未確定。
+
 ## 継続するテスト
 
 `site/e2e/proximal-gradient-cold-navigation.spec.ts` に 3 tests を追加する。既存の direct-route tests に欠けていた初回 canonical-link 遷移を、desktop と phone で確認する。3 tests は既存の `@critical` selection に含める。新しい workflow は不要。
@@ -51,10 +63,12 @@ CI=1 PLAYWRIGHT_PORT=43873 npm --prefix site run test:e2e:artifact -- \
 
 ## PR の検証
 
-`UV_CACHE_DIR=/tmp/oc-uv-cache uv run optimization-compass validate pr-fast` は pass。Ruff lint / format、mypy、repository contracts 55 tests、content / licensing checks、site unit 494 pass / 1 skip、typecheck と production build を含む。50 記事を巡回する browser suite は再実行していない。最終の test 添付と `@critical` tag を含む 3 tests も retry なしで 3 pass（10.4 秒）。
+`UV_CACHE_DIR=/tmp/oc-uv-cache uv run optimization-compass validate pr-fast` は pass。最初の test-only head では Ruff lint / format、mypy、repository contracts 55 tests、content / licensing checks、site unit 494 pass / 1 skip、typecheck と production build を含む。50 記事を巡回する browser suite は再実行していない。最終の test 添付と `@critical` tag を含む 3 tests も retry なしで 3 pass（10.4 秒）。
+
+修正後の `pr-fast` も pass（site unit 495 pass / 1 skip）。unchanged-render と changed-HTML の両方を含む regression unit test は pass。production build に対する proximal article 4 tests と cold-navigation 3 tests は retry なしで計 7 pass（24.6 秒）。CI の exact-head 結果は PR checks で確認する。
 
 ## 残る不確実性
 
 元の失敗時の resource / console 記録と正確な代替文がないため、network failure、stale asset、mount の不成立などを区別できない。公開 Pages 上の fresh context 検証も今回の接続制限で未実施。CDN/cache 条件、元の browser version、元の network 条件を網羅してはいない。
 
-再発時は reload 前に図の DOM（compiler fallback / loading / boundary failure）、console、失敗 request と HTTP status、現在の asset URL と deployment identity を保存する。それまでは推測の runtime fix や自動 retry、公開サイト変更を入れない。
+再発時は reload 前に図の DOM（compiler fallback / loading / boundary failure）、console、失敗 request と HTTP status、現在の asset URL と deployment identity を保存する。再現した unchanged-render defect 以外の推測の runtime fix や自動 retry、公開サイト変更は入れない。

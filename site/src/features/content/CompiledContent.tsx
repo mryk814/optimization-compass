@@ -1,5 +1,5 @@
 import type { AtlasContentPage } from "../../contracts/atlas-content";
-import { useLayoutEffect, useRef, type MouseEvent } from "react";
+import { useLayoutEffect, useMemo, useRef, type MouseEvent } from "react";
 import { useLocation } from "react-router-dom";
 
 import { ExplorableMounts } from "../explorable/ExplorableMounts";
@@ -7,6 +7,9 @@ import { PhysicalSceneMounts } from "../physical-scenes/PhysicalSceneMounts";
 
 export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" | "toc"> }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  // React reapplies innerHTML when this object changes, which detaches the figure portals.
+  // Parent data loads must not replace an unchanged article after its figures have mounted.
+  const compiledHtml = useMemo(() => ({ __html: page.html }), [page.html]);
   const { search } = useLocation();
   const focusScene = new URLSearchParams(search).get("figure") ?? undefined;
   useLayoutEffect(() => {
@@ -48,7 +51,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
           </details>
         </nav>
       )}
-      <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />
+      <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={compiledHtml} onClick={followContentAnchor} />
       <ExplorableMounts container={contentRef} html={page.html} />
       <PhysicalSceneMounts container={contentRef} html={page.html} focusScene={focusScene} />
     </div>

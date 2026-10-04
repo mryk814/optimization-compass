@@ -73,6 +73,24 @@ describe("ExplorableMounts inside compiled content", () => {
     expect(screen.getByText("説明")).toBeInTheDocument();
   });
 
+  it("preserves the live figure on an unchanged article rerender", async () => {
+    const page = { html: figure("convexity-chord"), toc: [] };
+    const view = render(<MemoryRouter><CompiledContent page={page} /></MemoryRouter>);
+    const liveFigure = await screen.findByText("見る問い");
+    expect(liveFigure).toBeInTheDocument();
+    view.rerender(<MemoryRouter><CompiledContent page={page} /></MemoryRouter>);
+    expect(screen.queryByText("静的な代替")).not.toBeInTheDocument();
+    expect(screen.getByText("見る問い")).toBe(liveFigure);
+
+    view.rerender(<MemoryRouter><CompiledContent page={{
+      html: figure("convexity-chord").replace("説明", "更新された説明"), toc: [],
+    }} /></MemoryRouter>);
+    expect(await screen.findByText("見る問い")).toBeInTheDocument();
+    expect(screen.getByText("更新された説明")).toBeInTheDocument();
+    expect(screen.queryByText("説明", { exact: true })).not.toBeInTheDocument();
+    expect(screen.queryByText("静的な代替")).not.toBeInTheDocument();
+  });
+
   it("leaves the fallback for an id the site does not know", () => {
     render(<MemoryRouter><CompiledContent page={{ html: figure("not-registered"), toc: [] }} /></MemoryRouter>);
 
