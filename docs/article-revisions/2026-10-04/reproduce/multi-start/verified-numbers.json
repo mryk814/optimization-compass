@@ -1,0 +1,642 @@
+{
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "rng": "numpy.default_rng(7)",
+  "local_solver": "BFGS, jac=None, default options",
+  "initial_sampling_box": [
+    -5.12,
+    5.12
+  ],
+  "local_bounds": null,
+  "distinct_tolerance": 0.001,
+  "runs": [
+    {
+      "run": 1,
+      "start": [
+        1.2809775780317896,
+        4.067469321928454
+      ],
+      "end": [
+        0.9949586266229654,
+        3.9797838485940424
+      ],
+      "fun": 16.914202849554876,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 30,
+      "best": 16.914202849554876,
+      "cluster": 1
+    },
+    {
+      "run": 2,
+      "start": [
+        2.823021468110782,
+        -2.8138783744963396
+      ],
+      "end": [
+        2.984855694021286,
+        -2.984855708575249
+      ],
+      "fun": 17.90920248297404,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 42,
+      "total_nfev": 72,
+      "best": 16.914202849554876,
+      "cluster": 2
+    },
+    {
+      "run": 3,
+      "start": [
+        -2.0462972425090515,
+        3.8251872808577216
+      ],
+      "end": [
+        -1.9899122423099835,
+        3.9797838528710816
+      ],
+      "fun": 19.899074983015648,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 102,
+      "best": 16.914202849554876,
+      "cluster": 3
+    },
+    {
+      "run": 4,
+      "start": [
+        -5.066083281248515,
+        3.2893790042395272
+      ],
+      "end": [
+        -4.974691389352436,
+        2.9848556867999667
+      ],
+      "fun": 33.82832417602928,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 132,
+      "best": 16.914202849554876,
+      "cluster": 4
+    },
+    {
+      "run": 5,
+      "start": [
+        3.0419909504209537,
+        -0.3283460828802989
+      ],
+      "end": [
+        2.98485569333054,
+        -7.396740548577897e-09
+      ],
+      "fun": 8.954601241487033,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 33,
+      "total_nfev": 165,
+      "best": 8.954601241487033,
+      "cluster": 5
+    },
+    {
+      "run": 6,
+      "start": [
+        -2.0169479493702296,
+        -2.268921732088081
+      ],
+      "end": [
+        -1.9899122434058247,
+        -0.9949586461836397
+      ],
+      "fun": 4.974790247647412,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 42,
+      "total_nfev": 207,
+      "best": 4.974790247647412,
+      "cluster": 6
+    },
+    {
+      "run": 7,
+      "start": [
+        -2.5101354224217642,
+        -0.5624186277616987
+      ],
+      "end": [
+        -1.9899122511807796,
+        -0.9949586572949682
+      ],
+      "fun": 4.974790247647515,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 66,
+      "total_nfev": 273,
+      "best": 4.974790247647412,
+      "cluster": 6
+    },
+    {
+      "run": 8,
+      "start": [
+        0.04657417172944189,
+        0.547812885242803
+      ],
+      "end": [
+        -4.71268713306697e-09,
+        0.9949586257328681
+      ],
+      "fun": 0.9949590570933253,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 39,
+      "total_nfev": 312,
+      "best": 0.9949590570933253,
+      "cluster": 7
+    },
+    {
+      "run": 9,
+      "start": [
+        5.073922902368181,
+        2.9968580527488315
+      ],
+      "end": [
+        3.9797838517613564,
+        2.9848556937743904
+      ],
+      "fun": 24.873845033948573,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 27,
+      "total_nfev": 339,
+      "best": 0.9949590570933253,
+      "cluster": 8
+    },
+    {
+      "run": 10,
+      "start": [
+        1.2511153094775054,
+        5.006951912262502
+      ],
+      "end": [
+        0.9949586305175782,
+        4.974691385636939
+      ],
+      "fun": 25.86868199163553,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 369,
+      "best": 0.9949590570933253,
+      "cluster": 9
+    },
+    {
+      "run": 11,
+      "start": [
+        -2.9152389300674666,
+        -3.479428773295672
+      ],
+      "end": [
+        -3.9797838705781174,
+        -2.9848557106177416
+      ],
+      "fun": 24.873845033948584,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 42,
+      "total_nfev": 411,
+      "best": 0.9949590570933253,
+      "cluster": 10
+    },
+    {
+      "run": 12,
+      "start": [
+        1.1524055477558353,
+        -4.670033838475434
+      ],
+      "end": [
+        0.994958629514634,
+        -4.9746913984852945
+      ],
+      "fun": 25.86868199163554,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 33,
+      "total_nfev": 444,
+      "best": 0.9949590570933253,
+      "cluster": 11
+    },
+    {
+      "run": 13,
+      "start": [
+        -4.754633945358376,
+        0.15246151957883214
+      ],
+      "end": [
+        -4.97469141036388,
+        -1.8769660126964508e-08
+      ],
+      "fun": 24.873722934542364,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 474,
+      "best": 0.9949590570933253,
+      "cluster": 12
+    },
+    {
+      "run": 14,
+      "start": [
+        -0.34605030066903986,
+        4.271797997494807
+      ],
+      "end": [
+        -1.2927571803176732e-08,
+        2.9848556897502245
+      ],
+      "fun": 8.95460124148707,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 33,
+      "total_nfev": 507,
+      "best": 0.9949590570933253,
+      "cluster": 13
+    },
+    {
+      "run": 15,
+      "start": [
+        1.3232768459879471,
+        0.14456470117902231
+      ],
+      "end": [
+        0.9949586411858103,
+        -1.5342181297968298e-09
+      ],
+      "fun": 0.9949590570932934,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 537,
+      "best": 0.9949590570932934,
+      "cluster": 14
+    },
+    {
+      "run": 16,
+      "start": [
+        -0.03201602157051653,
+        -2.585447198440132
+      ],
+      "end": [
+        -7.097096976105404e-09,
+        -2.9848557093700365
+      ],
+      "fun": 8.954601241487037,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 45,
+      "total_nfev": 582,
+      "best": 0.9949590570932934,
+      "cluster": 15
+    },
+    {
+      "run": 17,
+      "start": [
+        -4.9992291784447405,
+        -3.149802045590419
+      ],
+      "end": [
+        -4.974691407015582,
+        -1.9899122490859764
+      ],
+      "fun": 28.853554125096412,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 612,
+      "best": 0.9949590570932934,
+      "cluster": 16
+    },
+    {
+      "run": 18,
+      "start": [
+        1.9664089178300337,
+        -3.0657871463731694
+      ],
+      "end": [
+        1.9899122259987383,
+        -2.984855708544001
+      ],
+      "fun": 12.934432432041124,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 27,
+      "total_nfev": 639,
+      "best": 0.9949590570932934,
+      "cluster": 17
+    },
+    {
+      "run": 19,
+      "start": [
+        -1.3359481794334034,
+        -5.081761361386742
+      ],
+      "end": [
+        -0.9949586459166302,
+        -4.974691399306174
+      ],
+      "fun": 25.86868199163554,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 669,
+      "best": 0.9949590570932934,
+      "cluster": 18
+    },
+    {
+      "run": 20,
+      "start": [
+        3.379688753169874,
+        -3.538318529930856
+      ],
+      "end": [
+        -2.984855708458165,
+        -3.9797838680928166
+      ],
+      "fun": 24.873845033948566,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 36,
+      "total_nfev": 705,
+      "best": 0.9949590570932934,
+      "cluster": 19
+    },
+    {
+      "run": 21,
+      "start": [
+        -2.379783121266837,
+        3.8946012567636847
+      ],
+      "end": [
+        -1.989912241009876,
+        3.97978385311465
+      ],
+      "fun": 19.89907498301564,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 735,
+      "best": 0.9949590570932934,
+      "cluster": 3
+    },
+    {
+      "run": 22,
+      "start": [
+        0.1002578930526532,
+        3.554818522786502
+      ],
+      "end": [
+        -0.9949586434045852,
+        3.979783850315044
+      ],
+      "fun": 16.914202849554847,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 36,
+      "total_nfev": 771,
+      "best": 0.9949590570932934,
+      "cluster": 20
+    },
+    {
+      "run": 23,
+      "start": [
+        1.430703789491469,
+        2.475734500985417
+      ],
+      "end": [
+        -8.786055669095622e-09,
+        -0.9949586414438097
+      ],
+      "fun": 0.9949590570933111,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 51,
+      "total_nfev": 822,
+      "best": 0.9949590570932934,
+      "cluster": 21
+    },
+    {
+      "run": 24,
+      "start": [
+        -4.183085004154412,
+        0.4213127308952451
+      ],
+      "end": [
+        -2.984855708088756,
+        -7.1763604930310314e-09
+      ],
+      "fun": 8.954601241487032,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 852,
+      "best": 0.9949590570932934,
+      "cluster": 22
+    },
+    {
+      "run": 25,
+      "start": [
+        0.07958769971558333,
+        3.802515217335098
+      ],
+      "end": [
+        -9.912472580676113e-09,
+        3.97978385381154
+      ],
+      "fun": 15.919243792461558,
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "nfev": 30,
+      "total_nfev": 882,
+      "best": 0.9949590570932934,
+      "cluster": 23
+    }
+  ],
+  "clusters": [
+    {
+      "representative": [
+        0.9949586266229654,
+        3.9797838485940424
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        2.984855694021286,
+        -2.984855708575249
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -1.9899122423099835,
+        3.9797838528710816
+      ],
+      "count": 2
+    },
+    {
+      "representative": [
+        -4.974691389352436,
+        2.9848556867999667
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        2.98485569333054,
+        -7.396740548577897e-09
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -1.9899122434058247,
+        -0.9949586461836397
+      ],
+      "count": 2
+    },
+    {
+      "representative": [
+        -4.71268713306697e-09,
+        0.9949586257328681
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        3.9797838517613564,
+        2.9848556937743904
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        0.9949586305175782,
+        4.974691385636939
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -3.9797838705781174,
+        -2.9848557106177416
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        0.994958629514634,
+        -4.9746913984852945
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -4.97469141036388,
+        -1.8769660126964508e-08
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -1.2927571803176732e-08,
+        2.9848556897502245
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        0.9949586411858103,
+        -1.5342181297968298e-09
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -7.097096976105404e-09,
+        -2.9848557093700365
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -4.974691407015582,
+        -1.9899122490859764
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        1.9899122259987383,
+        -2.984855708544001
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -0.9949586459166302,
+        -4.974691399306174
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -2.984855708458165,
+        -3.9797838680928166
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -0.9949586434045852,
+        3.979783850315044
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -8.786055669095622e-09,
+        -0.9949586414438097
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -2.984855708088756,
+        -7.1763604930310314e-09
+      ],
+      "count": 1
+    },
+    {
+      "representative": [
+        -9.912472580676113e-09,
+        3.97978385381154
+      ],
+      "count": 1
+    }
+  ],
+  "summary": {
+    "distinct": 23,
+    "duplicates": 2,
+    "successes": 25,
+    "nfev": 882,
+    "best": 0.9949590570932934
+  },
+  "oracle": {
+    "x": [
+      0,
+      0
+    ],
+    "f": 0
+  },
+  "tests": "passed"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "radius": 2.0,
+    "step": 2.0,
+    "trial_x": 2.5,
+    "predicted": 1.25,
+    "actual": -6.75,
+    "ratio": -5.4
+  },
+  {
+    "radius": 0.5,
+    "step": 0.5,
+    "trial_x": 1.0,
+    "predicted": 0.21875,
+    "actual": 0.140625,
+    "ratio": 0.6428571428571429
+  }
+]

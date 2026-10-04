@@ -1,0 +1,52 @@
+{
+  "scipy": "1.17.0",
+  "alpha_star": 0.025021374038168284,
+  "D": 500.8778654960527,
+  "H1": [
+    [
+      1.000832424067648,
+      -0.0007512486361014671
+    ],
+    [
+      -0.0007512486361014671,
+      0.025001126872954155
+    ]
+  ],
+  "trials": [
+    {
+      "t": 0.01,
+      "change": -0.019899999999999887,
+      "armijo": true,
+      "strong": false,
+      "weak": false
+    },
+    {
+      "t": 0.5,
+      "change": -0.7499999999999999,
+      "armijo": true,
+      "strong": true,
+      "weak": true
+    },
+    {
+      "t": 1.0,
+      "change": -0.9999999999999999,
+      "armijo": true,
+      "strong": true,
+      "weak": true
+    },
+    {
+      "t": 1.95,
+      "change": -0.09749999999999955,
+      "armijo": true,
+      "strong": false,
+      "weak": true
+    },
+    {
+      "t": 2.1,
+      "change": 0.20999999999999977,
+      "armijo": false,
+      "strong": false,
+      "weak": true
+    }
+  ]
+}

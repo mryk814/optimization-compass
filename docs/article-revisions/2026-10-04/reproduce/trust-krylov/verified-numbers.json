@@ -1,0 +1,222 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "projected_subproblems": [
+    {
+      "delta": 1.0,
+      "dimension": 1,
+      "basis_hvp_calls": 1,
+      "lambda": 160.12414900678448,
+      "p": [
+        -0.029986509105671005,
+        -0.9995503035223668
+      ],
+      "model_change": -180.10706438294594,
+      "trial_f": 328.892935617054,
+      "norm_p": 1.0,
+      "reduced_kkt_residual": 2.7727065097308132e-14,
+      "full_kkt_residual": 1.1389749225696877,
+      "Q": [
+        [
+          0.029986509105671005
+        ],
+        [
+          0.9995503035223668
+        ]
+      ],
+      "T": [
+        [
+          39.965830752322915
+        ]
+      ]
+    },
+    {
+      "delta": 1.0,
+      "dimension": 2,
+      "basis_hvp_calls": 2,
+      "lambda": 160.13708316380374,
+      "p": [
+        -0.037005723076561234,
+        -0.9993150536540424
+      ],
+      "model_change": -180.11106411653577,
+      "trial_f": 328.8889358834643,
+      "norm_p": 1.0000000000000002,
+      "reduced_kkt_residual": 1.1028658464763842e-12,
+      "full_kkt_residual": 1.1028658464763832e-12,
+      "Q": [
+        [
+          0.029986509105671005,
+          -0.9995503035223671
+        ],
+        [
+          0.9995503035223668,
+          0.029986509105664156
+        ]
+      ],
+      "T": [
+        [
+          39.965830752322915,
+          1.1389749225694137
+        ],
+        [
+          1.1389749225694137,
+          2.0341692476770756
+        ]
+      ]
+    },
+    {
+      "delta": 4.0,
+      "dimension": 1,
+      "basis_hvp_calls": 1,
+      "lambda": 10.056664187453931,
+      "p": [
+        -0.11994603642268402,
+        -3.9982012140894674
+      ],
+      "model_change": -480.63327301784625,
+      "trial_f": 28.36672698215375,
+      "norm_p": 4.0,
+      "reduced_kkt_residual": 4.3192681588081156e-15,
+      "full_kkt_residual": 4.55589969027875,
+      "Q": [
+        [
+          0.029986509105671005
+        ],
+        [
+          0.9995503035223668
+        ]
+      ],
+      "T": [
+        [
+          39.965830752322915
+        ]
+      ]
+    },
+    {
+      "delta": 4.0,
+      "dimension": 2,
+      "basis_hvp_calls": 2,
+      "lambda": 10.371612820497447,
+      "p": [
+        -0.484981229776235,
+        -3.970490298031815
+      ],
+      "model_change": -481.47687605648974,
+      "trial_f": 27.523123943510278,
+      "norm_p": 4.000000000000005,
+      "reduced_kkt_residual": 3.0776119178362455e-13,
+      "full_kkt_residual": 3.0776119178362374e-13,
+      "Q": [
+        [
+          0.029986509105671005,
+          -0.9995503035223671
+        ],
+        [
+          0.9995503035223668,
+          0.029986509105664156
+        ]
+      ],
+      "T": [
+        [
+          39.965830752322915,
+          1.1389749225694137
+        ],
+        [
+          1.1389749225694137,
+          2.0341692476770756
+        ]
+      ]
+    }
+  ],
+  "basis_construction_total_hvp": 2,
+  "orthogonality_error": 9.697402688476858e-15,
+  "invariant_subspace_counterexample": {
+    "H_diagonal": [
+      2.0,
+      -1.0
+    ],
+    "g": [
+      1.0,
+      0.0
+    ],
+    "restricted_p": [
+      -0.5,
+      0.0
+    ],
+    "restricted_model": -0.25,
+    "global_p": [
+      -0.3333333333333333,
+      0.9428090415820634
+    ],
+    "global_model": -0.6666666666666666,
+    "lambda": 1.0
+  },
+  "scipy_trust_krylov": {
+    "quadratic_inexact_True": {
+      "x": [
+        1.0000000000000004,
+        -2.0
+      ],
+      "fun": 1.9721522630525295e-31,
+      "gradient_2": 8.881784197001252e-16,
+      "nit": 4,
+      "nfev": 5,
+      "njev": 5,
+      "nhev_reported": 10,
+      "actual_hvp_calls": 9,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    },
+    "quadratic_inexact_False": {
+      "x": [
+        1.0,
+        -1.9999999999999944
+      ],
+      "fun": 6.162975822039155e-28,
+      "gradient_2": 2.220446049250313e-13,
+      "nit": 3,
+      "nfev": 4,
+      "njev": 4,
+      "nhev_reported": 10,
+      "actual_hvp_calls": 9,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    },
+    "rosenbrock_inexact_True": {
+      "x": [
+        0.9999999941888266,
+        0.999999988354427
+      ],
+      "fun": 3.3823681764270716e-17,
+      "gradient_2": 5.197678213186768e-09,
+      "nit": 38,
+      "nfev": 39,
+      "njev": 39,
+      "nhev_reported": 91,
+      "actual_hvp_calls": 90,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    },
+    "rosenbrock_inexact_False": {
+      "x": [
+        0.9999999994405535,
+        0.9999999988644926
+      ],
+      "fun": 3.405841249902723e-19,
+      "gradient_2": 6.448849170676843e-09,
+      "nit": 25,
+      "nfev": 26,
+      "njev": 26,
+      "nhev_reported": 70,
+      "actual_hvp_calls": 69,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    }
+  },
+  "distinction": "Explicit projection/eigen solver is educational, not trlib or SciPy trust-krylov."
+}
