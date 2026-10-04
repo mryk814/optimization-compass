@@ -3,14 +3,14 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `174`
+- Prose review warnings: `176`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
-| `concept.constrained-nlp` | 84 | 7481 | 10 | 4 | 0 | pass |
+| `concept.constrained-nlp` | 84 | 7491 | 10 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
 | `concept.convex-quadratic-program` | 84 | 3338 | 9 | 4 | 0 | pass |
 | `concept.convexity` | 61 | 2155 | 8 | 2 | 0 | pass |
@@ -50,7 +50,7 @@
 
 ## Prose warning summary
 
-- `number.overprecise`: 80
+- `number.overprecise`: 82
 - `prose.choppy`: 7
 - `prose.work-report`: 9
 - `sentence.commas`: 74
@@ -199,7 +199,7 @@
 | `trust-exact` | 0 |
 | `trust-krylov` | 0 |
 | `trust-region-newton-cg` | 0 |
-| `trust-region-reflective` | 6 |
+| `trust-region-reflective` | 8 |
 | `turbo-saasbo` | 6 |
 | `weighted-sum` | 1 |
 

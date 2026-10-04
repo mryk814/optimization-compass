@@ -21,7 +21,7 @@
 | `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 10030 | 14 | 2 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |
 | `bundle-method` | `M_BUNDLE` | 59 | 5739 | 9 | 1 | pass |
-| `cdcl-sat` | `M_CDCL_SAT` | 44 | 3791 | 12 | 1 | pass |
+| `cdcl-sat` | `M_CDCL_SAT` | 44 | 3802 | 12 | 1 | pass |
 | `cma-es` | `M_CMA_ES` | 110 | 6549 | 14 | 1 | pass |
 | `cobyla` | `M_COBYLA` | 56 | 2988 | 14 | 1 | pass |
 | `cobyqa` | `M_COBYQA` | 52 | 2800 | 12 | 1 | pass |
@@ -29,7 +29,7 @@
 | `coordinate-descent` | `M_COORDINATE_DESCENT` | 53 | 6899 | 10 | 2 | pass |
 | `cp-sat` | `M_CP_SAT` | 66 | 3309 | 14 | 1 | pass |
 | `cp-search` | `M_CP_SEARCH` | 48 | 4801 | 13 | 1 | pass |
-| `density-filter` | `M_DENSITY_FILTER` | 65 | 2810 | 12 | 1 | pass |
+| `density-filter` | `M_DENSITY_FILTER` | 65 | 2821 | 12 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 45 | 5363 | 9 | 2 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 78 | 7860 | 12 | 2 | pass |
 | `direct-collocation` | `M_DIRECT_COLLOCATION` | 45 | 4979 | 12 | 1 | pass |
@@ -55,7 +55,7 @@
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 61 | 2512 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 70 | 2979 | 7 | 1 | pass |
 | `fista` | `M_FISTA` | 50 | 2699 | 11 | 1 | pass |
-| `gauss-newton` | `M_GAUSS_NEWTON` | 54 | 5771 | 10 | 1 | pass |
+| `gauss-newton` | `M_GAUSS_NEWTON` | 54 | 5780 | 10 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 58 | 2956 | 12 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 53 | 3247 | 12 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 56 | 3221 | 14 | 1 | pass |
@@ -81,7 +81,7 @@
 | `newton-method` | `M_NEWTON` | 140 | 6742 | 13 | 1 | pass |
 | `nonlinear-cg` | `M_NLCG` | 54 | 5103 | 9 | 1 | pass |
 | `nsga-iii` | `M_NSGA_III` | 61 | 2719 | 12 | 1 | pass |
-| `optimality-criteria-topology` | `M_OC_TOPOLOGY` | 76 | 3297 | 12 | 1 | pass |
+| `optimality-criteria-topology` | `M_OC_TOPOLOGY` | 76 | 3337 | 12 | 1 | pass |
 | `outer-approximation-minlp` | `M_OUTER_APPROX_MINLP` | 60 | 4025 | 12 | 1 | pass |
 | `particle-swarm` | `M_PARTICLE_SWARM` | 51 | 5453 | 13 | 1 | pass |
 | `pattern-search` | `M_PATTERN_SEARCH` | 57 | 2469 | 12 | 1 | pass |
@@ -92,7 +92,7 @@
 | `primal-simplex` | `M_SIMPLEX` | 55 | 7050 | 13 | 1 | pass |
 | `projected-gradient` | `M_PROJECTED_GRADIENT` | 50 | 6455 | 11 | 1 | pass |
 | `proximal-gradient` | `M_PROX_GRADIENT` | 44 | 2650 | 12 | 1 | pass |
-| `random-search` | `M_RANDOM_SEARCH` | 52 | 5332 | 12 | 1 | pass |
+| `random-search` | `M_RANDOM_SEARCH` | 52 | 5363 | 12 | 1 | pass |
 | `riemannian-gradient` | `M_RIEMANNIAN_GRADIENT` | 60 | 4122 | 13 | 1 | pass |
 | `riemannian-trust-region` | `M_RIEMANNIAN_TRUST_REGION` | 50 | 3372 | 13 | 1 | pass |
 | `sgd` | `M_SGD` | 75 | 7050 | 10 | 2 | pass |
@@ -104,13 +104,13 @@
 | `spatial-branch-and-bound` | `M_SPATIAL_BRANCH_BOUND` | 75 | 5290 | 13 | 1 | pass |
 | `spsa` | `M_SPSA` | 50 | 2614 | 11 | 1 | pass |
 | `sqp` | `M_SQP` | 72 | 6565 | 9 | 1 | pass |
-| `subgradient` | `M_SUBGRADIENT` | 58 | 5064 | 9 | 1 | pass |
+| `subgradient` | `M_SUBGRADIENT` | 58 | 5084 | 9 | 1 | pass |
 | `tpe` | `M_TPE` | 54 | 3200 | 14 | 1 | pass |
 | `trust-exact` | `M_TRUST_EXACT` | 59 | 6585 | 12 | 1 | pass |
 | `trust-krylov` | `M_TRUST_KRYLOV` | 67 | 5497 | 9 | 1 | pass |
 | `trust-region-newton-cg` | `M_TRUST_NCG` | 58 | 5741 | 9 | 1 | pass |
-| `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 66 | 6464 | 13 | 1 | pass |
-| `turbo-saasbo` | `M_TURBO_SAASBO` | 147 | 4459 | 14 | 1 | pass |
+| `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 66 | 6479 | 13 | 1 | pass |
+| `turbo-saasbo` | `M_TURBO_SAASBO` | 147 | 4495 | 14 | 1 | pass |
 | `weighted-sum` | `M_WEIGHTED_SUM` | 60 | 3813 | 13 | 1 | pass |
 
 ## Floor
