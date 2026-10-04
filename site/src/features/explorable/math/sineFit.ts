@@ -89,7 +89,7 @@ export interface Iterate extends Params {
   lambda?: number;
 }
 
-export type Outcome = "global" | "local" | "diverged";
+export type Outcome = "global" | "local" | "diverged" | "stalled" | "budget";
 
 export interface Descent {
   path: Iterate[];
@@ -103,8 +103,9 @@ const GLOBAL_TOLERANCE = 1e-3;
 /** Where the reader can still see the iterate; a GN step that leaves this box has flown off. */
 export const OFF_MAP = { w: 12, a: 6 };
 
-function outcomeOf(last: Iterate): Outcome {
+function outcomeOf(last: Iterate, stop: "settled" | "stalled" | "budget"): Outcome {
   if (!Number.isFinite(last.sse) || Math.abs(last.w) > OFF_MAP.w || Math.abs(last.a) > OFF_MAP.a) return "diverged";
+  if (stop !== "settled") return stop;
   return Math.abs(last.sse - GLOBAL_MINIMUM.sse) < GLOBAL_TOLERANCE ? "global" : "local";
 }
 
@@ -118,16 +119,17 @@ function settled(path: readonly Iterate[]): boolean {
 export function gaussNewton(start: Params, maxSteps = 8): Descent {
   const path: Iterate[] = [{ ...start, sse: sse(start) }];
   let p = start;
+  let stop: "settled" | "stalled" | "budget" = "budget";
   for (let k = 0; k < maxSteps; k += 1) {
     const step = solve2(normal(p), 0, 0);
-    if (!step) break;
+    if (!step) { stop = "stalled"; break; }
     const next = { a: p.a + step.a, w: p.w + step.w };
     path.push({ ...next, sse: sse(next), predicted: linearizedSse(p, next) });
     p = next;
     if (Math.abs(p.w) > OFF_MAP.w || Math.abs(p.a) > OFF_MAP.a) break;
-    if (settled(path)) break;
+    if (settled(path)) { stop = "settled"; break; }
   }
-  return { path, outcome: outcomeOf(path[path.length - 1]) };
+  return { path, outcome: outcomeOf(path[path.length - 1], stop) };
 }
 
 /**
@@ -138,6 +140,7 @@ export function levenbergMarquardt(start: Params, maxSteps = 30, initialLambda =
   const path: Iterate[] = [{ ...start, sse: sse(start) }];
   let p = start;
   let lambda = initialLambda;
+  let stop: "settled" | "stalled" | "budget" = "budget";
   for (let k = 0; k < maxSteps; k += 1) {
     const n = normal(p);
     const current = sse(p);
@@ -154,12 +157,12 @@ export function levenbergMarquardt(start: Params, maxSteps = 30, initialLambda =
       }
       lambda *= 2;
     }
-    if (!accepted || !step) break;
+    if (!accepted || !step) { stop = "stalled"; break; }
     path.push({ ...accepted, sse: sse(accepted), predicted: linearizedSse(p, accepted), lambda });
     p = accepted;
-    if (settled(path)) break;
+    if (settled(path)) { stop = "settled"; break; }
   }
-  return { path, outcome: outcomeOf(path[path.length - 1]) };
+  return { path, outcome: outcomeOf(path[path.length - 1], stop) };
 }
 
 export function descend(method: Method, start: Params): Descent {

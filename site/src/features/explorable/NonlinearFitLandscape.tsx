@@ -205,6 +205,8 @@ export default function NonlinearFitLandscape() {
 }
 
 function outcomeText(run: Descent, last: Iterate): string {
+  if (run.outcome === "stalled") return `近似の計算や更新が成立せず、二乗和 ${fmt(last.sse, 2)} で止まりました。局所最小に着いたとは判断できません。`;
+  if (run.outcome === "budget") return `反復の上限で打ち切りました。二乗和は ${fmt(last.sse, 2)} で、まだ変化が止まったとは判断できません。`;
   if (run.outcome === "global") return `最良の当てはめ（二乗和 ${fmt(last.sse, 3)}）に着きました。`;
   if (run.outcome === "local") return `二乗和 ${fmt(last.sse, 2)} の谷で止まりました。最良の ${fmt(GLOBAL_MINIMUM.sse, 2)} とは別の谷です。`;
   return `一歩が地図の外（ω=${fmt(last.w, 1)}）へ飛びました。`;
