@@ -62,6 +62,7 @@ known-vulnerability auditとlicense inventory生成は3つの依存PRで成功�
 
 #287のCI #802: Python705、site unit494（skip1）、critical browser20が成功。
 #281のCI #795: 検証・browser/axeが成功。
+deploy-pagesとdeploy専用setup-pythonはPRで実行されないため、最終mainのdeploy・smokeで確認する。
 
 合成後のアプリ入力は#287と同一で、差分はworkflow2 files。
 50稿の先行表示・数理の確認を再利用し、統合後の新しいproduction buildと、公開を阻止するcritical/axe検査、PC・375pxの代表画面を確認する。
