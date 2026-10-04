@@ -1,0 +1,76 @@
+{
+  "python": "3.12.14",
+  "matplotlib": "3.10.8",
+  "model": "one machine, nonpreemptive, integer durations/releases, A precedes C",
+  "total_orders": 6,
+  "precedence_feasible_orders": 3,
+  "rows": [
+    {
+      "order": [
+        "A",
+        "B",
+        "C"
+      ],
+      "starts": {
+        "A": 0,
+        "B": 4,
+        "C": 7
+      },
+      "makespan": 8
+    },
+    {
+      "order": [
+        "A",
+        "C",
+        "B"
+      ],
+      "starts": {
+        "A": 0,
+        "C": 2,
+        "B": 4
+      },
+      "makespan": 7
+    },
+    {
+      "order": [
+        "B",
+        "A",
+        "C"
+      ],
+      "starts": {
+        "B": 4,
+        "A": 7,
+        "C": 9
+      },
+      "makespan": 10
+    }
+  ],
+  "release_lower_bound": 7,
+  "release_B_2_variation_makespans": [
+    6,
+    6
+  ],
+  "best": {
+    "order": [
+      "A",
+      "C",
+      "B"
+    ],
+    "starts": {
+      "A": 0,
+      "C": 2,
+      "B": 4
+    },
+    "makespan": 7
+  },
+  "start_grid_oracle": {
+    "domain": "each start 0..10",
+    "candidates": 1331,
+    "minimum_makespan": 7
+  },
+  "cp_sat_executed": false,
+  "claims": [
+    "The sequence enumeration is an exact oracle for this fixed one-machine model. It does not represent CP-SAT search order.",
+    "Integer oracle alone does not prove continuous-time optimality; B release plus duration does."
+  ]
+}

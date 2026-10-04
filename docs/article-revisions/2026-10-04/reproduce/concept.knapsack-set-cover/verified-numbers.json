@@ -1,0 +1,256 @@
+{
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "total_subsets": 16,
+  "feasible_subsets": 10,
+  "best": {
+    "bits": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "name": "AB",
+    "weight": 7,
+    "value": 13
+  },
+  "greedy_items": [
+    "A",
+    "D"
+  ],
+  "greedy_value": 12,
+  "fractional_x": [
+    "1",
+    "2/3",
+    "0",
+    "1"
+  ],
+  "fractional_upper_bound": "46/3",
+  "rounded_fractional_weight": 9,
+  "solver_checks": [
+    {
+      "integer": false,
+      "status": 0,
+      "x": [
+        1.0,
+        0.6666666666666666,
+        0.0,
+        1.0
+      ],
+      "value": 15.333333333333332
+    },
+    {
+      "integer": true,
+      "status": 0,
+      "x": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "value": 13.0
+    }
+  ],
+  "all_subsets": [
+    {
+      "bits": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "name": "none",
+      "weight": 0,
+      "value": 0
+    },
+    {
+      "bits": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "D",
+      "weight": 2,
+      "value": 4
+    },
+    {
+      "bits": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "name": "C",
+      "weight": 5,
+      "value": 6
+    },
+    {
+      "bits": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "name": "CD",
+      "weight": 7,
+      "value": 10
+    },
+    {
+      "bits": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "name": "B",
+      "weight": 3,
+      "value": 5
+    },
+    {
+      "bits": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "name": "BD",
+      "weight": 5,
+      "value": 9
+    },
+    {
+      "bits": [
+        0,
+        1,
+        1,
+        0
+      ],
+      "name": "BC",
+      "weight": 8,
+      "value": 11
+    },
+    {
+      "bits": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "name": "BCD",
+      "weight": 10,
+      "value": 15
+    },
+    {
+      "bits": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "name": "A",
+      "weight": 4,
+      "value": 8
+    },
+    {
+      "bits": [
+        1,
+        0,
+        0,
+        1
+      ],
+      "name": "AD",
+      "weight": 6,
+      "value": 12
+    },
+    {
+      "bits": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "name": "AC",
+      "weight": 9,
+      "value": 14
+    },
+    {
+      "bits": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "name": "ACD",
+      "weight": 11,
+      "value": 18
+    },
+    {
+      "bits": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "name": "AB",
+      "weight": 7,
+      "value": 13
+    },
+    {
+      "bits": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "name": "ABD",
+      "weight": 9,
+      "value": 17
+    },
+    {
+      "bits": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "name": "ABC",
+      "weight": 12,
+      "value": 19
+    },
+    {
+      "bits": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "name": "ABCD",
+      "weight": 14,
+      "value": 23
+    }
+  ],
+  "retained_disaster_example_optimum": {
+    "value": 15,
+    "bits": [
+      1,
+      1,
+      0,
+      0
+    ]
+  },
+  "set_cover": {
+    "total_subsets": 32,
+    "optimum": [
+      "B",
+      "C"
+    ],
+    "cost": 2,
+    "greedy": [
+      "A",
+      "B",
+      "C"
+    ],
+    "uncoverable_element_solver_status": 2
+  }
+}

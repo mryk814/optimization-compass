@@ -1,0 +1,89 @@
+{
+  "versions": {
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "source_commit": "fe6e96666bdef94ae33bdc13a49461e7d2a38962",
+  "quadratic": "0.35*x*x + 0.2",
+  "chord_rows": [
+    {
+      "theta": 0,
+      "mix": 2.0,
+      "f_mix": 1.5999999999999999,
+      "chord": 1.5999999999999999,
+      "gap": 0.0
+    },
+    {
+      "theta": 0.25,
+      "mix": 1.0,
+      "f_mix": 0.55,
+      "chord": 1.5999999999999999,
+      "gap": 1.0499999999999998
+    },
+    {
+      "theta": 0.5,
+      "mix": 0.0,
+      "f_mix": 0.2,
+      "chord": 1.5999999999999999,
+      "gap": 1.4
+    },
+    {
+      "theta": 1,
+      "mix": -2.0,
+      "f_mix": 1.5999999999999999,
+      "chord": 1.5999999999999999,
+      "gap": 0.0
+    }
+  ],
+  "double_well": {
+    "formula": "0.18*x**4 - 0.9*x*x + 0.25*x + 1.4",
+    "a": -1.5,
+    "b": 1.5,
+    "theta": 0.5,
+    "at_mix": 1.4,
+    "chord": 0.2862499999999999,
+    "gap": -1.11375,
+    "stationary_points": [
+      {
+        "x": -1.6464774316572937,
+        "f": -0.1286140882663016,
+        "second_derivative": 4.055517935186685
+      },
+      {
+        "x": 0.13998616348624784,
+        "f": 1.417429148968252,
+        "second_derivative": -1.7576723679099873
+      },
+      {
+        "x": 1.5064912681710463,
+        "f": 0.6611849392980486,
+        "second_derivative": 3.102154432723312
+      }
+    ]
+  },
+  "nonconvex_domain": {
+    "intervals": [
+      [
+        -2,
+        -1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "local_point": 2,
+    "local_value": 1.5999999999999999,
+    "global_point": -1,
+    "global_value": 0.55,
+    "midpoint": 0.5,
+    "midpoint_feasible": false
+  },
+  "checks": {
+    "quadratic_identity_random_trials": 1000,
+    "boundary_theta_zero_one": true,
+    "same_endpoints_gap_zero": true
+  },
+  "tests": "all assertions passed",
+  "proof_limit": "Numerical sampling is not proof of convexity; the algebraic identity is given in the article."
+}

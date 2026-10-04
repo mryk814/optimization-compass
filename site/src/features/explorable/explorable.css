@@ -712,3 +712,20 @@
 .mo-level { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
 .mo-improve line { stroke: var(--ex-red); stroke-width: 2.5; }
 .mo-label { fill: var(--ex-ink); font-size: var(--type-label); }
+.prox-zero-band { fill: var(--ex-teal); opacity: 0.14; }
+.prox-start { fill: #67747a; stroke: #67747a; stroke-width: 2; }
+.prox-intermediate { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.prox-target { fill: var(--ex-orange); stroke: var(--ex-orange-ink); stroke-width: 2; }
+.prox-gradient-arrow { stroke: var(--ex-teal); stroke-width: 3; }
+.prox-shrink-arrow { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.prox-gradient-arrowhead { fill: var(--ex-teal); }
+.prox-shrink-arrowhead { fill: var(--ex-orange-ink); }
+.prox-active-step .ex-label { text-decoration: underline; text-underline-offset: 3px; }
+.prox-detail { margin-top: 0.6rem; }
+.prox-detail > summary { cursor: pointer; }
+.prox-detail[open] > summary { margin-bottom: 0.75rem; }
+.prox-guide { stroke: var(--ex-ink); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.5; }
+.prox-equations { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+.prox-equations p { margin: 0; }
+.prox-equations .live-math-block { margin: 0 0 0.6rem; }
+.prox-substitution { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 0.4rem; margin-bottom: 0.6rem; }

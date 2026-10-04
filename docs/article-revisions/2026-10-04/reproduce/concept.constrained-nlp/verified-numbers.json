@@ -1,0 +1,144 @@
+{
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "analytic": {
+    "x": [
+      0.29289321881345254,
+      0.29289321881345254
+    ],
+    "objective": 0.17157287525381,
+    "g": -2.220446049250313e-16,
+    "primal_violation": 0.0,
+    "dual_violation": 0.0,
+    "stationarity": 0.0,
+    "complementarity": 9.197388681172373e-17,
+    "lambda": 0.41421356237309515
+  },
+  "slsqp": {
+    "x": [
+      0.29289321881344577,
+      0.29289321881345914
+    ],
+    "objective": 0.17157287525380988,
+    "g": 0.0,
+    "primal_violation": 0.0,
+    "dual_violation": 0.0,
+    "stationarity": 1.8984813721090177e-14,
+    "complementarity": 0.0,
+    "lambda": 0.4142135623730951,
+    "success": true,
+    "message": "Optimization terminated successfully"
+  },
+  "trust_constr": {
+    "x": [
+      0.29289322052055966,
+      0.2928932205205597
+    ],
+    "objective": 0.1715728772538104,
+    "g": -4.82842821281082e-09,
+    "primal_violation": 0.0,
+    "dual_violation": 0.0,
+    "stationarity": 8.081221247735471e-10,
+    "complementarity": 2.0000004644173137e-09,
+    "lambda": 0.4142135652158809,
+    "success": true,
+    "message": "`gtol` termination condition is satisfied.",
+    "bound_multipliers": [
+      -8.081220499718523e-10,
+      -8.08122072530656e-10
+    ]
+  },
+  "sensitivity": [
+    {
+      "radius_squared": 0.5,
+      "x": [
+        0.5,
+        0.5
+      ],
+      "objective": 0.5000000000000001,
+      "lambda": 1.0
+    },
+    {
+      "radius_squared": 1,
+      "x": [
+        0.2928932188134524,
+        0.2928932188134524
+      ],
+      "objective": 0.17157287525381,
+      "lambda": 0.41421356237309515
+    },
+    {
+      "radius_squared": 1.1,
+      "x": [
+        0.2583801512904337,
+        0.2583801512904337
+      ],
+      "objective": 0.13352060516173483,
+      "lambda": 0.3483997249264841
+    },
+    {
+      "radius_squared": 2,
+      "x": [
+        0,
+        0
+      ],
+      "objective": 0.0,
+      "lambda": 0.0
+    },
+    {
+      "radius_squared": 2.2,
+      "x": [
+        0,
+        0
+      ],
+      "objective": 0,
+      "lambda": 0
+    }
+  ],
+  "wrong_sign": {
+    "x": [
+      1.7071067811108867,
+      1.707106781110877
+    ],
+    "objective": 5.8284271242295125,
+    "success": true,
+    "g": -2.140148058771274e-10,
+    "nearby_boundary_point": [
+      1.7000004761807905,
+      1.7141423761034396
+    ],
+    "nearby_objective": 5.828285704568461,
+    "far_exact_objective": 5.82842712474619,
+    "curvature_counterexample": -0.00014142017772922344
+  },
+  "nonconvex_two_components": [
+    {
+      "start": [
+        2.0,
+        2.0
+      ],
+      "x": [
+        0.9999999995997476,
+        0.999999999599748
+      ],
+      "objective": 1.9999999991994954,
+      "constraint_violation": 8.00504440512384e-10
+    },
+    {
+      "start": [
+        -2.0,
+        -2.0
+      ],
+      "x": [
+        -3.0,
+        -3.0
+      ],
+      "objective": -6.0,
+      "constraint_violation": 0.0
+    }
+  ],
+  "tests": "all assertions passed"
+}

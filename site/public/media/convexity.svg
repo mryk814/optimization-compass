@@ -1,11 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" role="img" aria-labelledby="title desc">
-  <title id="title">凸関数と弦</title>
-  <desc id="desc">上向きの放物線上の二点を直線で結び、直線が曲線より上にあることを示す。</desc>
-  <rect width="640" height="320" rx="18" fill="#f3f5ef"/>
-  <path d="M70 270 Q320 20 570 270" fill="none" stroke="#315c48" stroke-width="8"/>
-  <path d="M155 178 L485 178" fill="none" stroke="#b3532d" stroke-width="6" stroke-dasharray="12 10"/>
-  <circle cx="155" cy="178" r="9" fill="#b3532d"/>
-  <circle cx="485" cy="178" r="9" fill="#b3532d"/>
-  <text x="320" y="152" text-anchor="middle" fill="#6b4a35" font-family="sans-serif" font-size="20">line segment</text>
-  <text x="320" y="258" text-anchor="middle" fill="#315c48" font-family="sans-serif" font-size="20">convex function</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 510" role="img" aria-labelledby="title desc">
+  <title id="title">凸な二次関数と、その上にある弦</title>
+  <desc id="desc">青は f(x)=0.35x²+0.2。橙の弦は a=-2 と b=2 を結び、両端の関数値は1.6。中間点 x=0 の関数値0.2との高さの差は1.4。</desc>
+  <rect width="440" height="510" rx="18" fill="#f3f5ef"/>
+  <g font-family="sans-serif" fill="#173b45">
+    <text x="20" y="32" font-size="21" font-weight="700">弦は関数の上にある</text>
+    <text x="20" y="61" font-size="18">f(x) = 0.35x² + 0.2</text>
+    <rect x="45" y="80" width="373" height="300" rx="10" fill="#fff" stroke="#d6dfdc"/>
+    <path d="M45 100 H418 M45 350 H418" stroke="#d6dfdc" stroke-dasharray="4 5"/>
+    <path d="M45 80 V380 H418" fill="none" stroke="#647b80"/>
+    <g font-size="18">
+      <text x="9" y="106">1.6</text>
+      <text x="9" y="356">0.2</text>
+      <text x="60" y="408" text-anchor="middle">−2</text>
+      <text x="230" y="408" text-anchor="middle">0</text>
+      <text x="400" y="408" text-anchor="middle">2</text>
+      <text x="423" y="383">x</text>
+    </g>
+    <!-- x=-2+4t, y=350-(f(x)-0.2)*250/1.4 = 100+1000t-1000t². -->
+    <path id="function-curve" d="M60 100 Q230 600 400 100" fill="none" stroke="#2563a8" stroke-width="4"/>
+    <path id="chord" d="M60 100 H400" fill="none" stroke="#c15b27" stroke-width="4" stroke-dasharray="9 6"/>
+    <g fill="#c15b27">
+      <circle cx="60" cy="100" r="5"/>
+      <circle cx="400" cy="100" r="5"/>
+      <circle cx="230" cy="100" r="5"/>
+    </g>
+    <circle cx="230" cy="350" r="5" fill="#2563a8"/>
+    <path d="M230 112 V338 M224 118 L230 112 L236 118 M224 332 L230 338 L236 332" fill="none" stroke="#647b80" stroke-width="2"/>
+    <text x="248" y="228" font-size="20">差 1.4</text>
+    <path d="M20 450 H48" stroke="#2563a8" stroke-width="4"/>
+    <text x="57" y="456" font-size="18">関数</text>
+    <path d="M156 450 H184" stroke="#c15b27" stroke-width="4" stroke-dasharray="9 6"/>
+    <text x="193" y="456" font-size="18">2点を結ぶ弦</text>
+    <text x="20" y="489" font-size="18">a = −2、b = 2、中間点 x = 0</text>
+  </g>
 </svg>
