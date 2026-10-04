@@ -11,7 +11,7 @@ related_ids: [riemannian-trust-region, family.manifold, family.smooth-local]
 visualization_ids: [so3-riemannian-alignment]
 comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-03
 ---
 
 変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んで写像で多様体上に戻す一次法です。
@@ -21,14 +21,6 @@ last_reviewed: 2026-09-30
 地球の表面を歩くように、いまの位置の接平面で向きを決め、曲面へ戻ります。
 
 Riemann勾配法は、多様体上の点を保ちながら、接空間へ射影した勾配で一歩進む一次法です。
-
-同じSO(3)上の回転へ戻るなら、周囲の空間での一歩の射影と接空間での一歩は同じ更新でしょうか。
-固定実行では、採用した回転行列がどちらも直交性と行列式を保っていても、最初の一歩の作り方と目標までの角度は異なります。
-
-![単位行列から同じ、回転角がπに近い目標へ向かうProjected GradientとRiemannian Gradientの固定Python実行。上段は12回の更新での測地距離による残差、中央は最初の更新量のノルムと写像による補正、下段は採用した回転の直交性と行列式残差を示す。](./media/so3-update-diagnostic.svg "同じ目標、初期回転、歩幅、12評価で、周囲の空間での一歩と接空間での一歩を比較します。固定3対応・ノイズなしの教材であり、一般的な性能の順位付けや一般的な局所収束は示しません。")
-
-緑の履歴がこの手法です。
-目標への角度が下がることと、採用した回転行列がSO(3)構造を保つことを別々に確認します。
 
 ## 一手の意味
 
@@ -48,10 +40,10 @@ Riemann勾配法はそれらを制約付き問題ではなく、解空間その�
 
 ### 3つの操作で進む仕組み
 
-Riemann勾配法の1 一歩は、次の3つの操作でできています。
+Riemann勾配法の一歩は、次の3つの操作でできています。
 
 1. 通常のユークリッド勾配 $\nabla f(x)$ を計算する
-2. それを現在点における接空間へ射影し、Riemann勾配を作る
+2. ユークリッド計量から誘導された場合は、現在点の接空間へ直交射影してRiemann勾配を作る（別の計量なら対応する変換を使う）
 3. 接空間上で一歩を取り、多様体へ戻す写像という操作で多様体上の点に戻す
 
 接空間は、現在点で多様体を局所的に近似する平坦な空間です。
@@ -71,20 +63,46 @@ $$
 球面上では勾配射影と多様体へ戻す写像の動きを直接確認できます。
 これはStiefel多様体／Grassmann多様体／SO(3)へ進む足がかりになります。
 
-## 小さな例
+## 小さな例：単位円で、下る成分だけを残す
 
-$A=\operatorname{diag}(1,2)$ として、単位円上で $x^TAx$ を最小化します。
-$x=(1,1)/\sqrt2$、一歩の係数0.25から始めます。
+$A=\operatorname{diag}(1,2)$、$f(x)=x^TAx$ とし、$\|x\|=1$ の下で最小化します。$x=(\cos\theta,\sin\theta)$ と書けば $f(x)=1+\sin^2\theta$ なので、最小値は1、最小点は $(\pm1,0)$ です。まずこの答えを基準にして、アルゴリズムの一歩を読みます。
 
-| 反復 | $x_1$ | $x_2$ | 目的値 |
-|---|---:|---:|---:|
-| 1 | 0.8575 | 0.5145 | 1.2647 |
-| 2 | 0.9482 | 0.3177 | 1.1009 |
-| 3 | 0.9849 | 0.1729 | 1.0299 |
+球面を周囲のユークリッド内積で測ると
 
-各行で点の長さは1です。
-最小固有値1に対応する方向 $(1,0)$ へ近づきます。
-これは正規化で戻す球面の例で、SO(3)の更新式とは異なります。
+$$
+\nabla f(x)=2Ax,\qquad
+\operatorname{grad}f(x)=(I-xx^T)2Ax
+=2\{Ax-(x^TAx)x\}
+$$
+
+です。勾配を単に長さ1へ正規化するのではなく、$x$ に平行な半径方向を引いています。任意の接方向 $\xi$ には $x^T\xi=0$ なので、$\xi^T\operatorname{grad}f=\xi^T\nabla f$。円の上で実際に動ける方向の微分は、引き算をしても変わりません。
+
+![単位円上の初期点から周囲の下降方向と接下降方向を分けた左図、正規化後の反復点と最小固有方向。右図は同じ実行の目的差と接勾配ノルム。](./media/riemannian-circle-rayleigh.svg "A=diag(1,2)、初期(1,1)/√2、係数0.25の同一実行。左は最初の一歩、右は更新15回までの診断。")
+
+初期点 $x_0=(1,1)/\sqrt2$ では $f(x_0)=1.5$。通常の勾配は $(\sqrt2,2\sqrt2)$、接勾配は $(-1,1)/\sqrt2$ です。係数 $\eta=0.25$ を使うと
+
+$$
+x_0-\eta\operatorname{grad}f(x_0)
+=\frac{(1.25,0.75)}{\sqrt2},\qquad
+x_1=\frac{(5,3)}{\sqrt{34}}.
+$$
+
+正規化後の費用は $43/34\approx1.2647$。長さ1という条件と、費用の減少をそれぞれ確認できます。
+
+| 更新回数 $k$ | $x_1$成分 | $x_2$成分 | $f(x_k)$ | 接勾配ノルム |
+|---|---:|---:|---:|---:|
+| 0 | 0.7071 | 0.7071 | 1.5000 | 1.0000 |
+| 1 | 0.8575 | 0.5145 | 1.2647 | 0.8824 |
+| 2 | 0.9482 | 0.3177 | 1.1009 | 0.6025 |
+| 3 | 0.9849 | 0.1729 | 1.0299 | 0.3407 |
+
+右図の縦軸は対数です。目的差 $f-1$ が小さくなる速さと、接勾配が小さくなる速さは違います。単位長の残差が小さいことだけでは、ここまでの進展は判断できません。
+
+### 固定係数と停止条件の落とし穴
+
+この係数は本例で減少を確かめたものです。一般には大きすぎる一歩で費用が増えるため、$f(R_x(-\eta g))\le f(x)-c\eta\|g\|^2$ のような十分減少を確認して係数を縮める直線探索を使います。$0<c<1$ です。
+
+また、最大固有方向 $(0,1)$ でも接勾配は0です。その点は費用2の最大点であり、接勾配ノルム0は「これ以上よくできない最小点」の証明になりません。初期点、二階情報、既知の固有値を分けて調べます。
 
 ## 向く条件・避ける条件
 
@@ -104,46 +122,37 @@ $x=(1,1)/\sqrt2$、一歩の係数0.25から始めます。
 ```python
 import numpy as np
 
+A = np.diag([1.0, 2.0])
+x = np.ones(2) / np.sqrt(2.0)
+for k in range(31):
+    f = float(x @ A @ x)
+    g = 2.0 * (A @ x - f * x)
+    assert abs(x @ g) < 1e-12
+    assert abs(x @ x - 1.0) < 1e-12
+    if k <= 3:
+        print(k, x, f, np.linalg.norm(g))
+    if k < 30:
+        y = x - 0.25 * g
+        x = y / np.linalg.norm(y)
 
-def rayleigh(x: np.ndarray, a: np.ndarray) -> float:
-    return float(x @ a @ x)
+# Independent oracle: smallest eigenvalue, with sign ambiguity.
+w, V = np.linalg.eigh(A)
+assert abs(x @ A @ x - w[0]) < 1e-12
+assert min(np.linalg.norm(x - V[:, 0]),
+           np.linalg.norm(x + V[:, 0])) < 1e-8
 
-
-def egrad(x: np.ndarray, a: np.ndarray) -> np.ndarray:
-    return 2.0 * a @ x
-
-
-def tangent_projection(x: np.ndarray, v: np.ndarray) -> np.ndarray:
-    return v - (x @ v) * x
-
-
-def retract(x: np.ndarray) -> np.ndarray:
-    return x / np.linalg.norm(x)
-
-
-rng = np.random.default_rng(0)
-n = 6
-m = rng.normal(size=(n, n))
-a = (m + m.T) / 2.0
-
-x = rng.normal(size=n)
-x = retract(x)
-
-step_size = 0.05
-for _ in range(500):
-    grad_euclid = egrad(x, a)
-    grad_riemann = tangent_projection(x, grad_euclid)
-    x = retract(x - step_size * grad_riemann)
-
-eigvals, eigvecs = np.linalg.eigh(a)
-min_eigval = eigvals[0]
-min_eigvec = eigvecs[:, 0]
-
-print(rayleigh(x, a), min_eigval)
-print(min(np.linalg.norm(x - min_eigvec), np.linalg.norm(x + min_eigvec)))
+# Angular directional derivative at the same initial point.
+theta, h = np.pi / 4, 1e-6
+F = lambda t: np.cos(t)**2 + 2 * np.sin(t)**2
+finite_difference = (F(theta + h) - F(theta - h)) / (2 * h)
+x0 = np.array([np.cos(theta), np.sin(theta)])
+tangent = np.array([-np.sin(theta), np.cos(theta)])
+g0 = 2 * (A @ x0 - (x0 @ A @ x0) * x0)
+assert abs(finite_difference - tangent @ g0) < 1e-8
+print('final cost:', x @ A @ x)
 ```
 
-`rayleigh(x, a)`は`np.linalg.eigh`から得た最小固有値へ近づきます。
+最後の費用は丸めて1です。`np.linalg.eigh`の最小固有値を独立の基準にし、同じ初期点で角度方向の中心差分も照合します。
 `x`は符号の自由度を除いて最小固有ベクトルへ近づきます。
 Stiefel多様体／Grassmann多様体／SO(3)などでは、接空間射影と多様体へ戻す写像の実装が変わります。
 [Pymanopt](https://pymanopt.org/)や[Manopt](https://www.manopt.org/)の公式リファレンスで、利用バージョンに対応する多様体クラスを確認するほうが安全です。
@@ -164,13 +173,25 @@ Stiefel多様体／Grassmann多様体／SO(3)などでは、接空間射影と�
 - 初期点によって収束先が大きく変わる
 - 停滞から抜け出せず高精度化が必要になる
 
-### SO(3)で接空間の一歩を見る
+### 発展：SO(3)で接空間の一歩を見る
+
+本編の円とは別の、既存の回転合わせの教材です。
+
+同じSO(3)上の回転へ戻るなら、周囲の空間での一歩の射影と接空間での一歩は同じ更新でしょうか。
+固定実行では、採用した回転行列がどちらも直交性と行列式を保っていても、最初の一歩の作り方と目標までの角度は異なります。
+
+![単位行列から同じ、回転角がπに近い目標へ向かうProjected GradientとRiemannian Gradientの固定Python実行。上段は12回の更新での測地距離による残差、中央は最初の更新量のノルムと写像による補正、下段は採用した回転の直交性と行列式残差を示す。](./media/so3-update-diagnostic.svg "同じ目標、初期回転、歩幅、12評価で、周囲の空間での一歩と接空間での一歩を比較します。固定3対応・ノイズなしの教材であり、一般的な性能の順位付けや一般的な局所収束は示しません。")
+
+緑の履歴がこの手法です。
+目標への角度が下がることと、採用した回転行列がSO(3)構造を保つことを別々に確認します。
+
+
 
 [Riemannian 更新のTheater](#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT)では、リー代数上の一歩を指数写像でSO(3)へ戻す流れを追えます。
 目的関数値と、直交性・行列式の残差を分けて確認します。
 
 [射影による更新との比較](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じ目標・初期回転・目的関数・一歩の係数・12回の評価を使います。
-変えるのは、接空間の一歩を使うか、周囲の空間での一歩をQR射影するかだけです。
+変えるのは、接空間の一歩を使うか、周囲の空間での一歩をQRで直交化するかです。QRによる戻しは、一般にはFrobeniusノルムで最も近い回転への厳密射影ではありません。
 
 これは回転角がπに近い固定目標、ノイズなし、単一初期値の教育用比較です。
 反復数や最終損失から一般的な速度の順位を付けるものではありません。
@@ -180,3 +201,7 @@ Stiefel多様体／Grassmann多様体／SO(3)などでは、接空間射影と�
 より頑健な局所収束や鞍点脱出が必要な場合は[Riemann信頼領域法](#/learn/riemannian-trust-region)、多様体手法全体の選び分けは[Riemann多様体最適化の選び分け](#/learn/family.manifold)で確認できます。
 
 - 問題の形を確認する: [回転群上の最適化](#/formulations/PA037)
+
+## 一次資料
+
+球面上の勾配・ヘッセ行列と実装の対応は [Manoptの目的関数の記述](https://www.manopt.org/costdescription.html)、直線探索付き一次法は [Boumalの教科書](https://www.nicolasboumal.net/book/IntroOptimManifolds_Boumal_2023.pdf) 4.3〜4.5節で確認できます。
