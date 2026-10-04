@@ -12,7 +12,7 @@ visualization_ids: [pendulum-collocation-coarse, pendulum-collocation-refined, p
 comparison_ids: [COMPARE_PENDULUM_COLLOCATION_MESH]
 aliases: [/learn/direct-collocation]
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-03
 ---
 
 状態と制御入力を時間格子上の変数にし、動力学の残差を制約として同時に解く軌道最適化法です。
@@ -30,17 +30,6 @@ last_reviewed: 2026-09-30
 
 変数は増えます。
 その代わり、長い計画期間や不安定動力学でも、全区間の前進シミュレーション感度を一つの初期点から伝え続けずに済む場合があります。
-
-同じ軌道でも、時間格子点と制御入力による更新は別の対象です。
-隣接点の動力学の残差も分けて読みます。
-
-時間格子点上の違反が許容誤差内なら、軌道全体も可行でしょうか。
-固定した振り子教材では、そうとは限りません。
-
-![同じ振り子の振り上げをN=20、N=40、重力を10%変えた検証用の前進シミュレーションで実行し、時間格子点上と区間再構成または検証用の前進シミュレーション上の経路制約違反を反復ごとに比較した結果。時間格子点上では3回の実行とも許容値へ近づくが、区間内では違反の残り方が異なる。](./media/optimal-control-mesh-execution.svg "固定Python 実行記録の実行結果です。時間格子点上の収束と区間内またはモデルの不一致下の可行性を分けて読みます。連続時間可行性や実機安全性は保証しません。")
-
-上段では3実行とも時間格子点上の違反が下がります。
-下段ではN=40がN=20より小さくなる一方、モデルと実際のずれを調べる検証用の前進シミュレーションには大きな違反が残ります。
 
 ## 一手の意味
 
@@ -88,21 +77,52 @@ $$
 
 ## 小さな例
 
-Python例の1状態積分系を使います。
-初期位置0から時間1で位置1へ進み、制御入力の二乗積分を小さくします。
-20区間の初期状態を直線、初期制御をすべて0に変えて実行しました。
-これは本文の実行例と同じ問題で、初期軌道だけを変えた検査です。
+### 費用0の直線を、なぜ採用できないか
 
-| 記録 | 最終状態 | 最初の制御入力 | 目的値 | 等式残差のノルム |
+$\dot x=u$、$x(0)=0$、$x(1)=1$、$-2\le u\le2$ の下で $\int_0^1u^2dt$ を最小化します。$N=20$、$h=1/N$ として、状態21個と区分一定入力20個を変数にします。
+
+初期候補を $x_k=k/20$、$u_k=0$ にします。終端は1、入力費用は0なので、目的値だけなら理想的に見えます。しかし入力0で位置は動きません。各区間のdefectは
+
+$$
+r_k=x_{k+1}-x_k-hu_k=0.05,
+\qquad \|r\|_2=\sqrt{20}\times0.05\approx0.2236.
+$$
+
+状態を変数にしたからこそ、このような力学に合わない候補も途中で表現できます。ソルバーに $r_k=0$ を課して、それを排除します。
+
+![初期状態の直線と入力0の再積分は一致しない。解では状態は直線のままで、入力が1へ変わり、区間幅で割ったdefectが1から0になる。](./media/collocation-integrator-defect.svg "本編の積分系・20区間の同一問題。左は状態変数と再積分、中央は入力、右は尺度をそろえたdefect。振り子の発展例とは別です。")
+
+本例では状態の直線を残して、入力をすべて1にすれば整合します。初期状態と終端を固定し、すべてのdefectを足すと $h\sum u_k=1$。したがって
+
+$$
+h\sum_{k=0}^{N-1}u_k^2\ge
+\left(h\sum_{k=0}^{N-1}u_k\right)^2=1
+$$
+
+で、等号は全入力が1のときです。これが解析的な最適解です。図では費用が0から1へ増えますが、力学に合う最良の解へ進んでいます。「目的が下がること」と「不可能な候補から可行な候補へ進むこと」を同一視しません。
+
+| 候補 | 終端状態 | 入力 | 費用 | defectの2ノルム |
 |---|---:|---:|---:|---:|
-| 初期点 | 1.0000 | 0.0000 | 0.0000 | 0.2236 |
-| 1反復目 | 1.0000 | 1.0000 | 1.0000 | $8.33\times10^{-10}$ |
-| 2反復目 | 1.0000 | 1.0000 | 1.0000 | $1.83\times10^{-16}$ |
+| 初期の状態直線 | 1 | 0 | 0 | 0.2236 |
+| 求解後 | 1 | 1 | 1 | $10^{-12}$未満 |
 
-初期軌道は目的値だけ見ると良く見えますが、制御入力0では状態が進みません。
-状態と制御を同時に調整し、整合性の残差を減らして初めて有効な候補になります。
-この例はEuler型の直接離散化です。
-高次の選点法公式や連続時間の安全性を実証する例ではありません。
+求解器の内部反復番号や末尾の桁は、微分の渡し方・環境で変わります。掲載コードは同じ初期候補と解析ヤコビ行列を使い、最終解と残差を照合します。
+
+### 格子を細かくしただけで、残差が小さく見えることがある
+
+初期の直線と入力0をそのまま使うと、各defectは $1/N$、その2ノルムは $1/\sqrt N$ です。$N=4,20,80$ ではそれぞれ0.5、約0.2236、約0.1118。力学の誤りは何も直っていないのに、ノルムだけは下がります。速度の単位にそろえた $r_k/h$ はどの格子でも1です。
+
+本例を解いた後は、いずれの格子でも $u=1$、費用1です。区分一定入力の積分系では $x_{k+1}=x_k+hu_k$ が区間の厳密解でもあるため、独立再積分も一致します。この特殊例で「格子を細かくすれば一般の離散化誤差もなくなる」とは実証できません。非線形な発展例で別に確かめます。
+
+### Euler型の転写から、選点法へ
+
+本編は状態と入力を同時に持つ仕組みを読むためのEuler型直接離散化です。一般のDirect Collocationでは、区間内の状態多項式を作り、選んだ点でその微分を $f$ と一致させます。例えば台形則のdefectは
+
+$$
+r_k=x_{k+1}-x_k-\frac h2\{f(x_k,u_k,t_k)+f(x_{k+1},u_{k+1},t_{k+1})\}.
+$$
+
+この式では両端の入力を使っており、本編の区分一定入力とは変数の置き方も違います。Hermite–Simpson法なら中点の状態や微分も使います。高次にすれば常に安全という意味ではなく、補間と残差と再積分が同じ入力表現に対応しているかを確認します。
 
 ## 向く条件・避ける条件
 
@@ -147,39 +167,39 @@ Python例の1状態積分系を使います。
 import numpy as np
 from scipy.optimize import minimize
 
-steps = 20
-dt = 1.0 / steps
 
+def solve(steps=20):
+    h = 1.0 / steps
+    n = 2 * steps + 1
+    C = np.zeros((steps + 2, n))
+    C[0, 0] = 1.0
+    C[-1, steps] = 1.0
+    for k in range(steps):
+        C[k + 1, k] = -1.0
+        C[k + 1, k + 1] = 1.0
+        C[k + 1, steps + 1 + k] = -h
+    rhs = np.zeros(steps + 2)
+    rhs[-1] = 1.0
 
-def unpack(vector: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    state = vector[: steps + 1]
-    control = vector[steps + 1 :]
-    return state, control
+    def cost(z):
+        return h * (z[steps + 1:] @ z[steps + 1:])
 
+    def grad(z):
+        return np.r_[np.zeros(steps + 1), 2 * h * z[steps + 1:]]
 
-def objective(vector: np.ndarray) -> float:
-    _, control = unpack(vector)
-    return float(dt * np.sum(control * control))
+    initial = np.r_[np.linspace(0, 1, steps + 1), np.zeros(steps)]
+    result = minimize(cost, initial, jac=grad, method='SLSQP',
+                      constraints={'type': 'eq', 'fun': lambda z: C @ z - rhs,
+                                   'jac': lambda z: C},
+                      bounds=[(None, None)] * (steps + 1) + [(-2, 2)] * steps,
+                      options={'ftol': 1e-12, 'maxiter': 200})
+    assert result.success, result.message
+    print(steps, 'initial:', cost(initial), np.linalg.norm(C @ initial - rhs))
+    print(steps, 'solved:', cost(result.x), np.linalg.norm(C @ result.x - rhs))
+    return result.x, initial, C, rhs
 
-
-def equality_constraints(vector: np.ndarray) -> np.ndarray:
-    state, control = unpack(vector)
-    dynamics = state[1:] - state[:-1] - dt * control
-    return np.concatenate(([state[0]], dynamics, [state[-1] - 1.0]))
-
-
-initial = np.concatenate((np.linspace(0.0, 1.0, steps + 1), np.ones(steps)))
-result = minimize(
-    objective,
-    initial,
-    method="SLSQP",
-    constraints={"type": "eq", "fun": equality_constraints},
-    bounds=[(None, None)] * (steps + 1) + [(-2.0, 2.0)] * steps,
-    options={"ftol": 1e-10, "maxiter": 500},
-)
-
-state, control = unpack(result.x)
-print(result.success, objective(result.x), np.linalg.norm(equality_constraints(result.x)))
+if __name__ == '__main__':
+    solve(20)
 ```
 
 この例は単純な動力学です。
@@ -213,6 +233,21 @@ print(result.success, objective(result.x), np.linalg.norm(equality_constraints(r
 コスト（費用）と可行性は別の診断軸です。
 時間格子依存性、KKT 残差、ソルバー時間も分けて読みます。
 
+## 発展：非線形な振り子では区間内も確かめる
+
+次は本編の積分系とは異なる、既存の振り子教材です。
+
+同じ軌道でも、時間格子点と制御入力による更新は別の対象です。
+隣接点の動力学の残差も分けて読みます。
+
+時間格子点上の違反が許容誤差内なら、軌道全体も可行でしょうか。
+固定した振り子教材では、そうとは限りません。
+
+![同じ振り子の振り上げをN=20、N=40、重力を10%変えた検証用の前進シミュレーションで実行し、時間格子点上と区間再構成または検証用の前進シミュレーション上の経路制約違反を反復ごとに比較した結果。時間格子点上では3回の実行とも許容値へ近づくが、区間内では違反の残り方が異なる。](./media/optimal-control-mesh-execution.svg "固定Python 実行記録の実行結果です。時間格子点上の収束と区間内またはモデルの不一致下の可行性を分けて読みます。連続時間可行性や実機安全性は保証しません。")
+
+上段では3実行とも時間格子点上の違反が下がります。
+下段ではN=40がN=20より小さくなる一方、モデルと実際のずれを調べる検証用の前進シミュレーションには大きな違反が残ります。
+
 ## 失敗・切替の兆候
 
 - 時間格子上のコスト（費用）は改善するが、高精度シミュレーションで制約を破る → 時間格子を細分化し、離散化誤差を確認する
@@ -233,3 +268,7 @@ NLPの`success`は、連続時間問題の正しさを直接保証しません�
 まず[軌道変数](#/learn/concept.trajectory-variable)で状態と制御入力を同時に持つ意味を確認します。[動力学の残差](#/learn/concept.dynamics-defect)では時間格子上の等式制約を読みます。[経路・終端制約](#/learn/concept.path-terminal-constraints)で制約を評価する時刻を確認し、[時間離散化](#/learn/concept.time-discretization)で時間格子細分化へ進みます。
 
 [振り子の振り上げの事例](#/gallery/EC029)では格子点での可行性と区間再構成を分けます。[時間格子感度比較](#/compare/COMPARE_PENDULUM_COLLOCATION_MESH)ではN=20とN=40を対比専用で確認できます。観測ごとに再求解する用途では[観測ごとに解き直す運用](#/learn/concept.receding-horizon)へ進みます。
+
+## 一次資料
+
+台形則、Hermite–Simpson、区間の補間と実務上の検査は、Kellyの著者公開論文 [An Introduction to Trajectory Optimization](https://www.matthewpeterkelly.com/research/MatthewKelly_IntroTrajectoryOptimization_SIAM_Review_2017.pdf) の3〜5節を参照できます。[CasADiのDirect collocation](https://web.casadi.org/docs/#direct-collocation) は状態を変数にした疎な転写の説明です。高密度のサンプル検査は有用ですが、全時刻の制約保証には別途誤差上界や区間の検証が必要です。

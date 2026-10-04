@@ -14,18 +14,20 @@ aliases: [/learn/cp-sat]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-03
 ---
 
 真偽値・整数・論理・スケジューリング制約を、伝播・SAT学習・探索の組合せで解き、実行可能解と界から停止状態を読む離散最適化法です。
 
 ## 30秒でつかむ
 
-勤務表を埋めるとき、決まった勤務から不可能な候補を消し、行き詰まった条件も覚えて探索します。
+4つの仕事を3人へ振り分け、費用12の予定ができました。全員が容量以内なら、もう探索を止めてよいでしょうか。予定を採用することはできますが、それだけでは「最も安い」とは言えません。
 
-- 見るもの: 可行解、探索の下界、矛盾
-- 動かすもの: 整数の割当と探索枝
-- 前進の判断: 可行解と下界の差が縮むこと
+CP-SATは、真偽値・整数・論理・区間の条件を組み合わせて解きます。最小化では、見つけた可行解が上界、「これより安くできない」という情報が下界です。両者の差を見れば、まだ改善できる余地を読み取れます。本稿の割当では、費用11の解と下界11が一致します。
+
+- **見るもの**: 条件を守る解、その費用、最良下界、終了状態
+- **変えるもの**: 担当の候補や探索枝。既に不可能と分かった候補は制約で除く
+- **止め方の違い**: 時間内に可行解を採用することと、最適性まで証明することを分ける
 
 ## 一手の意味
 
@@ -69,7 +71,15 @@ CP-SATは単純な木の列挙ではありません。
 ## 小さな例
 
 Python節の3人、4仕事、各人の容量2という割当を使います。
-仕事0〜3の担当者を並べ、容量と費用を計算します。
+仕事0〜3の担当者を並べ、容量と費用を計算します。行が人、列が仕事で、数字が割当費用です。各仕事はちょうど1人、各人は最大2仕事を担当します。
+
+| 人\仕事 | 0 | 1 | 2 | 3 |
+|---|---:|---:|---:|---:|
+| 0 | 3 | 8 | 4 | 6 |
+| 1 | 5 | 2 | 7 | 3 |
+| 2 | 6 | 4 | 3 | 5 |
+
+担当を $(0,1,0,1)$ と書くのは、仕事0と2を人0、仕事1と3を人1へ渡す意味です。費用は $3+2+4+3=12$ です。
 
 | 候補 | 各人の仕事数 | 費用 | 判定 |
 |---|---|---:|---|
@@ -79,7 +89,27 @@ Python節の3人、4仕事、各人の容量2という割当を使います。
 
 容量違反の21を、可行解の目的値と比較しません。
 全 $3^4=81$ 割当を確認した最小費用は11です。
-この表は候補の検査順であり、CP-SAT内部の探索順を再現しません。
+表は三つの候補を比較する教材であり、CP-SAT内部の探索順を再現しません。
+
+![同じ費用行列の三つの担当案。左は人0が4仕事で容量違反、中央は各人2仕事以内で費用12、右は担当0 1 2 1で費用11。選択したセルだけを緑で示す。](./media/cp-sat-assignment-oracle.svg "全81割当の基準計算と同じ費用行列。ソルバーの探索履歴、ログ、best boundの時系列を描いた図ではありません。")
+
+### 一つの担当を変える
+
+中央の予定から、仕事2を人0ではなく人2へ移します。その費用は4から3へ下がり、担当数は $(2,2,0)$ から $(1,2,1)$ になります。全員が容量以内なので、費用11の新しい可行解です。単なる費用の足し算だけでなく、移動先と移動元の担当数も調べます。
+
+ここまでは「11まで改善できた」という上界です。最適性には下界も必要です。
+
+### 下界を手で作って一致させる
+
+いったん「各人2仕事まで」を無視し、各仕事を最安の人へ独立に渡してみます。仕事ごとの最小費用は $3,2,3,3$ なので、合計は11。制約を外した問題は元より安くなってよいため、元の最小費用は11以上です。
+
+この最安の組合せが、偶然にも容量を守る $(0,1,2,1)$ でした。したがって
+
+$$11\;\text{（下界）}\le z^*\le11\;\text{（可行解）}$$
+
+となり、最適値11が証明できました。この例は下界が特に簡単に一致するため、難しいSAT学習や枝刈りの挙動を実演する例ではありません。別の費用や容量では、仕事ごとの最安割当が同じ人へ集中し、下界だけでは解を作れなくなります。
+
+なお、図の下界11はこの手計算で得た値です。実行していないCP-SATの `best_objective_bound` を測定した値として表示していません。
 
 ## 向く条件・避ける条件
 
@@ -118,6 +148,39 @@ Python節の3人、4仕事、各人の容量2という割当を使います。
 
 ## Python
 
+### 最初に全列挙で答えを確かめる
+
+標準ライブラリだけで全 $3^4=81$ 割当を調べます。大きい問題を解くアルゴリズムとして使うのではなく、定式化とソルバー出力を照合する基準計算です。
+
+```python
+from itertools import product
+
+cost = [[3, 8, 4, 6], [5, 2, 7, 3], [6, 4, 3, 5]]
+capacity = [2, 2, 2]
+feasible = []
+for a in product(range(3), repeat=4):
+    if any(a.count(w) > capacity[w] for w in range(3)):
+        continue
+    value = sum(cost[a[t]][t] for t in range(4))
+    feasible.append((value, a))
+value, assignment = min(feasible)
+lower_bound = sum(min(cost[w][t] for w in range(3)) for t in range(4))
+assert value == lower_bound == 11
+print("feasible =", len(feasible), "of 81")
+print("best =", assignment, "cost =", value, "lower bound =", lower_bound)
+```
+
+```text
+feasible = 54 of 81
+best = (0, 1, 2, 1) cost = 11 lower bound = 11
+```
+
+この出力は全列挙を実行して確認しました。容量違反は残り27通りです。
+
+### 同じ問題をCP-SATで書く
+
+次はOR-Toolsが導入されている環境向けのコードです。今回の検証環境ではOR-Toolsを実行していないため、ソルバーの実測ログや終了状態を添えてはいません。上のoracleの11と照合してください。変数・求解・状態確認のAPIは[公式CP-SAT例](https://developers.google.com/optimization/cp/cp_solver)に従います。
+
 ```python
 from ortools.sat.python import cp_model
 
@@ -149,17 +212,43 @@ model.minimize(
 solver = cp_model.CpSolver()
 solver.parameters.max_time_in_seconds = 10.0
 solver.parameters.random_seed = 7
+solver.parameters.num_search_workers = 1
 status = solver.solve(model)
 
-print(status, solver.objective_value, solver.best_objective_bound)
+print("status =", solver.status_name(status))
+if status in (cp_model.FEASIBLE, cp_model.OPTIMAL):
+    picked = tuple(
+        next(w for w in workers if solver.value(assignment[w, t]))
+        for t in tasks
+    )
+    # 元のデータへ戻して可行性と費用を検査する
+    assert all(picked.count(w) <= capacity[w] for w in workers)
+    actual_cost = sum(cost[picked[t]][t] for t in tasks)
+    assert abs(actual_cost - solver.objective_value) < 1e-6
+    print("assignment =", picked)
+    print("objective =", solver.objective_value)
+    print("best bound =", solver.best_objective_bound)
+    if status == cp_model.OPTIMAL:
+        assert actual_cost == 11  # この小例のoracleと照合
+else:
+    print("採用できる解は確認できていません")
 ```
 
-実行後は状態を確認してから値を読みます。
-`FEASIBLE`は実行可能解を得たが、最適性は未証明です。
-`OPTIMAL`は設定した許容誤差のもとで最適性を証明済みです。
-`INFEASIBLE`はモデルが矛盾し、`UNKNOWN`は計算予算などの理由で結論がない状態です。
+実行後は、まず状態を確認してから解の値を読みます。
+
+| 状態 | 読み方 |
+|---|---|
+| `FEASIBLE` | 可行解はあるが、最適性はまだ証明されていない |
+| `OPTIMAL` | 最適な可行解。ギャップ許容値を指定した場合はその停止条件も確認する |
+| `INFEASIBLE` | このモデルに可行解がないことが証明された |
+| `MODEL_INVALID` | モデルの検証に通っていない。現実の問題が矛盾するという意味ではない |
+| `UNKNOWN` | 時間などの制限までに可行解や実行不能性の結論が得られていない |
+
+状態は[公式説明](https://developers.google.com/optimization/cp/cp_solver)に定義されています。非ゼロの絶対・相対ギャップを停止条件に設定すると、`OPTIMAL` でもその許容ギャップに達して止まる場合があるため、[公式パラメータ定義](https://github.com/google/or-tools/blob/stable/ortools/sat/sat_parameters.proto)と合わせて、目的値と界を読みます。上のコードはギャップ許容値を変更していません。
 
 ## 診断値
+
+最小化なら、停止時の最良可行値を $U$、最良下界を $L$ として $L\le z^*\le U$ です。たとえば費用12の可行解と下界11なら、まだ1の改善余地があります。費用11と下界11なら差は0です。前者でも業務上は採用できる場合がありますが、「最適と証明済み」とは分けて伝えます。
 
 - 状態
 - 目的値 / 最良界 / ギャップ

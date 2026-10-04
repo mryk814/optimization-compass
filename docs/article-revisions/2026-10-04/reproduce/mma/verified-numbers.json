@@ -1,0 +1,164 @@
+{
+  "intro_toy": [
+    {
+      "x": 0.0,
+      "L": -1.0,
+      "U": 1.0,
+      "p": 0.01,
+      "q": 4.01,
+      "r": -0.019999999999999574,
+      "candidate": 0.5,
+      "cost": 2.25
+    },
+    {
+      "x": 0.5,
+      "L": -0.5,
+      "U": 1.5,
+      "p": 0.01,
+      "q": 3.01,
+      "r": -0.7699999999999996,
+      "candidate": 1.0,
+      "cost": 1.0
+    },
+    {
+      "x": 1.0,
+      "L": 0.0,
+      "U": 2.0,
+      "p": 0.01,
+      "q": 2.01,
+      "r": -1.0199999999999998,
+      "candidate": 1.5,
+      "cost": 0.25
+    }
+  ],
+  "constrained_history": [
+    {
+      "k": 0,
+      "x": 0.0,
+      "L": -1.5,
+      "U": 1.5,
+      "factor": 1.0,
+      "alpha": 0.0,
+      "beta": 0.5,
+      "candidate": 0.5,
+      "f": 2.25,
+      "original_constraint": -1.3125,
+      "approximate_constraint": -1.56249875
+    },
+    {
+      "k": 1,
+      "x": 0.5,
+      "L": -1.0,
+      "U": 2.0,
+      "factor": 1.0,
+      "alpha": 0.0,
+      "beta": 1.0,
+      "candidate": 1.0,
+      "f": 1.0,
+      "original_constraint": -0.5625,
+      "approximate_constraint": -0.5621237499999999
+    },
+    {
+      "k": 2,
+      "x": 1.0,
+      "L": -0.7999999999999998,
+      "U": 2.8,
+      "factor": 1.2,
+      "alpha": 0.5,
+      "beta": 1.5,
+      "candidate": 1.243193090519521,
+      "f": 0.572756698237394,
+      "original_constraint": -0.016970939684522124,
+      "approximate_constraint": -3.608224830031759e-16
+    },
+    {
+      "k": 3,
+      "x": 1.243193090519521,
+      "L": -0.9168069094804787,
+      "U": 3.4031930905195207,
+      "factor": 1.2,
+      "alpha": 0.743193090519521,
+      "beta": 1.743193090519521,
+      "candidate": 1.249997091827124,
+      "f": 0.5625043622677716,
+      "original_constraint": -7.270423732608222e-06,
+      "approximate_constraint": 2.680147770384167e-16
+    },
+    {
+      "k": 4,
+      "x": 1.249997091827124,
+      "L": -1.3420029081728757,
+      "U": 3.841997091827124,
+      "factor": 1.2,
+      "alpha": 0.7499970918271239,
+      "beta": 1.749997091827124,
+      "candidate": 1.250000000000236,
+      "f": 0.562499999999646,
+      "original_constraint": 5.901945598907332e-13,
+      "approximate_constraint": 3.067953877056162e-13
+    }
+  ],
+  "subproblem_checks": [
+    {
+      "k": 0,
+      "contact_value_error": 0.0,
+      "contact_gradient_error": 8.881784197001252e-16,
+      "independent_candidate": 0.49999999999999156,
+      "independent_error": 8.43769498715119e-15
+    },
+    {
+      "k": 1,
+      "contact_value_error": 2.220446049250313e-16,
+      "contact_gradient_error": 4.440892098500626e-16,
+      "independent_candidate": 1.0,
+      "independent_error": 0.0
+    },
+    {
+      "k": 2,
+      "contact_value_error": 4.440892098500626e-16,
+      "contact_gradient_error": 2.220446049250313e-16,
+      "independent_candidate": 1.243193090519721,
+      "independent_error": 2.000621890374532e-13
+    },
+    {
+      "k": 3,
+      "contact_value_error": 2.220446049250313e-16,
+      "contact_gradient_error": 0.0,
+      "independent_candidate": 1.249997091827124,
+      "independent_error": 0.0
+    },
+    {
+      "k": 4,
+      "contact_value_error": 3.4867941867133823e-16,
+      "contact_gradient_error": 4.440892098500626e-16,
+      "independent_candidate": 1.250000000000114,
+      "independent_error": 1.2212453270876722e-13
+    }
+  ],
+  "prescribed_history_tests": [
+    {
+      "name": "同方向",
+      "history": [
+        0.6,
+        0.8,
+        1.0
+      ],
+      "factor": 1.2,
+      "L": -0.2,
+      "U": 2.2
+    },
+    {
+      "name": "反転",
+      "history": [
+        1.0,
+        1.2,
+        1.0
+      ],
+      "factor": 0.7,
+      "L": 0.3,
+      "U": 1.7
+    }
+  ],
+  "analytic_solution": 1.25,
+  "analytic_cost": 0.5625
+}

@@ -12,7 +12,7 @@ visualization_ids: [topology-optimization-field-evolution, pde-state-tolerance-t
 comparison_ids: [COMPARE_PDE_STATE_TOLERANCE_COST]
 aliases: [/learn/adjoint-sensitivity]
 status: published
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-03
 ---
 
 随伴感度は、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加求解で計算する方法です。
@@ -28,40 +28,48 @@ last_reviewed: 2026-09-30
 
 ## 一手の意味
 
-状態と随伴を解いた後、設計変数の直接の影響から、状態を経由する影響を引きます。
+### 符号と転置をそろえる
+
+状態方程式を $R(u,m)=0$、状態を消去した目的を $\widehat J(m)=J(u(m),m)$ とします。以下では勾配は列ベクトル、$R_u,R_m$ はヤコビ行列です。状態を微分すると
 
 $$
-\frac{dJ}{dm}
-=
-\frac{\partial J}{\partial m}
--\lambda^\top\frac{\partial R}{\partial m}.
+R_u\,du+R_m\,dm=0.
 $$
 
-状態方程式を
+$R_u$ が局所的に可逆なら、$du=-R_u^{-1}R_mdm$ を代入できます。ただし設計変数が多数だと、$du/dm$ を全列求めるのは高価です。そこで一つのスカラー目的に対し
 
 $$
-R(u,m)=0
+R_u^T\lambda=\nabla_uJ,\qquad
+\nabla_m\widehat J=\nabla_mJ-R_m^T\lambda
 $$
 
-とし、目的関数を $J(u,m)$ とします。
-設計変数 $m$ を少し変えたときの $dJ/dm$ を直接求めると、設計変数の数だけ状態の変化を追う必要があります。
+を使います。これは $\mathcal L=J-\lambda^TR$ という符号の選び方と対応しています。$\mathcal L=J+\lambda^TR$ を使う資料では随伴の符号も変わるので、式を片方だけ移植しません。
 
-随伴変数 $\lambda$ を導入し、
-
-$$
-\left(\frac{\partial R}{\partial u}\right)^T\lambda=\left(\frac{\partial J}{\partial u}\right)^T
-$$
-
-を解くと、状態方程式と目的関数の微分を組み合わせて設計感度を計算できます。
-
-トポロジー最適化では、密度場の要素数が増えても、感度計算を設計変数数に比例する回数だけ繰り返さずに済む構造が重要です。
+多数の設計変数に対しても、一つの目的なら原則として一つの転置線形系で感度を組み立てられます。ただし状態求解、ヤコビ行列の構築、$R_m^T\lambda$ の計算は残ります。目的や独立した制約が増えれば、必要な随伴右辺も増えます。直接感度法は少数の設計方向、多数の出力を調べるときに有利な場合があります。
 
 ## 小さな例
 
-設計変数 $m$ が、状態 $u$ を式 $mu=1$ で決める小さな問題です。
-目的は $J=\tfrac12(u-1)^2$ とします。
-随伴方程式は $m\lambda=u-1$、設計感度は $dJ/dm=-\lambda u$ です。
-感度を確かめた後、幅0.5の勾配更新で $m$ を変えます。
+### 状態・随伴・感度を一つずつ計算する
+
+設計変数は $m>0$、状態方程式は $R(u,m)=mu-1=0$、目的は $J(u,m)=\tfrac12(u-1)^2$ です。状態の目標は1です。$m=2$ では、次の順に進みます。
+
+1. 状態を解く：$u=1/m=0.5$
+2. 目的の状態微分を作る：$J_u=u-1=-0.5$
+3. 随伴を解く：$R_u\lambda=J_u$ より $2\lambda=-0.5$、$\lambda=-0.25$
+4. 設計感度を組み立てる：$J_m=0$、$R_m=u=0.5$ より $d\widehat J/dm=-\lambda u=0.125$
+
+ここで $\widehat J(m)=J(u(m),m)$ は、状態を解いた後の目的です。$J_m=0$ は「状態を固定して見た直接の影響がない」という意味で、設計を変えても目的が変わらないという意味ではありません。
+
+![設計mから状態uと目的Jへ進む順方向、目的から随伴λと設計感度へ戻る逆方向。右は同じm=2におけるTaylor残差の二次減少。](./media/adjoint-scalar-chain.svg "状態を解く、随伴を解く、感度を組み立てる三段階。感度が正なら小さな下降更新はmを減らす向き。更新幅はこの図では決めていない。")
+
+解析的に状態を代入しても
+
+$$
+\widehat J(m)=\frac12\left(\frac1m-1\right)^2,
+\qquad \widehat J'(m)=\frac{m-1}{m^3}
+$$
+
+となり、$m=2$ で0.125と一致します。正の感度なので、目的を下げるには $m$ を少し減らします。$m^+=2-0.5\times0.125=1.9375$ とすれば、新しい状態は約0.5161、目的は約0.1171です。
 
 | 更新回数 | $m$ | 状態 $u$ | 随伴 $\lambda$ | 感度 | 目的値 |
 |---|---:|---:|---:|---:|---:|
@@ -69,10 +77,21 @@ $$
 | 1 | 1.9375 | 0.5161 | -0.2497 | 0.1289 | 0.1171 |
 | 2 | 1.8731 | 0.5339 | -0.2489 | 0.1329 | 0.1086 |
 
-正の感度なので、目的を下げる更新は $m$ を減らす向きです。
-状態が1へ近づき、目的値が下がっています。
-刻み幅 $10^{-5}$ の中心差分も、3行とも感度と小数第10位まで一致しました。
-この例の更新則は感度の利用例であり、随伴法そのものが更新幅を決めるわけではありません。
+幅0.5は感度の利用例として別に選んだ勾配降下法の係数です。随伴法は更新幅、制約の処理、候補の受理まで自動で決める最適化アルゴリズムではありません。
+
+### 微分が合うかは、一つの刻み幅だけで決めない
+
+中心差分 $[\widehat J(m+h)-\widehat J(m-h)]/(2h)$ を $h=10^{-5}$ で計算すると、上の3点の絶対誤差は $4\times10^{-12}$ 未満です。小数の一致桁数を保証するものではなく、丸めや状態求解精度に依存する実行上の誤差です。
+
+さらに、一次項を引いたTaylor残差
+
+$$
+E(h)=|\widehat J(m+h)-\widehat J(m)-h\widehat J'(m)|
+$$
+
+を調べます。滑らかな目的と正しい感度なら $E(h)=O(h^2)$。$m=2$ では $h=0.1,0.05,0.025$ に対し約 $3.12\times10^{-4},7.81\times10^{-5},1.95\times10^{-5}$ で、半分の幅にすると約1/4です。図の緑の傾きがその検査です。幅を極端に小さくすると差の桁落ちが支配し、きれいな二次減少は続きません。
+
+状態残差と随伴残差も独立に検査します。例えば $m=2$ で状態を誤って $u=(1+\varepsilon)/2$ と解くと、状態残差は $\varepsilon$ です。この状態で随伴を正確に解いても、計算した感度は $0.125-\varepsilon^2/8$。この点では一次の誤差が偶然相殺されます。感度がよく合うことだけで、状態が正確だと判断しない理由です。
 
 ## 向く条件・避ける条件
 
@@ -85,16 +104,31 @@ $$
 その後、感度を確認できます。
 
 ```python
+import numpy as np
+
+J = lambda m: 0.5 * (1.0 / m - 1.0)**2
 m = 2.0
 for iteration in range(3):
     u = 1.0 / m
     adjoint = (u - 1.0) / m
-    sensitivity = -adjoint * u
-    eps = 1e-5
-    objective = lambda value: 0.5 * (1.0 / value - 1.0) ** 2
-    finite_difference = (objective(m + eps) - objective(m - eps)) / (2.0 * eps)
-    print(iteration, m, u, sensitivity, finite_difference, objective(m))
-    m -= 0.5 * sensitivity
+    gradient = -adjoint * u
+    h = 1e-5
+    fd = (J(m + h) - J(m - h)) / (2 * h)
+    analytic = (m - 1.0) / m**3
+    assert abs(m * u - 1.0) < 1e-12
+    assert abs(m * adjoint - (u - 1.0)) < 1e-12
+    assert abs(gradient - analytic) < 1e-12
+    assert abs(gradient - fd) < 1e-9
+    print(iteration, m, u, adjoint, gradient, J(m), abs(gradient-fd))
+    m -= 0.5 * gradient  # This is a separate gradient-descent update.
+
+m, gradient = 2.0, 0.125
+previous = None
+for h in (0.2, 0.1, 0.05, 0.025, 0.0125):
+    remainder = abs(J(m + h) - J(m) - h * gradient)
+    rate = np.log2(previous / remainder) if previous else None
+    print('Taylor:', h, remainder, rate)
+    previous = remainder
 ```
 
 3回とも、状態残差 $mu-1$ と随伴残差 $m\lambda-(u-1)$ は丸め誤差の範囲で0です。
@@ -104,10 +138,10 @@ PDEの実装へ進む場合は、次の計算順序を使います。
 設計感度の組み立ても別の段階です。
 次の擬似コードは、更新則や境界条件を省いた感度計算の骨格です。
 
-```python
+```text
 state = solve_state(design)
 adjoint = solve_transpose_jacobian(state, objective)
-sensitivity = direct_derivative(state, design) - adjoint @ residual_derivative(state, design)
+sensitivity = direct_derivative(state, design) - residual_derivative(state, design).T @ adjoint
 ```
 
 ## 診断値
@@ -122,7 +156,6 @@ sensitivity = direct_derivative(state, design) - adjoint @ residual_derivative(s
 
 ## 失敗・切替の兆候
 
-### 失敗・切替の兆候
 
 勾配検査が合わない場合は、更新則より先に微分実装を点検します。
 状態残差が大きい場合は、状態方程式と境界条件を確認します。
@@ -158,3 +191,22 @@ SIMPでは、まず密度場から剛性を作り、状態求解で変位を得�
 [PDE制約付き最適化](#/formulations/PA045)で、設計変数と状態を分ける定式化を確認します。
 
 [形状最適化の設計変数](#/learn/shape-optimization)で変数の表現の意味を確認し、[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認します。[密度フィルター](#/learn/density-filter)は離散場の正則化、[形状更新の失敗モード](#/learn/geometry-update-failure-modes)は格子と状態の切り分けを扱います。
+
+## 発展：時間依存系では境界項を落とさない
+
+上の主例は静的な代数方程式です。終端時刻 $T$ を固定した時間依存系 $\dot x=f(x,m)$、$x(0)=x_0(m)$、$J=\int_0^T L(x,m)dt+\Phi(x(T),m)$ へ進むと、同じ符号で $\mathcal L=J-\int_0^T\lambda^T(\dot x-f)dt$ と置き、部分積分します。終端状態が自由なら
+
+$$
+-\dot\lambda=L_x+f_x^T\lambda,\quad
+\lambda(T)=\Phi_x,\quad
+\nabla_m\widehat J=\Phi_m+\int_0^T(L_m+f_m^T\lambda)dt
++\left(\frac{\partial x_0}{\partial m}\right)^T\lambda(0).
+$$
+
+右辺の初期条件の項は、$x_0$ が設計に依存する場合に必要です。固定初期条件なら0です。終端等式がある場合は、その乗数による終端条件も加わるため、この自由終端の式をそのまま使いません。PDEでは空間の部分積分と境界条件にも同じ注意が必要です。
+
+離散化した残差を微分する離散随伴と、連続系で随伴を導いて離散化する連続随伴は、有限の格子では一般に同じ勾配とは限りません。検査する有限差分は、実際に最適化している離散目的と同じ求解・境界条件に対して行います。
+
+## 一次資料
+
+[dolfin-adjointの微分の導出](https://www.dolfin-adjoint.org/en/latest/documentation/maths/3-gradients.html) と [Taylor残差による検証](https://www.dolfin-adjoint.org/en/latest/documentation/verification.html) に、随伴の計算と勾配検査が分けて説明されています。次の設計更新を決める手法は [MMA](#/learn/mma) へ進みます。
