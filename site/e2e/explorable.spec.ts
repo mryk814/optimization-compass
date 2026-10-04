@@ -15,6 +15,11 @@ const figures = [
   },
   { label: "primal-simplex", route: "/learn/primal-simplex", id: "lp-vertex-walk" },
   { label: "convexity", route: "/learn/concept.convexity", id: "convexity-chord" },
+  { label: "nonlinear-least-squares", route: "/learn/concept.nonlinear-least-squares", id: "nonlinear-least-squares-landscape" },
+  { label: "newton-method", route: "/learn/newton-method", id: "newton-parabola-jump" },
+  { label: "cma-es", route: "/learn/cma-es", id: "cmaes-shape-learning" },
+  { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
+  { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
 ];
 
 for (const figure of figures) {
@@ -45,13 +50,13 @@ for (const figure of figures) {
   });
 }
 
-test("勾配降下法の図でlearning rateを動かすと結果と安定限界が切り替わる", async ({ page, baseURL }) => {
+test("勾配降下法の図で学習率を動かすと結果と安定限界が切り替わる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/method.gradient-descent");
   const region = page.locator('[data-explorable-id="gradient-descent-valley"]');
   await expect(region.getByText("見る問い")).toBeVisible();
-  await region.getByRole("slider", { name: /learning rate/u }).fill("0.06");
+  await region.getByRole("slider", { name: /学習率/u }).fill("0.06");
   await expect(region.getByText(/発散しました/u).first()).toBeVisible();
-  await region.getByRole("slider", { name: /learning rate/u }).fill("0.03");
+  await region.getByRole("slider", { name: /学習率/u }).fill("0.03");
   await expect(region.getByText(/発散しました/u)).toHaveCount(0);
   await region.getByRole("radio", { name: "Momentum" }).check({ force: true });
   await expect(region.getByRole("slider", { name: /持ち越し/u })).toBeVisible();

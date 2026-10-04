@@ -261,6 +261,49 @@
   max-inline-size: var(--measure-reading);
 }
 
+/* Every article: the main figure gets room without widening the prose. */
+.compiled-content-layout--lesson {
+  display: block;
+  max-inline-size: 60rem;
+}
+
+.compiled-content-layout--lesson .content-toc {
+  position: static;
+  max-inline-size: var(--measure-reading);
+  margin-bottom: 1rem;
+  border: 1px solid #d7ddd5;
+  border-radius: 0.35rem;
+}
+
+.compiled-content-layout--lesson .content-toc summary {
+  min-height: 2.75rem;
+  align-content: center;
+  cursor: pointer;
+  font-size: var(--type-body);
+  line-height: var(--leading-support);
+}
+
+.compiled-content-layout--lesson .content-toc button {
+  min-height: 2.75rem;
+  font-size: var(--type-body);
+  line-height: var(--leading-support);
+}
+
+.compiled-content-layout--lesson .markdown-body {
+  max-inline-size: none;
+}
+
+.compiled-content-layout--lesson .markdown-body > :not(.explorable) {
+  max-inline-size: var(--measure-reading);
+}
+
+/* Supporting lesson figures (site/public/figures, scripts/generate_lesson_figures.py) are drawn
+   440 px wide, so one SVG unit is one CSS pixel on a PC. Execution figures (site/public/media)
+   are drawn wider and keep the reading measure so their labels are not shrunk further. */
+.compiled-content-layout .markdown-body > figure:has(> img[src*="figures/"]) {
+  max-inline-size: 27.5rem;
+}
+
 .atlas-page-header p:not(.eyebrow),
 .content-lead,
 .gallery-question-panel p:not(.eyebrow),

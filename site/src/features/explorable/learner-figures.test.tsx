@@ -63,6 +63,9 @@ describe("LeastSquaresBowl", () => {
     fireEvent.click(screen.getByRole("radio", { name: "二乗和が最小の直線" }));
     expect(screen.getAllByText(/お椀の底です/).length).toBeGreaterThan(0);
     expect(screen.getAllByText("0.700").length).toBeGreaterThan(0);
+    const totals = screen.getByRole("rowheader", { name: "合計" }).closest("tr");
+    expect(totals?.querySelectorAll("td")).toHaveLength(2);
+    expect(totals?.textContent).toBe("合計0.000.00");
   });
 
   it("moves a data point with the keyboard and refits", () => {

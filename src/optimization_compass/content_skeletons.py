@@ -69,6 +69,10 @@ FORMULATION_LEARNER_FIRST = (
     "数値計算の方法を選ぶ",
 )
 
+# A method article may close by routing from the reader's trouble to neighbouring methods
+# ("when X happens, read Y") instead of a plain reading list; every other section is unchanged.
+METHOD_TROUBLE_ROUTE = "困りごとから関連する手法へ"
+
 PENDING_PATH = Path("data/seeds/content_skeleton_pending.json")
 _ARCHETYPE_ID_PATTERN = re.compile(r"^PA\d{3}$")
 
@@ -89,11 +93,13 @@ def skeleton_gaps(page: ContentPage) -> tuple[str, ...]:
     if kind is None:
         return ()
     headings = [heading.label for heading in page.toc if heading.level == 2]
-    sections = (
-        FORMULATION_LEARNER_FIRST
-        if kind == "formulation" and "課題から定式化する" in headings
-        else SKELETONS[kind]
-    )
+    sections: tuple[str, ...]
+    if kind == "formulation" and "課題から定式化する" in headings:
+        sections = FORMULATION_LEARNER_FIRST
+    elif kind == "method" and METHOD_TROUBLE_ROUTE in headings:
+        sections = (*SKELETONS["method"][:-1], METHOD_TROUBLE_ROUTE)
+    else:
+        sections = SKELETONS[kind]
     missing = tuple(f"missing:{section}" for section in sections if section not in headings)
     if missing:
         return missing

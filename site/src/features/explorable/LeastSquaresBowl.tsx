@@ -398,19 +398,19 @@ interface ReadoutProps {
 
 function Readout({ points, line, best, fit, optimum, atOptimum }: ReadoutProps) {
   const squares = fit.residuals.map((r) => sup(mn(`(${fmt(r)})`), mn("2")));
-  const terms: string[] = [];
-  squares.forEach((square, index) => {
-    if (index > 0) terms.push(mo("+"));
-    terms.push(square);
-  });
-  const sum = row(...terms);
   const total = row(mo("="), tint(atOptimum ? "teal" : "orange", mn(fmt(fit.sse, 3))));
   const near = (value: number) => Math.abs(value) < 5e-3;
+  // The normal equations leave machine roundoff; show mathematical zero at display precision.
+  const totalLabel = (value: number) => fmt(Math.abs(value) < 1e-12 ? 0 : value);
   return (
     <>
       <section aria-label="残差の二乗和" className="ex-equation">
         <p className="ex-eyebrow">残差の二乗和（四角の面積の合計）</p>
-        <LiveMath block label={`残差の二乗を4つ足す`} markup={sum} />
+        <div className="lsq-squared-terms">
+          {squares.map((square, index) => (
+            <LiveMath key={index} label={`${index > 0 ? "足す、" : ""}点${index + 1}の残差 ${fmt(fit.residuals[index])} の二乗`} markup={row(index > 0 ? mo("+") : "", square)} />
+          ))}
+        </div>
         <LiveMath block label={`二乗和は ${fmt(fit.sse, 3)}`} markup={total} />
         <p className="ex-hint">最小値は {fmt(optimum, 3)}。そのときの直線は y = {fmt(best.a)} + {fmt(best.b)} t です。</p>
       </section>
@@ -435,8 +435,8 @@ function Readout({ points, line, best, fit, optimum, atOptimum }: ReadoutProps) 
             ))}
             <tr className={near(fit.residualSum) && near(fit.residualMoment) ? "ex-row-best" : undefined}>
               <th scope="row" colSpan={4}>合計</th>
-              <td>{fmt(fit.residualSum)}</td>
-              <td>{fmt(fit.residualMoment)}</td>
+              <td>{totalLabel(fit.residualSum)}</td>
+              <td>{totalLabel(fit.residualMoment)}</td>
             </tr>
           </tbody>
         </table>
@@ -444,7 +444,7 @@ function Readout({ points, line, best, fit, optimum, atOptimum }: ReadoutProps) 
       <p className={`ex-verdict ${atOptimum ? "ex-tone-good" : "ex-tone-swing"}`}>
         {atOptimum
           ? "お椀の底です。残差の合計 Σr も、t を掛けた合計 Σt·r も0なので、切片を動かしても傾きを動かしても二乗和は増えます。"
-          : `まだ底ではありません。Σr = ${fmt(fit.residualSum)}、Σt·r = ${fmt(fit.residualMoment)} が0でない分だけ、右の矢印の向きへ直線を動かすと二乗和が減ります。`}
+          : `まだ底ではありません。Σr = ${fmt(fit.residualSum)}、Σt·r = ${fmt(fit.residualMoment)} が0でない分だけ、「直線を表す点」の矢印の向きへ動かすと二乗和が減ります。`}
       </p>
       <p className="ex-hint">四角の面積が残差の二乗です。観測点の高さを動かすと、最小の直線とお椀の底の位置が変わります。</p>
     </>

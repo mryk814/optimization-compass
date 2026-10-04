@@ -113,4 +113,6 @@ npm --prefix site test -- --run src/contracts/formulation-atlas.test.ts
 `content_skeletons.py` の `FORMULATION_LEARNER_FIRST` がこの完全な構成を検証する。
 既存記事の8節構成は引き続き有効で、他記事を一括で並べ替える必要はない。
 関連手法へのリンクは「困りごとから関連する問題へ」で検証し、重複する「次に読む」は置かない。
+method記事も、`次に読む` の代わりに「困りごとから関連する手法へ」で締められる（`METHOD_TROUBLE_ROUTE`）。
+節ごとの中身と図の水準は [`docs/teaching-article-playbook.md`](teaching-article-playbook.md) にある。
 共通UIのコンパスは記事の後に表示し、詳細なソルバー一覧は折りたたむ。

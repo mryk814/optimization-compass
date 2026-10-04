@@ -27,18 +27,25 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
     event.preventDefault();
     goToHeading(anchor.dataset.headingTarget);
   };
+  const headings = (
+    <ol>
+      {page.toc.map((heading) => (
+        <li className={`toc-level-${heading.level}`} key={heading.heading_id}>
+          <button onClick={() => goToHeading(heading.heading_id)} type="button">{heading.label}</button>
+        </li>
+      ))}
+    </ol>
+  );
   return (
-    <div className="compiled-content-layout">
+    // Every article uses the linear-least-squares layout: a folded table of contents above a
+    // 42rem reading column, with figures allowed to grow wider (docs/content-reading-principles.md §11).
+    <div className="compiled-content-layout compiled-content-layout--lesson">
       {page.toc.length > 1 && (
         <nav aria-label="この教材の目次" className="content-toc">
-          <strong>このページの項目</strong>
-          <ol>
-            {page.toc.map((heading) => (
-              <li className={`toc-level-${heading.level}`} key={heading.heading_id}>
-                <button onClick={() => goToHeading(heading.heading_id)} type="button">{heading.label}</button>
-              </li>
-            ))}
-          </ol>
+          <details>
+            <summary>このページの項目</summary>
+            {headings}
+          </details>
         </nav>
       )}
       <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />

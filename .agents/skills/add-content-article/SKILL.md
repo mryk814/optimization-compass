@@ -10,6 +10,7 @@ description: Add or improve a method/concept article (method記事・concept記�
 1. `.agents/skills/optimization-compass-maintenance/SKILL.md` — Recipe A（既存記事修正）/ Recipe B（既存entityへの記事追加）
 2. `docs/adding-knowledge.md` §6–§7
 3. `docs/method-content-density.md` — published method記事の密度floor
+4. `docs/teaching-article-playbook.md` — 一つの題材で教え切る書き方、節ごとの中身、図の水準。新規執筆と大きな書き直しでは、本文の前に§2のブリーフを作る
 
 ## 手順
 

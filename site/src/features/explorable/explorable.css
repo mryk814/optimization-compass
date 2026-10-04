@@ -361,6 +361,9 @@
   min-width: 0;
 }
 
+/* Let equations wrap and residual tables scroll within the readout grid. */
+.ex-readout > * { min-width: 0; }
+
 .ex-equation {
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--ex-line);
@@ -597,6 +600,9 @@
 .live-math .mx-navy { color: var(--ex-ink); }
 
 /* Least squares */
+.ex-controls:has(.lsq-point-controls) { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.ex-controls:has(.lsq-point-controls) > .ex-choice { grid-column: 1 / -1; }
+.lsq-squared-terms { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 0.5rem; margin: 0.25rem 0; }
 .ex-square { fill: var(--ex-orange); fill-opacity: 0.16; stroke: var(--ex-orange-ink); stroke-width: 1.2; }
 .ex-fit-line { stroke: var(--ex-ink); stroke-width: 2.5; }
 .ex-residual { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 4 3; }
@@ -635,3 +641,74 @@
 .lsq-drag-cue { fill: #315c48; font-size: 16px; font-weight: 700; pointer-events: none; }
 .lsq-point-controls { width: 100%; }
 .lsq-point-controls summary { min-height: 44px; cursor: pointer; }
+
+/* Coordinate descent: the path leads, the selectable check stays beside it. */
+[data-explorable-id="coordinate-descent-walk"] .ex-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cd-presets { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: end; gap: 0.6rem 1rem; }
+.cd-presets > button { margin-left: auto; }
+.cd-start { grid-column: 1 / -1; }
+.cd-start summary,
+.cd-adjustments summary { cursor: pointer; min-height: 44px; }
+.cd-adjustments { grid-column: 1 / -1; }
+.cd-adjustments > div { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0.6rem 1rem; }
+.cd-panels { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.cd-primary { display: grid; gap: 0.75rem; min-width: 0; }
+.cd-detail { display: grid; gap: 0.5rem; min-width: 0; }
+.cd-substitution { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.25rem 0.4rem; }
+.cd-detail .ex-choice label { padding: 0.35rem 0.6rem; }
+.cd-diagnostics { display: grid; gap: 0.25rem; font-variant-numeric: tabular-nums; }
+[data-explorable-id="coordinate-descent-walk"] .ex-action,
+[data-explorable-id="coordinate-descent-walk"] .ex-choice label { min-height: 44px; box-sizing: border-box; }
+@media (max-width: 45rem) {
+  [data-explorable-id="coordinate-descent-walk"] .ex-controls { grid-template-columns: minmax(0, 1fr); }
+  .cd-panels { grid-template-columns: minmax(0, 1fr); }
+  .cd-detail { width: 100%; max-width: 27.5rem; justify-self: center; }
+}
+
+/* Nonlinear least squares: the local Gauss–Newton bowl and shared 3D surface marks. */
+.nls-bowl path { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.nls-bowl-bottom line { stroke: var(--ex-orange-ink); stroke-width: 1.8; stroke-dasharray: 2 3; }
+.nls-bowl-bottom circle { fill: var(--ex-panel); stroke: var(--ex-orange-ink); stroke-width: 2; }
+.ex-surface-path { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; stroke-linejoin: round; }
+.ex-surface-dot { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 1; }
+.ex-surface-axes text { fill: var(--ex-ink); font-size: var(--type-label); font-weight: 700; }
+
+/* Newton's method: the fitted parabola, its stationary point, and the digits bars. */
+.newton-model { fill: none; stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.newton-vertex line { stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.newton-vertex circle { fill: var(--ex-panel); stroke: var(--ex-orange-ink); stroke-width: 2; }
+.newton-escape line { stroke: var(--ex-red); stroke-width: 2.5; }
+.newton-escape text { fill: var(--ex-red-ink); font-size: var(--type-label); font-weight: 700; }
+.newton-bar { fill: var(--ex-orange); }
+.newton-bar.is-hill { fill: var(--ex-red); }
+.newton-bar-gd { fill: var(--ex-ink-soft); fill-opacity: 0.45; }
+.newton-legend text { fill: var(--ex-ink); font-size: var(--type-label); }
+
+/* CMA-ES: sampling ellipses, parents, the target shape, and the history charts. */
+.cma-ellipse { fill: var(--ex-orange); fill-opacity: 0.12; stroke: var(--ex-orange-ink); stroke-width: 2; }
+.cma-ellipse-wide { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.cma-parent { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 1.5; }
+.cma-sample { fill: var(--ex-panel); stroke: var(--ex-ink-soft); stroke-width: 1.5; }
+.cma-target { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.cma-shape-label, .cma-chart-label { fill: var(--ex-ink); font-size: var(--type-label); }
+.cma-line-f { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.cma-line-ratio { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
+.cma-now { stroke: var(--ex-ink-soft); stroke-width: 1; stroke-dasharray: 3 3; }
+
+/* Interior point: feasible disk, central path, and the barrier's level sets. */
+.ipm-feasible { fill: var(--ex-teal-wash); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.ipm-path { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.ipm-barrier-contour path { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.ipm-free circle { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
+.ipm-free text { fill: var(--ex-ink); font-size: var(--type-label); }
+
+/* Multiobjective: feasible regions, the Pareto set and front, the better quadrant, level lines. */
+.mo-feasible { fill: var(--ex-teal-wash); stroke: none; }
+.mo-pareto { stroke: var(--ex-teal-ink); stroke-width: 5; stroke-linecap: round; }
+.mo-front { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; }
+.mo-better { fill: var(--ex-orange); fill-opacity: 0.1; stroke: var(--ex-orange-ink); stroke-dasharray: 4 3; }
+.mo-level { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.mo-improve line { stroke: var(--ex-red); stroke-width: 2.5; }
+.mo-label { fill: var(--ex-ink); font-size: var(--type-label); }

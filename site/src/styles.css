@@ -2099,7 +2099,8 @@ caption {
 .markdown-body { grid-column: 1; grid-row: 1; width: 100%; min-width: 0; }
 .markdown-body h2, .gallery-section h2 { scroll-margin-top: 1rem; margin: 1.75rem 0 .5rem; color: #6b4a35; font-size: 1.2rem; line-height: 1.35; }
 .markdown-body h2:first-child { margin-top: 0; }
-.markdown-body h3 { scroll-margin-top: 1rem; margin: 1.25rem 0 .35rem; color: #6b4a35; font-size: 1rem; line-height: 1.45; }
+/* One subheading style for every article (formulation, method, concept). */
+.markdown-body h3 { scroll-margin-top: 1rem; margin: 1.25rem 0 .35rem; padding-left: .7rem; border-left: 3px solid #315c48; color: #315c48; font-size: 1.15rem; line-height: 1.45; }
 .markdown-body p, .markdown-body li, .gallery-section p { color: #46534b; font-size: 1rem; line-height: 1.85; }
 .markdown-body p { margin: .7rem 0; }
 .markdown-body ul, .markdown-body ol { margin: .45rem 0; padding-left: 1.35rem; }
@@ -2113,6 +2114,16 @@ caption {
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
 .markdown-body figure img { display: block; width: 100%; height: auto; border: 1px solid #d9dbd4; border-radius: .45rem; }
+/* Execution figures (site/public/media, scripts/generate_article_figures.py) carry width/height
+   attributes and are drawn for that size; never stretch them past it, or their text grows. The
+   frame is an outline so the figure keeps the full article width on a phone (text >= 12 px). */
+.markdown-body figure img[src*="media/"] {
+  width: auto;
+  max-width: 100%;
+  border: 0;
+  outline: 1px solid #d9dbd4;
+  outline-offset: -1px;
+}
 .markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }
@@ -2576,7 +2587,7 @@ main:focus {
   line-height: 1.12;
 }
 
-.page-panel p {
+.page-panel p:not(.markdown-body p) {
   max-width: 40rem;
   margin: 0.55rem 0;
   color: #4a574f;
@@ -2714,6 +2725,7 @@ main:focus {
 
 .method-related-cases li {
   display: grid;
+  min-width: 0;
   gap: 0.15rem;
 }
 
@@ -2721,6 +2733,8 @@ main:focus {
   color: #285740;
   font-size: 0.82rem;
   font-weight: 700;
+  /* Labels can be long stable IDs with no break opportunity. */
+  overflow-wrap: anywhere;
 }
 
 .method-related-cases span {

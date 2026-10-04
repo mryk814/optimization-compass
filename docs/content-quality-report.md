@@ -3,14 +3,14 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `190`
+- Prose review warnings: `176`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
-| `concept.constrained-nlp` | 84 | 7481 | 10 | 4 | 0 | pass |
+| `concept.constrained-nlp` | 84 | 7491 | 10 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
 | `concept.convex-quadratic-program` | 84 | 3338 | 9 | 4 | 0 | pass |
 | `concept.convexity` | 61 | 2155 | 8 | 2 | 0 | pass |
@@ -20,13 +20,13 @@
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 6947 | 12 | 4 | 0 | pass |
-| `concept.linear-least-squares` | 108 | 8972 | 16 | 10 | 0 | pass |
+| `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 3394 | 6 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 95 | 3295 | 9 | 4 | 0 | pass |
-| `concept.multiobjective-optimization` | 86 | 8047 | 12 | 4 | 0 | pass |
+| `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4444 | 9 | 5 | 0 | pass |
-| `concept.nonlinear-least-squares` | 87 | 3533 | 9 | 4 | 0 | pass |
+| `concept.nonlinear-least-squares` | 119 | 8046 | 12 | 7 | 0 | pass |
 | `concept.optimal-control` | 102 | 5641 | 9 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
@@ -50,10 +50,10 @@
 
 ## Prose warning summary
 
-- `number.overprecise`: 95
-- `prose.choppy`: 6
-- `prose.work-report`: 10
-- `sentence.commas`: 75
+- `number.overprecise`: 82
+- `prose.choppy`: 7
+- `prose.work-report`: 9
+- `sentence.commas`: 74
 - `sentence.long`: 4
 
 | Content | Warnings |
@@ -70,11 +70,11 @@
 | `basin-hopping` | 0 |
 | `bayesian-optimization` | 2 |
 | `bfgs` | 1 |
-| `branch-and-bound` | 0 |
+| `branch-and-bound` | 4 |
 | `branch-and-cut` | 0 |
 | `bundle-method` | 0 |
 | `cdcl-sat` | 1 |
-| `cma-es` | 1 |
+| `cma-es` | 0 |
 | `cobyla` | 0 |
 | `cobyqa` | 0 |
 | `concept.chance-risk-contract` | 0 |
@@ -88,13 +88,13 @@
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.knapsack-set-cover` | 0 |
-| `concept.linear-least-squares` | 5 |
+| `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 5 |
 | `concept.mixed-integer-linear-program` | 0 |
 | `concept.multiobjective-optimization` | 0 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 0 |
-| `concept.nonlinear-least-squares` | 0 |
+| `concept.nonlinear-least-squares` | 1 |
 | `concept.optimal-control` | 8 |
 | `concept.path-terminal-constraints` | 1 |
 | `concept.pde-constrained-optimization` | 0 |
@@ -147,7 +147,7 @@
 | `hungarian-algorithm` | 1 |
 | `hyperband-asha` | 4 |
 | `ilqr-ddp` | 0 |
-| `interior-point-nlp` | 11 |
+| `interior-point-nlp` | 0 |
 | `lbfgs` | 0 |
 | `lbfgsb` | 0 |
 | `least-squares` | 0 |
@@ -165,7 +165,7 @@
 | `multiple-shooting` | 1 |
 | `network-simplex` | 0 |
 | `newton-cg` | 0 |
-| `newton-method` | 4 |
+| `newton-method` | 0 |
 | `nonlinear-cg` | 1 |
 | `nsga-iii` | 0 |
 | `optimality-criteria-topology` | 0 |
@@ -199,7 +199,7 @@
 | `trust-exact` | 0 |
 | `trust-krylov` | 0 |
 | `trust-region-newton-cg` | 0 |
-| `trust-region-reflective` | 6 |
+| `trust-region-reflective` | 8 |
 | `turbo-saasbo` | 6 |
 | `weighted-sum` | 1 |
 
