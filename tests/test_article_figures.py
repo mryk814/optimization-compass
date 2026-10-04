@@ -515,7 +515,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/direct-collocation.md": "optimal-control-mesh-execution.svg",
         "content/methods/family-optimal-control.md": "optimal-control-mesh-execution.svg",
         "content/methods/random-search.md": "random-search-coverage-execution.svg",
-        "content/methods/tpe.md": "tpe-density-ratio-execution.svg",
+        "content/methods/tpe.md": "tpe-five-observations.svg",
         "content/methods/hyperband-asha.md": "hyperband-rungs-execution.svg",
         "content/methods/turbo-saasbo.md": "turbo-trust-region-execution.svg",
     }

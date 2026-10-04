@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "proximal-gradient-threshold": {
+    question: "勾配で進んだ点zを、なぜそのまま使わず0へ縮めるのか。",
+    fixedConditions: "F(x)=(x−3)²/2+λ|x|の1変数凸問題。λは0〜4、歩幅ηは0.1〜1、始点は−3〜5で、12回更新する。滑らかな項の勾配のLipschitz定数はL=1。",
+    notImplied: "1変数の厳密な更新を示す図であり、大規模データでの速度、変数選択の正しさ、他の手法に対する優劣は示さない。",
+    beats: [],
+  },
   "branch-bound-proof": {
     question: "良い組合せが見つかったあと、何を確かめれば最適だと言えるのか。",
     fixedConditions: "各品を一つまで選ぶ0-1ナップサック。入門は容量8、A・D・B・Cの（重さ, 得点）が（4, 8）・（2, 4）・（3, 5）・（5, 6）。発展は容量10でE（4, 6）・F（5, 7）・G（3, 3）・H（2, 1）を追加する。分数ナップサックで各候補の上界を計算する。絵の大きさは重さを表さない。",

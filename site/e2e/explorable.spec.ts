@@ -20,6 +20,7 @@ const figures = [
   { label: "cma-es", route: "/learn/cma-es", id: "cmaes-shape-learning" },
   { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
   { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
+  { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
 ];
 
 for (const figure of figures) {

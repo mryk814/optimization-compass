@@ -1,0 +1,153 @@
+{
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "fits": {
+    "linear": {
+      "x": 2.5,
+      "residuals": [
+        2.5,
+        2.5,
+        2.5,
+        -7.5
+      ],
+      "loss_contributions": [
+        3.125,
+        3.125,
+        3.125,
+        28.125
+      ],
+      "gradient_contributions": [
+        2.5,
+        2.5,
+        2.5,
+        -7.5
+      ],
+      "cost": 37.5,
+      "success": true
+    },
+    "huber": {
+      "x": 0.3333333333333333,
+      "residuals": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333,
+        -9.666666666666666
+      ],
+      "loss_contributions": [
+        0.05555555555555555,
+        0.05555555555555555,
+        0.05555555555555555,
+        9.166666666666666
+      ],
+      "gradient_contributions": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333,
+        -1.0
+      ],
+      "cost": 9.333333333333332,
+      "success": true
+    }
+  },
+  "threshold_formula": "sign(m)*min(abs(m)/4, delta/3), delta>0",
+  "cases": [
+    {
+      "outlier": 0,
+      "delta": 1,
+      "analytic_x": 0.0,
+      "solver_x": 0.0,
+      "cost": 0.0,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 1.3333333333333333,
+      "delta": 1,
+      "analytic_x": 0.3333333333333333,
+      "solver_x": 0.3333333333333333,
+      "cost": 0.6666666666666666,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": -1.3333333333333333,
+      "delta": 1,
+      "analytic_x": -0.3333333333333333,
+      "solver_x": -0.3333333333333333,
+      "cost": 0.6666666666666666,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 1,
+      "delta": 1,
+      "analytic_x": 0.25,
+      "solver_x": 0.25,
+      "cost": 0.375,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 10,
+      "delta": 0.25,
+      "analytic_x": 0.08333333333333333,
+      "solver_x": 0.08333333333333333,
+      "cost": 2.458333333333333,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 10,
+      "delta": 1,
+      "analytic_x": 0.3333333333333333,
+      "solver_x": 0.3333333333333333,
+      "cost": 9.333333333333332,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 10,
+      "delta": 3,
+      "analytic_x": 1.0,
+      "solver_x": 1.0,
+      "cost": 24.0,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 10,
+      "delta": 7.5,
+      "analytic_x": 2.5,
+      "solver_x": 2.5,
+      "cost": 37.5,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 10,
+      "delta": 10,
+      "analytic_x": 2.5,
+      "solver_x": 2.5,
+      "cost": 37.5,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": -10,
+      "delta": 1,
+      "analytic_x": -0.3333333333333333,
+      "solver_x": -0.3333333333333333,
+      "cost": 9.333333333333332,
+      "gradient_sum": 0.0
+    },
+    {
+      "outlier": 100,
+      "delta": 1,
+      "analytic_x": 0.3333333333333333,
+      "solver_x": 0.3333333333333333,
+      "cost": 99.33333333333334,
+      "gradient_sum": 0.0
+    }
+  ],
+  "boundary_checks": "rho and first derivative continuous at +/-delta for delta .25,1,7.5",
+  "standardized_residual_equivalence": {
+    "sigma": 10,
+    "delta_standardized": 0.1,
+    "x": 0.33333333798994624
+  },
+  "tests": "all assertions passed"
+}

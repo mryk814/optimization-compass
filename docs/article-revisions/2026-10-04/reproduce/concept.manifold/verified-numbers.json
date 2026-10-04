@@ -1,0 +1,45 @@
+{
+  "point": [
+    1.0,
+    0.0
+  ],
+  "ambient_gradient": [
+    0.2,
+    -1.0
+  ],
+  "tangent_gradient": [
+    0.0,
+    -1.0
+  ],
+  "tangent_step": [
+    -0.0,
+    0.5
+  ],
+  "ambient_candidate": [
+    0.9,
+    0.5
+  ],
+  "ambient_candidate_norm": 1.0295630140987,
+  "tangent_candidate_norm": 1.118033988749895,
+  "retracted": [
+    0.8944271909999159,
+    0.4472135954999579
+  ],
+  "projected_ambient_candidate": [
+    0.8741572761215378,
+    0.4856429311786321
+  ],
+  "exponential": [
+    0.8775825618903728,
+    0.479425538604203
+  ],
+  "cost_before": 0.2,
+  "cost_after": -0.2683281572999747,
+  "local_derivative_errors": [
+    0.0012499921875985809,
+    0.0001249999921057402,
+    1.2499998829433586e-05
+  ],
+  "unit_residual": 1.1102230246251565e-16,
+  "tangent_residual": 0.0
+}

@@ -1,0 +1,384 @@
+[
+  {
+    "content_id": "lbfgs",
+    "files": [
+      "reproduce/lbfgs/verified-numbers.json",
+      "reproduce/lbfgs/verify_example.py",
+      "reproduce/lbfgs/make_figure.py"
+    ]
+  },
+  {
+    "content_id": "family.trust-region",
+    "files": [
+      "reproduce/family.trust-region/verified-numbers.json",
+      "reproduce/family.trust-region/family-trust-region.md",
+      "reproduce/family.trust-region/verify_and_draw.py"
+    ]
+  },
+  {
+    "content_id": "gauss-newton",
+    "files": [
+      "reproduce/gauss-newton/gauss-newton.md",
+      "reproduce/gauss-newton/verified-numbers.json",
+      "reproduce/gauss-newton/verify_and_draw.py"
+    ]
+  },
+  {
+    "content_id": "lbfgsb",
+    "files": [
+      "reproduce/lbfgsb/lbfgsb.md",
+      "reproduce/lbfgsb/verified-numbers.json",
+      "reproduce/lbfgsb/verify_and_draw.py"
+    ]
+  },
+  {
+    "content_id": "admm",
+    "files": [
+      "reproduce/admm/verified-numbers.json",
+      "reproduce/admm/verify_and_draw.py",
+      "reproduce/admm/admm.md"
+    ]
+  },
+  {
+    "content_id": "fista",
+    "files": [
+      "reproduce/fista/verified-numbers.json",
+      "reproduce/fista/verify_and_draw.py",
+      "reproduce/fista/fista.md"
+    ]
+  },
+  {
+    "content_id": "least-squares",
+    "files": [
+      "reproduce/least-squares/verified-numbers.json",
+      "reproduce/least-squares/verify_and_draw.py",
+      "reproduce/least-squares/least-squares.md"
+    ]
+  },
+  {
+    "content_id": "bfgs",
+    "files": [
+      "reproduce/bfgs/verified-numbers.json",
+      "reproduce/bfgs/verify_and_draw.py",
+      "reproduce/bfgs/bfgs.md"
+    ]
+  },
+  {
+    "content_id": "projected-gradient",
+    "files": [
+      "reproduce/projected-gradient/verified-numbers.json",
+      "reproduce/projected-gradient/verify_and_draw.py",
+      "reproduce/projected-gradient/projected-gradient.md"
+    ]
+  },
+  {
+    "content_id": "augmented-lagrangian",
+    "files": [
+      "reproduce/augmented-lagrangian/verified-numbers.json",
+      "reproduce/augmented-lagrangian/verify_and_draw.py",
+      "reproduce/augmented-lagrangian/augmented-lagrangian.md"
+    ]
+  },
+  {
+    "content_id": "sqp",
+    "files": [
+      "reproduce/sqp/verified-numbers.json",
+      "reproduce/sqp/verify_and_draw.py",
+      "reproduce/sqp/sqp.md"
+    ]
+  },
+  {
+    "content_id": "concept.robust-regression",
+    "files": [
+      "reproduce/concept.robust-regression/verified-numbers.json",
+      "reproduce/concept.robust-regression/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "concept.constrained-nlp",
+    "files": [
+      "reproduce/concept.constrained-nlp/verified-numbers.json",
+      "reproduce/concept.constrained-nlp/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "concept.convexity",
+    "files": [
+      "reproduce/concept.convexity/verified-numbers.json",
+      "reproduce/concept.convexity/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "concept.variable-domain",
+    "files": [
+      "reproduce/concept.variable-domain/verified-numbers.json",
+      "reproduce/concept.variable-domain/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "concept.mixed-integer-linear-program",
+    "files": [
+      "reproduce/concept.mixed-integer-linear-program/verified-numbers.json",
+      "reproduce/concept.mixed-integer-linear-program/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "concept.convex-quadratic-program",
+    "files": [
+      "reproduce/concept.convex-quadratic-program/verified-numbers.json",
+      "reproduce/concept.convex-quadratic-program/verify_and_plot.py"
+    ]
+  },
+  {
+    "content_id": "cp-sat",
+    "files": [
+      "reproduce/cp-sat/verified-numbers.json",
+      "reproduce/cp-sat/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "epsilon-constraint",
+    "files": [
+      "reproduce/epsilon-constraint/verified-numbers.json",
+      "reproduce/epsilon-constraint/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "concept.knapsack-set-cover",
+    "files": [
+      "reproduce/concept.knapsack-set-cover/verified-numbers.json",
+      "reproduce/concept.knapsack-set-cover/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "dual-simplex",
+    "files": [
+      "reproduce/dual-simplex/verified-numbers.json",
+      "reproduce/dual-simplex/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "concept.cp-scheduling",
+    "files": [
+      "reproduce/concept.cp-scheduling/verified-numbers.json",
+      "reproduce/concept.cp-scheduling/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "weighted-sum",
+    "files": [
+      "reproduce/weighted-sum/verified-numbers.json",
+      "reproduce/weighted-sum/generate_verify.py"
+    ]
+  },
+  {
+    "content_id": "momentum-sgd",
+    "files": [
+      "reproduce/momentum-sgd/verified-numbers.json",
+      "reproduce/momentum-sgd/verify-and-figure.py",
+      "reproduce/momentum-sgd/article-example.py"
+    ]
+  },
+  {
+    "content_id": "adamw",
+    "files": [
+      "reproduce/adamw/verified-numbers.json",
+      "reproduce/adamw/verify-and-figure.py",
+      "reproduce/adamw/article-example.py"
+    ]
+  },
+  {
+    "content_id": "mirror-descent",
+    "files": [
+      "reproduce/mirror-descent/verified-numbers.json",
+      "reproduce/mirror-descent/verify-and-figure.py",
+      "reproduce/mirror-descent/article-example.py"
+    ]
+  },
+  {
+    "content_id": "subgradient",
+    "files": [
+      "reproduce/subgradient/verified-numbers.json",
+      "reproduce/subgradient/verify-and-figure.py",
+      "reproduce/subgradient/article-example.py"
+    ]
+  },
+  {
+    "content_id": "spsa",
+    "files": [
+      "reproduce/spsa/verified-numbers.json",
+      "reproduce/spsa/verify-and-figure.py",
+      "reproduce/spsa/article-example.py"
+    ]
+  },
+  {
+    "content_id": "barrier-lp-qp",
+    "files": [
+      "reproduce/barrier-lp-qp/verified-numbers.json",
+      "reproduce/barrier-lp-qp/verify-and-figure.py",
+      "reproduce/barrier-lp-qp/article-example.py"
+    ]
+  },
+  {
+    "content_id": "cobyla",
+    "files": [
+      "reproduce/cobyla/verified-numbers.json",
+      "reproduce/cobyla/verify.py"
+    ]
+  },
+  {
+    "content_id": "cobyqa",
+    "files": [
+      "reproduce/cobyqa/verified-numbers.json",
+      "reproduce/cobyqa/verify.py"
+    ]
+  },
+  {
+    "content_id": "pattern-search",
+    "files": [
+      "reproduce/pattern-search/verified-numbers.json",
+      "reproduce/pattern-search/verify.py"
+    ]
+  },
+  {
+    "content_id": "differential-evolution",
+    "files": [
+      "reproduce/differential-evolution/verified-numbers.json",
+      "reproduce/differential-evolution/verify.py"
+    ]
+  },
+  {
+    "content_id": "basin-hopping",
+    "files": [
+      "reproduce/basin-hopping/verified-numbers.json",
+      "reproduce/basin-hopping/verify.py"
+    ]
+  },
+  {
+    "content_id": "multi-start",
+    "files": [
+      "reproduce/multi-start/verified-numbers.json",
+      "reproduce/multi-start/verify.py"
+    ]
+  },
+  {
+    "content_id": "tpe",
+    "files": [
+      "reproduce/tpe/verified-numbers.json",
+      "reproduce/tpe/verify.py"
+    ]
+  },
+  {
+    "content_id": "trust-region-newton-cg",
+    "files": [
+      "reproduce/trust-region-newton-cg/verified-numbers.json",
+      "reproduce/trust-region-newton-cg/generate_verify.py",
+      "reproduce/trust-region-newton-cg/published-example-1.py"
+    ]
+  },
+  {
+    "content_id": "nonlinear-cg",
+    "files": [
+      "reproduce/nonlinear-cg/verified-numbers.json",
+      "reproduce/nonlinear-cg/generate_verify.py",
+      "reproduce/nonlinear-cg/published-example-1.py"
+    ]
+  },
+  {
+    "content_id": "trust-krylov",
+    "files": [
+      "reproduce/trust-krylov/verified-numbers.json",
+      "reproduce/trust-krylov/generate_verify.py",
+      "reproduce/trust-krylov/published-example-1.py"
+    ]
+  },
+  {
+    "content_id": "trust-exact",
+    "files": [
+      "reproduce/trust-exact/verified-numbers.json",
+      "reproduce/trust-exact/generate_verify.py",
+      "reproduce/trust-exact/published-example-1.py"
+    ]
+  },
+  {
+    "content_id": "newton-cg",
+    "files": [
+      "reproduce/newton-cg/verified-numbers.json",
+      "reproduce/newton-cg/generate_verify.py",
+      "reproduce/newton-cg/published-example-1.py"
+    ]
+  },
+  {
+    "content_id": "direct-shooting",
+    "files": [
+      "reproduce/direct-shooting/verified-numbers.json",
+      "reproduce/direct-shooting/article-code-01.py",
+      "reproduce/direct-shooting/generate_verify.py",
+      "reproduce/direct-shooting/example.py"
+    ]
+  },
+  {
+    "content_id": "adjoint-sensitivity",
+    "files": [
+      "reproduce/adjoint-sensitivity/verified-numbers.json",
+      "reproduce/adjoint-sensitivity/article-code-01.py",
+      "reproduce/adjoint-sensitivity/generate_verify.py",
+      "reproduce/adjoint-sensitivity/example.py"
+    ]
+  },
+  {
+    "content_id": "concept.manifold",
+    "files": [
+      "reproduce/concept.manifold/verified-numbers.json",
+      "reproduce/concept.manifold/article-code-01.py",
+      "reproduce/concept.manifold/generate_verify.py",
+      "reproduce/concept.manifold/example.py"
+    ]
+  },
+  {
+    "content_id": "riemannian-trust-region",
+    "files": [
+      "reproduce/riemannian-trust-region/verified-numbers.json",
+      "reproduce/riemannian-trust-region/article-code-01.py",
+      "reproduce/riemannian-trust-region/generate_verify.py",
+      "reproduce/riemannian-trust-region/example.py"
+    ]
+  },
+  {
+    "content_id": "riemannian-gradient",
+    "files": [
+      "reproduce/riemannian-gradient/verified-numbers.json",
+      "reproduce/riemannian-gradient/article-code-01.py",
+      "reproduce/riemannian-gradient/generate_verify.py",
+      "reproduce/riemannian-gradient/example.py"
+    ]
+  },
+  {
+    "content_id": "concept.optimal-control",
+    "files": [
+      "reproduce/concept.optimal-control/verified-numbers.json",
+      "reproduce/concept.optimal-control/article-code-01.py",
+      "reproduce/concept.optimal-control/generate_verify.py",
+      "reproduce/concept.optimal-control/example.py"
+    ]
+  },
+  {
+    "content_id": "mma",
+    "files": [
+      "reproduce/mma/verified-numbers.json",
+      "reproduce/mma/article-code-01.py",
+      "reproduce/mma/generate_verify.py",
+      "reproduce/mma/article-code-02.py",
+      "reproduce/mma/example.py"
+    ]
+  },
+  {
+    "content_id": "direct-collocation",
+    "files": [
+      "reproduce/direct-collocation/verified-numbers.json",
+      "reproduce/direct-collocation/article-code-01.py",
+      "reproduce/direct-collocation/generate_verify.py",
+      "reproduce/direct-collocation/example.py"
+    ]
+  }
+]
