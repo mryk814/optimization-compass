@@ -49,4 +49,16 @@ describe("spring sine fit", () => {
     expect(Math.abs(flown.path[3].w)).toBeGreaterThan(12);
     expect(levenbergMarquardt({ a: 1, w: 4 }).path.at(-1)!.sse).toBeCloseTo(13.6, 1);
   });
+
+  it("distinguishes a singular start from a settled local valley", () => {
+    const run = gaussNewton({ a: 0, w: 1.8 });
+    expect(run.path).toHaveLength(1);
+    expect(run.outcome).toBe("stalled");
+    expect(sse({ a: 0.01, w: 1.8 })).toBeLessThan(run.path[0].sse);
+  });
+
+  it("reports budget exhaustion before the fit has settled", () => {
+    expect(gaussNewton({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
+    expect(levenbergMarquardt({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
+  });
 });

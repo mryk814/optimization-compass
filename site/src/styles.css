@@ -2114,6 +2114,16 @@ caption {
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
 .markdown-body figure img { display: block; width: 100%; height: auto; border: 1px solid #d9dbd4; border-radius: .45rem; }
+/* Execution figures (site/public/media, scripts/generate_article_figures.py) carry width/height
+   attributes and are drawn for that size; never stretch them past it, or their text grows. The
+   frame is an outline so the figure keeps the full article width on a phone (text >= 12 px). */
+.markdown-body figure img[src*="media/"] {
+  width: auto;
+  max-width: 100%;
+  border: 0;
+  outline: 1px solid #d9dbd4;
+  outline-offset: -1px;
+}
 .markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }
@@ -2715,6 +2725,7 @@ main:focus {
 
 .method-related-cases li {
   display: grid;
+  min-width: 0;
   gap: 0.15rem;
 }
 
@@ -2722,6 +2733,8 @@ main:focus {
   color: #285740;
   font-size: 0.82rem;
   font-weight: 700;
+  /* Labels can be long stable IDs with no break opportunity. */
+  overflow-wrap: anywhere;
 }
 
 .method-related-cases span {
