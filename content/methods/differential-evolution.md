@@ -4,7 +4,7 @@ kind: method
 method_id: M_DIFFERENTIAL_EVOLUTION
 title_ja: Differential Evolution（差分進化）
 title_en: Differential Evolution
-summary: 個体間の差分ベクトルから候補を作り、交叉と選択で上下限付きの連続空間を探索する集団法です。
+summary: "Differential Evolution（差分進化、DE）は、集団の点どうしの差を次の移動に使う手法です。ランダムな方向を外から与えるだけでなく、今ある点の間隔と向きから変異を作り、元の個体と比べて残すところが特徴です。8個体の一世代から、その計算を追います。"
 source_ids: [S006, S074]
 prerequisites: [concept.derivative-free]
 related_ids: [cma-es, genetic-algorithm, particle-swarm, bayesian-optimization, family.evolutionary]
@@ -53,7 +53,7 @@ $$
 
 世代内では元の集団を固定し、置換結果は次世代用の配列へ保存します。対象個体0の更新結果を、同じ世代の個体4の変異へ混ぜない方式です。
 
-![DE/rand/1/binの個体4の変異と置換、同じ実行の最良値と平均値の推移。差分矢印と移動先を同じ2変数空間で表示。](./media/differential-evolution-step.svg)
+![DE/rand/1/binの個体4の変異と置換、同じ実行の最良値と平均値の推移。差分矢印と移動先を同じ2変数空間で表示。](./media/differential-evolution-step.svg "同じ実行で個体4の変異と置換を追います。最良値と集団の平均値を分けて読みます。")
 
 ### 個体4を置き換える計算
 

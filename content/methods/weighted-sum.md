@@ -4,7 +4,7 @@ kind: method
 method_id: M_WEIGHTED_SUM
 title_ja: 重み付き和によるスカラー化
 title_en: Weighted-sum Scalarization
-summary: 複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的ソルバーを繰り返し解いてPareto候補を集める方法です。
+summary: 二つの目的を「半分ずつ」重視すれば、真ん中の答えになるのでしょうか。この例では同じ単位のままならそうなります。ところが片方の表示単位を100倍に変えると、同じ重み0.5でも、ほとんど片方だけを重視する解へ動きます。
 source_ids: [S039, S055, S068]
 prerequisites: [concept.convexity]
 related_ids: [epsilon-constraint, multi-objective, moead]

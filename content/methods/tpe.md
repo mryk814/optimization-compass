@@ -4,7 +4,7 @@ kind: method
 method_id: M_TPE
 title_ja: TPE（Tree-structured Parzen Estimator）
 title_en: Tree-Structured Parzen Estimator
-summary: 観測済み試行を良い群と悪い群に分け、条件付き探索空間でも良い群に現れやすいパラメータを提案する逐次探索です。
+summary: "TPE（Tree-structured Parzen Estimator）は、観測済みの設定を目的値の良い群と残りの群に分け、両者の密度を比べて次の設定を提案する方法です。ここで大きな密度比は、実測済みの良さではなく、次に測る場所の優先度です。同じ5観測を図、数値、Pythonで追います。"
 source_ids: [S034]
 related_ids: [family.expensive-black-box, bayesian-optimization]
 status: published
@@ -37,7 +37,7 @@ TPE（Tree-structured Parzen Estimator）は、観測済みの設定を目的値
 
 小さい値が良い最小化です。説明用の閾値 $y^*=0.5$ で分けると、良い群は $\{0.8,1.2\}$、残りは $\{-1,0,3\}$ です。良い群の割合は $\gamma=2/5=0.4$。この閾値は教材用に固定したもので、Optunaの既定の群分けを再現していません。
 
-![同じ5点を目的値で群分けし、固定帯域の二つの密度と密度比を作る。次の比較候補0、1、2では1が最大となり、その後の実測値0を左に白抜きで示す。](./media/tpe-five-observations.svg)
+![同じ5点を目的値で群分けし、固定帯域の二つの密度と密度比を作る。次の比較候補0、1、2では1が最大となり、その後の実測値0を左に白抜きで示す。](./media/tpe-five-observations.svg "色付き5点は提案前の情報です。白抜きの点は提案後の実測で、最初の密度を作る材料には含みません。")
 
 左の色付き5点が提案前に持っていた情報です。白抜きの点 $x=1$ は、提案してから新たに測った結果であり、最初の密度を作る材料には含めていません。
 

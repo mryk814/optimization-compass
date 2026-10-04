@@ -4,7 +4,7 @@ kind: method
 method_id: M_COBYLA
 title_ja: COBYLA
 title_en: Constrained Optimization BY Linear Approximations
-summary: 目的関数と制約の値だけから局所線形モデルを作り、信頼領域半径内で一般不等式制約付きの局所解を探す微分不要法です。
+summary: "COBYLAは、目的関数と制約の値から局所的な線形モデルを作り、そのモデルを使って次に試す点を選ぶ微分不要法です。重要なのは、モデル上で制約を守る候補でも、実際の制約を破ることがあるという点です。円の内側で一番よい点を探す例から、このずれを読みます。"
 source_ids: [S002, S018, S056]
 prerequisites: [concept.derivative-free, constrained-continuous]
 related_ids: [constrained-continuous, mads, pattern-search]
@@ -80,7 +80,7 @@ $$
 
 ここで直線制約は最適候補に対して余裕があります。線形化した円境界と信頼領域の交点から得られる候補は、約 $(0.699876,0.811153)$ です。
 
-![左は説明用3点の線形モデルと真の円のずれ。線形境界上の候補は円の外に出る。右は同じ最適化問題をSciPy COBYLAで解いた実評価履歴。](./media/cobyla-model-feasibility.svg)
+![左は説明用3点の線形モデルと真の円のずれ。線形境界上の候補は円の外に出る。右は同じ最適化問題をSciPy COBYLAで解いた実評価履歴。](./media/cobyla-model-feasibility.svg "左は説明用の線形モデル、右は同じ問題のSciPy実評価履歴です。モデルの実行可能性と真の制約を区別します。")
 
 | 候補で調べる量 | モデルによる予測 | 本物の関数での評価 |
 |---|---:|---:|

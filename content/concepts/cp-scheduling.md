@@ -5,7 +5,7 @@ canonical_entity_type: problem
 canonical_entity_id: PA026
 title_ja: 制約プログラミングによるスケジューリング
 title_en: Constraint Programming Scheduling
-summary: 制約プログラミングによるスケジューリングは、作業の順序や資源の競合を制約として表し、開始時刻を決める定式化です。実行できる予定を探すことと、最も早く終わる予定を証明することを区別します。
+summary: 機械が1単位時間空く予定は、詰め方が悪いのでしょうか。必ずしもそうではありません。材料が届く前には始められない作業があると、避けられない空白を含む予定でも、全作業を最も早く終えられます。
 prerequisites: []
 related_ids: [cp-sat, cp-search, branch-and-cut, concept.mixed-integer-linear-program]
 source_ids: [S022, S053]

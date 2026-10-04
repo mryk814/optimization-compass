@@ -4,7 +4,7 @@ kind: method
 method_id: M_TRUST_EXACT
 title_ja: 厳密信頼領域Newton法
 title_en: Nearly Exact Trust-Region
-summary: 信頼領域の部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。
+summary: "厳密信頼領域Newton法は、半径内の二次モデルを、行列分解を使って高い精度で最小にする方法です。ここで「厳密」に近づけるのは現在点の部分問題です。元の非線形問題の大域最適解を保証する名前ではありません。SciPyの名称も nearly exact（ほぼ厳密）です。"
 source_ids: [S002, S056]
 prerequisites: []
 related_ids: [trust-region-newton-cg, trust-krylov, newton-method, family.trust-region]
@@ -79,7 +79,7 @@ $$
 
 これは4回の連続した更新ではありません。全て同じ $(4,3)$ に立ち、半径だけを変えた四つの候補です。外側の最適化の軌跡と混ぜないでください。
 
-![同じ現在点で信頼半径を変えた4本の一歩と、半径に対する各成分の変化](./media/trust-exact-main.svg)
+![同じ現在点で信頼半径を変えた4本の一歩と、半径に対する各成分の変化](./media/trust-exact-main.svg "原点は現在点からの移動ゼロです。半径を広げると、Newton点へ向かう左向き成分も大きくなります。")
 
 図の原点は現在点からの移動 $p=0$ です。青い小半径では、ほぼ真下に進みます。紫のNewton点が許容されるまで広げると、左向き成分も大きくなります。
 

@@ -4,7 +4,7 @@ kind: method
 method_id: M_TRUST_KRYLOV
 title_ja: Trust-region Krylov法
 title_en: Trust-Region Krylov
-summary: ヘッセ行列とベクトルの積から作るKrylov部分空間で信頼領域の部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
+summary: "Trust-region Krylov法は、Hessian-vector product（HVP）で少数の方向を作り、その方向が張る部分空間で信頼領域の一歩を探します。大きなヘッセ行列の全分解を避けながら、境界上でも部分問題の解を改善するのが狙いです。"
 source_ids: [S002, S056]
 related_ids: [family.smooth-local, newton-cg, trust-region-newton-cg]
 status: published
@@ -91,7 +91,7 @@ $$
 
 負のモデル変化は改善です。半径1では空間を広げても追加減少は約0.004しかありません。半径4では約0.844改善します。半径が狭い間は勾配方向だけでも足り、広い一歩では別の方向を調べる価値が増えることが分かります。
 
-![半径1と4で、1次元Krylov空間の線上の解と2次元空間の解を比較し、候補点を拡大した図](./media/trust-krylov-main.svg)
+![半径1と4で、1次元Krylov空間の線上の解と2次元空間の解を比較し、候補点を拡大した図](./media/trust-krylov-main.svg "主図は元の尺度を保ち、近い候補点だけを別尺度で拡大しています。青の破線は1次元Krylov空間です。")
 
 青の破線が1次元空間です。緑は2次元モデルの解で、半径4では左向き成分が明らかに増えます。拡大図は近い候補点を見分けるための別尺度です。主図の円と矢印は元の尺度を保っています。
 

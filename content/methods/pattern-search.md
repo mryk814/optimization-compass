@@ -4,7 +4,7 @@ kind: method
 method_id: M_PATTERN_SEARCH
 title_ja: Pattern Search
 title_en: Pattern Search
-summary: 現在点の周囲へ配置方向の近傍調査点を配置し、改善の有無に応じて一歩の大きさを拡大・縮小する微分不要局所探索法です。
+summary: "現在点の周囲を数方向に試し、良い点があれば移り、なければ探索幅を縮めます。Pattern Searchの一手を読むときは、点が動いたかと次にどの幅で調べるかを別々に見るのが出発点です。"
 source_ids: [S018, S056, S060]
 prerequisites: [concept.derivative-free]
 related_ids: [powell, mads, method.nelder-mead]
@@ -48,7 +48,7 @@ $$
 
 初期値は8.712です。曲がった谷を持つため、座標方向だけの一歩が必ず谷に沿うとは限りません。
 
-![同一の二変数関数で最初の3回のpollを比較。1回目は上方向を採用し、2回目と3回目は現在点を保って幅だけを縮める。](./media/pattern-search-poll.svg)
+![同一の二変数関数で最初の3回のpollを比較。1回目は上方向を採用し、2回目と3回目は現在点を保って幅だけを縮める。](./media/pattern-search-poll.svg "同じ関数の最初の3回のpollです。緑は採用候補、茶色は不採用候補、濃い青は調査開始点です。")
 
 図中の数字は候補の目的値です。緑は採用候補、茶色は不採用候補、濃い青は調査開始点です。薄い曲線は同じ目的関数の等高線で、ソルバーへ勾配を与えているわけではありません。
 

@@ -4,7 +4,7 @@ kind: method
 method_id: M_MULTISTART
 title_ja: Multi-start局所最適化
 title_en: Multi-start Local Optimization
-summary: 複数の初期点から局所法を独立に実行し、最良の解を採用する最も単純な大域化戦略です。
+summary: "Multi-startは、出発点を変えて局所最適化を繰り返し、得られた候補の中から良いものを選ぶ戦略です。実装は単純ですが、結果の読み方には注意が必要です。局所求解が25本とも成功しても、大域最適解に届かない例を追います。"
 source_ids: [S056, S007, S008]
 prerequisites: []
 related_ids: [basin-hopping, bfgs, family.global-search]
@@ -59,7 +59,7 @@ $$
 
 3本目までの最良値は1本目の16.9142のままです。「別の谷を見つけた」と「最良値を更新した」は違います。
 
-![25個の初期点とBFGSによる到達点、累積目的評価数に対する最良値、到達点ごとの重複本数。原点は未到達。](./media/multi-start-basins.svg)
+![25個の初期点とBFGSによる到達点、累積目的評価数に対する最良値、到達点ごとの重複本数。原点は未到達。](./media/multi-start-basins.svg "矢印は初期点と終了点の対応で、BFGSの内部経路ではありません。25回の求解でも原点には到達していません。")
 
 左の矢印は初期点と終了点の対応であり、BFGSの内部経路ではありません。中央の緑線は局所求解が終わるたびの最良値、灰色の点は各求解の終了値です。
 

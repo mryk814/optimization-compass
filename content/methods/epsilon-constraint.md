@@ -4,7 +4,7 @@ kind: method
 method_id: M_EPSILON_CONSTRAINT
 title_ja: ε-constraint法
 title_en: Epsilon-Constraint Method
-summary: 一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらパレート候補を集める方法です。
+summary: 排出を30以下にしたい。その範囲で最も安い生産計画は何でしょうか。ε制約法では、この「30以下」を制約として固定し、費用だけを最小化します。上限を24へ下げたら、別の単目的問題をもう一度解きます。
 source_ids: [S039, S055]
 related_ids: [multi-objective]
 status: published
