@@ -91,7 +91,7 @@
 | `primal-dual-conic` | `M_PRIMAL_DUAL_CONIC` | 64 | 3417 | 13 | 1 | pass |
 | `primal-simplex` | `M_SIMPLEX` | 55 | 7050 | 13 | 1 | pass |
 | `projected-gradient` | `M_PROJECTED_GRADIENT` | 50 | 8193 | 14 | 1 | pass |
-| `proximal-gradient` | `M_PROX_GRADIENT` | 44 | 4033 | 8 | 1 | pass |
+| `proximal-gradient` | `M_PROX_GRADIENT` | 44 | 4079 | 8 | 1 | pass |
 | `random-search` | `M_RANDOM_SEARCH` | 52 | 5363 | 12 | 1 | pass |
 | `riemannian-gradient` | `M_RIEMANNIAN_GRADIENT` | 60 | 5727 | 16 | 1 | pass |
 | `riemannian-trust-region` | `M_RIEMANNIAN_TRUST_REGION` | 50 | 7396 | 17 | 1 | pass |
