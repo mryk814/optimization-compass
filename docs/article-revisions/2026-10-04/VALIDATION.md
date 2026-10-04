@@ -52,7 +52,7 @@ previewは専用worktreeのproduction artifactです。mainへのmergeや公開�
 各記事の既存の独立レビュー・計算結果を引き継ぎ、Python64ブロックの構文を確認しました。
 今回全code例を再実行したとは主張しません。OR-ToolsのCP-SAT例とOptunaのTPE例の
 未実行注記は保持しています。固定帯域のTPE教材計算はOptuna例とは別です。
-+
+
 ## 近接勾配の最初の一手の表示
 
 初期表示が12回目になり、中間点と更新点が同じ橙色で、二つの図の縮尺も異なっていた。
