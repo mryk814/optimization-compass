@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `460`
+- Prose review warnings: `458`
 
 ## Concept publication floor
 
@@ -42,7 +42,7 @@
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
-| `concept.variable-domain` | 51 | 4690 | 9 | 2 | 0 | pass |
+| `concept.variable-domain` | 51 | 4699 | 9 | 2 | 0 | pass |
 | `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 80 | 2156 | 7 | 3 | 0 | pass |
@@ -54,7 +54,7 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 20
-- `sentence.commas`: 193
+- `sentence.commas`: 191
 - `sentence.long`: 27
 
 | Content | Warnings |
@@ -111,7 +111,7 @@
 | `concept.time-discretization` | 1 |
 | `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
-| `concept.variable-domain` | 2 |
+| `concept.variable-domain` | 0 |
 | `constrained-continuous` | 0 |
 | `coordinate-descent` | 0 |
 | `cp-sat` | 2 |

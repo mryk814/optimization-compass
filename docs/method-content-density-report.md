@@ -108,7 +108,7 @@
 | `tpe` | `M_TPE` | 145 | 4917 | 18 | 2 | pass |
 | `trust-exact` | `M_TRUST_EXACT` | 133 | 6635 | 17 | 1 | pass |
 | `trust-krylov` | `M_TRUST_KRYLOV` | 126 | 7010 | 17 | 1 | pass |
-| `trust-region-newton-cg` | `M_TRUST_NCG` | 137 | 6628 | 17 | 1 | pass |
+| `trust-region-newton-cg` | `M_TRUST_NCG` | 137 | 6660 | 17 | 1 | pass |
 | `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 66 | 6479 | 13 | 1 | pass |
 | `turbo-saasbo` | `M_TURBO_SAASBO` | 147 | 4495 | 14 | 1 | pass |
 | `weighted-sum` | `M_WEIGHTED_SUM` | 107 | 6604 | 20 | 1 | pass |

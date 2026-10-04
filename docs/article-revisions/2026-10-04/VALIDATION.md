@@ -9,7 +9,8 @@
 - 現行mainのSVG生成処理とsineFitの停止表示を保持。
 - summary 15件を、レビュー済みの冒頭段落と一致させた。
 - 図caption 28件を、隣接するレビュー済み説明から補った。
-- 19記事を既存の節順へ配置。見出しを除く全行の内容と出現回数が不変であることを照合した。
+- 19記事を既存の節順へ配置。節の移動では見出しを除く全行の内容と出現回数を照合し、数値・code・出典を保持した。
+- Trust-region Newton-CGの冒頭には、既存の説明へ「見るもの・動かすもの・前進の判断」のラベルを補った。変数領域の2文は意味と数値を保って短く分けた。
 - 既存SVG 9枚を本文と目視照合。8枚を保持し、逆向きの曲線だった `convexity.svg` だけを修正した。
 - 凸性図は本文と同じ `f(x)=0.35x²+0.2`。101点の有理数計算でBezier曲線との完全一致を確認。
   端点1.6、中間点0.2、弦との差1.4を表示する。
@@ -23,6 +24,7 @@
 | `validate content-ready` | pass、144教材・36Gallery・29比較・license・公開契約5 tests |
 | 今回の50稿すべてのpublish-readyと節構成 | 50/50 pass |
 | `tests/test_explorables.py` | 18 pass |
+| 先行CIで失敗した記事関連3 tests | 修正後の限定sliceで3 pass |
 | 記事表示componentのfocused Vitest | 7 pass |
 | 近接勾配・sineFit・registry/mountの先行Vitest | 31 pass、対象実装不変のため再利用 |
 | 最終 `npm run build` | pass、TypeScript型検査を含む |
