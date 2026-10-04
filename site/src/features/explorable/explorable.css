@@ -712,3 +712,12 @@
 .mo-level { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
 .mo-improve line { stroke: var(--ex-red); stroke-width: 2.5; }
 .mo-label { fill: var(--ex-ink); font-size: var(--type-label); }
+.prox-zero-band { fill: var(--ex-teal); opacity: 0.14; }
+.prox-start { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
+.prox-intermediate { fill: none; stroke: var(--ex-orange); stroke-width: 2; }
+.prox-target { fill: var(--ex-orange); opacity: 0.5; }
+.prox-guide { stroke: var(--ex-ink); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.5; }
+.prox-equations { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+.prox-equations p { margin: 0; }
+.prox-equations .live-math-block { margin: 0 0 0.6rem; }
+.prox-substitution { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 0.4rem; margin-bottom: 0.6rem; }

@@ -18,4 +18,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "cmaes-shape-learning": lazy(() => import("./CmaesShape")),
   "interior-point-barrier-path": lazy(() => import("./BarrierPath")),
   "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
+  "proximal-gradient-threshold": lazy(() => import("./ProximalThreshold")),
 };
