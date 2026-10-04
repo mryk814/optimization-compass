@@ -2725,6 +2725,7 @@ main:focus {
 
 .method-related-cases li {
   display: grid;
+  min-width: 0;
   gap: 0.15rem;
 }
 
@@ -2732,6 +2733,8 @@ main:focus {
   color: #285740;
   font-size: 0.82rem;
   font-weight: 700;
+  /* Labels can be long stable IDs with no break opportunity. */
+  overflow-wrap: anywhere;
 }
 
 .method-related-cases span {
