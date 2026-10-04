@@ -1,0 +1,139 @@
+{
+  "contract_version": "1.0.0",
+  "reviews": {
+    "adam": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "5af80116bf1a",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "bayesian-optimization": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "0551f92707a8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "waivers": {
+        "figure.checks-after": "読者に先に選ばせる型。図の後の観察は「なぜ、その場所を選びましたか」以下の小見出しで追う"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "concept.linear-least-squares": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "c5cdbf494cad",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "concept.linear-program": {
+      "reviewed_on": "2026-10-04",
+      "reviewer": "claude",
+      "body_sha256": "c5a79a7e0f4a",
+      "verdicts": {
+        "compare.no-ranking": {
+          "verdict": "fail",
+          "note": "L29「数百万変数の問題でも…解けます」、L118「大規模で疎な問題に強く」など、条件も出典もない一般的な性能の主張がある"
+        },
+        "example.computed": "pass",
+        "example.single-thread": {
+          "verdict": "fail",
+          "note": "パン屋の題材は双対とコードまで通るが、主図lp-vertex-walkは別のLP（max 3x+2y）で、例の頂点(4,3)と売上24を図で確かめられない。図の初期値をパン屋のLPにそろえる"
+        },
+        "explorable.ui-names": {
+          "verdict": "fail",
+          "note": "本文が「目的の係数」「橙の直線」「紺の点」と色や一般語で呼び、UI名「係数 c₁（x の重み）」で指していない。LpVertexWalkにex-panel-titleの見出しがない"
+        },
+        "figure.observation-to-formula": {
+          "verdict": "fail",
+          "note": "図の後はL73の1文だけで、観察から生まれる疑問がない。主図も標準形より後にある"
+        },
+        "figure.one-question": {
+          "verdict": "fail",
+          "note": "captionが「別のLPの教材用の図」止まりで、図の問い（なぜ頂点だけでよいか）と読み取れない範囲（実装・計算量は示さない等）を書いていない"
+        },
+        "pitfalls.with-example": {
+          "verdict": "fail",
+          "note": "L142-145の4項目が一般論で、パン屋の数値で誤りを示していない。例：小麦粉を18から増やすと39までは売上が5/7ずつ増え、それを超えると増えない（双対値の外挿）"
+        },
+        "prose.readable": {
+          "verdict": "fail",
+          "note": "L28「この強い制限が、この定式化の強みでもあります」、L105、L111「使える道具と得られる保証が変わります」など、中身のない抽象文がある"
+        },
+        "reading.formula-sentence": {
+          "verdict": "fail",
+          "note": "標準形の式の前（L33）が記号の導入だけで、式が何をするかの一文がない。式の後の読み方（L39）はある"
+        },
+        "routes.trouble-first": {
+          "verdict": "fail",
+          "note": "見分け方L96の固定費と、実行不能・非有界の行き先にリンクがない。近い定式化L107-109にリンクがなく、一般／特殊／緩和の関係語もない"
+        },
+        "screen.three-widths": {
+          "verdict": "fail",
+          "note": "375pxで主図のラベルが重なる（「B z=7.5」と「2x+y≤5」）。右端の「y ≥ 0」が切れる"
+        }
+      },
+      "notes": "Sonnet 5.5のレビューをClaudeが本文と照合して確認。数値（頂点の売上、双対値5/7・6/7、コード出力）は再計算で一致。画面はClaudeが1280/375/320pxで確認"
+    },
+    "gauss-newton": {
+      "reviewed_on": "2026-10-04",
+      "reviewer": "claude",
+      "body_sha256": "360054f3e8ee",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": {
+          "verdict": "fail",
+          "note": "30秒でつかむ（L20-27）と一手の意味（L29-46）は一般論だけで、指数減衰の例はL50の小さな例から始まる。30秒でつかむで同じ題材と最初の残差を出し、一手の式にも例の値を添える"
+        },
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": {
+          "verdict": "fail",
+          "note": "本文に図がなく、観察から式へ進む流れがない。式が先で、反復2の跳ね上がりの観察は表の後。非線形最小二乗の記事の操作図を使い、「なぜ遠い一手は外れるのか」から式へつなぐ"
+        },
+        "figure.one-question": "na",
+        "prose.readable": {
+          "verdict": "fail",
+          "note": "L20-22は「ずれ」の繰り返しで冗長。コラムの導入L187が続く停止規則の比較とつながらない。L206の保存の一文が次に読むの後で孤立している。\\topとTの表記ゆれ（L25とL40）"
+        },
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnet 5.5のレビューをClaudeが確認。reading.formula-sentenceはSonnetのfailをpassに変更（L31の式の前に意味の一文、L37に読み方がある）。figure.one-questionは本文に図がないためna。数値は全反復を再計算して一致"
+    }
+  }
+}
