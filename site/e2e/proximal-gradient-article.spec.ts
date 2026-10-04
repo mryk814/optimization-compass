@@ -4,6 +4,7 @@ import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation
 const selector = '[data-explorable-id="proximal-gradient-threshold"]';
 
 test("近接勾配の二つの操作と0になる区間をキーボードでも確かめる", async ({ page, baseURL }, testInfo) => {
+  await page.setViewportSize({ width: 375, height: 812 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await gotoAtlasRoute(page, baseURL!, "/learn/proximal-gradient");
   const region = page.locator(selector);
@@ -82,7 +83,8 @@ test("近接勾配と最小二乗の記事を往復しても図が重複せず�
     const nonlinear = page.locator('[data-explorable-id="nonlinear-least-squares-landscape"]');
     await nonlinear.getByRole("slider", { name: /振幅 a/u }).fill("0");
     await nonlinear.getByRole("button", { name: "この点から下る", exact: true }).click();
-    await expect(nonlinear.locator(".ex-readout")).toContainText("更新方向を安定して求められず");
+    await expect(nonlinear.locator(".ex-readout")).toContainText("近似の計算や更新が成立せず");
+    await expect(nonlinear.locator(".ex-readout")).toContainText("局所最小に着いたとは判断できません");
     await expect(nonlinear.locator(".ex-readout")).not.toContainText("別の谷");
     await page.waitForLoadState("networkidle");
     await page.evaluate(() => { window.location.hash = "/learn/proximal-gradient"; });
