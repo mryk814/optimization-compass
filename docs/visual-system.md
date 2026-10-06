@@ -70,7 +70,7 @@ A を骨格にし、B の「手法は特定の軸だけを読む計器である�
 | **Axis state** | 既知（塗り）、不明＝genuinely uncertain（斜線）、未回答＝missing（点線の空欄）、該当なし＝irrelevant（短い横線） | Signature の各軸、Method Lens | `signature.ts` の `AxisState` |
 | **Disposition Mark** | 候補 ●、条件付き ◐、除外 ⊘、判断保留 ◌（根拠不足・未回答） | Case、Diagnose 結果、Method、Theater のレーン見出し | `DispositionMark.tsx` |
 | **Method Lens** | 手法が読む軸と、この問題で「支える軸」「破る軸」「まだ開いている軸」、候補に変わる条件 | Case、Diagnose 結果、Method、Theater | `MethodLens.tsx`、`method-lens.ts` |
-| **Search Stage** | 地形（人間だけが見る）、評価点、経路、不確実性帯、次の一手、失敗事象、予算目盛り | Theater、Compare（重ね表示）、Case のプレビュー、記事 explorable | `SearchStage.tsx` |
+| **Search Stage** | 地形（人間だけが見る）、評価点、経路、不確実性帯、次の一手、失敗事象、予算目盛り。2次元では等高線、実行可能領域、読んだ情報（青緑の矢印）と次の一手（橙の矢印）、未知の平面 | Theater、Compare（重ね表示）、Case のプレビュー、記事 explorable | `SearchStage.tsx` |
 | **Evidence Link** | 主張 → source ID | すべての判断の末尾（既存の `EvidenceLinks` を共通語彙として使う） | `EvidenceLinks.tsx` |
 | **Switch Signal** | 「この観測が出たら手法を見直す」印 | Theater の失敗事象、Case の限界、Compare の注記 | `SearchStage.tsx` の `FailureEvent` |
 
@@ -137,7 +137,7 @@ Gallery（署名つきカード）
 | 署名の軸・状態・語彙 | `site/src/visual-system/signature.ts`（軸と選択肢の順序は診断の質問と一致することを `signature.test.ts` が検査） |
 | Method Lens の計算 | `site/src/visual-system/method-lens.ts`（規則と predicate だけから作る。Case にない除外を作らないことをテストで固定） |
 | 部品 | `ProblemSignature`、`DispositionMark`、`LensBoard`、`MethodReading`、`CaseSignatureStrip`、`SearchStage` |
-| アルゴリズムの視点の舞台 | `site/src/features/theater/lenses/`（`/theater/lenses/hyperparameter-search`） |
+| アルゴリズムの視点の舞台 | `site/src/features/theater/lenses/`（`/theater/lenses/hyperparameter-search` は1次元の地形、`/theater/lenses/constrained-design` は2次元の制約。対応する Case は `theater-routes.ts` の `ALGORITHM_LENS_CASES`） |
 | e2e | `site/e2e/visual-system.spec.ts`（vertical slice の5画面で axe と375pxの横はみ出し、除外の読み、視点の切り替え） |
 
 画面への配置:
@@ -167,3 +167,11 @@ Gallery（署名つきカード）
 - Learn・Sources・Coverage にはまだ署名と印を置いていない。Learn の formulation 記事（問題型）は、Case と違って回答を持たないため、問題型ごとの典型的な署名を正準データとして持つかどうかから決める必要がある。
 - データの発見: Case の除外36件のうち23件は、12軸の規則・前提・変数型では説明できない。推薦エンジンの証明判定には部分一致の不具合もある。詳細と修正案は [`investigations/2026-10-07-case-rule-gaps.md`](investigations/2026-10-07-case-rule-gaps.md)。Lens はこれらの食い違いを隠さず表示する。
 - Gallery カードのメタ情報の文字（0.65rem）は、この変更の前から14pxの契約を下回っている。
+
+## 12. 二つ目の舞台で確かめたこと
+
+制約つきの Case `constrained-design` で、地形が2次元になり、主題が「探索」から「制約の見え方」に変わっても、記号を増やさずに描けるかを確かめた。
+
+- 新しく足したのは2次元の部品だけ（`ContourField`、`FeasibleCircle`、`PathLine`、`VectorArrow`、`UnseenPlane`）。色・形・動き・未知の斜線・違反の赤・判断の印は、1次元の舞台と同じものを使っている。
+- アルゴリズムの視点では、実行可能領域を描くのは射影の計器だけになる。目的だけを見る計器には円が見えないことを、空白ではなく斜線の平面として描く。
+- ペナルティ法の最後の点にはごく小さな違反が残る。表示を丸めて「0」にすると赤と矛盾するので、小さな違反は指数表記で残した。違反の表示を丸めない、という規則としてここに記録する。

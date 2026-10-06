@@ -12,6 +12,7 @@
  *   SpreadBracket     a population's sampling width (orange bracket)
  *   BudgetTicks       one tick per evaluation, filled when spent
  */
+import { contourSegments, type Bounds } from "../features/explorable/math/contours";
 import { shapePath, type MethodShape } from "./DispositionMark";
 
 export interface StageScale {
@@ -224,6 +225,81 @@ export function AcquisitionStrip({
       <path className="vs-ei" d={`${d} L ${x1} ${top + height} L ${x0} ${top + height} Z`} />
       {next !== null && <line className="vs-acquisition-next" x1={scale.px(next)} x2={scale.px(next)} y1={top} y2={top + height} />}
       <line className="vs-stage-axis" x1={x0} x2={x1} y1={top + height} y2={top + height} />
+    </g>
+  );
+}
+
+/* ---------- Two-dimensional stage: the same marks on a plane ---------- */
+
+/**
+ * Level lines of the teaching objective on a plane — the human view's terrain, drawn as
+ * dashed grey like the 1D TerrainCurve. Exact only up to the sampling grid.
+ */
+export function ContourField({ f, bounds, levels, scale, resolution = 60 }: { f: (x: number, y: number) => number; bounds: Bounds; levels: readonly number[]; scale: StageScale; resolution?: number }) {
+  const d = levels
+    .flatMap((level) => contourSegments(f, bounds, level, resolution, resolution))
+    .map(([x1, y1, x2, y2]) => `M ${scale.px(x1).toFixed(1)} ${scale.py(y1).toFixed(1)} L ${scale.px(x2).toFixed(1)} ${scale.py(y2).toFixed(1)}`)
+    .join(" ");
+  return <path className="vs-terrain vs-contours" d={d} />;
+}
+
+/** A feasible region bounded by a circle: teal wash, ink boundary (a structure line). */
+export function FeasibleCircle({ center, radius, scale }: { center: readonly [number, number]; radius: number; scale: StageScale }) {
+  const rx = Math.abs(scale.px(center[0] + radius) - scale.px(center[0]));
+  const ry = Math.abs(scale.py(center[1] + radius) - scale.py(center[1]));
+  return <ellipse className="vs-feasible" cx={scale.px(center[0])} cy={scale.py(center[1])} rx={rx} ry={ry} />;
+}
+
+/** The path a method took through the plane; ink, so method identity stays in the marks' shape. */
+export function PathLine({ points, scale, dashed = false }: { points: ReadonlyArray<readonly [number, number]>; scale: StageScale; dashed?: boolean }) {
+  if (points.length < 2) return null;
+  return <path className={dashed ? "vs-path is-dashed" : "vs-path"} d={points.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${scale.px(x).toFixed(1)} ${scale.py(y).toFixed(1)}`).join(" ")} />;
+}
+
+/**
+ * An arrow from a point. `read` is information the method observes (teal); `next` is the move
+ * it makes (orange). `length` rescales the vector so long gradients stay on the stage.
+ */
+export function VectorArrow({ from, vector, scale, kind, maxLength = 0.6 }: { from: readonly [number, number]; vector: readonly [number, number]; scale: StageScale; kind: "read" | "next"; maxLength?: number }) {
+  const norm = Math.hypot(vector[0], vector[1]);
+  if (norm < 1e-9) return null;
+  const k = Math.min(1, maxLength / norm);
+  const x1 = scale.px(from[0]);
+  const y1 = scale.py(from[1]);
+  const x2 = scale.px(from[0] + vector[0] * k);
+  const y2 = scale.py(from[1] + vector[1] * k);
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const head = 7;
+  const hx = (a: number) => x2 - head * Math.cos(angle + a);
+  const hy = (a: number) => y2 - head * Math.sin(angle + a);
+  return (
+    <g className={`vs-vector is-${kind}`}>
+      <line x1={x1} x2={x2} y1={y1} y2={y2} />
+      <path d={`M ${x2} ${y2} L ${hx(0.45)} ${hy(0.45)} L ${hx(-0.45)} ${hy(-0.45)} Z`} />
+    </g>
+  );
+}
+
+/**
+ * Unknown is data, on a plane: the stage is hatched where the method holds no information;
+ * a method that knows its feasible set (a projection) clears that region.
+ */
+export function UnseenPlane({ id, scale, knownCircle }: { id: string; scale: StageScale; knownCircle?: { center: readonly [number, number]; radius: number } }) {
+  const rx = knownCircle ? Math.abs(scale.px(knownCircle.center[0] + knownCircle.radius) - scale.px(knownCircle.center[0])) : 0;
+  const ry = knownCircle ? Math.abs(scale.py(knownCircle.center[1] + knownCircle.radius) - scale.py(knownCircle.center[1])) : 0;
+  return (
+    <g className="vs-unseen-field">
+      <defs>
+        <pattern height="7" id={id} patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="7">
+          <rect className="vs-hatch-ground" height="7" width="7" />
+          <line className="vs-hatch-line" x1="0" x2="0" y1="0" y2="7" />
+        </pattern>
+        <mask id={`${id}-mask`}>
+          <rect fill="white" height={scale.height} width={scale.width} />
+          {knownCircle && <ellipse cx={scale.px(knownCircle.center[0])} cy={scale.py(knownCircle.center[1])} fill="black" rx={rx} ry={ry} />}
+        </mask>
+      </defs>
+      <rect fill={`url(#${id})`} height={scale.height} mask={`url(#${id}-mask)`} opacity={0.45} width={scale.width} />
     </g>
   );
 }

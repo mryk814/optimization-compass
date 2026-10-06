@@ -44,7 +44,7 @@ import {
   patchJourneyState,
 } from "../../state/journey-navigation";
 import { CaseSignatureStrip } from "../../visual-system";
-import { THEATER_ROUTES } from "../theater/theater-routes";
+import { algorithmLensRoute } from "../theater/theater-routes";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
@@ -162,8 +162,8 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         </label>
       </section>
       <CaseSignatureStrip caseId={comparison.case_id}>
-        {comparison.case_id === "hyperparameter-search" && (
-          <JourneyLink className="vs-case-strip-action" to={THEATER_ROUTES.algorithmLenses}>同じ地形を3つの計器で測る →</JourneyLink>
+        {algorithmLensRoute(comparison.case_id) && (
+          <JourneyLink className="vs-case-strip-action" to={algorithmLensRoute(comparison.case_id)!}>同じ問題を3つの計器で見る →</JourneyLink>
         )}
       </CaseSignatureStrip>
       <ComparisonScopeSummary comparison={comparison} />

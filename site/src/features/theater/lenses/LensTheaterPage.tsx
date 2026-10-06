@@ -49,6 +49,7 @@ import {
   type LensSnapshot,
 } from "./lensRuns";
 import "./lens-theater.css";
+import { CONSTRAINED_CASE, ConstrainedLensTheater } from "./ConstrainedLensTheater";
 
 const SUPPORTED_CASE = "hyperparameter-search";
 
@@ -105,6 +106,11 @@ const Y_DOMAIN: readonly [number, number] = [-0.9, 3.9];
 
 export function LensTheaterPage() {
   const { caseId = SUPPORTED_CASE } = useParams();
+  if (caseId === CONSTRAINED_CASE) return <ConstrainedLensTheater />;
+  return <LandscapeLensTheater caseId={caseId} />;
+}
+
+function LandscapeLensTheater({ caseId }: { caseId: string }) {
   const [item, setItem] = useState<GalleryCase>();
   const [error, setError] = useState<Error>();
   const siteData = useSiteData();
@@ -147,7 +153,7 @@ export function LensTheaterPage() {
   }, [item, siteData]);
 
   if (caseId !== SUPPORTED_CASE) {
-    return <NotFoundPage detail={`アルゴリズムの視点の舞台は、まだ ${SUPPORTED_CASE} だけに接続されています。`} />;
+    return <NotFoundPage detail={`アルゴリズムの視点の舞台がないCaseです: ${caseId}`} />;
   }
 
   const excludedGradient = item?.excluded_methods.find((entry) => entry.method_id === "M_BFGS");

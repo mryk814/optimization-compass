@@ -61,3 +61,20 @@ test("CaseからMapへ進むと、同じ回答の署名が詳細欄に出る", a
   await expect(page.locator(".map-signature")).toBeVisible();
   await expect(page.locator(".map-signature")).toContainText("まだ開いている軸 1");
 });
+
+test("@critical 制約の舞台はaxe違反がなく、375pxではみ出さない", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/lenses/constrained-design");
+  await expect(page.getByRole("heading", { name: "同じ制約を、3つの計器で読む" })).toBeVisible();
+  await expectNoHighImpactViolations(page, testInfo, "visual-system-constrained-stage");
+  await page.setViewportSize({ width: 375, height: 800 });
+  await expectNoHorizontalOverflow(page);
+});
+
+test("制約の舞台では、アルゴリズムの視点で実行可能領域が見えるのは射影の計器だけ", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/lenses/constrained-design");
+  await expect(page.locator(".lens-lane .vs-feasible")).toHaveCount(1);
+  await expect(page.locator(".lens-lane").filter({ hasText: "境界へ射影する" }).locator(".vs-feasible")).toHaveCount(1);
+  await expect(page.locator(".lens-lane").filter({ hasText: "目的の傾きだけを見る" }).locator(".vs-eval.is-violation").first()).toBeVisible();
+  await page.getByLabel("人間の視点（等高線と実行可能領域を重ねる）").check();
+  await expect(page.locator(".lens-lane .vs-feasible")).toHaveCount(3);
+});

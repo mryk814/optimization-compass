@@ -512,6 +512,13 @@ export function GalleryCasePage() {
                 <small>除外したBFGSの理由（勾配が得られない）が、観測でどう現れるかも見られます。</small>
               </Link>
             )}
+            {caseId === "constrained-design" && (
+              <Link className="gallery-lens-theater-link" to="/theater/lenses/constrained-design">
+                <span>THEATER · ALGORITHM VIEW</span>
+                <strong>目的だけ・罰・射影の3つの計器で、同じ制約を読む →</strong>
+                <small>除外したBFGSの理由（制約を無視すると実行不可能な設計を返す）が、観測でどう現れるかも見られます。</small>
+              </Link>
+            )}
             {alternateScenarios.length > 0 && (
               <div className="gallery-alternate-runs">
                 <strong>補助の実行</strong>
