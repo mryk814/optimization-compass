@@ -61,6 +61,7 @@ Find and change the canonical input instead. Generated artifacts may appear in a
 | Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
 | Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
 | Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
+| Draw a problem, method, decision, or search on any surface | reuse `site/src/visual-system/` primitives; rules in [`docs/visual-system.md`](docs/visual-system.md) | low–medium |
 | Add an interactive explorable figure to an article | `docs/explorables.md` recipe: registry JSON, `math/` core with tests, figure component, `::: explorable` block | medium |
 | Add a new method, implementation, source, evidence relation, or controlled vocabulary | dataset migration/build inputs plus content | high |
 | Add a scenario, generator, artifact contract, or renderer family | Python contracts/generators plus site implementation | high |

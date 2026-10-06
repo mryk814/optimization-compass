@@ -5,4 +5,5 @@ export const THEATER_ROUTES = {
   bayesianOptimization: "/theater/bayesian-optimization",
   constrainedContinuous: "/theater/learning/SCENARIO_CONSTRAINED_DISK",
   multiObjective: "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+  algorithmLenses: "/theater/lenses/hyperparameter-search",
 } as const;

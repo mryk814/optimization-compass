@@ -1,0 +1,510 @@
+/* Shared primitives of the Conceptual Visual System. Colours come only from tokens.css. */
+
+.vs-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Problem Signature ---------- */
+
+.vs-signature { margin: 0; color: var(--vs-ink); }
+.vs-signature-compact { display: inline-flex; line-height: 0; }
+
+.vs-signature-full {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.vs-signature-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+}
+
+.vs-signature-group {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.35rem 0.4rem 0.1rem;
+  border-top: 2px solid var(--vs-ink);
+}
+
+.vs-signature-group-label {
+  color: var(--vs-ink-soft);
+  font-size: var(--type-meta);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.vs-signature-svg { display: block; overflow: visible; }
+
+.vs-axis-name {
+  fill: var(--vs-ink);
+  font-size: var(--type-chart-compact);
+  font-weight: 700;
+}
+
+.vs-column-stem { stroke: var(--vs-line-strong); stroke-width: 1; }
+.vs-signature-compact .vs-column-stem { stroke: var(--vs-line); }
+
+.vs-slot {
+  fill: var(--vs-panel);
+  stroke: var(--vs-line-strong);
+  stroke-width: 1;
+}
+
+.vs-signature-compact .vs-slot { fill: var(--vs-line); stroke: none; }
+
+.vs-slot.is-chosen {
+  fill: var(--vs-observed);
+  stroke: var(--vs-observed-ink);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: vs-settle var(--vs-motion-settle) var(--vs-ease) both;
+}
+
+.vs-signature-compact .vs-slot.is-chosen { stroke: none; }
+
+.vs-hatch-ground { fill: var(--vs-open-wash); }
+.vs-hatch-line { stroke: var(--vs-open); stroke-width: 1.4; opacity: 0.55; }
+.vs-column.is-unknown rect { animation: vs-reveal var(--vs-motion-reveal) var(--vs-ease) both; }
+
+.vs-column-missing {
+  fill: none;
+  stroke: var(--vs-open);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.vs-column.is-not_applicable .vs-slot { opacity: 0.35; }
+.vs-column-na { stroke: var(--vs-muted); stroke-width: 2.5; stroke-linecap: round; }
+
+.vs-lens-ring {
+  fill: none;
+  stroke: var(--vs-candidate);
+  stroke-width: 1.8;
+}
+
+.vs-signature-compact .vs-lens-ring { stroke-width: 1; }
+
+.vs-lens-slash {
+  stroke: var(--vs-violation);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.vs-signature-compact .vs-lens-slash { stroke-width: 1.2; }
+
+/* The base strip under each column states the lens verdict on that axis. */
+.vs-lens-base { fill: transparent; }
+.lens-supports .vs-lens-base { fill: var(--vs-candidate); }
+.lens-blocks .vs-lens-base { fill: var(--vs-violation); }
+.lens-open .vs-lens-base { fill: none; stroke: var(--vs-open); stroke-dasharray: 2 2; }
+.lens-silent .vs-lens-base { fill: var(--vs-line-strong); }
+.lens-unread .vs-slot { opacity: 0.45; }
+
+.vs-signature-reading dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.25rem 0.9rem;
+  margin: 0;
+}
+
+.vs-reading {
+  display: flex;
+  gap: 0.45rem;
+  align-items: baseline;
+  font-size: var(--type-meta);
+  line-height: var(--leading-meta);
+}
+
+.vs-reading dt { color: var(--vs-ink-soft); }
+.vs-reading dd { margin: 0; font-weight: 700; }
+.vs-reading.is-unknown dd,
+.vs-reading.is-missing dd { color: var(--vs-open-ink); font-weight: 400; }
+.vs-reading.is-unknown dd { padding: 0 0.3rem; background: var(--vs-hatch); }
+.vs-reading.is-not_applicable dd { color: var(--vs-muted); font-weight: 400; }
+
+/* ---------- Disposition Mark ---------- */
+
+.vs-disposition {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+  font-size: var(--type-meta);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vs-disposition-glyph { flex: none; overflow: visible; }
+.vs-disposition-glyph * {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: vs-settle var(--vs-motion-settle) var(--vs-ease) both;
+}
+
+.vs-mark-fill { fill: var(--vs-candidate); }
+.vs-mark-ring { fill: var(--vs-panel); stroke: var(--vs-candidate); stroke-width: 1.6; }
+.vs-mark-ring.is-dashed { stroke: var(--vs-open); stroke-dasharray: 2.5 2; }
+.is-excluded .vs-mark-ring { stroke: var(--vs-ink); }
+.vs-mark-slash { stroke: var(--vs-ink); stroke-width: 1.6; stroke-linecap: round; }
+
+.vs-disposition.is-candidate { color: var(--vs-candidate-ink); }
+.vs-disposition.is-conditional { color: var(--vs-candidate-ink); }
+.vs-disposition.is-excluded { color: var(--vs-ink); }
+.vs-disposition.is-pending { color: var(--vs-open-ink); }
+
+.vs-method-glyph path { fill: var(--vs-ink); }
+
+/* ---------- Lens Board ---------- */
+
+.vs-lens-board {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid var(--vs-line);
+  border-radius: 0.6rem;
+  background: var(--vs-ground);
+}
+
+.vs-lens-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.5rem;
+}
+
+.vs-lens-tab {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 0.6rem;
+  align-items: center;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--vs-line);
+  border-radius: 0.45rem;
+  color: var(--vs-ink);
+  background: var(--vs-panel);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vs-lens-tab strong {
+  grid-column: 1;
+  font-size: var(--type-support);
+  line-height: 1.35;
+}
+
+.vs-lens-tab .vs-disposition { grid-column: 1; }
+.vs-lens-tab .vs-signature-compact { grid-row: 1 / span 3; grid-column: 2; }
+.vs-lens-tab small { grid-column: 1; color: var(--vs-ink-soft); font-size: var(--type-meta); }
+
+.vs-lens-tab[aria-selected="true"] {
+  border-color: var(--vs-ink);
+  box-shadow: inset 0 0 0 1.5px var(--vs-ink);
+}
+
+.vs-lens-tab:focus-visible { outline: 3px solid var(--vs-candidate); outline-offset: 2px; }
+
+.vs-lens-panel {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  border-radius: 0.45rem;
+  background: var(--vs-panel);
+}
+
+.vs-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0;
+  padding: 0;
+  color: var(--vs-ink-soft);
+  font-size: var(--type-meta);
+  list-style: none;
+}
+
+.vs-legend li { display: inline-flex; gap: 0.35rem; align-items: center; }
+.vs-legend span { display: inline-block; flex: none; width: 12px; height: 12px; }
+.vs-legend-dot { border-radius: 50%; background: var(--vs-observed); }
+.vs-legend-ring { border: 2px solid var(--vs-candidate); border-radius: 50%; }
+.vs-legend-slash { background: linear-gradient(135deg, transparent 44%, var(--vs-violation) 44% 58%, transparent 58%); }
+.vs-legend-hatch { background: var(--vs-hatch); }
+.vs-legend-missing { border: 1px dashed var(--vs-open); }
+
+.vs-lens-explanation { display: grid; gap: 0.6rem; }
+.vs-lens-explanation header { display: flex; flex-wrap: wrap; gap: 0.3rem 0.7rem; align-items: baseline; }
+.vs-lens-explanation h3 { margin: 0; font-size: 1.1rem; }
+.vs-lens-explanation header small { color: var(--vs-ink-soft); font-size: var(--type-meta); }
+.vs-lens-reason { margin: 0; padding-left: 0.7rem; border-left: 3px solid var(--vs-ink); }
+.vs-lens-none { margin: 0; color: var(--vs-ink-soft); }
+
+.vs-lens-axes {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vs-lens-axes > li {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(5rem, auto) 1fr;
+  gap: 0.15rem 0.6rem;
+  align-items: baseline;
+  padding: 0.45rem 0.6rem;
+  border-left: 4px solid var(--vs-line-strong);
+  background: var(--vs-ground);
+  font-size: var(--type-meta);
+  line-height: var(--leading-meta);
+}
+
+.vs-lens-axes > li.is-blocks { border-left-color: var(--vs-violation); }
+.vs-lens-axes > li.is-supports { border-left-color: var(--vs-candidate); }
+.vs-lens-axes > li.is-open { border-left: 4px dashed var(--vs-open); }
+.vs-lens-axis-name { color: var(--vs-ink-soft); font-weight: 700; }
+.vs-lens-axis-value { font-weight: 700; }
+.is-blocks .vs-lens-axis-status { color: var(--vs-violation-ink); }
+.is-supports .vs-lens-axis-status { color: var(--vs-candidate-ink); }
+.is-open .vs-lens-axis-status { color: var(--vs-open-ink); }
+.vs-lens-axes ul,
+.vs-lens-flip { grid-column: 1 / -1; margin: 0; }
+.vs-lens-axes ul { padding-left: 1.1rem; }
+.vs-lens-axes code { font-family: var(--vs-font-num); font-size: var(--type-meta); color: var(--vs-ink-soft); }
+.vs-lens-flip { color: var(--vs-ink); }
+.vs-lens-flip::before { content: "↺ "; color: var(--vs-candidate); font-weight: 700; }
+
+/* ---------- Search Stage ---------- */
+
+.vs-stage { display: block; overflow: visible; }
+.vs-stage-axis { stroke: var(--vs-line-strong); stroke-width: 1; }
+.vs-stage-tick { fill: var(--vs-ink-soft); font-size: var(--type-chart-compact); font-family: var(--vs-font-num); }
+.vs-terrain { fill: none; stroke: var(--vs-terrain); stroke-width: 2; stroke-dasharray: 5 4; }
+.vs-band { fill: var(--vs-observed-wash); stroke: none; }
+.vs-model { fill: none; stroke: var(--vs-observed); stroke-width: 2; }
+.vs-ei { fill: var(--vs-candidate-wash); stroke: var(--vs-candidate); stroke-width: 1.2; }
+.vs-unseen {
+  fill: var(--vs-open-wash);
+  opacity: 0.65;
+}
+
+.vs-eval {
+  fill: var(--vs-observed);
+  stroke: var(--vs-panel);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: vs-settle var(--vs-motion-settle) var(--vs-ease) both;
+}
+
+.vs-eval.is-faded { fill: var(--vs-observed-wash); stroke: var(--vs-observed); }
+.vs-eval.is-latest { stroke: var(--vs-ink); stroke-width: 1.8; }
+.vs-eval.is-violation { fill: var(--vs-violation); }
+.vs-eval-best-ring { fill: none; stroke: var(--vs-ink); stroke-width: 1.2; stroke-dasharray: 2 2; }
+.vs-eval-label { fill: var(--vs-ink); font-size: var(--type-chart-compact); font-family: var(--vs-font-num); }
+
+.vs-proposal line { stroke: var(--vs-candidate); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.vs-proposal path { fill: var(--vs-candidate); }
+.vs-proposal text { fill: var(--vs-candidate-ink); font-size: var(--type-chart-compact); font-weight: 700; }
+.vs-tangent line { stroke: var(--vs-candidate); stroke-width: 3; stroke-linecap: round; }
+.vs-step-arrow line { stroke: var(--vs-candidate); stroke-width: 2; }
+.vs-step-arrow path { fill: var(--vs-candidate); }
+.vs-spread rect { fill: var(--vs-candidate-wash); stroke: var(--vs-candidate); stroke-width: 1.2; }
+.vs-spread line { stroke: var(--vs-candidate-ink); stroke-width: 2; }
+
+.vs-budget { display: inline-flex; gap: 3px; align-items: center; }
+.vs-budget-tick {
+  width: 9px;
+  height: 14px;
+  border: 1px solid var(--vs-line-strong);
+  border-radius: 2px;
+  background: var(--vs-panel);
+}
+
+.vs-budget-tick.is-spent { border-color: var(--vs-observed-ink); background: var(--vs-observed); }
+.vs-budget-tick.is-spent.is-probe { background: var(--vs-panel); border: 2px solid var(--vs-observed); }
+
+/* ---------- Switch Signal / Failure Event ---------- */
+
+.vs-signal {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+  align-items: start;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border-left: 4px solid var(--vs-ink);
+  background: var(--vs-ground);
+  font-size: var(--type-meta);
+  line-height: var(--leading-meta);
+  animation: vs-reveal var(--vs-motion-reveal) var(--vs-ease) both;
+}
+
+.vs-signal::before {
+  content: "⇄";
+  color: var(--vs-ink);
+  font-weight: 700;
+}
+
+.vs-signal strong { display: block; }
+
+/* ---------- Fixed / changed / observed contract (shared with Compare) ---------- */
+
+.vs-contract {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  border-left: 4px solid var(--vs-ink);
+  background: var(--vs-panel);
+  font-size: var(--type-meta);
+}
+
+.vs-contract div { display: grid; grid-template-columns: 3.5rem 1fr; gap: 0.6rem; }
+.vs-contract dt { font-weight: 700; }
+.vs-contract dd { margin: 0; }
+
+@media (max-width: 40rem) {
+  .vs-lens-axes > li { grid-template-columns: 1fr auto; }
+  .vs-lens-axis-status { grid-column: 1 / -1; }
+}
+
+/* ---------- Surface placements (Gallery / Case) ---------- */
+
+.gallery-card-head {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gallery-card-head > span:first-child { color: #6b756e; font-size: .65rem; }
+
+.gallery-card-dispositions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  margin: 0 0 0.2rem;
+  padding: 0;
+  color: var(--vs-ink);
+  font-size: var(--type-meta);
+  list-style: none;
+}
+
+.gallery-card-dispositions li { display: inline-flex; gap: 0.3rem; align-items: center; }
+
+.gallery-signature-section > header p:not(.eyebrow) {
+  max-width: var(--measure-lead);
+  margin: 0.2rem 0 0;
+  color: var(--vs-ink-soft);
+}
+
+.gallery-lens-theater-link {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.7rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--vs-ink);
+  border-radius: 0.5rem;
+  color: var(--vs-ink);
+  background: var(--vs-ground);
+  text-decoration: none;
+}
+
+.gallery-lens-theater-link span { color: var(--vs-candidate-ink); font-size: var(--type-meta); font-weight: 700; letter-spacing: 0.06em; }
+.gallery-lens-theater-link small { color: var(--vs-ink-soft); font-size: var(--type-meta); }
+.gallery-lens-theater-link:hover { background: var(--vs-panel); }
+
+.vs-lens-gap {
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  border: 1px dashed var(--vs-open);
+  color: var(--vs-ink);
+  background: var(--vs-open-wash);
+  font-size: var(--type-meta);
+}
+
+/* ---------- Surface placements (Diagnose) ---------- */
+
+.diagnose-signature {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--vs-line);
+  border-radius: 0.5rem;
+  background: var(--vs-ground);
+}
+
+.diagnose-signature header { display: flex; flex-wrap: wrap; gap: 0.3rem 0.8rem; align-items: baseline; justify-content: space-between; }
+.diagnose-signature header small { color: var(--vs-open-ink); font-size: var(--type-meta); }
+.diagnose-signature .vs-signature-group { padding-inline: 0; }
+
+.diagnose-result-band h2 { display: flex; gap: 0.45rem; align-items: center; }
+
+.diagnose-result-lens {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0.3rem 0;
+  font-size: var(--type-meta);
+}
+
+.diagnose-result-lens small { color: var(--vs-ink-soft); font-size: var(--type-meta); }
+.vs-axis-leader { stroke: var(--vs-line); stroke-width: 1; }
+.vs-reading-wide { grid-column: 1 / -1; }
+.vs-signature-full.is-medium .vs-signature-groups { gap: 0.4rem 0.6rem; }
+
+/* A warning is a condition still to check (open), not a violation: no red. */
+.diagnose-warning,
+.diagnose-warning-list {
+  padding: 0.25rem 0.5rem;
+  border-left: 3px dashed var(--vs-open);
+  color: var(--vs-ink);
+  background: var(--vs-open-wash);
+}
+
+/* ---------- Surface placements (Method) ---------- */
+
+.vs-method-reading {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0 1.4rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--vs-line);
+  border-radius: 0.6rem;
+  background: var(--vs-ground);
+}
+
+.vs-method-reading h2 { margin: 0; font-size: 1.15rem; }
+.vs-method-reading .eyebrow { margin: 0; }
+.vs-method-reading-list { display: grid; gap: 0.25rem; margin: 0; padding: 0; list-style: none; font-size: var(--type-meta); }
+.vs-method-reading-list li { display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+.vs-method-reading-list strong { min-width: 5rem; }
+.vs-method-reading-list .is-supports { color: var(--vs-candidate-ink); }
+.vs-method-reading-list .is-blocks { color: var(--vs-violation-ink); }
+.vs-method-reading-note { margin: 0; color: var(--vs-ink-soft); font-size: var(--type-meta); }
+.vs-signature-group { align-content: start; }
+
+.vs-case-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  margin: 0.4rem 0 0.8rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--vs-line);
+  border-left: 4px solid var(--vs-ink);
+  border-radius: 0.45rem;
+  background: var(--vs-ground);
+}
+
+.vs-case-strip > div { display: grid; gap: 0.15rem; min-width: 0; }
+.vs-case-strip .eyebrow { margin: 0; }
+.vs-case-strip a { color: var(--vs-ink); font-weight: 700; }
+.vs-case-strip > a:last-child,
+.vs-case-strip .vs-case-strip-action { margin-left: auto; }
