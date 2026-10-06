@@ -64,4 +64,19 @@ describe("method lens", () => {
     const lens = buildMethodLens("M_BFGS", caseAnswers({ Q05: "unreliable_or_none" }), siteData);
     expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("silent");
   });
+it("draws the engine's variable-type check on the variable axis", () => {
+    const lens = buildMethodLens("M_NELDER_MEAD", caseAnswers({ Q01: "binary" }), siteData);
+    const axis = lens.axes.find((item) => item.questionId === "Q01");
+    expect(axis?.status).toBe("blocks");
+    expect(axis?.evidence.map((item) => item.kind)).toContain("variable_domain");
+    expect(axis?.flipValues).toContain("continuous");
+    const cpSat = buildMethodLens("M_CP_SAT", caseAnswers({ Q01: "binary" }), siteData);
+    expect(cpSat.axes.find((item) => item.questionId === "Q01")?.status).toBe("supports");
+  });
+
+  it("does not draw the engine's substring certificate check", () => {
+    // engine.py and recommend.ts treat "dual" inside "first_order_residual" as a certificate term.
+    const bfgs = buildMethodLens("M_BFGS", caseAnswers({ Q10: "global_proof_required" }), siteData);
+    expect(bfgs.axes.find((item) => item.questionId === "Q10")?.status).toBe("unread");
+  });
 });

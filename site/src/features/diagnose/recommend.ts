@@ -103,7 +103,7 @@ function validateAnswers(data: SiteData, answers: Answers): Record<string, strin
   return normalized;
 }
 
-function variableCompatibility(domain: string, variableTypes: string): "native" | "encoded" | "incompatible" | "unknown" {
+export function variableCompatibility(domain: string, variableTypes: string): "native" | "encoded" | "incompatible" | "unknown" {
   const tokens = variableTypes.split(";").map((token) => token.trim().toLowerCase()).filter(Boolean);
   if (!tokens.length) return "unknown";
   const terms: Record<string, Set<string>> = {

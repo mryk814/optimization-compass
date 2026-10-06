@@ -35,7 +35,7 @@ test("Caseで除外した手法の目に切り替えると、規則上の扱い�
   await page.getByRole("tab", { name: /BFGS/u }).click();
   const panel = page.getByRole("tabpanel");
   await expect(panel.getByText("診断規則には、この回答でこの手法を外す規則がありません", { exact: false })).toBeVisible();
-  await expect(panel.getByText(/勾配が「解析勾配・数値差分」なら支える/u)).toBeVisible();
+  await expect(panel.getByText(/勾配が「解析勾配・数値差分」なら、この手法を支える/u)).toBeVisible();
 });
 
 test("アルゴリズムの視点では真の地形を隠し、人間の視点で重ねる", async ({ page, baseURL }) => {
