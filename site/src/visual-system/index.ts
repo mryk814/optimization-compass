@@ -7,3 +7,4 @@ export * from "./signature";
 export * from "./useSiteData";
 export * from "./MethodReading";
 export * from "./CaseSignatureStrip";
+export * from "./EntitySignature";
