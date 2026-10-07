@@ -7,7 +7,7 @@
  * (editorial, sourced) or from `recommend()`; the lens shows where on the axes it comes from.
  */
 import type { SiteMethod, SitePredicate, SiteQuestion, SiteRule } from "../contracts/site-data";
-import { variableCompatibility } from "../features/diagnose/recommend";
+import { supportsCertificate, variableCompatibility } from "../features/diagnose/recommend";
 import { SIGNATURE_AXES, SIGNATURE_SLOTS, shortValueLabel, type SignatureAnswer } from "./signature";
 
 /**
@@ -20,8 +20,8 @@ import { SIGNATURE_AXES, SIGNATURE_SLOTS, shortValueLabel, type SignatureAnswer 
 export type LensAxisStatus = "supports" | "blocks" | "open" | "silent" | "unread";
 
 export interface LensEvidence {
-  /** variable_domain: the recommendation engine's own variable-type check (same function as `recommend()`). */
-  kind: "promote_rule" | "exclude_rule" | "assumption" | "incompatibility" | "variable_domain";
+  /** variable_domain / certificate: the engine's own variable-type and certificate checks (same functions as `recommend()`). */
+  kind: "promote_rule" | "exclude_rule" | "assumption" | "incompatibility" | "variable_domain" | "certificate";
   id: string;
   text: string;
   sourceIds: readonly string[];
@@ -54,7 +54,7 @@ export interface LensCatalog {
   questions: readonly Pick<SiteQuestion, "question_id" | "mapped_feature_id">[];
   rules: readonly SiteRule[];
   predicates: readonly SitePredicate[];
-  /** When given, the engine's variable-type check (Q01) is drawn too. */
+  /** When given, the engine's variable-type (Q01) and certificate (Q10) checks are drawn too. */
   methods?: readonly SiteMethod[];
 }
 
@@ -197,13 +197,10 @@ function merge(axis: LensAxis, status: LensAxisStatus, evidence: LensEvidence | 
 }
 
 /**
- * The engine's variable-domain check (Q01), drawn on its axis. `recommend()` applies it to
- * promoted methods; the lens shows it for any method, so an exclusion grounded in a variable
- * mismatch is visible where it happens.
- *
- * The engine's certificate check (Q10) is deliberately not drawn: it matches certificate terms
- * as substrings ("dual" inside "residual"), so it marks local methods as certificate-capable.
- * See docs/investigations/2026-10-07-case-rule-gaps.md.
+ * The engine's variable-domain (Q01) and certificate (Q10) checks, drawn on their axes.
+ * `recommend()` applies them to promoted methods; the lens shows them for any method, so an
+ * exclusion grounded in a variable or guarantee mismatch is visible where it happens.
+ * The certificate check matches whole tokens since PR #295 (it used to match substrings).
  */
 function applyEngineChecks(axis: LensAxis, answer: SignatureAnswer | undefined, method: SiteMethod): LensAxis {
   const values = answer?.status === "answered" ? answer.values.filter((value) => value !== "unknown") : [];
@@ -227,6 +224,28 @@ function applyEngineChecks(axis: LensAxis, answer: SignatureAnswer | undefined, 
       sourceIds: method.reference_source_ids,
     };
     return merge(axis, result === "native" ? "supports" : result === "incompatible" ? "blocks" : "silent", evidence, flip, block);
+  }
+  if (axis.questionId === "Q10") {
+    const demanding = ["gap_desired", "global_proof_required"];
+    const asked = values.find((value) => demanding.includes(value));
+    if (supportsCertificate(method)) {
+      const evidence: LensEvidence | undefined = asked ? {
+        kind: "certificate",
+        id: "optimality_certificate",
+        text: `証明: 上下界・gapなどのcertificateを返す（${method.optimality_certificate}）`,
+        sourceIds: method.reference_source_ids,
+      } : undefined;
+      return merge(axis, asked ? "supports" : axis.status === "unread" ? "silent" : axis.status, evidence, demanding, []);
+    }
+    // The engine excludes for a required proof and only demotes for a desired gap.
+    const evidence: LensEvidence | undefined = asked ? {
+      kind: "certificate",
+      id: "optimality_certificate",
+      text: `証明: 大域最適性の上下界・gapを一般には返さない（${method.optimality_certificate}）`,
+      sourceIds: method.reference_source_ids,
+    } : undefined;
+    const status: LensAxisStatus = asked === "global_proof_required" ? "blocks" : asked ? "silent" : axis.status === "unread" ? "silent" : axis.status;
+    return merge(axis, status, evidence, [], ["global_proof_required"]);
   }
   return axis;
 }
