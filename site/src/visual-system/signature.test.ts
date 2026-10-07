@@ -59,9 +59,17 @@ describe("method lens", () => {
     expect(lens.blockingAxes).toHaveLength(0);
   });
 
-  it("does not invent an exclusion the rules do not make", () => {
-    // The Case excludes BFGS for an unavailable gradient; no rule does, so the lens must not.
+  it("blocks BFGS on the gradient axis through its derivative-access assumption", () => {
+    // Dataset 0.18.20 added P_M_BFGS_DERIVATIVE; the Case's editorial exclusion now has an axis.
     const lens = buildMethodLens("M_BFGS", caseAnswers({ Q05: "unreliable_or_none" }), siteData);
-    expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("silent");
+    const axis = lens.axes.find((item) => item.questionId === "Q05");
+    expect(axis?.status).toBe("blocks");
+    expect(axis?.evidence.map((item) => item.id)).toContain("P_M_BFGS_DERIVATIVE");
+  });
+
+  it("does not invent an exclusion where no rule or predicate reads the axis", () => {
+    const lens = buildMethodLens("M_NELDER_MEAD", caseAnswers({ Q05: "unreliable_or_none" }), siteData);
+    expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("unread");
+    expect(lens.blockingAxes).toHaveLength(0);
   });
 });
