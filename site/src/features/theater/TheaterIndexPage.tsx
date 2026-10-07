@@ -106,6 +106,11 @@ export function TheaterIndexPage() {
         <strong>同じ地形を、勾配・集団・予測の3つの計器で測る →</strong>
         <small>手法ごとに「何が見えているか」を並べ、見えている世界の違いが動きの違いになることを確かめます。</small>
       </Link>
+      <Link className="gallery-lens-theater-link" to="/theater/lenses/constrained-design">
+        <span>ALGORITHM VIEW · 強度制約を守りながら軽量設計を探す</span>
+        <strong>同じ制約を、目的だけ・罰・射影の3つの計器で読む →</strong>
+        <small>制約が「見えない」「破ったときだけ見える」「常に見える」の違いが、違反と最後の位置の違いになることを確かめます。</small>
+      </Link>
       <section className="theater-catalog-tools" aria-labelledby="theater-catalog-tools-title">
         <header>
           <p className="eyebrow">次に見る教材を選ぶ</p>

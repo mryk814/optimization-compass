@@ -599,3 +599,18 @@
 .search-result-card:has(.search-result-glyph) .search-result-heading { padding-right: 6.5rem; }
 .search-result-glyph { position: absolute; top: 0.75rem; right: 0.85rem; }
 .map-signature { margin: 0.9rem 0 0; }
+
+/* ---------- Two-dimensional stage ---------- */
+.vs-contours { stroke-width: 1; stroke-dasharray: 3 4; }
+.vs-feasible { fill: var(--vs-observed-wash); stroke: var(--vs-ink); stroke-width: 2; }
+.vs-path { fill: none; stroke: var(--vs-ink); stroke-width: 1.6; }
+.vs-path.is-dashed { stroke-dasharray: 5 4; }
+.vs-vector line { stroke-width: 2.4; stroke-linecap: round; }
+.vs-vector.is-read line { stroke: var(--vs-observed); }
+.vs-vector.is-read path { fill: var(--vs-observed); }
+.vs-vector.is-next line { stroke: var(--vs-candidate); }
+.vs-vector.is-next path { fill: var(--vs-candidate); }
+.vs-optimum circle { fill: none; stroke: var(--vs-terrain); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.vs-optimum text { fill: var(--vs-ink-soft); font-size: var(--type-chart-compact); }
+.vs-trial { fill: var(--vs-panel); stroke: var(--vs-candidate); stroke-width: 1.6; stroke-dasharray: 2 2; }
+.lens-violation { color: var(--vs-violation-ink); font-weight: 700; }
