@@ -10,6 +10,12 @@ Method Lens（[`docs/visual-system.md`](../visual-system.md)）は、Case の候
 
 この調査では、正準データ、推薦エンジン、生成物を変更していない。1 と 2 は推薦またはデータセットの変更であり、出典と回帰ケースを用意して別に判断する。
 
+**その後の対応（2026-10-07）**
+
+- 1 は mryk814/optimization-compass#295 で修正した（語単位の判定、回帰テスト、共通 fixture の作り直し）。Lens は Q10 の判定を描くようにした。
+- 2 は dataset 0.18.20（mryk814/optimization-compass#296）で `P_M_BFGS_DERIVATIVE` を追加した。勾配の使えない Case の BFGS の除外は、Lens で「勾配」の軸の理由として表示される。
+- 3 と 4 は未対応。
+
 対象は dataset 0.18.19 の公開 Case 36 件、除外 36 件、条件付き候補、候補。
 
 ## 1. 証明要件の判定が部分一致になっている

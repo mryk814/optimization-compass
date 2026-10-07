@@ -30,12 +30,15 @@ for (const route of SLICE) {
   });
 }
 
-test("Caseで除外した手法の目に切り替えると、規則上の扱いと候補に変わる条件が出る", async ({ page, baseURL }) => {
+test("Caseで除外した手法の目に切り替えると、外れる軸と候補に変わる条件が出る", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
   await page.getByRole("tab", { name: /BFGS/u }).click();
   const panel = page.getByRole("tabpanel");
-  await expect(panel.getByText("診断規則には、この回答でこの手法を外す規則がありません", { exact: false })).toBeVisible();
-  await expect(panel.getByText(/勾配が「解析勾配・数値差分」なら、この手法を支える/u)).toBeVisible();
+  const gradientAxis = panel.locator(".vs-lens-axes > li.is-blocks").filter({ hasText: "勾配" });
+  await expect(gradientAxis).toBeVisible();
+  await expect(gradientAxis).toContainText("P_M_BFGS_DERIVATIVE");
+  await expect(gradientAxis.getByText(/勾配が「解析勾配・数値差分・自動微分」なら/u)).toBeVisible();
+  await expect(panel.getByText("診断規則には、この回答でこの手法を外す規則がありません", { exact: false })).toHaveCount(0);
 });
 
 test("アルゴリズムの視点では真の地形を隠し、人間の視点で重ねる", async ({ page, baseURL }) => {

@@ -1,6 +1,6 @@
 {
   "fixture_version": "1.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.20",
   "cases": [
     {
       "case_id": "binary_linear",
@@ -184,7 +184,8 @@
               "証明なしのglobal candidate探索。"
             ],
             "warnings": [
-              "変数domainを直接扱わず、encoding・relaxation・wrapperが必要です。"
+              "変数domainを直接扱わず、encoding・relaxation・wrapperが必要です。",
+              "この手法単独では一般に最適性gapや上下界を返しません。"
             ],
             "source_ids": [
               "S054",
@@ -776,7 +777,7 @@
         "warnings": [
           "1件の候補は変数encoding等が必要なため、条件付き候補へ下げました。",
           "17件の候補を変数domain不一致として除外しました。",
-          "1件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。"
+          "2件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。"
         ],
         "trace": [
           {
@@ -1043,7 +1044,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -1762,7 +1763,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -2527,7 +2528,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -2822,7 +2823,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3150,7 +3151,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3418,7 +3419,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3444,34 +3445,9 @@
         "alternatives_first": [],
         "first_choices": [
           {
-            "entity_id": "M_BAYESIAN_OPT_GP",
-            "name": "Gaussian process Bayesian optimization",
-            "priority_band": "first_choice",
-            "supporting_rule_count": 2,
-            "high_priority_rule_count": 2,
-            "medium_priority_rule_count": 0,
-            "reasons": [
-              "微分不要法へ。評価費と次元で分岐。",
-              "証明なしのglobal candidate探索。"
-            ],
-            "warnings": [],
-            "source_ids": [
-              "S054",
-              "S055",
-              "S056"
-            ],
-            "implementation_ids": [
-              "I_AX",
-              "I_BOTORCH",
-              "I_OPTUNA"
-            ]
-          }
-        ],
-        "conditional_choices": [
-          {
             "entity_id": "M_BRANCH_CUT",
             "name": "branch-and-cut",
-            "priority_band": "conditional",
+            "priority_band": "first_choice",
             "supporting_rule_count": 1,
             "high_priority_rule_count": 1,
             "medium_priority_rule_count": 0,
@@ -3495,7 +3471,7 @@
           {
             "entity_id": "M_PRIMAL_DUAL_CONIC",
             "name": "primal-dual錐内点法",
-            "priority_band": "conditional",
+            "priority_band": "first_choice",
             "supporting_rule_count": 1,
             "high_priority_rule_count": 1,
             "medium_priority_rule_count": 0,
@@ -3519,7 +3495,7 @@
           {
             "entity_id": "M_SPATIAL_BRANCH_BOUND",
             "name": "空間branch-and-bound",
-            "priority_band": "conditional",
+            "priority_band": "first_choice",
             "supporting_rule_count": 1,
             "high_priority_rule_count": 1,
             "medium_priority_rule_count": 0,
@@ -3540,7 +3516,38 @@
             ]
           }
         ],
+        "conditional_choices": [],
         "excluded_methods": [
+          {
+            "entity_id": "M_BAYESIAN_OPT_GP",
+            "name": "Gaussian process Bayesian optimization",
+            "priority_band": "excluded",
+            "supporting_rule_count": 3,
+            "high_priority_rule_count": 3,
+            "medium_priority_rule_count": 0,
+            "reasons": [
+              "微分不要法へ。評価費と次元で分岐。",
+              "証明なしのglobal candidate探索。",
+              "大域最適性の証明要件を満たす一般的なcertificateがありません。"
+            ],
+            "warnings": [
+              "heuristicをincumbent生成に使う場合も、証明可能なsolverを別に必要とします。"
+            ],
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S034",
+              "S035",
+              "S036",
+              "S037",
+              "S038",
+              "S059",
+              "S069",
+              "S075"
+            ],
+            "implementation_ids": []
+          },
           {
             "entity_id": "M_CMA_ES",
             "name": "CMA-ES",
@@ -3761,7 +3768,7 @@
         ],
         "followups": [],
         "warnings": [
-          "5件の候補を大域証明要件との不一致で除外しました。"
+          "6件の候補を大域証明要件との不一致で除外しました。"
         ],
         "trace": [
           {
@@ -3849,7 +3856,7 @@
           }
         ],
         "answered_question_count": 4,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3964,7 +3971,7 @@
           }
         ],
         "answered_question_count": 1,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -4019,7 +4026,7 @@
           }
         ],
         "answered_question_count": 1,
-        "dataset_version": "0.18.19",
+        "dataset_version": "0.18.20",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     }
