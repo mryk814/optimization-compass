@@ -121,12 +121,21 @@ function variableCompatibility(domain: string, variableTypes: string): "native" 
   if (tokens.some((token) => markers.some((marker) => token.includes(marker)))) return "encoded";
   return "incompatible";
 }
+/**
+ * A certificate token names a bound or gap on the optimum (mip_gap, dual_bound, duality_gap…)
+ * or an unsat proof. Tokens are matched whole, so a stationarity residual such as
+ * "primal_dual_residual" or a disclaimer such as "not_global_certificate" never counts.
+ * Must stay identical to engine.py `_is_certificate_token`.
+ */
+export function isCertificateToken(token: string): boolean {
+  return /(^|_)(gap|bound)$/u.test(token) || /(^|_)unsat_proof(_|$)/u.test(token);
+}
 function supportsCertificate(method: SiteMethod): boolean {
   const scope = method.solution_scope.toLowerCase();
-  const certificate = method.optimality_certificate.toLowerCase();
   const exactness = method.exactness.toLowerCase();
   if (scope.includes("global_certificate")) return true;
-  if (["gap", "bound", "dual", "primal", "unsat", "certificate", "proof"].some((term) => certificate.includes(term))) return true;
+  const tokens = method.optimality_certificate.toLowerCase().split(";").map((token) => token.trim()).filter(Boolean);
+  if (tokens.some(isCertificateToken)) return true;
   return exactness.includes("exact") && scope.includes("global");
 }
 function maintenanceOrder(status: string): number {
