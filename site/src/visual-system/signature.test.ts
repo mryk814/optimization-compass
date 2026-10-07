@@ -59,10 +59,18 @@ describe("method lens", () => {
     expect(lens.blockingAxes).toHaveLength(0);
   });
 
-  it("does not invent an exclusion the rules do not make", () => {
-    // The Case excludes BFGS for an unavailable gradient; no rule does, so the lens must not.
+  it("blocks BFGS on the gradient axis through its derivative-access assumption", () => {
+    // Dataset 0.18.20 added P_M_BFGS_DERIVATIVE; the Case's editorial exclusion now has an axis.
     const lens = buildMethodLens("M_BFGS", caseAnswers({ Q05: "unreliable_or_none" }), siteData);
-    expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("silent");
+    const axis = lens.axes.find((item) => item.questionId === "Q05");
+    expect(axis?.status).toBe("blocks");
+    expect(axis?.evidence.map((item) => item.id)).toContain("P_M_BFGS_DERIVATIVE");
+  });
+
+  it("does not invent an exclusion where no rule or predicate reads the axis", () => {
+    const lens = buildMethodLens("M_NELDER_MEAD", caseAnswers({ Q05: "unreliable_or_none" }), siteData);
+    expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("unread");
+    expect(lens.blockingAxes).toHaveLength(0);
   });
 it("draws the engine's variable-type check on the variable axis", () => {
     const lens = buildMethodLens("M_NELDER_MEAD", caseAnswers({ Q01: "binary" }), siteData);
@@ -74,9 +82,13 @@ it("draws the engine's variable-type check on the variable axis", () => {
     expect(cpSat.axes.find((item) => item.questionId === "Q01")?.status).toBe("supports");
   });
 
-  it("does not draw the engine's substring certificate check", () => {
-    // engine.py and recommend.ts treat "dual" inside "first_order_residual" as a certificate term.
+  it("draws the engine's whole-token certificate check on the proof axis", () => {
+    // "dual" inside "first_order_residual" no longer counts as a certificate (PR #295).
     const bfgs = buildMethodLens("M_BFGS", caseAnswers({ Q10: "global_proof_required" }), siteData);
-    expect(bfgs.axes.find((item) => item.questionId === "Q10")?.status).toBe("unread");
+    expect(bfgs.axes.find((item) => item.questionId === "Q10")?.status).toBe("blocks");
+    const bnb = buildMethodLens("M_BRANCH_BOUND", caseAnswers({ Q10: "global_proof_required" }), siteData);
+    expect(bnb.axes.find((item) => item.questionId === "Q10")?.status).toBe("supports");
+    const sqpGap = buildMethodLens("M_SQP", caseAnswers({ Q10: "gap_desired" }), siteData);
+    expect(sqpGap.axes.find((item) => item.questionId === "Q10")?.status).toBe("silent");
   });
 });
