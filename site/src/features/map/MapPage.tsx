@@ -7,6 +7,7 @@ import { parseSiteData, type SiteData } from "../../contracts/site-data";
 import { encodeAtlasState, type AtlasCompatibilityCatalog, type AtlasStateV1 } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
+import { buildSignature, ProblemSignature, signatureSummary } from "../../visual-system";
 import { OptimizationProblemPrimerDisclosure } from "../../components/OptimizationProblemPrimer";
 import { MapDetail } from "./MapDetail";
 import { ancestorIds, applyAnswerBindings, matchingBindingNodeIds } from "./map-state";
@@ -276,6 +277,7 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
             onContinueDiagnosis={continueDiagnosis}
             selectedId={atlas.state.selectedNodeId}
           />
+          {Object.keys(atlas.state.answers).length > 0 && <MapSignature answers={atlas.state.answers} />}
         </aside>
       </div>
     </>
@@ -344,6 +346,21 @@ export function MapPage() {
         </section>
       )}
       {loadState.status === "ready" && <LoadedMap key={loadState.view.view_id} data={loadState.data} model={loadState.model} view={loadState.view} views={loadState.views} />}
+    </section>
+  );
+}
+
+/** The same "problem taking shape" signature as Diagnose, beside the structure it places. */
+function MapSignature({ answers }: { answers: Parameters<typeof buildSignature>[0] }) {
+  const axes = buildSignature(answers);
+  const open = axes.filter((axis) => axis.state === "missing" || axis.state === "unknown").length;
+  return (
+    <section className="diagnose-signature map-signature" aria-label="いま見えている問題の形">
+      <header>
+        <strong>いま見えている問題の形</strong>
+        <small>{open === 0 ? "12軸すべてに回答があります" : `まだ開いている軸 ${open}`}</small>
+      </header>
+      <ProblemSignature axes={axes} label={signatureSummary(axes)} showReading={false} size="medium" />
     </section>
   );
 }

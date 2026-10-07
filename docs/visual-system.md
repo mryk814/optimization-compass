@@ -149,6 +149,8 @@ Gallery（署名つきカード）
 - Compare: 「この比較の問題」帯（CaseSignatureStrip）
 - Theater: アルゴリズムの視点の舞台と、一覧からの入口
 - Home: 候補・選ばない理由の印
+- Search: ケースの結果に問題の署名、手法の結果にその手法が読む軸（`EntitySignature.tsx`）
+- Map: 詳細欄の下に、Diagnose と同じ「いま見えている問題の形」
 
 ## 10. 新しい表現を足すとき
 
@@ -162,6 +164,6 @@ Gallery（署名つきカード）
 - 正準の surrogate 図（BO Theater と比較）は `SearchStage` の部品で描くようにした。軌跡・Nelder–Mead・実行可能領域・パレート・三目的・指標推移の各 renderer は、構造はそのままで、色だけを §3 のトークンに揃えた（`visual-system.css` の後半）。これらの SVG を `SearchStage` の部品で作り直すことと、固定 `viewBox` をやめて実寸で描くことは、まだ残っている。
 - 色の対応: 手法が読んだ情報（勾配など）は青緑、次の一手（更新・試行点・選んだ点）は橙、手法の区別は線種と形、既知の最適点は灰色の破線（人間だけが知る答え）、違反した点は赤。
 - サイトの外枠（緑）と意味の色（紺・青緑・橙・赤）は分けたが、外枠の配色そのものは変えていない。
-- Map・Learn・Search・Sources・Coverage にはまだ署名と印を置いていない。Map の node と Search の結果に小さな署名を付けるのが自然な次の候補。
-- データの発見: Case `hyperparameter-search` は「勾配が使えない」ことを理由に BFGS を除外しているが、以前は BFGS に勾配の前提（predicate）がなく、Lens は「規則上の除外軸なし」と表示していた。dataset 0.18.20 で `P_M_BFGS_DERIVATIVE` を追加し、今は「勾配」の軸で外れる理由として描ける。Case の判断と規則・前提の食い違いは、これからも Lens が隠さず表示する。
+- Learn・Sources・Coverage にはまだ署名と印を置いていない。Learn の formulation 記事（問題型）は、Case と違って回答を持たないため、問題型ごとの典型的な署名を正準データとして持つかどうかから決める必要がある。
+- データの発見: Case の除外36件のうち16件は、12軸の規則・前提・変数型では説明できない（12軸の外の理由で、Case の文章のまま保つ）。BFGS の勾配の前提は dataset 0.18.20 で追加し、推薦エンジンの証明判定の部分一致は #295 で直した。詳細は [`investigations/2026-10-07-case-rule-gaps.md`](investigations/2026-10-07-case-rule-gaps.md)。Lens はこれからも Case の判断と規則・前提の食い違いを隠さず表示する。
 - Gallery カードのメタ情報の文字（0.65rem）は、この変更の前から14pxの契約を下回っている。

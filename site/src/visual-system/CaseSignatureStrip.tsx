@@ -11,7 +11,7 @@ import { buildSignature, caseAnswers } from "./signature";
 
 let galleryCases: Promise<GalleryCase[]> | undefined;
 
-function loadGalleryCases(): Promise<GalleryCase[]> {
+export function loadGalleryCases(): Promise<GalleryCase[]> {
   galleryCases ??= fetch(`${siteBaseUrl()}data/gallery.json`)
     .then((response) => {
       if (!response.ok) throw new Error(`Gallery request failed (${response.status}).`);

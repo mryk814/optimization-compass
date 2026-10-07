@@ -51,3 +51,16 @@ test("アルゴリズムの視点では真の地形を隠し、人間の視点�
   await page.getByRole("button", { name: "最初から" }).click();
   await expect(page.getByText(/切り替えの兆候/u).first()).toBeVisible();
 });
+
+test("検索結果のケースと手法に、同じ署名の記号が付く", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/search?q=" + encodeURIComponent("少ない実験で配合条件を絞る"));
+  const caseCard = page.locator(".search-result-card").filter({ hasText: "少ない実験で配合条件を絞る" }).first();
+  await expect(caseCard.locator(".vs-signature")).toBeVisible();
+});
+
+test("CaseからMapへ進むと、同じ回答の署名が詳細欄に出る", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
+  await page.getByRole("link", { name: "問題構造Mapで位置を確認" }).click();
+  await expect(page.locator(".map-signature")).toBeVisible();
+  await expect(page.locator(".map-signature")).toContainText("まだ開いている軸 1");
+});

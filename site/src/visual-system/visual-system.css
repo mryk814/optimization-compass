@@ -593,3 +593,9 @@
 .failure-point.infeasible-point,
 .current-marker.infeasible-point,
 .vs-eval.is-violation { fill: var(--vs-violation); stroke: var(--vs-violation-ink); }
+
+/* ---------- Surface placements (Search) ---------- */
+.search-result-card:has(.search-result-glyph) { position: relative; }
+.search-result-card:has(.search-result-glyph) .search-result-heading { padding-right: 6.5rem; }
+.search-result-glyph { position: absolute; top: 0.75rem; right: 0.85rem; }
+.map-signature { margin: 0.9rem 0 0; }
