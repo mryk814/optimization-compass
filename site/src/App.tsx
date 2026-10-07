@@ -23,10 +23,13 @@ import { NotFoundPage } from "./features/navigation/NotFoundPage";
 import { PathStepNavigation } from "./features/paths/PathStepNavigation";
 import { THEATER_ROUTES } from "./features/theater/theater-routes";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
+import { DispositionMark } from "./visual-system/DispositionMark";
 import { JourneyNavigation } from "./state/journey-navigation";
 
+import "./visual-system/tokens.css";
 import "./styles.css";
 import "./home.css";
+import "./visual-system/visual-system.css";
 
 const CompareLabIndexPage = lazy(() => import("./features/compare/CompareLabIndexPage").then(
   (module) => ({ default: module.CompareLabIndexPage }),
@@ -101,6 +104,9 @@ const BayesianOptimizationPage = lazy(
     (module) => ({ default: module.BayesianOptimizationPage }),
   ),
 );
+const LensTheaterPage = lazy(() => import("./features/theater/lenses/LensTheaterPage").then(
+  (module) => ({ default: module.LensTheaterPage }),
+));
 const TheaterIndexPage = lazy(() => import("./features/theater/TheaterIndexPage").then(
   (module) => ({ default: module.TheaterIndexPage }),
 ));
@@ -246,12 +252,12 @@ function HomePage() {
               <summary>候補と選ばない理由を見る</summary>
               <div className="home-case-dispositions">
                 <article className="home-disposition-candidate">
-                  <span>候補</span>
+                  <span><DispositionMark kind="candidate" label="none" />候補</span>
                   <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
                   <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う候補です。"}</p>
                 </article>
                 <article className="home-disposition-excluded">
-                  <span>選ばない理由</span>
+                  <span><DispositionMark kind="excluded" label="none" />選ばない理由</span>
                   <strong>{excluded ? methodLabel(excluded.method_id) : "前提違反を確認"}</strong>
                   <p>{excluded?.reason ?? "候補だけでなく、適用を避ける条件も明示します。"}</p>
                 </article>
@@ -411,6 +417,7 @@ function AppShell() {
             <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
             <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
             <Route path="/theater/bayesian-optimization/:scenarioId" element={<BayesianOptimizationPage />} />
+            <Route path="/theater/lenses/:caseId" element={<LensTheaterPage />} />
             <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
             <Route path="/theater/physical/:sceneId" element={<PhysicalScenePage />} />
             <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />

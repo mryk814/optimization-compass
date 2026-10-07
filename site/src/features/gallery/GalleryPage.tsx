@@ -23,6 +23,16 @@ import {
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
+import { THEATER_ROUTES } from "../theater/theater-routes";
+import {
+  buildSignature,
+  caseAnswers,
+  DispositionMark,
+  LensBoard,
+  ProblemSignature,
+  useSiteData,
+  type LensEntry,
+} from "../../visual-system";
 export function GalleryPage() {
   const [cases, setCases] = useState<GalleryCase[]>([]);
   const [galleryDomains, setGalleryDomains] = useState<GalleryDomain[]>([]);
@@ -173,15 +183,26 @@ function GalleryCaseGrid({
   items: GalleryCase[];
   journeyByCase: Map<string, LearningJourney>;
 }) {
+  const links = useEntityLinks();
+  const methodLabel = (id: string) => (links.status === "ready" ? findEntity(links.index, "method", id)?.label : undefined) ?? id;
   return (
     <div className="gallery-card-grid">
       {items.map((item) => {
         const journey = journeyByCase.get(item.case_id);
+        const firstCandidate = item.candidate_methods[0];
+        const firstExcluded = item.excluded_methods[0];
         return (
           <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
-            <span>{item.domain_label_ja} · {difficultyLabel(item.difficulty)}</span>
+            <div className="gallery-card-head">
+              <span>{item.domain_label_ja} · {difficultyLabel(item.difficulty)}</span>
+              <ProblemSignature axes={buildSignature(caseAnswers(item.question_answers))} size="compact" />
+            </div>
             <h2>{item.title_ja}</h2>
             <p>{item.question}</p>
+            <ul className="gallery-card-dispositions" aria-label="候補と除外">
+              {firstCandidate && <li><DispositionMark kind="candidate" label={false} /> {methodLabel(firstCandidate.method_id)}</li>}
+              {firstExcluded && <li><DispositionMark kind="excluded" label={false} /> {methodLabel(firstExcluded.method_id)}</li>}
+            </ul>
             <footer>
               <JourneyProgress journey={journey} />
               <strong>開く →</strong>
@@ -382,6 +403,31 @@ export function GalleryCasePage() {
     links.status === "ready" ? findEntity(links.index, type, id) : undefined
   );
 
+  const siteData = useSiteData();
+  const signatureAnswers = useMemo(() => (item ? caseAnswers(item.question_answers) : {}), [item]);
+  const signatureAxes = useMemo(() => buildSignature(signatureAnswers), [signatureAnswers]);
+  const lensEntries = useMemo((): LensEntry[] => {
+    if (!item) return [];
+    const toEntry = (disposition: LensEntry["disposition"]) => (entry: { method_id: string; reason: string }): LensEntry => {
+      const target = entity("method", entry.method_id);
+      return {
+        methodId: entry.method_id,
+        name: target?.label ?? entry.method_id,
+        href: target?.canonical_url ?? undefined,
+        disposition,
+        origin: "case",
+        reason: entry.reason,
+      };
+    };
+    return [
+      ...item.candidate_methods.map(toEntry("candidate")),
+      ...item.conditional_methods.map(toEntry("conditional")),
+      ...item.excluded_methods.map(toEntry("excluded")),
+    ];
+  // entity() reads the link index; recompute when it becomes ready.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item, links.status]);
+
   if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
 
   const primaryScenario = journey?.scenarios.find((scenario) => scenario.role === "primary");
@@ -389,6 +435,7 @@ export function GalleryCasePage() {
   const canonicalComparison = journey?.comparisons[0];
   const problemArchetype = journey ? entity("problem", journey.problem_archetype_id) : undefined;
   const sourceIds = journey && item ? [...new Set([...journey.source_ids, ...item.source_ids])] : [];
+
 
   return (
     <section className="atlas-page gallery-detail">
@@ -410,9 +457,26 @@ export function GalleryCasePage() {
             </div>
           </section>
 
+          <section aria-labelledby="signature-title" className="gallery-hub-section gallery-signature-section">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">2. 問題の形と手法の判断</p>
+              <h2 id="signature-title">この問題の署名を、手法ごとの目で読む</h2>
+              <p>12の軸で、この問題がどこにあるかを点で示します。手法を選ぶと、その手法を支える値（橙の輪）と外れる値（赤の斜線）が同じ軸に重なります。</p>
+            </header>
+            <LensBoard
+              answers={signatureAnswers}
+              axes={signatureAxes}
+              catalog={siteData}
+              entries={lensEntries}
+              renderMethodLink={(entry) => (
+                <EntityReference atlasState={state} entity={entity("method", entry.methodId)} fallback={entry.name} journeyPatch={{ methodId: entry.methodId }} />
+              )}
+            />
+          </section>
+
           <section aria-labelledby="journey-actions-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">2. 次に進む</p>
+              <p className="eyebrow">3. 次に進む</p>
               <h2 id="journey-actions-title">実行を見てから、条件差を比べる</h2>
             </header>
             <div className="gallery-action-grid">
@@ -441,6 +505,13 @@ export function GalleryCasePage() {
                 何を固定し、何だけを変えた比較なのかを先に確認します。
               </JourneyAction>
             </div>
+            {caseId === "hyperparameter-search" && (
+              <Link className="gallery-lens-theater-link" to={THEATER_ROUTES.algorithmLenses}>
+                <span>THEATER · ALGORITHM VIEW</span>
+                <strong>勾配・集団・予測の3つの計器で、同じ地形を測る →</strong>
+                <small>除外したBFGSの理由（勾配が得られない）が、観測でどう現れるかも見られます。</small>
+              </Link>
+            )}
             {alternateScenarios.length > 0 && (
               <div className="gallery-alternate-runs">
                 <strong>補助の実行</strong>
@@ -455,7 +526,7 @@ export function GalleryCasePage() {
 
           <details className="gallery-formulation-disclosure">
             <summary>
-              <span>3. 定式化</span>
+              <span>4. 定式化</span>
               <strong>変数・目的・制約を確認する</strong>
               <small>必要なときに展開</small>
             </summary>
@@ -471,7 +542,7 @@ export function GalleryCasePage() {
 
           <section aria-labelledby="context-levels-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">4. 問題の粒度</p>
+              <p className="eyebrow">5. 問題の粒度</p>
               <h2 id="context-levels-title">同じ問題でも、3つの粒度を分ける</h2>
             </header>
             <div className="gallery-context-grid">
@@ -512,49 +583,12 @@ export function GalleryCasePage() {
 
           <section aria-labelledby="inspect-title" className="gallery-hub-section gallery-inspect-panel">
             <header className="gallery-section-heading">
-              <p className="eyebrow">5. 判断のポイント</p>
+              <p className="eyebrow">6. 判断のポイント</p>
               <h2 id="inspect-title">このケースで見るべきこと</h2>
             </header>
             <div className="gallery-inspect-grid">
               <div><strong>持ち帰る</strong><GalleryTakeaway>{journey.takeaway}</GalleryTakeaway></div>
               <div><strong>言い過ぎない</strong><ul>{journey.limitations.map((text) => <li key={text}>{text}</li>)}</ul></div>
-            </div>
-          </section>
-
-          <section aria-labelledby="method-roles-title" className="gallery-hub-section">
-            <header className="gallery-section-heading">
-              <p className="eyebrow">6. 手法の役割</p>
-              <h2 id="method-roles-title">候補・条件付き・除外を理由で分ける</h2>
-            </header>
-            <div className="gallery-method-grid">
-              <MethodGroup
-                className="is-candidate"
-                empty="候補手法は未登録です。"
-                ids={journey.candidate_method_ids}
-                label="候補"
-                method={entity}
-                openByDefault
-                reasons={new Map(item.candidate_methods.map((entry) => [entry.method_id, entry.reason]))}
-                state={state}
-              />
-              <MethodGroup
-                className="is-conditional"
-                empty="条件付き候補はありません。"
-                ids={journey.conditional_method_ids}
-                label="条件付き"
-                method={entity}
-                reasons={new Map(item.conditional_methods.map((entry) => [entry.method_id, entry.reason]))}
-                state={state}
-              />
-              <MethodGroup
-                className="is-excluded"
-                empty="明示的な除外手法はありません。"
-                ids={journey.excluded_method_ids}
-                label="避ける"
-                method={entity}
-                reasons={new Map(item.excluded_methods.map((entry) => [entry.method_id, entry.reason]))}
-                state={state}
-              />
             </div>
           </section>
 
@@ -711,51 +745,6 @@ function JourneyAction({
     </>
   );
   return <JourneyLink atlasState={state} className={`gallery-journey-action${available ? "" : " is-missing"}`} journeyPatch={journeyPatch} to={href ?? fallbackTo}>{content}</JourneyLink>;
-}
-
-function MethodGroup({
-  className,
-  empty,
-  ids,
-  label,
-  method,
-  openByDefault = false,
-  reasons,
-  state,
-}: {
-  className: string;
-  empty: string;
-  ids: string[];
-  label: string;
-  method: (type: EntityType, id: string) => LinkedEntity | undefined;
-  openByDefault?: boolean;
-  reasons: Map<string, string>;
-  state?: AtlasStateV1;
-}) {
-  return (
-    <details className={`gallery-method-group ${className}`} open={openByDefault}>
-      <summary>
-        <strong>{label}</strong>
-        <span>{ids.length}件</span>
-      </summary>
-      <div>
-        {ids.length === 0 ? <p>{empty}</p> : (
-          <ul>
-            {ids.map((id) => {
-              const target = method("method", id);
-              const reason = reasons.get(id) || target?.summary || "このケースの定式化と前提に合う主要候補です。";
-              return (
-                <li key={id}>
-                  <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
-                  <p>{reason}</p>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-    </details>
-  );
 }
 
 export function GalleryNote({ children }: { children: string }) {

@@ -21,3 +21,4 @@ build/
 .DS_Store
 .env
 site/.scene-media/
+site/.vqa/

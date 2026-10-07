@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { THEATER_ROUTES } from "./theater-routes";
 
 import { PageOrientation } from "../../components/PageOrientation";
 import {
@@ -100,6 +101,11 @@ export function TheaterIndexPage() {
           </Link>
         </section>
       )}
+      <Link className="gallery-lens-theater-link" to={THEATER_ROUTES.algorithmLenses}>
+        <span>ALGORITHM VIEW · 高価な実験の設定を探す</span>
+        <strong>同じ地形を、勾配・集団・予測の3つの計器で測る →</strong>
+        <small>手法ごとに「何が見えているか」を並べ、見えている世界の違いが動きの違いになることを確かめます。</small>
+      </Link>
       <section className="theater-catalog-tools" aria-labelledby="theater-catalog-tools-title">
         <header>
           <p className="eyebrow">次に見る教材を選ぶ</p>
