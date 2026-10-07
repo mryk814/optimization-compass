@@ -98,7 +98,7 @@ export function ProposalMarker({ x, scale, label = "次" }: { x: number; scale: 
     <g className="vs-proposal">
       <line x1={px} x2={px} y1={10} y2={scale.height - 18} />
       <path d={`M ${px} ${scale.height - 16} l -5 9 h 10 Z`} />
-      <text textAnchor="middle" x={px} y={scale.height - 1}>{label}</text>
+      <text textAnchor={px > scale.width - 40 ? "end" : "start"} x={px > scale.width - 40 ? px - 5 : px + 5} y={22}>{label}</text>
     </g>
   );
 }
@@ -175,6 +175,55 @@ export function UnseenField({ scale, known, id }: { scale: StageScale; known: Re
         </mask>
       </defs>
       <rect fill={`url(#${id})`} height={bottom - top} mask={`url(#${id}-mask)`} opacity={0.55} width={scale.width} x={0} y={top} />
+    </g>
+  );
+}
+
+/** A band given by explicit lower and upper curves (e.g. a recorded posterior interval). */
+export function RangeBand({ xs, lower, upper, scale }: { xs: readonly number[]; lower: readonly number[]; upper: readonly number[]; scale: StageScale }) {
+  if (xs.length === 0) return null;
+  const top = xs.map((x, i) => `${i === 0 ? "M" : "L"} ${scale.px(x).toFixed(1)} ${scale.py(upper[i]).toFixed(1)}`).join(" ");
+  const bottom = [...xs].reverse().map((x, j) => `L ${scale.px(x).toFixed(1)} ${scale.py(lower[xs.length - 1 - j]).toFixed(1)}`).join(" ");
+  return <path className="vs-band" d={`${top} ${bottom} Z`} />;
+}
+
+/** The teaching objective from recorded samples — only the human view shows it. */
+export function TerrainLine({ xs, ys, scale }: { xs: readonly number[]; ys: readonly number[]; scale: StageScale }) {
+  return <path className="vs-terrain" d={linePath(xs, ys, scale)} />;
+}
+
+/**
+ * An acquisition score along x, drawn as an orange area under the stage: where the method
+ * would like to measure next. Normalised to its own maximum; the proposal is a vertical tick.
+ */
+export function AcquisitionStrip({
+  xs,
+  values,
+  next,
+  top,
+  height = 30,
+  scale,
+  label = "EI",
+}: {
+  xs: readonly number[];
+  values: readonly number[];
+  next: number | null;
+  top: number;
+  height?: number;
+  scale: StageScale;
+  label?: string;
+}) {
+  if (values.length === 0) return null;
+  const max = Math.max(...values, 1e-12);
+  const d = xs.map((x, i) => `${i === 0 ? "M" : "L"} ${scale.px(x).toFixed(1)} ${(top + height - (Math.max(values[i], 0) / max) * height).toFixed(1)}`).join(" ");
+  const x0 = scale.px(xs[0]);
+  const x1 = scale.px(xs[xs.length - 1]);
+  return (
+    <g className="vs-acquisition">
+      <text className="vs-stage-tick" x={4} y={top + 10}>{label}</text>
+      <path className="vs-ei" d={`${d} L ${x1} ${top + height} L ${x0} ${top + height} Z`} />
+      {next !== null && <line className="vs-acquisition-next" x1={scale.px(next)} x2={scale.px(next)} y1={top} y2={top + height} />}
+      <line className="vs-stage-axis" x1={x0} x2={x1} y1={top + height} y2={top + height} />
     </g>
   );
 }

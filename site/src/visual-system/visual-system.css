@@ -508,3 +508,88 @@
 .vs-case-strip a { color: var(--vs-ink); font-weight: 700; }
 .vs-case-strip > a:last-child,
 .vs-case-strip .vs-case-strip-action { margin-left: auto; }
+
+.vs-acquisition-next { stroke: var(--vs-candidate-ink); stroke-width: 1.5; }
+.vs-stage-label { fill: var(--vs-ink); font-size: var(--type-chart); font-weight: 700; }
+.vs-surrogate-figure { display: grid; gap: 0.5rem; margin: 0; min-width: 0; }
+.vs-legend .vs-legend-line { width: 18px; height: 0; border-top: 2px solid var(--vs-observed); }
+.vs-legend .vs-legend-line.is-terrain { border-top: 2px dashed var(--vs-terrain); }
+.vs-legend .vs-legend-line.is-proposal { border-top: 2px dashed var(--vs-candidate); }
+
+/* ---------- Canonical trajectory renderers on the shared tokens ----------
+ * Method identity is the line pattern (solid / dashed / dotted), never a hue. What the method
+ * reads (a gradient) is observed teal; what it does next (an update) is candidate orange.
+ */
+.comparison-plot,
+.objective-history svg { border-color: var(--vs-line); background: var(--vs-ground); }
+.objective-background { fill: var(--vs-ground); }
+.objective-contours line { stroke: var(--vs-line-strong); }
+.objective-contours line:nth-child(3n) { stroke: var(--vs-terrain); }
+.trajectory-0,
+.trajectory-1,
+.trajectory-2 { stroke: var(--vs-ink); }
+.trajectory-1 { stroke-dasharray: 6 3; }
+.trajectory-2 { stroke-dasharray: 2 3; }
+.gradient-vector { stroke: var(--vs-observed); }
+.gradient-arrow-head { fill: var(--vs-observed); }
+.update-vector { stroke: var(--vs-candidate); }
+.update-arrow-head { fill: var(--vs-candidate); }
+.method-marker,
+.current-marker { fill: var(--vs-panel); stroke: var(--vs-ink); }
+.vs-tangent line { stroke: var(--vs-observed); }
+.history-0 polyline,
+.history-1 polyline,
+.history-2 polyline { stroke: var(--vs-ink); }
+.history-0 text,
+.history-1 text,
+.history-2 text { fill: var(--vs-ink); }
+.history-cursor { stroke: var(--vs-candidate); }
+
+/* Nelder–Mead, feasible-region and Pareto renderers: same semantic colours.
+ * The simplex is the method's state (observed), the trial point and operation are the next
+ * action (candidate), the worst vertex is ink (to be replaced, not a violation), the known
+ * optimum is the human-only answer key (terrain grey), infeasible points stay red. */
+.nm-grid { stroke: var(--vs-line); }
+.nm-simplex { fill: var(--vs-observed-wash); fill-opacity: 0.6; stroke: var(--vs-observed-ink); }
+.nm-vertex { fill: var(--vs-observed); }
+.nm-candidate { fill: var(--vs-candidate); }
+.nm-operation-vector { stroke: var(--vs-candidate); }
+.nm-arrow-head { fill: var(--vs-candidate); }
+.nm-centroid line { stroke: var(--vs-ink); }
+.nm-vertex-worst polygon { fill: var(--vs-panel); stroke: var(--vs-ink); }
+.nm-vertex-second-worst rect { fill: var(--vs-panel); stroke: var(--vs-ink-soft); }
+.nm-initial-marker { fill: var(--vs-ink); }
+.nm-initial-marker text { fill: var(--vs-ink); }
+.nm-optimum-marker { stroke: var(--vs-terrain); stroke-dasharray: 3 2; }
+.nm-optimum-marker text { fill: var(--vs-ink-soft); }
+.feasible-region { fill: var(--vs-observed-wash); }
+.infeasible-point { fill: var(--vs-violation); stroke: var(--vs-violation-ink); }
+.dominated-point { fill: var(--vs-muted); }
+.pareto-front { stroke: var(--vs-ink); }
+.pareto-point { fill: var(--vs-panel); stroke: var(--vs-candidate); }
+.objective-contour { stroke: var(--vs-terrain); }
+.active-boundary { stroke: var(--vs-ink); }
+.primary-path { stroke: var(--vs-ink); }
+.failure-path { stroke: var(--vs-ink-soft); }
+.failure-point { fill: var(--vs-panel); stroke: var(--vs-ink-soft); }
+.initial-marker { fill: var(--vs-ink); stroke: var(--vs-panel); }
+.reference-marker { fill: var(--vs-panel); stroke: var(--vs-terrain); stroke-dasharray: 3 2; }
+.ideal-marker { fill: var(--vs-muted); stroke: var(--vs-panel); }
+.selected-marker { fill: var(--vs-candidate); stroke: var(--vs-candidate-ink); }
+.triobjective-points .is-dominated { fill: var(--vs-muted); }
+.triobjective-points .is-front { fill: var(--vs-candidate-wash); stroke: var(--vs-candidate); }
+.triobjective-points .is-selected { fill: var(--vs-candidate); stroke: var(--vs-ink); }
+.parallel-front polyline { stroke: var(--vs-line-strong); }
+.parallel-selected { stroke: var(--vs-candidate); }
+.legend-swatch.feasible { background: var(--vs-observed-wash); border-color: var(--vs-ink); }
+.legend-swatch.primary,
+.legend-swatch.pareto { background: var(--vs-ink); }
+.legend-swatch.failure { background: repeating-linear-gradient(90deg, var(--vs-ink-soft) 0 6px, transparent 6px 9px); }
+.legend-dot.reference { background: var(--vs-panel); border: 1.5px dashed var(--vs-terrain); }
+.legend-dot.ideal { background: var(--vs-muted); }
+.legend-dot.dominated { background: var(--vs-muted); }
+.legend-dot.selected { background: var(--vs-candidate); }
+/* A violation always wins over the mark it sits on. */
+.failure-point.infeasible-point,
+.current-marker.infeasible-point,
+.vs-eval.is-violation { fill: var(--vs-violation); stroke: var(--vs-violation-ink); }

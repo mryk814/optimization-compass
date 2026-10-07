@@ -9,6 +9,7 @@ import { PlayerBar } from "../../explorable/controls";
 import { useReplayOnChange, useTimeline } from "../../explorable/useTimeline";
 import { NotFoundPage } from "../../navigation/NotFoundPage";
 import {
+  AcquisitionStrip,
   BudgetTicks,
   buildMethodLens,
   buildSignature,
@@ -312,7 +313,7 @@ function LensLane({
           {view === "human" && <TerrainCurve f={lensObjective} scale={scale} xs={LENS_GRID} />}
           <LensLayers scale={scale} snapshot={snapshot} spec={spec} />
           {spec.id === "surrogate" && snapshot.view.kind === "surrogate" && (
-            <EiStrip ei={snapshot.view.ei} next={snapshot.view.next} top={height - 40} width={width} scale={scale} />
+            <AcquisitionStrip next={snapshot.view.next} scale={scale} top={height - 40} values={snapshot.view.ei} xs={LENS_GRID} />
           )}
         </svg>
       </div>
@@ -408,21 +409,6 @@ function LensLayers({ spec, snapshot, scale }: { spec: LensSpec; snapshot: LensS
       <EvaluationMarks points={points} scale={scale} shape={spec.shape} />
       {view.next !== null && <ProposalMarker scale={scale} x={view.next} />}
     </>
-  );
-}
-
-function EiStrip({ ei, next, top, width, scale }: { ei: readonly number[]; next: number | null; top: number; width: number; scale: StageScale }) {
-  if (ei.length === 0) return null;
-  const max = Math.max(...ei, 1e-12);
-  const h = 30;
-  const d = LENS_GRID.map((x, i) => `${i === 0 ? "M" : "L"} ${scale.px(x).toFixed(1)} ${(top + h - (ei[i] / max) * h).toFixed(1)}`).join(" ");
-  return (
-    <g>
-      <text className="vs-stage-tick" x={4} y={top + 8}>EI</text>
-      <path className="vs-ei" d={`${d} L ${scale.px(LENS_DOMAIN[1])} ${top + h} L ${scale.px(LENS_DOMAIN[0])} ${top + h} Z`} />
-      {next !== null && <line className="vs-stage-axis" x1={scale.px(next)} x2={scale.px(next)} y1={top} y2={top + h} />}
-      <line className="vs-stage-axis" x1={0} x2={width} y1={top + h} y2={top + h} />
-    </g>
   );
 }
 

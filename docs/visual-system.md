@@ -159,7 +159,8 @@ Gallery（署名つきカード）
 
 ## 11. 分かっている残課題
 
-- 既存の Theater / Compare の正準 renderer（trajectory、surrogate など）は、まだ独自の色と印で描いている。例えば獲得関数を紫の棒で描いている。`SearchStage` の部品へ移すのが次の一歩。
+- 正準の surrogate 図（BO Theater と比較）は `SearchStage` の部品で描くようにした。軌跡・Nelder–Mead・実行可能領域・パレート・三目的・指標推移の各 renderer は、構造はそのままで、色だけを §3 のトークンに揃えた（`visual-system.css` の後半）。これらの SVG を `SearchStage` の部品で作り直すことと、固定 `viewBox` をやめて実寸で描くことは、まだ残っている。
+- 色の対応: 手法が読んだ情報（勾配など）は青緑、次の一手（更新・試行点・選んだ点）は橙、手法の区別は線種と形、既知の最適点は灰色の破線（人間だけが知る答え）、違反した点は赤。
 - サイトの外枠（緑）と意味の色（紺・青緑・橙・赤）は分けたが、外枠の配色そのものは変えていない。
 - Map・Learn・Search・Sources・Coverage にはまだ署名と印を置いていない。Map の node と Search の結果に小さな署名を付けるのが自然な次の候補。
 - データの発見: Case `hyperparameter-search` は「勾配が使えない」ことを理由に BFGS を除外しているが、以前は BFGS に勾配の前提（predicate）がなく、Lens は「規則上の除外軸なし」と表示していた。dataset 0.18.20 で `P_M_BFGS_DERIVATIVE` を追加し、今は「勾配」の軸で外れる理由として描ける。Case の判断と規則・前提の食い違いは、これからも Lens が隠さず表示する。
