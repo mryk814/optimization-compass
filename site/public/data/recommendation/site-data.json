@@ -132,7 +132,7 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.20",
   "feature_values": [
     {
       "feature_id": "F_CONSTRAINT_CLASS",
@@ -819,7 +819,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-26T00:00:00Z",
+  "generated_at": "2026-10-07T00:00:00Z",
   "implementations": [
     {
       "implementation_id": "I_ACADOS",
@@ -3400,8 +3400,8 @@
       "subject_type": "method"
     },
     {
-      "last_verified": "2026-07-13",
-      "rationale": "Current recommendation incompatibility conditions are represented atomically.",
+      "last_verified": "2026-10-07",
+      "rationale": "Current recommendation incompatibility conditions and the derivative-access assumption are represented atomically.",
       "source_ids": [
         "S002",
         "S056",
@@ -3637,6 +3637,28 @@
         "S075"
       ],
       "subject_id": "M_BAYESIAN_OPT_GP",
+      "subject_type": "method"
+    },
+    {
+      "confidence": "high",
+      "effect": "require",
+      "expression": {
+        "kind": "predicate",
+        "predicate_id": "P_M_BFGS_DERIVATIVE"
+      },
+      "inheritance_mode": "local_only",
+      "last_verified": "2026-10-07",
+      "override_action": "add",
+      "overrides_policy_id": null,
+      "policy_id": "POL_M_BFGS_DERIVATIVE",
+      "rationale_key": "method.bfgs.derivative_access",
+      "schema_version": "1.0.0",
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "subject_id": "M_BFGS",
       "subject_type": "method"
     },
     {
@@ -4010,6 +4032,29 @@
       "subject_id": "M_BAYESIAN_OPT_GP",
       "subject_type": "method",
       "value": "over_10000",
+      "value_type": "controlled_code"
+    },
+    {
+      "confidence": "high",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "last_verified": "2026-10-07",
+      "operator": "in",
+      "predicate_id": "P_M_BFGS_DERIVATIVE",
+      "predicate_kind": "assumption",
+      "rationale_key": "method.bfgs.derivative_access",
+      "schema_version": "1.0.0",
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "subject_id": "M_BFGS",
+      "subject_type": "method",
+      "value": [
+        "analytic_gradient",
+        "autodiff",
+        "numerical_difference_only"
+      ],
       "value_type": "controlled_code"
     },
     {
