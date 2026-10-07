@@ -99,7 +99,7 @@ export function LensLegend({ withProblem = true }: { withProblem?: boolean }) {
   return (
     <ul className="vs-legend" aria-label="記号の読み方">
       {withProblem && <li><span className="vs-legend-dot" aria-hidden="true" />この問題の値</li>}
-      <li><span className="vs-legend-ring" aria-hidden="true" />手法を支える値（規則・前提）</li>
+      <li><span className="vs-legend-ring" aria-hidden="true" />手法を支える値（規則・前提・型）</li>
       <li><span className="vs-legend-slash" aria-hidden="true" />手法が外れる値</li>
       {withProblem && <li><span className="vs-legend-hatch" aria-hidden="true" />不明と回答</li>}
       {withProblem && <li><span className="vs-legend-missing" aria-hidden="true" />まだ答えていない</li>}

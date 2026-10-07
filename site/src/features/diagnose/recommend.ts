@@ -103,7 +103,7 @@ function validateAnswers(data: SiteData, answers: Answers): Record<string, strin
   return normalized;
 }
 
-function variableCompatibility(domain: string, variableTypes: string): "native" | "encoded" | "incompatible" | "unknown" {
+export function variableCompatibility(domain: string, variableTypes: string): "native" | "encoded" | "incompatible" | "unknown" {
   const tokens = variableTypes.split(";").map((token) => token.trim().toLowerCase()).filter(Boolean);
   if (!tokens.length) return "unknown";
   const terms: Record<string, Set<string>> = {
@@ -130,7 +130,7 @@ function variableCompatibility(domain: string, variableTypes: string): "native" 
 export function isCertificateToken(token: string): boolean {
   return /(^|_)(gap|bound)$/u.test(token) || /(^|_)unsat_proof(_|$)/u.test(token);
 }
-function supportsCertificate(method: SiteMethod): boolean {
+export function supportsCertificate(method: SiteMethod): boolean {
   const scope = method.solution_scope.toLowerCase();
   const exactness = method.exactness.toLowerCase();
   if (scope.includes("global_certificate")) return true;

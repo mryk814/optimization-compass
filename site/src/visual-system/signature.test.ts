@@ -72,4 +72,23 @@ describe("method lens", () => {
     expect(lens.axes.find((axis) => axis.questionId === "Q05")?.status).toBe("unread");
     expect(lens.blockingAxes).toHaveLength(0);
   });
+it("draws the engine's variable-type check on the variable axis", () => {
+    const lens = buildMethodLens("M_NELDER_MEAD", caseAnswers({ Q01: "binary" }), siteData);
+    const axis = lens.axes.find((item) => item.questionId === "Q01");
+    expect(axis?.status).toBe("blocks");
+    expect(axis?.evidence.map((item) => item.kind)).toContain("variable_domain");
+    expect(axis?.flipValues).toContain("continuous");
+    const cpSat = buildMethodLens("M_CP_SAT", caseAnswers({ Q01: "binary" }), siteData);
+    expect(cpSat.axes.find((item) => item.questionId === "Q01")?.status).toBe("supports");
+  });
+
+  it("draws the engine's whole-token certificate check on the proof axis", () => {
+    // "dual" inside "first_order_residual" no longer counts as a certificate (PR #295).
+    const bfgs = buildMethodLens("M_BFGS", caseAnswers({ Q10: "global_proof_required" }), siteData);
+    expect(bfgs.axes.find((item) => item.questionId === "Q10")?.status).toBe("blocks");
+    const bnb = buildMethodLens("M_BRANCH_BOUND", caseAnswers({ Q10: "global_proof_required" }), siteData);
+    expect(bnb.axes.find((item) => item.questionId === "Q10")?.status).toBe("supports");
+    const sqpGap = buildMethodLens("M_SQP", caseAnswers({ Q10: "gap_desired" }), siteData);
+    expect(sqpGap.axes.find((item) => item.questionId === "Q10")?.status).toBe("silent");
+  });
 });

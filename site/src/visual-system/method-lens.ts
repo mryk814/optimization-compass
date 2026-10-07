@@ -6,8 +6,9 @@
  * The lens never assigns a candidate/excluded band itself. The band comes from the Case
  * (editorial, sourced) or from `recommend()`; the lens shows where on the axes it comes from.
  */
-import type { SitePredicate, SiteQuestion, SiteRule } from "../contracts/site-data";
-import { SIGNATURE_AXES, shortValueLabel, type SignatureAnswer } from "./signature";
+import type { SiteMethod, SitePredicate, SiteQuestion, SiteRule } from "../contracts/site-data";
+import { supportsCertificate, variableCompatibility } from "../features/diagnose/recommend";
+import { SIGNATURE_AXES, SIGNATURE_SLOTS, shortValueLabel, type SignatureAnswer } from "./signature";
 
 /**
  * - supports: a promote rule matches this answer, or an assumption predicate is satisfied.
@@ -19,7 +20,8 @@ import { SIGNATURE_AXES, shortValueLabel, type SignatureAnswer } from "./signatu
 export type LensAxisStatus = "supports" | "blocks" | "open" | "silent" | "unread";
 
 export interface LensEvidence {
-  kind: "promote_rule" | "exclude_rule" | "assumption" | "incompatibility";
+  /** variable_domain / certificate: the engine's own variable-type and certificate checks (same functions as `recommend()`). */
+  kind: "promote_rule" | "exclude_rule" | "assumption" | "incompatibility" | "variable_domain" | "certificate";
   id: string;
   text: string;
   sourceIds: readonly string[];
@@ -52,6 +54,8 @@ export interface LensCatalog {
   questions: readonly Pick<SiteQuestion, "question_id" | "mapped_feature_id">[];
   rules: readonly SiteRule[];
   predicates: readonly SitePredicate[];
+  /** When given, the engine's variable-type (Q01) and certificate (Q10) checks are drawn too. */
+  methods?: readonly SiteMethod[];
 }
 
 function predicateValues(predicate: SitePredicate): string[] | undefined {
@@ -167,14 +171,83 @@ export function buildMethodLens(
       conflict: predicateBlocks && supports && !blocks,
     };
   });
+  const method = catalog.methods?.find((item) => item.method_id === methodId);
+  const checked = method ? axes.map((axis) => applyEngineChecks(axis, answers[axis.questionId], method)) : axes;
   return {
     methodId,
-    axes,
-    readAxisCount: axes.filter((axis) => axis.status !== "unread").length,
-    blockingAxes: axes.filter((axis) => axis.status === "blocks"),
-    supportingAxes: axes.filter((axis) => axis.status === "supports"),
-    openAxes: axes.filter((axis) => axis.status === "open"),
+    axes: checked,
+    readAxisCount: checked.filter((axis) => axis.status !== "unread").length,
+    blockingAxes: checked.filter((axis) => axis.status === "blocks"),
+    supportingAxes: checked.filter((axis) => axis.status === "supports"),
+    openAxes: checked.filter((axis) => axis.status === "open"),
   };
+}
+
+const STATUS_RANK: Record<LensAxisStatus, number> = { unread: 0, silent: 1, open: 2, supports: 3, blocks: 4 };
+
+/** Combine a rule/predicate verdict with an engine check on the same axis: a block always wins. */
+function merge(axis: LensAxis, status: LensAxisStatus, evidence: LensEvidence | undefined, flip: string[], block: string[]): LensAxis {
+  return {
+    ...axis,
+    status: STATUS_RANK[status] > STATUS_RANK[axis.status] ? status : axis.status,
+    evidence: evidence ? [...axis.evidence, evidence] : axis.evidence,
+    flipValues: [...new Set([...axis.flipValues, ...flip])],
+    blockValues: [...new Set([...axis.blockValues, ...block])],
+  };
+}
+
+/**
+ * The engine's variable-domain (Q01) and certificate (Q10) checks, drawn on their axes.
+ * `recommend()` applies them to promoted methods; the lens shows them for any method, so an
+ * exclusion grounded in a variable or guarantee mismatch is visible where it happens.
+ * The certificate check matches whole tokens since PR #295 (it used to match substrings).
+ */
+function applyEngineChecks(axis: LensAxis, answer: SignatureAnswer | undefined, method: SiteMethod): LensAxis {
+  const values = answer?.status === "answered" ? answer.values.filter((value) => value !== "unknown") : [];
+  if (axis.questionId === "Q01") {
+    const domains = (SIGNATURE_SLOTS.Q01 ?? []).filter((value) => value !== "structured_or_unknown");
+    const compatibility = new Map(domains.map((domain) => [domain, variableCompatibility(domain, method.variable_types)]));
+    const flip = domains.filter((domain) => compatibility.get(domain) === "native");
+    const block = domains.filter((domain) => compatibility.get(domain) === "incompatible");
+    if (flip.length === 0 && block.length === 0) return axis;
+    const value = values[0];
+    if (!value || value === "structured_or_unknown") return merge(axis, answer?.status === "not_applicable" ? "silent" : "open", undefined, flip, block);
+    const result = compatibility.get(value);
+    const evidence: LensEvidence = {
+      kind: "variable_domain",
+      id: "variable_types",
+      text: result === "native"
+        ? `変数型: この手法は${shortValueLabel("Q01", value)}を直接扱う（${method.variable_types}）`
+        : result === "encoded"
+          ? `変数型: ${shortValueLabel("Q01", value)}は変換（encoding）が必要（${method.variable_types}）`
+          : `変数型: この手法は${shortValueLabel("Q01", value)}を扱わない（${method.variable_types}）`,
+      sourceIds: method.reference_source_ids,
+    };
+    return merge(axis, result === "native" ? "supports" : result === "incompatible" ? "blocks" : "silent", evidence, flip, block);
+  }
+  if (axis.questionId === "Q10") {
+    const demanding = ["gap_desired", "global_proof_required"];
+    const asked = values.find((value) => demanding.includes(value));
+    if (supportsCertificate(method)) {
+      const evidence: LensEvidence | undefined = asked ? {
+        kind: "certificate",
+        id: "optimality_certificate",
+        text: `証明: 上下界・gapなどのcertificateを返す（${method.optimality_certificate}）`,
+        sourceIds: method.reference_source_ids,
+      } : undefined;
+      return merge(axis, asked ? "supports" : axis.status === "unread" ? "silent" : axis.status, evidence, demanding, []);
+    }
+    // The engine excludes for a required proof and only demotes for a desired gap.
+    const evidence: LensEvidence | undefined = asked ? {
+      kind: "certificate",
+      id: "optimality_certificate",
+      text: `証明: 大域最適性の上下界・gapを一般には返さない（${method.optimality_certificate}）`,
+      sourceIds: method.reference_source_ids,
+    } : undefined;
+    const status: LensAxisStatus = asked === "global_proof_required" ? "blocks" : asked ? "silent" : axis.status === "unread" ? "silent" : axis.status;
+    return merge(axis, status, evidence, [], ["global_proof_required"]);
+  }
+  return axis;
 }
 
 function predicateText(questionId: string, predicate: SitePredicate): string {
@@ -189,5 +262,5 @@ function predicateText(questionId: string, predicate: SitePredicate): string {
 export function flipText(axis: LensAxis): string | undefined {
   if (axis.flipValues.length === 0) return undefined;
   const labels = axis.flipValues.map((value) => shortValueLabel(axis.questionId, value)).join("・");
-  return `${axis.name}が「${labels}」なら支える規則・前提がある`;
+  return `${axis.name}が「${labels}」なら、この手法を支える規則・前提・型がある`;
 }
