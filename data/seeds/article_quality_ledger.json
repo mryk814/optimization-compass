@@ -134,6 +134,24 @@
         "screen.three-widths": "pass"
       },
       "notes": "Sonnet 5.5のレビューをClaudeが確認。reading.formula-sentenceはSonnetのfailをpassに変更（L31の式の前に意味の一文、L37に読み方がある）。figure.one-questionは本文に図がないためna。数値は全反復を再計算して一致"
+    },
+    "primal-simplex": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "62b7e0aee6e3",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "パン屋のLPを主図simplex-pivot（新規）・2回のピボット表・最適性の証明書・Pythonまで一つの題材で通した。数値はscratchのFraction実装・vitest・linprogで確認。1280/375/320pxで全14状態のラベル重なりとはみ出しをスクリプトで検査。オーナーの画面確認は未。"
     }
   }
 }
