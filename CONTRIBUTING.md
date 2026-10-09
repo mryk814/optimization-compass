@@ -9,7 +9,6 @@
 - [`AGENTS.md`](AGENTS.md) — authority、生成物、変更分類、検証tierの短い入口
 - [`docs/adding-knowledge.md`](docs/adding-knowledge.md) — 教材、Gallery、比較、problem、手法、可視化の追加手順
 - [`docs/knowledge-change-checklist.md`](docs/knowledge-change-checklist.md) — Knowledge PRの確認項目とPR記載テンプレート
-- [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md) — AIエージェント向け作業規約
 
 `src/optimization_compass/resources/knowledge.sqlite`、`site/public/data/**`、公開distribution、生成Traceやmediaは直接修正しません。canonical inputを修正し、documented buildから再生成してください。
 

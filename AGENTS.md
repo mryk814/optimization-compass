@@ -1,9 +1,7 @@
 # Optimization Compass agent instructions
 
 This file is the first entry point for humans and automated agents changing this repository.
-For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
-
-Task-shaped authoring skills for growing the dataset live in [`.agents/skills/`](.agents/skills/): `grow-data` (triage/routing), `add-formulation`, `add-content-article`, `add-explorable`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
+For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Prose style for articles lives in [`docs/article-style.md`](docs/article-style.md).
 
 ## What we are building for the learner
 

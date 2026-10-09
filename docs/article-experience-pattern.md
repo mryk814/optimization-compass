@@ -1,7 +1,7 @@
 # 操作から式へつなぐ記事の見本
 
 BO、線形最小二乗、分枝限定法の既存記事から、操作と観察を式へつなぐ型をまとめています。線形最小二乗と座標降下法で、この型を使った記事を読めます。
-記事の固定節構造は `content-reading-principles.md`、文体は `.agents/skills/article-style/SKILL.md` のままです。
+記事の固定節構造は `content-reading-principles.md`、文体は `article-style.md` のままです。
 この型は節の中の読者体験と、図・本文の対応を決めます。全記事の一括改稿には使いません。
 
 ## 既存記事から残すもの
