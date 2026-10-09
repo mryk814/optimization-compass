@@ -32,6 +32,7 @@ def test_check_codes_are_unique_and_resolvable() -> None:
     codes = [check.code for check in CHECKS]
     assert len(codes) == len(set(codes))
     for task in TASKS.values():
+        assert len(task.check_codes) == len(set(task.check_codes))
         for code in task.check_codes:
             assert code in codes, f"task {task.name} references unknown check {code}"
 
@@ -41,10 +42,9 @@ def test_every_task_names_a_known_gate() -> None:
         assert task.gate in TASKS, f"task {task.name} declares unknown gate {task.gate}"
 
 
-def test_tier_compositions_match_agents_documentation() -> None:
+def test_tier_compositions_keep_the_required_checks() -> None:
     assert TASKS["tier-a"].check_codes == ("content.pages", "content.licensing")
     assert TASKS["tier-b"].check_codes == (
-        "content.report-drift",
         "python.lint",
         "python.format",
         "python.types",
@@ -125,6 +125,7 @@ def test_independent_browser_check_still_builds_and_build_still_typechecks() -> 
     scripts = json.loads(
         (Path(__file__).parents[1] / "site/package.json").read_text(encoding="utf-8")
     )["scripts"]
+    assert "--exclude=e2e/**" in scripts["test"]
     assert scripts["build"] == "npm run typecheck && vite build"
     assert scripts["test:e2e"] == "npm run build && npm run test:e2e:artifact"
     assert scripts["test:e2e:artifact"] == "playwright test"
@@ -168,13 +169,12 @@ def test_problem_task_gate_is_tier_c() -> None:
         ),
         (["site/public/data/content.json"], "tier-b"),
         (["site/src/App.tsx", ".github/workflows/ci.yml"], "pr-fast"),
-        (["tests/test_validate_cli.py", "tests/test_pages_workflow.py"], "pr-fast"),
+        (["tests/test_validate_cli.py", "tests/test_pages_checkpoint.py"], "pr-fast"),
         (
             [
                 "scripts/pages_checkpoint.py",
                 "src/optimization_compass/validation_tasks.py",
                 "tests/test_pages_checkpoint.py",
-                ".agents/skills/optimization-compass-maintenance/SKILL.md",
             ],
             "pr-fast",
         ),
@@ -240,7 +240,13 @@ def test_repository_contract_gate_runs_publication_checkpoint_tests() -> None:
     check = next(check for check in CHECKS if check.code == "repository.contract-tests")
 
     assert "tests/test_pages_checkpoint.py" in check.command
-    assert "tests/test_repository_skills.py" in check.command
+    assert check.command == (
+        "{python}",
+        "-m",
+        "pytest",
+        "tests/test_validate_cli.py",
+        "tests/test_pages_checkpoint.py",
+    )
 
 
 def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() -> None:

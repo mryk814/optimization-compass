@@ -3,7 +3,7 @@
 This guide explains where information is owned, which files to edit, and how to validate common changes.
 It is designed both for maintainers and for contributors making their first small correction or addition.
 
-For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md). For an AI-agent procedure, read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](../.agents/skills/optimization-compass-maintenance/SKILL.md).
+For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md).
 
 ## 1. The mental model
 
@@ -151,12 +151,10 @@ content/concepts/<content-id>.md
 ### Validate
 
 ```bash
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
-npm --prefix site test -- --run
+uv run optimization-compass validate content <content-id>
 ```
 
-If a relation or generated index changes, also run a staged dataset build and site build.
+For a published existing-entity article, regenerate its public indexes with `ready content <content-id>` as described below. A prose or content-relation correction does not require a dataset release.
 
 ## 7. Content Golden Path: add an article for an existing method
 
@@ -168,8 +166,8 @@ author canonical draft
   → promote frontmatter to published
   → ready regenerates public indexes and runs the owning gate
   → open and merge the PR
-  → main deploys GitHub Pages
-  → verify the reported public routes
+  → review the built preview
+  → separately authorize publication and verify the public routes
 ```
 
 Create a parseable draft directly in the editable authority. The command refuses unknown method
@@ -585,21 +583,21 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 
 ## 17. Validation matrix
 
-| Change | Local minimum | CI / release escalation |
+| Change | Local minimum | Review / release escalation |
 |---|---|---|
 | Prose correction | `validate content` | Pages review; no full suite |
 | Existing-entity draft | `validate content` | Pages review when published |
-| Existing-entity published article | `ready content <id>` | Pages artifact and critical journeys in CI |
-| Gallery case | `validate gallery` | Tier B when merged |
-| Comparison | `validate comparison` | Tier B when merged |
+| Existing-entity published article | `ready content <id>` | Built preview; relevant browser journeys |
+| Gallery case | `validate gallery` | Tier B before merging |
+| Comparison | `validate comparison` | Tier B before merging |
 | Problem instance | `validate problem` | Tier C and scenario checks |
 | Method/implementation/source | focused data checks | Tier B/C and staged release |
 | Scenario/generator/renderer | focused contract checks | Tier C and browser checks |
 | Release/schema/recommendation | explicit release plan | complete repository validation |
 
 The focused commands are intentionally small. `tier-b` and `tier-c` are for changes that can alter
-canonical data, executable behavior, generated artifacts, or release identity; CI remains the place
-where the broader proof runs. `--list` shows a task's checks and `--format json` is available for
+canonical data, executable behavior, generated artifacts, or release identity. Run the broader proof
+locally: this repository no longer includes a CI workflow. `--list` shows a task's checks and `--format json` is available for
 automation.
 
 For ordinary edits, use the focused command in the matrix. For a contract or release change, use
@@ -607,8 +605,6 @@ the named `tier-b` / `tier-c` task instead of copying a long command list; the r
 single source of truth for its checks.
 
 ## 18. Pull request expectations
-
-Use [`knowledge-change-checklist.md`](knowledge-change-checklist.md) when preparing a PR.
 
 At minimum, state:
 

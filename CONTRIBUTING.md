@@ -8,8 +8,6 @@
 
 - [`AGENTS.md`](AGENTS.md) — authority、生成物、変更分類、検証tierの短い入口
 - [`docs/adding-knowledge.md`](docs/adding-knowledge.md) — 教材、Gallery、比較、problem、手法、可視化の追加手順
-- [`docs/knowledge-change-checklist.md`](docs/knowledge-change-checklist.md) — Knowledge PRの確認項目とPR記載テンプレート
-- [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md) — AIエージェント向け作業規約
 
 `src/optimization_compass/resources/knowledge.sqlite`、`site/public/data/**`、公開distribution、生成Traceやmediaは直接修正しません。canonical inputを修正し、documented buildから再生成してください。
 
@@ -24,8 +22,8 @@ uv run optimization-compass validate content <content-id>
 uv run optimization-compass ready content <content-id>
 ```
 
-最後のコマンドが生成index、検索・retrieval・route、site build、必要なPR gateをまとめて確認し、
-commit対象とmerge後のPages確認先を表示します。dataset versionの変更や`--publish`は不要です。
+最後のコマンドが生成index、検索・retrieval・routeと記事の公開条件を確認し、commit対象を表示します。
+site buildやブラウザー確認は変更内容に応じて別途行います。dataset versionの変更や`--publish`は不要です。
 
 ## Pull request の種類
 
@@ -89,8 +87,8 @@ screenshot・logoを追加する場合は、rights holder、source、適用licen
 
 ## ローカル確認
 
-最初に`uv sync --all-extras`を行い、変更面を所有するtaskだけを実行します。PR CIも同じregistry
-から`docs`、`tier-a`、`content-ready`、`pr-fast`、`tier-b`を機械選択します。
+最初に`uv sync --frozen --all-extras --all-groups`を行い、変更面を所有するtaskを実行します。
+GitHub Actions workflowは削除されているため、pushやPR作成だけで検証・公開は行われません。
 
 ```bash
 uv run optimization-compass select-validation-task --base-ref origin/main

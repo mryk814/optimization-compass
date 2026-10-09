@@ -107,7 +107,7 @@ catalogだけを保持します。
 ```
 
 released SQLiteはruntime authorityですが、直接編集しません。生成物ではなく、監査可能な入力を修正します。
-詳細は [`docs/metadata-responsibilities.md`](docs/metadata-responsibilities.md) と
+詳細は [`docs/architecture.md`](docs/architecture.md#authority-boundaries) と
 [`AGENTS.md`](AGENTS.md) を参照してください。
 
 ## Quick start
@@ -139,7 +139,8 @@ uv run optimization-compass validate gallery
 ```
 
 スキーマ、推薦ロジック、生成器、実行可能問題、リリースを変更したときだけ、
-`validate tier-b` / `validate tier-c` を使います。公開後はGitHub PagesのCIが生成物・ビルド・重要導線を確認します。
+`validate tier-b` / `validate tier-c` を使います。GitHub Actions workflowは削除されているため、
+pushやPR作成による自動検証・Pages公開はありません。
 詳しい入口は [`docs/adding-knowledge.md`](docs/adding-knowledge.md) を参照してください。
 
 ## Contributing

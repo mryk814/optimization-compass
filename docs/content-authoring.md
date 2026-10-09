@@ -68,9 +68,8 @@ the generated site data.
 
 ## Body style
 
-Prose style — sentence tone, terminology spelling, and canonical section headings — is
-defined in [`.agents/skills/article-style/SKILL.md`](../.agents/skills/article-style/SKILL.md).
-Read it before writing or revising article text. The rules below cover structure only.
+For sentence tone and terminology, follow [`content-reading-principles.md`](content-reading-principles.md)
+and [`teaching-article-playbook.md`](teaching-article-playbook.md). The rules below cover structure.
 
 The reading order, visual hierarchy, body measure, and progressive-disclosure policy are
 defined in [`docs/content-reading-principles.md`](content-reading-principles.md). Read it
