@@ -1,7 +1,7 @@
 # Optimization Compass agent instructions
 
 This file is the first entry point for humans and automated agents changing this repository.
-For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md).
+For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Prose style for articles lives in [`docs/article-style.md`](docs/article-style.md).
 
 ## What we are building for the learner
 

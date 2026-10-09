@@ -3,7 +3,7 @@
 This guide explains where information is owned, which files to edit, and how to validate common changes.
 It is designed both for maintainers and for contributors making their first small correction or addition.
 
-For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md).
+For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md). For article prose style, read [`article-style.md`](article-style.md).
 
 ## 1. The mental model
 

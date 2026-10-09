@@ -23,7 +23,7 @@ method記事の見本は [`content/methods/adam.md`](../content/methods/adam.md)
 |---|---|
 | frontmatter、許可されるMarkdown、検証 | [`docs/content-authoring.md`](content-authoring.md) |
 | 節の型（見出しの名前と順番） | `src/optimization_compass/content_skeletons.py`、[`docs/formulation-atlas.md`](formulation-atlas.md) |
-| 文体と表記 | [`docs/content-reading-principles.md`](content-reading-principles.md) |
+| 文体と表記 | [`docs/article-style.md`](article-style.md) |
 | 図の色と描き方 | [`docs/content-visual-language.md`](content-visual-language.md)、[`docs/explorables.md`](explorables.md) |
 | 操作 → 変化 → 疑問 → 式の流れと、画面での検収基準 | [`docs/article-experience-pattern.md`](article-experience-pattern.md) |
 | **一つの題材で教え切る方法、節ごとの中身、視覚表現の水準、画面を基準にした書き方** | **この文書** |
@@ -242,7 +242,7 @@ sources: [S054, S055]   # 事実の根拠。Qiita・Zennは不可
 
 ## 6. 日本語
 
-文体の規則は `article-style` スキルに従います。見本の3記事で特に効いている書き方は次のとおりです。
+文体の規則は [`article-style.md`](article-style.md) に従います。見本の3記事で特に効いている書き方は次のとおりです。
 
 - 式の後に「この式は『〜』と読みます」と書き、式を日本語の文に戻します。
 - 結果の数値の後に「〜と読めます」と書き、題材の言葉に戻します。例：「温度は1時間に約0.9度ずつ上がっている、と読めます。」
