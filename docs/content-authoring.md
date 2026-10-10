@@ -69,7 +69,7 @@ the generated site data.
 ## Body style
 
 Prose style — sentence tone, terminology spelling, and canonical section headings — is
-defined in [`.agents/skills/article-style/SKILL.md`](../.agents/skills/article-style/SKILL.md).
+defined in [`docs/article-style.md`](article-style.md).
 Read it before writing or revising article text. The rules below cover structure only.
 
 The reading order, visual hierarchy, body measure, and progressive-disclosure policy are

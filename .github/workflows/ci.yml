@@ -1,0 +1,69 @@
+name: Pull request validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate_pages_artifact:
+    name: Validate and build Pages artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install locked dependencies and verify action pins
+        run: |
+          uv lock --check
+          uv sync --frozen --all-extras --all-groups
+          npm --prefix site ci
+          uv run --frozen python scripts/verify_workflow_pins.py
+      - name: Select the authoritative validation task
+        id: validation
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          TASK="$(uv run --frozen optimization-compass select-validation-task --base-ref "origin/$BASE_REF" --format task)"
+          echo "task=$TASK" >> "$GITHUB_OUTPUT"
+          TASK="$TASK" uv run --frozen python - <<'PY' >> "$GITHUB_OUTPUT"
+          import os
+          from optimization_compass.validation_tasks import task_plan
+          needs_build = all(check.code != "site.build" for check in task_plan(os.environ["TASK"]).checks)
+          print(f"needs_build={str(needs_build).lower()}")
+          PY
+      - name: Run the selected authoritative validation task
+        env:
+          VALIDATION_TASK: ${{ steps.validation.outputs.task }}
+        run: uv run --frozen optimization-compass validate "$VALIDATION_TASK"
+      - name: Build the site when the selected task does not build it
+        if: steps.validation.outputs.needs_build == 'true'
+        run: npm --prefix site run build
+      - name: Verify generated data and repository drift
+        run: |
+          uv run --frozen optimization-compass export-site-data --output "$RUNNER_TEMP/site-data"
+          diff --recursive --brief site/public/data "$RUNNER_TEMP/site-data"
+          uv run --frozen python scripts/sync_readme_facts.py --check
+          uv run --frozen python scripts/repository_size.py --check
+          git diff --exit-code -- data site/public/data src/optimization_compass/resources site/package-lock.json uv.lock
+      - name: Verify the actual built Pages artifact
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          uv run --frozen python scripts/pages_artifact.py stamp \
+            --root site/dist --commit-sha "$COMMIT_SHA" --base-path /optimization-compass/
+          uv run --frozen python scripts/pages_artifact.py verify-local \
+            --root site/dist --expected-commit-sha "$COMMIT_SHA"
