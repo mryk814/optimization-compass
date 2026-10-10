@@ -155,6 +155,11 @@
       "id": "033",
       "path": "data/migrations/033_graph_flow_variants.sql",
       "sha256": "f0170099e5d68c36e6367fce49cdd21b6bf1d3798b04a44f85bc6fab4f8258e3"
+    },
+    {
+      "id": "034",
+      "path": "data/migrations/034_dfo_bo_combinatorial_topology_variants.sql",
+      "sha256": "e6a6e7b39b25fa1499abad4793fa7b8ff4928a92449d4835bac313f10959b6be"
     }
   ],
   "specialized_inputs": [

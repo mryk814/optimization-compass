@@ -2481,12 +2481,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SUBMODULAR_GREEDY"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "劣モジュラ関数の貪欲法は既存の行にも記事にもなく、最も近い PA032 は集合被覆・ナップサック側の話題に限られる。"
+        "note_ja": "劣モジュラ関数の貪欲法 の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2665,12 +2670,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BOBYQA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DFO_LOCAL です。"
+        "note_ja": "BOBYQA の行そのものです。"
       },
       "source_refs": [
         "E03"
@@ -3157,12 +3167,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SAFEOPT"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "SafeOpt は安全制約付きの BO 系手法で、既存の行・記事はない。近い行は M_BAYESIAN_OPT_GP だが制約の安全性は扱っていない。"
+        "note_ja": "SafeOpt の行そのものです。"
       },
       "source_refs": [
         "E38"
@@ -3179,12 +3194,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CONSTRAINED_BO"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "制約付き BO は既存の BO 行に含まれておらず、専用の行や記事もない。BO の制約処理は今後の追加候補である。"
+        "note_ja": "制約付きベイズ最適化 の行そのものです。"
       },
       "source_refs": [
         "E12"
@@ -3588,12 +3608,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PAREGO"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "ParEGO は重み付き Tchebycheff と GP の期待改善を組み合わせた多目的 BO で、専用の行や記事はない。近い行は M_WEIGHTED_SUM と M_BAYESIAN_OPT_GP である。"
+        "note_ja": "ParEGO の行そのものです。"
       },
       "source_refs": [
         "E02"
@@ -4077,12 +4102,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LEVELSET_TOPOLOGY"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "レベルセット形状更新は形状最適化の更新法だが、専用の行や記事はなく、ギャラリーと比較の文中に出るだけである。"
+        "note_ja": "レベルセット法による形状更新 の行そのものです。"
       },
       "source_refs": [
         "E02"
