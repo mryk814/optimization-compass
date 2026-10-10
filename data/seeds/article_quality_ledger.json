@@ -43,12 +43,12 @@
     "concept.inverse-problem": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
-      "body_sha256": "9865ad17db3f",
+      "body_sha256": "692f5690886b",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
         "example.single-thread": "pass",
-        "explorable.ui-names": "na",
+        "explorable.ui-names": "pass",
         "figure.observation-to-formula": "pass",
         "figure.one-question": "pass",
         "pitfalls.with-example": "pass",

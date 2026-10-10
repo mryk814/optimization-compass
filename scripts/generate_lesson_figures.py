@@ -1,6 +1,6 @@
 """Generate the computed supporting figures that sit next to one formula in a lesson.
 
-uv run python scripts/generate_lesson_figures.py            # write site/public/figures/*.svg
+uv run python scripts/generate_lesson_figures.py            # write figures and explorable fixture
 uv run python scripts/generate_lesson_figures.py --check    # fail if a committed figure is stale
 
 Supporting figures are drawn at the width they are shown on a PC (440 px, the 27.5rem cap
@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import math
 import random
 from collections.abc import Callable, Sequence
@@ -21,6 +22,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 OUTPUT = ROOT / "site" / "public" / "figures"
+# Inputs of the inverse-problem explorable. Python owns the example; the TS math only imports it.
+INVERSE_FIXTURE = (
+    ROOT / "site" / "src" / "features" / "explorable" / "math" / "inverseProblem.fixture.json"
+)
 
 WIDTH = 440
 INK, MUTED, GRID = "#17211b", "#56645b", "#aab4ab"
@@ -501,6 +506,21 @@ def inverse_problem_curve() -> tuple[float, float, list[tuple[float, float]]]:
     return alpha, error(solve(alpha)), curve
 
 
+def inverse_problem_fixture() -> str:
+    """JSON text of the rod example's fixed inputs for the inverse-problem explorable."""
+    blur, truth, data = inverse_problem_data()
+    payload = {
+        "generated_by": "scripts/generate_lesson_figures.py (inverse_problem_data)",
+        "n": INV_N,
+        "blur_width": INV_WIDTH,
+        "sigma": INV_SIGMA,
+        "truth": truth,
+        "data": data,
+        "blur": blur,
+    }
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n"
+
+
 def _inverse_problem_alpha_svg() -> str:
     alpha, err, curve = inverse_problem_curve()
     px = _scale(-10.0, 0.0, 64, 416)
@@ -686,8 +706,10 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="fail if a figure is stale")
     args = parser.parse_args()
     stale = []
-    for name, body in generate_lesson_figures().items():
-        path = OUTPUT / name
+    outputs = {OUTPUT / n: b for n, b in generate_lesson_figures().items()}
+    outputs[INVERSE_FIXTURE] = inverse_problem_fixture()
+    for path, body in outputs.items():
+        name = path.name
         if args.check:
             if not path.exists() or path.read_text(encoding="utf-8") != body:
                 stale.append(name)

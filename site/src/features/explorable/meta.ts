@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "inverse-problem-alpha": {
+    question: "罰則の重み α を動かすと、復元した温度分布はどこで真の分布に一番近づくか。",
+    fixedConditions: "40点の観測から棒の初期温度を復元する。ぼかし G は幅0.05のガウス型、真の分布は位置0.3と0.7に山がある2山、雑音は標準偏差σ=10⁻³でn=40個（δ=σ√n=0.0063）。α は10⁻¹⁰〜1で、(GᵀG+αI)m=Gᵀd を解く。数値は記事と同じ1回の観測で、Pythonが出力した固定データを使う。",
+    notImplied: "1回の観測と1つの雑音の実現での結果であり、残差原理や特定の α が常によいことは示さない。真の分布は答え合わせのためだけに使い、実際の問題では計算できない。離散化した40点の問題であり、連続の問題の解の保証ではない。",
+    beats: [],
+  },
   "proximal-gradient-threshold": {
     question: "勾配で進んだ点zを、なぜそのまま使わず0へ縮めるのか。",
     fixedConditions: "F(x)=(x−3)²/2+λ|x|の1変数凸問題。λは0〜4、歩幅ηは0.1〜1、始点は−3〜5で、12回更新する。滑らかな項の勾配のLipschitz定数はL=1。",

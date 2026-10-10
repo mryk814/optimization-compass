@@ -605,7 +605,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 8
+              "has_interactive": 9
             },
             "states": {
               "undecided": 80
@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 3,
+            "complete": 4,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 47,
+              "in_progress": 46,
               "no_article": 30,
               "stale": 0
             }

@@ -20,4 +20,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "interior-point-barrier-path": lazy(() => import("./BarrierPath")),
   "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
   "proximal-gradient-threshold": lazy(() => import("./ProximalThreshold")),
+  "inverse-problem-alpha": lazy(() => import("./InverseProblemAlpha")),
 };
