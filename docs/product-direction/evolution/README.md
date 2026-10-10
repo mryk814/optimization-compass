@@ -21,3 +21,11 @@
 
 - PR297/298 の本文にある試験結果は作者の申告です。この監査では再実行していません。
 - 画面の確認、リポジトリ全体のテスト、site build は、この票では行っていません。
+
+## OC-EVOL-002：編集上の収録範囲 v1（proposed）
+
+収録範囲は [`data/seeds/editorial_scope.json`](../../../data/seeds/editorial_scope.json)、書き方と判定の基準は [`docs/editorial-scope.md`](../../editorial-scope.md) にあります。件数は `uv run python scripts/editorial_scope.py` で出します。この記録には件数を書き写しません。
+
+照合で分かったことのうち、収録範囲の外で直すものを残します。
+
+- `problem_definition_archetypes` で、`PROBLEM_BILEVEL_REGRESSION` が PA033（非線形最小二乗）、`PROBLEM_FAILED_SIMULATION` が PA054（実験計画）、`PROBLEM_PORTFOLIO_UNCERTAINTY` が PA036（単体）に結ばれています。名前と標準形からは、それぞれ PA046・PA016・確率計画かロバストの行が自然に見えます。結び方の意図を確かめる必要があります（dataset の変更なので別のPRにします）。
