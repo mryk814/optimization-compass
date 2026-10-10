@@ -626,8 +626,8 @@
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 45,
-              "no_article": 30,
+              "in_progress": 48,
+              "no_article": 27,
               "stale": 0
             }
           },
@@ -14125,12 +14125,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.vehicle-routing"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -14157,12 +14157,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA031",
-            "EC019"
+            "EC019",
+            "concept.vehicle-routing"
           ]
         },
         "recommendation": {

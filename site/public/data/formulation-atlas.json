@@ -3193,7 +3193,7 @@
           "title_ja": "時間窓付き配送ルートを10分以内に組む"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.vehicle-routing",
       "cues_ja": [
         "配送・巡回・点検で、何台の車がどの順に回るかを決める"
       ],
@@ -3231,7 +3231,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3274,8 +3274,12 @@
       "problem_id": "PA031",
       "reading_ja": "複数の車両で顧客を回る巡回路を決めます。最短路を並べるだけでは解けず、訪問順と割当を同時に決めます。",
       "source_ids": [
+        "S005",
+        "S022",
         "S023",
-        "S024"
+        "S024",
+        "S054",
+        "S079"
       ],
       "standard_form": "\\min\\; \\sum_{k}\\sum_{(i,j)} c_{ij}x_{ijk} \\;\\text{ s.t. }\\; \\text{各顧客を1回訪問},\\; \\text{容量},\\; \\text{時間枠}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo>min</mo><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>k</mi></mrow></munder><munder><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mtext>各顧客を1回訪問</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mtext>容量</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mtext>時間枠</mtext></mrow></math></div>"
@@ -6274,6 +6278,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 20
+    "with_article": 21
   }
 }

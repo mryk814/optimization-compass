@@ -5679,6 +5679,10 @@
             "id": "PA031"
           },
           {
+            "type": "content",
+            "id": "concept.vehicle-routing"
+          },
+          {
             "type": "term",
             "id": "TERM_ROUTING_PROBLEM"
           }
@@ -5710,6 +5714,10 @@
             "id": "PA031"
           },
           {
+            "type": "content",
+            "id": "concept.vehicle-routing"
+          },
+          {
             "type": "term",
             "id": "TERM_ROUTING_PROBLEM"
           }
@@ -5739,6 +5747,10 @@
           {
             "type": "problem",
             "id": "PA031"
+          },
+          {
+            "type": "content",
+            "id": "concept.vehicle-routing"
           },
           {
             "type": "problem_definition",
