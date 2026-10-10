@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.21",
+  "dataset_version": "0.18.22",
   "entities": [
     {
       "aliases": [],
@@ -20016,6 +20016,11 @@
       "relations": [
         {
           "relation_type": "implements",
+          "target_id": "M_ADAGRAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_ADAM",
           "target_type": "method"
         },
@@ -20026,7 +20031,17 @@
         },
         {
           "relation_type": "implements",
+          "target_id": "M_LION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_RMSPROP",
           "target_type": "method"
         },
         {
@@ -20334,6 +20349,11 @@
       "relations": [
         {
           "relation_type": "implements",
+          "target_id": "M_ADAGRAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_ADAM",
           "target_type": "method"
         },
@@ -20350,6 +20370,16 @@
         {
           "relation_type": "implements",
           "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_MUON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_RMSPROP",
           "target_type": "method"
         },
         {
@@ -20787,6 +20817,11 @@
       "relations": [
         {
           "relation_type": "implements",
+          "target_id": "M_ADAGRAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_ADAM",
           "target_type": "method"
         },
@@ -20797,7 +20832,17 @@
         },
         {
           "relation_type": "implements",
+          "target_id": "M_LION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_RMSPROP",
           "target_type": "method"
         },
         {
@@ -25817,6 +25862,52 @@
       "summary": "active制約集合を更新してQPを解く。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_ADAGRAD",
+      "entity_id": "M_ADAGRAD",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "AdaGrad",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S112",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        }
+      ],
+      "summary": "過去の勾配の二乗和を座標ごとに蓄え、その平方根で学習率を割ることで座標別にstepを調整する。"
+    },
+    {
       "aliases": [
         "/learn/adam"
       ],
@@ -26210,6 +26301,32 @@
       "summary": "Lagrange項と二次penaltyを組み合わせ制約を段階的に満たす。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_AUGMENTING_MAXFLOW",
+      "entity_id": "M_AUGMENTING_MAXFLOW",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "増加路法(最大流)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S141",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S142",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        }
+      ],
+      "summary": "残余graph上で始点から終点への増加路を見つけて流量を増やすことを、増加路が無くなるまで繰り返す最大流アルゴリズム。増加路を幅優先探索の最短路で選ぶ規則がEdmonds-Karp法。"
+    },
+    {
       "aliases": [
         "/learn/barrier-lp-qp"
       ],
@@ -26542,6 +26659,43 @@
         }
       ],
       "summary": "GP posteriorとacquisitionで高価な評価点を選ぶ。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_BELLMAN_FORD",
+      "entity_id": "M_BELLMAN_FORD",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Bellman-Ford法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S140",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        }
+      ],
+      "summary": "各辺を繰り返し緩和(relax)して始点からの最短距離を更新する最短路アルゴリズム。負の辺重みを扱え、始点から到達できる負閉路を検出できる。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_BENDERS",
+      "entity_id": "M_BENDERS",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Benders分解",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S134",
+          "target_type": "source"
+        }
+      ],
+      "summary": "難しい変数(整数など)を扱うmasterと、それを固定した線形のsubproblemに分け、subproblemの双対情報からmasterへcut(optimality/feasibility cut)を足していく分解法。"
     },
     {
       "aliases": [
@@ -26928,6 +27082,58 @@
       "summary": "branch-and-boundにcut生成を統合するMILP主力法。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_BRANCH_PRICE",
+      "entity_id": "M_BRANCH_PRICE",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "分枝価格法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S137",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S138",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S139",
+          "target_type": "source"
+        }
+      ],
+      "summary": "branch and boundの各節点の緩和を列生成で解く整数計画の厳密解法。変数が非常に多い定式化を使い、分枝規則がpricing問題を壊さないよう設計する。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_BRANCH_PRICE_CUT",
+      "entity_id": "M_BRANCH_PRICE_CUT",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "分枝価格カット法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S137",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S138",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S139",
+          "target_type": "source"
+        }
+      ],
+      "summary": "分枝価格法に切除平面(cut)を組み合わせ、節点の列生成緩和をcutで強める整数計画の厳密解法。cutがpricing問題を壊さない設計が要点。"
+    },
+    {
       "aliases": [
         "/learn/bundle-method"
       ],
@@ -26969,6 +27175,27 @@
         }
       ],
       "summary": "劣勾配とcutを蓄積し非滑らかmodelを安定化。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_CCCP",
+      "entity_id": "M_CCCP",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "凹凸手続き(CCCP)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S132",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S133",
+          "target_type": "source"
+        }
+      ],
+      "summary": "目的を凸関数と凹関数の和に分け、各反復で凹部分を現在点で線形化して凸部分問題を解く。目的が単調に減少する。"
     },
     {
       "aliases": [
@@ -27183,6 +27410,32 @@
       "summary": "二次補間modelを用いる制約付きDFO。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_COLUMN_GENERATION",
+      "entity_id": "M_COLUMN_GENERATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "列生成",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S136",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S138",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S139",
+          "target_type": "source"
+        }
+      ],
+      "summary": "列(変数)が膨大なLPを、一部の列だけの制限master問題と、被約費用が負の列を探すpricing問題の反復で解く方法。切断在庫問題のGilmore-Gomoryが起源。"
+    },
+    {
       "aliases": [
         "/learn/coordinate-descent"
       ],
@@ -27385,6 +27638,79 @@
         }
       ],
       "summary": "global constraint propagationとbranchingで有限domainを探索。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_CUBIC_REGULARIZATION",
+      "entity_id": "M_CUBIC_REGULARIZATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "三次正則化法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S126",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S127",
+          "target_type": "source"
+        }
+      ],
+      "summary": "局所二次モデルに三次の正則化項を加えた部分問題を各反復で解くNewton型の方法。正則化の重みを適応的に調整するのがARC。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_DANTZIG_WOLFE",
+      "entity_id": "M_DANTZIG_WOLFE",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Dantzig-Wolfe分解",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S135",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S138",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S139",
+          "target_type": "source"
+        }
+      ],
+      "summary": "ブロック角構造を持つ線形計画を、結合制約だけを持つmaster(各ブロックの極点・極方向の凸結合)と、ブロックごとのsubproblemに分け、subproblemを価格付け問題として解いて列を足す分解法。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_DCA",
+      "entity_id": "M_DCA",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "DCアルゴリズム(DCA)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S132",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S133",
+          "target_type": "source"
+        }
+      ],
+      "summary": "目的を二つの凸関数の差g-hに分け、各反復でhの劣勾配を選び、gから線形項を引いた凸部分問題を解く。双対問題にも同型の反復がある。"
     },
     {
       "aliases": [
@@ -27740,6 +28066,63 @@
       "summary": "control parameterを最適化し状態を前進simulationで消去。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_DOGLEG",
+      "entity_id": "M_DOGLEG",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Dogleg法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S125",
+          "target_type": "source"
+        }
+      ],
+      "summary": "Newtonステップと最急降下(Cauchy)方向のstepを折れ線(dogleg)でつなぎ、信頼領域境界との交点を試行stepにする。部分問題を閉形式で近似的に解く。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_DOUGLAS_RACHFORD",
+      "entity_id": "M_DOUGLAS_RACHFORD",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Douglas–Rachford分割法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S128",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S129",
+          "target_type": "source"
+        }
+      ],
+      "summary": "目的を二つの項の和f+gに分け、各項のprox(または単調作用素のresolvent)を交互に適用して不動点へ進む分割法。smoothnessを要求せず、両項が非滑らかでもよい。"
+    },
+    {
       "aliases": [
         "/learn/dual-simplex"
       ],
@@ -27920,6 +28303,32 @@
         }
       ],
       "summary": "Nesterov型加速を加えた近接勾配法。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_FRANK_WOLFE",
+      "entity_id": "M_FRANK_WOLFE",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Frank–Wolfe法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S130",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S131",
+          "target_type": "source"
+        }
+      ],
+      "summary": "各反復で勾配を使った線形部分問題(線形最小化オラクル)を実行可能集合上で解き、現在点からその解へ向かって凸結合で進む。射影を使わない。"
     },
     {
       "aliases": [
@@ -28587,6 +28996,47 @@
       "summary": "Gauss–Newtonにdampingを加えた非線形最小二乗法。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_LION",
+      "entity_id": "M_LION",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Lion",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S119",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S120",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        }
+      ],
+      "summary": "momentumのみを保持し、補間した更新方向の符号(sign)を使って座標ごとに一定の大きさで更新する。プログラム探索で発見された。"
+    },
+    {
       "aliases": [
         "/learn/local-search-combinatorial"
       ],
@@ -29034,6 +29484,53 @@
         }
       ],
       "summary": "複数初期値から局所法を実行し最良解を選ぶ。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_MUON",
+      "entity_id": "M_MUON",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Muon",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S121",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S122",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S123",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        }
+      ],
+      "summary": "隠れ層の2次元重み行列に対し、momentum更新をNewton-Schulz反復で直交化してから適用する。他のパラメータは別のoptimizer(AdamW等)で更新する。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_NATURAL_GRADIENT",
+      "entity_id": "M_NATURAL_GRADIENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "自然勾配法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S117",
+          "target_type": "source"
+        }
+      ],
+      "summary": "確率モデルのパラメータ空間のRiemann計量(Fisher情報行列)で勾配を補正し、座標の取り方に依存しにくい方向へ更新する。"
     },
     {
       "aliases": [
@@ -30042,6 +30539,27 @@
       "summary": "滑らかな項へgradient、非滑らかな項へproxを適用。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_PUSH_RELABEL",
+      "entity_id": "M_PUSH_RELABEL",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Push-relabel法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S143",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        }
+      ],
+      "summary": "増加路ではなくpreflow(流入が流出を上回ってよい流れ)を保ち、超過流量を持つ頂点から高さ(label)を使って押し(push)、持ち上げる(relabel)ことで最大流を求めるアルゴリズム。"
+    },
+    {
       "aliases": [
         "/learn/random-search"
       ],
@@ -30274,6 +30792,89 @@
         }
       ],
       "summary": "接空間の二次modelをtrust region内で解きretractionする。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_RMSPROP",
+      "entity_id": "M_RMSPROP",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "RMSprop",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S115",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S116",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        }
+      ],
+      "summary": "二乗勾配の指数移動平均の平方根で学習率を割り、座標ごとにstepを調整する。centered形では勾配の分散推定で正規化する。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SAGA",
+      "entity_id": "M_SAGA",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SAGA",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S114",
+          "target_type": "source"
+        }
+      ],
+      "summary": "各sampleの最新勾配を保存し、その平均を用いて確率的勾配を補正する分散縮小法。proximal演算子による合成目的にも対応する。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SARAH",
+      "entity_id": "M_SARAH",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SARAH（確率的再帰勾配法）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S118",
+          "target_type": "source"
+        }
+      ],
+      "summary": "内側ループで直前の勾配推定を再帰的に更新し、過去の勾配を保存せずに分散を抑える有限和向けの方法。"
     },
     {
       "aliases": [
@@ -30982,6 +31583,32 @@
       "summary": "各反復でQP近似を解く制約付きNLP法。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_SR1",
+      "entity_id": "M_SR1",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SR1法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S124",
+          "target_type": "source"
+        }
+      ],
+      "summary": "gradient差から対称ランク1の補正でHessian近似を更新する準Newton法。更新後の近似が正定値とは限らず、不定な曲率も表現でき、trust regionと併用されることが多い。"
+    },
+    {
       "aliases": [
         "/learn/subgradient"
       ],
@@ -31023,6 +31650,38 @@
         }
       ],
       "summary": "非滑らか凸関数の劣勾配で更新。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SUCCESSIVE_SHORTEST_PATH",
+      "entity_id": "M_SUCCESSIVE_SHORTEST_PATH",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "逐次最短路法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        }
+      ],
+      "summary": "残余graph上の最小費用の増加路(縮約費用での最短路)を繰り返し選んで流量を増やし、所定の流量に達するまで最小費用流を保ったまま構成する最小費用流アルゴリズム。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SVRG",
+      "entity_id": "M_SVRG",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SVRG（確率的分散縮小勾配法）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S113",
+          "target_type": "source"
+        }
+      ],
+      "summary": "定期的にスナップショット点での全勾配を計算し、確率的勾配を制御変量として補正することで更新の分散を抑える。"
     },
     {
       "aliases": [
@@ -36374,6 +37033,336 @@
       "label": "FEniCS Adjoint Documentation",
       "relations": [],
       "summary": "Time-dependent adjoints may use checkpointing to trade storage for forward recomputation, and adjoint correctness requires explicit verification."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S112",
+      "entity_id": "S112",
+      "entity_type": "source",
+      "external_url": "https://jmlr.org/papers/v12/duchi11a.html",
+      "label": "Adaptive Subgradient Methods for Online Learning and Stochastic Optimization",
+      "relations": [],
+      "summary": "AdaGrad: per-coordinate adaptive step sizes from accumulated squared (sub)gradients, with regret bounds for online convex optimization."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S113",
+      "entity_id": "S113",
+      "entity_type": "source",
+      "external_url": "https://papers.nips.cc/paper/2013/hash/ac1dd209cbcc5e5d1c6e28598e8cbbe8-Abstract.html",
+      "label": "Accelerating Stochastic Gradient Descent using Predictive Variance Reduction",
+      "relations": [],
+      "summary": "SVRG: snapshot full gradient as control variate reduces stochastic-gradient variance; geometric convergence for smooth strongly convex finite sums."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S114",
+      "entity_id": "S114",
+      "entity_type": "source",
+      "external_url": "https://proceedings.neurips.cc/paper/2014/hash/ede7e2b6d13a41ddf9f4bdef84fdc737-Abstract.html",
+      "label": "SAGA: A Fast Incremental Gradient Method With Support for Non-Strongly Convex Composite Objectives",
+      "relations": [],
+      "summary": "SAGA: stored per-sample gradients as control variate; proximal support for composite objectives; convergence for strongly convex and non-strongly convex cases."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S115",
+      "entity_id": "S115",
+      "entity_type": "source",
+      "external_url": "https://docs.pytorch.org/docs/stable/generated/torch.optim.RMSprop.html",
+      "label": "torch.optim.RMSprop",
+      "relations": [],
+      "summary": "RMSprop: running average of squared gradients scales the step; attributed to G. Hinton's course; centered variant attributed to Graves (2013); eps is added after the square root (TensorFlow swaps the two)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S116",
+      "entity_id": "S116",
+      "entity_type": "source",
+      "external_url": "https://arxiv.org/abs/1308.0850",
+      "label": "Generating Sequences With Recurrent Neural Networks",
+      "relations": [],
+      "summary": "Published description of the centered form of RMSprop (normalizing by the variance estimate of the gradient) used for sequence generation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S117",
+      "entity_id": "S117",
+      "entity_type": "source",
+      "external_url": "https://direct.mit.edu/neco/article/10/2/251/6143/Natural-Gradient-Works-Efficiently-in-Learning",
+      "label": "Natural Gradient Works Efficiently in Learning",
+      "relations": [],
+      "summary": "Natural gradient: steepest descent in the Riemannian metric given by the Fisher information matrix; online natural gradient learning is asymptotically Fisher efficient."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S118",
+      "entity_id": "S118",
+      "entity_type": "source",
+      "external_url": "https://proceedings.mlr.press/v70/nguyen17b.html",
+      "label": "SARAH: A Novel Method for Machine Learning Problems Using Stochastic Recursive Gradient",
+      "relations": [],
+      "summary": "SARAH: recursive stochastic gradient estimate without storing past gradients for finite-sum problems; linear convergence under strong convexity."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S119",
+      "entity_id": "S119",
+      "entity_type": "source",
+      "external_url": "https://proceedings.nips.cc/paper_files/paper/2023/hash/9a39b4925e35cf447ccba8757137d84f-Abstract-Conference.html",
+      "label": "Symbolic Discovery of Optimization Algorithms",
+      "relations": [],
+      "summary": "Lion (EvoLved Sign Momentum): optimizer found by program search that tracks only momentum and applies the sign of an interpolated update."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S120",
+      "entity_id": "S120",
+      "entity_type": "source",
+      "external_url": "https://github.com/google/automl/tree/master/lion",
+      "label": "google/automl: lion",
+      "relations": [],
+      "summary": "Reference implementations of Lion in JAX/Optax, TensorFlow 2 and PyTorch."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S121",
+      "entity_id": "S121",
+      "entity_type": "source",
+      "external_url": "https://github.com/KellerJordan/Muon",
+      "label": "KellerJordan/Muon",
+      "relations": [],
+      "summary": "Muon: optimizer for the hidden weight matrices of neural networks, orthogonalizing the momentum update; other parameters are to be optimized with AdamW."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S122",
+      "entity_id": "S122",
+      "entity_type": "source",
+      "external_url": "https://docs.pytorch.org/docs/stable/generated/torch.optim.Muon.html",
+      "label": "torch.optim.Muon",
+      "relations": [],
+      "summary": "Muon in PyTorch: optimizer for 2D hidden-layer parameters with Newton-Schulz orthogonalization; bias and embedding parameters should use a standard method such as AdamW; adjust_lr_fn modes follow the original and Moonshot implementations."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S123",
+      "entity_id": "S123",
+      "entity_type": "source",
+      "external_url": "https://arxiv.org/abs/2502.16982",
+      "label": "Muon is Scalable for LLM Training",
+      "relations": [],
+      "summary": "Muon with weight decay and per-parameter update-scale adjustment scales to LLM training; reports about 2x compute efficiency versus AdamW."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S124",
+      "entity_id": "S124",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/BF01594934",
+      "label": "Convergence of quasi-Newton matrices generated by the symmetric rank one update",
+      "relations": [],
+      "summary": "SR1 matrices converge to the true Hessian under a uniform linear independence condition on the steps."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S125",
+      "entity_id": "S125",
+      "entity_type": "source",
+      "external_url": "https://www.gnu.org/software/gsl/doc/html/multiroots.html",
+      "label": "A hybrid method for nonlinear equations",
+      "relations": [],
+      "summary": "Powell's hybrid (dogleg) method for nonlinear equations: a step combining the Newton and steepest-descent directions within a step bound."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S126",
+      "entity_id": "S126",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s10107-006-0706-8",
+      "label": "Cubic regularization of Newton method and its global performance",
+      "relations": [],
+      "summary": "Cubic regularization of Newton method: global worst-case complexity bounds for several problem classes including some nonconvex ones."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S127",
+      "entity_id": "S127",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s10107-009-0286-5",
+      "label": "Adaptive cubic regularisation methods for unconstrained optimization. Part I: motivation, convergence and numerical results",
+      "relations": [],
+      "summary": "ARC: adaptive regularisation using cubics with adaptive estimation of the local Lipschitz constant and approximate model minimizers; compared with a basic trust-region implementation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S128",
+      "entity_id": "S128",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1090/S0002-9947-1956-0084194-4",
+      "label": "On the numerical solution of heat conduction problems in two and three space variables",
+      "relations": [],
+      "summary": "The Douglas-Rachford scheme: an implicit alternating-direction finite-difference method for heat conduction whose operator-splitting form is the origin of the Douglas-Rachford iteration."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S129",
+      "entity_id": "S129",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/0716071",
+      "label": "Splitting algorithms for the sum of two nonlinear operators",
+      "relations": [],
+      "summary": "Douglas-Rachford and forward-backward splitting for the sum of two maximal monotone operators, with convergence results and application to convex minimization."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S130",
+      "entity_id": "S130",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1002/nav.3800030109",
+      "label": "An algorithm for quadratic programming",
+      "relations": [],
+      "summary": "Frank-Wolfe algorithm: iterate by solving a linear program over the feasible polytope and moving toward its solution, originally for quadratic programming with linear constraints."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S131",
+      "entity_id": "S131",
+      "entity_type": "source",
+      "external_url": "https://proceedings.mlr.press/v28/jaggi13.html",
+      "label": "Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization",
+      "relations": [],
+      "summary": "Primal-dual convergence analysis of Frank-Wolfe for constrained convex problems via duality gap certificates, valid for approximately solved linear subproblems, with sparsity guarantees."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S132",
+      "entity_id": "S132",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1162/08997660360581958",
+      "label": "The Concave-Convex Procedure",
+      "relations": [],
+      "summary": "CCCP: iterative scheme for minimizing a sum of a convex and a concave function that decreases the objective monotonically; EM and some other algorithms can be rewritten in this form."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S133",
+      "entity_id": "S133",
+      "entity_type": "source",
+      "external_url": "https://math.ac.vn/acta/1997-Volume22/1/pconvex-analysis-approachnbspto-d-c-programming-theory-algorithms-and-applicationsp",
+      "label": "Convex analysis approach to d.c. programming: theory, algorithms and applications",
+      "relations": [],
+      "summary": "DC programming theory (duality, local and global optimality conditions) and the DC algorithm (DCA), including convergence and finite convergence in polyhedral DC programming."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S134",
+      "entity_id": "S134",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/BF01386316",
+      "label": "Partitioning procedures for solving mixed-variables programming problems",
+      "relations": [],
+      "summary": "Benders decomposition: a mixed-variables problem is partitioned into a problem in the complicating variables and a linear problem in the remaining variables, solved by alternating between them."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S135",
+      "entity_id": "S135",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/opre.8.1.101",
+      "label": "Decomposition principle for linear programs",
+      "relations": [],
+      "summary": "Dantzig-Wolfe decomposition principle: a linear program with block structure is split into subprograms solved in alternation with a coordinating (master) program; the coordinator process is finite."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S136",
+      "entity_id": "S136",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/opre.9.6.849",
+      "label": "A linear programming approach to the cutting-stock problem",
+      "relations": [],
+      "summary": "Column generation for the cutting-stock LP: a technique that always computes with a matrix having no more columns than rows, generating the needed pattern columns by a pricing step."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S137",
+      "entity_id": "S137",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/opre.46.3.316",
+      "label": "Branch-and-price: column generation for solving huge integer programs",
+      "relations": [],
+      "summary": "Branch-and-price: integer programs with a huge number of variables solved by column generation inside branch-and-bound, with branching rules compatible with the pricing problem; gives tighter LP relaxations and can remove symmetry for some model classes."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S138",
+      "entity_id": "S138",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/opre.1050.0234",
+      "label": "Selected topics in column generation",
+      "relations": [],
+      "summary": "Survey of column generation biased toward integer programming, covering Dantzig-Wolfe decomposition and the dual point of view."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S139",
+      "entity_id": "S139",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/0-387-25486-2_1",
+      "label": "A primer in column generation",
+      "relations": [],
+      "summary": "Tutorial on column generation in linear and integer programming: Dantzig-Wolfe decomposition and Lagrangian relaxation embedded in branch-and-bound, with branching and cutting rules derived from a compact formulation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S140",
+      "entity_id": "S140",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1090/qam/102435",
+      "label": "On a routing problem",
+      "relations": [],
+      "summary": "Functional-equation (dynamic programming) formulation of the shortest-path routing problem on a network, solved by successive approximation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S141",
+      "entity_id": "S141",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.4153/CJM-1956-045-5",
+      "label": "Maximal flow through a network",
+      "relations": [],
+      "summary": "Max-flow min-cut theorem: the maximal flow value between two nodes equals the minimal capacity of a cut separating them; flow is built up by augmenting paths."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S142",
+      "entity_id": "S142",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1145/321694.321699",
+      "label": "Theoretical improvements in algorithmic efficiency for network flow problems",
+      "relations": [],
+      "summary": "Augmenting-path maximum-flow rules with polynomial running time independent of the capacities (shortest augmenting path, a fattest-path variant) and a scaling method for minimum-cost flow."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S143",
+      "entity_id": "S143",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1145/48014.61051",
+      "label": "A new approach to the maximum-flow problem",
+      "relations": [],
+      "summary": "Push-relabel method based on preflows: O(n^3) time on n vertices, and O(nm log(n^2/m)) with dynamic trees on m edges."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S144",
+      "entity_id": "S144",
+      "entity_type": "source",
+      "external_url": "https://mitmgmtfaculty.mit.edu/jorlin/network-flows",
+      "label": "Network Flows: Theory, Algorithms, and Applications",
+      "relations": [],
+      "summary": "Textbook treatment of shortest path, maximum flow and minimum-cost flow algorithms, including label-correcting (Bellman-Ford), augmenting-path, preflow-push and successive shortest path methods."
     },
     {
       "aliases": [],

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.21",
+  "dataset_version": "0.18.22",
   "paths": [
     {
       "audience_ja": "微分と行列の積は分かるが、最適化は初めて学ぶ人",

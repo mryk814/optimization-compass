@@ -1,6 +1,6 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.21`
+- Dataset: `0.18.22`
 - Generated: `2026-10-10T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
@@ -32,8 +32,8 @@
 
 | 軸 | 対象 | 完了 | 状態内訳 |
 |---|---:|---:|---|
-| 名前と同一性 | 160 | 120 | candidate 0, unrepresented 40, unknown 0 |
-| 定義と根拠 | 160 | 113 | no_canonical_row 47 |
+| 名前と同一性 | 160 | 144 | candidate 0, unrepresented 16, unknown 0 |
+| 定義と根拠 | 160 | 137 | no_canonical_row 23 |
 | 説明 | 160 | 9 | stale 1, in_progress 104, no_article 46 |
 | 体験 | 0 | 0 | undecided 160, has_interactive 22 |
 | 転移 | 0 | 0 | undecided 160 |

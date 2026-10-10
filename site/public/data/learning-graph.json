@@ -3,6 +3,29 @@
     {
       "abbreviations": [],
       "deprecated_terms": [],
+      "disambiguation_note": "Adam・RMSPropとは別の手法。AdaGradは二乗勾配を累積する。",
+      "domain_terms": [
+        "座標別学習率"
+      ],
+      "label_en": "AdaGrad",
+      "label_ja": "適応的劣勾配法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "表記ゆれ(AdaGrad/Adagrad)と正式名をmethodへ解決する。Adagradは大文字小文字違いのためlabel_enで吸収される。",
+      "source_ids": [
+        "S112"
+      ],
+      "synonyms": [
+        "adaptive subgradient method"
+      ],
+      "target_id": "M_ADAGRAD",
+      "target_type": "method",
+      "term_id": "TERM_ADAGRAD"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
       "disambiguation_note": null,
       "domain_terms": [
         "適応的モーメント推定"
@@ -49,6 +72,85 @@
       "target_id": "M_ADMM",
       "target_type": "method",
       "term_id": "TERM_ADMM"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "Edmonds-Karp法はFord-Fulkerson法の増加路を最短路で選ぶ規則で、同じ行に収める。push-relabel法は別のmethod。",
+      "domain_terms": [
+        "残余graph",
+        "max-flow min-cut"
+      ],
+      "label_en": "Ford-Fulkerson method",
+      "label_ja": "増加路法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と規則名をmethodへ解決する。",
+      "source_ids": [
+        "S141",
+        "S142"
+      ],
+      "synonyms": [
+        "Edmonds-Karp",
+        "augmenting path method",
+        "最大流アルゴリズム"
+      ],
+      "target_id": "M_AUGMENTING_MAXFLOW",
+      "target_type": "method",
+      "term_id": "TERM_AUGMENTING_MAXFLOW"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "非負の辺重みを前提とするDijkstra法とは別の手法。Bellman方程式による動的計画法の一般形とも別。",
+      "domain_terms": [
+        "負閉路検出",
+        "辺の緩和"
+      ],
+      "label_en": "Bellman-Ford algorithm",
+      "label_ja": "Bellman-Ford法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S140"
+      ],
+      "synonyms": [
+        "Bellman-Ford-Moore",
+        "label-correcting shortest path"
+      ],
+      "target_id": "M_BELLMAN_FORD",
+      "target_type": "method",
+      "term_id": "TERM_BELLMAN_FORD"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "Dantzig-Wolfe分解とは別の分解。BendersはmasterにcutをDantzig-Wolfeは列を足す(双対の関係)。L-shaped法は二段階確率計画に特化した形。",
+      "domain_terms": [
+        "複雑化変数",
+        "optimality cut",
+        "feasibility cut"
+      ],
+      "label_en": "Benders decomposition",
+      "label_ja": "Benders分解",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S134"
+      ],
+      "synonyms": [
+        "Benders partitioning",
+        "L-shaped method",
+        "Benders cut"
+      ],
+      "target_id": "M_BENDERS",
+      "target_type": "method",
+      "term_id": "TERM_BENDERS"
     },
     {
       "abbreviations": [],
@@ -134,6 +236,82 @@
     },
     {
       "abbreviations": [
+        "B&P"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "branch and cutとは別(cutでなく列を動的に足す)。cutも併用する場合は分枝価格カット法。",
+      "domain_terms": [
+        "列生成つき分枝限定"
+      ],
+      "label_en": "Branch and price",
+      "label_ja": "分枝価格法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S137"
+      ],
+      "synonyms": [
+        "branch-and-price"
+      ],
+      "target_id": "M_BRANCH_PRICE",
+      "target_type": "method",
+      "term_id": "TERM_BRANCH_PRICE"
+    },
+    {
+      "abbreviations": [
+        "BPC"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "分枝価格法にcutを足した手法。cutだけならbranch and cut、列生成だけなら分枝価格法。",
+      "domain_terms": [
+        "列生成とcutの併用"
+      ],
+      "label_en": "Branch-price-and-cut",
+      "label_ja": "分枝価格カット法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S139",
+        "S137"
+      ],
+      "synonyms": [
+        "branch-and-price-and-cut"
+      ],
+      "target_id": "M_BRANCH_PRICE_CUT",
+      "target_type": "method",
+      "term_id": "TERM_BRANCH_PRICE_CUT"
+    },
+    {
+      "abbreviations": [
+        "CCCP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "DCアルゴリズム(DCA)と関係が深いが、CCCPは凹部分が微分可能な形で定式化される。",
+      "domain_terms": [
+        "差凸最適化"
+      ],
+      "label_en": "Concave-convex procedure",
+      "label_ja": "凹凸手続き",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S132"
+      ],
+      "synonyms": [
+        "convex-concave procedure"
+      ],
+      "target_id": "M_CCCP",
+      "target_type": "method",
+      "term_id": "TERM_CCCP"
+    },
+    {
+      "abbreviations": [
         "CMAES"
       ],
       "deprecated_terms": [],
@@ -156,6 +334,33 @@
       "target_id": "M_CMA_ES",
       "target_type": "method",
       "term_id": "TERM_CMA_ES"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "共役勾配法(CG)とは無関係。整数解を得る分枝は分枝価格法として別の手法。",
+      "domain_terms": [
+        "pricing問題",
+        "restricted master",
+        "被約費用"
+      ],
+      "label_en": "Column generation",
+      "label_ja": "列生成",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。略称CGは共役勾配法と衝突するため登録しない。",
+      "source_ids": [
+        "S136",
+        "S139"
+      ],
+      "synonyms": [
+        "delayed column generation",
+        "pricing problem approach"
+      ],
+      "target_id": "M_COLUMN_GENERATION",
+      "target_type": "method",
+      "term_id": "TERM_COLUMN_GENERATION"
     },
     {
       "abbreviations": [
@@ -235,6 +440,91 @@
       "target_id": "M_CP_SAT",
       "target_type": "method",
       "term_id": "TERM_CP_SAT"
+    },
+    {
+      "abbreviations": [
+        "ARC"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "trust-region法とは別の大域化。ARCは適応的な三次正則化(Adaptive Regularisation using Cubics)。",
+      "domain_terms": [
+        "三次正則化Newton法"
+      ],
+      "label_en": "Cubic regularization",
+      "label_ja": "三次正則化法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称・綴り(regularization/regularisation)をmethodへ解決する。",
+      "source_ids": [
+        "S126",
+        "S127"
+      ],
+      "synonyms": [
+        "cubic regularisation",
+        "adaptive cubic regularisation",
+        "cubic regularization of Newton method"
+      ],
+      "target_id": "M_CUBIC_REGULARIZATION",
+      "target_type": "method",
+      "term_id": "TERM_CUBIC_REGULARIZATION"
+    },
+    {
+      "abbreviations": [
+        "DW"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "Benders分解とは別の分解。列生成はDantzig-Wolfeのmasterを解く方法として関係する。",
+      "domain_terms": [
+        "ブロック角構造",
+        "restricted master"
+      ],
+      "label_en": "Dantzig-Wolfe decomposition",
+      "label_ja": "Dantzig-Wolfe分解",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S135",
+        "S139"
+      ],
+      "synonyms": [
+        "Dantzig-Wolfe",
+        "DW decomposition"
+      ],
+      "target_id": "M_DANTZIG_WOLFE",
+      "target_type": "method",
+      "term_id": "TERM_DANTZIG_WOLFE"
+    },
+    {
+      "abbreviations": [
+        "DCA"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "CCCPと関係が深いが、DCAは劣勾配を使う一般形。直流(DC)とは無関係。",
+      "domain_terms": [
+        "差凸計画",
+        "DC分解"
+      ],
+      "label_en": "Difference of convex algorithm",
+      "label_ja": "DCアルゴリズム",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S133",
+        "S132"
+      ],
+      "synonyms": [
+        "DC algorithm",
+        "DC programming",
+        "difference-of-convex algorithm"
+      ],
+      "target_id": "M_DCA",
+      "target_type": "method",
+      "term_id": "TERM_DCA"
     },
     {
       "abbreviations": [
@@ -319,6 +609,58 @@
     {
       "abbreviations": [],
       "deprecated_terms": [],
+      "disambiguation_note": "exact trust-regionやtrust-ncgとは別のtrust-region部分問題の解き方。",
+      "domain_terms": [
+        "折れ線step"
+      ],
+      "label_en": "Dogleg method",
+      "label_ja": "Dogleg法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S125"
+      ],
+      "synonyms": [
+        "Powell dogleg",
+        "Powell hybrid method"
+      ],
+      "target_id": "M_DOGLEG",
+      "target_type": "method",
+      "term_id": "TERM_DOGLEG"
+    },
+    {
+      "abbreviations": [
+        "DRS"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "ADMMとは別の手法(ADMMはその双対への適用として関係する)。Peaceman-Rachford分割とも別。",
+      "domain_terms": [
+        "prox分割",
+        "極大単調作用素"
+      ],
+      "label_en": "Douglas-Rachford splitting",
+      "label_ja": "Douglas–Rachford分割法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S129",
+        "S128"
+      ],
+      "synonyms": [
+        "DR splitting",
+        "Douglas-Rachford"
+      ],
+      "target_id": "M_DOUGLAS_RACHFORD",
+      "target_type": "method",
+      "term_id": "TERM_DOUGLAS_RACHFORD"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
       "disambiguation_note": null,
       "domain_terms": [
         "高価なblack-box評価"
@@ -340,6 +682,34 @@
       "target_id": "F_EVALUATION_COST",
       "target_type": "feature",
       "term_id": "TERM_EVALUATION_COST"
+    },
+    {
+      "abbreviations": [
+        "FW"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "射影勾配法とは別の手法。射影の代わりに線形最小化オラクルを使う。",
+      "domain_terms": [
+        "線形最小化オラクル",
+        "条件付き勾配法"
+      ],
+      "label_en": "Frank-Wolfe algorithm",
+      "label_ja": "Frank–Wolfe法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称・略称をmethodへ解決する。",
+      "source_ids": [
+        "S130",
+        "S131"
+      ],
+      "synonyms": [
+        "conditional gradient method",
+        "projection-free method"
+      ],
+      "target_id": "M_FRANK_WOLFE",
+      "target_type": "method",
+      "term_id": "TERM_FRANK_WOLFE"
     },
     {
       "abbreviations": [
@@ -477,6 +847,29 @@
       "target_id": "M_LBFGS",
       "target_type": "method",
       "term_id": "TERM_LBFGS"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "Adam・AdamWとは別の手法。Lionはmomentumのsignで更新する。",
+      "domain_terms": [
+        "符号momentum"
+      ],
+      "label_en": "Lion",
+      "label_ja": "Lion法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と正式名をmethodへ解決する。",
+      "source_ids": [
+        "S119"
+      ],
+      "synonyms": [
+        "EvoLved Sign Momentum"
+      ],
+      "target_id": "M_LION",
+      "target_type": "method",
+      "term_id": "TERM_LION"
     },
     {
       "abbreviations": [
@@ -637,6 +1030,51 @@
       "term_id": "TERM_MULTI_PROBLEM"
     },
     {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "素粒子のミューオンではなく最適化手法。Adam・AdamWとは別の手法で、隠れ層の行列重みを対象にする。",
+      "domain_terms": [
+        "行列重みの直交化"
+      ],
+      "label_en": "Muon",
+      "label_ja": "Muon法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S121"
+      ],
+      "synonyms": [],
+      "target_id": "M_MUON",
+      "target_type": "method",
+      "term_id": "TERM_MUON"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "Riemann多様体上の一般的なRiemann勾配(M_RIEMANNIAN_GRADIENT)とは別項目。自然勾配は統計モデルのFisher計量を使う。",
+      "domain_terms": [
+        "Fisher情報行列"
+      ],
+      "label_en": "Natural gradient",
+      "label_ja": "自然勾配法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "自然勾配の呼称をmethodへ解決する。",
+      "source_ids": [
+        "S117"
+      ],
+      "synonyms": [
+        "natural gradient descent",
+        "自然勾配"
+      ],
+      "target_id": "M_NATURAL_GRADIENT",
+      "target_type": "method",
+      "term_id": "TERM_NATURAL_GRADIENT"
+    },
+    {
       "abbreviations": [
         "NM"
       ],
@@ -773,6 +1211,52 @@
       "term_id": "TERM_PROX_GRADIENT"
     },
     {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "増加路法(Ford-Fulkerson / Edmonds-Karp)とは別の最大流アルゴリズム。",
+      "domain_terms": [
+        "preflow",
+        "超過流量"
+      ],
+      "label_en": "Push-relabel algorithm",
+      "label_ja": "Push-relabel法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S143"
+      ],
+      "synonyms": [
+        "preflow-push",
+        "Goldberg-Tarjan algorithm"
+      ],
+      "target_id": "M_PUSH_RELABEL",
+      "target_type": "method",
+      "term_id": "TERM_PUSH_RELABEL"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "AdaGradとは別の手法。RMSpropは二乗勾配を指数移動平均し、累積し続けない。綴りはRMSprop/RMSPropの両方が使われる。",
+      "domain_terms": [
+        "二乗勾配の移動平均"
+      ],
+      "label_en": "RMSprop",
+      "label_ja": "RMSprop法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "表記ゆれ(RMSprop/RMSProp)をmethodへ解決する。RMSPropは大文字小文字違いのためlabel_enで吸収される。",
+      "source_ids": [
+        "S115"
+      ],
+      "synonyms": [],
+      "target_id": "M_RMSPROP",
+      "target_type": "method",
+      "term_id": "TERM_RMSPROP"
+    },
+    {
       "abbreviations": [
         "VRP"
       ],
@@ -800,6 +1284,54 @@
       "target_id": "PA031",
       "target_type": "problem",
       "term_id": "TERM_ROUTING_PROBLEM"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "SVRGとは別の手法。SAGAはsampleごとの勾配を保存する。",
+      "domain_terms": [
+        "分散縮小"
+      ],
+      "label_en": "SAGA",
+      "label_ja": "SAGA法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S114"
+      ],
+      "synonyms": [
+        "SAGA incremental gradient"
+      ],
+      "target_id": "M_SAGA",
+      "target_type": "method",
+      "term_id": "TERM_SAGA"
+    },
+    {
+      "abbreviations": [
+        "SARAH"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "SVRG・SAGAとは別の手法。SARAHは再帰的な勾配推定を使い、過去の勾配を保存しない。",
+      "domain_terms": [
+        "分散縮小"
+      ],
+      "label_en": "Stochastic recursive gradient algorithm",
+      "label_ja": "SARAH法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称と正式名をmethodへ解決する。",
+      "source_ids": [
+        "S118"
+      ],
+      "synonyms": [
+        "stochastic recursive gradient"
+      ],
+      "target_id": "M_SARAH",
+      "target_type": "method",
+      "term_id": "TERM_SARAH"
     },
     {
       "abbreviations": [
@@ -930,6 +1462,84 @@
     },
     {
       "abbreviations": [
+        "SR1"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "BFGS(ランク2更新)とは別の手法。SR1はランク1更新で、近似が正定値とは限らない。",
+      "domain_terms": [
+        "Hessian近似更新"
+      ],
+      "label_en": "Symmetric rank-one update",
+      "label_ja": "SR1法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称と正式名をmethodへ解決する。",
+      "source_ids": [
+        "S124"
+      ],
+      "synonyms": [
+        "symmetric rank-1",
+        "SR1 update"
+      ],
+      "target_id": "M_SR1",
+      "target_type": "method",
+      "term_id": "TERM_SR1"
+    },
+    {
+      "abbreviations": [
+        "SSP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "最大流の増加路法(費用なし)やnetwork simplexとは別の最小費用流アルゴリズム。",
+      "domain_terms": [
+        "縮約費用",
+        "電位"
+      ],
+      "label_en": "Successive shortest path algorithm",
+      "label_ja": "逐次最短路法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称と名称をmethodへ解決する。",
+      "source_ids": [
+        "S144"
+      ],
+      "synonyms": [
+        "Busacker-Gowen algorithm",
+        "最小費用流の増加路法"
+      ],
+      "target_id": "M_SUCCESSIVE_SHORTEST_PATH",
+      "target_type": "method",
+      "term_id": "TERM_SUCCESSIVE_SHORTEST_PATH"
+    },
+    {
+      "abbreviations": [
+        "SVRG"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "SAGAとは別の手法。SVRGはsnapshot全勾配、SAGAはsampleごとの保存勾配を制御変量にする。",
+      "domain_terms": [
+        "分散縮小"
+      ],
+      "label_en": "Stochastic variance reduced gradient",
+      "label_ja": "確率的分散縮小勾配法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称と正式名をmethodへ解決する。",
+      "source_ids": [
+        "S113"
+      ],
+      "synonyms": [
+        "分散縮小勾配法"
+      ],
+      "target_id": "M_SVRG",
+      "target_type": "method",
+      "term_id": "TERM_SVRG"
+    },
+    {
+      "abbreviations": [
         "TO"
       ],
       "deprecated_terms": [],
@@ -984,7 +1594,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.21",
+  "dataset_version": "0.18.22",
   "edges": [
     {
       "audience": "learner",
@@ -2102,6 +2712,14 @@
       "label_ja": "構造トポロジー最適化"
     },
     {
+      "canonical_url": "/methods/M_ADAGRAD",
+      "entity_id": "M_ADAGRAD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Adaptive subgradient method (AdaGrad)",
+      "label_ja": "AdaGrad"
+    },
+    {
       "canonical_url": "/methods/M_ADAM",
       "entity_id": "M_ADAM",
       "entity_type": "method",
@@ -2118,12 +2736,36 @@
       "label_ja": "交互方向乗数法"
     },
     {
+      "canonical_url": "/methods/M_AUGMENTING_MAXFLOW",
+      "entity_id": "M_AUGMENTING_MAXFLOW",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Augmenting-path maximum flow (Ford-Fulkerson / Edmonds-Karp)",
+      "label_ja": "増加路法(最大流)"
+    },
+    {
       "canonical_url": "/methods/M_BAYESIAN_OPT_GP",
       "entity_id": "M_BAYESIAN_OPT_GP",
       "entity_type": "method",
       "external_url": null,
       "label_en": "Gaussian-process Bayesian optimization",
       "label_ja": "Gaussian process Bayesian optimization"
+    },
+    {
+      "canonical_url": "/methods/M_BELLMAN_FORD",
+      "entity_id": "M_BELLMAN_FORD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Bellman-Ford algorithm",
+      "label_ja": "Bellman-Ford法"
+    },
+    {
+      "canonical_url": "/methods/M_BENDERS",
+      "entity_id": "M_BENDERS",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Benders decomposition",
+      "label_ja": "Benders分解"
     },
     {
       "canonical_url": "/methods/M_BFGS",
@@ -2142,12 +2784,44 @@
       "label_ja": "branch-and-bound"
     },
     {
+      "canonical_url": "/methods/M_BRANCH_PRICE",
+      "entity_id": "M_BRANCH_PRICE",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Branch and price",
+      "label_ja": "分枝価格法"
+    },
+    {
+      "canonical_url": "/methods/M_BRANCH_PRICE_CUT",
+      "entity_id": "M_BRANCH_PRICE_CUT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Branch-price-and-cut",
+      "label_ja": "分枝価格カット法"
+    },
+    {
+      "canonical_url": "/methods/M_CCCP",
+      "entity_id": "M_CCCP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Concave-convex procedure (CCCP)",
+      "label_ja": "凹凸手続き(CCCP)"
+    },
+    {
       "canonical_url": "/methods/M_CMA_ES",
       "entity_id": "M_CMA_ES",
       "entity_type": "method",
       "external_url": null,
       "label_en": "Covariance matrix adaptation evolution strategy",
       "label_ja": "CMA-ES"
+    },
+    {
+      "canonical_url": "/methods/M_COLUMN_GENERATION",
+      "entity_id": "M_COLUMN_GENERATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Column generation",
+      "label_ja": "列生成"
     },
     {
       "canonical_url": "/methods/M_CP_SAT",
@@ -2158,12 +2832,60 @@
       "label_ja": "CP-SAT"
     },
     {
+      "canonical_url": "/methods/M_CUBIC_REGULARIZATION",
+      "entity_id": "M_CUBIC_REGULARIZATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Cubic regularization of Newton method (ARC)",
+      "label_ja": "三次正則化法"
+    },
+    {
+      "canonical_url": "/methods/M_DANTZIG_WOLFE",
+      "entity_id": "M_DANTZIG_WOLFE",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Dantzig-Wolfe decomposition",
+      "label_ja": "Dantzig-Wolfe分解"
+    },
+    {
+      "canonical_url": "/methods/M_DCA",
+      "entity_id": "M_DCA",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Difference of convex algorithm (DCA)",
+      "label_ja": "DCアルゴリズム(DCA)"
+    },
+    {
       "canonical_url": "/methods/M_DIFFERENTIAL_EVOLUTION",
       "entity_id": "M_DIFFERENTIAL_EVOLUTION",
       "entity_type": "method",
       "external_url": null,
       "label_en": "Differential evolution",
       "label_ja": "差分進化"
+    },
+    {
+      "canonical_url": "/methods/M_DOGLEG",
+      "entity_id": "M_DOGLEG",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Dogleg trust-region method",
+      "label_ja": "Dogleg法"
+    },
+    {
+      "canonical_url": "/methods/M_DOUGLAS_RACHFORD",
+      "entity_id": "M_DOUGLAS_RACHFORD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Douglas-Rachford splitting",
+      "label_ja": "Douglas–Rachford分割法"
+    },
+    {
+      "canonical_url": "/methods/M_FRANK_WOLFE",
+      "entity_id": "M_FRANK_WOLFE",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Frank-Wolfe algorithm",
+      "label_ja": "Frank–Wolfe法"
     },
     {
       "canonical_url": "/methods/M_GAUSS_NEWTON",
@@ -2206,6 +2928,14 @@
       "label_ja": "Levenberg–Marquardt法"
     },
     {
+      "canonical_url": "/methods/M_LION",
+      "entity_id": "M_LION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Lion (EvoLved Sign Momentum)",
+      "label_ja": "Lion"
+    },
+    {
       "canonical_url": "/methods/M_MIRROR_DESCENT",
       "entity_id": "M_MIRROR_DESCENT",
       "entity_type": "method",
@@ -2228,6 +2958,22 @@
       "external_url": null,
       "label_en": "SGD with momentum",
       "label_ja": "momentum SGD"
+    },
+    {
+      "canonical_url": "/methods/M_MUON",
+      "entity_id": "M_MUON",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Muon",
+      "label_ja": "Muon"
+    },
+    {
+      "canonical_url": "/methods/M_NATURAL_GRADIENT",
+      "entity_id": "M_NATURAL_GRADIENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Natural gradient descent",
+      "label_ja": "自然勾配法"
     },
     {
       "canonical_url": "/methods/M_NELDER_MEAD",
@@ -2270,6 +3016,14 @@
       "label_ja": "近接勾配法"
     },
     {
+      "canonical_url": "/methods/M_PUSH_RELABEL",
+      "entity_id": "M_PUSH_RELABEL",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Push-relabel maximum flow",
+      "label_ja": "Push-relabel法"
+    },
+    {
       "canonical_url": "/methods/M_RANDOM_SEARCH",
       "entity_id": "M_RANDOM_SEARCH",
       "entity_type": "method",
@@ -2292,6 +3046,30 @@
       "external_url": null,
       "label_en": "Riemannian trust-region",
       "label_ja": "Riemann trust-region法"
+    },
+    {
+      "canonical_url": "/methods/M_RMSPROP",
+      "entity_id": "M_RMSPROP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "RMSprop",
+      "label_ja": "RMSprop"
+    },
+    {
+      "canonical_url": "/methods/M_SAGA",
+      "entity_id": "M_SAGA",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "SAGA (incremental gradient method with variance reduction)",
+      "label_ja": "SAGA"
+    },
+    {
+      "canonical_url": "/methods/M_SARAH",
+      "entity_id": "M_SARAH",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Stochastic recursive gradient algorithm",
+      "label_ja": "SARAH（確率的再帰勾配法）"
     },
     {
       "canonical_url": "/methods/M_SGD",
@@ -2332,6 +3110,30 @@
       "external_url": null,
       "label_en": "Sequential quadratic programming",
       "label_ja": "逐次二次計画法"
+    },
+    {
+      "canonical_url": "/methods/M_SR1",
+      "entity_id": "M_SR1",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Symmetric rank-one (SR1) quasi-Newton update",
+      "label_ja": "SR1法"
+    },
+    {
+      "canonical_url": "/methods/M_SUCCESSIVE_SHORTEST_PATH",
+      "entity_id": "M_SUCCESSIVE_SHORTEST_PATH",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Successive shortest path (min-cost flow)",
+      "label_ja": "逐次最短路法"
+    },
+    {
+      "canonical_url": "/methods/M_SVRG",
+      "entity_id": "M_SVRG",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Stochastic variance reduced gradient",
+      "label_ja": "SVRG（確率的分散縮小勾配法）"
     },
     {
       "canonical_url": "/methods/M_WEIGHTED_SUM",

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.21",
+  "dataset_version": "0.18.22",
   "expectations": [
     {
       "applicability": "expected",
@@ -540,11 +540,11 @@
       "knowledge_topic": {
         "axes": {
           "claims": {
-            "complete": 113,
+            "complete": 137,
             "eligible": 160,
             "info": {},
             "states": {
-              "no_canonical_row": 47
+              "no_canonical_row": 23
             }
           },
           "experience": {
@@ -558,13 +558,13 @@
             }
           },
           "identity": {
-            "complete": 120,
+            "complete": 144,
             "eligible": 160,
             "info": {},
             "states": {
               "candidate": 0,
               "unknown": 0,
-              "unrepresented": 40
+              "unrepresented": 16
             }
           },
           "lesson": {
@@ -699,15 +699,19 @@
           "target_ids": []
         },
         "map": {
-          "count": 25,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_COMPOSITE_CONVEX",
             "/methods/M_ADMM",
             "/methods/M_BUNDLE",
+            "/methods/M_CCCP",
             "/methods/M_COORDINATE_DESCENT",
+            "/methods/M_DCA",
+            "/methods/M_DOUGLAS_RACHFORD",
             "/methods/M_FISTA",
+            "/methods/M_FRANK_WOLFE",
             "/methods/M_MIRROR_DESCENT",
             "/methods/M_PROX_GRADIENT",
             "/methods/M_SUBGRADIENT",
@@ -720,6 +724,12 @@
             "S062",
             "S066",
             "S067",
+            "S128",
+            "S129",
+            "S130",
+            "S131",
+            "S132",
+            "S133",
             "admm",
             "bundle-method",
             "coordinate-descent",
@@ -742,7 +752,7 @@
           ]
         },
         "source": {
-          "count": 7,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -752,7 +762,13 @@
             "S061",
             "S062",
             "S066",
-            "S067"
+            "S067",
+            "S128",
+            "S129",
+            "S130",
+            "S131",
+            "S132",
+            "S133"
           ]
         },
         "visualization": {
@@ -1340,13 +1356,16 @@
           "target_ids": []
         },
         "map": {
-          "count": 55,
+          "count": 62,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_BENDERS",
             "/methods/M_BRANCH_BOUND",
             "/methods/M_BRANCH_CUT",
+            "/methods/M_BRANCH_PRICE",
+            "/methods/M_BRANCH_PRICE_CUT",
             "/methods/M_OUTER_APPROX_MINLP",
             "/methods/M_SPATIAL_BRANCH_BOUND",
             "COMPARE_IRRIGATION_BNB_BUDGET",
@@ -1382,6 +1401,10 @@
             "S054",
             "S056",
             "S079",
+            "S134",
+            "S137",
+            "S138",
+            "S139",
             "binary-knapsack-bnb-budget",
             "binary-knapsack-bnb-complete",
             "branch-and-bound",
@@ -1416,7 +1439,7 @@
           ]
         },
         "source": {
-          "count": 12,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1431,7 +1454,11 @@
             "S029",
             "S054",
             "S056",
-            "S079"
+            "S079",
+            "S134",
+            "S137",
+            "S138",
+            "S139"
           ]
         },
         "visualization": {
@@ -1759,21 +1786,30 @@
           "target_ids": []
         },
         "map": {
-          "count": 19,
+          "count": 28,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_GRAPH_DP",
+            "/methods/M_AUGMENTING_MAXFLOW",
+            "/methods/M_BELLMAN_FORD",
             "/methods/M_DIJKSTRA_ASTAR",
             "/methods/M_DYNAMIC_PROGRAMMING",
             "/methods/M_HUNGARIAN",
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
             "/methods/M_NETWORK_SIMPLEX",
+            "/methods/M_PUSH_RELABEL",
+            "/methods/M_SUCCESSIVE_SHORTEST_PATH",
             "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
             "EC019",
             "I_ORTOOLS_ROUTING",
             "S023",
             "S054",
+            "S140",
+            "S141",
+            "S142",
+            "S143",
+            "S144",
             "dijkstra-astar",
             "dynamic-programming",
             "family.graph-dp",
@@ -1795,12 +1831,17 @@
           ]
         },
         "source": {
-          "count": 2,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S023",
-            "S054"
+            "S054",
+            "S140",
+            "S141",
+            "S142",
+            "S143",
+            "S144"
           ]
         },
         "visualization": {
@@ -1888,7 +1929,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 58,
+          "count": 64,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1896,6 +1937,8 @@
             "/methods/M_ACTIVE_SET_QP",
             "/methods/M_ADMM_QP",
             "/methods/M_BARRIER_LP_QP",
+            "/methods/M_COLUMN_GENERATION",
+            "/methods/M_DANTZIG_WOLFE",
             "/methods/M_DUAL_SIMPLEX",
             "/methods/M_PDLP",
             "/methods/M_PRIMAL_DUAL_CONIC",
@@ -1933,6 +1976,10 @@
             "S062",
             "S078",
             "S103",
+            "S135",
+            "S136",
+            "S138",
+            "S139",
             "active-set-qp",
             "admm-qp",
             "barrier-lp-qp",
@@ -1972,7 +2019,7 @@
           ]
         },
         "source": {
-          "count": 12,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1987,7 +2034,11 @@
             "S056",
             "S062",
             "S078",
-            "S103"
+            "S103",
+            "S135",
+            "S136",
+            "S138",
+            "S139"
           ]
         },
         "visualization": {
@@ -2425,18 +2476,20 @@
           "target_ids": []
         },
         "map": {
-          "count": 65,
+          "count": 70,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_SMOOTH_LOCAL",
             "/methods/M_BFGS",
+            "/methods/M_CUBIC_REGULARIZATION",
             "/methods/M_GRADIENT_DESCENT",
             "/methods/M_LBFGS",
             "/methods/M_LBFGSB",
             "/methods/M_NEWTON",
             "/methods/M_NEWTON_CG",
             "/methods/M_NLCG",
+            "/methods/M_SR1",
             "COMPARE_CONSTRAINED_FAILURE",
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
             "COMPARE_GRADIENT_DIVERGENCE",
@@ -2463,6 +2516,9 @@
             "S057",
             "S064",
             "S065",
+            "S124",
+            "S126",
+            "S127",
             "battery-operation-tradeoff",
             "bfgs",
             "bilevel-regularized-regression",
@@ -2518,7 +2574,7 @@
           ]
         },
         "source": {
-          "count": 8,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2529,7 +2585,10 @@
             "S056",
             "S057",
             "S064",
-            "S065"
+            "S065",
+            "S124",
+            "S126",
+            "S127"
           ]
         },
         "visualization": {
@@ -2598,15 +2657,23 @@
           "target_ids": []
         },
         "map": {
-          "count": 25,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_STOCHASTIC_ML",
+            "/methods/M_ADAGRAD",
             "/methods/M_ADAM",
             "/methods/M_ADAMW",
+            "/methods/M_LION",
             "/methods/M_MOMENTUM_SGD",
+            "/methods/M_MUON",
+            "/methods/M_NATURAL_GRADIENT",
+            "/methods/M_RMSPROP",
+            "/methods/M_SAGA",
+            "/methods/M_SARAH",
             "/methods/M_SGD",
+            "/methods/M_SVRG",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "EC021",
@@ -2618,6 +2685,18 @@
             "S049",
             "S056",
             "S070",
+            "S112",
+            "S113",
+            "S114",
+            "S115",
+            "S116",
+            "S117",
+            "S118",
+            "S119",
+            "S120",
+            "S121",
+            "S122",
+            "S123",
             "adam",
             "adam-quadratic",
             "adam-quadratic-divergence",
@@ -2643,7 +2722,7 @@
           ]
         },
         "source": {
-          "count": 5,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2651,7 +2730,19 @@
             "S048",
             "S049",
             "S056",
-            "S070"
+            "S070",
+            "S112",
+            "S113",
+            "S114",
+            "S115",
+            "S116",
+            "S117",
+            "S118",
+            "S119",
+            "S120",
+            "S121",
+            "S122",
+            "S123"
           ]
         },
         "visualization": {
@@ -3026,11 +3117,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 36,
+          "count": 38,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_TRUST_REGION",
+            "/methods/M_DOGLEG",
             "/methods/M_GAUSS_NEWTON",
             "/methods/M_LEVENBERG_MARQUARDT",
             "/methods/M_TRUST_EXACT",
@@ -3054,6 +3146,7 @@
             "S041",
             "S056",
             "S096",
+            "S125",
             "exponential-fit-lm",
             "exponential-fit-trf",
             "exponential-fit-trf-poor-init",
@@ -3083,7 +3176,7 @@
           ]
         },
         "source": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3091,7 +3184,8 @@
             "S003",
             "S041",
             "S056",
-            "S096"
+            "S096",
+            "S125"
           ]
         },
         "visualization": {
@@ -3307,6 +3401,97 @@
       },
       "label": "Active-set QP",
       "subject_id": "M_ACTIVE_SET_QP",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM",
+            "I_TENSORFLOW_OPTIM"
+          ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 8,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_ADAGRAD",
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM",
+            "I_TENSORFLOW_OPTIM",
+            "S047",
+            "S048",
+            "S049",
+            "S112"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S047",
+            "S048",
+            "S049",
+            "S112"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Adaptive subgradient method (AdaGrad)",
+      "subject_id": "M_ADAGRAD",
       "subject_type": "method"
     },
     {
@@ -3903,6 +4088,90 @@
           "target_ids": []
         },
         "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_AUGMENTING_MAXFLOW",
+            "S141",
+            "S142",
+            "S144"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S141",
+            "S142",
+            "S144"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Augmenting-path maximum flow (Ford-Fulkerson / Edmonds-Karp)",
+      "subject_id": "M_AUGMENTING_MAXFLOW",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -4246,6 +4515,168 @@
       },
       "label": "Gaussian-process Bayesian optimization",
       "subject_id": "M_BAYESIAN_OPT_GP",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_BELLMAN_FORD",
+            "S140",
+            "S144"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S140",
+            "S144"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Bellman-Ford algorithm",
+      "subject_id": "M_BELLMAN_FORD",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_BENDERS",
+            "S134"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S134"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Benders decomposition",
+      "subject_id": "M_BENDERS",
       "subject_type": "method"
     },
     {
@@ -4629,6 +5060,174 @@
           "target_ids": []
         },
         "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_BRANCH_PRICE",
+            "S137",
+            "S138",
+            "S139"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S137",
+            "S138",
+            "S139"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Branch and price",
+      "subject_id": "M_BRANCH_PRICE",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_BRANCH_PRICE_CUT",
+            "S137",
+            "S138",
+            "S139"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S137",
+            "S138",
+            "S139"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Branch-price-and-cut",
+      "subject_id": "M_BRANCH_PRICE_CUT",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -4705,6 +5304,88 @@
       },
       "label": "Bundle method",
       "subject_id": "M_BUNDLE",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_CCCP",
+            "S132",
+            "S133"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S132",
+            "S133"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Concave-convex procedure (CCCP)",
+      "subject_id": "M_CCCP",
       "subject_type": "method"
     },
     {
@@ -5092,6 +5773,90 @@
           "target_ids": []
         },
         "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_COLUMN_GENERATION",
+            "S136",
+            "S138",
+            "S139"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S136",
+            "S138",
+            "S139"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Column generation",
+      "subject_id": "M_COLUMN_GENERATION",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -5377,6 +6142,256 @@
       },
       "label": "Constraint-programming search",
       "subject_id": "M_CP_SEARCH",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_CUBIC_REGULARIZATION",
+            "S056",
+            "S126",
+            "S127"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S056",
+            "S126",
+            "S127"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Cubic regularization of Newton method (ARC)",
+      "subject_id": "M_CUBIC_REGULARIZATION",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_DANTZIG_WOLFE",
+            "S135",
+            "S138",
+            "S139"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S135",
+            "S138",
+            "S139"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Dantzig-Wolfe decomposition",
+      "subject_id": "M_DANTZIG_WOLFE",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_DCA",
+            "S132",
+            "S133"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S132",
+            "S133"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Difference of convex algorithm (DCA)",
+      "subject_id": "M_DCA",
       "subject_type": "method"
     },
     {
@@ -5953,6 +6968,176 @@
           "target_ids": []
         },
         "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_DOGLEG",
+            "S002",
+            "S056",
+            "S125"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S002",
+            "S056",
+            "S125"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Dogleg trust-region method",
+      "subject_id": "M_DOGLEG",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_DOUGLAS_RACHFORD",
+            "S061",
+            "S066",
+            "S128",
+            "S129"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S061",
+            "S066",
+            "S128",
+            "S129"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Douglas-Rachford splitting",
+      "subject_id": "M_DOUGLAS_RACHFORD",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -6299,6 +7484,90 @@
       },
       "label": "Fast iterative shrinkage-thresholding algorithm",
       "subject_id": "M_FISTA",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_FRANK_WOLFE",
+            "S055",
+            "S130",
+            "S131"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S055",
+            "S130",
+            "S131"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Frank-Wolfe algorithm",
+      "subject_id": "M_FRANK_WOLFE",
       "subject_type": "method"
     },
     {
@@ -7285,6 +8554,95 @@
     {
       "dimensions": {
         "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_OPTAX",
+            "I_TENSORFLOW_OPTIM"
+          ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 7,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_LION",
+            "I_OPTAX",
+            "I_TENSORFLOW_OPTIM",
+            "S047",
+            "S049",
+            "S119",
+            "S120"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S047",
+            "S049",
+            "S119",
+            "S120"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Lion (EvoLved Sign Momentum)",
+      "subject_id": "M_LION",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -8021,6 +9379,171 @@
       },
       "label": "Multi-start local optimization",
       "subject_id": "M_MULTISTART",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_PYTORCH_OPTIM"
+          ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_MUON",
+            "I_PYTORCH_OPTIM",
+            "S121",
+            "S122",
+            "S123"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S121",
+            "S122",
+            "S123"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Muon",
+      "subject_id": "M_MUON",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_NATURAL_GRADIENT",
+            "S117"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S117"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Natural gradient descent",
+      "subject_id": "M_NATURAL_GRADIENT",
       "subject_type": "method"
     },
     {
@@ -9635,6 +11158,88 @@
     {
       "dimensions": {
         "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_PUSH_RELABEL",
+            "S143",
+            "S144"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S143",
+            "S144"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Push-relabel maximum flow",
+      "subject_id": "M_PUSH_RELABEL",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -9933,6 +11538,259 @@
       },
       "label": "Riemannian trust-region",
       "subject_id": "M_RIEMANNIAN_TRUST_REGION",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM",
+            "I_TENSORFLOW_OPTIM"
+          ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 9,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_RMSPROP",
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM",
+            "I_TENSORFLOW_OPTIM",
+            "S047",
+            "S048",
+            "S049",
+            "S115",
+            "S116"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S047",
+            "S048",
+            "S049",
+            "S115",
+            "S116"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "RMSprop",
+      "subject_id": "M_RMSPROP",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SAGA",
+            "S114"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S114"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "SAGA (incremental gradient method with variance reduction)",
+      "subject_id": "M_SAGA",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SARAH",
+            "S118"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S118"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Stochastic recursive gradient algorithm",
+      "subject_id": "M_SARAH",
       "subject_type": "method"
     },
     {
@@ -10943,6 +12801,90 @@
           "target_ids": []
         },
         "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SR1",
+            "S002",
+            "S056",
+            "S124"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S002",
+            "S056",
+            "S124"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Symmetric rank-one (SR1) quasi-Newton update",
+      "subject_id": "M_SR1",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
@@ -11019,6 +12961,166 @@
       },
       "label": "Subgradient method",
       "subject_id": "M_SUBGRADIENT",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SUCCESSIVE_SHORTEST_PATH",
+            "S144"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S144"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Successive shortest path (min-cost flow)",
+      "subject_id": "M_SUCCESSIVE_SHORTEST_PATH",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SVRG",
+            "S113"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S113"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Stochastic variance reduced gradient",
+      "subject_id": "M_SVRG",
       "subject_type": "method"
     },
     {
@@ -17465,7 +19567,7 @@
     },
     "subject_counts": {
       "feature_family": 10,
-      "method": 105,
+      "method": 129,
       "problem": 57
     }
   }
