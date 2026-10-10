@@ -1928,12 +1928,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_PRICE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "分枝価格法 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1950,12 +1955,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BENDERS"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "Benders分解 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1972,12 +1982,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DANTZIG_WOLFE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+        "note_ja": "Dantzig-Wolfe分解 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1994,12 +2009,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_COLUMN_GENERATION"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+        "note_ja": "列生成 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -2140,12 +2160,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_PRICE_CUT"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "分枝価格カット法 の行そのものです。"
       },
       "source_refs": [
         "E07"
