@@ -1,8 +1,9 @@
 # Dependency maintenance
 
-The repository no longer contains Dependabot configuration or a GitHub Actions workflow. Dependency
-updates and vulnerability checks must be run explicitly; there is no grouped weekly update schedule
-or automatic supply-chain gate in this checkout.
+The repository no longer contains Dependabot configuration. The PR-only validation workflow checks
+locked dependency installation and immutable action pins. Dependency updates and vulnerability
+audits must still be run explicitly; there is no grouped weekly update schedule or automatic
+vulnerability audit in this checkout.
 
 Review upstream release notes and both lockfile changes. Changes to generated data, recommendations,
 browser behavior, or license terms need the matching validation task before merging.
@@ -28,5 +29,5 @@ not this project's source.
 
 The dependency report is an inventory of Python and npm packages, versions, and declared licenses,
 not a legal conclusion. `UNKNOWN` metadata or changed terms require review under
-[`licensing.md`](licensing.md). The workflow-pin validator remains a standalone helper for an
-explicit workflow directory; the removed default directory cannot pass its check.
+[`licensing.md`](licensing.md). The workflow-pin validator checks `.github/workflows` by default and
+also accepts an explicit workflow directory.

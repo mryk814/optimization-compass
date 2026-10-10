@@ -546,9 +546,10 @@ Run full Python tests, deterministic stage, frontend parity, frontend tests/buil
 ### Publish an article to the Atlas
 
 An ordinary article for an existing canonical entity uses `ready content`, a pull request, and a
-merge to `main`. The main workflow builds the exact validated Pages artifact, runs browser and
-accessibility gates, deploys it, and performs remote smoke checks. The contributor verifies the
-routes printed by `ready content`. There is no dataset version bump and no local `--publish` step.
+merge to `main`. The PR workflow selects the validation task, builds the site, checks generated-data
+drift, and verifies the local Pages artifact. It does not upload or deploy that artifact; publication
+requires a separately authorized process. The contributor verifies the routes printed by
+`ready content`. There is no dataset version bump and no local `--publish` step.
 
 ### Publish a dataset version
 
@@ -597,8 +598,9 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 
 The focused commands are intentionally small. `tier-b` and `tier-c` are for changes that can alter
 canonical data, executable behavior, generated artifacts, or release identity. Run the broader proof
-locally: this repository no longer includes a CI workflow. `--list` shows a task's checks and `--format json` is available for
-automation.
+locally while editing. PRs targeting `main` select and run the authoritative task from the same
+registry, then build and verify the site artifact without automatic deployment. `--list` shows a
+task's checks and `--format json` is available for automation.
 
 For ordinary edits, use the focused command in the matrix. For a contract or release change, use
 the named `tier-b` / `tier-c` task instead of copying a long command list; the registry is the

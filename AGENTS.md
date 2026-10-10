@@ -98,7 +98,7 @@ For high or critical changes, inspect similar merged work and document the autho
 
 Use the smallest task exposed by `optimization-compass validate`. The local content tasks check parsing, relations, licensing, and the focused authoring contract. They do not run the full Python suite, site build, or browser suite.
 
-The repository no longer includes GitHub Actions workflows. Run the applicable gates locally; do not assume a push validates or deploys the site. Preserve generated-data identity, canonical data integrity, stable IDs, and deployment identity.
+Pull requests targeting `main`, including updates to open PRs, run the selected authoritative validation task, build the site, and verify generated-data drift and the local Pages artifact. Run the applicable gates locally while editing. The workflow runs only on PR events, not standalone push events, and there is no automatic Pages upload or deployment. Preserve generated-data identity, canonical data integrity, stable IDs, and deployment identity.
 
 For an existing canonical method article, `ready content <content-id>` exports public data and runs the focused content contract. It no longer regenerates review reports as a side effect; report scripts remain available when a report is explicitly needed.
 

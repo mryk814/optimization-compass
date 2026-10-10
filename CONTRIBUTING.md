@@ -88,7 +88,8 @@ screenshot・logoを追加する場合は、rights holder、source、適用licen
 ## ローカル確認
 
 最初に`uv sync --frozen --all-extras --all-groups`を行い、変更面を所有するtaskを実行します。
-GitHub Actions workflowは削除されているため、pushやPR作成だけで検証・公開は行われません。
+`main` 向けのPR（更新を含む）でも同じtaskを選択して検証し、site buildとPages artifactのローカル検証を行います。
+単独のpushイベントでは実行されず、Pagesへの自動upload・公開もありません。
 
 ```bash
 uv run optimization-compass select-validation-task --base-ref origin/main

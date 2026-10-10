@@ -139,8 +139,9 @@ uv run optimization-compass validate gallery
 ```
 
 スキーマ、推薦ロジック、生成器、実行可能問題、リリースを変更したときだけ、
-`validate tier-b` / `validate tier-c` を使います。GitHub Actions workflowは削除されているため、
-pushやPR作成による自動検証・Pages公開はありません。
+`validate tier-b` / `validate tier-c` を使います。`main` 向けのPR（更新を含む）では、変更面に対応する検証、
+site build、生成データのdrift確認、Pages artifactのローカル検証が自動実行されます。
+単独のpushイベントでは実行されず、Pagesへの自動upload・公開もありません。
 詳しい入口は [`docs/adding-knowledge.md`](docs/adding-knowledge.md) を参照してください。
 
 ## Contributing
