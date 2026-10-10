@@ -210,7 +210,7 @@
     "primal-simplex": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
-      "body_sha256": "62b7e0aee6e3",
+      "body_sha256": "90487510a6b5",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -223,7 +223,7 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "パン屋のLPを主図simplex-pivot（新規）・2回のピボット表・最適性の証明書・Pythonまで一つの題材で通した。数値はscratchのFraction実装・vitest・linprogで確認。1280/375/320pxで全14状態のラベル重なりとはみ出しをスクリプトで検査。オーナーの画面確認は未。"
+      "notes": "OC-EVOL-011: 感度の操作図 simplex-shadow-price を追加。b=6,26/3,18,19,25/3,39,40 の値を linprog で独立に検算。1280/375/320px でラベルの重なりを修正後に確認。オーナーの画面確認は未。"
     }
   }
 }

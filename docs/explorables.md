@@ -95,7 +95,7 @@ site/src/features/explorable/
 | Python の例と操作図で同じ入力を使う fixture と鮮度の検査 | 実装済み（1図） | `generate_lesson_figures.py --check` |
 | 読者に先に予想させる区切り（予想してから結果を見せる） | 提案のみ | 単体法の証明・BO の場面で必要になったときに beats へ足す |
 | 学習者が見える情報と最適化側が見える情報の区別の表示 | 提案のみ | 同上 |
-| 双対価格・余裕・ギャップなど LP の観測量の共有名 | 提案のみ | 単体法の証明（OC-EVOL-011）で `simplex.ts` に足す |
+| 双対価格・余裕・ギャップなど LP の観測量の共有名 | 一部実装済み（右辺 b を引数にした解、双対値、基底が有効な範囲、見積もりとの差） | `math/shadowPrice.ts`（OC-EVOL-011）。余裕・ギャップの共有名はまだ提案 |
 | Python と TypeScript で同じ手法を二度実装している箇所（勾配降下法、Adam） | 既知のずれの危険。同じ例を使う比較のテストはまだない | `math/descent.ts` と `traces/generators.py`、`math/adam.ts` と同 |
 
 提案のものは、使う図ができたときにその図のPRで足します。使い道のない項目を先に契約へ足しません。
@@ -140,6 +140,7 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `gradient-descent-valley` | `method.gradient-descent` | learning rate と谷の細長さで、方向ごとの誤差の倍率がどう決まるか。安定限界 `2/L` |
 | `lp-vertex-walk` | `concept.linear-program` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
 | `simplex-pivot` | `primal-simplex` | 読者が増やす変数を選び、増やす量 θ を動かして比の最小値を見つける。被約費用を「売値 − 使う資源の値段」で計算し、2回のピボットで最適な頂点に着く |
+| `simplex-shadow-price` | `primal-simplex` | 小麦粉の在庫 b を1/3刻みで動かし、値段 5/7 の見積もりと実際の最適値（原点から厳密に解き直す）が一致する範囲 26/3 ≤ b ≤ 39 と、外での基底の変化。各 b の双対値による証明書 u·b+v·13。`simplex.ts` の右辺を引数にして再利用し、`simplex-pivot` とは別の図 |
 | `convexity-chord` | `concept.convexity` | 定義の不等式を、2点と混合比で数値として確かめる。局所解と全体の最小の違い |
 | `least-squares-bowl` | `concept.linear-least-squares` | 残差の二乗を正方形の面積で見せ、データの平面とパラメータの平面（お椀）をつなぐ。外れ値1点の引っ張り |
 | `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |
