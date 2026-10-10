@@ -150,6 +150,11 @@
       "id": "032",
       "path": "data/migrations/032_decomposition_variants.sql",
       "sha256": "d523fa11f8b8bc75bb1f552b00fb101b0cf3db02b12c1145530590fba26fd5b7"
+    },
+    {
+      "id": "033",
+      "path": "data/migrations/033_graph_flow_variants.sql",
+      "sha256": "f0170099e5d68c36e6367fce49cdd21b6bf1d3798b04a44f85bc6fab4f8258e3"
     }
   ],
   "specialized_inputs": [

@@ -2280,12 +2280,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BELLMAN_FORD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "Bellman-Ford法 の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2333,12 +2338,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_AUGMENTING_MAXFLOW"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "増加路法(最大流) の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2355,12 +2365,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PUSH_RELABEL"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "Push-relabel法 の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2408,12 +2423,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SUCCESSIVE_SHORTEST_PATH"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP, M_NETWORK_SIMPLEX です。"
+        "note_ja": "逐次最短路法 の行そのものです。"
       },
       "source_refs": [
         "E14"
