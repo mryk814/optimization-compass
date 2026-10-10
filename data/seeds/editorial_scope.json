@@ -211,12 +211,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADAGRAD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "AdaGrad の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -233,12 +238,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RMSPROP"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "RMSprop の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -339,12 +349,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SVRG"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SVRG の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -361,12 +376,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SAGA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SAGA の行そのものです。"
       },
       "source_refs": [
         "E06"

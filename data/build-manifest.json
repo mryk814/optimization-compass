@@ -125,6 +125,11 @@
       "id": "027",
       "path": "data/migrations/027_portfolio_mean_variance.sql",
       "sha256": "b29457e30a0b2270a3df1cc894ac2c61155d51ce06a1dba4543b507513acb891"
+    },
+    {
+      "id": "028",
+      "path": "data/migrations/028_stochastic_ml_variants.sql",
+      "sha256": "9a247ca697230cc5edb234dfdd53aea92dedd91af7e8ef09f7d713351c525da3"
     }
   ],
   "specialized_inputs": [
