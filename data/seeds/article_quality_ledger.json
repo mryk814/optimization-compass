@@ -181,6 +181,25 @@
         "screen.three-widths": "pass"
       }
     },
+    "concept.robust-regression": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "0283a5e517fe",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "操作図robust-loss-pullを追加。m=10/50, δ=1でHuber 1/3、二乗 m/4を手で確認。1280/375/320pxで確認。"
+    },
     "concept.smooth-low-dimensional-unconstrained": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",

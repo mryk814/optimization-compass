@@ -495,6 +495,17 @@ applying any migration and rejects missing, unregistered, reordered, or changed 
 Run `uv run optimization-compass validate manifest`, followed by the full Python, data, licensing,
 parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
 
+### Tests must not pin inventory counts
+
+Tests compare a generated collection (export, report, catalog) against the canonical authority it is
+built from: the same number of items as the authority holds, equal ID sets where that is cheap, and
+non-empty. Adding a method, source, or problem must therefore need no test edit, while a dropped or
+duplicated item still fails. Numbers stay pinned only for deterministic computed results, format
+contracts (for example hash length), schema contracts (for example the table count, which changes
+only with a schema migration), fixtures built inside a test, and deliberate recommendation
+contracts (questionnaire and decision rules), which change only with an explicit recommendation
+change and regression case.
+
 ## 14. Recipe: add a visualization scenario
 
 A complete visualization is not just an animation. It combines:

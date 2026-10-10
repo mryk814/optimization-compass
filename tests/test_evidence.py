@@ -22,8 +22,19 @@ def test_source_evidence_index_exports_every_source_and_canonical_link(
         generated_at=datetime(2026, 7, 13, tzinfo=UTC),
     )
 
-    assert len(index.sources) == 143
-    assert sum(len(source.evidence_targets) for source in index.sources) == 4253
+    source_ids = [row["source_id"] for row in repository.fetch_all("SELECT source_id FROM sources")]
+    link_ids = {
+        row["evidence_link_id"]
+        for row in repository.fetch_all("SELECT evidence_link_id FROM evidence_links")
+    }
+    assert source_ids
+    assert link_ids
+    assert sorted(source.source_id for source in index.sources) == sorted(source_ids)
+    exported_link_ids = [
+        target.evidence_link_id for source in index.sources for target in source.evidence_targets
+    ]
+    assert len(exported_link_ids) == len(link_ids)
+    assert set(exported_link_ids) == link_ids
     assert {rule.source_type for rule in index.freshness_policy} == set(SOURCE_FRESHNESS_DAYS)
     scipy = next(source for source in index.sources if source.source_id == "S001")
     assert scipy.title == "SciPy Optimization and root finding"

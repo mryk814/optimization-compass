@@ -3,7 +3,7 @@
 - Published concept guides: `44`
 - Meeting the concept floor: `44`
 - Below the concept floor: `0`
-- Prose review warnings: `603`
+- Prose review warnings: `604`
 
 ## Concept publication floor
 
@@ -36,7 +36,7 @@
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
 | `concept.pde-constrained-program` | 102 | 4598 | 8 | 4 | 0 | pass |
 | `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
-| `concept.robust-regression` | 77 | 6188 | 10 | 4 | 0 | pass |
+| `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
 | `concept.root-finding` | 93 | 4253 | 8 | 4 | 0 | pass |
 | `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
@@ -59,8 +59,8 @@
 - `number.overprecise`: 209
 - `prose.choppy`: 6
 - `prose.meta`: 5
-- `prose.work-report`: 20
-- `sentence.commas`: 313
+- `prose.work-report`: 19
+- `sentence.commas`: 315
 - `sentence.long`: 50
 
 | Content | Warnings |
@@ -111,7 +111,7 @@
 | `concept.pde-constrained-optimization` | 0 |
 | `concept.pde-constrained-program` | 0 |
 | `concept.receding-horizon` | 5 |
-| `concept.robust-regression` | 4 |
+| `concept.robust-regression` | 5 |
 | `concept.root-finding` | 6 |
 | `concept.semidefinite-program` | 0 |
 | `concept.simplex` | 4 |

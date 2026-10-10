@@ -17,15 +17,38 @@ def load_report() -> CoverageReport:
     )
 
 
-def test_report_separates_inventory_from_expected_coverage() -> None:
+def test_report_separates_inventory_from_expected_coverage(
+    repository: KnowledgeRepository,
+) -> None:
     report = load_report()
-    assert report.summary.subject_counts == {
-        "feature_family": 10,
-        "method": 129,
-        "problem": 57,
+    method_ids = {row["method_id"] for row in repository.fetch_all("SELECT method_id FROM methods")}
+    problem_ids = {
+        row["problem_id"]
+        for row in repository.fetch_all("SELECT problem_id FROM problem_archetypes")
     }
-    assert len(report.subjects) == 196
-    assert len(report.expectations) == 11
+    # Feature families are the problem_features categories; method families (MF_*) are not subjects.
+    family_ids = {
+        row["category"] for row in repository.fetch_all("SELECT category FROM problem_features")
+    }
+    expectation_ids = {
+        row["expectation_id"]
+        for row in repository.fetch_all("SELECT expectation_id FROM learning_coverage_expectations")
+    }
+    assert method_ids and problem_ids and family_ids and expectation_ids
+    assert report.summary.subject_counts == {
+        "feature_family": len(family_ids),
+        "method": len(method_ids),
+        "problem": len(problem_ids),
+    }
+    subject_ids = {(item.subject_type, item.subject_id) for item in report.subjects}
+    assert len(subject_ids) == len(report.subjects)
+    assert subject_ids == (
+        {("method", item) for item in method_ids}
+        | {("problem", item) for item in problem_ids}
+        | {("feature_family", item) for item in family_ids}
+    )
+    # Expectations are rows of learning_coverage_expectations, not a fixed contract.
+    assert [item.expectation_id for item in report.expectations] == sorted(expectation_ids)
     assert set(report.summary.status_counts) == {
         "available",
         "partial",
