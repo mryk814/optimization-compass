@@ -266,6 +266,9 @@ sources: [S054, S055]   # 事実の根拠。Qiita・Zennは不可
 - [ ] explorableのパネルに見出しがあり、操作名が日本語で、アイコンだけのボタンは本文に名前とアイコンを両方書いている
 - [ ] 比較から順位付けや一般的な性能の主張をしていない
 - [ ] `uv run python scripts/check_article.py <file>` と `uv run optimization-compass validate content` が通る
+- [ ] `uv run python scripts/article_quality.py show <file>` で自動判定にfailがなく、review基準を判定して `record` した（[`article-quality.md`](article-quality.md)）
+
+このチェックリストの各項目は、記事ごとの品質台帳（[`article-quality.md`](article-quality.md)）の基準になっています。項目を足したり厳しくしたりしたら、`data/seeds/article_quality_criteria.json` も更新します。
 
 ## 8. AIごとの分担
 

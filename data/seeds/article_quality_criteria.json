@@ -1,0 +1,311 @@
+{
+  "contract_version": "1.0.0",
+  "criteria": [
+    {
+      "criterion_id": "skeleton",
+      "title_ja": "節の型（見出しの名前と順番）に従う",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family"
+      ],
+      "since": "2026-10-03",
+      "guide": "src/optimization_compass/content_skeletons.py"
+    },
+    {
+      "criterion_id": "evidence.sources",
+      "title_ja": "事実の根拠（source_ids）がある",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "AGENTS.md Core invariants"
+    },
+    {
+      "criterion_id": "visual.figure",
+      "title_ja": "中心の仕組みを描いた図が1枚以上ある（L1以上）",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.1"
+    },
+    {
+      "criterion_id": "visual.interactive",
+      "title_ja": "学習経路に載る記事は操作図（L2）がある",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "scope": "learning_path",
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.1"
+    },
+    {
+      "criterion_id": "figure.main-early",
+      "title_ja": "主図が詳しい式より先にある",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.3"
+    },
+    {
+      "criterion_id": "figure.first-action",
+      "title_ja": "主図の直前に、最初の操作を画面のUI名で書いている",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 30秒でつかむ 5"
+    },
+    {
+      "criterion_id": "figure.checks-after",
+      "title_ja": "主図の後に、確かめてほしいことが番号付きで3つ以上ある",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 30秒でつかむ 6"
+    },
+    {
+      "criterion_id": "reading.example-column",
+      "title_ja": "記号表に「例では」の列がある",
+      "check": "auto",
+      "applies_to": [
+        "formulation"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 標準形を読む"
+    },
+    {
+      "criterion_id": "code.output-comments",
+      "title_ja": "Pythonの実際の出力を、print行のコメントか直後の表・textブロックで示している",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 数値計算の方法を選ぶ / Python"
+    },
+    {
+      "criterion_id": "figure.text-size",
+      "title_ja": "静止SVGの文字がスマホで12px以上、PCで18px以下",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.4"
+    },
+    {
+      "criterion_id": "math.renders",
+      "title_ja": "数式ブロックに、サイトの数式変換で崩れる書き方（aligned などの環境、&、\\）がない",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-04",
+      "guide": "src/optimization_compass/content_markdown.py（latex_to_mathml）"
+    },
+    {
+      "criterion_id": "prose.no-progress-report",
+      "title_ja": "進行報告・作業報告の言い回しがない",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §3"
+    },
+    {
+      "criterion_id": "prose.no-direction-words",
+      "title_ja": "図を左右上下ではなくパネル名で呼ぶ",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.4"
+    },
+    {
+      "criterion_id": "prose.no-language-mixing",
+      "title_ja": "日本語の文に英単語をそのまま混ぜていない",
+      "check": "auto",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": ".agents/skills/article-style/SKILL.md"
+    },
+    {
+      "criterion_id": "example.single-thread",
+      "title_ja": "一つの題材が、30秒でつかむから数値計算まで通っている",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §3"
+    },
+    {
+      "criterion_id": "example.computed",
+      "title_ja": "例の数値はスクリプトで計算した値で、検算できる中間量がある",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §3"
+    },
+    {
+      "criterion_id": "reading.formula-sentence",
+      "title_ja": "式の前に意味の一文、式の後に日本語での読み方がある",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 標準形を読む, §6"
+    },
+    {
+      "criterion_id": "pitfalls.with-example",
+      "title_ja": "つまずきやすい点の各項目が、記事の例の数値で誤りを示している",
+      "check": "review",
+      "applies_to": [
+        "formulation"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 つまずきやすい点"
+    },
+    {
+      "criterion_id": "routes.trouble-first",
+      "title_ja": "困りごと → リンクがあり、関連記事との関係に条件が書かれている",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §4 困りごとから関連する問題へ"
+    },
+    {
+      "criterion_id": "figure.one-question",
+      "title_ja": "各図が一つの問いに答え、captionで読み取れない範囲を断っている",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.2"
+    },
+    {
+      "criterion_id": "figure.observation-to-formula",
+      "title_ja": "主図の観察から疑問が生まれ、式の説明へつながっている",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/article-experience-pattern.md"
+    },
+    {
+      "criterion_id": "explorable.ui-names",
+      "title_ja": "操作図のパネル見出し・日本語の操作名があり、アイコンだけのボタンは本文で名前とアイコンを併記している",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.2"
+    },
+    {
+      "criterion_id": "compare.no-ranking",
+      "title_ja": "比較から順位付けや一般的な性能の主張をしていない",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "AGENTS.md Core invariants, playbook §4 小さな例"
+    },
+    {
+      "criterion_id": "screen.three-widths",
+      "title_ja": "PC 1280px・スマホ375px・記事幅320pxの実画面で、本文・図・操作がまとまり、はみ出さない",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §5.4"
+    },
+    {
+      "criterion_id": "prose.readable",
+      "title_ja": "AIらしい言い回しを推敲で取り除いている（yomiyasu相当）",
+      "check": "review",
+      "applies_to": [
+        "formulation",
+        "method",
+        "family",
+        "concept"
+      ],
+      "since": "2026-10-03",
+      "guide": "docs/teaching-article-playbook.md §6"
+    }
+  ]
+}

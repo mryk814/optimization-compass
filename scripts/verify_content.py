@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from optimization_compass.article_quality import require_ledger_integrity
 from optimization_compass.content_models import load_content
 from optimization_compass.content_quality import (
     public_content_routes,
@@ -37,6 +38,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
     _load_payload(data_root / "learning-paths.json", identity.dataset_version)
 
     source_pages = [page for page in load_content(root / "content") if page.status == "published"]
+    require_ledger_integrity(root)
     generated_pages = content_index["pages"]
     source_ids = {page.content_id for page in source_pages}
     generated_ids = _unique_ids(generated_pages, "content_id", "content pages")
