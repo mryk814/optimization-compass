@@ -13,6 +13,7 @@ from optimization_compass.content_quality import (
 from optimization_compass.content_skeletons import load_pending, require_content_skeletons
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.editorial_scope import require_scope_integrity
 from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.release_identity import load_dataset_release_identity
 
@@ -197,12 +198,17 @@ def verify_content(root: Path) -> dict[str, int | str]:
         if not limitations:
             raise ValueError(f"{case_id} limitations must be a non-empty list")
 
-    return {
+    scope_members = require_scope_integrity(root, repository, source_pages)
+
+    result: dict[str, int | str] = {
         "dataset_version": identity.dataset_version,
         "content_pages": len(generated_pages),
         "gallery_cases": len(case_ids),
         "comparisons": len(comparison_ids),
     }
+    if scope_members is not None:
+        result["editorial_scope_members"] = scope_members
+    return result
 
 
 def main() -> None:

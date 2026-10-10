@@ -56,6 +56,7 @@ Find and change the canonical input instead. Generated artifacts may appear in a
 | Add a formulation article (8-section skeleton) for an existing problem archetype | `content/concepts/*.md` with `canonical_entity_type: problem`; recipe A in `docs/formulation-atlas.md` | low |
 | Add or correct a standard form, cue, or formulation relation | `data/seeds/formulation_atlas.json`; recipe B | low–medium |
 | Add or reorder a learning path | `data/seeds/learning_paths.json`; recipe C | low |
+| Add, merge, or re-tier an editorial scope member (the coverage denominator) | `data/seeds/editorial_scope.json`; [`docs/editorial-scope.md`](docs/editorial-scope.md) | low–medium |
 | Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
 | Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
 | Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
