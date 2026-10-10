@@ -40,6 +40,42 @@
       },
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
+    "concept.inverse-problem": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "9865ad17db3f",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.l1-sparse-regularization": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "624db9f41e12",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "concept.linear-least-squares": {
       "reviewed_on": "2026-10-03",
       "reviewer": "owner",

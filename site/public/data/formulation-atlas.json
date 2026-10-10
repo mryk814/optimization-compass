@@ -3624,7 +3624,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.l1-sparse-regularization",
       "cues_ja": [
         "候補の特徴量が多く、効いているものだけを残したい"
       ],
@@ -3662,7 +3662,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3706,6 +3706,7 @@
       "reading_ja": "当てはめの誤差に L1 罰則を足し、多くの係数がちょうど0になる解を求めます。",
       "source_ids": [
         "S055",
+        "S061",
         "S066",
         "S067"
       ],
@@ -5651,7 +5652,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.inverse-problem",
       "cues_ja": [
         "断層画像・地下構造・熱源のように、結果から原因を逆算する"
       ],
@@ -5689,7 +5690,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5734,7 +5735,9 @@
       "source_ids": [
         "S003",
         "S041",
-        "S056"
+        "S055",
+        "S056",
+        "S101"
       ],
       "standard_form": "\\min_{m}\\; \\tfrac12\\|G(m)-d\\|_2^2+\\tfrac{\\alpha}{2}\\|Lm\\|_2^2",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>m</mi></mrow></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>G</mi><mo stretchy=\"false\">&#x00028;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mi>d</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mrow><mi>&#x003B1;</mi></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>L</mi><mi>m</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math></div>"
@@ -6268,6 +6271,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 17
+    "with_article": 19
   }
 }

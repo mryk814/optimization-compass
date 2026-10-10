@@ -8,8 +8,13 @@ from scripts.generate_lesson_figures import (
     OUTPUT,
     WIDTH,
     generate_lesson_figures,
+    inverse_problem_curve,
+    lasso_lambda_max,
+    lasso_solution,
+    lasso_zero_points,
     least_squares_fit,
     least_squares_sse,
+    ridge_solution,
 )
 
 ROOT = Path(__file__).parents[1]
@@ -24,6 +29,29 @@ def test_least_squares_figures_use_the_article_numbers() -> None:
     assert "この直線では合計 0.70" in figures["least-squares-residuals.svg"]
     assert "二乗和 1.66" in figures["least-squares-contours.svg"]
     assert figures["least-squares-minimum.svg"].count("0.9 で最小 0.70") == 2
+
+
+def test_inverse_problem_figure_uses_the_article_numbers() -> None:
+    alpha, error, curve = inverse_problem_curve()
+    assert f"{alpha:.2e}" == "7.25e-04"
+    assert round(error, 4) == 0.0199
+    by_exponent = dict(curve)
+    assert round(by_exponent[-10.0], 1) == 43.9
+    assert round(by_exponent[-3.0], 4) == 0.0182
+    assert round(by_exponent[0.0], 2) == 0.61
+    assert "α=7.25e-04" in generate_lesson_figures()["inverse-problem-alpha.svg"]
+
+
+def test_l1_path_figure_uses_the_article_numbers() -> None:
+    assert round(lasso_lambda_max(), 2) == 18.96
+    assert [round(value, 1) for value in lasso_zero_points()] == [19.0, 12.6, 7.2, 4.8]
+    assert [round(value, 2) for value in lasso_solution(10.0)] == [0.74, -0.21, 0.0, 0.0]
+    assert [round(value, 2) for value in lasso_solution(0.0)] == [1.77, -1.18, -0.9, 0.21]
+    assert [round(value, 2) for value in ridge_solution(10.0)] == [0.88, -0.61, -0.29, 0.25]
+    assert all(value != 0.0 for value in ridge_solution(20.0))
+    figure = generate_lesson_figures()["l1-sparse-regularization-path.svg"]
+    assert "階数は4.8、徒歩は7.2、築年数は12.6、面積は19.0で0になります" in figure
+    assert "stroke-dasharray" not in figure
 
 
 def test_lesson_figures_are_current_and_drawn_at_their_display_width() -> None:

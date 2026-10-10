@@ -169,8 +169,8 @@
           "title_ja": "外れ値を含むrobust regression"
         },
         {
-          "content_id": null,
-          "has_article": false,
+          "content_id": "concept.l1-sparse-regularization",
+          "has_article": true,
           "question_ja": "L1 罰則を足すと、なぜ係数がちょうど0になるのか。",
           "route": "/formulations/PA035",
           "step": 6,
@@ -179,8 +179,8 @@
           "title_ja": "L1・sparse regularization"
         },
         {
-          "content_id": null,
-          "has_article": false,
+          "content_id": "concept.inverse-problem",
+          "has_article": true,
           "question_ja": "データだけで答えが決まらないとき、正則化は何を仮定しているのか。",
           "route": "/formulations/PA055",
           "step": 7,
