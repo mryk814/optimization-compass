@@ -3,7 +3,7 @@
 - Published concept guides: `38`
 - Meeting the concept floor: `38`
 - Below the concept floor: `0`
-- Prose review warnings: `458`
+- Prose review warnings: `467`
 
 ## Concept publication floor
 
@@ -54,8 +54,8 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 20
-- `sentence.commas`: 191
-- `sentence.long`: 27
+- `sentence.commas`: 198
+- `sentence.long`: 29
 
 | Content | Warnings |
 |---|---:|
@@ -177,7 +177,7 @@
 | `pdlp` | 0 |
 | `powell` | 1 |
 | `primal-dual-conic` | 0 |
-| `primal-simplex` | 0 |
+| `primal-simplex` | 9 |
 | `projected-gradient` | 1 |
 | `proximal-gradient` | 0 |
 | `random-search` | 0 |

@@ -10063,7 +10063,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10083,6 +10083,7 @@
             "S014",
             "S016",
             "S055",
+            "S056",
             "S062",
             "primal-simplex"
           ]
@@ -10098,7 +10099,7 @@
           ]
         },
         "source": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10109,6 +10110,7 @@
             "S014",
             "S016",
             "S055",
+            "S056",
             "S062"
           ]
         },
