@@ -441,8 +441,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
-    assert len(source_payload["sources"]) == 110
-    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4209
+    assert len(source_payload["sources"]) == 143
+    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4269
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     search_trace = next(
         entity

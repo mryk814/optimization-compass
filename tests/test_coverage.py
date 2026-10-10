@@ -21,10 +21,10 @@ def test_report_separates_inventory_from_expected_coverage() -> None:
     report = load_report()
     assert report.summary.subject_counts == {
         "feature_family": 10,
-        "method": 105,
+        "method": 129,
         "problem": 57,
     }
-    assert len(report.subjects) == 172
+    assert len(report.subjects) == 196
     assert len(report.expectations) == 11
     assert set(report.summary.status_counts) == {
         "available",
