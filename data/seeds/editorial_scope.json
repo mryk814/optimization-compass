@@ -327,12 +327,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NATURAL_GRADIENT"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML, MF_MANIFOLD です。"
+        "note_ja": "自然勾配 の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -403,12 +408,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SARAH"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SARAH の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -425,12 +435,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MUON"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "Muon の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -447,12 +462,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LION"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "Lion の行そのものです。"
       },
       "source_refs": [
         "E06"
