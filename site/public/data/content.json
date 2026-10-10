@@ -11003,7 +11003,8 @@
       "kind": "method",
       "last_reviewed": "2026-10-10",
       "prerequisites": [
-        "concept.linear-program"
+        "concept.linear-program",
+        "concept.convexity"
       ],
       "related_ids": [
         "dual-simplex",

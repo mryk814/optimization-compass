@@ -6,7 +6,7 @@ title_ja: 主単体法
 title_en: Primal Simplex
 summary: 線形計画（LP）を、実行可能な頂点から隣の頂点へ移りながら解く方法です。いまは0の変数のうち、増やすと目的が良くなるものを被約費用で選び、ほかの変数のどれかが先に0になるところ（比の最小値）まで進めます。
 source_ids: [S004, S016, S055, S056]
-prerequisites: [concept.linear-program]
+prerequisites: [concept.linear-program, concept.convexity]
 related_ids: [dual-simplex, barrier-lp-qp, lp-qp-conic, family.discrete-structure, concept.linear-program]
 aliases: [/learn/primal-simplex]
 status: published

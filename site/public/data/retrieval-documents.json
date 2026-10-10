@@ -30793,6 +30793,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30821,6 +30822,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30849,6 +30851,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30877,6 +30880,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30905,6 +30909,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30933,6 +30938,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30961,6 +30967,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -30989,6 +30996,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -31017,6 +31025,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
@@ -31045,6 +31054,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:barrier-lp-qp",
+        "content:concept.convexity",
         "content:concept.linear-program",
         "content:dual-simplex",
         "content:family.discrete-structure",
