@@ -144,6 +144,25 @@
       },
       "notes": "Sonnet 5.5のレビューをClaudeが本文と照合して確認。数値（頂点の売上、双対値5/7・6/7、コード出力）は再計算で一致。画面はClaudeが1280/375/320pxで確認"
     },
+    "concept.mixed-integer-quadratic-program": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "30cca463efac",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "10個の可行な部分集合と最適ADE 120.75をtrust-constrで独立に再計算して一致。1280/375/320pxで確認。"
+    },
     "concept.model-predictive-control": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -179,6 +198,25 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       }
+    },
+    "concept.vehicle-routing": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "688ceee3293c",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "22通りの分け方・最適35.527・1台31.805を全探索で独立に再計算して一致。1280/375/320pxで確認。輪の図でdepot往復(4)(6)は短く記号に隠れるが本文で明記。"
     },
     "gauss-newton": {
       "reviewed_on": "2026-10-04",
