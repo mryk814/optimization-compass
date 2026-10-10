@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 4,
+            "complete": 5,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 46,
+              "in_progress": 45,
               "no_article": 30,
               "stale": 0
             }
@@ -15143,12 +15143,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.model-predictive-control"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -15175,12 +15175,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA043",
-            "EC025"
+            "EC025",
+            "concept.model-predictive-control"
           ]
         },
         "recommendation": {

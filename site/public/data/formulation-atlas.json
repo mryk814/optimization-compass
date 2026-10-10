@@ -4467,7 +4467,7 @@
           "title_ja": "100Hzで反復MPCの二次計画問題を解く"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.model-predictive-control",
       "cues_ja": [
         "制御周期ごとに、制約つきの最適な操作を実時間で求めたい"
       ],
@@ -4505,7 +4505,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4550,6 +4550,9 @@
       "source_ids": [
         "S012",
         "S043",
+        "S055",
+        "S056",
+        "S062",
         "S076"
       ],
       "standard_form": "\\min_{u_0,\\dots,u_{N-1}}\\; \\sum_{k=0}^{N-1}\\big(x_k^\\top Qx_k+u_k^\\top Ru_k\\big)+x_N^\\top Px_N \\;\\text{ s.t. }\\; x_{k+1}=Ax_k+Bu_k,\\; x_0=\\hat x(t)",
@@ -6271,6 +6274,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 19
+    "with_article": 20
   }
 }

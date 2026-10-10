@@ -8551,6 +8551,97 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.model-predictive-control",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "モデル予測制御（MPC）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA043",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "モデル予測制御（MPC）は、現在の状態から有限の先までの操作量を最適化し、最初の一手だけを実行して、次の周期でまた解き直す定式化です。線形のモデル、二次の費用、線形の制約なら、毎周期の問題は凸QPです。ただし、その問題が解けたことは、次の周期でも解けることや、連続時間で制約を守ることを保証しません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.multiobjective-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -31994,7 +32085,9 @@
       "summary": "最適制御。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.model-predictive-control"
+      ],
       "canonical_url": "/formulations/PA043",
       "entity_id": "PA043",
       "entity_type": "problem",
@@ -32005,6 +32098,11 @@
           "relation_type": "case",
           "target_id": "EC025",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.model-predictive-control",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",
