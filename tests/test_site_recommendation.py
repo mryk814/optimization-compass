@@ -20,6 +20,8 @@ def test_site_data_is_complete_and_deterministic(repository: object) -> None:
     assert first == second
     assert first.contract_version == "2.0.0"
     assert first.dataset_version == repository.dataset_version()
+    # Deliberate pin: the questionnaire and decision rules change only with an explicit
+    # recommendation change and regression case (AGENTS.md: critical change).
     assert len(first.questions) == 12
     assert len(first.rules) == 78
     assert first.questions[0].choices[2].value == "binary"
