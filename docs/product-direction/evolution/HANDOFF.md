@@ -47,6 +47,7 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 |---|---|---|---|
 | PR [#308](https://github.com/mryk814/optimization-compass/pull/308) | `claude/eager-ramanujan-cov8ei` | 収録範囲 v1 の承認反映、ロバスト回帰の操作図 `robust-loss-pull`、この引き継ぎ文書 | CI が緑ならマージします。main が進んでいたら、main を取り込み、`export-site-data` と報告2本を作り直してから push します |
 | PR [#309](https://github.com/mryk814/optimization-compass/pull/309)（draft） | `claude/eager-ramanujan-cov8ei-rel-0.18.22` | 手法24個（migration 028〜033）、0.18.22 の公開生成物 | 下の「0.18.22 を仕上げる」 |
+| PR [#311](https://github.com/mryk814/optimization-compass/pull/311)（draft） | `claude/eager-ramanujan-cov8ei-test-counts` | テストの件数固定をやめ、生成元（DB・seed）と突き合わせる形にする | CI が緑ならマージします。#309 より先が望ましく、#309 は取り込むときに件数の行をこちらに合わせます |
 | ブランチ（PR なし） | `claude/eager-ramanujan-cov8ei-pa039` | 記事 PA039 ハイパーパラメータ最適化（数値の照合、3幅の画面確認、台帳の記録まで済み） | 下の「PA039 を出す」 |
 | ブランチ（PR なし） | `claude/eager-ramanujan-cov8ei-methods-0.18.23` | 手法11個（migration 034、035） | 下の「0.18.23 を作る」 |
 
@@ -107,7 +108,7 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
    - `recommendation_parity.py --update` を実行します。差分が版の番号だけであることを確かめます。`problem_method_fit` を足していないので、推薦は変わらないはずです。
    - `generate_article_figures.py`、`export-site-data`、報告2本を作り直します。
    - `pytest`（`test_historical_releases.py` は shallow clone では落ちるので除きます）を実行します。
-   - 件数を固定したテストを直します。0.18.22 では #309 の 4dd2fb9 で直しました。0.18.23 で増えるのは、手法 +11、出典 +16（S145–S152、S160–S167）、evidence +19 です。
+   - #311 がマージ済みなら、この項目は不要です（件数は生成元から数えます）。まだなら、件数を固定したテストを直します。0.18.22 では #309 の 4dd2fb9 で直しました。0.18.23 で増えるのは、手法 +11、出典 +16（S145–S152、S160–S167）、evidence +19 です。
      - `tests/test_coverage.py`: `"method"` を 129→140、`len(report.subjects)` を 196→207
      - `tests/test_evidence.py`: 出典数を 143→159、evidence_targets の合計を 4253→4272
      - `tests/test_site_export.py`: 出典数を 143→159、合計を 4269→4288
