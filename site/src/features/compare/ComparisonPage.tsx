@@ -43,6 +43,8 @@ import {
   JourneyLink,
   patchJourneyState,
 } from "../../state/journey-navigation";
+import { CaseSignatureStrip } from "../../visual-system";
+import { algorithmLensRoute } from "../theater/theater-routes";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
@@ -159,6 +161,11 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
           </select>
         </label>
       </section>
+      <CaseSignatureStrip caseId={comparison.case_id}>
+        {algorithmLensRoute(comparison.case_id) && (
+          <JourneyLink className="vs-case-strip-action" to={algorithmLensRoute(comparison.case_id)!}>同じ問題を3つの計器で見る →</JourneyLink>
+        )}
+      </CaseSignatureStrip>
       <ComparisonScopeSummary comparison={comparison} />
       {loaded.renderer === "trajectory" ? (
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />

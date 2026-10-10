@@ -13,7 +13,8 @@ const figures = [
     route: "/learn/method.gradient-descent",
     id: "gradient-descent-valley",
   },
-  { label: "primal-simplex", route: "/learn/primal-simplex", id: "lp-vertex-walk" },
+  { label: "primal-simplex", route: "/learn/primal-simplex", id: "simplex-pivot" },
+  { label: "linear-program", route: "/learn/concept.linear-program", id: "lp-vertex-walk" },
   { label: "convexity", route: "/learn/concept.convexity", id: "convexity-chord" },
   { label: "nonlinear-least-squares", route: "/learn/concept.nonlinear-least-squares", id: "nonlinear-least-squares-landscape" },
   { label: "newton-method", route: "/learn/newton-method", id: "newton-parabola-jump" },
@@ -78,10 +79,23 @@ test("凸性の図で二つの谷を選ぶと定義の違反が見つかり、�
 });
 
 test("LPの図で係数を動かすと最適な頂点が切り替わる", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/primal-simplex");
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/concept.linear-program");
   const region = page.locator('[data-explorable-id="lp-vertex-walk"]');
   await expect(region.getByText("見る問い")).toBeVisible();
   await expect(region.getByText(/最適解は頂点 \(1\.0, 3\.0\)/u).first()).toBeVisible();
   await region.getByRole("slider", { name: /係数 c₁/u }).fill("-1");
   await expect(region.getByText(/最適解は頂点 \(0\.0, 4\.0\)/u).first()).toBeVisible();
+});
+
+test("単体法の図で増やす変数を選び、比の最小値まで進めると最適な頂点に着く", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/primal-simplex");
+  const region = page.locator('[data-explorable-id="simplex-pivot"]');
+  await expect(region.getByText("見る問い")).toBeVisible();
+  await region.getByRole("button", { name: /x₂（クロワッサン）を増やす/u }).click();
+  await region.getByRole("slider", { name: /増やす量 θ/u }).fill("5");
+  await expect(region.getByText(/バターの余りが負になりました/u).first()).toBeVisible();
+  await region.getByRole("button", { name: "比の最小値 θ=13/3 まで進めて s₂ と入れ替える" }).click();
+  await region.getByRole("button", { name: /x₁（食パン）を増やす/u }).click();
+  await region.getByRole("button", { name: "比の最小値 θ=4 まで進めて s₁ と入れ替える" }).click();
+  await expect(region.getByText(/頂点 \(4, 3\) が最適で、売上は 24 です/u).first()).toBeVisible();
 });

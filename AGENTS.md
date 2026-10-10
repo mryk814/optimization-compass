@@ -1,9 +1,7 @@
 # Optimization Compass agent instructions
 
 This file is the first entry point for humans and automated agents changing this repository.
-For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
-
-Task-shaped authoring skills for growing the dataset live in [`.agents/skills/`](.agents/skills/): `grow-data` (triage/routing), `add-formulation`, `add-content-article`, `add-explorable`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
+For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Prose style for articles lives in [`docs/article-style.md`](docs/article-style.md).
 
 ## What we are building for the learner
 
@@ -13,7 +11,7 @@ Read this before any rule below. Every change should make one of these better fo
 2. **進める（paths）** — `/paths/<path_id>` orders formulations and articles by the question each answers. Every step page shows "this step's question" on top and "the next question" at the bottom.
 3. **当てはめる（solve）** — Diagnose and Gallery apply the same knowledge to the reader's own problem.
 
-The structure is **skeleton → lessons → projections**: the skeleton (released database + `data/seeds/formulation_atlas.json`) makes every entity visible from day one; lessons (`content/**/*.md`, one fixed section skeleton per kind) are added one at a time; the app screens are projections generated from both. Pick what to write next with `uv run python scripts/formulation_backlog.py` instead of guessing. Direction and the rules review: [`docs/product-direction/learning-atlas.md`](docs/product-direction/learning-atlas.md); decision: [ADR 0017](docs/adr/0017-formulation-atlas-and-learning-paths.md); recipes: [`docs/formulation-atlas.md`](docs/formulation-atlas.md).
+The structure is **skeleton → lessons → projections**: the skeleton (released database + `data/seeds/formulation_atlas.json`) makes every entity visible from day one; lessons (`content/**/*.md`, one fixed section skeleton per kind) are added one at a time; the app screens are projections generated from both. Pick what to write next with `uv run python scripts/formulation_backlog.py` instead of guessing. Whether each published article meets the teaching criteria, and which reviews went stale after an edit or a new criterion, is tracked in the article quality ledger: run `uv run python scripts/article_quality.py show <article>` before and after changing an article, and `record` your review ([`docs/article-quality.md`](docs/article-quality.md)). Direction and the rules review: [`docs/product-direction/learning-atlas.md`](docs/product-direction/learning-atlas.md); decision: [ADR 0017](docs/adr/0017-formulation-atlas-and-learning-paths.md); recipes: [`docs/formulation-atlas.md`](docs/formulation-atlas.md).
 
 A change that only adds pages, rows, or characters without improving one of the three reader actions above is not progress.
 
@@ -58,9 +56,11 @@ Find and change the canonical input instead. Generated artifacts may appear in a
 | Add a formulation article (8-section skeleton) for an existing problem archetype | `content/concepts/*.md` with `canonical_entity_type: problem`; recipe A in `docs/formulation-atlas.md` | low |
 | Add or correct a standard form, cue, or formulation relation | `data/seeds/formulation_atlas.json`; recipe B | low–medium |
 | Add or reorder a learning path | `data/seeds/learning_paths.json`; recipe C | low |
+| Add, merge, or re-tier an editorial scope member (the coverage denominator) | `data/seeds/editorial_scope.json`; [`docs/editorial-scope.md`](docs/editorial-scope.md) | low–medium |
 | Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
 | Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
 | Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
+| Draw a problem, method, decision, or search on any surface | reuse `site/src/visual-system/` primitives; rules in [`docs/visual-system.md`](docs/visual-system.md) | low–medium |
 | Add an interactive explorable figure to an article | `docs/explorables.md` recipe: registry JSON, `math/` core with tests, figure component, `::: explorable` block | medium |
 | Add a new method, implementation, source, evidence relation, or controlled vocabulary | dataset migration/build inputs plus content | high |
 | Add a scenario, generator, artifact contract, or renderer family | Python contracts/generators plus site implementation | high |
@@ -92,14 +92,14 @@ For high or critical changes, inspect similar merged work and document the autho
 1. Classify the change using the routing table above.
 2. Read the matching recipe only when adding a new entity or changing a contract.
 3. Edit the canonical input, preserve IDs and sources, and run the smallest focused validation.
-4. For prose or small seed corrections, inspect the rendered Pages result in the PR or after deploy.
+4. For prose or small seed corrections, inspect the rendered local preview.
 5. Use the complete release validation only for schema, recommendation, generator, executable-problem, or release changes.
 
 ## Validation policy
 
 Use the smallest task exposed by `optimization-compass validate`. The local content tasks check parsing, relations, licensing, and the focused authoring contract. They do not run the full Python suite, site build, or browser suite.
 
-CI and main-branch Pages still run the broader artifact and release gates. Do not weaken generated-data identity, canonical data integrity, stable IDs, or deployment identity merely to shorten local feedback.
+Pull requests targeting `main`, including updates to open PRs, run the selected authoritative validation task, build the site, and verify generated-data drift and the local Pages artifact. Run the applicable gates locally while editing. The workflow runs only on PR events, not standalone push events, and there is no automatic Pages upload or deployment. Preserve generated-data identity, canonical data integrity, stable IDs, and deployment identity.
 
 For an existing canonical method article, `ready content <content-id>` exports public data and runs the focused content contract. It no longer regenerates review reports as a side effect; report scripts remain available when a report is explicitly needed.
 
@@ -137,7 +137,7 @@ Every commit must include a DCO sign-off. See [`CONTRIBUTING.md`](CONTRIBUTING.m
 - Site exports for a not-yet-published staged release embed a predecessor-only catalog snapshot. The
   published site may include the new current entry only after the external bundle and catalog update.
 - After changing a test or generated-data policy, run both `ruff check .` and `ruff format --check .`
-  before relying on the longer Pages smoke job; a focused test pass alone is not sufficient.
+  before relying on longer validation; a focused test pass alone is not sufficient.
 - A change to `resources/problem-suite.json` is a release-boundary change: update the release
   authority, build and publish the staged SQLite/site tree, then regenerate `CITATION.cff` and the
   dataset card. The normal site export intentionally rejects a seed/runtime SQLite mismatch.

@@ -1,0 +1,7146 @@
+{
+  "contract_version": "1.0.0",
+  "scope_version": "editorial-scope-v1",
+  "status": "proposed",
+  "approved_by": null,
+  "approved_on": null,
+  "based_on": "compass-reference-2026-10-draft1",
+  "sources": [
+    {
+      "source_ref": "E01",
+      "title": "NEOS Optimization Problem Types",
+      "url": "https://neos-guide.org/guide/types/",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E02",
+      "title": "NEOS Algorithms",
+      "url": "https://neos-guide.org/guide/algorithms/",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E03",
+      "title": "SciPy optimize",
+      "url": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E04",
+      "title": "Proximal Algorithms — Parikh & Boyd",
+      "url": "https://web.stanford.edu/~boyd/papers/prox_algs.html",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E05",
+      "title": "Jaggi 2013: Revisiting Frank-Wolfe",
+      "url": "https://proceedings.mlr.press/v28/jaggi13.html",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E06",
+      "title": "Optax optimizers",
+      "url": "https://optax.readthedocs.io/en/latest/api/optimizers.html",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E07",
+      "title": "GCG",
+      "url": "https://gcg.or.rwth-aachen.de/",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E09",
+      "title": "SDDP theory introduction",
+      "url": "https://sddp.dev/stable/explanation/theory_intro/",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E11",
+      "title": "Python Optimal Transport",
+      "url": "https://pythonot.github.io/",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E12",
+      "title": "BoTorch tutorials",
+      "url": "https://botorch.org/docs/tutorials",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E14",
+      "title": "OR-Tools min-cost flow",
+      "url": "https://developers.google.com/optimization/flow/mincostflow",
+      "checked_on": "2026-10-10"
+    },
+    {
+      "source_ref": "E38",
+      "title": "SafeOpt — Sui et al. 2015",
+      "url": "https://proceedings.mlr.press/v37/sui15.html",
+      "checked_on": "2026-10-10"
+    }
+  ],
+  "members": [
+    {
+      "scope_id": "TOPIC_GRADIENT_DESCENT",
+      "unit": "knowledge_topic",
+      "title_ja": "勾配降下法",
+      "title_en": "Gradient descent",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_GRADIENT_DESCENT"
+          },
+          {
+            "type": "content",
+            "id": "method.gradient-descent"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "最急降下法の行そのものです。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MOMENTUM",
+      "unit": "knowledge_topic",
+      "title_ja": "モメンタム法",
+      "title_en": "Momentum",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MOMENTUM_SGD"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "行の別名 momentum に一致します。Momentum SGD 行は確率的勾配と組み合わせた形です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NESTEROV",
+      "unit": "knowledge_topic",
+      "title_ja": "Nesterov加速",
+      "title_en": "Nesterov acceleration",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MOMENTUM_SGD"
+          },
+          {
+            "type": "method",
+            "id": "M_FISTA"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Nesterov の先読みは M_MOMENTUM_SGD の別名（Nesterov momentum）として、加速の外挿は FISTA の中で使われています。一つの名前が二つの行にまたがる多対多の対応です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SGD",
+      "unit": "knowledge_topic",
+      "title_ja": "確率的勾配降下法",
+      "title_en": "Stochastic gradient descent",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SGD"
+          },
+          {
+            "type": "content",
+            "id": "sgd"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "確率的勾配降下法の行そのものです。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADAGRAD",
+      "unit": "knowledge_topic",
+      "title_ja": "AdaGrad",
+      "title_en": "AdaGrad",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_RMSPROP",
+      "unit": "knowledge_topic",
+      "title_ja": "RMSProp",
+      "title_en": "RMSProp",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADAM",
+      "unit": "knowledge_topic",
+      "title_ja": "Adam",
+      "title_en": "Adam",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADAM"
+          },
+          {
+            "type": "content",
+            "id": "adam"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Adam の行そのものです。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADAMW",
+      "unit": "knowledge_topic",
+      "title_ja": "AdamW",
+      "title_en": "AdamW",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADAMW"
+          },
+          {
+            "type": "content",
+            "id": "adamw"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "AdamW の行そのものです。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NATURAL_GRADIENT",
+      "unit": "knowledge_topic",
+      "title_ja": "自然勾配",
+      "title_en": "Natural gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML, MF_MANIFOLD です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SVRG",
+      "unit": "knowledge_topic",
+      "title_ja": "SVRG",
+      "title_en": "Stochastic variance reduced gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SAGA",
+      "unit": "knowledge_topic",
+      "title_ja": "SAGA",
+      "title_en": "SAGA",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SARAH",
+      "unit": "knowledge_topic",
+      "title_ja": "SARAH",
+      "title_en": "SARAH",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MUON",
+      "unit": "knowledge_topic",
+      "title_ja": "Muon",
+      "title_en": "Muon",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LION",
+      "unit": "knowledge_topic",
+      "title_ja": "Lion",
+      "title_en": "Lion",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+      },
+      "source_refs": [
+        "E06"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NEWTON",
+      "unit": "knowledge_topic",
+      "title_ja": "Newton法",
+      "title_en": "Newton method",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NEWTON"
+          },
+          {
+            "type": "content",
+            "id": "newton-method"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Newton 法の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DAMPED_NEWTON",
+      "unit": "knowledge_topic",
+      "title_ja": "減衰Newton法",
+      "title_en": "Damped Newton",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NEWTON"
+          },
+          {
+            "type": "glossary",
+            "id": "G051"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "直線探索で歩幅を減衰させる Newton 法で、Newton 行の変種です。専用の行や記事はありません。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NEWTON_CG",
+      "unit": "knowledge_topic",
+      "title_ja": "Newton-CG",
+      "title_en": "Newton-CG",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NEWTON_CG"
+          },
+          {
+            "type": "content",
+            "id": "newton-cg"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Newton-CG の行そのものです（alias の truncated Newton に一致）。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BFGS",
+      "unit": "knowledge_topic",
+      "title_ja": "BFGS",
+      "title_en": "BFGS",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BFGS"
+          },
+          {
+            "type": "content",
+            "id": "bfgs"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "BFGS の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DFP",
+      "unit": "knowledge_topic",
+      "title_ja": "DFP",
+      "title_en": "DFP",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BFGS"
+          },
+          {
+            "type": "glossary",
+            "id": "G053"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "BFGS と同じ Broyden 族の rank-2 更新で、BFGS 行の変種です。専用の行や記事はありません。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SR1",
+      "unit": "knowledge_topic",
+      "title_ja": "SR1",
+      "title_en": "Symmetric rank-one",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_SMOOTH_LOCAL, G053 です。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LBFGS",
+      "unit": "knowledge_topic",
+      "title_ja": "L-BFGS",
+      "title_en": "L-BFGS",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LBFGS"
+          },
+          {
+            "type": "content",
+            "id": "lbfgs"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "L-BFGS の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LBFGSB",
+      "unit": "knowledge_topic",
+      "title_ja": "L-BFGS-B",
+      "title_en": "L-BFGS-B",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LBFGSB"
+          },
+          {
+            "type": "content",
+            "id": "lbfgsb"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "L-BFGS-B の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NONLINEAR_CG",
+      "unit": "knowledge_topic",
+      "title_ja": "非線形共役勾配",
+      "title_en": "Nonlinear conjugate gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NLCG"
+          },
+          {
+            "type": "content",
+            "id": "nonlinear-cg"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "非線形共役勾配法の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_GAUSS_NEWTON",
+      "unit": "knowledge_topic",
+      "title_ja": "Gauss–Newton法",
+      "title_en": "Gauss-Newton",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_GAUSS_NEWTON"
+          },
+          {
+            "type": "content",
+            "id": "gauss-newton"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Gauss-Newton 法の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LEVENBERG_MARQUARDT",
+      "unit": "knowledge_topic",
+      "title_ja": "Levenberg–Marquardt法",
+      "title_en": "Levenberg-Marquardt",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LEVENBERG_MARQUARDT"
+          },
+          {
+            "type": "term",
+            "id": "TERM_LM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Levenberg-Marquardt 法の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_TRF",
+      "unit": "knowledge_topic",
+      "title_ja": "反射型信頼領域法",
+      "title_en": "Trust-region reflective",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TRUST_REGION_REFLECTIVE"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "TRF は行の別名です。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DOGLEG",
+      "unit": "knowledge_topic",
+      "title_ja": "Dogleg法",
+      "title_en": "Dogleg",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_TRUST_REGION です。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_TRUST_EXACT",
+      "unit": "knowledge_topic",
+      "title_ja": "厳密部分問題型信頼領域",
+      "title_en": "trust-exact",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TRUST_EXACT"
+          },
+          {
+            "type": "content",
+            "id": "trust-exact"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Nearly exact trust-region の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_TRUST_KRYLOV",
+      "unit": "knowledge_topic",
+      "title_ja": "Krylov型信頼領域",
+      "title_en": "trust-krylov",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TRUST_KRYLOV"
+          },
+          {
+            "type": "content",
+            "id": "trust-krylov"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "trust-krylov の行そのものです。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CUBIC_REGULARIZATION",
+      "unit": "knowledge_topic",
+      "title_ja": "三次正則化法",
+      "title_en": "Cubic regularization",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_SMOOTH_LOCAL, MF_TRUST_REGION です。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SUBGRADIENT",
+      "unit": "knowledge_topic",
+      "title_ja": "劣勾配法",
+      "title_en": "Subgradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SUBGRADIENT"
+          },
+          {
+            "type": "content",
+            "id": "subgradient"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "劣勾配法の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BUNDLE",
+      "unit": "knowledge_topic",
+      "title_ja": "バンドル法",
+      "title_en": "Bundle method",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BUNDLE"
+          },
+          {
+            "type": "content",
+            "id": "bundle-method"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Bundle 法の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROXIMAL_GRADIENT",
+      "unit": "knowledge_topic",
+      "title_ja": "近接勾配法",
+      "title_en": "Proximal gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PROX_GRADIENT"
+          },
+          {
+            "type": "content",
+            "id": "proximal-gradient"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "近接勾配法の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FISTA",
+      "unit": "knowledge_topic",
+      "title_ja": "FISTA",
+      "title_en": "FISTA",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_FISTA"
+          },
+          {
+            "type": "content",
+            "id": "fista"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "FISTA の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADMM",
+      "unit": "knowledge_topic",
+      "title_ja": "ADMM",
+      "title_en": "Alternating direction method of multipliers",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADMM"
+          },
+          {
+            "type": "content",
+            "id": "admm"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ADMM の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DOUGLAS_RACHFORD",
+      "unit": "knowledge_topic",
+      "title_ja": "Douglas–Rachford分割",
+      "title_en": "Douglas-Rachford splitting",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PDHG",
+      "unit": "knowledge_topic",
+      "title_ja": "主双対ハイブリッド勾配",
+      "title_en": "Primal-dual hybrid gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PDLP"
+          },
+          {
+            "type": "content",
+            "id": "pdlp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PDHG は PDLP の基礎となる反復で、PDLP 行の内部部品として説明されています。一般の PDHG 行は別にありません。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MIRROR_DESCENT",
+      "unit": "knowledge_topic",
+      "title_ja": "ミラー降下法",
+      "title_en": "Mirror descent",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MIRROR_DESCENT"
+          },
+          {
+            "type": "content",
+            "id": "mirror-descent"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Mirror descent の行そのものです。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FRANK_WOLFE",
+      "unit": "knowledge_topic",
+      "title_ja": "Frank–Wolfe法",
+      "title_en": "Frank-Wolfe",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_CONSTRAINED_NLP, M_PROJECTED_GRADIENT です。"
+      },
+      "source_refs": [
+        "E05"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BLOCK_COORDINATE",
+      "unit": "knowledge_topic",
+      "title_ja": "ブロック座標降下",
+      "title_en": "Block coordinate descent",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_COORDINATE_DESCENT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "座標降下法の行の別名で、ブロック版の名前に一致します。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROXIMAL_NEWTON",
+      "unit": "knowledge_topic",
+      "title_ja": "近接Newton法",
+      "title_en": "Proximal Newton",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PROX_GRADIENT"
+          },
+          {
+            "type": "method",
+            "id": "MF_COMPOSITE_CONVEX"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "近接勾配法の二階版で、近接勾配行の変種として読めます。複合 family にも入るため、固有の行は作らず変種として扱えます。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CCCP",
+      "unit": "knowledge_topic",
+      "title_ja": "CCCP",
+      "title_en": "Concave-convex procedure",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DCA",
+      "unit": "knowledge_topic",
+      "title_ja": "DCアルゴリズム",
+      "title_en": "Difference of convex algorithm",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROXIMAL_POINT",
+      "unit": "knowledge_topic",
+      "title_ja": "近接点法",
+      "title_en": "Proximal point",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G054"
+          },
+          {
+            "type": "method",
+            "id": "M_PROX_GRADIENT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "近接演算子を1ステップとして繰り返す手法で、近接勾配法やADMMで使われる部品と同じ演算に基づきます。独立した行はありません。"
+      },
+      "source_refs": [
+        "E04"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROJECTED_GRADIENT",
+      "unit": "knowledge_topic",
+      "title_ja": "射影勾配法",
+      "title_en": "Projected gradient",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PROJECTED_GRADIENT"
+          },
+          {
+            "type": "content",
+            "id": "projected-gradient"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "射影勾配法の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SQP",
+      "unit": "knowledge_topic",
+      "title_ja": "逐次二次計画",
+      "title_en": "Sequential quadratic programming",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SQP"
+          },
+          {
+            "type": "content",
+            "id": "sqp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SQP の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SLSQP",
+      "unit": "knowledge_topic",
+      "title_ja": "SLSQP",
+      "title_en": "SLSQP",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SLSQP"
+          },
+          {
+            "type": "content",
+            "id": "slsqp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SLSQP の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_AUGMENTED_LAGRANGIAN",
+      "unit": "knowledge_topic",
+      "title_ja": "拡張Lagrange法",
+      "title_en": "Augmented Lagrangian",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_AUGMENTED_LAGRANGIAN"
+          },
+          {
+            "type": "content",
+            "id": "augmented-lagrangian"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "拡張 Lagrange 法の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_EXTERIOR_PENALTY",
+      "unit": "knowledge_topic",
+      "title_ja": "外点ペナルティ",
+      "title_en": "Exterior penalty",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G057"
+          },
+          {
+            "type": "method",
+            "id": "M_AUGMENTED_LAGRANGIAN"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "制約違反に罰則を課す部品で、拡張 Lagrange 法の罰則項と同じ考え方です。独立した行はありません。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LOG_BARRIER",
+      "unit": "knowledge_topic",
+      "title_ja": "対数障壁",
+      "title_en": "Logarithmic barrier",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_INTERIOR_POINT_NLP"
+          },
+          {
+            "type": "glossary",
+            "id": "G058"
+          },
+          {
+            "type": "content",
+            "id": "interior-point-nlp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "対数バリアは内点法の中心的な部品で、内点法 NLP 行の中で説明されています。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NLP_INTERIOR_POINT",
+      "unit": "knowledge_topic",
+      "title_ja": "非線形内点法",
+      "title_en": "Nonlinear interior point",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_INTERIOR_POINT_NLP"
+          },
+          {
+            "type": "content",
+            "id": "interior-point-nlp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "非線形内点法の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FEASIBLE_SQP",
+      "unit": "knowledge_topic",
+      "title_ja": "実行可能性維持SQP",
+      "title_en": "Feasible SQP",
+      "entity_kind": "variant",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SQP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SQP の実行可能性を保つ変種で、SQP 行の変種として読めます。専用の行や記事はありません。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FILTER_GLOBALIZATION",
+      "unit": "knowledge_topic",
+      "title_ja": "フィルタ大域化",
+      "title_en": "Filter globalization",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SQP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "フィルター法は SQP の大域化の部品として既に言及されていますが、説明と実装は行に含まれていません。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PRIMAL_SIMPLEX",
+      "unit": "knowledge_topic",
+      "title_ja": "主単体法",
+      "title_en": "Primal simplex",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SIMPLEX"
+          },
+          {
+            "type": "content",
+            "id": "primal-simplex"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Primal simplex の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DUAL_SIMPLEX",
+      "unit": "knowledge_topic",
+      "title_ja": "双対単体法",
+      "title_en": "Dual simplex",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DUAL_SIMPLEX"
+          },
+          {
+            "type": "content",
+            "id": "dual-simplex"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Dual simplex の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CONIC_INTERIOR_POINT",
+      "unit": "knowledge_topic",
+      "title_ja": "錐内点法",
+      "title_en": "Conic interior point",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PRIMAL_DUAL_CONIC"
+          },
+          {
+            "type": "term",
+            "id": "TERM_CONIC"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "錐内点法は主双対錐内点法の行と同じ対象を指します。一般名での別名です。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ACTIVE_SET_QP",
+      "unit": "knowledge_topic",
+      "title_ja": "有効制約QP",
+      "title_en": "Active-set QP",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ACTIVE_SET_QP"
+          },
+          {
+            "type": "content",
+            "id": "active-set"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "有効制約集合法の QP 版の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADMM_QP",
+      "unit": "knowledge_topic",
+      "title_ja": "分割型QP",
+      "title_en": "ADMM QP",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADMM_QP"
+          },
+          {
+            "type": "content",
+            "id": "admm-qp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ADMM QP の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PDLP",
+      "unit": "knowledge_topic",
+      "title_ja": "PDLP",
+      "title_en": "Primal-dual linear programming",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PDLP"
+          },
+          {
+            "type": "content",
+            "id": "pdlp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PDLP の行そのものです。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_HOMOGENEOUS_EMBEDDING",
+      "unit": "knowledge_topic",
+      "title_ja": "同次埋込み",
+      "title_en": "Homogeneous embedding",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_LP_QP_CONIC です。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BRANCH_BOUND",
+      "unit": "knowledge_topic",
+      "title_ja": "分枝限定法",
+      "title_en": "Branch and bound",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_BOUND"
+          },
+          {
+            "type": "content",
+            "id": "branch-and-bound"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Branch and bound の行そのものです。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BRANCH_CUT",
+      "unit": "knowledge_topic",
+      "title_ja": "分枝カット法",
+      "title_en": "Branch and cut",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_CUT"
+          },
+          {
+            "type": "content",
+            "id": "branch-and-cut"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Branch and cut の行そのものです。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BRANCH_PRICE",
+      "unit": "knowledge_topic",
+      "title_ja": "分枝価格法",
+      "title_en": "Branch and price",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BENDERS",
+      "unit": "knowledge_topic",
+      "title_ja": "Benders分解",
+      "title_en": "Benders decomposition",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DANTZIG_WOLFE",
+      "unit": "knowledge_topic",
+      "title_ja": "Dantzig–Wolfe分解",
+      "title_en": "Dantzig-Wolfe decomposition",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_COLUMN_GENERATION",
+      "unit": "knowledge_topic",
+      "title_ja": "列生成",
+      "title_en": "Column generation",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LAGRANGIAN_RELAXATION",
+      "unit": "knowledge_topic",
+      "title_ja": "Lagrange緩和",
+      "title_en": "Lagrangian relaxation",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G059"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONSTRAINT_LAGRANGIAN_RELAXATION"
+          },
+          {
+            "type": "method",
+            "id": "M_BUNDLE"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "制約を双対化する部品で、双対分解の説明が bundle 法にあります。問題特徴の行と用語は既にあり、戦略としての独立行はありません。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CP_SEARCH",
+      "unit": "knowledge_topic",
+      "title_ja": "制約プログラミング探索",
+      "title_en": "Constraint programming search",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CP_SEARCH"
+          },
+          {
+            "type": "content",
+            "id": "cp-search"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "制約プログラミング探索の行そのものです。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CDCL",
+      "unit": "knowledge_topic",
+      "title_ja": "CDCL",
+      "title_en": "Conflict-driven clause learning",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CDCL_SAT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "CDCL は CDCL SAT 行の別名です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CP_SAT",
+      "unit": "knowledge_topic",
+      "title_ja": "CP-SAT型統合探索",
+      "title_en": "CP-SAT",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CP_SAT"
+          },
+          {
+            "type": "content",
+            "id": "cp-sat"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "CP-SAT の行そのものです。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BRANCH_PRICE_CUT",
+      "unit": "knowledge_topic",
+      "title_ja": "分枝価格カット",
+      "title_en": "Branch-price-and-cut",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DYNAMIC_PROGRAMMING",
+      "unit": "knowledge_topic",
+      "title_ja": "動的計画法",
+      "title_en": "Dynamic programming",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DYNAMIC_PROGRAMMING"
+          },
+          {
+            "type": "content",
+            "id": "dynamic-programming"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "動的計画法の行そのものです。"
+      },
+      "source_refs": [
+        "E07"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DIJKSTRA",
+      "unit": "knowledge_topic",
+      "title_ja": "Dijkstra法",
+      "title_en": "Dijkstra",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIJKSTRA_ASTAR"
+          },
+          {
+            "type": "content",
+            "id": "dijkstra-astar"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Dijkstra は Dijkstra / A* 行に一体で含まれています。独立の行は作られていません。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ASTAR",
+      "unit": "knowledge_topic",
+      "title_ja": "A*",
+      "title_en": "A star",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIJKSTRA_ASTAR"
+          },
+          {
+            "type": "content",
+            "id": "dijkstra-astar"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "A* は Dijkstra / A* 行に一体で含まれ、Dijkstra に見積り関数を加えた形です。独立の行はありません。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BELLMAN_FORD",
+      "unit": "knowledge_topic",
+      "title_ja": "Bellman–Ford法",
+      "title_en": "Bellman-Ford",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_HUNGARIAN",
+      "unit": "knowledge_topic",
+      "title_ja": "Hungarian法",
+      "title_en": "Hungarian algorithm",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_HUNGARIAN"
+          },
+          {
+            "type": "content",
+            "id": "hungarian-algorithm"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Hungarian 法の行そのものです。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_AUGMENTING_MAXFLOW",
+      "unit": "knowledge_topic",
+      "title_ja": "増加路最大流",
+      "title_en": "Augmenting-path maximum flow",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PUSH_RELABEL",
+      "unit": "knowledge_topic",
+      "title_ja": "Push–relabel最大流",
+      "title_en": "Push-relabel",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NETWORK_SIMPLEX",
+      "unit": "knowledge_topic",
+      "title_ja": "ネットワーク単体法",
+      "title_en": "Network simplex",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NETWORK_SIMPLEX"
+          },
+          {
+            "type": "content",
+            "id": "network-simplex"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Network simplex の行そのものです。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SUCCESSIVE_SHORTEST_PATH",
+      "unit": "knowledge_topic",
+      "title_ja": "逐次最短路最小費用流",
+      "title_en": "Successive shortest path",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP, M_NETWORK_SIMPLEX です。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_GREEDY_SET_COVER",
+      "unit": "knowledge_topic",
+      "title_ja": "集合被覆貪欲法",
+      "title_en": "Greedy set cover",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.knapsack-set-cover"
+          },
+          {
+            "type": "problem",
+            "id": "PA032"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "集合被覆の貪欲法は、knapsack・set cover 概念記事の中で例と限界つきで説明されており、専用の method 行はない。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SUBMODULAR_GREEDY",
+      "unit": "knowledge_topic",
+      "title_ja": "劣モジュラ貪欲法",
+      "title_en": "Submodular greedy",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "劣モジュラ関数の貪欲法は既存の行にも記事にもなく、最も近い PA032 は集合被覆・ナップサック側の話題に限られる。"
+      },
+      "source_refs": [
+        "E14"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NELDER_MEAD",
+      "unit": "knowledge_topic",
+      "title_ja": "Nelder–Mead法",
+      "title_en": "Nelder-Mead",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NELDER_MEAD"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Nelder-Mead 単体法は既存の method 行そのもので、別名 Downhill simplex も同行に紐づく。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_POWELL",
+      "unit": "knowledge_topic",
+      "title_ja": "Powell方向集合",
+      "title_en": "Powell direction set",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_POWELL"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Powell 方向集合法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PATTERN_SEARCH",
+      "unit": "knowledge_topic",
+      "title_ja": "パターン探索",
+      "title_en": "Pattern search",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PATTERN_SEARCH"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "パターン探索は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MADS",
+      "unit": "knowledge_topic",
+      "title_ja": "MADS",
+      "title_en": "Mesh adaptive direct search",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MADS"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "MADS は既存の method 行と同じ対象で、名称も一致する。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_COBYLA",
+      "unit": "knowledge_topic",
+      "title_ja": "COBYLA",
+      "title_en": "COBYLA",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_COBYLA"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "COBYLA は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_COBYQA",
+      "unit": "knowledge_topic",
+      "title_ja": "COBYQA",
+      "title_en": "COBYQA",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_COBYQA"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "COBYQA は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BOBYQA",
+      "unit": "knowledge_topic",
+      "title_ja": "BOBYQA",
+      "title_en": "BOBYQA",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DFO_LOCAL です。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DIRECT",
+      "unit": "knowledge_topic",
+      "title_ja": "DIRECT",
+      "title_en": "DIRECT",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIRECT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "DIRECT は既存の method 行 M_DIRECT と同じ対象である（ヒットの多くは一般語 direct による誤一致）。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CMAES",
+      "unit": "knowledge_topic",
+      "title_ja": "CMA-ES",
+      "title_en": "CMA-ES",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CMA_ES"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "CMA-ES は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DE",
+      "unit": "knowledge_topic",
+      "title_ja": "差分進化",
+      "title_en": "Differential evolution",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIFFERENTIAL_EVOLUTION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "差分進化は既存の method 行と同じ対象で、略称 DE も用語行にある。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PSO",
+      "unit": "knowledge_topic",
+      "title_ja": "粒子群最適化",
+      "title_en": "Particle swarm",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PARTICLE_SWARM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "粒子群最適化は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_GA",
+      "unit": "knowledge_topic",
+      "title_ja": "遺伝的アルゴリズム",
+      "title_en": "Genetic algorithm",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_GENETIC_ALGORITHM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "遺伝的アルゴリズムは既存の method 行と同じ対象である。多目的版の NSGA-II は別行である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SA",
+      "unit": "knowledge_topic",
+      "title_ja": "焼きなまし法",
+      "title_en": "Simulated annealing",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SIMULATED_ANNEALING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "焼きなまし法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DUAL_ANNEALING",
+      "unit": "knowledge_topic",
+      "title_ja": "Dual annealing",
+      "title_en": "Dual annealing",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SIMULATED_ANNEALING"
+          },
+          {
+            "type": "content",
+            "id": "dual-annealing"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Dual annealing は焼きなまし法の変種で、専用の method 行はなく、記事は M_SIMULATED_ANNEALING に紐づいている。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_BASIN_HOPPING",
+      "unit": "knowledge_topic",
+      "title_ja": "Basin hopping",
+      "title_en": "Basin hopping",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BASIN_HOPPING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Basin hopping は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MULTISTART",
+      "unit": "knowledge_topic",
+      "title_ja": "多点開始",
+      "title_en": "Multi-start",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MULTISTART"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多点開始は既存の method 行 M_MULTISTART と同じ対象で、族行 MF_GLOBAL_SEARCH より具体的である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_RANDOM_SEARCH",
+      "unit": "knowledge_topic",
+      "title_ja": "ランダム探索",
+      "title_en": "Random search",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RANDOM_SEARCH"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ランダム探索は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SOBOL_DESIGN",
+      "unit": "knowledge_topic",
+      "title_ja": "Sobol列による初期設計",
+      "title_en": "Sobol design",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Sobol 列による初期設計は専用の行や記事がなく、既存の記述は初期点の影響を述べるだけである。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_GRID_SEARCH",
+      "unit": "knowledge_topic",
+      "title_ja": "格子探索",
+      "title_en": "Grid search",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RANDOM_SEARCH"
+          },
+          {
+            "type": "content",
+            "id": "random-search"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "格子探索は random-search 記事の比較節で説明されており、専用の method 行はない。"
+      },
+      "source_refs": [
+        "E03"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_GP_BO",
+      "unit": "knowledge_topic",
+      "title_ja": "GPベイズ最適化",
+      "title_en": "Gaussian-process Bayesian optimization",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ガウス過程ベイズ最適化は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_TPE",
+      "unit": "knowledge_topic",
+      "title_ja": "TPE",
+      "title_en": "Tree-structured Parzen estimator",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TPE"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "TPE は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SMAC",
+      "unit": "knowledge_topic",
+      "title_ja": "SMAC型モデル探索",
+      "title_en": "SMAC",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SMAC_RF"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SMAC は既存の行 M_SMAC_RF（ランダムフォレスト代理モデル版）と同じ対象である。SMAC の他の代理モデルは含まないので、名称の範囲は確認が要る。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_TURBO",
+      "unit": "knowledge_topic",
+      "title_ja": "TuRBO",
+      "title_en": "Trust region Bayesian optimization",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TURBO_SAASBO"
+          },
+          {
+            "type": "content",
+            "id": "turbo-saasbo"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "TuRBO は既存の結合行 M_TURBO_SAASBO の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SAASBO",
+      "unit": "knowledge_topic",
+      "title_ja": "SAASBO",
+      "title_en": "SAASBO",
+      "entity_kind": "variant",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_TURBO_SAASBO"
+          },
+          {
+            "type": "content",
+            "id": "turbo-saasbo"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SAASBO は既存の結合行 M_TURBO_SAASBO の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SAFEOPT",
+      "unit": "knowledge_topic",
+      "title_ja": "SafeOpt",
+      "title_en": "SafeOpt",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SafeOpt は安全制約付きの BO 系手法で、既存の行・記事はない。近い行は M_BAYESIAN_OPT_GP だが制約の安全性は扱っていない。"
+      },
+      "source_refs": [
+        "E38"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CONSTRAINED_BO",
+      "unit": "knowledge_topic",
+      "title_ja": "制約付きBO",
+      "title_en": "Constrained Bayesian optimization",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "制約付き BO は既存の BO 行に含まれておらず、専用の行や記事もない。BO の制約処理は今後の追加候補である。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_QEI",
+      "unit": "knowledge_topic",
+      "title_ja": "バッチ期待改善",
+      "title_en": "qEI",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G038"
+          },
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          },
+          {
+            "type": "content",
+            "id": "bayesian-optimization"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "バッチ期待改善は BO の獲得関数の一種で、獲得関数の一般論は既存記事にあるが、qEI という個別の説明はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_QNEHVI",
+      "unit": "knowledge_topic",
+      "title_ja": "ノイズ付き多目的期待改善",
+      "title_en": "qNEHVI",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G038"
+          },
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "獲得関数の一般論は G038 と BO の行にありますが、qNEHVI の名前は出てきません。多目的の側（MF_MULTI_OBJECTIVE）にも収めうるため、記事化のときに置き場所を決めます。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ENTROPY_SEARCH",
+      "unit": "knowledge_topic",
+      "title_ja": "エントロピー探索",
+      "title_en": "Entropy search",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G038"
+          },
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "エントロピー探索は BO の獲得関数の一種で、一般論は既存記事にあるが、この名称の説明はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_KNOWLEDGE_GRADIENT",
+      "unit": "knowledge_topic",
+      "title_ja": "Knowledge gradient",
+      "title_en": "Knowledge gradient",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G038"
+          },
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Knowledge gradient は BO の獲得関数の一種で、一般論は既存記事にあるが、この名称の説明はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MF_BO",
+      "unit": "knowledge_topic",
+      "title_ja": "多忠実度BO",
+      "title_en": "Multi-fidelity Bayesian optimization",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G081"
+          },
+          {
+            "type": "content",
+            "id": "concept.evaluation-cost"
+          },
+          {
+            "type": "method",
+            "id": "M_BAYESIAN_OPT_GP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多忠実度 BO は評価精度の次元を evaluation-cost 記事と比較データで扱っており、BO 手法の専用行はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_HYPERBAND",
+      "unit": "knowledge_topic",
+      "title_ja": "Hyperband",
+      "title_en": "Hyperband",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_HYPERBAND_ASHA"
+          },
+          {
+            "type": "content",
+            "id": "hyperband-asha"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Hyperband は結合行 M_HYPERBAND_ASHA の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ASHA",
+      "unit": "knowledge_topic",
+      "title_ja": "ASHA",
+      "title_en": "Asynchronous successive halving",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_HYPERBAND_ASHA"
+          },
+          {
+            "type": "content",
+            "id": "hyperband-asha"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ASHA は結合行 M_HYPERBAND_ASHA の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PBT",
+      "unit": "knowledge_topic",
+      "title_ja": "Population-based training",
+      "title_en": "Population based training",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PBT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Population-based training は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E12"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_WEIGHTED_SUM",
+      "unit": "knowledge_topic",
+      "title_ja": "重み付き和",
+      "title_en": "Weighted sum",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_WEIGHTED_SUM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "重み付き和は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_EPSILON_CONSTRAINT",
+      "unit": "knowledge_topic",
+      "title_ja": "ε制約法",
+      "title_en": "Epsilon constraint",
+      "entity_kind": "strategy",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_EPSILON_CONSTRAINT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ε制約法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NSGAII",
+      "unit": "knowledge_topic",
+      "title_ja": "NSGA-II",
+      "title_en": "NSGA-II",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NSGA_II"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "NSGA-II は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_NSGAIII",
+      "unit": "knowledge_topic",
+      "title_ja": "NSGA-III",
+      "title_en": "NSGA-III",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NSGA_III"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "NSGA-III は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MOEAD",
+      "unit": "knowledge_topic",
+      "title_ja": "MOEA/D",
+      "title_en": "MOEA/D",
+      "entity_kind": "algorithm",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MOEA_D"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "MOEA/D は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PAREGO",
+      "unit": "knowledge_topic",
+      "title_ja": "ParEGO",
+      "title_en": "ParEGO",
+      "entity_kind": "algorithm",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ParEGO は重み付き Tchebycheff と GP の期待改善を組み合わせた多目的 BO で、専用の行や記事はない。近い行は M_WEIGHTED_SUM と M_BAYESIAN_OPT_GP である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SAA",
+      "unit": "knowledge_topic",
+      "title_ja": "標本平均近似",
+      "title_en": "Sample average approximation",
+      "entity_kind": "strategy",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は PA049 です。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ROBUST_COUNTERPART",
+      "unit": "knowledge_topic",
+      "title_ja": "ロバスト対応問題",
+      "title_en": "Robust counterpart",
+      "entity_kind": "strategy",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA050"
+          },
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ロバスト対応問題は不確実性集合を制約に写す再定式化の部品で、ロバスト最適化の問題行 PA050 と chance-risk-contract 記事の中で使われている。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CCG",
+      "unit": "knowledge_topic",
+      "title_ja": "列・制約生成",
+      "title_en": "Column-and-constraint generation",
+      "entity_kind": "strategy",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "列・制約生成法は二段階ロバスト問題の解法で、専用の行や記事はない。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROGRESSIVE_HEDGING",
+      "unit": "knowledge_topic",
+      "title_ja": "Progressive hedging",
+      "title_en": "Progressive hedging",
+      "entity_kind": "strategy",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Progressive hedging は確率計画の分解法だが、知識ベースの行・記事には存在せず、計画上の backlog にだけ出てくる。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SDDP",
+      "unit": "knowledge_topic",
+      "title_ja": "確率的双対動的計画",
+      "title_en": "Stochastic dual dynamic programming",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "確率的双対動的計画は多段確率計画の分解法で、専用の行や記事はなく、backlog にだけ現れる。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CVAR_REFORMULATION",
+      "unit": "knowledge_topic",
+      "title_ja": "CVaR再定式化",
+      "title_en": "CVaR reformulation",
+      "entity_kind": "strategy",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA049"
+          },
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "CVaR 再定式化はリスク指標を線形の補助変数付き式に変える部品で、chance-risk-contract 記事と確率計画の問題族 PA049 の中で使われている。"
+      },
+      "source_refs": [
+        "E09"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_RIEMANNIAN_GD",
+      "unit": "knowledge_topic",
+      "title_ja": "Riemannian勾配法",
+      "title_en": "Riemannian gradient",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RIEMANNIAN_GRADIENT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Riemannian 勾配法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_RIEMANNIAN_TR",
+      "unit": "knowledge_topic",
+      "title_ja": "Riemannian信頼領域",
+      "title_en": "Riemannian trust region",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RIEMANNIAN_TRUST_REGION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Riemannian 信頼領域は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DIRECT_SHOOTING",
+      "unit": "knowledge_topic",
+      "title_ja": "直接射撃法",
+      "title_en": "Direct shooting",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIRECT_SHOOTING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "直接射撃法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MULTIPLE_SHOOTING",
+      "unit": "knowledge_topic",
+      "title_ja": "多重射撃法",
+      "title_en": "Multiple shooting",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MULTIPLE_SHOOTING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多重射撃法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_COLLOCATION",
+      "unit": "knowledge_topic",
+      "title_ja": "直接選点法",
+      "title_en": "Direct collocation",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DIRECT_COLLOCATION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "直接選点法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ILQR",
+      "unit": "knowledge_topic",
+      "title_ja": "iLQR",
+      "title_en": "Iterative LQR",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ILQR_DDP"
+          },
+          {
+            "type": "content",
+            "id": "ilqr-ddp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "iLQR は結合行 M_ILQR_DDP の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DDP",
+      "unit": "knowledge_topic",
+      "title_ja": "DDP",
+      "title_en": "Differential dynamic programming",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ILQR_DDP"
+          },
+          {
+            "type": "content",
+            "id": "ilqr-ddp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "DDP は結合行 M_ILQR_DDP の一方で、独立の行はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_RICCATI",
+      "unit": "knowledge_topic",
+      "title_ja": "Riccati再帰",
+      "title_en": "Riccati recursion",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ILQR_DDP"
+          },
+          {
+            "type": "method",
+            "id": "MF_OPTIMAL_CONTROL"
+          },
+          {
+            "type": "content",
+            "id": "ilqr-ddp"
+          },
+          {
+            "type": "content",
+            "id": "family.optimal-control"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Riccati 再帰は iLQR/DDP の後退計算の部品で、専用の記事はなく、既存の軌道最適化の記事の中で使われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SIMP",
+      "unit": "knowledge_topic",
+      "title_ja": "SIMP",
+      "title_en": "SIMP",
+      "entity_kind": "strategy",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SIMP_TOPOLOGY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "SIMP は既存の method 行 M_SIMP_TOPOLOGY と同じ対象である（ヒットの多くは simplex による誤一致）。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_MMA",
+      "unit": "knowledge_topic",
+      "title_ja": "移動漸近法",
+      "title_en": "Method of moving asymptotes",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MMA"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "移動漸近法は既存の method 行と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_OC",
+      "unit": "knowledge_topic",
+      "title_ja": "最適性規準法",
+      "title_en": "Optimality criteria",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_OC_TOPOLOGY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "最適性規準法は既存の method 行 M_OC_TOPOLOGY と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_LEVELSET",
+      "unit": "knowledge_topic",
+      "title_ja": "レベルセット形状更新",
+      "title_en": "Level-set shape update",
+      "entity_kind": "strategy",
+      "tier": "frontier",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "レベルセット形状更新は形状最適化の更新法だが、専用の行や記事はなく、ギャラリーと比較の文中に出るだけである。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SINKHORN",
+      "unit": "knowledge_topic",
+      "title_ja": "Sinkhorn法",
+      "title_en": "Sinkhorn",
+      "entity_kind": "algorithm",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Sinkhorn 法はエントロピー正則化の輸送問題の解法で、専用の行や記事はなく、近い輸送系の行もない。"
+      },
+      "source_refs": [
+        "E11"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_UNBALANCED_SINKHORN",
+      "unit": "knowledge_topic",
+      "title_ja": "非均衡Sinkhorn法",
+      "title_en": "Unbalanced Sinkhorn",
+      "entity_kind": "variant",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "非均衡 Sinkhorn 法は Sinkhorn の変種で、Sinkhorn 自体が未登録のため専用の行や記事はない。"
+      },
+      "source_refs": [
+        "E11"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_AUTODIFF",
+      "unit": "knowledge_topic",
+      "title_ja": "自動微分",
+      "title_en": "Automatic differentiation",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G026"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "自動微分は用語集の G026 と同じ名称で、既存の用語行がある。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ADJOINT",
+      "unit": "knowledge_topic",
+      "title_ja": "随伴感度",
+      "title_en": "Adjoint sensitivity",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADJOINT_SENSITIVITY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "随伴感度は既存の method 行 M_ADJOINT_SENSITIVITY と同じ対象である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FINITE_DIFFERENCE",
+      "unit": "knowledge_topic",
+      "title_ja": "有限差分感度",
+      "title_en": "Finite differences",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G027"
+          },
+          {
+            "type": "content",
+            "id": "trust-region-newton-cg"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "有限差分は数値微分の一手法で、既存の用語 G027 の下で勾配利用の部品として複数の記事に現れる。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_COMPLEX_STEP",
+      "unit": "knowledge_topic",
+      "title_ja": "複素ステップ感度",
+      "title_en": "Complex step",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G028"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "複素ステップ感度は用語集の G028 と同じ名称の手法である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ARMIJO",
+      "unit": "knowledge_topic",
+      "title_ja": "Armijo条件",
+      "title_en": "Armijo condition",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G051"
+          },
+          {
+            "type": "method",
+            "id": "M_BFGS"
+          },
+          {
+            "type": "method",
+            "id": "M_NLCG"
+          },
+          {
+            "type": "method",
+            "id": "M_SQP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Armijo 条件は直線探索の受理規則の部品で、専用の行はなく、BFGS・非線形共役勾配・SQP の記事の中で使われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_WOLFE",
+      "unit": "knowledge_topic",
+      "title_ja": "Wolfe条件",
+      "title_en": "Wolfe conditions",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G051"
+          },
+          {
+            "type": "method",
+            "id": "M_GRADIENT_DESCENT"
+          },
+          {
+            "type": "method",
+            "id": "M_BFGS"
+          },
+          {
+            "type": "method",
+            "id": "M_NLCG"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Wolfe 条件は直線探索の受理規則の部品で、専用の行はなく、勾配法・BFGS・非線形共役勾配の記事の中で使われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PRECONDITIONING",
+      "unit": "knowledge_topic",
+      "title_ja": "前処理",
+      "title_en": "Preconditioning",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G050"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "前処理は用語集の G050 と同じ名称である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SCALING",
+      "unit": "knowledge_topic",
+      "title_ja": "変数スケーリング",
+      "title_en": "Variable scaling",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G049"
+          },
+          {
+            "type": "method",
+            "id": "M_NEWTON_CG"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "変数スケーリングは用語 G049 の具体的な使い方で、専用の行はなく、Newton-CG の記事などで前処理と並べて扱われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_CONTINUATION",
+      "unit": "knowledge_topic",
+      "title_ja": "継続法",
+      "title_en": "Continuation",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_INTERIOR_POINT_NLP"
+          },
+          {
+            "type": "problem",
+            "id": "PA048"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "継続法は障壁パラメータを段階的に動かす部品で、内点法や相補性問題の事例の中で使われているが、専用の記事や行はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_WARM_START",
+      "unit": "knowledge_topic",
+      "title_ja": "ウォームスタート",
+      "title_en": "Warm start",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G044"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ウォームスタートは用語集の G044 と同じ名称である。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_FEASIBILITY_RESTORATION",
+      "unit": "knowledge_topic",
+      "title_ja": "実行可能性回復",
+      "title_en": "Feasibility restoration",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "実行可能性回復は非線形内点法や SQP の部品として知られるが、知識ベースには名前付きの記述がない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_DUALITY_CERTIFICATE",
+      "unit": "knowledge_topic",
+      "title_ja": "双対証明書",
+      "title_en": "Duality certificate",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G012"
+          },
+          {
+            "type": "glossary",
+            "id": "G015"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "双対証明書は下界と最適性証明の部品で、用語 G012 と G015 の下に説明があるが、この名称の専用記述はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_REGULARIZATION",
+      "unit": "knowledge_topic",
+      "title_ja": "疎性・正則化",
+      "title_en": "Sparsity regularization",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA035"
+          },
+          {
+            "type": "glossary",
+            "id": "G046"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "疎性正則化は L1 型の目的項で、問題行 PA035 とその周辺の記事で使われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_ELIMINATION",
+      "unit": "knowledge_topic",
+      "title_ja": "変数消去",
+      "title_en": "Variable elimination",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "MF_CONSTRAINED_NLP"
+          },
+          {
+            "type": "content",
+            "id": "family.constrained-nlp"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "変数消去は等式制約を減らす前処理の部品で、制約付き非線形計画の族の記事の中で説明されている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_EPIGRAPH",
+      "unit": "knowledge_topic",
+      "title_ja": "エピグラフ再定式化",
+      "title_en": "Epigraph reformulation",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA018"
+          },
+          {
+            "type": "problem",
+            "id": "PA020"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "エピグラフ再定式化は二次目的を制約に移す部品で、formulation atlas の二次計画と二次錐の関係の注記にある。専用の記事や行はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_SCHUR",
+      "unit": "knowledge_topic",
+      "title_ja": "Schur補元",
+      "title_en": "Schur complement",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ACTIVE_SET_QP"
+          },
+          {
+            "type": "method",
+            "id": "M_ACTIVE_SET"
+          },
+          {
+            "type": "content",
+            "id": "concept.semidefinite-program"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Schur 補元は KKT 系の分解の部品で、active-set 系の記事の中で使われている。専用の行はない。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_INTERVAL_BOUNDS",
+      "unit": "knowledge_topic",
+      "title_ja": "区間による上下界",
+      "title_en": "Interval bounds",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "区間演算による上下界の記述は見つかりません（「区間」の出現は時間窓の意味だけです）。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "TOPIC_PROX_OPERATOR",
+      "unit": "knowledge_topic",
+      "title_ja": "近接写像",
+      "title_en": "Proximal operator",
+      "entity_kind": "primitive",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G054"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "近接写像は用語集の G054 と同じ名称で、近接勾配法の記事でも使われている。"
+      },
+      "source_refs": [
+        "E02"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SMOOTH_NLP",
+      "unit": "problem_structure",
+      "title_ja": "滑らかな無制約NLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA006"
+          },
+          {
+            "type": "problem",
+            "id": "PA007"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "滑らかな無制約NLPは、次元と勾配の有無で PA006 と PA007 の二つの行に分かれています。二つの行をまとめた見出しとして扱います。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BOX_NLP",
+      "unit": "problem_structure",
+      "title_ja": "箱制約NLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA008"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "箱制約は上下限制約の別名で、PA008 がそのまま対応する。非滑らかな場合は PA011 で別の行になる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_EQUALITY_NLP",
+      "unit": "problem_structure",
+      "title_ja": "等式制約NLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA009"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONSTRAINT_NONLINEAR_EQUALITY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "等式制約は PA009 の標準形の一部で、独立の型ではなく制約の種類。線形等式だけなら線形系の型、単体の和1の条件なら PA036 に寄る。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_INEQUALITY_NLP",
+      "unit": "problem_structure",
+      "title_ja": "不等式制約NLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA009"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONSTRAINT_NONLINEAR_INEQUALITY"
+          },
+          {
+            "type": "problem",
+            "id": "PA008"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "不等式 g(x)<=0 だけの場合は PA009 の標準形の部分集合。上下限だけなら PA008 に入るので、制約の種類で読み分ける。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONVEX",
+      "unit": "problem_structure",
+      "title_ja": "凸最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.convexity"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONVEXITY"
+          },
+          {
+            "type": "glossary",
+            "id": "G019"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "凸最適化は一つの標準形ではなく性質のクラスで、凸性の概念記事と特徴 F_CONVEXITY が説明を担う。凸な各型（PA010, PA017, PA018, PA020, PA021）が具体的な行になっている。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_LP",
+      "unit": "problem_structure",
+      "title_ja": "線形計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA017"
+          },
+          {
+            "type": "content",
+            "id": "concept.linear-program"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA017 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONVEX_QP",
+      "unit": "problem_structure",
+      "title_ja": "凸二次計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA018"
+          },
+          {
+            "type": "content",
+            "id": "concept.convex-quadratic-program"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA018 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_NONCONVEX_QP",
+      "unit": "problem_structure",
+      "title_ja": "非凸二次計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA019"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA019 は非凸QPと非凸QCQPをまとめた行です。非凸QPはその一方で、独立の行はありません。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONVEX_QCQP",
+      "unit": "problem_structure",
+      "title_ja": "凸二次制約二次計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA020"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_QCQP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "凸な二次制約は二次錐制約に書き換えられるため PA020 の特別な書き方に当たる。独立の行は持たず、QCQP は構造特徴 F_STRUCTURE_QCQP として残っている。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_NONCONVEX_QCQP",
+      "unit": "problem_structure",
+      "title_ja": "非凸QCQP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA019"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_QCQP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA019 は非凸QPと非凸QCQPをまとめた行です。非凸QCQPはその一方で、独立の行はありません。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SOCP",
+      "unit": "problem_structure",
+      "title_ja": "二次錐計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA020"
+          },
+          {
+            "type": "glossary",
+            "id": "G064"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA020 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SDP",
+      "unit": "problem_structure",
+      "title_ja": "半正定値計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA021"
+          },
+          {
+            "type": "content",
+            "id": "concept.semidefinite-program"
+          },
+          {
+            "type": "glossary",
+            "id": "G065"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA021 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_EXP_CONE",
+      "unit": "problem_structure",
+      "title_ja": "指数錐計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA022"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "指数錐は一般錐の一つとして PA022 の読みに明示的に含まれ、単独の行は持たない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_POWER_CONE",
+      "unit": "problem_structure",
+      "title_ja": "べき錐計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA022"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "べき錐も一般錐の一種として PA022 に含まれる。内容記事や行はなく、現状は実装側の対応表にだけ現れる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_GP",
+      "unit": "problem_structure",
+      "title_ja": "幾何計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "幾何計画は正の変数の対数変換で凸問題になるため、PA018・PA020 と結び付く候補。現状は行も記事もない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SIGNOMIAL",
+      "unit": "problem_structure",
+      "title_ja": "符号付き幾何計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "符号付き幾何計画は GP の一般化で、凸化には近似が必要になる。GP 側の行がないため、追加は GP の後に行う。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_LINEAR_LS",
+      "unit": "problem_structure",
+      "title_ja": "線形最小二乗",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA005"
+          },
+          {
+            "type": "content",
+            "id": "concept.linear-least-squares"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA005 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_NONLINEAR_LS",
+      "unit": "problem_structure",
+      "title_ja": "非線形最小二乗",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA033"
+          },
+          {
+            "type": "content",
+            "id": "concept.nonlinear-least-squares"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_NONLINEAR_LEAST_SQUARES"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA033 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ROBUST_REGRESSION",
+      "unit": "problem_structure",
+      "title_ja": "ロバスト回帰",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA034"
+          },
+          {
+            "type": "content",
+            "id": "concept.robust-regression"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_ROBUST_REGRESSION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA034 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SPARSE_PENALTY",
+      "unit": "problem_structure",
+      "title_ja": "疎性正則化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA035"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_SPARSE"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_REGULARIZED"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "疎性正則化の代表形 L1 は PA035 が持つ。候補名は L0 やグループ罰則を含みうるため、その場合は未表現として扱う。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MATRIX_COMPLETION",
+      "unit": "problem_structure",
+      "title_ja": "行列補完",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "観測された成分から低ランク行列を埋める問題で、現在の atlas に行も記事もない。低ランク因子分解と並べて追加を検討する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_LOW_RANK",
+      "unit": "problem_structure",
+      "title_ja": "低ランク因子分解",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA033"
+          },
+          {
+            "type": "problem",
+            "id": "PA003"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "因子 U,V を同時に決める形は非線形最小二乗（PA033）、Frobenius 誤差の低ランク近似は SVD の閉形式（PA003）にあたります。一つの名前が二つの行にまたがる多対多の対応です。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_INVERSE_PDE",
+      "unit": "problem_structure",
+      "title_ja": "PDE逆問題",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA055"
+          },
+          {
+            "type": "problem",
+            "id": "PA045"
+          },
+          {
+            "type": "content",
+            "id": "concept.pde-constrained-program"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_INVERSE_PROBLEM"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_PDE_CONSTRAINED"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PDE の係数や状態を観測から推定する型で、PA055 の逆問題に PA045 の PDE 制約が加わった派生。二つの行の組合せとして読める。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_PDE_SHAPE",
+      "unit": "problem_structure",
+      "title_ja": "PDE制約形状設計",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA057"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_SHAPE_OPTIMIZATION"
+          },
+          {
+            "type": "content",
+            "id": "shape-optimization"
+          },
+          {
+            "type": "content",
+            "id": "concept.pde-constrained-optimization"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PDE 制約付きの形状設計は PA057 の標準形そのもので、関係表も同じ説明を持つ。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_DENSITY_TOPOLOGY",
+      "unit": "problem_structure",
+      "title_ja": "密度法トポロジー",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SIMP_TOPOLOGY"
+          },
+          {
+            "type": "method",
+            "id": "MF_TOPOLOGY_OPTIMIZATION"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_TOPOLOGY_OPTIMIZATION"
+          },
+          {
+            "type": "term",
+            "id": "TERM_SIMP_TOPOLOGY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "密度法は SIMP の別名で、方法側の行 M_SIMP_TOPOLOGY が既に持つ。候補は問題の profile なので、問題側は PROBLEM_TOPOLOGY_OPTIMIZATION に対応させる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_LEVELSET_SHAPE",
+      "unit": "problem_structure",
+      "title_ja": "レベルセット形状設計",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "レベルセットは形状を陰関数で表す別の表現で、現状は gallery と比較の文中にだけ出る。密度法との違い（接続変更の可否）が追加時の論点になる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MILP",
+      "unit": "problem_structure",
+      "title_ja": "混合整数線形計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA023"
+          },
+          {
+            "type": "content",
+            "id": "concept.mixed-integer-linear-program"
+          },
+          {
+            "type": "glossary",
+            "id": "G066"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA023 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BINARY_LP",
+      "unit": "problem_structure",
+      "title_ja": "0-1線形計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA023"
+          },
+          {
+            "type": "feature",
+            "id": "F_VARIABLE_BINARY"
+          },
+          {
+            "type": "content",
+            "id": "concept.mixed-integer-linear-program"
+          },
+          {
+            "type": "problem",
+            "id": "PA032"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "全変数が0-1の MILP で、PA023 の変数域を絞った特別な場合。制約が1本なら PA032 ナップサックになる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MIQP",
+      "unit": "problem_structure",
+      "title_ja": "混合整数二次計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA024"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA024 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONVEX_MINLP",
+      "unit": "problem_structure",
+      "title_ja": "凸MINLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA025"
+          },
+          {
+            "type": "method",
+            "id": "M_OUTER_APPROX_MINLP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA025 のうち連続部分が凸な場合で、Outer Approximation が使える。独立の行は持たない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_NONCONVEX_MINLP",
+      "unit": "problem_structure",
+      "title_ja": "非凸MINLP",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA025"
+          },
+          {
+            "type": "method",
+            "id": "M_SPATIAL_BRANCH_BOUND"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA025 のうち連続部分が非凸な場合で、大域的な証明には空間分枝限定を使う。PA025 が一般形なので、名前の行は持たない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ASSIGNMENT",
+      "unit": "problem_structure",
+      "title_ja": "割当",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA030"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_LINEAR_ASSIGNMENT"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_ASSIGNMENT"
+          },
+          {
+            "type": "method",
+            "id": "M_HUNGARIAN"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA030 と一致し、実行可能な基準問題も既にある。割当は PA028 の最小費用流の特別な場合でもある。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MAXFLOW",
+      "unit": "problem_structure",
+      "title_ja": "最大流",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA028"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_NETWORK_FLOW"
+          },
+          {
+            "type": "method",
+            "id": "MF_GRAPH_DP"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "最大流は流量の最大化で、PA028 の網流れの枠組みの変種。PA028 の標準形は費用最小のため、最大流の目的は行として書かれていない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MINCOSTFLOW",
+      "unit": "problem_structure",
+      "title_ja": "最小費用流",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA028"
+          },
+          {
+            "type": "method",
+            "id": "M_NETWORK_SIMPLEX"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_NETWORK_FLOW"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA028 の標準形が最小費用流そのもの。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SHORTEST_PATH",
+      "unit": "problem_structure",
+      "title_ja": "最短路",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA029"
+          },
+          {
+            "type": "method",
+            "id": "M_DIJKSTRA_ASTAR"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_SHORTEST_PATH"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA029 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_TSP",
+      "unit": "problem_structure",
+      "title_ja": "巡回セールスマン",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA031"
+          },
+          {
+            "type": "term",
+            "id": "TERM_ROUTING_PROBLEM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "TSP は単一車両・容量なしの配送経路の特殊例で、PA031 の中に含まれる。用語集も同義語としない扱い。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_VRP",
+      "unit": "problem_structure",
+      "title_ja": "配送経路",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "alias_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA031"
+          },
+          {
+            "type": "term",
+            "id": "TERM_ROUTING_PROBLEM"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "配送経路と VRP は PA031 の別名。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_VRPTW",
+      "unit": "problem_structure",
+      "title_ja": "時間窓付き配送",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA031"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_TIME_WINDOW_ROUTING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "時間窓を加えた VRP で PA031 の変種。執行可能な定義 PROBLEM_TIME_WINDOW_ROUTING は一本の経路の判定だけを扱うため、VRPTW の行としては表していない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_JOB_SHOP",
+      "unit": "problem_structure",
+      "title_ja": "ジョブショップ",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA026"
+          },
+          {
+            "type": "content",
+            "id": "concept.cp-scheduling"
+          },
+          {
+            "type": "method",
+            "id": "M_CP_SAT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ジョブショップは作業順序と資源の重なりを扱うスケジューリングで、PA026 の代表的な変種。独立の行や記事はない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CUMULATIVE_SCHEDULE",
+      "unit": "problem_structure",
+      "title_ja": "累積資源制約スケジューリング",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA026"
+          },
+          {
+            "type": "method",
+            "id": "M_CP_SAT"
+          },
+          {
+            "type": "method",
+            "id": "M_CP_SEARCH"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_SCHEDULING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "累積資源制約は CP のスケジューリングで資源条件を表す global constraint の一つで、CP-SAT や CP 探索の中で使われる部品。PA026 の資源条件の一部として扱う。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SET_COVER",
+      "unit": "problem_structure",
+      "title_ja": "集合被覆",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA032"
+          },
+          {
+            "type": "content",
+            "id": "concept.knapsack-set-cover"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA032 はナップサックと集合被覆をまとめた行です。集合被覆はその一方で、独立の行はありません。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_KNAPSACK",
+      "unit": "problem_structure",
+      "title_ja": "ナップサック",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA032"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_BINARY_KNAPSACK"
+          },
+          {
+            "type": "content",
+            "id": "concept.knapsack-set-cover"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_KNAPSACK"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA032 はナップサックと集合被覆をまとめた行です。ナップサックはその一方で、実行可能な基準問題 PROBLEM_BINARY_KNAPSACK があります。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BIN_PACKING",
+      "unit": "problem_structure",
+      "title_ja": "ビンパッキング",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "品目を容量付きの箱へ詰める割当型で、複数箱のナップサックに近い。現状は行も記事もない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_FACILITY_LOCATION",
+      "unit": "problem_structure",
+      "title_ja": "施設配置",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "施設の開設と顧客への割当を同時に決める型で、MILP として書けるが、行も記事もない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SAT",
+      "unit": "problem_structure",
+      "title_ja": "SAT",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA027"
+          },
+          {
+            "type": "method",
+            "id": "M_CDCL_SAT"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_SAT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA027 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MAXSAT",
+      "unit": "problem_structure",
+      "title_ja": "MaxSAT",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA027"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_SAT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA027 の読みが MaxSAT を含みます。基本形は SAT で、MaxSAT は満たす節の数（重み）を最大にする変種です。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CP",
+      "unit": "problem_structure",
+      "title_ja": "制約充足",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "method",
+            "id": "MF_CONSTRAINT_PROGRAMMING"
+          },
+          {
+            "type": "problem",
+            "id": "PA026"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_CONSTRAINT_PROGRAMMING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "制約充足（CP）の一般形は方法の家族 MF_CONSTRAINT_PROGRAMMING と、CP 型の PA026・PA027 に分散している。単独の型の行はない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MULTIOBJECTIVE",
+      "unit": "problem_structure",
+      "title_ja": "多目的最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA038"
+          },
+          {
+            "type": "content",
+            "id": "concept.multiobjective-optimization"
+          },
+          {
+            "type": "method",
+            "id": "MF_MULTI_OBJECTIVE"
+          },
+          {
+            "type": "term",
+            "id": "TERM_MULTI_OBJECTIVE"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_MULTIOBJECTIVE"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多目的最適化の標準形は PA038 が持ち、概念記事も同じ行を説明する。ただし PA038 は連続変数に限るため、離散の多目的は行として表していない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_LEXICOGRAPHIC",
+      "unit": "problem_structure",
+      "title_ja": "辞書式優先最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "feature",
+            "id": "F_OBJECTIVE_LEXICOGRAPHIC"
+          },
+          {
+            "type": "method",
+            "id": "M_EPSILON_CONSTRAINT"
+          },
+          {
+            "type": "problem",
+            "id": "PA038"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "辞書式の優先順は目的の並べ方の性質として feature に既にあり、ε制約の求解でも使われる。独立の型ではなく、多目的を一つずつ決める方法の部品として読む。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MINIMAX",
+      "unit": "problem_structure",
+      "title_ja": "ミニマックス",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "max の最小化は epigraph で制約付き NLP（PA009）や非滑らかな問題へ書き換えられるが、型名と変換規則は行にない。追加時は PA009・PA011 との関係を明示する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_TWO_STAGE",
+      "unit": "problem_structure",
+      "title_ja": "二段階確率計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA049"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_STOCHASTIC_PROGRAMMING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA049 の標準形そのものが二段階の recourse で、名前は確率計画として一つの行にまとまっている。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MULTI_STAGE",
+      "unit": "problem_structure",
+      "title_ja": "多段階確率計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA049"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_STOCHASTIC_PROGRAMMING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "段階を増やした recourse で PA049 の変種。行も記事もなく、時間の段階構造は動的な型（PA042・PA044）とつながる。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ROBUST",
+      "unit": "problem_structure",
+      "title_ja": "ロバスト最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA050"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_ROBUST_OPTIMIZATION"
+          },
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "ロバスト最適化は PA050 の名称そのもの。確率制約や DRO と混ぜない境界は chance-risk-contract 記事にある。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CHANCE",
+      "unit": "problem_structure",
+      "title_ja": "機会制約",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONSTRAINT_CHANCE"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "機会制約は PA 行を持たず、確率制約の記事と制約特徴 F_CONSTRAINT_CHANCE が説明を担う。PA049・PA050 とは保証範囲で区別する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_DRO",
+      "unit": "problem_structure",
+      "title_ja": "分布ロバスト",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_DRO"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "分布ロバスト最適化は比較記事の中で別軸に分けて説明され、構造特徴 F_STRUCTURE_DRO として表される。独立の行はない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CVAR",
+      "unit": "problem_structure",
+      "title_ja": "CVaRを含むリスク最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.chance-risk-contract"
+          },
+          {
+            "type": "content",
+            "id": "concept.uncertainty-models"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_PORTFOLIO_UNCERTAINTY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "CVaR は記事で説明され、有限シナリオの実行例がある。ただし実行例 PROBLEM_PORTFOLIO_UNCERTAINTY は sqlite で PA036（単体上）に結び付いており、CVaR 型を PA049・PA050 の変種として読む方が自然かは要確認。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ONLINE",
+      "unit": "problem_structure",
+      "title_ja": "オンライン最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA052"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA052 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BANDIT",
+      "unit": "problem_structure",
+      "title_ja": "バンディットによる意思決定",
+      "title_en": null,
+      "entity_kind": "neighboring_problem",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "バンディットの名前も部分観測の扱いもリポジトリにありません。収める先の候補は PA052（オンライン最適化）です。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_EXPENSIVE_BLACKBOX",
+      "unit": "problem_structure",
+      "title_ja": "高価なブラックボックス",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA014"
+          },
+          {
+            "type": "problem",
+            "id": "PA015"
+          },
+          {
+            "type": "method",
+            "id": "MF_SURROGATE_HPO"
+          },
+          {
+            "type": "content",
+            "id": "concept.expensive-black-box"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "高価な評価は低次元の PA014 と高次元の PA015 に分かれ、候補名は次元を指定していない。両方を覆う見出しとして読む。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_NOISY_BLACKBOX",
+      "unit": "problem_structure",
+      "title_ja": "ノイズ付きブラックボックス",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA013"
+          },
+          {
+            "type": "feature",
+            "id": "F_OBJECTIVE_NOISY"
+          },
+          {
+            "type": "glossary",
+            "id": "G039"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA013 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONDITIONAL_HPO",
+      "unit": "problem_structure",
+      "title_ja": "条件付き探索空間",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "primitive_in",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA039"
+          },
+          {
+            "type": "method",
+            "id": "M_TPE"
+          },
+          {
+            "type": "method",
+            "id": "M_SMAC_RF"
+          },
+          {
+            "type": "feature",
+            "id": "F_VARIABLE_DOMAIN"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "条件付き探索空間は、変数の有効性が他の変数に依存する変数域の構造で、TPE や SMAC が扱う部品。PA039 の変数域の性質として読む。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MULTIFIDELITY",
+      "unit": "problem_structure",
+      "title_ja": "多忠実度評価",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "glossary",
+            "id": "G081"
+          },
+          {
+            "type": "content",
+            "id": "concept.evaluation-cost"
+          },
+          {
+            "type": "feature",
+            "id": "F_EVALUATION_COST"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多忠実度評価は評価費の記事と用語集が説明しており、行を持つ評価 profile として扱われている。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BATCH_ASYNC",
+      "unit": "problem_structure",
+      "title_ja": "バッチ・非同期評価",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.evaluation-cost"
+          },
+          {
+            "type": "feature",
+            "id": "F_BUDGET_PARALLEL_EVALUATION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "バッチと非同期の評価は評価方針として記事で説明され、特徴 F_BUDGET_PARALLEL_EVALUATION で表される。独立の型ではなく、高価な評価の実行条件として読む。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_FAILURE_SAFE",
+      "unit": "problem_structure",
+      "title_ja": "失敗・安全性を含む評価",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA016"
+          },
+          {
+            "type": "feature",
+            "id": "F_OBJECTIVE_MAY_FAIL"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_FAILED_SIMULATION"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "失敗を含む評価は PA016 の名称と一致する。候補の『安全性』が制約違反の扱いまで含むかは要確認。含むなら PA016 の範囲を広げるか、制約側の特徴で表す。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_OPTIMAL_CONTROL",
+      "unit": "problem_structure",
+      "title_ja": "最適制御",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA042"
+          },
+          {
+            "type": "method",
+            "id": "MF_OPTIMAL_CONTROL"
+          },
+          {
+            "type": "content",
+            "id": "concept.optimal-control"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_OPTIMAL_CONTROL"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA042 と一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MPC",
+      "unit": "problem_structure",
+      "title_ja": "モデル予測制御",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA043"
+          },
+          {
+            "type": "content",
+            "id": "concept.receding-horizon"
+          },
+          {
+            "type": "content",
+            "id": "concept.model-predictive-control"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA043 と一致し、定式化の記事は concept.model-predictive-control です。解き直しの手順の説明は receding-horizon 記事にあります。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_CONTACT_TRAJECTORY",
+      "unit": "problem_structure",
+      "title_ja": "接触を含む軌道",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "concept_content",
+        "refs": [
+          {
+            "type": "content",
+            "id": "concept.nested-equilibrium-complementarity-hybrid"
+          },
+          {
+            "type": "problem",
+            "id": "PA044"
+          },
+          {
+            "type": "problem",
+            "id": "PA048"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_COMPLEMENTARITY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "接触を含む軌道は軌道の型（PA044）と相補性（PA048）が組み合わさった型で、ハイブリッド記事の接触の例として説明されている。独立の行はない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_RIEMANNIAN",
+      "unit": "problem_structure",
+      "title_ja": "多様体最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "method",
+            "id": "MF_MANIFOLD"
+          },
+          {
+            "type": "feature",
+            "id": "F_VARIABLE_MANIFOLD"
+          },
+          {
+            "type": "problem",
+            "id": "PA037"
+          },
+          {
+            "type": "problem",
+            "id": "PA036"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "多様体上の最適化は方法の家族 MF_MANIFOLD が覆い、変数の性質は F_VARIABLE_MANIFOLD で表される。SO(3) や単体など具体的な型は PA037・PA036 にある。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ROTATION_POSE",
+      "unit": "problem_structure",
+      "title_ja": "回転・姿勢SO(3)/SE(3)",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA037"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT"
+          },
+          {
+            "type": "content",
+            "id": "concept.so3-rotation-representation"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "回転と姿勢の最適化は PA037 の名称と標準形に一致し、実行可能な基準問題と記事もある。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SIMPLEX_GEOMETRY",
+      "unit": "problem_structure",
+      "title_ja": "確率単体上の最適化",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA036"
+          },
+          {
+            "type": "content",
+            "id": "concept.simplex-optimization"
+          },
+          {
+            "type": "content",
+            "id": "concept.simplex"
+          },
+          {
+            "type": "feature",
+            "id": "F_VARIABLE_SIMPLEX"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "確率単体上の最適化は PA036 の名称と標準形に一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SPD_PSD",
+      "unit": "problem_structure",
+      "title_ja": "正定値・半正定値行列上の最適化",
+      "title_en": null,
+      "entity_kind": "modeling_profile",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA021"
+          },
+          {
+            "type": "content",
+            "id": "concept.spd-matrix-geometry"
+          },
+          {
+            "type": "feature",
+            "id": "F_VARIABLE_PSD_MATRIX"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "変数が半正定値行列である点は SDP（PA021）と同じで、SPD 上の幾何的な読みは concept.spd-matrix-geometry が説明します。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_BILEVEL",
+      "unit": "problem_structure",
+      "title_ja": "二段階階層最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA046"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_BILEVEL_REGRESSION"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_BILEVEL"
+          },
+          {
+            "type": "content",
+            "id": "concept.nested-equilibrium-complementarity-hybrid"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "上位・下位の入れ子構造を持つ型で、名称と標準形が PA046 と一致する。実行可能な PROBLEM_BILEVEL_REGRESSION は sqlite で PA033 に結び付いており、PA046 の例としては読めないので、その対応は見直しが必要。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_MPEC",
+      "unit": "problem_structure",
+      "title_ja": "相補性制約最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA048"
+          },
+          {
+            "type": "feature",
+            "id": "F_CONSTRAINT_COMPLEMENTARITY"
+          },
+          {
+            "type": "content",
+            "id": "concept.nested-equilibrium-complementarity-hybrid"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "相補性制約を目的と一緒に最小化する型で、PA048 の制約を最適化に入れたもの。PA046 の KKT 変換の出口として現れる。行は持たない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_VI",
+      "unit": "problem_structure",
+      "title_ja": "変分不等式",
+      "title_en": null,
+      "entity_kind": "neighboring_problem",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA047"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_VARIATIONAL_INEQUALITY"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "変分不等式は PA047 の標準形そのもので、PA047 はゲームと均衡の土台としてこれを書いている。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_EQUILIBRIUM",
+      "unit": "problem_structure",
+      "title_ja": "ゲーム・均衡",
+      "title_en": null,
+      "entity_kind": "neighboring_problem",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA047"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_GAME_EQUILIBRIUM"
+          },
+          {
+            "type": "content",
+            "id": "concept.nested-equilibrium-complementarity-hybrid"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "PA047 は変分不等式を土台にゲームと均衡を書く行です。均衡はその読み替えで、独立の行はありません。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_OPTIMAL_TRANSPORT",
+      "unit": "problem_structure",
+      "title_ja": "最適輸送",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "covered_by_family",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA028"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_TRANSPORT"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "離散の輸送計画は PA028 と特徴 F_STRUCTURE_TRANSPORT が表します。連続の最適輸送と Sinkhorn はまだありません。"
+      },
+      "source_refs": [
+        "E11"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_UNBALANCED_TRANSPORT",
+      "unit": "problem_structure",
+      "title_ja": "非均衡最適輸送",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "供給と需要の一致を要しない輸送で、最適輸送の変種。PA028 の供給=需要の等式を緩める点が差。行も記事もない。"
+      },
+      "source_refs": [
+        "E11"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_SUBMODULAR",
+      "unit": "problem_structure",
+      "title_ja": "劣モジュラ集合最適化",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "集合関数の劣モジュラ性を使う組合せ最適化で、貪欲法の保証を与える構造。PA027・PA032 の周辺にあるが、行も記事もない。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_EXPERIMENTAL_DESIGN",
+      "unit": "problem_structure",
+      "title_ja": "最適実験計画",
+      "title_en": null,
+      "entity_kind": "problem_archetype",
+      "tier": "core",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA054"
+          },
+          {
+            "type": "feature",
+            "id": "F_STRUCTURE_DESIGN_OF_EXPERIMENTS"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "最適実験計画は PA054 の名称と標準形に一致する。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    },
+    {
+      "scope_id": "STRUCTURE_ROOT_FINDING",
+      "unit": "problem_structure",
+      "title_ja": "求根・方程式求解",
+      "title_en": null,
+      "entity_kind": "neighboring_problem",
+      "tier": "applied",
+      "decision": "include",
+      "merged_into": null,
+      "decision_note_ja": null,
+      "mapping": {
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "problem",
+            "id": "PA004"
+          },
+          {
+            "type": "content",
+            "id": "concept.root-finding"
+          },
+          {
+            "type": "problem_definition",
+            "id": "PROBLEM_ROOT_FINDING"
+          }
+        ],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "名称と標準形が PA004 と一致し、基準問題と記事もある。"
+      },
+      "source_refs": [
+        "E01"
+      ]
+    }
+  ]
+}

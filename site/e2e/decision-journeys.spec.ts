@@ -108,8 +108,8 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
 
   await page.goBack();
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
-  await page.getByRole("region", { name: "候補・条件付き・除外を理由で分ける" }).locator("details").filter({ hasText: /^条件付き/u }).locator("summary").click();
-  await page.getByRole("link", { name: "Nelder–Mead単体法" }).click();
+  await page.getByRole("tab", { name: /Nelder–Mead単体法/u }).click();
+  await page.getByRole("tabpanel").getByRole("link", { name: "Nelder–Mead単体法" }).click();
   await expect(page).toHaveURL(/#\/methods\/M_NELDER_MEAD\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: /Nelder[–-]Mead/u })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toHaveCount(0);
@@ -119,15 +119,15 @@ test("canonical Gallery caseで候補・条件付き・除外理由を区別で�
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC013");
 
   await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形モデルのパラメータを推定する" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "候補・条件付き・除外を理由で分ける" })).toBeVisible();
-  const dispositions = page.getByRole("region", { name: "候補・条件付き・除外を理由で分ける" });
-  await expect(dispositions.getByText("候補", { exact: true })).toBeVisible();
-  await expect(dispositions.getByText("条件付き", { exact: true })).toBeVisible();
-  await dispositions.locator("details").filter({ hasText: /^条件付き/u }).locator("summary").click();
-  await expect(page.getByText(/初期値が十分よく/u)).toBeVisible();
-  await expect(dispositions.getByText("避ける", { exact: true })).toBeVisible();
-  await dispositions.locator("details").filter({ hasText: /^避ける/u }).locator("summary").click();
-  await expect(page.getByText(/残差とJacobianの構造を捨て/u)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "この問題の署名を、手法ごとの目で読む" })).toBeVisible();
+  const tabs = page.getByRole("tablist", { name: "どの手法の目で見るか" });
+  await expect(tabs.getByText("候補", { exact: true })).toBeVisible();
+  await expect(tabs.getByText("条件付き", { exact: true }).first()).toBeVisible();
+  await expect(tabs.getByText("除外", { exact: true })).toBeVisible();
+  await tabs.getByRole("tab").filter({ hasText: /^条件付き/u }).first().click();
+  await expect(page.getByRole("tabpanel").getByText(/初期値が十分よく/u)).toBeVisible();
+  await tabs.getByRole("tab").filter({ hasText: /^除外/u }).click();
+  await expect(page.getByRole("tabpanel").getByText(/残差とJacobianの構造を捨て/u)).toBeVisible();
   await expect(page.locator("pre code")).toContainText("least_squares");
 
   await page.getByRole("link", { name: "この特徴で診断する" }).click();

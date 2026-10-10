@@ -34,6 +34,15 @@ import {
   type RecommendationResult,
 } from "./recommend";
 import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
+import {
+  buildMethodLens,
+  buildSignature,
+  DispositionMark,
+  ProblemSignature,
+  signatureSummary,
+  type Disposition,
+  type SignatureAnswer,
+} from "../../visual-system";
 
 interface DiagnoseArtifacts {
   manifest: SiteManifest;
@@ -196,11 +205,14 @@ function ResultCard({
   item,
   data,
   onMap,
+  answers,
 }: {
   item: EntityRecommendation;
   data: SiteData;
   onMap?(methodId: string): void;
+  answers?: Readonly<Record<string, SignatureAnswer>>;
 }) {
+  const lens = answers && item.entity_id.startsWith("M_") ? buildMethodLens(item.entity_id, answers, data) : undefined;
   const links = useEntityLinks();
   const canonicalMethod = links.status === "ready"
     ? findEntity(links.index, "method", item.entity_id)
@@ -211,6 +223,18 @@ function ResultCard({
         <h3>{canonicalMethod?.canonical_url ? <Link to={canonicalMethod.canonical_url}>{item.name}</Link> : item.name}</h3>
         {onMap && <button onClick={() => onMap(item.entity_id)} type="button">地図で確認</button>}
       </div>
+      {lens && lens.readAxisCount > 0 && (
+        <div className="diagnose-result-lens">
+          <ProblemSignature axes={buildSignature(answers ?? {})} lens={lens} size="compact" label={`${item.name}の目で見た署名`} />
+          <small>
+            {[
+              lens.blockingAxes.length ? `外れる軸: ${lens.blockingAxes.map((axis) => axis.name).join("・")}` : "",
+              lens.supportingAxes.length ? `支える軸: ${lens.supportingAxes.map((axis) => axis.name).join("・")}` : "",
+              lens.openAxes.length ? `未確定: ${lens.openAxes.map((axis) => axis.name).join("・")}` : "",
+            ].filter(Boolean).join(" / ")}
+          </small>
+        </div>
+      )}
       {item.summary && <p>{item.summary}</p>}
       {item.reasons.length > 0 && <ul>{item.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>}
       {item.warnings.map((warning) => <p className="diagnose-warning" key={warning}>{warning}</p>)}
@@ -239,17 +263,21 @@ function ResultBand({
   items,
   data,
   onMap,
+  disposition,
+  answers,
 }: {
   title: string;
   items: EntityRecommendation[];
   data: SiteData;
   onMap?(methodId: string): void;
+  disposition?: Disposition;
+  answers?: Readonly<Record<string, SignatureAnswer>>;
 }) {
   if (items.length === 0) return null;
   return (
-    <section className="diagnose-result-band">
-      <h2>{title}</h2>
-      {items.map((item) => <ResultCard data={data} item={item} key={item.entity_id} onMap={onMap} />)}
+    <section className={`diagnose-result-band${disposition ? ` is-${disposition}` : ""}`}>
+      <h2>{disposition && <DispositionMark kind={disposition} label="none" />}{title}</h2>
+      {items.map((item) => <ResultCard answers={answers} data={data} item={item} key={item.entity_id} onMap={onMap} />)}
     </section>
   );
 }
@@ -258,10 +286,12 @@ function Results({
   result,
   data,
   onMethodMap,
+  answers,
 }: {
   result: RecommendationResult;
   data: SiteData;
   onMethodMap(methodId: string): void;
+  answers: Readonly<Record<string, SignatureAnswer>>;
 }) {
   const methodCount = result.alternatives_first.length
     + result.first_choices.length
@@ -275,9 +305,9 @@ function Results({
         </p>
       )}
       <ResultBand data={data} items={result.alternatives_first} title="代替解法" />
-      <ResultBand data={data} items={result.first_choices} onMap={onMethodMap} title="第一候補" />
-      <ResultBand data={data} items={result.conditional_choices} onMap={onMethodMap} title="条件付き候補" />
-      <ResultBand data={data} items={result.excluded_methods} onMap={onMethodMap} title="除外候補" />
+      <ResultBand answers={answers} data={data} disposition="candidate" items={result.first_choices} onMap={onMethodMap} title="第一候補" />
+      <ResultBand answers={answers} data={data} disposition="conditional" items={result.conditional_choices} onMap={onMethodMap} title="条件付き候補" />
+      <ResultBand answers={answers} data={data} disposition="excluded" items={result.excluded_methods} onMap={onMethodMap} title="除外候補" />
       {result.candidate_problem_archetypes.length > 0 && <details className="diagnose-result-disclosure">
         <summary>関連する問題型 <span>{result.candidate_problem_archetypes.length}</span></summary>
         {result.candidate_problem_archetypes.map((item) => <ResultCard data={data} item={item} key={item.entity_id} />)}
@@ -314,6 +344,8 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
     (answer) => answer.status === "answered" && answer.values.includes("hours_or_more"),
   ) || result.first_choices.some((item) => item.entity_id === "M_BAYESIAN_OPT_GP");
   const answeredCount = Object.keys(atlas.state.answers).length;
+  const signature = useMemo(() => buildSignature(atlas.state.answers), [atlas.state.answers]);
+  const openAxisCount = signature.filter((axis) => axis.state === "missing" || axis.state === "unknown").length;
   const [showAllQuestions, setShowAllQuestions] = useState(false);
   const nextQuestionId = data.questions.find(
     (question) => atlas.state.answers[question.question_id] === undefined,
@@ -407,7 +439,14 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
             <PromptExportLauncher source={{ kind: "diagnose", state: atlas.state, result, manifest, data }} />
           </div>
           {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxの選び方を見る</strong><p>観測から予測モデル（surrogate）とExpected Improvementがどう更新されるかを、固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
-          <Results data={data} onMethodMap={methodMap} result={result} />
+          <section className="diagnose-signature" aria-label="いま見えている問題の形">
+            <header>
+              <strong>いま見えている問題の形</strong>
+              <small>{openAxisCount === 0 ? "12軸すべてに回答があります" : `まだ開いている軸 ${openAxisCount}`}</small>
+            </header>
+            <ProblemSignature axes={signature} label={signatureSummary(signature)} size="medium" />
+          </section>
+          <Results answers={atlas.state.answers} data={data} onMethodMap={methodMap} result={result} />
         </aside>
       </div>
     </>

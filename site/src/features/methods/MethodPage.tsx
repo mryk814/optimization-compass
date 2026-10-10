@@ -18,6 +18,7 @@ import { LearningRelations } from "../learning/LearningRelations";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { NotFoundPage } from "../navigation/NotFoundPage";
 import { MethodPredicates } from "./MethodPredicates";
+import { MethodReading } from "../../visual-system";
 
 import "./MethodPage.css";
 
@@ -156,6 +157,7 @@ export function MethodPage() {
         readingSteps={["最初に要約と前提を読み、手法の適用範囲をつかみます。", "教材の手順・可視化・最小例で機構 (mechanism) を確認します。", "MapやCompareで、問題条件や他手法との関係を照合します。"]}
       />
       {loadError && <p role="alert">{loadError.message}</p>}
+      {siteData && <MethodReading catalog={siteData} methodId={methodId} />}
       {view && <MapAction methodId={methodId} view={view} />}
       {content && (
         <section aria-label="教材" className="method-learning">

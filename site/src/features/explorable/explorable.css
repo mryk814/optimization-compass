@@ -729,3 +729,81 @@
 .prox-equations p { margin: 0; }
 .prox-equations .live-math-block { margin: 0 0 0.6rem; }
 .prox-substitution { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 0.4rem; margin-bottom: 0.6rem; }
+
+/* Primal simplex pivot */
+.spx-enter > div { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.spx-enter button {
+  display: grid;
+  gap: 0.1rem;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.spx-enter button.is-selected { border-color: var(--ex-orange-ink); background: #fff3e6; color: var(--ex-orange-ink); }
+.spx-enter button:focus-visible { outline: 3px solid var(--ex-ink); outline-offset: 2px; }
+.spx-rate { font-weight: 400; color: var(--ex-ink-soft); }
+.spx-actions { flex-wrap: wrap; gap: 0.4rem; }
+.spx-actions .ex-action:disabled { border-color: var(--ex-line); background: var(--ex-panel); color: #7a8194; cursor: not-allowed; }
+.spx-ray { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.spx-stop circle { fill: var(--ex-panel); stroke: var(--ex-ink-soft); stroke-width: 2; }
+.spx-stop.is-first circle { fill: var(--ex-orange); stroke: var(--ex-ink); }
+.spx-stop.is-first text { fill: var(--ex-orange-ink); font-weight: 700; }
+.spx-probe.is-infeasible { fill: var(--ex-red); stroke: var(--ex-ink); stroke-width: 2.5; }
+.spx-bars { display: grid; gap: 0.55rem; margin: 0; padding: 0.5rem; list-style: none; border: 1px solid var(--ex-line); border-radius: 0.4rem; background: var(--ex-panel); }
+.spx-bars li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name value" "role role" "track track";
+  gap: 0.15rem 0.5rem;
+  font-size: var(--type-support);
+}
+.spx-bar-name { grid-area: name; color: var(--ex-ink); }
+.spx-bar-role { grid-area: role; color: var(--ex-ink-soft); }
+.spx-bar-value { grid-area: value; color: var(--ex-ink); font-variant-numeric: tabular-nums; font-weight: 700; }
+.spx-bar-track { grid-area: track; position: relative; height: 0.9rem; border-radius: 0.2rem; background: var(--ex-ground); }
+.spx-bar-zero { position: absolute; top: -0.15rem; bottom: -0.15rem; width: 2px; background: var(--ex-ink); }
+.spx-bar-fill { position: absolute; top: 0.1rem; bottom: 0.1rem; border-radius: 0.15rem; background: var(--ex-teal); }
+.spx-bar-fill.is-entering { background: var(--ex-orange); }
+.spx-bars li.is-negative .spx-bar-fill { background: var(--ex-red); }
+.spx-bars li.is-negative .spx-bar-value { color: var(--ex-red-ink); }
+.spx-bars li.is-negative .spx-bar-value::before { content: "⚠ "; }
+.spx-sales { margin: 0.5rem 0 0; color: var(--ex-ink); font-size: var(--type-support); }
+
+/* Primal simplex: how far the flour shadow price reaches */
+.sps-presets > div { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sps-presets button {
+  min-height: 2.75rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  font-weight: 700;
+  cursor: pointer;
+}
+.sps-presets button.is-selected { border-color: var(--ex-orange-ink); background: #fff3e6; color: var(--ex-orange-ink); }
+.sps-presets button:focus-visible { outline: 3px solid var(--ex-ink); outline-offset: 2px; }
+.sps-flour { stroke: var(--ex-orange); stroke-width: 3; }
+.sps-flour-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.sps-path { fill: none; stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.sps-base { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2.5; }
+.sps-range { fill: var(--ex-teal); fill-opacity: 0.14; }
+.sps-range-label { fill: var(--ex-teal-ink); font-weight: 700; }
+.sps-estimate { fill: none; stroke: var(--ex-orange); stroke-width: 3; stroke-dasharray: 8 5; }
+.sps-estimate-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.sps-true { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; stroke-linejoin: round; }
+.sps-true-label { fill: var(--ex-teal-ink); font-weight: 700; }
+.sps-now { stroke: var(--ex-ink); stroke-width: 1.5; stroke-opacity: 0.55; }
+.sps-gap { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.sps-estimate-dot { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
+.sps-true-dot { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2.5; }

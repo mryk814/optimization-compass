@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from collections import Counter, defaultdict
+from collections.abc import Iterable, Mapping
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
@@ -9,7 +10,14 @@ from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from optimization_compass.article_quality import ArticleReport, evaluate_all
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.editorial_scope import (
+    SCOPE_SEED_PATH,
+    EditorialScope,
+    ScopeMember,
+    load_editorial_scope,
+)
 from optimization_compass.failure_discovery import FailureDiscoveryIndex
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
@@ -112,6 +120,42 @@ class CoverageSummary(CoverageModel):
     baseline: Literal["not_provided"] = "not_provided"
 
 
+SCOPE_AXES = ("identity", "claims", "lesson", "experience", "transfer")
+SCOPE_UNITS = ("knowledge_topic", "problem_structure")
+_AXIS_STATES: dict[str, tuple[str, ...]] = {
+    "identity": ("candidate", "unrepresented", "unknown"),
+    "claims": ("no_canonical_row",),
+    "lesson": ("stale", "in_progress", "no_article"),
+    "experience": ("undecided",),
+    "transfer": ("undecided",),
+}
+_CLAIM_REF_TYPES = frozenset({"method", "problem", "problem_definition", "feature"})
+_INTERACTIVE_LEVEL = "explorable"
+
+
+class AxisCoverage(CoverageModel):
+    """One quality axis of one unit. Integers only; never a ratio or a blended score."""
+
+    eligible: int = Field(ge=0)
+    complete: int = Field(ge=0)
+    states: dict[str, int]
+    info: dict[str, int] = Field(default_factory=dict)
+
+
+class UnitScopeCoverage(CoverageModel):
+    denominator: int = Field(ge=0)
+    excluded: int = Field(ge=0)
+    held: int = Field(ge=0)
+    merged: int = Field(ge=0)
+    axes: dict[str, AxisCoverage]
+
+
+class ScopeCoverage(CoverageModel):
+    scope_version: str
+    status: Literal["proposed", "approved"]
+    units: dict[str, UnitScopeCoverage]
+
+
 class CoverageReport(CoverageModel):
     contract_version: Literal["1.0.0"] = "1.0.0"
     dataset_version: str
@@ -121,6 +165,14 @@ class CoverageReport(CoverageModel):
     expectations: list[CoverageExpectation]
     priorities: list[CoveragePriority]
     integrity_issues: list[IntegrityIssue]
+    scope: ScopeCoverage | None = None
+
+
+class ScopeAxisDelta(CoverageModel):
+    """Added denominator and added completion are reported separately, never netted."""
+
+    denominator_delta: int
+    complete_delta: int
 
 
 class CoverageDelta(CoverageModel):
@@ -132,6 +184,7 @@ class CoverageDelta(CoverageModel):
     removed_expectation_ids: list[str]
     subject_count_delta: dict[str, int]
     available_delta: int
+    scope_delta: dict[str, dict[str, ScopeAxisDelta]] | None = None
 
 
 def build_coverage_report(
@@ -140,6 +193,7 @@ def build_coverage_report(
     *,
     dataset_version: str,
     generated_at: datetime,
+    project_root: Path | None = None,
 ) -> CoverageReport:
     artifacts = _load_artifacts(artifact_root)
     subjects, membership = _build_inventory(repository, artifacts)
@@ -161,7 +215,123 @@ def build_coverage_report(
         expectations=expectations,
         priorities=priorities,
         integrity_issues=integrity,
+        scope=_scope_from_repository(project_root or Path(__file__).parents[2]),
     )
+
+
+def _scope_from_repository(root: Path) -> ScopeCoverage | None:
+    seed = root / SCOPE_SEED_PATH
+    if not seed.exists():
+        return None
+    _, reports = evaluate_all(root)
+    return build_scope_coverage(load_editorial_scope(seed), reports)
+
+
+def build_scope_coverage(scope: EditorialScope, reports: Iterable[ArticleReport]) -> ScopeCoverage:
+    """Count included members per unit and per axis. Counts only: no ratio, no total."""
+    by_content: dict[str, ArticleReport] = {}
+    by_entity: dict[str, dict[str, ArticleReport]] = defaultdict(dict)
+    for report in reports:
+        page = report.article.page
+        by_content[page.content_id] = report
+        for entity_id in (page.method_id, page.canonical_entity_id):
+            if entity_id:
+                by_entity[entity_id][page.content_id] = report
+    units: dict[str, UnitScopeCoverage] = {}
+    for unit in SCOPE_UNITS:
+        members = [m for m in scope.members if m.unit == unit]
+        included = [m for m in members if m.decision == "include"]
+        axes = _empty_axes(len(included))
+        for member in included:
+            resolved = _resolve_articles(member, by_content, by_entity)
+            _count_identity(member, axes["identity"])
+            _count_claims(member, axes["claims"])
+            _count_lesson(resolved, axes["lesson"])
+            axes["experience"].states["undecided"] += 1
+            axes["transfer"].states["undecided"] += 1
+            if any(r.visual_level == _INTERACTIVE_LEVEL for r in resolved):
+                axes["experience"].info["has_interactive"] += 1
+        units[unit] = UnitScopeCoverage(
+            denominator=len(included),
+            excluded=sum(m.decision == "exclude" for m in members),
+            held=sum(m.decision == "hold" for m in members),
+            merged=sum(m.decision == "merge" for m in members),
+            axes=axes,
+        )
+    return ScopeCoverage(scope_version=scope.scope_version, status=scope.status, units=units)
+
+
+def _empty_axes(included: int) -> dict[str, AxisCoverage]:
+    axes = {
+        axis: AxisCoverage(
+            eligible=included if axis in {"identity", "claims", "lesson"} else 0,
+            complete=0,
+            states={state: 0 for state in _AXIS_STATES[axis]},
+        )
+        for axis in SCOPE_AXES
+    }
+    axes["experience"].info["has_interactive"] = 0
+    return axes
+
+
+def _resolve_articles(
+    member: ScopeMember,
+    by_content: Mapping[str, ArticleReport],
+    by_entity: Mapping[str, Mapping[str, ArticleReport]],
+) -> list[ArticleReport]:
+    found: dict[str, ArticleReport] = {}
+    for ref in member.mapping.refs:
+        if ref.type == "content" and ref.id in by_content:
+            found[ref.id] = by_content[ref.id]
+        elif ref.type in {"method", "problem", "feature"}:
+            found.update(by_entity.get(ref.id, {}))
+    return [found[key] for key in sorted(found)]
+
+
+def _count_identity(member: ScopeMember, axis: AxisCoverage) -> None:
+    relation = member.mapping.relation
+    if member.mapping.review == "reviewed" and relation not in {"unrepresented", "unknown"}:
+        axis.complete += 1
+    elif relation in {"unknown", "unrepresented"}:
+        axis.states[relation] += 1
+    else:
+        axis.states["candidate"] += 1
+
+
+def _count_claims(member: ScopeMember, axis: AxisCoverage) -> None:
+    if any(ref.type in _CLAIM_REF_TYPES for ref in member.mapping.refs):
+        axis.complete += 1
+    else:
+        axis.states["no_canonical_row"] += 1
+
+
+def _count_lesson(resolved: list[ArticleReport], axis: AxisCoverage) -> None:
+    if not resolved:
+        axis.states["no_article"] += 1
+    elif any(r.status == "達成" for r in resolved):
+        axis.complete += 1
+    else:
+        best = min(resolved, key=lambda r: (r.count("fail"), r.count("stale", "new", "unreviewed")))
+        axis.states["stale" if best.count("stale", "new") else "in_progress"] += 1
+
+
+def _scope_delta(
+    before: ScopeCoverage | None, after: ScopeCoverage | None
+) -> dict[str, dict[str, ScopeAxisDelta]] | None:
+    if before is None or after is None:
+        return None
+    delta: dict[str, dict[str, ScopeAxisDelta]] = {}
+    for unit, now in after.units.items():
+        was = before.units.get(unit)
+        delta[unit] = {
+            axis: ScopeAxisDelta(
+                denominator_delta=value.eligible - (was.axes[axis].eligible if was else 0),
+                complete_delta=value.complete - (was.axes[axis].complete if was else 0),
+            )
+            for axis, value in now.axes.items()
+            if was is None or axis in was.axes
+        }
+    return delta
 
 
 def write_coverage_report(report: CoverageReport, json_path: Path, markdown_path: Path) -> None:
@@ -193,6 +363,8 @@ def write_coverage_report(report: CoverageReport, json_path: Path, markdown_path
         f"{item.factors['classification'].reason} |"
         for item in report.priorities
     )
+    if report.scope is not None:
+        lines.extend(_scope_markdown(report.scope))
     lines.extend(["", "## Integrity issues", ""])
     lines.extend(
         f"- `{item.code}` `{item.entity_id}`: {item.detail}" for item in report.integrity_issues
@@ -200,6 +372,38 @@ def write_coverage_report(report: CoverageReport, json_path: Path, markdown_path
     if not report.integrity_issues:
         lines.append("- None")
     markdown_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+_AXIS_LABELS = {
+    "identity": "名前と同一性",
+    "claims": "定義と根拠",
+    "lesson": "説明",
+    "experience": "体験",
+    "transfer": "転移",
+}
+_UNIT_LABELS = {"knowledge_topic": "知識トピック", "problem_structure": "問題構造"}
+
+
+def _scope_markdown(scope: ScopeCoverage) -> list[str]:
+    lines = ["", f"## 収録範囲（{scope.scope_version}, {scope.status}）", ""]
+    lines.append("軸ごとの件数です。割合や総合点は出しません。対象0件の軸は判定前です。")
+    for unit, value in scope.units.items():
+        lines.extend(
+            [
+                "",
+                f"### {_UNIT_LABELS[unit]}（対象 {value.denominator}件、除外 {value.excluded}件、"
+                f"保留 {value.held}件、統合 {value.merged}件）",
+                "",
+                "| 軸 | 対象 | 完了 | 状態内訳 |",
+                "|---|---:|---:|---|",
+            ]
+        )
+        for axis, item in value.axes.items():
+            breakdown = ", ".join(f"{k} {v}" for k, v in {**item.states, **item.info}.items())
+            lines.append(
+                f"| {_AXIS_LABELS[axis]} | {item.eligible} | {item.complete} | {breakdown} |"
+            )
+    return lines
 
 
 def diff_coverage(before: CoverageReport, after: CoverageReport) -> CoverageDelta:
@@ -227,6 +431,7 @@ def diff_coverage(before: CoverageReport, after: CoverageReport) -> CoverageDelt
             after.summary.status_counts.get("available", 0)
             - before.summary.status_counts.get("available", 0)
         ),
+        scope_delta=_scope_delta(before.scope, after.scope),
     )
 
 

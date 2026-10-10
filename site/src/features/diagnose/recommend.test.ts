@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import rawSiteData from "../../../public/data/recommendation/site-data.json";
 import { parseSiteData } from "../../contracts/site-data";
-import { recommend } from "./recommend";
+import { isCertificateToken, recommend } from "./recommend";
 
 const data = parseSiteData(rawSiteData);
 
@@ -59,5 +59,21 @@ describe("offline recommendation evaluator", () => {
 
     expect(result.first_choices).toHaveLength(1);
     expect(result.first_choices[0].implementations).toHaveLength(1);
+  });
+});
+
+describe("certificate tokens", () => {
+  test.each([
+    ["first_order_residual", false],
+    ["primal_dual_residual", false],
+    ["training_gradient_or_loss_not_global_certificate", false],
+    ["posterior_uncertainty_not_certificate", false],
+    ["pareto_stationarity_or_gap_method_specific", false],
+    ["mip_gap", true],
+    ["dual_bound", true],
+    ["primal_dual_gap", true],
+    ["bound_or_unsat_proof_implementation_dependent", true],
+  ])("%s → %s", (token, expected) => {
+    expect(isCertificateToken(token)).toBe(expected);
   });
 });

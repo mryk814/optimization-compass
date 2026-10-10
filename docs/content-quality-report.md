@@ -1,9 +1,9 @@
 # Content quality report
 
-- Published concept guides: `38`
-- Meeting the concept floor: `38`
+- Published concept guides: `42`
+- Meeting the concept floor: `42`
 - Below the concept floor: `0`
-- Prose review warnings: `458`
+- Prose review warnings: `549`
 
 ## Concept publication floor
 
@@ -19,11 +19,14 @@
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
+| `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 8793 | 14 | 4 | 0 | pass |
+| `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 103 | 6430 | 11 | 4 | 0 | pass |
+| `concept.model-predictive-control` | 150 | 15178 | 16 | 10 | 0 | pass |
 | `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4444 | 9 | 5 | 0 | pass |
 | `concept.nonlinear-least-squares` | 119 | 8046 | 12 | 7 | 0 | pass |
@@ -37,6 +40,7 @@
 | `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 4130 | 8 | 4 | 0 | pass |
+| `concept.smooth-low-dimensional-unconstrained` | 132 | 12714 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
@@ -54,8 +58,8 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 20
-- `sentence.commas`: 191
-- `sentence.long`: 27
+- `sentence.commas`: 265
+- `sentence.long`: 44
 
 | Content | Warnings |
 |---|---:|
@@ -88,11 +92,14 @@
 | `concept.dynamics-defect` | 1 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
+| `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 2 |
+| `concept.l1-sparse-regularization` | 33 |
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 8 |
 | `concept.mixed-integer-linear-program` | 7 |
+| `concept.model-predictive-control` | 19 |
 | `concept.multiobjective-optimization` | 0 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 0 |
 | `concept.nonlinear-least-squares` | 1 |
@@ -106,6 +113,7 @@
 | `concept.semidefinite-program` | 0 |
 | `concept.simplex` | 4 |
 | `concept.simplex-optimization` | 0 |
+| `concept.smooth-low-dimensional-unconstrained` | 13 |
 | `concept.so3-rotation-representation` | 1 |
 | `concept.spd-matrix-geometry` | 0 |
 | `concept.time-discretization` | 1 |
@@ -177,7 +185,7 @@
 | `pdlp` | 0 |
 | `powell` | 1 |
 | `primal-dual-conic` | 0 |
-| `primal-simplex` | 0 |
+| `primal-simplex` | 9 |
 | `projected-gradient` | 1 |
 | `proximal-gradient` | 0 |
 | `random-search` | 0 |

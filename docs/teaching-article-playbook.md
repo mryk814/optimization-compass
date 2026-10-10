@@ -23,7 +23,7 @@ method記事の見本は [`content/methods/adam.md`](../content/methods/adam.md)
 |---|---|
 | frontmatter、許可されるMarkdown、検証 | [`docs/content-authoring.md`](content-authoring.md) |
 | 節の型（見出しの名前と順番） | `src/optimization_compass/content_skeletons.py`、[`docs/formulation-atlas.md`](formulation-atlas.md) |
-| 文体と表記 | [`.agents/skills/article-style/SKILL.md`](../.agents/skills/article-style/SKILL.md) |
+| 文体と表記 | [`docs/article-style.md`](article-style.md) |
 | 図の色と描き方 | [`docs/content-visual-language.md`](content-visual-language.md)、[`docs/explorables.md`](explorables.md) |
 | 操作 → 変化 → 疑問 → 式の流れと、画面での検収基準 | [`docs/article-experience-pattern.md`](article-experience-pattern.md) |
 | **一つの題材で教え切る方法、節ごとの中身、視覚表現の水準、画面を基準にした書き方** | **この文書** |
@@ -242,7 +242,7 @@ sources: [S054, S055]   # 事実の根拠。Qiita・Zennは不可
 
 ## 6. 日本語
 
-文体の規則は `article-style` スキルに従います。見本の3記事で特に効いている書き方は次のとおりです。
+文体の規則は [`article-style.md`](article-style.md) に従います。見本の3記事で特に効いている書き方は次のとおりです。
 
 - 式の後に「この式は『〜』と読みます」と書き、式を日本語の文に戻します。
 - 結果の数値の後に「〜と読めます」と書き、題材の言葉に戻します。例：「温度は1時間に約0.9度ずつ上がっている、と読めます。」
@@ -266,6 +266,9 @@ sources: [S054, S055]   # 事実の根拠。Qiita・Zennは不可
 - [ ] explorableのパネルに見出しがあり、操作名が日本語で、アイコンだけのボタンは本文に名前とアイコンを両方書いている
 - [ ] 比較から順位付けや一般的な性能の主張をしていない
 - [ ] `uv run python scripts/check_article.py <file>` と `uv run optimization-compass validate content` が通る
+- [ ] `uv run python scripts/article_quality.py show <file>` で自動判定にfailがなく、review基準を判定して `record` した（[`article-quality.md`](article-quality.md)）
+
+このチェックリストの各項目は、記事ごとの品質台帳（[`article-quality.md`](article-quality.md)）の基準になっています。項目を足したり厳しくしたりしたら、`data/seeds/article_quality_criteria.json` も更新します。
 
 ## 8. AIごとの分担
 
