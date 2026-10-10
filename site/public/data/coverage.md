@@ -34,7 +34,7 @@
 |---|---:|---:|---|
 | 名前と同一性 | 160 | 117 | candidate 3, unrepresented 40, unknown 0 |
 | 定義と根拠 | 160 | 113 | no_canonical_row 47 |
-| 説明 | 160 | 7 | stale 1, in_progress 105, no_article 47 |
+| 説明 | 160 | 8 | stale 1, in_progress 104, no_article 47 |
 | 体験 | 0 | 0 | undecided 160, has_interactive 21 |
 | 転移 | 0 | 0 | undecided 160 |
 
