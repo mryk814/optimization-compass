@@ -4062,7 +4062,7 @@
           "title_ja": "高価な実験の設定を探す"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.hyperparameter-optimization",
       "cues_ja": [
         "learning rate・木の深さ・正則化の強さを決めたい"
       ],
@@ -4100,7 +4100,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4146,7 +4146,10 @@
         "S034",
         "S035",
         "S037",
-        "S038"
+        "S038",
+        "S059",
+        "S069",
+        "S075"
       ],
       "standard_form": "\\min_{\\lambda\\in\\Lambda}\\; \\mathcal{L}_{\\text{val}}\\big(w^{*}(\\lambda)\\big),\\quad w^{*}(\\lambda)=\\text{学習の結果}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>&#x003BB;</mi><mo>&#x02208;</mo><mi>&#x0039B;</mi></mrow></msub><mspace width=\"0.278em\" /><msub><mi>&#x02112;</mi><mrow><mtext>val</mtext></mrow></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msup><mi>w</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><msup><mi>w</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mtext>学習の結果</mtext></mrow></math></div>"
@@ -6283,6 +6286,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 22
+    "with_article": 23
   }
 }

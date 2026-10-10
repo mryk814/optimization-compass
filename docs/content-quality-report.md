@@ -1,9 +1,9 @@
 # Content quality report
 
-- Published concept guides: `44`
-- Meeting the concept floor: `44`
+- Published concept guides: `45`
+- Meeting the concept floor: `45`
 - Below the concept floor: `0`
-- Prose review warnings: `603`
+- Prose review warnings: `629`
 
 ## Concept publication floor
 
@@ -19,6 +19,7 @@
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
+| `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 8793 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
@@ -60,8 +61,8 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 20
-- `sentence.commas`: 313
-- `sentence.long`: 50
+- `sentence.commas`: 334
+- `sentence.long`: 55
 
 | Content | Warnings |
 |---|---:|
@@ -94,6 +95,7 @@
 | `concept.dynamics-defect` | 1 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
+| `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 2 |
 | `concept.l1-sparse-regularization` | 33 |
