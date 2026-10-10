@@ -22,7 +22,7 @@
 - PR297/298 の本文にある試験結果は作者の申告です。この監査では再実行していません。
 - 画面の確認、リポジトリ全体のテスト、site build は、この票では行っていません。
 
-## OC-EVOL-002：編集上の収録範囲 v1（proposed）
+## OC-EVOL-002：編集上の収録範囲 v1（2026-10-10 承認）
 
 収録範囲は [`data/seeds/editorial_scope.json`](../../../data/seeds/editorial_scope.json)、書き方と判定の基準は [`docs/editorial-scope.md`](../../editorial-scope.md) にあります。件数は `uv run python scripts/editorial_scope.py` で出します。この記録には件数を書き写しません。
 
@@ -35,7 +35,7 @@
 | 課題 | 状態 | 記録 |
 |---|---|---|
 | OC-EVOL-001 基準監査 | 完了 | 上の節 |
-| OC-EVOL-002 収録範囲 v1 | 完了（`proposed`。層と採否はオーナーの承認待ち） | [`editorial-scope.md`](../../editorial-scope.md) |
+| OC-EVOL-002 収録範囲 v1 | 完了（2026-10-10 オーナー承認、`approved`） | [`editorial-scope.md`](../../editorial-scope.md) |
 | OC-EVOL-003 Coverage の分母と品質軸 | 完了 | `coverage.py` の scope 節、Coverage 画面 |
 | OC-EVOL-004 同一性と粒度 | 完了 | [`identity-granularity.md`](../../identity-granularity.md) |
 | OC-EVOL-010 scene・媒体契約の差分 | 完了（提案のみの項目は使う図のPRで足す） | [`explorables.md`](../../explorables.md) の「数値の出どころ」 |
