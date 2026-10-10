@@ -22,4 +22,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
   "proximal-gradient-threshold": lazy(() => import("./ProximalThreshold")),
   "inverse-problem-alpha": lazy(() => import("./InverseProblemAlpha")),
+  "robust-loss-pull": lazy(() => import("./RobustLossPull")),
 };

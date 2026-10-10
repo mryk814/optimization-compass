@@ -147,6 +147,7 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `bayes-opt-acquisition` | `bayesian-optimization` | GPの予測平均と不確実性、獲得関数で次の点が決まる様子。β・長さの尺度・EIによる探索と活用の違い |
 | `coordinate-descent-walk` | `coordinate-descent` | 一座標の断面の最小と全体の収束の違い。谷の向き・曲率比・座標の結びつきによる軌跡、掃引ごとの停止と予算打ち切り |
 | `inverse-problem-alpha` | `concept.inverse-problem` | 罰則の重みαを対数目盛りで動かし、復元した分布・真の分布との誤差・観測とのずれ（雑音の大きさδとの比較）を同じ計算で見る |
+| `robust-loss-pull` | `concept.robust-regression` | 観測 (0, 0, 0, m) の最後の値 m とHuberの尺度 δ を動かし、二乗損失とHuber損失の定数当てはめ・各観測の損失の傾きを見比べる。Huber の推定値は min(m/4, δ/3) と一致 |
 
 ## 次の候補
 

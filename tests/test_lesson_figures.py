@@ -137,3 +137,16 @@ def test_lesson_figures_are_referenced_by_content() -> None:
     corpus = "".join(path.read_text(encoding="utf-8") for path in ROOT.glob("content/**/*.md"))
     for name in generate_lesson_figures():
         assert f"./figures/{name}" in corpus
+
+
+def test_robust_regression_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import robust_fit
+
+    squared_x, squared = robust_fit(None)
+    huber_x, huber = robust_fit(1.0)
+    assert round(squared_x, 9) == 2.5
+    assert [round(value, 9) for value in squared] == [2.5, 2.5, 2.5, -7.5]
+    assert round(huber_x, 9) == round(1 / 3, 9)
+    assert [round(value, 9) for value in huber] == [round(1 / 3, 9)] * 3 + [-1.0]
+    assert abs(sum(squared)) < 1e-9 and abs(sum(huber)) < 1e-9
+    assert "Huberの解 x=1/3" in generate_lesson_figures()["robust-regression-huber.svg"]

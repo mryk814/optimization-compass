@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "robust-loss-pull": {
+    question: "外れ値を1つ遠ざけると、二乗損失とHuber損失の当てはめはそれぞれどこまで引っ張られるか。",
+    fixedConditions: "観測は (0, 0, 0, m) の4つで、最後の値 m だけを0〜100で動かす。当てはめるのは1つの定数 x。損失は二乗 r²/2 とHuber ρ_δ（尺度 δ は0.25〜10）。Huberの最小点は傾きの合計 Σψ_δ(x−y_i)=0 の根を数値で求め、この配置の閉じた式 min(m/4, δ/3) と一致させる。",
+    notImplied: "この配置（三つの0と一つの m）の定数当てはめだけを示す。一般の回帰係数では、説明変数 a_i が大きい観測の寄与 ψ(r_i)a_i は抑えられない。実データの外れ値判定、δ の選び方、統計的な推定精度は示さない。",
+    beats: [],
+  },
   "inverse-problem-alpha": {
     question: "罰則の重み α を動かすと、復元した温度分布はどこで真の分布に一番近づくか。",
     fixedConditions: "40点の観測から棒の初期温度を復元する。ぼかし G は幅0.05のガウス型、真の分布は位置0.3と0.7に山がある2山、雑音は標準偏差σ=10⁻³でn=40個（δ=σ√n=0.0063）。α は10⁻¹⁰〜1で、(GᵀG+αI)m=Gᵀd を解く。数値は記事と同じ1回の観測で、Pythonが出力した固定データを使う。",
