@@ -776,3 +776,34 @@
 .spx-bars li.is-negative .spx-bar-value { color: var(--ex-red-ink); }
 .spx-bars li.is-negative .spx-bar-value::before { content: "⚠ "; }
 .spx-sales { margin: 0.5rem 0 0; color: var(--ex-ink); font-size: var(--type-support); }
+
+/* Primal simplex: how far the flour shadow price reaches */
+.sps-presets > div { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sps-presets button {
+  min-height: 2.75rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  font-weight: 700;
+  cursor: pointer;
+}
+.sps-presets button.is-selected { border-color: var(--ex-orange-ink); background: #fff3e6; color: var(--ex-orange-ink); }
+.sps-presets button:focus-visible { outline: 3px solid var(--ex-ink); outline-offset: 2px; }
+.sps-flour { stroke: var(--ex-orange); stroke-width: 3; }
+.sps-flour-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.sps-path { fill: none; stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.sps-base { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2.5; }
+.sps-range { fill: var(--ex-teal); fill-opacity: 0.14; }
+.sps-range-label { fill: var(--ex-teal-ink); font-weight: 700; }
+.sps-estimate { fill: none; stroke: var(--ex-orange); stroke-width: 3; stroke-dasharray: 8 5; }
+.sps-estimate-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.sps-true { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; stroke-linejoin: round; }
+.sps-true-label { fill: var(--ex-teal-ink); font-weight: 700; }
+.sps-now { stroke: var(--ex-ink); stroke-width: 1.5; stroke-opacity: 0.55; }
+.sps-gap { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.sps-estimate-dot { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
+.sps-true-dot { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2.5; }

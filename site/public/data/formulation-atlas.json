@@ -656,7 +656,7 @@
           "title_ja": "初期simplexで局所探索の感度を見抜く"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.smooth-low-dimensional-unconstrained",
       "cues_ja": [
         "変数が数個〜数十個で、目的が微分できる式で書ける"
       ],
@@ -694,7 +694,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -738,7 +738,9 @@
       "reading_ja": "制約のない滑らかな関数を、少数の変数について最小にします。勾配と曲率を使う局所法が基本です。",
       "source_ids": [
         "S002",
-        "S056"
+        "S054",
+        "S056",
+        "S057"
       ],
       "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; f(x),\\quad f \\text{ は滑らか},\\; n \\text{ は小さい}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>f</mi><mtext>&#x000A0;は滑らか</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>n</mi><mtext>&#x000A0;は小さい</mtext></mrow></math></div>"
@@ -2494,7 +2496,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.mixed-integer-quadratic-program",
       "cues_ja": [
         "二乗の目的に、選ぶ・選ばないの決定が混ざる"
       ],
@@ -2532,7 +2534,7 @@
       ],
       "family_id": "integer_combinatorial",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2575,9 +2577,14 @@
       "problem_id": "PA024",
       "reading_ja": "凸QPの一部の変数を整数に制限した型です。銘柄数の上限つきポートフォリオなどに現れます。",
       "source_ids": [
+        "S002",
+        "S004",
         "S021",
         "S024",
-        "S028"
+        "S028",
+        "S054",
+        "S056",
+        "S064"
       ],
       "standard_form": "\\min_{x}\\; \\tfrac12 x^\\top Q x+c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><msup><mi>x</mi><mo>&#x022A4;</mo></msup><mi>Q</mi><mi>x</mi><mo>&#x0002B;</mo><msup><mi>c</mi><mo>&#x022A4;</mo></msup><mi>x</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>A</mi><mi>x</mi><mo>&#x02264;</mo><mi>b</mi><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>j</mi></msub><mo>&#x02208;</mo><mi>&#x02124;</mi><mspace width=\"0.278em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>j</mi><mo>&#x02208;</mo><mi>I</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -3191,7 +3198,7 @@
           "title_ja": "時間窓付き配送ルートを10分以内に組む"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.vehicle-routing",
       "cues_ja": [
         "配送・巡回・点検で、何台の車がどの順に回るかを決める"
       ],
@@ -3229,7 +3236,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3272,8 +3279,12 @@
       "problem_id": "PA031",
       "reading_ja": "複数の車両で顧客を回る巡回路を決めます。最短路を並べるだけでは解けず、訪問順と割当を同時に決めます。",
       "source_ids": [
+        "S005",
+        "S022",
         "S023",
-        "S024"
+        "S024",
+        "S054",
+        "S079"
       ],
       "standard_form": "\\min\\; \\sum_{k}\\sum_{(i,j)} c_{ij}x_{ijk} \\;\\text{ s.t. }\\; \\text{各顧客を1回訪問},\\; \\text{容量},\\; \\text{時間枠}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo>min</mo><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>k</mi></mrow></munder><munder><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mtext>各顧客を1回訪問</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mtext>容量</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mtext>時間枠</mtext></mrow></math></div>"
@@ -3622,7 +3633,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.l1-sparse-regularization",
       "cues_ja": [
         "候補の特徴量が多く、効いているものだけを残したい"
       ],
@@ -3660,7 +3671,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3704,6 +3715,7 @@
       "reading_ja": "当てはめの誤差に L1 罰則を足し、多くの係数がちょうど0になる解を求めます。",
       "source_ids": [
         "S055",
+        "S061",
         "S066",
         "S067"
       ],
@@ -4464,7 +4476,7 @@
           "title_ja": "100Hzで反復MPCの二次計画問題を解く"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.model-predictive-control",
       "cues_ja": [
         "制御周期ごとに、制約つきの最適な操作を実時間で求めたい"
       ],
@@ -4502,7 +4514,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4547,6 +4559,9 @@
       "source_ids": [
         "S012",
         "S043",
+        "S055",
+        "S056",
+        "S062",
         "S076"
       ],
       "standard_form": "\\min_{u_0,\\dots,u_{N-1}}\\; \\sum_{k=0}^{N-1}\\big(x_k^\\top Qx_k+u_k^\\top Ru_k\\big)+x_N^\\top Px_N \\;\\text{ s.t. }\\; x_{k+1}=Ax_k+Bu_k,\\; x_0=\\hat x(t)",
@@ -5649,7 +5664,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.inverse-problem",
       "cues_ja": [
         "断層画像・地下構造・熱源のように、結果から原因を逆算する"
       ],
@@ -5687,7 +5702,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5732,7 +5747,9 @@
       "source_ids": [
         "S003",
         "S041",
-        "S056"
+        "S055",
+        "S056",
+        "S101"
       ],
       "standard_form": "\\min_{m}\\; \\tfrac12\\|G(m)-d\\|_2^2+\\tfrac{\\alpha}{2}\\|Lm\\|_2^2",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>m</mi></mrow></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>G</mi><mo stretchy=\"false\">&#x00028;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mi>d</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mrow><mi>&#x003B1;</mi></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>L</mi><mi>m</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math></div>"
@@ -6266,6 +6283,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 16
+    "with_article": 22
   }
 }

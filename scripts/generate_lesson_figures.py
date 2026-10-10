@@ -1,6 +1,6 @@
 """Generate the computed supporting figures that sit next to one formula in a lesson.
 
-uv run python scripts/generate_lesson_figures.py            # write site/public/figures/*.svg
+uv run python scripts/generate_lesson_figures.py            # write figures and explorable fixture
 uv run python scripts/generate_lesson_figures.py --check    # fail if a committed figure is stale
 
 Supporting figures are drawn at the width they are shown on a PC (440 px, the 27.5rem cap
@@ -14,12 +14,19 @@ from __future__ import annotations
 
 import argparse
 import html
+import itertools
+import json
 import math
+import random
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 OUTPUT = ROOT / "site" / "public" / "figures"
+# Inputs of the inverse-problem explorable. Python owns the example; the TS math only imports it.
+INVERSE_FIXTURE = (
+    ROOT / "site" / "src" / "features" / "explorable" / "math" / "inverseProblem.fixture.json"
+)
 
 WIDTH = 440
 INK, MUTED, GRID = "#17211b", "#56645b", "#aab4ab"
@@ -292,12 +299,973 @@ def _nonlinear_least_squares_profile_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Smooth low-dimensional unconstrained (content/concepts/smooth-low-dimensional-unconstrained.md):
+# f(x) = (x1^2 - 1)^2 + x1 x2 + 2 x2^2 has a saddle at the origin and two valley bottoms.
+LANDSCAPE_START_A = (0.5, 1.0)
+LANDSCAPE_START_B = (0.2, 0.1)
+
+
+def landscape_value(x1: float, x2: float) -> float:
+    return (x1 * x1 - 1) ** 2 + x1 * x2 + 2 * x2 * x2
+
+
+def landscape_gradient(x1: float, x2: float) -> tuple[float, float]:
+    return 4 * x1 * (x1 * x1 - 1) + x2, x1 + 4 * x2
+
+
+def landscape_newton_path(
+    start: tuple[float, float], tolerance: float = 1e-8
+) -> list[tuple[float, float]]:
+    """Pure Newton iteration with the exact 2x2 Hessian [[12 x1^2 - 4, 1], [1, 4]]."""
+    x1, x2 = start
+    path = [(x1, x2)]
+    while math.hypot(*landscape_gradient(x1, x2)) >= tolerance and len(path) < 50:
+        g1, g2 = landscape_gradient(x1, x2)
+        h11, h12, h22 = 12 * x1 * x1 - 4, 1.0, 4.0
+        det = h11 * h22 - h12 * h12
+        x1 -= (h22 * g1 - h12 * g2) / det
+        x2 -= (-h12 * g1 + h11 * g2) / det
+        path.append((x1, x2))
+    return path
+
+
+def _contour_segments(
+    func: Callable[[float, float], float],
+    level: float,
+    x_range: tuple[float, float],
+    y_range: tuple[float, float],
+    cells: tuple[int, int],
+) -> list[tuple[tuple[float, float], tuple[float, float]]]:
+    """Marching squares on a regular grid; each cell contributes zero, one or two segments."""
+    nx, ny = cells
+    xs = [x_range[0] + (x_range[1] - x_range[0]) * i / nx for i in range(nx + 1)]
+    ys = [y_range[0] + (y_range[1] - y_range[0]) * j / ny for j in range(ny + 1)]
+    values = [[func(x, y) - level for y in ys] for x in xs]
+
+    def cross(a: tuple[float, float, float], b: tuple[float, float, float]) -> tuple[float, float]:
+        t = a[2] / (a[2] - b[2])
+        return a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])
+
+    segments = []
+    for i in range(nx):
+        for j in range(ny):
+            corners = [
+                (xs[i], ys[j], values[i][j]),
+                (xs[i + 1], ys[j], values[i + 1][j]),
+                (xs[i + 1], ys[j + 1], values[i + 1][j + 1]),
+                (xs[i], ys[j + 1], values[i][j + 1]),
+            ]
+            hits = [
+                cross(corners[k], corners[(k + 1) % 4])
+                for k in range(4)
+                if (corners[k][2] > 0) != (corners[(k + 1) % 4][2] > 0)
+            ]
+            if len(hits) == 2:
+                segments.append((hits[0], hits[1]))
+            elif len(hits) == 4:
+                segments.append((hits[0], hits[1]))
+                segments.append((hits[2], hits[3]))
+    return segments
+
+
+def _smooth_landscape_svg() -> str:
+    root = math.sqrt(17) / 4
+    minima = ((root, -root / 4), (-root, root / 4))
+    bottom = landscape_value(*minima[0])
+    px = _scale(-1.8, 1.8, 56, 416)
+    py = _scale(1.2, -1.2, 52, 292)
+    path_a = landscape_newton_path(LANDSCAPE_START_A)
+    path_b = landscape_newton_path(LANDSCAPE_START_B)
+    parts = _open(
+        "谷が二つ、その間に峠",
+        (
+            f"f(x)=(x1^2-1)^2+x1x2+2x2^2 の等高線。原点が峠（鞍点、f=1）で、"
+            f"x=(±{root:.2f}, ∓{root / 4:.2f}) の二つの谷底が最小値 {bottom:.3f} です。"
+            f"Newton法は始点Aから{len(path_a) - 1}回で左の谷底へ、"
+            f"始点Bから{len(path_b) - 1}回で峠へ着きます。"
+        ),
+        396,
+    )
+    parts.append(f'<path d="M56 52V292H416V52Z" fill="none" stroke="{GRID}"/>')
+    for level in (-0.1, 0.5, 1.0, 2.0, 4.0):
+        style = (
+            f'stroke="{MUTED}" stroke-width="2"'
+            if level == 1.0
+            else f'stroke="{RING}" stroke-width="1.5"'
+        )
+        segments = _contour_segments(landscape_value, level, (-1.8, 1.8), (-1.2, 1.2), (144, 96))
+        data = "".join(
+            f"M{px(a[0]):.1f} {py(a[1]):.1f}L{px(b[0]):.1f} {py(b[1]):.1f}" for a, b in segments
+        )
+        parts.append(f'<path d="{data}" fill="none" {style}/>')
+    for value in (-1, 0, 1):
+        parts.append(_text(px(value), 312, f"{value}", "tick", "middle"))
+        parts.append(_text(48, py(value) + 5, f"{value}", "tick", "end"))
+    parts.append(_text(416, 332, "x₁", "tick", "end"))
+    parts.append(_text(62, 70, "x₂", "tick"))
+    for path, color in ((path_a, LINE), (path_b, POINT)):
+        parts.append(_polyline([(px(a), py(b)) for a, b in path], color, 2.5))
+        for a, b in path[1:]:
+            parts.append(f'<circle cx="{px(a):.1f}" cy="{py(b):.1f}" r="3.5" fill="{color}"/>')
+        a, b = path[0]
+        parts.append(
+            f'<rect x="{px(a) - 5:.1f}" y="{py(b) - 5:.1f}" width="10" height="10" fill="#f7f8f3" '
+            f'stroke="{color}" stroke-width="2.5"/>'
+        )
+    for a, b in minima:
+        parts.append(f'<circle cx="{px(a):.1f}" cy="{py(b):.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(_text(px(minima[0][0]) - 12, py(minima[0][1]) + 24, "谷底", "", "end"))
+    parts.append(_text(px(minima[1][0]) + 14, py(minima[1][1]) - 10, "谷底"))
+    parts.append(_text(px(0) - 12, py(0) + 26, "峠", "", "end"))
+    parts.append(_text(px(LANDSCAPE_START_A[0]) + 12, py(LANDSCAPE_START_A[1]) + 5, "始点A"))
+    parts.append(_text(px(LANDSCAPE_START_B[0]) + 12, py(LANDSCAPE_START_B[1]) - 8, "始点B"))
+    parts.append(_text(20, 356, f"緑：始点AからNewton法 {len(path_a) - 1}回で左の谷底", "note"))
+    parts.append(_text(20, 380, f"青：始点BからNewton法 {len(path_b) - 1}回で峠"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Inverse problem (content/concepts/inverse-problem.md): a rod's initial temperature profile is
+# recovered from 40 blurred, noisy readings. Pure Python, so the figure needs no numeric extra.
+INV_N = 40
+INV_WIDTH = 0.05
+INV_SIGMA = 1e-3
+
+
+def inverse_problem_data() -> tuple[list[list[float]], list[float], list[float]]:
+    xs = [(i + 0.5) / INV_N for i in range(INV_N)]
+    kernel = [[math.exp(-((a - b) ** 2) / (2 * INV_WIDTH**2)) for b in xs] for a in xs]
+    blur = [[v / sum(row) for v in row] for row in kernel]
+    truth = [
+        math.exp(-(((x - 0.3) / 0.08) ** 2)) + 0.6 * math.exp(-(((x - 0.7) / 0.06) ** 2))
+        for x in xs
+    ]
+    rng = random.Random(0)
+    noise = [INV_SIGMA * rng.gauss(0, 1) for _ in range(INV_N)]
+    data = [
+        sum(a * t for a, t in zip(row, truth, strict=True)) + e
+        for row, e in zip(blur, noise, strict=True)
+    ]
+    return blur, truth, data
+
+
+def _solve_linear(matrix: list[list[float]], rhs: list[float]) -> list[float]:
+    size = len(rhs)
+    a = [[*row, rhs[i]] for i, row in enumerate(matrix)]
+    for col in range(size):
+        pivot = max(range(col, size), key=lambda r: abs(a[r][col]))
+        a[col], a[pivot] = a[pivot], a[col]
+        for r in range(col + 1, size):
+            factor = a[r][col] / a[col][col]
+            for c in range(col, size + 1):
+                a[r][c] -= factor * a[col][c]
+    solution = [0.0] * size
+    for r in range(size - 1, -1, -1):
+        tail = sum(a[r][c] * solution[c] for c in range(r + 1, size))
+        solution[r] = (a[r][size] - tail) / a[r][r]
+    return solution
+
+
+def inverse_problem_curve() -> tuple[float, float, list[tuple[float, float]]]:
+    """Return the discrepancy-principle alpha, its error, and (log10 alpha, error) points."""
+    blur, truth, data = inverse_problem_data()
+    size = INV_N
+    gram = [
+        [sum(blur[k][i] * blur[k][j] for k in range(size)) for j in range(size)]
+        for i in range(size)
+    ]
+    gtd = [sum(blur[k][i] * data[k] for k in range(size)) for i in range(size)]
+    norm_truth = math.sqrt(sum(t * t for t in truth))
+
+    def solve(alpha: float) -> list[float]:
+        shifted = [
+            [gram[i][j] + (alpha if i == j else 0.0) for j in range(size)] for i in range(size)
+        ]
+        return _solve_linear(shifted, gtd)
+
+    def error(m: list[float]) -> float:
+        return math.sqrt(sum((a - b) ** 2 for a, b in zip(m, truth, strict=True))) / norm_truth
+
+    def residual(m: list[float]) -> float:
+        return math.sqrt(
+            sum(
+                (sum(a * v for a, v in zip(row, m, strict=True)) - d) ** 2
+                for row, d in zip(blur, data, strict=True)
+            )
+        )
+
+    delta = INV_SIGMA * math.sqrt(size)
+    lo, hi = -10.0, 0.0
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        if residual(solve(10**mid)) < delta:
+            lo = mid
+        else:
+            hi = mid
+    alpha = 10 ** ((lo + hi) / 2)
+    curve = [(e / 4, error(solve(10 ** (e / 4)))) for e in range(-40, 1)]
+    return alpha, error(solve(alpha)), curve
+
+
+def inverse_problem_fixture() -> str:
+    """JSON text of the rod example's fixed inputs for the inverse-problem explorable."""
+    blur, truth, data = inverse_problem_data()
+    payload = {
+        "generated_by": "scripts/generate_lesson_figures.py (inverse_problem_data)",
+        "n": INV_N,
+        "blur_width": INV_WIDTH,
+        "sigma": INV_SIGMA,
+        "truth": truth,
+        "data": data,
+        "blur": blur,
+    }
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n"
+
+
+def _inverse_problem_alpha_svg() -> str:
+    alpha, err, curve = inverse_problem_curve()
+    px = _scale(-10.0, 0.0, 64, 416)
+    py = _scale(-2.0, 2.0, 252, 52)
+    parts = _open(
+        "正則化の強さ α ごとの誤差",
+        (
+            "40点の観測から初期温度を復元したときの、真値との相対誤差です。"
+            f"α=1e-10 では誤差{curve[0][1]:.1f}、残差が雑音の大きさに等しくなるα={alpha:.2e}で"
+            f"誤差{err:.3f}、α=1 では{curve[-1][1]:.2f}です。縦軸と横軸は対数です。"
+        ),
+        360,
+    )
+    parts.append(f'<path d="M64 52V252H416" fill="none" stroke="{GRID}"/>')
+    for e in (-10, -7, -4, -1):
+        parts.append(_text(px(e), 272, f"1e{e}", "tick", "middle"))
+    for e, label in ((-2, "0.01"), (-1, "0.1"), (0, "1"), (1, "10"), (2, "100")):
+        parts.append(_text(56, py(e) + 5, label, "tick", "end"))
+    parts.append(_text(416, 236, "α", "tick", "end"))
+    parts.append(_text(70, 62, "相対誤差", "tick"))
+    parts.append(_polyline([(px(e), py(math.log10(v))) for e, v in curve], LINE, 3))
+    cx, cy = px(math.log10(alpha)), py(math.log10(err))
+    parts.append(f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="6" fill="{UPDATE}"/>')
+    parts.append(_text(20, 306, f"橙の点：残差が雑音の大きさに等しい α={alpha:.2e}"))
+    parts.append(_text(20, 330, f"そのときの誤差 {err:.3f}", "note"))
+    parts.append(_text(20, 354, "α=0（正則化なし）の誤差は 4.75e4（図の外）"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# L1 sparse regularization (content/concepts/l1-sparse-regularization.md): twelve rental
+# listings, four candidate features, rent in units of 10,000 yen.
+RENT_FEATURES = ("面積", "築年数", "徒歩", "階数")
+RENT_COLUMNS = (
+    (20, 36, 19, 27, 45, 57, 35, 44, 25, 37, 39, 39),
+    (8, 14, 25, 3, 17, 9, 28, 2, 3, 28, 7, 22),
+    (2, 7, 3, 15, 11, 6, 10, 11, 7, 12, 12, 4),
+    (3, 4, 7, 2, 4, 4, 1, 4, 1, 2, 8, 8),
+)
+RENT_Y = (6.0, 6.3, 4.6, 3.9, 6.8, 11.1, 4.1, 9.9, 5.4, 3.8, 7.3, 6.0)
+RENT_COLORS = (LINE, POINT, UPDATE, MUTED)
+
+
+def _rent_design() -> tuple[list[list[float]], list[float]]:
+    """Standardized feature columns (mean 0, standard deviation 1) and centered rent."""
+    columns = []
+    for column in RENT_COLUMNS:
+        mean = sum(column) / len(column)
+        spread = math.sqrt(sum((v - mean) ** 2 for v in column) / len(column))
+        columns.append([(v - mean) / spread for v in column])
+    mean_y = sum(RENT_Y) / len(RENT_Y)
+    return columns, [y - mean_y for y in RENT_Y]
+
+
+def _soft_threshold(value: float, threshold: float) -> float:
+    return math.copysign(max(abs(value) - threshold, 0.0), value)
+
+
+def lasso_solution(lam: float, sweeps: int = 400) -> list[float]:
+    """Coordinate descent for 1/2 |Ax-b|^2 + lam |x|_1 on the standardized rent data."""
+    columns, y = _rent_design()
+    coef = [0.0] * len(columns)
+    residual = list(y)
+    for _ in range(sweeps):
+        for j, column in enumerate(columns):
+            norm = sum(v * v for v in column)
+            rho = sum(v * r for v, r in zip(column, residual, strict=True)) + norm * coef[j]
+            new = _soft_threshold(rho, lam) / norm
+            residual = [r + v * (coef[j] - new) for v, r in zip(column, residual, strict=True)]
+            coef[j] = new
+    return coef
+
+
+def ridge_solution(lam: float) -> list[float]:
+    """Solve (A^T A + lam I) x = A^T b by Gaussian elimination."""
+    columns, y = _rent_design()
+    size = len(columns)
+    rows = [
+        [sum(u * v for u, v in zip(columns[i], columns[j], strict=True)) for j in range(size)]
+        + [sum(u * v for u, v in zip(columns[i], y, strict=True))]
+        for i in range(size)
+    ]
+    for i in range(size):
+        rows[i][i] += lam
+    for i in range(size):
+        pivot = rows[i][i]
+        rows[i] = [v / pivot for v in rows[i]]
+        for k in range(size):
+            if k != i:
+                factor = rows[k][i]
+                rows[k] = [a - factor * c for a, c in zip(rows[k], rows[i], strict=True)]
+    return [rows[i][size] for i in range(size)]
+
+
+def lasso_lambda_max() -> float:
+    columns, y = _rent_design()
+    return max(abs(sum(u * v for u, v in zip(column, y, strict=True))) for column in columns)
+
+
+def lasso_zero_points() -> list[float]:
+    """The lambda at which each coefficient first becomes exactly 0 (bisection)."""
+    points = []
+    for j in range(len(RENT_COLUMNS)):
+        low, high = 0.0, lasso_lambda_max()
+        for _ in range(40):
+            middle = (low + high) / 2
+            if lasso_solution(middle, 120)[j] == 0.0:
+                high = middle
+            else:
+                low = middle
+        points.append(high)
+    return points
+
+
+def _l1_path_svg() -> str:
+    top_lam = 20.0
+    zero_points = lasso_zero_points()
+    steps = [top_lam * index / 80 for index in range(81)]
+    lasso = [lasso_solution(lam, 200) for lam in steps]
+    ridge = [ridge_solution(lam) for lam in steps]
+    lam_max = lasso_lambda_max()
+    parts = _open(
+        "λ を上げたときの係数",
+        (
+            "標準化した4つの特徴量について、λを0から20まで上げたときの係数の変化です。"
+            f"上のパネルのL1では係数がちょうど0になり、階数は{zero_points[3]:.1f}、"
+            f"徒歩は{zero_points[2]:.1f}、築年数は{zero_points[1]:.1f}、"
+            f"面積は{zero_points[0]:.1f}で0になります。"
+            "下のパネルのL2（ridge）では、どの係数も0にならず小さくなるだけです。"
+        ),
+        580,
+    )
+    px = _scale(0.0, top_lam, 64, 420)
+    for index, (label, path) in enumerate(
+        (("L1（lasso）の係数", lasso), ("L2（ridge）の係数", ridge))
+    ):
+        top = 56 + index * 208
+        py = _scale(-1.5, 2.0, top + 150, top + 20)
+        parts.append(_text(20, top + 2, label))
+        parts.append(f'<path d="M64 {top + 20}V{top + 150}H420" fill="none" stroke="{GRID}"/>')
+        parts.append(f'<path d="M64 {py(0.0):.2f}H420" stroke="{GRID}" stroke-width="1"/>')
+        for value in (-1.0, 0.0, 1.0, 2.0):
+            parts.append(_text(56, py(value) + 5, f"{value:g}", "tick", "end"))
+        for lam in (0, 10, 20):
+            parts.append(_text(px(lam), top + 170, f"{lam}", "tick", "middle"))
+        parts.append(_text(420, top + 190, "λ", "tick", "end"))
+        # Draw the last feature first so a coefficient resting on 0 shows the first feature's color.
+        for j in reversed(range(len(RENT_COLORS))):
+            points = [(px(lam), py(coef[j])) for lam, coef in zip(steps, path, strict=True)]
+            parts.append(_polyline(points, RENT_COLORS[j], 3))
+        if index == 0:
+            for j, color in enumerate(RENT_COLORS):
+                parts.append(
+                    f'<circle cx="{px(zero_points[j]):.2f}" cy="{py(0.0):.2f}" r="6" '
+                    f'fill="#f7f8f3" stroke="{color}" stroke-width="3"/>'
+                )
+    legend_top = 484
+    for j, (name, color) in enumerate(zip(RENT_FEATURES, RENT_COLORS, strict=True)):
+        x = 20 + (j % 2) * 200
+        y = legend_top + (j // 2) * 24
+        parts.append(f'<path d="M{x} {y - 5}h28" stroke="{color}" stroke-width="3"/>')
+        parts.append(_text(x + 36, y, name))
+    parts.append(_text(20, legend_top + 52, "白抜きの丸：係数がちょうど0になる λ", "note"))
+    parts.append(_text(20, legend_top + 76, f"λ が {lam_max:.1f} 以上なら係数はすべて0", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# MPC (content/concepts/model-predictive-control.md): a cart on a rail with a wall at p = 0.
+MPC_A = ((1.0, 1.0), (0.0, 1.0))
+MPC_B = (0.5, 1.0)
+MPC_Q = (1.0, 0.1)  # diag(Q); the input weight R is MPC_R
+MPC_R = 0.1
+MPC_X0 = (3.0, 0.0)
+
+
+def _mpc_terminal_weight() -> tuple[tuple[float, float], tuple[float, float]]:
+    """Solve the discrete algebraic Riccati equation by iterating the recursion."""
+    a, b, r = MPC_A, MPC_B, MPC_R
+    p = [[MPC_Q[0], 0.0], [0.0, MPC_Q[1]]]
+    for _ in range(2000):
+        pb = [p[0][0] * b[0] + p[0][1] * b[1], p[1][0] * b[0] + p[1][1] * b[1]]
+        gain = r + b[0] * pb[0] + b[1] * pb[1]
+        pa = [[sum(p[i][m] * a[m][j] for m in range(2)) for j in range(2)] for i in range(2)]
+        bpa = [sum(b[m] * pa[m][j] for m in range(2)) for j in range(2)]
+        at_pa = [[sum(a[m][i] * pa[m][j] for m in range(2)) for j in range(2)] for i in range(2)]
+        p = [
+            [(MPC_Q[i] if i == j else 0.0) + at_pa[i][j] - bpa[i] * bpa[j] / gain for j in range(2)]
+            for i in range(2)
+        ]
+    return (p[0][0], p[0][1]), (p[1][0], p[1][1])
+
+
+def _mpc_plan(horizon: int, state: tuple[float, float], gain_scale: float = 1.0) -> list[float]:
+    """Solve the condensed MPC QP with |u|<=1 and p_k>=0 by ADMM (the OSQP iteration)."""
+    n = horizon
+    terminal = _mpc_terminal_weight()
+    # x_k = free_k + sum_j phi[k][j] u_j  (the model the planner believes in)
+    free, phi = [], []
+    x = list(state)
+    cols = [[0.0, 0.0] for _ in range(n)]
+    for k in range(n):
+        x = [MPC_A[i][0] * x[0] + MPC_A[i][1] * x[1] for i in range(2)]
+        free.append(list(x))
+        cols = [[MPC_A[i][0] * c[0] + MPC_A[i][1] * c[1] for i in range(2)] for c in cols]
+        cols[k] = [MPC_B[0] * gain_scale, MPC_B[1] * gain_scale]
+        phi.append([[cols[j][i] for j in range(n)] for i in range(2)])
+    # cost = sum_k x_k' W_k x_k + R u'u,  W_k = diag(Q), the last one is the terminal P
+    weights = [((MPC_Q[0], 0.0), (0.0, MPC_Q[1]))] * (n - 1) + [terminal]
+    hess = [[0.0] * n for _ in range(n)]
+    lin = [0.0] * n
+    for k in range(n):
+        w = weights[k]
+        for a_ in range(n):
+            wa = [sum(w[i][m] * phi[k][m][a_] for m in range(2)) for i in range(2)]
+            lin[a_] += 2 * sum(wa[i] * free[k][i] for i in range(2))
+            for b_ in range(n):
+                hess[a_][b_] += 2 * sum(wa[i] * phi[k][i][b_] for i in range(2))
+    for j in range(n):
+        hess[j][j] += 2 * MPC_R
+    # constraints l <= C u <= h : rows 0..n-1 are u_j, rows n.. are p_k = free + phi u
+    cmat = [[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
+    cmat += [phi[k][0] for k in range(n)]
+    low = [-1.0] * n + [-free[k][0] for k in range(n)]
+    high = [1.0] * n + [1e9] * n
+    rho, sigma, alpha = 1.0, 1e-9, 1.6
+    m = 2 * n
+    system = [
+        [
+            hess[i][j]
+            + (sigma if i == j else 0.0)
+            + rho * sum(cmat[r][i] * cmat[r][j] for r in range(m))
+            for j in range(n)
+        ]
+        for i in range(n)
+    ]
+    inverse = [
+        list(col)
+        for col in zip(
+            *[_solve_linear(system, [1.0 if i == j else 0.0 for i in range(n)]) for j in range(n)],
+            strict=True,
+        )
+    ]
+    u, z, y = [0.0] * n, [0.0] * m, [0.0] * m
+    for _ in range(60000):
+        rhs = [
+            sigma * u[i] - lin[i] + sum(cmat[r][i] * (rho * z[r] - y[r]) for r in range(m))
+            for i in range(n)
+        ]
+        u_tilde = [sum(inverse[i][j] * rhs[j] for j in range(n)) for i in range(n)]
+        cu = [sum(cmat[r][j] * u_tilde[j] for j in range(n)) for r in range(m)]
+        z_tilde = cu
+        u_next = [alpha * u_tilde[i] + (1 - alpha) * u[i] for i in range(n)]
+        z_relaxed = [alpha * z_tilde[r] + (1 - alpha) * z[r] for r in range(m)]
+        z_next = [min(max(z_relaxed[r] + y[r] / rho, low[r]), high[r]) for r in range(m)]
+        y = [y[r] + rho * (z_relaxed[r] - z_next[r]) for r in range(m)]
+        change = max(abs(a_ - b_) for a_, b_ in zip(u_next, u, strict=True))
+        u, z = u_next, z_next
+        if change < 1e-13:
+            break
+    return u
+
+
+MPC_GAIN_ERROR = 1.3  # the real cart responds 30 % more strongly to the input than the model says
+MPC_STEPS = 12
+
+
+def _mpc_step(state: Sequence[float], u: float, scale: float = 1.0) -> list[float]:
+    return [
+        MPC_A[i][0] * state[0] + MPC_A[i][1] * state[1] + scale * MPC_B[i] * u for i in range(2)
+    ]
+
+
+def mpc_wall_data() -> dict[str, list[float]]:
+    """Positions over 12 steps: the model's plan, the plan run open loop, and receding horizon."""
+    plan = _mpc_plan(MPC_STEPS, MPC_X0)
+    model, real = [list(MPC_X0)], [list(MPC_X0)]
+    for u in plan:
+        model.append(_mpc_step(model[-1], u))
+        real.append(_mpc_step(real[-1], u, MPC_GAIN_ERROR))
+    state, receding = list(MPC_X0), [list(MPC_X0)]
+    for _ in range(MPC_STEPS):
+        u = _mpc_plan(5, (state[0], state[1]))[0]
+        state = _mpc_step(state, u, MPC_GAIN_ERROR)
+        receding.append(state)
+    return {
+        "model": [s[0] for s in model],
+        "open_loop": [s[0] for s in real],
+        "receding": [s[0] for s in receding],
+        "receding_velocity_end": [receding[-1][1]],
+    }
+
+
+def _mpc_wall_svg() -> str:
+    data = mpc_wall_data()
+    open_loop, receding, model = data["open_loop"], data["receding"], data["model"]
+    low = min(open_loop)
+    parts = _open(
+        "解き直しと壁",
+        (
+            "台車を位置3から壁（位置0）の手前で止める12歩の計画です。実機の入力の効きは"
+            f"モデルの{MPC_GAIN_ERROR}倍とします。計画を解き直さず最後まで実行すると、"
+            f"位置が{open_loop[-1]:.2f}まで進んで壁を越えます。毎回5歩先まで解き直すと、"
+            f"最小の位置は{min(receding):.3f}で、壁を越えません。"
+        ),
+        392,
+    )
+    px = _scale(0.0, MPC_STEPS, 64, 420)
+    py = _scale(-1.2, 3.2, 270, 52)
+    parts.append(f'<path d="M64 52V270H420" fill="none" stroke="{GRID}"/>')
+    for step in (0, 4, 8, 12):
+        parts.append(_text(px(step), 292, f"{step}", "tick", "middle"))
+    for value in (-1, 0, 1, 2, 3):
+        parts.append(_text(56, py(value) + 5, f"{value}", "tick", "end"))
+    parts.append(_text(420, 314, "歩数", "tick", "end"))
+    parts.append(_text(70, 62, "位置", "tick"))
+    parts.append(f'<path d="M64 {py(0):.2f}H420" stroke="{POINT}" stroke-width="5"/>')
+    parts.append(_polyline([(px(k), py(v)) for k, v in enumerate(model)], UPDATE, 2))
+    parts.append(_polyline([(px(k), py(v)) for k, v in enumerate(open_loop)], MUTED, 3))
+    parts.append(_polyline([(px(k), py(v)) for k, v in enumerate(receding)], LINE, 3))
+    parts.append(_text(20, 340, "紺：壁（位置0）　橙：モデル上の計画"))
+    parts.append(
+        _text(20, 364, f"灰：解き直さず実行。12歩後 {open_loop[-1]:.2f}（最小 {low:.2f}）", "note")
+    )
+    parts.append(_text(20, 388, f"緑：毎回解き直し。最小 {min(receding):.3f}", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Vehicle routing (content/concepts/vehicle-routing.md): depot 0 and seven customers, two vehicles.
+VRP_XY = ((0, 0), (0, 6), (0, -6), (-2, 2), (1, 0), (6, -2), (1, -1), (3, -3))
+VRP_DEMAND = (0, 2, 3, 2, 1, 3, 2, 3)
+VRP_CAPACITY = 9
+VIOLATION = "#c23a2b"
+
+
+def _vrp_length(route: Sequence[int]) -> float:
+    path = [0, *route, 0]
+    return sum(math.dist(VRP_XY[a], VRP_XY[b]) for a, b in zip(path, path[1:], strict=False))
+
+
+def _vrp_nearest_neighbour() -> list[list[int]]:
+    left, routes = set(range(1, len(VRP_XY))), []
+    while left:
+        route, load, here = [], 0, 0
+        while True:
+            fits = [j for j in left if load + VRP_DEMAND[j] <= VRP_CAPACITY]
+            if not fits:
+                break
+            j = min(fits, key=lambda j: math.dist(VRP_XY[here], VRP_XY[j]))
+            route.append(j)
+            left.remove(j)
+            load, here = load + VRP_DEMAND[j], j
+        routes.append(route)
+    return routes
+
+
+def _vrp_two_opt(route: Sequence[int]) -> list[int]:
+    best, improved = list(route), True
+    while improved:
+        improved = False
+        for i in range(len(best) - 1):
+            for j in range(i + 1, len(best)):
+                trial = best[:i] + best[i : j + 1][::-1] + best[j + 1 :]
+                if _vrp_length(trial) < _vrp_length(best) - 1e-12:
+                    best, improved = trial, True
+    return best
+
+
+def _vrp_degree_only() -> tuple[float, list[list[int]], list[list[int]]]:
+    """Minimum-cost successor assignment: every customer in/out once, two depot arcs, no loads.
+
+    The two depot copies are nodes 7 and 8; depot-to-depot arcs are forbidden. Pure Python
+    brute force over the 9! successor permutations (the MILP without subtour constraints).
+    """
+    n = len(VRP_XY)
+
+    def node(i: int) -> int:  # successor-permutation index -> instance node
+        return i + 1 if i < n - 1 else 0
+
+    cost = [
+        [
+            math.inf
+            if (a == b or (a >= n - 1 and b >= n - 1))
+            else math.dist(VRP_XY[node(a)], VRP_XY[node(b)])
+            for b in range(n + 1)
+        ]
+        for a in range(n + 1)
+    ]
+    best_cost, best = math.inf, ()
+    for perm in itertools.permutations(range(n + 1)):
+        total = 0.0
+        for a, b in enumerate(perm):
+            total += cost[a][b]
+            if total >= best_cost:
+                break
+        else:
+            best_cost, best = total, perm
+    successor = {node(a): node(b) for a, b in enumerate(best) if a < n - 1}
+    starts = [node(b) for a, b in enumerate(best) if a >= n - 1]
+    routes, seen = [], set()
+    for start in starts:
+        route = [start]
+        while successor[route[-1]] != 0:
+            route.append(successor[route[-1]])
+        routes.append(route)
+        seen.update(route)
+    loops: list[list[int]] = []
+    for start in range(1, n):
+        if start not in seen:
+            loop = [start]
+            while successor[loop[-1]] != start:
+                loop.append(successor[loop[-1]])
+            loops.append(loop)
+            seen.update(loop)
+    return best_cost, sorted(routes), sorted(loops)
+
+
+def vrp_data() -> dict[str, object]:
+    """Optimum by enumeration, nearest neighbour + 2-opt, and the degree-only relaxation."""
+    n = len(VRP_XY)
+    best_route: dict[tuple[int, ...], tuple[int, ...]] = {}
+
+    def shortest(members: tuple[int, ...]) -> tuple[int, ...]:
+        if members not in best_route:
+            best_route[members] = min(itertools.permutations(members), key=_vrp_length)
+        return best_route[members]
+
+    splits = []
+    for mask in range(1, 2 ** (n - 1) - 1):
+        a = tuple(i for i in range(1, n) if mask >> (i - 1) & 1)
+        b = tuple(i for i in range(1, n) if not mask >> (i - 1) & 1)
+        if a < b and all(sum(VRP_DEMAND[i] for i in s) <= VRP_CAPACITY for s in (a, b)):
+            ra, rb = shortest(a), shortest(b)
+            splits.append((_vrp_length(ra) + _vrp_length(rb), list(ra), list(rb)))
+    splits.sort()
+    nearest = _vrp_nearest_neighbour()
+    improved = [_vrp_two_opt(route) for route in nearest]
+    degree_cost, degree_routes, degree_loops = _vrp_degree_only()
+    return {
+        "optimum": splits[0][0],
+        "optimum_routes": [splits[0][1], splits[0][2]],
+        "split_count": len(splits),
+        "nearest": sum(_vrp_length(r) for r in nearest),
+        "nearest_routes": nearest,
+        "heuristic": sum(_vrp_length(r) for r in improved),
+        "heuristic_routes": improved,
+        "degree_cost": degree_cost,
+        "degree_routes": degree_routes,
+        "degree_loops": degree_loops,
+    }
+
+
+def _vrp_panel(
+    left: float,
+    top: float,
+    routes: Sequence[Sequence[int]],
+    color: str,
+    loops: Sequence[Sequence[int]] = (),
+) -> list[str]:
+    """One map panel, 22 px per unit: depot (navy square), customers (numbered circles)."""
+    px = _scale(-2, 6, left + 12, left + 12 + 8 * 22)
+    py = _scale(6, -6, top + 12, top + 12 + 12 * 22)
+    parts = []
+    paths = [([0, *r, 0], color) for r in routes] + [([*lp, lp[0]], VIOLATION) for lp in loops]
+    for path, stroke in paths:
+        parts.append(_polyline([(px(VRP_XY[i][0]), py(VRP_XY[i][1])) for i in path], stroke, 3))
+    x0, y0 = px(0), py(0)
+    parts.append(f'<rect x="{x0 - 8:.1f}" y="{y0 - 8:.1f}" width="16" height="16" fill="{POINT}"/>')
+    for i in range(1, len(VRP_XY)):
+        x, y = px(VRP_XY[i][0]), py(VRP_XY[i][1])
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="10" fill="#f7f8f3" stroke="{POINT}" '
+            'stroke-width="1.5"/>'
+        )
+        parts.append(_text(x, y + 5.5, str(i), "tick", "middle"))
+    return parts
+
+
+def _vrp_routes_svg() -> str:
+    data = vrp_data()
+    parts = _open(
+        "配送経路：近似と最適",
+        (
+            "depotと7人の顧客を、容量9の2台で回る配送経路です。最近傍法と2-optの結果は"
+            f"{data['heuristic']:.3f}、全探索の最適は{data['optimum']:.3f}で、"
+            "2台への顧客の分け方が違います。"
+        ),
+        448,
+    )
+    parts += _vrp_panel(14, 96, data["heuristic_routes"], UPDATE)  # type: ignore[arg-type]
+    parts += _vrp_panel(226, 96, data["optimum_routes"], LINE)  # type: ignore[arg-type]
+    parts.append(_text(20, 56, "最近傍法＋2-opt"))
+    parts.append(_text(20, 78, f"{data['heuristic']:.3f}", "note"))
+    parts.append(_text(232, 56, "全探索の最適"))
+    parts.append(_text(232, 78, f"{data['optimum']:.3f}", "note"))
+    parts.append(_text(20, 404, "紺の四角：depot　数字：顧客"))
+    parts.append(_text(20, 428, "橙：最近傍法＋2-opt　緑：最適"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _vrp_subtour_svg() -> str:
+    data = vrp_data()
+    loops = data["degree_loops"]
+    parts = _open(
+        "輪を禁じないと現れる解",
+        (
+            "各顧客に入る弧と出る弧を1本ずつにして、depotを出る弧を2本にするだけの制約では、"
+            f"費用{data['degree_cost']:.3f}の解が選ばれます。depotにつながらない輪が"
+            f"{len(loops)}つ残り、実際には回れません。積載の制約を足すと、輪が消えて"  # type: ignore[arg-type]
+            f"費用{data['optimum']:.3f}になります。"
+        ),
+        448,
+    )
+    parts += _vrp_panel(14, 96, data["degree_routes"], LINE, loops)  # type: ignore[arg-type]
+    parts += _vrp_panel(226, 96, data["optimum_routes"], LINE)  # type: ignore[arg-type]
+    parts.append(_text(20, 56, "次数の制約だけ"))
+    parts.append(_text(20, 78, f"{data['degree_cost']:.3f}", "note"))
+    parts.append(_text(232, 56, "積載の制約つき"))
+    parts.append(_text(232, 78, f"{data['optimum']:.3f}", "note"))
+    parts.append(_text(20, 404, "赤：depotにつながらない輪"))
+    parts.append(_text(20, 428, "緑：depotから出る経路　紺の四角：depot"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# MIQP (content/concepts/mixed-integer-quadratic-program.md): five assets, at most three held.
+MIQP_NAMES = "ABCDE"
+MIQP_VOL = (10.0, 12.0, 15.0, 20.0, 25.0)  # standard deviations in percent
+MIQP_CORR = (
+    (1.0, 0.5, 0.3, 0.1, 0.0),
+    (0.5, 1.0, 0.4, 0.2, 0.1),
+    (0.3, 0.4, 1.0, 0.3, 0.2),
+    (0.1, 0.2, 0.3, 1.0, 0.4),
+    (0.0, 0.1, 0.2, 0.4, 1.0),
+)
+MIQP_RETURN = (4.0, 5.0, 6.0, 8.0, 9.0)  # expected returns in percent
+MIQP_CAP = (0.6, 0.5, 0.5, 0.4, 0.4)  # per-asset upper limit on the weight
+MIQP_LOT = 0.1  # minimum weight of a held asset
+MIQP_TARGET = 6.0  # required expected return
+MIQP_MAX_HELD = 3
+MIQP_FEE = 5.0  # fixed cost per held asset, on the same scale as the variance
+MIQP_TOL = 1e-9
+
+
+def _miqp_covariance() -> list[list[float]]:
+    return [[MIQP_VOL[i] * MIQP_VOL[j] * MIQP_CORR[i][j] for j in range(5)] for i in range(5)]
+
+
+def _solve_consistent(matrix: list[list[float]], rhs: list[float]) -> list[float] | None:
+    """Gaussian elimination that tolerates redundant rows and rejects inconsistent ones."""
+    rows, cols = len(matrix), len(matrix[0])
+    a = [[*row, rhs[i]] for i, row in enumerate(matrix)]
+    pivots: list[int] = []
+    r = 0
+    for col in range(cols):
+        pivot = max(range(r, rows), key=lambda i: abs(a[i][col]), default=None)
+        if pivot is None or abs(a[pivot][col]) < 1e-12:
+            continue
+        a[r], a[pivot] = a[pivot], a[r]
+        a[r] = [v / a[r][col] for v in a[r]]
+        for i in range(rows):
+            if i != r:
+                factor = a[i][col]
+                a[i] = [v - factor * w for v, w in zip(a[i], a[r], strict=True)]
+        pivots.append(col)
+        r += 1
+    if any(abs(a[i][cols]) > 1e-9 for i in range(r, rows)):
+        return None
+    solution = [0.0] * cols
+    for i, col in enumerate(pivots):
+        solution[col] = a[i][cols]
+    return solution
+
+
+def _miqp_small_qp(
+    indices: Sequence[int],
+    lower: float,
+    upper: Sequence[float],
+    linear: Sequence[float],
+) -> tuple[float, list[float]] | None:
+    """Exact minimum of x'Sx + linear'x with sum x = 1, mu'x >= target and lower <= x <= upper.
+
+    The problem is convex, so any KKT point is a global minimum. With at most five variables the
+    KKT points are found by trying every choice of "at lower / at upper / free" per variable and
+    "return constraint active / inactive". Returns None when no feasible point exists.
+    """
+    sigma = _miqp_covariance()
+    size = len(indices)
+    q = [[sigma[i][j] for j in indices] for i in indices]
+    c = [linear[i] for i in indices]
+    mu = [MIQP_RETURN[i] for i in indices]
+    ub = [upper[i] for i in indices]
+    best: tuple[float, list[float]] | None = None
+    for status in itertools.product((0, 1, 2), repeat=size):  # 0 free, 1 at lower, 2 at upper
+        for active in (False, True):
+            x = [lower if s == 1 else ub[j] if s == 2 else 0.0 for j, s in enumerate(status)]
+            free = [j for j, s in enumerate(status) if s == 0]
+            fixed = [j for j, s in enumerate(status) if s != 0]
+            count = len(free) + 1 + (1 if active else 0)
+            matrix, rhs = [], []
+            for j in free:
+                row = [2 * q[j][k] for k in free] + [-1.0] + ([-mu[j]] if active else [])
+                matrix.append(row)
+                rhs.append(-c[j] - sum(2 * q[j][k] * x[k] for k in fixed))
+            matrix.append([1.0] * len(free) + [0.0] * (count - len(free)))
+            rhs.append(1.0 - sum(x[k] for k in fixed))
+            if active:
+                matrix.append([mu[j] for j in free] + [0.0, 0.0])
+                rhs.append(MIQP_TARGET - sum(mu[k] * x[k] for k in fixed))
+            solved = _solve_consistent(matrix, rhs)
+            if solved is None:
+                continue
+            for position, j in enumerate(free):
+                x[j] = solved[position]
+            lam = solved[len(free)]
+            nu = solved[len(free) + 1] if active else 0.0
+            if any(x[j] < lower - MIQP_TOL or x[j] > ub[j] + MIQP_TOL for j in range(size)):
+                continue
+            if abs(sum(x) - 1.0) > 1e-7 or sum(m * v for m, v in zip(mu, x, strict=True)) < (
+                MIQP_TARGET - 1e-7
+            ):
+                continue
+            if nu < -MIQP_TOL:
+                continue
+            gradient = [
+                2 * sum(q[j][k] * x[k] for k in range(size)) + c[j] - lam - nu * mu[j]
+                for j in range(size)
+            ]
+            if any(status[j] == 1 and gradient[j] < -1e-7 for j in range(size)):
+                continue
+            if any(status[j] == 2 and gradient[j] > 1e-7 for j in range(size)):
+                continue
+            value = sum(x[j] * q[j][k] * x[k] for j in range(size) for k in range(size))
+            value += sum(c[j] * x[j] for j in range(size))
+            if best is None or value < best[0]:
+                best = (value, list(x))
+    return best
+
+
+def miqp_enumerate(
+    upper: Sequence[float] = MIQP_CAP,
+) -> list[tuple[float, tuple[int, ...], list[float]]]:
+    """Subsets of at most MIQP_MAX_HELD assets as (variance + fee, subset, weights), best first."""
+    found = []
+    for size in range(1, MIQP_MAX_HELD + 1):
+        for subset in itertools.combinations(range(5), size):
+            result = _miqp_small_qp(subset, MIQP_LOT, upper, [0.0] * 5)
+            if result is not None:
+                found.append((result[0] + MIQP_FEE * size, subset, result[1]))
+    return sorted(found, key=lambda item: item[0])
+
+
+def miqp_relaxation(big_m: Sequence[float]) -> tuple[float, list[float]]:
+    """Continuous relaxation of the big-M model: z_i = x_i / M_i leaves cost fee * x_i / M_i."""
+    upper = [min(cap, m) for cap, m in zip(MIQP_CAP, big_m, strict=True)]
+    linear = [MIQP_FEE / m for m in big_m]
+    result = _miqp_small_qp(range(5), 0.0, upper, linear)
+    assert result is not None
+    return result
+
+
+def miqp_big_m_rows() -> list[tuple[str, float, float, tuple[int, ...]]]:
+    """(label, relaxation bound, integer optimum, optimal subset) for each choice of M."""
+    rows = []
+    for label, big_m in (
+        ("M ＝ 各銘柄の上限", MIQP_CAP),
+        ("M ＝ 1", (1.0,) * 5),
+        ("M ＝ 10", (10.0,) * 5),
+        ("M ＝ 100", (100.0,) * 5),
+        ("M ＝ 0.4（上限より小さい別の問題）", (0.4,) * 5),
+    ):
+        upper = [min(cap, m) for cap, m in zip(MIQP_CAP, big_m, strict=True)]
+        best = miqp_enumerate(upper)[0]
+        rows.append((label, miqp_relaxation(big_m)[0], best[0], best[1]))
+    return rows
+
+
+def _miqp_big_m_svg() -> str:
+    rows = miqp_big_m_rows()
+    parts = _open(
+        "M の大きさと下界",
+        (
+            "5銘柄から3銘柄以内を選ぶポートフォリオで、"
+            "big-M の M を変えたときの連続緩和の下界と整数の最適値です。"
+            + "".join(
+                f"{label.split('（')[0]}では下界{bound:.2f}、最適値{best:.2f}。"
+                for label, bound, best, _ in rows
+            )
+        ),
+        524,
+    )
+    px = _scale(88.0, 130.0, 40, 420)
+    axis_y = 60 + len(rows) * 68
+    for tick in (90, 100, 110, 120, 130):
+        parts.append(
+            f'<path d="M{px(tick):.2f} {axis_y - 6}V{axis_y + 6}" '
+            f'stroke="{POINT}" stroke-width="2"/>'
+        )
+        parts.append(_text(px(tick), axis_y + 22, f"{tick}", "tick", "middle"))
+    parts.append(f'<path d="M40 {axis_y}H420" stroke="{POINT}" stroke-width="2"/>')
+    parts.append(_text(420, axis_y + 46, "目的値（分散＋固定費）", "tick", "end"))
+    for index, (label, bound, best, _) in enumerate(rows):
+        top = 66 + index * 68
+        line_y = top + 24
+        parts.append(_text(20, top + 6, label))
+        for tick in (90, 100, 110, 120, 130):
+            parts.append(
+                f'<path d="M{px(tick):.2f} {line_y - 9}V{line_y + 9}" '
+                f'stroke="{GRID}" stroke-width="1"/>'
+            )
+        parts.append(
+            f'<path d="M{px(bound):.2f} {line_y}H{px(best):.2f}" '
+            f'stroke="{POINT}" stroke-width="3"/>'
+        )
+        parts.append(
+            f'<circle cx="{px(bound):.2f}" cy="{line_y}" r="7" fill="{UPDATE}"/>'
+            f'<circle cx="{px(best):.2f}" cy="{line_y}" r="7" fill="{LINE}"/>'
+        )
+        parts.append(_text(min(max(px(bound), 62), 398), line_y + 28, f"{bound:.2f}", "", "middle"))
+        parts.append(_text(min(max(px(best), 62), 398), line_y + 28, f"{best:.2f}", "", "middle"))
+    legend_y = axis_y + 76
+    parts.append(f'<circle cx="28" cy="{legend_y - 5}" r="7" fill="{UPDATE}"/>')
+    parts.append(_text(44, legend_y, "橙：連続緩和の下界"))
+    parts.append(f'<circle cx="28" cy="{legend_y + 23}" r="7" fill="{LINE}"/>')
+    parts.append(_text(44, legend_y + 28, "緑：整数の最適値（列挙で確認）"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
         "least-squares-contours.svg": _least_squares_contours_svg(),
         "least-squares-minimum.svg": _least_squares_minimum_svg(),
         "nonlinear-least-squares-profile.svg": _nonlinear_least_squares_profile_svg(),
+        "smooth-landscape-saddle.svg": _smooth_landscape_svg(),
+        "inverse-problem-alpha.svg": _inverse_problem_alpha_svg(),
+        "l1-sparse-regularization-path.svg": _l1_path_svg(),
+        "mpc-wall-receding.svg": _mpc_wall_svg(),
+        "vrp-routes.svg": _vrp_routes_svg(),
+        "vrp-subtour.svg": _vrp_subtour_svg(),
+        "miqp-big-m-bound.svg": _miqp_big_m_svg(),
     }
 
 
@@ -306,8 +1274,10 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="fail if a figure is stale")
     args = parser.parse_args()
     stale = []
-    for name, body in generate_lesson_figures().items():
-        path = OUTPUT / name
+    outputs = {OUTPUT / n: b for n, b in generate_lesson_figures().items()}
+    outputs[INVERSE_FIXTURE] = inverse_problem_fixture()
+    for path, body in outputs.items():
+        name = path.name
         if args.check:
             if not path.exists() or path.read_text(encoding="utf-8") != body:
                 stale.append(name)
