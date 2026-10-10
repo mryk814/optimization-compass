@@ -32,7 +32,7 @@
 
 | 軸 | 対象 | 完了 | 状態内訳 |
 |---|---:|---:|---|
-| 名前と同一性 | 160 | 117 | candidate 3, unrepresented 40, unknown 0 |
+| 名前と同一性 | 160 | 120 | candidate 0, unrepresented 40, unknown 0 |
 | 定義と根拠 | 160 | 113 | no_canonical_row 47 |
 | 説明 | 160 | 8 | stale 1, in_progress 104, no_article 47 |
 | 体験 | 0 | 0 | undecided 160, has_interactive 21 |
@@ -42,9 +42,9 @@
 
 | 軸 | 対象 | 完了 | 状態内訳 |
 |---|---:|---:|---|
-| 名前と同一性 | 80 | 66 | candidate 5, unrepresented 9, unknown 0 |
-| 定義と根拠 | 80 | 71 | no_canonical_row 9 |
-| 説明 | 80 | 1 | stale 0, in_progress 48, no_article 31 |
+| 名前と同一性 | 80 | 70 | candidate 0, unrepresented 10, unknown 0 |
+| 定義と根拠 | 80 | 70 | no_canonical_row 10 |
+| 説明 | 80 | 1 | stale 0, in_progress 47, no_article 32 |
 | 体験 | 0 | 0 | undecided 80, has_interactive 7 |
 | 転移 | 0 | 0 | undecided 80 |
 

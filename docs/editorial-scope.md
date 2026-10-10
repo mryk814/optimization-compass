@@ -45,6 +45,8 @@ uv run python scripts/editorial_scope.py pending
 
 ## 関係の語彙
 
+種別ごとに既存のどの表へ写すか、まとめ行をどう扱うかは [`identity-granularity.md`](identity-granularity.md) にあります。
+
 | `relation` | 意味 | `refs` |
 |---|---|---|
 | `same_entity` | 既存の正規行がそのものである | 必須 |
