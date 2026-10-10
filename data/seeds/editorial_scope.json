@@ -211,12 +211,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_ADAGRAD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "AdaGrad の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -233,12 +238,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_RMSPROP"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "RMSprop の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -317,12 +327,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_NATURAL_GRADIENT"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML, MF_MANIFOLD です。"
+        "note_ja": "自然勾配 の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -339,12 +354,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SVRG"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SVRG の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -361,12 +381,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SAGA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SAGA の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -383,12 +408,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SARAH"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "SARAH の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -405,12 +435,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_MUON"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "Muon の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -427,12 +462,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_LION"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_STOCHASTIC_ML です。"
+        "note_ja": "Lion の行そのものです。"
       },
       "source_refs": [
         "E06"
@@ -604,12 +644,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SR1"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_SMOOTH_LOCAL, G053 です。"
+        "note_ja": "SR1 の行そのものです。"
       },
       "source_refs": [
         "E03"
@@ -808,12 +853,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DOGLEG"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_TRUST_REGION です。"
+        "note_ja": "Dogleg法 の行そのものです。"
       },
       "source_refs": [
         "E03"
@@ -892,12 +942,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CUBIC_REGULARIZATION"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_SMOOTH_LOCAL, MF_TRUST_REGION です。"
+        "note_ja": "三次正則化法 の行そのものです。"
       },
       "source_refs": [
         "E03"
@@ -1069,12 +1124,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DOUGLAS_RACHFORD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "Douglas–Rachford分割の行そのものです。"
       },
       "source_refs": [
         "E04"
@@ -1153,12 +1213,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_FRANK_WOLFE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_CONSTRAINED_NLP, M_PROJECTED_GRADIENT です。"
+        "note_ja": "Frank–Wolfe法の行そのものです。"
       },
       "source_refs": [
         "E05"
@@ -1233,12 +1298,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CCCP"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "CCCP の行そのものです。"
       },
       "source_refs": [
         "E04"
@@ -1255,12 +1325,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DCA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "DCアルゴリズムの行そのものです。"
       },
       "source_refs": [
         "E04"
@@ -1853,12 +1928,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_PRICE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "分枝価格法 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1875,12 +1955,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BENDERS"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "Benders分解 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1897,12 +1982,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DANTZIG_WOLFE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+        "note_ja": "Dantzig-Wolfe分解 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -1919,12 +2009,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_COLUMN_GENERATION"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT, MF_LP_QP_CONIC です。"
+        "note_ja": "列生成 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -2065,12 +2160,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BRANCH_PRICE_CUT"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_DISCRETE_EXACT です。"
+        "note_ja": "分枝価格カット法 の行そのものです。"
       },
       "source_refs": [
         "E07"
@@ -2180,12 +2280,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_BELLMAN_FORD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "Bellman-Ford法 の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2233,12 +2338,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_AUGMENTING_MAXFLOW"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "増加路法(最大流) の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2255,12 +2365,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PUSH_RELABEL"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP です。"
+        "note_ja": "Push-relabel法 の行そのものです。"
       },
       "source_refs": [
         "E14"
@@ -2308,12 +2423,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SUCCESSIVE_SHORTEST_PATH"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_GRAPH_DP, M_NETWORK_SIMPLEX です。"
+        "note_ja": "逐次最短路法 の行そのものです。"
       },
       "source_refs": [
         "E14"

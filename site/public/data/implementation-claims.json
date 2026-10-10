@@ -3558,7 +3558,7 @@
       "subject_id": "I_OPTAX",
       "valid_from": "2026-07-13",
       "valid_to": null,
-      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW",
+      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW;M_ADAGRAD;M_RMSPROP;M_LION",
       "value_status": "verified",
       "verification_status": "verified"
     },
@@ -5206,7 +5206,7 @@
       "subject_id": "I_PYTORCH_OPTIM",
       "valid_from": "2026-07-13",
       "valid_to": null,
-      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW;M_LBFGS",
+      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW;M_LBFGS;M_ADAGRAD;M_RMSPROP;M_MUON",
       "value_status": "verified",
       "verification_status": "verified"
     },
@@ -8184,7 +8184,7 @@
       "subject_id": "I_TENSORFLOW_OPTIM",
       "valid_from": "2026-07-13",
       "valid_to": null,
-      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW",
+      "value": "M_SGD;M_MOMENTUM_SGD;M_ADAM;M_ADAMW;M_ADAGRAD;M_RMSPROP;M_LION",
       "value_status": "verified",
       "verification_status": "verified"
     },
@@ -8316,7 +8316,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.21",
+  "dataset_version": "0.18.22",
   "freshness": {
     "as_of": "2026-10-10",
     "claim_count": 457,
