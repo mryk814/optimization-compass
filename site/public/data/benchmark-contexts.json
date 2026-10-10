@@ -16,7 +16,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 25,
         "unit": "objective_evaluations"
@@ -85,7 +85,7 @@
         ],
         "policy": "fixed_initial_design"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 10,
         "unit": "oracle_evaluations"
@@ -151,7 +151,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 300,
         "unit": "objective_evaluations"
@@ -287,7 +287,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -451,7 +451,7 @@
         ],
         "policy": "fixed_empty_assignment_with_heuristic_incumbent"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 9,
         "unit": "oracle_evaluations"
@@ -524,7 +524,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -615,7 +615,7 @@
         ],
         "policy": "fixed_feasible_reference"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 4096,
         "unit": "oracle_evaluations"
@@ -834,7 +834,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 200,
         "unit": "objective_evaluations"
@@ -1410,7 +1410,7 @@
         ],
         "policy": "member_initial_points"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 80,
         "unit": "oracle_evaluations"
@@ -1548,7 +1548,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-10-07",
+      "last_verified": "2026-10-10",
       "oracle_budget": {
         "limit": 40,
         "unit": "objective_evaluations"
@@ -1674,7 +1674,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.20",
+  "dataset_version": "0.18.21",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

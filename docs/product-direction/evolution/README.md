@@ -28,7 +28,7 @@
 
 照合で分かったことのうち、収録範囲の外で直すものを残します。
 
-- `problem_definition_archetypes` で、`PROBLEM_BILEVEL_REGRESSION` が PA033（非線形最小二乗）、`PROBLEM_FAILED_SIMULATION` が PA054（実験計画）、`PROBLEM_PORTFOLIO_UNCERTAINTY` が PA036（単体）に結ばれています。名前と標準形からは、それぞれ PA046・PA016・確率計画かロバストの行が自然に見えます。結び方の意図を確かめる必要があります（dataset の変更なので別のPRにします）。
+- `problem_definition_archetypes` で、`PROBLEM_BILEVEL_REGRESSION` が PA033（非線形最小二乗）、`PROBLEM_FAILED_SIMULATION` が PA054（実験計画）、`PROBLEM_PORTFOLIO_UNCERTAINTY` が PA036（単体）に結ばれていました。`problem_registry.py` の式と照らすと三つとも誤りだったので、dataset 0.18.21 でそれぞれ PA046＋PA005、PA016、PA049＋PA036 に直しました（`problem-suite.json` の `related_problem_ids`）。
 
 ## 進み具合（2026-10-10 時点）
 
