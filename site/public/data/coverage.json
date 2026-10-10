@@ -533,6 +533,120 @@
       "total": 8
     }
   ],
+  "scope": {
+    "scope_version": "editorial-scope-v1",
+    "status": "proposed",
+    "units": {
+      "knowledge_topic": {
+        "axes": {
+          "claims": {
+            "complete": 113,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "no_canonical_row": 47
+            }
+          },
+          "experience": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {
+              "has_interactive": 21
+            },
+            "states": {
+              "undecided": 160
+            }
+          },
+          "identity": {
+            "complete": 117,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "candidate": 3,
+              "unknown": 0,
+              "unrepresented": 40
+            }
+          },
+          "lesson": {
+            "complete": 8,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "in_progress": 104,
+              "no_article": 47,
+              "stale": 1
+            }
+          },
+          "transfer": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {},
+            "states": {
+              "undecided": 160
+            }
+          }
+        },
+        "denominator": 160,
+        "excluded": 0,
+        "held": 0,
+        "merged": 0
+      },
+      "problem_structure": {
+        "axes": {
+          "claims": {
+            "complete": 71,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "no_canonical_row": 9
+            }
+          },
+          "experience": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {
+              "has_interactive": 7
+            },
+            "states": {
+              "undecided": 80
+            }
+          },
+          "identity": {
+            "complete": 66,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "candidate": 5,
+              "unknown": 0,
+              "unrepresented": 9
+            }
+          },
+          "lesson": {
+            "complete": 1,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "in_progress": 48,
+              "no_article": 31,
+              "stale": 0
+            }
+          },
+          "transfer": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {},
+            "states": {
+              "undecided": 80
+            }
+          }
+        },
+        "denominator": 80,
+        "excluded": 0,
+        "held": 0,
+        "merged": 0
+      }
+    }
+  },
   "subjects": [
     {
       "dimensions": {

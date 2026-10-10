@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import rawCoverage from "../../../public/data/coverage.json";
@@ -15,7 +15,7 @@ describe("CoveragePage", () => {
         ? structuredClone(rawJourneys)
         : structuredClone(rawCoverage),
   }) as Response)));
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
   test("shows priority reasons and filters the full inventory", async () => {
     render(<MemoryRouter><CoveragePage /></MemoryRouter>);
@@ -45,5 +45,22 @@ describe("CoveragePage", () => {
     expect(inventory.querySelectorAll("tr")).toHaveLength(11);
     fireEvent.change(screen.getByLabelText("状態"), { target: { value: "missing" } });
     expect(inventory.querySelectorAll("tr")).toHaveLength(1);
+  });
+
+  test("shows scope counts per unit and axis without a percentage", async () => {
+    render(<MemoryRouter><CoveragePage /></MemoryRouter>);
+    expect(await screen.findByRole("heading", { name: /^収録範囲（/u })).toBeVisible();
+    const scope = rawCoverage.scope;
+    expect(scope).toBeTruthy();
+    const topic = scope!.units.knowledge_topic;
+    const identity = screen.getByRole("article", { name: "知識トピックの収録範囲" });
+    expect(identity).toHaveTextContent(`${topic.axes.identity.complete}`);
+    expect(identity).toHaveTextContent(`/ ${topic.axes.identity.eligible}`);
+    expect(identity).toHaveTextContent(`未表現 ${topic.axes.identity.states.unrepresented}件`);
+    const experience = screen.getByRole("article", { name: "知識トピックの体験" });
+    expect(experience).toHaveTextContent("判定前");
+    expect(experience).not.toHaveTextContent("0 / 0");
+    const section = document.querySelector<HTMLElement>(".coverage-scope");
+    expect(section?.textContent).not.toMatch(/%|％/u);
   });
 });

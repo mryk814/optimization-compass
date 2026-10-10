@@ -314,6 +314,14 @@ caption {
 .coverage-partial { border-left-color: #b47816; }
 .coverage-missing { border-left-color: #ad3e3e; }
 .coverage-not_applicable { border-left-color: #6f7080; }
+.coverage-scope-unit { display: grid; gap: .6rem; margin-top: .8rem; }
+.coverage-scope-unit h3 { margin: 0; }
+.coverage-scope-unit h3 span { font-size: .85rem; font-weight: 400; color: var(--muted-text, #62625e); }
+.coverage-scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+.coverage-scope-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
+.coverage-scope-grid ul { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .9rem; }
+.coverage-scope-figure { margin: .2rem 0; font-variant-numeric: tabular-nums; }
+.coverage-scope-figure strong { font-size: 1.7rem; }
 .coverage-baseline { margin: 0; color: var(--muted-text, #62625e); font-size: .88rem; }
 .coverage-priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .8rem; }
 .coverage-priority-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
