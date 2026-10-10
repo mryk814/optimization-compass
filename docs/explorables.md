@@ -77,6 +77,29 @@ site/src/features/explorable/
 - **計算は描画から分ける**: `math/` は React に依存しません。解析解（例: 二次関数での誤差の倍率 `1-ηλ`）と一致することをテストで固定します。
 - **停止理由**: 非線形最小二乗の図では、表示精度で二乗和の変化が止まった結果、特異な近似や更新不成立による停止、反復予算の打ち切りを区別します。更新できなかった点や予算を使い切った点を、局所最小の谷に着いたとは表示しません。
 
+## 数値の出どころ（文章・静止図・操作図・動画で同じ値を使う）
+
+一つの例の数値は、一つの計算からだけ出します。記事の表、静止SVG、操作図、録画が別々に計算すると、値がずれても気づけません。
+
+- **操作図の数値は `math/` の関数が出します。** 録画（`#/record/<id>`）は同じ部品を scene time `t` で動かすだけで、別に計算しません。
+- **記事の例をPythonで作った場合**は、TypeScriptで乱数や行列の組み立てを作り直しません。Python側の生成スクリプトが例の入力（真値、観測、行列など）をJSONのfixtureに書き出し、`math/` はそれを読み込みます。生成スクリプトの `--check` で、fixtureが古くないことを確かめます。例: `inverse-problem-alpha` は `scripts/generate_lesson_figures.py` が書く `math/inverseProblem.fixture.json` を使います。
+- **記事・captionが言う数値は、テストで固定します。** 操作図の `math/` のテストと、静止図の生成スクリプトのテストが、同じ記事の数値を確かめます。
+
+### 共有の契約：今あるものと、まだ提案のもの
+
+| 項目 | 状態 | 場所 |
+|---|---|---|
+| 図ごとの問い・固定条件・読み取れないこと | 実装済み | `explorables.json`（`question`、`fixed_conditions`、`not_implied`） |
+| 解説の区切り（beats）と一つの時計 | 実装済み | `explorables.py` の Beat、`scene.ts`、`useSceneTour.ts` |
+| 録画の入力ハッシュ | 実装済み（CIでは検査しない。録画は git 管理外） | `site/scripts/record-scene.mjs` の `manifest.json` |
+| Python の例と操作図で同じ入力を使う fixture と鮮度の検査 | 実装済み（1図） | `generate_lesson_figures.py --check` |
+| 読者に先に予想させる区切り（予想してから結果を見せる） | 提案のみ | 単体法の証明・BO の場面で必要になったときに beats へ足す |
+| 学習者が見える情報と最適化側が見える情報の区別の表示 | 提案のみ | 同上 |
+| 双対価格・余裕・ギャップなど LP の観測量の共有名 | 提案のみ | 単体法の証明（OC-EVOL-011）で `simplex.ts` に足す |
+| Python と TypeScript で同じ手法を二度実装している箇所（勾配降下法、Adam） | 既知のずれの危険。同じ例を使う比較のテストはまだない | `math/descent.ts` と `traces/generators.py`、`math/adam.ts` と同 |
+
+提案のものは、使う図ができたときにその図のPRで足します。使い道のない項目を先に契約へ足しません。
+
 ## 解説付き再生（beats）と録画
 
 図には、自動で進む解説（guided scene）を付けられます。方針は [ADR 0018](adr/0018-motion-3d-and-video.md) です。
@@ -122,6 +145,7 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |
 | `bayes-opt-acquisition` | `bayesian-optimization` | GPの予測平均と不確実性、獲得関数で次の点が決まる様子。β・長さの尺度・EIによる探索と活用の違い |
 | `coordinate-descent-walk` | `coordinate-descent` | 一座標の断面の最小と全体の収束の違い。谷の向き・曲率比・座標の結びつきによる軌跡、掃引ごとの停止と予算打ち切り |
+| `inverse-problem-alpha` | `concept.inverse-problem` | 罰則の重みαを対数目盛りで動かし、復元した分布・真の分布との誤差・観測とのずれ（雑音の大きさδとの比較）を同じ計算で見る |
 
 ## 次の候補
 
