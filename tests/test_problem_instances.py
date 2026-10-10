@@ -20,7 +20,12 @@ def test_problem_suite_has_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 25
+    raw = json.loads(PROBLEM_SEED.read_text(encoding="utf-8"))
+    assert suite.instances
+    assert [item.problem_instance_id for item in suite.instances] == [
+        item["problem_instance_id"] for item in raw["instances"]
+    ]
+    assert len({item.problem_instance_id for item in suite.instances}) == len(raw["instances"])
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -128,8 +133,17 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 22
-    assert len(catalog.instances) == 25
+    seed = load_problem_suite()
+    assert catalog.definitions
+    assert catalog.instances
+    assert {item.problem_definition_id for item in catalog.definitions} == {
+        item.problem_definition_id for item in seed.definitions
+    }
+    assert len(catalog.definitions) == len(seed.definitions)
+    assert {item.problem_instance_id for item in catalog.instances} == {
+        item.problem_instance_id for item in seed.instances
+    }
+    assert len(catalog.instances) == len(seed.instances)
     context = next(
         item
         for item in repository.benchmark_contexts()
