@@ -40,6 +40,25 @@
       },
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
+    "concept.hyperparameter-optimization": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "eb58c010498b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "数値は final.py を再実行して一致を確認。1280/375/320px で横のはみ出し0、図の色は共通トークン（更新=橙、観測=緑、構造=紺）。"
+    },
     "concept.inverse-problem": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",

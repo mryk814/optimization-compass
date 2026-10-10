@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 10,
+            "complete": 11,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 44,
+              "in_progress": 43,
               "no_article": 26,
               "stale": 0
             }
@@ -16913,12 +16913,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.hyperparameter-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -16945,11 +16945,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA039",
+            "concept.hyperparameter-optimization",
             "hyperparameter-search"
           ]
         },
