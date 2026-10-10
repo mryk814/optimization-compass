@@ -626,8 +626,8 @@
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 48,
-              "no_article": 27,
+              "in_progress": 49,
+              "no_article": 26,
               "stale": 0
             }
           },
@@ -13562,12 +13562,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.mixed-integer-quadratic-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -13594,11 +13594,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA024"
+            "/formulations/PA024",
+            "concept.mixed-integer-quadratic-program"
           ]
         },
         "recommendation": {

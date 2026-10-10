@@ -8551,6 +8551,97 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.mixed-integer-quadratic-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "混合整数二次計画（MIQP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA024",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "outer-approximation-minlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spatial-branch-and-bound",
+          "target_type": "content"
+        }
+      ],
+      "summary": "混合整数二次計画は、凸二次計画の一部の変数に「整数であること」を加えた定式化です。整数条件を外した凸QPの最適値は下界になりますが、整数解との差が残るため、緩和を解きながら変数を決めていく分枝限定法で最適性を示します。二次の行列 Q が半正定値でないと、緩和そのものが凸でなくなり、この下界の保証は成り立ちません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.model-predictive-control",
       "entity_type": "content",
       "external_url": null,
@@ -31693,13 +31784,21 @@
       "summary": "混合整数線形計画。変数=mixed、目的=linear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.mixed-integer-quadratic-program"
+      ],
       "canonical_url": "/formulations/PA024",
       "entity_id": "PA024",
       "entity_type": "problem",
       "external_url": null,
       "label": "混合整数二次計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.mixed-integer-quadratic-program",
+          "target_type": "content"
+        }
+      ],
       "summary": "混合整数二次計画。変数=mixed、目的=quadratic、制約=mixed。"
     },
     {

@@ -5444,6 +5444,10 @@
           {
             "type": "problem",
             "id": "PA024"
+          },
+          {
+            "type": "content",
+            "id": "concept.mixed-integer-quadratic-program"
           }
         ],
         "review": "reviewed",

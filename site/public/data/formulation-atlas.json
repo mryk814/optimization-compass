@@ -2496,7 +2496,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.mixed-integer-quadratic-program",
       "cues_ja": [
         "二乗の目的に、選ぶ・選ばないの決定が混ざる"
       ],
@@ -2534,7 +2534,7 @@
       ],
       "family_id": "integer_combinatorial",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2577,9 +2577,14 @@
       "problem_id": "PA024",
       "reading_ja": "凸QPの一部の変数を整数に制限した型です。銘柄数の上限つきポートフォリオなどに現れます。",
       "source_ids": [
+        "S002",
+        "S004",
         "S021",
         "S024",
-        "S028"
+        "S028",
+        "S054",
+        "S056",
+        "S064"
       ],
       "standard_form": "\\min_{x}\\; \\tfrac12 x^\\top Q x+c^\\top x \\;\\text{ s.t. }\\; Ax\\le b,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><msup><mi>x</mi><mo>&#x022A4;</mo></msup><mi>Q</mi><mi>x</mi><mo>&#x0002B;</mo><msup><mi>c</mi><mo>&#x022A4;</mo></msup><mi>x</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>A</mi><mi>x</mi><mo>&#x02264;</mo><mi>b</mi><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>j</mi></msub><mo>&#x02208;</mo><mi>&#x02124;</mi><mspace width=\"0.278em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>j</mi><mo>&#x02208;</mo><mi>I</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -6278,6 +6283,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 21
+    "with_article": 22
   }
 }
