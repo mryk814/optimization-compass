@@ -314,3 +314,8 @@
     grid-column: 2;
   }
 }
+
+/* The check label may wrap inside the next-question card so the card fits a 320px column. */
+.path-next-card .path-step-check {
+  white-space: normal;
+}

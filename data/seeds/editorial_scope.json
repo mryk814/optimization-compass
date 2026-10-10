@@ -6659,12 +6659,16 @@
           {
             "type": "content",
             "id": "concept.receding-horizon"
+          },
+          {
+            "type": "content",
+            "id": "concept.model-predictive-control"
           }
         ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名称と標準形が PA043 と一致する。解き直しの説明は receding-horizon 記事にある。"
+        "note_ja": "名称と標準形が PA043 と一致し、定式化の記事は concept.model-predictive-control です。解き直しの手順の説明は receding-horizon 記事にあります。"
       },
       "source_refs": [
         "E01"

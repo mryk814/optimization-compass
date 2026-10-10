@@ -8114,6 +8114,77 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.inverse-problem",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "逆問題",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA055",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "逆問題は、観測から、それを生んだ原因（初期の温度分布や係数など）を逆算する定式化です。観測のわずかな雑音が原因の推定で何桁にも増幅されるため、観測に合うだけの解は使えません。そこで「原因は小さく、なめらかなはず」という仮定を正則化項として足し、その重みで観測への合わせ方を調整します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.knapsack-set-cover",
       "entity_type": "content",
       "external_url": null,
@@ -8176,6 +8247,87 @@
         }
       ],
       "summary": "ナップサック問題と集合被覆問題は、品目や集合を「選ぶ・選ばない」の0か1で決める定式化です。ナップサック問題は容量の上限のもとで価値を最大にし、集合被覆問題は全部を覆う条件のもとで費用を最小にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.l1-sparse-regularization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "L1正則化つき回帰（スパース正則化）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S067",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA035",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.robust-regression",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "coordinate-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "L1正則化つき回帰は、二乗誤差に係数の絶対値の和（L1ノルム）の罰則を足して最小にする定式化です。罰則の強さ λ を上げると、予測にあまり役立たない係数がちょうど0になり、残った特徴量だけで予測する式が得られます。目的は凸ですが、絶対値の角で微分できないため、近接勾配法や座標降下法のように、角を一歩ごとに処理する方法で解きます。"
     },
     {
       "aliases": [],
@@ -8395,6 +8547,97 @@
         }
       ],
       "summary": "混合整数線形計画は、線形計画の一部の変数に「整数であること」を加えた定式化です。この一条件で一般に可行集合の凸性が失われるため、緩和で得た界と見つけた解の差（最適性ギャップ）を詰めながら最適性を証明します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.model-predictive-control",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "モデル予測制御（MPC）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA043",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "モデル予測制御（MPC）は、現在の状態から有限の先までの操作量を最適化し、最初の一手だけを実行して、次の周期でまた解き直す定式化です。線形のモデル、二次の費用、線形の制約なら、毎周期の問題は凸QPです。ただし、その問題が解けたことは、次の周期でも解けることや、連続時間で制約を守ることを保証しません。"
     },
     {
       "aliases": [],
@@ -9198,6 +9441,97 @@
         }
       ],
       "summary": "単体上の最適化は、非負で合計が1になる割合や確率を決める定式化です。可行集合は凸ですが、目的関数まで凸とは限りません。割合を保つ更新と、目的の性質に応じた保証を分けて考えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.smooth-low-dimensional-unconstrained",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "滑らかな低次元無制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA006",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-start",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-exact",
+          "target_type": "content"
+        }
+      ],
+      "summary": "滑らかな低次元無制約は、微分できる関数を、数個から数十個の連続変数について制約なしで最小にする定式化です。最小点では勾配が0ですが、勾配が0の点には峠（鞍点）や別の谷底も含まれます。そのため、勾配に加えて曲率（Hessian）を調べ、どの谷に着いたかを確かめます。"
     },
     {
       "aliases": [],
@@ -30946,7 +31280,9 @@
       "summary": "線形最小二乗。変数=continuous、目的=sum_of_squares、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.smooth-low-dimensional-unconstrained"
+      ],
       "canonical_url": "/formulations/PA006",
       "entity_id": "PA006",
       "entity_type": "problem",
@@ -30957,6 +31293,11 @@
           "relation_type": "case",
           "target_id": "nelder-mead-initial-simplex",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.smooth-low-dimensional-unconstrained",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",
@@ -31529,13 +31870,21 @@
       "summary": "外れ値を含むrobust regression。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.l1-sparse-regularization"
+      ],
       "canonical_url": "/formulations/PA035",
       "entity_id": "PA035",
       "entity_type": "problem",
       "external_url": null,
       "label": "L1・sparse regularization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.l1-sparse-regularization",
+          "target_type": "content"
+        }
+      ],
       "summary": "L1・sparse regularization。変数=continuous、目的=composite、制約=unconstrained。"
     },
     {
@@ -31736,7 +32085,9 @@
       "summary": "最適制御。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.model-predictive-control"
+      ],
       "canonical_url": "/formulations/PA043",
       "entity_id": "PA043",
       "entity_type": "problem",
@@ -31747,6 +32098,11 @@
           "relation_type": "case",
           "target_id": "EC025",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.model-predictive-control",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",
@@ -31895,13 +32251,21 @@
       "summary": "実験計画。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.inverse-problem"
+      ],
       "canonical_url": "/formulations/PA055",
       "entity_id": "PA055",
       "entity_type": "problem",
       "external_url": null,
       "label": "逆問題",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.inverse-problem",
+          "target_type": "content"
+        }
+      ],
       "summary": "逆問題。変数=continuous、目的=sum_of_squares、制約=mixed。"
     },
     {

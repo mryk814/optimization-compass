@@ -89,7 +89,7 @@
 | `pdlp` | `M_PDLP` | 55 | 4748 | 13 | 1 | pass |
 | `powell` | `M_POWELL` | 52 | 2284 | 10 | 1 | pass |
 | `primal-dual-conic` | `M_PRIMAL_DUAL_CONIC` | 64 | 3417 | 13 | 1 | pass |
-| `primal-simplex` | `M_SIMPLEX` | 102 | 12086 | 17 | 1 | pass |
+| `primal-simplex` | `M_SIMPLEX` | 102 | 13149 | 18 | 1 | pass |
 | `projected-gradient` | `M_PROJECTED_GRADIENT` | 50 | 8193 | 14 | 1 | pass |
 | `proximal-gradient` | `M_PROX_GRADIENT` | 44 | 4079 | 8 | 1 | pass |
 | `random-search` | `M_RANDOM_SEARCH` | 52 | 5363 | 12 | 1 | pass |

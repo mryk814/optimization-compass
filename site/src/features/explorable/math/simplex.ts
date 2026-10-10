@@ -64,6 +64,8 @@ export const START_BASIS: Basis = [2, 3];
 
 export interface BasisState {
   basis: Basis;
+  /** The flour stock b of this state; the article's value is 18. The butter stock stays 13. */
+  flour: Fraction;
   /** Value of every variable; the nonbasic ones are 0. Negative means the basis is infeasible. */
   values: Fraction[];
   /** Reduced cost of every variable in the minimisation form; basic ones are 0. */
@@ -87,8 +89,8 @@ function solve(basis: Basis, r: readonly [Fraction, Fraction]): [Fraction, Fract
   return [y0, y1];
 }
 
-export function basisState(basis: Basis): BasisState {
-  const xb = solve(basis, [frac(RHS[0]), frac(RHS[1])]);
+export function basisState(basis: Basis, flour: Fraction = frac(RHS[0])): BasisState {
+  const xb = solve(basis, [flour, frac(RHS[1])]);
   const values = VARIABLES.map(() => frac(0));
   basis.forEach((index, row) => { values[index] = xb[row]; });
   // Dual y solves B^T y = c_B, so reduced cost = c_j - y . A_j.
@@ -104,6 +106,7 @@ export function basisState(basis: Basis): BasisState {
   const sales = add(mul(frac(3), values[0]), mul(frac(4), values[1]));
   return {
     basis,
+    flour,
     values,
     reduced,
     sales,
@@ -173,7 +176,7 @@ export function valuesAlong(state: BasisState, move: EdgeMove, amount: number): 
 export function pivot(state: BasisState, move: EdgeMove): BasisState {
   if (move.leaving === undefined) throw new Error("unbounded edge has no pivot");
   const basis = state.basis.map((index) => (index === move.leaving ? move.entering : index)) as unknown as Basis;
-  return basisState(basis);
+  return basisState(basis, state.flour);
 }
 
 /** The nonbasic variables that raise the sales, i.e. negative reduced cost. */

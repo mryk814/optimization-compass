@@ -8049,7 +8049,19 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.inverse-problem",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.knapsack-set-cover",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.l1-sparse-regularization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8074,6 +8086,12 @@
     },
     {
       "asset_id": "concept.mixed-integer-linear-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.model-predictive-control",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8152,6 +8170,12 @@
     },
     {
       "asset_id": "concept.simplex-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.smooth-low-dimensional-unconstrained",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

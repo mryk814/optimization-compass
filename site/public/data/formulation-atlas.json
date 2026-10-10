@@ -656,7 +656,7 @@
           "title_ja": "初期simplexで局所探索の感度を見抜く"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.smooth-low-dimensional-unconstrained",
       "cues_ja": [
         "変数が数個〜数十個で、目的が微分できる式で書ける"
       ],
@@ -694,7 +694,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -738,7 +738,9 @@
       "reading_ja": "制約のない滑らかな関数を、少数の変数について最小にします。勾配と曲率を使う局所法が基本です。",
       "source_ids": [
         "S002",
-        "S056"
+        "S054",
+        "S056",
+        "S057"
       ],
       "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; f(x),\\quad f \\text{ は滑らか},\\; n \\text{ は小さい}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>f</mi><mtext>&#x000A0;は滑らか</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>n</mi><mtext>&#x000A0;は小さい</mtext></mrow></math></div>"
@@ -3622,7 +3624,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.l1-sparse-regularization",
       "cues_ja": [
         "候補の特徴量が多く、効いているものだけを残したい"
       ],
@@ -3660,7 +3662,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3704,6 +3706,7 @@
       "reading_ja": "当てはめの誤差に L1 罰則を足し、多くの係数がちょうど0になる解を求めます。",
       "source_ids": [
         "S055",
+        "S061",
         "S066",
         "S067"
       ],
@@ -4464,7 +4467,7 @@
           "title_ja": "100Hzで反復MPCの二次計画問題を解く"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.model-predictive-control",
       "cues_ja": [
         "制御周期ごとに、制約つきの最適な操作を実時間で求めたい"
       ],
@@ -4502,7 +4505,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4547,6 +4550,9 @@
       "source_ids": [
         "S012",
         "S043",
+        "S055",
+        "S056",
+        "S062",
         "S076"
       ],
       "standard_form": "\\min_{u_0,\\dots,u_{N-1}}\\; \\sum_{k=0}^{N-1}\\big(x_k^\\top Qx_k+u_k^\\top Ru_k\\big)+x_N^\\top Px_N \\;\\text{ s.t. }\\; x_{k+1}=Ax_k+Bu_k,\\; x_0=\\hat x(t)",
@@ -5649,7 +5655,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.inverse-problem",
       "cues_ja": [
         "断層画像・地下構造・熱源のように、結果から原因を逆算する"
       ],
@@ -5687,7 +5693,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5732,7 +5738,9 @@
       "source_ids": [
         "S003",
         "S041",
-        "S056"
+        "S055",
+        "S056",
+        "S101"
       ],
       "standard_form": "\\min_{m}\\; \\tfrac12\\|G(m)-d\\|_2^2+\\tfrac{\\alpha}{2}\\|Lm\\|_2^2",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>m</mi></mrow></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>G</mi><mo stretchy=\"false\">&#x00028;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mi>d</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mrow><mi>&#x003B1;</mi></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>L</mi><mi>m</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math></div>"
@@ -6266,6 +6274,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 16
+    "with_article": 20
   }
 }

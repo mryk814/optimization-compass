@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "inverse-problem-alpha": {
+    question: "罰則の重み α を動かすと、復元した温度分布はどこで真の分布に一番近づくか。",
+    fixedConditions: "40点の観測から棒の初期温度を復元する。ぼかし G は幅0.05のガウス型、真の分布は位置0.3と0.7に山がある2山、雑音は標準偏差σ=10⁻³でn=40個（δ=σ√n=0.0063）。α は10⁻¹⁰〜1で、(GᵀG+αI)m=Gᵀd を解く。数値は記事と同じ1回の観測で、Pythonが出力した固定データを使う。",
+    notImplied: "1回の観測と1つの雑音の実現での結果であり、残差原理や特定の α が常によいことは示さない。真の分布は答え合わせのためだけに使い、実際の問題では計算できない。離散化した40点の問題であり、連続の問題の解の保証ではない。",
+    beats: [],
+  },
   "proximal-gradient-threshold": {
     question: "勾配で進んだ点zを、なぜそのまま使わず0へ縮めるのか。",
     fixedConditions: "F(x)=(x−3)²/2+λ|x|の1変数凸問題。λは0〜4、歩幅ηは0.1〜1、始点は−3〜5で、12回更新する。滑らかな項の勾配のLipschitz定数はL=1。",
@@ -79,6 +85,12 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
     question: "単体法は、どの変数を増やし、どこで止まれば、実行可能なまま売上を上げられるのか。",
     fixedConditions: "記事のパン屋のLP（max 3x₁+4x₂、小麦粉 3x₁+2x₂≤18、バター x₁+3x₂≤13、非負）を分数で厳密に計算する。出発点は原点の基底 {s₁, s₂}。",
     notImplied: "2変数の小さなLPでの手順で、実際のソルバーのピボット規則・前処理・計算量・大規模問題での速さは示さない。",
+    beats: [],
+  },
+  "simplex-shadow-price": {
+    question: "小麦粉の在庫を変えたとき、値段 5/7 で売上を見積もってよいのはどこまでか。",
+    fixedConditions: "記事のパン屋のLP（max 3x₁+4x₂、小麦粉 3x₁+2x₂≤b、バター x₁+3x₂≤13、非負）で、小麦粉の在庫 b だけを6〜45の範囲で1/3刻みに動かす。値段 5/7 は b=18 の最適な基底 {x₁, x₂} のもので、各 b の実際の最適値は原点から主単体法で厳密に解き直し、分数で表示する。",
+    notImplied: "b の範囲の外でも値段 5/7 が使えるとは示さない。バターの在庫や売値を変えたときの範囲は示さず、実際のソルバーの感度分析の出力や、整数や大規模な問題での挙動も示さない。",
     beats: [],
   },
   "convexity-chord": {

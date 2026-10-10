@@ -40,6 +40,42 @@
       },
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
+    "concept.inverse-problem": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "692f5690886b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.l1-sparse-regularization": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "624db9f41e12",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "concept.linear-least-squares": {
       "reviewed_on": "2026-10-03",
       "reviewer": "owner",
@@ -108,6 +144,42 @@
       },
       "notes": "Sonnet 5.5のレビューをClaudeが本文と照合して確認。数値（頂点の売上、双対値5/7・6/7、コード出力）は再計算で一致。画面はClaudeが1280/375/320pxで確認"
     },
+    "concept.model-predictive-control": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "b9888737fbd6",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.smooth-low-dimensional-unconstrained": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "8a39c2baa43b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "gauss-newton": {
       "reviewed_on": "2026-10-04",
       "reviewer": "claude",
@@ -138,7 +210,7 @@
     "primal-simplex": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
-      "body_sha256": "62b7e0aee6e3",
+      "body_sha256": "90487510a6b5",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -151,7 +223,7 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "パン屋のLPを主図simplex-pivot（新規）・2回のピボット表・最適性の証明書・Pythonまで一つの題材で通した。数値はscratchのFraction実装・vitest・linprogで確認。1280/375/320pxで全14状態のラベル重なりとはみ出しをスクリプトで検査。オーナーの画面確認は未。"
+      "notes": "OC-EVOL-011: 感度の操作図 simplex-shadow-price を追加。b=6,26/3,18,19,25/3,39,40 の値を linprog で独立に検算。1280/375/320px でラベルの重なりを修正後に確認。オーナーの画面確認は未。"
     }
   }
 }
