@@ -8157,6 +8157,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.smooth-low-dimensional-unconstrained",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.so3-rotation-representation",
       "asset_type": "content",
       "policy": "warning",

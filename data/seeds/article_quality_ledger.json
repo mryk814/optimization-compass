@@ -108,6 +108,24 @@
       },
       "notes": "Sonnet 5.5のレビューをClaudeが本文と照合して確認。数値（頂点の売上、双対値5/7・6/7、コード出力）は再計算で一致。画面はClaudeが1280/375/320pxで確認"
     },
+    "concept.smooth-low-dimensional-unconstrained": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "8a39c2baa43b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "gauss-newton": {
       "reviewed_on": "2026-10-04",
       "reviewer": "claude",

@@ -292,12 +292,139 @@ def _nonlinear_least_squares_profile_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Smooth low-dimensional unconstrained (content/concepts/smooth-low-dimensional-unconstrained.md):
+# f(x) = (x1^2 - 1)^2 + x1 x2 + 2 x2^2 has a saddle at the origin and two valley bottoms.
+LANDSCAPE_START_A = (0.5, 1.0)
+LANDSCAPE_START_B = (0.2, 0.1)
+
+
+def landscape_value(x1: float, x2: float) -> float:
+    return (x1 * x1 - 1) ** 2 + x1 * x2 + 2 * x2 * x2
+
+
+def landscape_gradient(x1: float, x2: float) -> tuple[float, float]:
+    return 4 * x1 * (x1 * x1 - 1) + x2, x1 + 4 * x2
+
+
+def landscape_newton_path(
+    start: tuple[float, float], tolerance: float = 1e-8
+) -> list[tuple[float, float]]:
+    """Pure Newton iteration with the exact 2x2 Hessian [[12 x1^2 - 4, 1], [1, 4]]."""
+    x1, x2 = start
+    path = [(x1, x2)]
+    while math.hypot(*landscape_gradient(x1, x2)) >= tolerance and len(path) < 50:
+        g1, g2 = landscape_gradient(x1, x2)
+        h11, h12, h22 = 12 * x1 * x1 - 4, 1.0, 4.0
+        det = h11 * h22 - h12 * h12
+        x1 -= (h22 * g1 - h12 * g2) / det
+        x2 -= (-h12 * g1 + h11 * g2) / det
+        path.append((x1, x2))
+    return path
+
+
+def _contour_segments(
+    func: Callable[[float, float], float],
+    level: float,
+    x_range: tuple[float, float],
+    y_range: tuple[float, float],
+    cells: tuple[int, int],
+) -> list[tuple[tuple[float, float], tuple[float, float]]]:
+    """Marching squares on a regular grid; each cell contributes zero, one or two segments."""
+    nx, ny = cells
+    xs = [x_range[0] + (x_range[1] - x_range[0]) * i / nx for i in range(nx + 1)]
+    ys = [y_range[0] + (y_range[1] - y_range[0]) * j / ny for j in range(ny + 1)]
+    values = [[func(x, y) - level for y in ys] for x in xs]
+
+    def cross(a: tuple[float, float, float], b: tuple[float, float, float]) -> tuple[float, float]:
+        t = a[2] / (a[2] - b[2])
+        return a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])
+
+    segments = []
+    for i in range(nx):
+        for j in range(ny):
+            corners = [
+                (xs[i], ys[j], values[i][j]),
+                (xs[i + 1], ys[j], values[i + 1][j]),
+                (xs[i + 1], ys[j + 1], values[i + 1][j + 1]),
+                (xs[i], ys[j + 1], values[i][j + 1]),
+            ]
+            hits = [
+                cross(corners[k], corners[(k + 1) % 4])
+                for k in range(4)
+                if (corners[k][2] > 0) != (corners[(k + 1) % 4][2] > 0)
+            ]
+            if len(hits) == 2:
+                segments.append((hits[0], hits[1]))
+            elif len(hits) == 4:
+                segments.append((hits[0], hits[1]))
+                segments.append((hits[2], hits[3]))
+    return segments
+
+
+def _smooth_landscape_svg() -> str:
+    root = math.sqrt(17) / 4
+    minima = ((root, -root / 4), (-root, root / 4))
+    bottom = landscape_value(*minima[0])
+    px = _scale(-1.8, 1.8, 56, 416)
+    py = _scale(1.2, -1.2, 52, 292)
+    path_a = landscape_newton_path(LANDSCAPE_START_A)
+    path_b = landscape_newton_path(LANDSCAPE_START_B)
+    parts = _open(
+        "谷が二つ、その間に峠",
+        (
+            f"f(x)=(x1^2-1)^2+x1x2+2x2^2 の等高線。原点が峠（鞍点、f=1）で、"
+            f"x=(±{root:.2f}, ∓{root / 4:.2f}) の二つの谷底が最小値 {bottom:.3f} です。"
+            f"Newton法は始点Aから{len(path_a) - 1}回で左の谷底へ、"
+            f"始点Bから{len(path_b) - 1}回で峠へ着きます。"
+        ),
+        396,
+    )
+    parts.append(f'<path d="M56 52V292H416V52Z" fill="none" stroke="{GRID}"/>')
+    for level in (-0.1, 0.5, 1.0, 2.0, 4.0):
+        style = (
+            f'stroke="{MUTED}" stroke-width="2"'
+            if level == 1.0
+            else f'stroke="{RING}" stroke-width="1.5"'
+        )
+        segments = _contour_segments(landscape_value, level, (-1.8, 1.8), (-1.2, 1.2), (144, 96))
+        data = "".join(
+            f"M{px(a[0]):.1f} {py(a[1]):.1f}L{px(b[0]):.1f} {py(b[1]):.1f}" for a, b in segments
+        )
+        parts.append(f'<path d="{data}" fill="none" {style}/>')
+    for value in (-1, 0, 1):
+        parts.append(_text(px(value), 312, f"{value}", "tick", "middle"))
+        parts.append(_text(48, py(value) + 5, f"{value}", "tick", "end"))
+    parts.append(_text(416, 332, "x₁", "tick", "end"))
+    parts.append(_text(62, 70, "x₂", "tick"))
+    for path, color in ((path_a, LINE), (path_b, POINT)):
+        parts.append(_polyline([(px(a), py(b)) for a, b in path], color, 2.5))
+        for a, b in path[1:]:
+            parts.append(f'<circle cx="{px(a):.1f}" cy="{py(b):.1f}" r="3.5" fill="{color}"/>')
+        a, b = path[0]
+        parts.append(
+            f'<rect x="{px(a) - 5:.1f}" y="{py(b) - 5:.1f}" width="10" height="10" fill="#f7f8f3" '
+            f'stroke="{color}" stroke-width="2.5"/>'
+        )
+    for a, b in minima:
+        parts.append(f'<circle cx="{px(a):.1f}" cy="{py(b):.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(_text(px(minima[0][0]) - 12, py(minima[0][1]) + 24, "谷底", "", "end"))
+    parts.append(_text(px(minima[1][0]) + 14, py(minima[1][1]) - 10, "谷底"))
+    parts.append(_text(px(0) - 12, py(0) + 26, "峠", "", "end"))
+    parts.append(_text(px(LANDSCAPE_START_A[0]) + 12, py(LANDSCAPE_START_A[1]) + 5, "始点A"))
+    parts.append(_text(px(LANDSCAPE_START_B[0]) + 12, py(LANDSCAPE_START_B[1]) - 8, "始点B"))
+    parts.append(_text(20, 356, f"緑：始点AからNewton法 {len(path_a) - 1}回で左の谷底", "note"))
+    parts.append(_text(20, 380, f"青：始点BからNewton法 {len(path_b) - 1}回で峠"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
         "least-squares-contours.svg": _least_squares_contours_svg(),
         "least-squares-minimum.svg": _least_squares_minimum_svg(),
         "nonlinear-least-squares-profile.svg": _nonlinear_least_squares_profile_svg(),
+        "smooth-landscape-saddle.svg": _smooth_landscape_svg(),
     }
 
 

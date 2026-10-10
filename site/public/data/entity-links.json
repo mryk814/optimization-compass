@@ -9201,6 +9201,97 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.smooth-low-dimensional-unconstrained",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "滑らかな低次元無制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA006",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-start",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-exact",
+          "target_type": "content"
+        }
+      ],
+      "summary": "滑らかな低次元無制約は、微分できる関数を、数個から数十個の連続変数について制約なしで最小にする定式化です。最小点では勾配が0ですが、勾配が0の点には峠（鞍点）や別の谷底も含まれます。そのため、勾配に加えて曲率（Hessian）を調べ、どの谷に着いたかを確かめます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.so3-rotation-representation",
       "entity_id": "concept.so3-rotation-representation",
       "entity_type": "content",
@@ -30946,7 +31037,9 @@
       "summary": "線形最小二乗。変数=continuous、目的=sum_of_squares、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.smooth-low-dimensional-unconstrained"
+      ],
       "canonical_url": "/formulations/PA006",
       "entity_id": "PA006",
       "entity_type": "problem",
@@ -30957,6 +31050,11 @@
           "relation_type": "case",
           "target_id": "nelder-mead-initial-simplex",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.smooth-low-dimensional-unconstrained",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",

@@ -111,7 +111,7 @@ def test_index_merges_database_seed_and_articles(repository: KnowledgeRepository
     assert lp["methods"][0]["fit_level"] == "default_choice"
     assert any(method["role"] == "avoid" for method in lp["methods"])
     assert by_id["PA034"]["maturity"] == "article"
-    assert by_id["PA006"]["maturity"] == "skeleton"
+    assert by_id["PA054"]["maturity"] == "skeleton"
     assert index["summary"]["formulations"] == len(by_id)
     assert all(family["problem_ids"] for family in index["families"])
 

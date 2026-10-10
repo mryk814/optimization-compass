@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 1,
+            "complete": 2,
             "eligible": 80,
             "info": {},
             "states": {
               "in_progress": 47,
-              "no_article": 32,
+              "no_article": 31,
               "stale": 0
             }
           },
@@ -12073,12 +12073,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.smooth-low-dimensional-unconstrained"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -12105,11 +12105,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA006",
+            "concept.smooth-low-dimensional-unconstrained",
             "nelder-mead-initial-simplex"
           ]
         },
