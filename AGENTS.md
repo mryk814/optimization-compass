@@ -1,9 +1,7 @@
 # Optimization Compass agent instructions
 
 This file is the first entry point for humans and automated agents changing this repository.
-For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
-
-Task-shaped authoring skills for growing the dataset live in [`.agents/skills/`](.agents/skills/): `grow-data` (triage/routing), `add-formulation`, `add-content-article`, `add-explorable`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
+For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Prose style for articles lives in [`docs/article-style.md`](docs/article-style.md).
 
 ## What we are building for the learner
 
@@ -93,14 +91,14 @@ For high or critical changes, inspect similar merged work and document the autho
 1. Classify the change using the routing table above.
 2. Read the matching recipe only when adding a new entity or changing a contract.
 3. Edit the canonical input, preserve IDs and sources, and run the smallest focused validation.
-4. For prose or small seed corrections, inspect the rendered Pages result in the PR or after deploy.
+4. For prose or small seed corrections, inspect the rendered local preview.
 5. Use the complete release validation only for schema, recommendation, generator, executable-problem, or release changes.
 
 ## Validation policy
 
 Use the smallest task exposed by `optimization-compass validate`. The local content tasks check parsing, relations, licensing, and the focused authoring contract. They do not run the full Python suite, site build, or browser suite.
 
-CI and main-branch Pages still run the broader artifact and release gates. Do not weaken generated-data identity, canonical data integrity, stable IDs, or deployment identity merely to shorten local feedback.
+Pull requests targeting `main`, including updates to open PRs, run the selected authoritative validation task, build the site, and verify generated-data drift and the local Pages artifact. Run the applicable gates locally while editing. The workflow runs only on PR events, not standalone push events, and there is no automatic Pages upload or deployment. Preserve generated-data identity, canonical data integrity, stable IDs, and deployment identity.
 
 For an existing canonical method article, `ready content <content-id>` exports public data and runs the focused content contract. It no longer regenerates review reports as a side effect; report scripts remain available when a report is explicitly needed.
 
@@ -138,7 +136,7 @@ Every commit must include a DCO sign-off. See [`CONTRIBUTING.md`](CONTRIBUTING.m
 - Site exports for a not-yet-published staged release embed a predecessor-only catalog snapshot. The
   published site may include the new current entry only after the external bundle and catalog update.
 - After changing a test or generated-data policy, run both `ruff check .` and `ruff format --check .`
-  before relying on the longer Pages smoke job; a focused test pass alone is not sufficient.
+  before relying on longer validation; a focused test pass alone is not sufficient.
 - A change to `resources/problem-suite.json` is a release-boundary change: update the release
   authority, build and publish the staged SQLite/site tree, then regenerate `CITATION.cff` and the
   dataset card. The normal site export intentionally rejects a seed/runtime SQLite mismatch.
