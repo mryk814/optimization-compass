@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -11260,6 +11260,20 @@
           "target_id": "EC027",
           "target_table": "example_cases",
           "target_type": "case"
+        },
+        {
+          "canonical_url": "/methods/M_BOBYQA",
+          "claim_summary": "NLoptがBOBYQA(LN_BOBYQA)を上下限付きの微分不要局所最適化として提供する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004257",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "BOBYQA",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_BOBYQA",
+          "target_table": "methods",
+          "target_type": "method"
         }
       ],
       "last_verified": "2026-07-13",
@@ -62080,6 +62094,514 @@
       "source_type": "textbook",
       "supported_claim": "Textbook treatment of shortest path, maximum flow and minimum-cost flow algorithms, including label-correcting (Bellman-Ford), augmenting-path, preflow-push and successive shortest path methods.",
       "title": "Network Flows: Theory, Algorithms, and Applications"
+    },
+    {
+      "access_note": "Department of Applied Mathematics and Theoretical Physics, University of Cambridge, report NA2009/06 (August 2009). Title, author, report number and content confirmed on 2026-10-10 via search (NAG documentation links to the DAMTP PDF; a mirror is on optimization-online.org); the PDF itself could not be opened from this environment, so the URL is the one cited by the NAG documentation.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_BOBYQA",
+          "claim_summary": "補間による二次modelとtrust regionで、上下限付きの関数を微分なしで最小化する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004256",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "BOBYQA",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_BOBYQA",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://www.damtp.cam.ac.uk/user/na/NA_papers/NA2009_06.pdf",
+      "publication_date": "2009-08-01",
+      "publisher": "M. J. D. Powell",
+      "source_id": "S145",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Derivative-free minimization under simple lower and upper bounds using a quadratic model by interpolation, trust-region steps, and the RESCUE recovery routine.",
+      "title": "The BOBYQA algorithm for bound constrained optimization without derivatives"
+    },
+    {
+      "access_note": "Proceedings of the 32nd International Conference on Machine Learning (ICML), PMLR 37:997-1005, 2015. Authors, title, venue and pages confirmed on 2026-10-10 against the PMLR record via search.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SAFEOPT",
+          "claim_summary": "Gaussian processで安全領域を保ちながら探索し、到達可能な最適値への収束を示す。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004258",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "SafeOpt",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SAFEOPT",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://proceedings.mlr.press/v37/sui15.html",
+      "publication_date": "2015-07-01",
+      "publisher": "Yanan Sui; Alkis Gotovos; Joel Burdick; Andreas Krause",
+      "source_id": "S146",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "SafeOpt: Gaussian-process optimization that only evaluates points believed to stay above a safety threshold, with a convergence guarantee to the optimum reachable within the safe set.",
+      "title": "Safe Exploration for Optimization with Gaussian Processes"
+    },
+    {
+      "access_note": "Proceedings of the 31st International Conference on Machine Learning (ICML), PMLR 32(2):937-945, 2014. Confirmed on 2026-10-10 against the PMLR record via search; the PMLR listing omits the third author surname, which the PDF gives as Xu.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_CONSTRAINED_BO",
+          "claim_summary": "目的と不等式制約の両方にGP事前分布を置くベイズ最適化。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004259",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "制約付きベイズ最適化",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_CONSTRAINED_BO",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://proceedings.mlr.press/v32/gardner14.html",
+      "publication_date": "2014-06-01",
+      "publisher": "Jacob R. Gardner; Matt J. Kusner; Zhixiang (Eddie) Xu; Kilian Q. Weinberger; John P. Cunningham",
+      "source_id": "S147",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Bayesian optimization with Gaussian-process priors on both the objective and inequality constraint functions, using a constraint-aware acquisition for problems where feasibility is as costly to evaluate as the objective.",
+      "title": "Bayesian Optimization with Inequality Constraints"
+    },
+    {
+      "access_note": "Proceedings of the 30th Conference on Uncertainty in Artificial Intelligence (UAI 2014), Quebec City; arXiv:1403.5607. Authors, title, venue and the arXiv number confirmed on 2026-10-10 via search; page ranges differ between the AUAI and PMLR listings, so none is recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_CONSTRAINED_BO",
+          "claim_summary": "未知の制約をGPでmodel化し、目的と制約を別々に評価できるベイズ最適化。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004260",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "制約付きベイズ最適化",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_CONSTRAINED_BO",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://arxiv.org/abs/1403.5607",
+      "publication_date": "2014-07-01",
+      "publisher": "Michael A. Gelbart; Jasper Snoek; Ryan P. Adams",
+      "source_id": "S148",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Constrained Bayesian optimization with unknown, possibly noisy constraints modelled by Gaussian processes, with the objective and constraints evaluable separately (decoupled).",
+      "title": "Bayesian Optimization with Unknown Constraints"
+    },
+    {
+      "access_note": "IEEE Transactions on Evolutionary Computation 10(1), 50-66, February 2006, DOI 10.1109/TEVC.2005.851274. Volume, issue, pages and DOI confirmed on 2026-10-10 via search (author project page and bibliographic indexes); the full text was not read, so the claim is limited to the title, abstract-level description and the method summary on the author page.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_PAREGO",
+          "claim_summary": "乱数の重みによるスカラー化とGPでPareto集合を近似する多目的最適化。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004261",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "ParEGO",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_PAREGO",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1109/TEVC.2005.851274",
+      "publication_date": "2006-02-01",
+      "publisher": "Joshua Knowles",
+      "source_id": "S149",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "ParEGO: extension of efficient global optimization to multiobjective problems by repeatedly scalarizing the objectives with randomly drawn weights and fitting a Gaussian-process model that is updated after each evaluation.",
+      "title": "ParEGO: a hybrid algorithm with on-line landscape approximation for expensive multiobjective optimization problems"
+    },
+    {
+      "access_note": "Mathematical Programming 14(1), 265-294 (1978), DOI 10.1007/BF01588971. Volume, pages, DOI and the guarantee confirmed on 2026-10-10 against the Springer record via search. Part II (Fisher, Nemhauser, Wolsey, Mathematical Programming Study 8, 73-87) is a different paper and is not recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SUBMODULAR_GREEDY",
+          "claim_summary": "単調劣モジュラ関数の濃度制約付き最大化で貪欲法が(1-1/e)近似を達成する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004262",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "劣モジュラ関数の貪欲法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SUBMODULAR_GREEDY",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/BF01588971",
+      "publication_date": "1978-12-01",
+      "publisher": "G. L. Nemhauser; L. A. Wolsey; M. L. Fisher",
+      "source_id": "S150",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "For a nondecreasing submodular set function with z(empty) = 0 under a cardinality constraint K, the greedy heuristic attains at least 1 - ((K-1)/K)^K of the optimal value; the bound is tight for each K and tends to (e-1)/e.",
+      "title": "An analysis of approximations for maximizing submodular set functions-I"
+    },
+    {
+      "access_note": "Computer Methods in Applied Mechanics and Engineering 192(1-2), 227-246 (2003), DOI 10.1016/S0045-7825(02)00559-5. Venue, volume, pages and DOI confirmed on 2026-10-10 via a repository record and an institutional publication list; the full text was not read, so the claim is limited to the title and the standard description of the method.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_LEVELSET_TOPOLOGY",
+          "claim_summary": "レベルセット関数で境界を表し、速度場で動かして位相変化を許す構造最適化。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004263",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "レベルセット法による形状更新",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_LEVELSET_TOPOLOGY",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1016/S0045-7825(02)00559-5",
+      "publication_date": "2003-01-01",
+      "publisher": "Michael Yu Wang; Xiaoming Wang; Dongming Guo",
+      "source_id": "S151",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Level-set representation of the structural boundary that is moved by solving a Hamilton-Jacobi equation with a velocity field from shape sensitivity, allowing topology changes during structural optimization.",
+      "title": "A level set method for structural topology optimization"
+    },
+    {
+      "access_note": "Journal of Computational Physics 194(1), 363-393 (2004), DOI 10.1016/j.jcp.2003.09.032. Volume, pages and DOI confirmed on 2026-10-10 via the IP Paris research portal and HAL-based records via search; the full text was not read.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_LEVELSET_TOPOLOGY",
+          "claim_summary": "形状微分とレベルセット法の組合せで弾性構造を最適化する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004264",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "レベルセット法による形状更新",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_LEVELSET_TOPOLOGY",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1016/j.jcp.2003.09.032",
+      "publication_date": "2004-02-01",
+      "publisher": "Gregoire Allaire; Francois Jouve; Anca-Maria Toader",
+      "source_id": "S152",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Combines the classical shape derivative with the level-set method for front propagation to optimize elastic structures in two and three dimensions.",
+      "title": "Structural optimization using sensitivity analysis and a level-set method"
+    },
+    {
+      "access_note": "SIAM Journal on Optimization 12, 479-502. Journal, volume and pages confirmed on 2026-10-10 by search against reference lists and the 1999 Stochastic Programming E-Print Series version (Humboldt-Universitat zu Berlin); the abstract of that version describes the Monte Carlo approach, convergence rates, stopping rules and a stochastic knapsack example. Year 2002 follows the usual SIAM listing; some reference lists give 2001. Issue number and the SIAM landing page were not confirmed from an official listing, so neither is recorded. DOI 10.1137/S1052623499363220 is the DOI already used in docs/research/uncertainty-method-source-audit.md.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SAA",
+          "claim_summary": "期待値を標本平均に置き換えた近似問題を解き、繰り返しで統計的なギャップを推定する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004280",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "標本平均近似(SAA)",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SAA",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/S1052623499363220",
+      "publication_date": "2002-01-01",
+      "publisher": "Anton J. Kleywegt; Alexander Shapiro; Tito Homem-de-Mello",
+      "source_id": "S160",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Sample average approximation (SAA): the expectation is replaced by a sample average, the sampled problem is solved, and the procedure is repeated to obtain statistical lower and upper bounds, convergence rates and stopping rules; stated for stochastic discrete optimization.",
+      "title": "The sample average approximation method for stochastic discrete optimization"
+    },
+    {
+      "access_note": "SIAM and the Mathematical Programming Society, MPS-SIAM Series on Optimization 9, 2009, 436 pages, DOI 10.1137/1.9780898718751. Authors, series, year and DOI confirmed on 2026-10-10 against library catalog records via search; the first-edition table of contents was not available, so chapter-level claims are not recorded. A 2014 second edition and a 2021 third edition exist; this record is the first edition.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SAA",
+          "claim_summary": "期待値を標本平均に置き換えた近似問題を解き、繰り返しで統計的なギャップを推定する。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004281",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "標本平均近似(SAA)",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SAA",
+          "target_table": "methods",
+          "target_type": "method"
+        },
+        {
+          "canonical_url": "/methods/M_PROGRESSIVE_HEDGING",
+          "claim_summary": "シナリオごとの解を情報構造に沿って集約する分解法。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004284",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "Progressive hedging法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_PROGRESSIVE_HEDGING",
+          "target_table": "methods",
+          "target_type": "method"
+        },
+        {
+          "canonical_url": "/methods/M_SDDP",
+          "claim_summary": "双対解から作る区分線形のcutで将来費用関数を近似する多段階確率計画の手法。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004286",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "確率的双対動的計画(SDDP)",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SDDP",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/1.9780898718751",
+      "publication_date": "2009-01-01",
+      "publisher": "Alexander Shapiro; Darinka Dentcheva; Andrzej Ruszczynski",
+      "source_id": "S161",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Textbook treatment of stochastic programming: two-stage and multistage models, sample average approximation, risk-averse models, and decomposition methods including sampling-based dual dynamic programming.",
+      "title": "Lectures on Stochastic Programming: Modeling and Theory"
+    },
+    {
+      "access_note": "Operations Research Letters 41(5), 457-461 (September 2013), Elsevier, DOI 10.1016/j.orl.2013.05.003. Journal, volume, issue, pages, year-month and DOI confirmed on 2026-10-10 against the CiNii record and the DOI as reported by search. The full text was not read; the claim is limited to the title and the commonly cited description of the method as the origin of C&CG.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_CCG",
+          "claim_summary": "最悪ケースのシナリオに対する列と制約をmasterへ足して二段階ロバスト問題を解く。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004282",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "列・制約生成法(二段階ロバスト最適化)",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_CCG",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1016/j.orl.2013.05.003",
+      "publication_date": "2013-09-01",
+      "publisher": "Bo Zeng; Long Zhao",
+      "source_id": "S162",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Column-and-constraint generation (C&CG) for two-stage robust optimization: a master problem is enlarged with recourse variables and constraints for scenarios found by a subproblem, giving lower and upper bounds.",
+      "title": "Solving two-stage robust optimization problems using a column-and-constraint generation method"
+    },
+    {
+      "access_note": "Mathematics of Operations Research 16(1), 119-147 (February 1991), DOI 10.1287/moor.16.1.119. Journal, volume, issue, pages, month and DOI confirmed on 2026-10-10 against the INFORMS record (abstract) and the IAOR record via search; an earlier version is IIASA Working Paper WP-87-119 (December 1987). Only the abstract was available: it describes an algorithm that produces a policy for any weighting of the scenarios, grouped by available information, without reliance on hindsight. Convergence conditions were not read from the paper.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_PROGRESSIVE_HEDGING",
+          "claim_summary": "シナリオごとの解を情報構造に沿って集約する分解法。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004283",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "Progressive hedging法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_PROGRESSIVE_HEDGING",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1287/moor.16.1.119",
+      "publication_date": "1991-02-01",
+      "publisher": "R. T. Rockafellar; Roger J.-B. Wets",
+      "source_id": "S163",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Progressive hedging (progressive hedging algorithm): scenario subproblems are solved separately and the scenario policies are aggregated so that decisions respect the information available (nonanticipativity).",
+      "title": "Scenarios and policy aggregation in optimization under uncertainty"
+    },
+    {
+      "access_note": "Mathematical Programming 52(2), 359-375 (1991), Springer. Journal, volume, issue, pages and year confirmed on 2026-10-10 against dblp and the Springer citation listing via search; the abstract content (piecewise-linear cost-to-go from dual solutions acting as Benders cuts, 39 reservoirs) was confirmed against the IAOR record. The DOI 10.1007/BF01582895 is taken from the Springer link returned by search (link.springer.com/doi/10.1007/BF01582895); the page itself was not opened. The authors are listed as Pereira and Pinto; the middle initial of Pinto varies by listing and is not asserted. Month not confirmed, so the date is the year only.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SDDP",
+          "claim_summary": "双対解から作る区分線形のcutで将来費用関数を近似する多段階確率計画の手法。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004285",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "確率的双対動的計画(SDDP)",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SDDP",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/BF01582895",
+      "publication_date": "1991-01-01",
+      "publisher": "M. V. F. Pereira; L. M. V. G. Pinto",
+      "source_id": "S164",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Stochastic dual dynamic programming (SDDP): the expected cost-to-go functions of stochastic dynamic programming are approximated by piecewise linear functions built from stage dual solutions (Benders-type cuts), avoiding state-space discretization; applied to a 39-reservoir hydrothermal system.",
+      "title": "Multi-stage stochastic optimization applied to energy planning"
+    },
+    {
+      "access_note": "Advances in Neural Information Processing Systems 26 (NIPS 2013; the conference is now named NeurIPS), proceedings page at papers.nips.cc confirmed on 2026-10-10 by search. The arXiv preprint 1306.0895 (June 2013) carries a slightly different title (optimal transportation distances). Pages were not confirmed and are not recorded; the proceedings month (December 2013) is the conference month and not an official publication date, so treat it as approximate.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SINKHORN",
+          "claim_summary": "エントロピー正則化した最適輸送を行列スケーリングで解く。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004287",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "Sinkhorn法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SINKHORN",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://papers.nips.cc/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html",
+      "publication_date": "2013-12-01",
+      "publisher": "Marco Cuturi",
+      "source_id": "S165",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Entropic regularization of the optimal transport problem makes the optimum computable by Sinkhorn matrix scaling, reported to be several orders of magnitude faster than standard transportation solvers for histograms of a few hundred dimensions or more.",
+      "title": "Sinkhorn distances: lightspeed computation of optimal transport"
+    },
+    {
+      "access_note": "Pacific Journal of Mathematics 21(2), 343-348 (1967). Journal, volume, issue, pages and year confirmed on 2026-10-10 against the Project Euclid record via search (which lists the authors in reverse order; AMS and Mathematical Reviews give Sinkhorn first). The convergence statement is taken from reviews quoting the result; the full text was not read. Sinkhorn alone, A relationship between arbitrary positive matrices and doubly stochastic matrices, Annals of Mathematical Statistics 35 (1964), is the earlier origin but was not confirmed against an official listing in this batch, so it is not recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SINKHORN",
+          "claim_summary": "エントロピー正則化した最適輸送を行列スケーリングで解く。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004288",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "Sinkhorn法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SINKHORN",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://projecteuclid.org/euclid.pjm/1102992505",
+      "publication_date": "1967-01-01",
+      "publisher": "Richard Sinkhorn; Paul Knopp",
+      "source_id": "S166",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Matrix scaling: repeated row and column normalization of a nonnegative matrix with total support converges to a doubly stochastic matrix of the form D1 A D2 with positive diagonal D1, D2.",
+      "title": "Concerning nonnegative matrices and doubly stochastic matrices"
+    },
+    {
+      "access_note": "Mathematics of Computation 87(314), 2563-2609 (2018). Journal, volume, pages and the four authors confirmed on 2026-10-10 against the AMS listing via search; issue 314 and DOI 10.1090/mcom/3303 come from a university repository record returned by search (the DOI page was not opened). Preprint: arXiv 1607.05816, first titled Scaling algorithms for unbalanced transport problems. Month not confirmed, so the date is the year only.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/methods/M_SINKHORN",
+          "claim_summary": "周辺制約を緩めた非均衡輸送も一般化したスケーリング反復で解く。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004289",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "Sinkhorn法",
+          "last_verified": "2026-10-10",
+          "supported_field": "row",
+          "target_id": "M_SINKHORN",
+          "target_table": "methods",
+          "target_type": "method"
+        }
+      ],
+      "last_verified": "2026-10-10",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1090/mcom/3303",
+      "publication_date": "2018-01-01",
+      "publisher": "Lenaic Chizat; Gabriel Peyre; Bernhard Schmitzer; Francois-Xavier Vialard",
+      "source_id": "S167",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Entropic-regularized unbalanced optimal transport, where the marginal constraints are relaxed by divergence penalties, is solved by generalized Sinkhorn scaling algorithms based on pointwise diagonal scaling of the coupling; also covers unbalanced barycenters and gradient flows.",
+      "title": "Scaling algorithms for unbalanced optimal transport problems"
     }
   ]
 }

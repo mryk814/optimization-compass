@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -35,11 +35,11 @@
       "intents": [],
       "query": "BO",
       "query_id": "alias-bo",
-      "result_count": 3,
+      "result_count": 6,
       "top_document_ids": [
         "method:M_BAYESIAN_OPT_GP",
-        "method:M_SMAC_RF",
-        "method:M_TURBO_SAASBO"
+        "method:M_CONSTRAINED_BO",
+        "method:M_PAREGO"
       ]
     },
     {
@@ -53,11 +53,11 @@
       "intents": [],
       "query": "CP-SAT 論理制約",
       "query_id": "mixed-cp-sat",
-      "result_count": 49,
+      "result_count": 57,
       "top_document_ids": [
         "method:M_CP_SAT",
-        "method:MF_CONSTRAINT_PROGRAMMING",
-        "method:M_CP_SEARCH"
+        "method:M_CONSTRAINED_BO",
+        "method:MF_CONSTRAINT_PROGRAMMING"
       ]
     },
     {
@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 77,
+      "result_count": 80,
       "top_document_ids": [
         "case:hyperparameter-search",
         "method:M_NATURAL_GRADIENT",
@@ -111,11 +111,11 @@
       "intents": [],
       "query": "制約違反しない連続最適化",
       "query_id": "constrained-continuous",
-      "result_count": 70,
+      "result_count": 79,
       "top_document_ids": [
+        "method:M_CONSTRAINED_BO",
         "method:MF_SMOOTH_LOCAL",
-        "method:MF_CONSTRAINED_NLP",
-        "method:MF_CONSTRAINT_PROGRAMMING"
+        "method:MF_CONSTRAINED_NLP"
       ]
     },
     {
@@ -185,7 +185,7 @@
       "intents": [],
       "query": "SciPy Optimization documentation",
       "query_id": "evidence-source",
-      "result_count": 82,
+      "result_count": 93,
       "top_document_ids": [
         "source:S001",
         "source:S082",

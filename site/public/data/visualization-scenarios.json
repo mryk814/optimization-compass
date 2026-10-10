@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215680,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "067eb13d1e3adf8d2fd95d9416738990ec7dcc3fb06b9808c724f08854a769f4",
+        "payload_sha256": "3b2893466cd7a0ba4c4a3b4a73f117107e7849cf021150e8c6e54c745bfcf34b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210229,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "dd7565e875885d5535c5c3e66e24dcf3ffba68d56a6214b05d723552bc985f8e",
+        "payload_sha256": "d3edc39e5bd11cfa75a1fae31afe1253f7cf09c64bc7542c11c6d0dea51e3de5",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -456,13 +456,13 @@
         ],
         "payload_bytes": 392512,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "0714ddc57893b39db32d7aa658678d802ea427a20c3340ee22f7a3a77f9506b5",
+        "payload_sha256": "e5998479fdbf8f0f39be6d53285b3aced2df287c312a55f64b6512b58668b530",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -629,13 +629,13 @@
         ],
         "payload_bytes": 204220,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "36c929f7cf15547cc0c71a408b4e4c5b1e144d6d97dc04d9119d6a8a23156000",
+        "payload_sha256": "b7a172599d7db789d74c00275080554b1d86ca05211eb7879d8204c5cffef147",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -817,13 +817,13 @@
         ],
         "payload_bytes": 72535,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "12f6d77b0affdc0b6d75143072151a039a6c7099b44a9c74ea74af5ca33be13d",
+        "payload_sha256": "241dbc1b3920ce802354519984cc7d44430ba21e76964de3f73252683ca27725",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1083,13 +1083,13 @@
         ],
         "payload_bytes": 66444,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "834985e31bd29d4d83c7f26bc7d49d2f6fe66d0aac7c0a0779a127eb223a591e",
+        "payload_sha256": "a8514b5f9bdcfbb20527dda9ae012fa66264503c1086692f9b7237d15540cc45",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1265,13 +1265,13 @@
         ],
         "payload_bytes": 65996,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "a9e851f322f474692cc143357e050dd4df64a3b8c84cd5eade1ebd1d06e6cc1e",
+        "payload_sha256": "ef64f65fa0a3105ea40cd2e7fea9cae852c5cb27e2596b8d54b97dad238350eb",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1447,13 +1447,13 @@
         ],
         "payload_bytes": 53139,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "af17caffdc448708aa4b014460cdadc4f7702761e012d5319a42fbb53c312003",
+        "payload_sha256": "90bfdb72d326d687e157edd6f14c2407e8e8da493aa82156216f45359ab51f31",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1643,13 +1643,13 @@
         ],
         "payload_bytes": 66387,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "f2f7445b06aa82e483997636fafd3f20d2064c566c192ede67d5ecee87c39b5c",
+        "payload_sha256": "2b9bf71d7a5488c020db8e7a98be1b7c259c00286dd2038c7ee1a7eb2637b85d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1839,13 +1839,13 @@
         ],
         "payload_bytes": 66018,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "85dab7482ea2ad60be9ab691090dcb0aa7efe6bd789b6e9e1c0a16ee3a8c790a",
+        "payload_sha256": "2726e66443e423a13029352277ed45dba5279712454e217c5325bdb770a264ba",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2036,13 +2036,13 @@
         ],
         "payload_bytes": 22750,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "7787fabab08bee724784543db139968261542c429138cf8f90b82a387d60d385",
+        "payload_sha256": "006e5e830e542e7127205e829da75e64e813b25d87550093278d86da80072b02",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2224,13 +2224,13 @@
         ],
         "payload_bytes": 22452,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "4b859c4bd4d1766d0aaaa6923283e0a9ad9cc33639cb8964397e771f603c52bc",
+        "payload_sha256": "209908709e3aecc8bd574e9745169ffabe59a293257fe792d227ca90a559c95d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2426,13 +2426,13 @@
         ],
         "payload_bytes": 22736,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "34ef0c72653ad97cf7f54b98b82849af72bf36e5bc11d9ca6737c2d0d479bd91",
+        "payload_sha256": "cf4965f9a0293d1c0c4f67acfd6115ad7fa8c7fdee8f1815899c0a9fdde8d8cb",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2614,13 +2614,13 @@
         ],
         "payload_bytes": 22742,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "a1f65f561ef2e9bfb100079fcc18e3757ae522f975450d07543b5896a0d569ed",
+        "payload_sha256": "917e1a5024df4adb50c274bad386e45302d7e4da853195b589fad4eae2e0927d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2801,13 +2801,13 @@
         ],
         "payload_bytes": 41553,
         "payload_path": "traces/so3-projected-alignment.json",
-        "payload_sha256": "fb28cd1eec468c3723dac686df381938f7a0e1cb184e0879f54245411b74c86c",
+        "payload_sha256": "9d3154927dec94b6c24a66500ac5591e331f997310f140f409ccc387bddb9cc9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3007,13 +3007,13 @@
         ],
         "payload_bytes": 41895,
         "payload_path": "traces/so3-riemannian-alignment.json",
-        "payload_sha256": "b15757139830637de357b5b7887e115d75528d7533ed143caa6140d35c8fe782",
+        "payload_sha256": "00778d91c88faa0ebc763b9906de02b29edcff4ac2d7dd1ab133677bf3228e35",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3203,13 +3203,13 @@
         ],
         "payload_bytes": 14304,
         "payload_path": "traces/optimal-control-ec020-history.json",
-        "payload_sha256": "3b6e83cc47ed3a74e8616d84bd24aa3d9acd1b653e5354d8fce00184dd19e51a",
+        "payload_sha256": "b64bdd23547e5aece97f41265d60607916c9374057b959f1c920e789c188a235",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3402,13 +3402,13 @@
         ],
         "payload_bytes": 16113,
         "payload_path": "traces/pendulum-collocation-coarse.json",
-        "payload_sha256": "07d5e29d26cc0c816bf1358a968ec4c372f3e3487dbd9fec10541baaf17c3819",
+        "payload_sha256": "2e6eb94cd4d779f22c8de5d86908dcca913e562c32789fea2509a4f39411a496",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3606,13 +3606,13 @@
         ],
         "payload_bytes": 16089,
         "payload_path": "traces/pendulum-collocation-refined.json",
-        "payload_sha256": "6ddb09ac0e07ec436bf5682ce4fa532fcb24645dbb74e96f7c0456edbe6caa93",
+        "payload_sha256": "5087964d850a1ee0436e4b63b9b6bbc292d7e4e52cc3bebfb890dc9c5069998a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3809,13 +3809,13 @@
         ],
         "payload_bytes": 15786,
         "payload_path": "traces/pendulum-model-rollout-failure.json",
-        "payload_sha256": "c11c02237fb5175ad53989ec7402f5a1efef1b1f8c303ee83dc51d095dc26a6f",
+        "payload_sha256": "30989bc99d986f8c2ce5f523041502fedc3f6ca78bddb80b573d3c03159d911b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4011,13 +4011,13 @@
         ],
         "payload_bytes": 6637,
         "payload_path": "traces/portfolio-nominal-8-4.json",
-        "payload_sha256": "9029a0c9b46cd21ba4c8c78191872a4f7949d257ba365d239aaf351f66b1f63f",
+        "payload_sha256": "97e865a6f9e0e8186fa5862847ac9f03fca960e75c735cdbb4052e5c97d4b20d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4212,13 +4212,13 @@
         ],
         "payload_bytes": 7041,
         "payload_path": "traces/portfolio-cvar-8-4.json",
-        "payload_sha256": "f047af581a88e90bcf2b2539ff492fa5c888e19f961bcb1fe6a23254f3df5ab7",
+        "payload_sha256": "c3d79fef511184f53138d5a5fc70f509755e84a9e88ad4d0cb76a08ba2ab4fdd",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4403,13 +4403,13 @@
         ],
         "payload_bytes": 3682,
         "payload_path": "traces/portfolio-mean-variance-gamma-low.json",
-        "payload_sha256": "29b623f18da8796d0fd80e18968c57608510cf9a1dc1b91bb80bc0c5ee54da4b",
+        "payload_sha256": "ac4301545e230a23fc0916ed954c9a15bd2b194aaefd414b8c74e2a5700c14b1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4608,13 +4608,13 @@
         ],
         "payload_bytes": 3798,
         "payload_path": "traces/portfolio-mean-variance-gamma-high.json",
-        "payload_sha256": "594a785aec0cf01689600d9a96204eb15f916e8668f54379b586a1fe68f849f7",
+        "payload_sha256": "820ba0c91d1a3c1fe89c0a2a8034826c96c7aee46012b17da5da96eb823dc19b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4814,13 +4814,13 @@
         ],
         "payload_bytes": 8691,
         "payload_path": "traces/repeated-mpc-qp-warm-start.json",
-        "payload_sha256": "ecb6e6817e4df0fc05977939be85c712a6ff2e7d158a305c8537ef21e8223798",
+        "payload_sha256": "6535cd9c8d1affc17eceaf62097e1fed63972615b87816bf69bccea2e9661ef1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5008,13 +5008,13 @@
         ],
         "payload_bytes": 8748,
         "payload_path": "traces/repeated-mpc-qp-cold-start.json",
-        "payload_sha256": "c2da220ab3bd5dbdcc1abb0dd7501c9c85585e25d20d6957f4a9879635546869",
+        "payload_sha256": "9a4c6bb9a8de4d599e822bf2093fecee2e23e2b56b5a51655607c98daa5cdf9f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5215,13 +5215,13 @@
         ],
         "payload_bytes": 8684,
         "payload_path": "traces/time-window-routing-feasible.json",
-        "payload_sha256": "636d023b7137793f9e6db944e9dbb85e618a71335720ca7a29eb03e19db23f92",
+        "payload_sha256": "1871214296fd70cb4b6aecd7dc11042c582a59df36553033e63fc5f2aea7b21c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5407,13 +5407,13 @@
         ],
         "payload_bytes": 8719,
         "payload_path": "traces/time-window-routing-violation.json",
-        "payload_sha256": "03301bc7746fcadaae7afef26334dcacf36fe3f6b66dda2b20518b5c52b878bb",
+        "payload_sha256": "0b3aecf797b7d9c78a922803e0a61e00a453554a7e198517fbee886882b37b67",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5612,13 +5612,13 @@
         ],
         "payload_bytes": 9561,
         "payload_path": "traces/failed-simulation-feasible-ledger.json",
-        "payload_sha256": "aeeec845b85de0d041aabddfb67ac9bf62adfd5b370297e5ef499dd0e765467f",
+        "payload_sha256": "87c0e150177f6c21b9ed62e1d8039636bc68c3ef3925a98162331ead6c41a426",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5796,13 +5796,13 @@
         ],
         "payload_bytes": 9366,
         "payload_path": "traces/failed-simulation-failure-ledger.json",
-        "payload_sha256": "7b22760c6287859108f7b6f60f83810f3204e0b87cf3fecacfd4d31fe48bb853",
+        "payload_sha256": "1405125eb39b25bd9a7b15e5092d473ea904f54e1457c8206f437a2168d82329",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5993,13 +5993,13 @@
         ],
         "payload_bytes": 4993,
         "payload_path": "traces/root-finding-component-tolerance.json",
-        "payload_sha256": "c677eb27f1437984263df8bc33cebe5ea43a63636213a02134cdd4b614416030",
+        "payload_sha256": "51e9a8ecabdcb8d00aaafec26b0223c5f97444d96870e4db445abc8913df58e2",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6175,13 +6175,13 @@
         ],
         "payload_bytes": 5114,
         "payload_path": "traces/root-finding-small-squared-residual.json",
-        "payload_sha256": "e08a8929e624b8b6239c458a01d0c80373f3e0018606bd5a137331eb454f937a",
+        "payload_sha256": "523319d4d24c23d59d4ccb5c688c32d6418a960e1f8a79b0221cb22f17cef72a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6372,13 +6372,13 @@
         ],
         "payload_bytes": 13733,
         "payload_path": "traces/pde-state-tolerance-tight.json",
-        "payload_sha256": "88d1fef14a6292d9eea50656ccc2f038ef52ec0ae0182acf5cd9d31a77437609",
+        "payload_sha256": "f59bb43bc704969a645916713619c49cd2cdd5fbd3dc83bdea0e1470171a085c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6582,13 +6582,13 @@
         ],
         "payload_bytes": 13212,
         "payload_path": "traces/pde-state-tolerance-loose.json",
-        "payload_sha256": "af1611f98663e6b0692b79b5ac154e6b1605d2b2a023b1ce23a6220701cc2857",
+        "payload_sha256": "01c408c59bac5229e9a8d7b734cfef228b07715d03551f1880d34ae336821fd4",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6792,13 +6792,13 @@
         ],
         "payload_bytes": 9136,
         "payload_path": "traces/pde-state-solve-failure.json",
-        "payload_sha256": "9ee2c13299c2fae63a86e69223d86375fcd6a93c168718b894eb730321582524",
+        "payload_sha256": "2b5b0b4f993bfe4f83c86299fa29bbceb3d549575018948f1c6020f9723f49f5",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7003,13 +7003,13 @@
         ],
         "payload_bytes": 15258,
         "payload_path": "traces/bilevel-regression-exact-inner.json",
-        "payload_sha256": "412b82f11d2200ea10513163cbe0152bbf588e04d33d13e384d59d116c43db05",
+        "payload_sha256": "9c62afaea0723cae74569bb255c46b6ec17cb126f34c178db0ab07bdd07697f7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7219,13 +7219,13 @@
         ],
         "payload_bytes": 15970,
         "payload_path": "traces/bilevel-regression-relaxed-complementarity.json",
-        "payload_sha256": "456d0d7c370b60f7bc5e0c4a69e957963db3f42dfede857adfde709a5e87b1e0",
+        "payload_sha256": "6dad9bb461c2fe2707655292941dd2d19139450acbab2bb6a2d1921ee99252c6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7432,13 +7432,13 @@
         ],
         "payload_bytes": 10967,
         "payload_path": "traces/hybrid-mode-chattering-ledger.json",
-        "payload_sha256": "38a492fdc077e278ad7b10eed14a98843191653d094314ff80d53888a727aac4",
+        "payload_sha256": "c8943a5e95fbf69748a17ffe2ddd192697fef743335e8b1b01a8d139e1949971",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7638,13 +7638,13 @@
         ],
         "payload_bytes": 16607,
         "payload_path": "traces/shape-diffuser-valid-update.json",
-        "payload_sha256": "1a5135b1fad023d1d453334f89071f198b2589f113e11d9b6c30af7c2147caf3",
+        "payload_sha256": "42a78ffb0b6960f150dd953d5881cc671935faf01494e61de001184c1190923d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7863,13 +7863,13 @@
         ],
         "payload_bytes": 16505,
         "payload_path": "traces/shape-diffuser-invalid-geometry.json",
-        "payload_sha256": "d4b10f2987327c80cf3196ee5fa7464af4a3908497c6b2a5b6d62a2a6d2efaa0",
+        "payload_sha256": "28ed0e3498ec994f06f57c3064a384db318a7f09e59d02a8fa01eaeff4f3204c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8087,13 +8087,13 @@
         ],
         "payload_bytes": 16659,
         "payload_path": "traces/shape-topology-representation-contrast.json",
-        "payload_sha256": "26a4eb62f8b83d2147d47cd880c8a0cd5ea561113f19aa362b003516ffd1ce12",
+        "payload_sha256": "0bfcf26d98daeac0562bf418f02d4edc889b6c54262fc492ecbf2738e29eb403",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8308,13 +8308,13 @@
         ],
         "payload_bytes": 102177,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "d07009bba46057db24ee8fa64a2b0bec2274c3fd8d977241b39ec8432924bd2c",
+        "payload_sha256": "a4a62cdc0cea5c7cdb07cae7c00804043651c15668b051ed8e0cca56ba21250e",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8571,13 +8571,13 @@
         ],
         "payload_bytes": 39757,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "d785d72809decb9d3ee16b941074b175ee4051332b8b128b59c67d3c05fc49ba",
+        "payload_sha256": "5d5eab4ebdf49e3c3ff9100f2f740fd0e99003e57d92897acfd4b4e1f2c1dff3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8773,7 +8773,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8988,7 +8988,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9203,7 +9203,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9490,7 +9490,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9706,7 +9706,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9931,7 +9931,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10157,7 +10157,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10382,13 +10382,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "cb75a0e0ec3eae5e63c50da07eef726001bb34ed66f759c222d7143cfdae163e",
+        "payload_sha256": "e73eb8bccd4ef08391d55422b11293f86aff2e85d33d29477fce0104f26b638d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10577,13 +10577,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "cb75a0e0ec3eae5e63c50da07eef726001bb34ed66f759c222d7143cfdae163e",
+        "payload_sha256": "e73eb8bccd4ef08391d55422b11293f86aff2e85d33d29477fce0104f26b638d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10789,13 +10789,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "3b26a9a9adda6a823d2083a54511ba602c9f4146e07d46590541d2506930647e",
+        "payload_sha256": "a6113a6ebc8d9f6418d0baa430a505193046dbbb630c3565fcccec932b3cff15",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10967,13 +10967,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "3b26a9a9adda6a823d2083a54511ba602c9f4146e07d46590541d2506930647e",
+        "payload_sha256": "a6113a6ebc8d9f6418d0baa430a505193046dbbb630c3565fcccec932b3cff15",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11160,13 +11160,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "761835d142868c2acd1f2fb0435e76a4360a9ac11f2743b39bbc45ae0e1a5b44",
+        "payload_sha256": "97ed57847760797a2e53cc317a679b863bda518b25d3c8d52acbc29a0fe8bbf7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11458,13 +11458,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "761835d142868c2acd1f2fb0435e76a4360a9ac11f2743b39bbc45ae0e1a5b44",
+        "payload_sha256": "97ed57847760797a2e53cc317a679b863bda518b25d3c8d52acbc29a0fe8bbf7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11712,13 +11712,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "761835d142868c2acd1f2fb0435e76a4360a9ac11f2743b39bbc45ae0e1a5b44",
+        "payload_sha256": "97ed57847760797a2e53cc317a679b863bda518b25d3c8d52acbc29a0fe8bbf7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11998,13 +11998,13 @@
         ],
         "payload_bytes": 2399,
         "payload_path": "visualizations/shift-scheduling-balanced.json",
-        "payload_sha256": "b9a51bca1f24efd18f4598e1986f5d551a3e6b6cf2ebaa9f078ad292a0448832",
+        "payload_sha256": "718d29533ff6fee3f8eef792c5aadb561d3687fd6c5fab187185150585feee52",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "assignment_schedule"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -12224,13 +12224,13 @@
         ],
         "payload_bytes": 2389,
         "payload_path": "visualizations/shift-scheduling-preference-only.json",
-        "payload_sha256": "dda02f25fdc9b40c5a0f63c4761d890c9706ef87430c517b9d2ea0c1fb9422fe",
+        "payload_sha256": "108796cbd70e407ad55226ef8c921db6db0a389ae5f2bfce9df90fd1a9c25da4",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "assignment_schedule"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.22",
+      "dataset_version": "0.18.23",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",

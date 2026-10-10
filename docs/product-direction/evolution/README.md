@@ -43,7 +43,7 @@
 | OC-EVOL-010 scene・媒体契約の差分 | 完了（提案のみの項目は使う図のPRで足す） | [`explorables.md`](../../explorables.md) の「数値の出どころ」 |
 | OC-EVOL-011 主単体法の証明・感度 | 操作図と本文は完了。動画は未着手 | `simplex-shadow-price` |
 | 辞書の拡張（問題型の記事） | PA006・PA024・PA031・PA035・PA043・PA055 を追加 | `scripts/formulation_backlog.py` で次を選ぶ |
-| 辞書の拡張（手法の行） | 24個を 0.18.22（#309）、11個を 0.18.23 用ブランチに用意 | [`HANDOFF.md`](HANDOFF.md) |
+| 辞書の拡張（手法の行） | 24個を 0.18.22（#309）、11個を 0.18.23 で追加 | [`HANDOFF.md`](HANDOFF.md) |
 
 ### 決めることが残っているもの
 

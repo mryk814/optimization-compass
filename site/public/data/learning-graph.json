@@ -207,6 +207,32 @@
       "term_id": "TERM_BO"
     },
     {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "非線形制約を扱えるCOBYLA / COBYQAとは別で、上下限のみを扱う。",
+      "domain_terms": [
+        "二次補間model",
+        "trust region",
+        "bound constraints"
+      ],
+      "label_en": "BOBYQA",
+      "label_ja": "BOBYQA法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S145"
+      ],
+      "synonyms": [
+        "Bound Optimization BY Quadratic Approximation",
+        "Powell BOBYQA"
+      ],
+      "target_id": "M_BOBYQA",
+      "target_type": "method",
+      "term_id": "TERM_BOBYQA"
+    },
+    {
       "abbreviations": [
         "B&B",
         "BnB"
@@ -312,6 +338,33 @@
     },
     {
       "abbreviations": [
+        "C&CG",
+        "CCG"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "列生成(M_COLUMN_GENERATION)やBenders分解とは別。列生成はLPの列を足し、C&CGは再計算変数と制約を足す。略称CCGは共役勾配(CG)と無関係。",
+      "domain_terms": [
+        "二段階ロバスト最適化",
+        "最悪ケースsubproblem"
+      ],
+      "label_en": "Column-and-constraint generation",
+      "label_ja": "列・制約生成法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と略称をmethodへ解決する。",
+      "source_ids": [
+        "S162"
+      ],
+      "synonyms": [
+        "column and constraint generation"
+      ],
+      "target_id": "M_CCG",
+      "target_type": "method",
+      "term_id": "TERM_CCG"
+    },
+    {
+      "abbreviations": [
         "CMAES"
       ],
       "deprecated_terms": [],
@@ -389,6 +442,37 @@
       "target_id": "M_PRIMAL_DUAL_CONIC",
       "target_type": "method",
       "term_id": "TERM_CONIC"
+    },
+    {
+      "abbreviations": [
+        "constrained BO",
+        "CBO"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "評価中の安全を保つSafeOptとは別。無制約のGP-BOは別のmethod。",
+      "domain_terms": [
+        "black-box constraints",
+        "feasibility probability",
+        "充足確率"
+      ],
+      "label_en": "Constrained Bayesian optimization",
+      "label_ja": "制約付きベイズ最適化",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と略称をmethodへ解決する。",
+      "source_ids": [
+        "S147",
+        "S148"
+      ],
+      "synonyms": [
+        "Bayesian optimization with unknown constraints",
+        "Bayesian optimization with inequality constraints",
+        "制約付きBO"
+      ],
+      "target_id": "M_CONSTRAINED_BO",
+      "target_type": "method",
+      "term_id": "TERM_CONSTRAINED_BO"
     },
     {
       "abbreviations": [],
@@ -851,6 +935,34 @@
     {
       "abbreviations": [],
       "deprecated_terms": [],
+      "disambiguation_note": "密度場を設計変数とするSIMPとは別。流体の界面追跡のレベルセット法一般ではなく、構造最適化の更新法を指す。",
+      "domain_terms": [
+        "Hamilton-Jacobi",
+        "形状微分",
+        "暗黙関数"
+      ],
+      "label_en": "Level-set method for structural topology optimization",
+      "label_ja": "レベルセット法による形状更新",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S151",
+        "S152"
+      ],
+      "synonyms": [
+        "level set method",
+        "level-set shape update",
+        "レベルセット形状更新"
+      ],
+      "target_id": "M_LEVELSET_TOPOLOGY",
+      "target_type": "method",
+      "term_id": "TERM_LEVELSET_TOPOLOGY"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
       "disambiguation_note": "Adam・AdamWとは別の手法。Lionはmomentumのsignで更新する。",
       "domain_terms": [
         "符号momentum"
@@ -1156,6 +1268,58 @@
       "term_id": "TERM_NSGA2"
     },
     {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "固定の重みで一回だけスカラー化する重み付き和法とは別。乱数の重みを反復ごとに引く。",
+      "domain_terms": [
+        "拡張Chebyshevスカラー化",
+        "多目的ベイズ最適化"
+      ],
+      "label_en": "ParEGO",
+      "label_ja": "ParEGO法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S149"
+      ],
+      "synonyms": [
+        "Pareto efficient global optimization"
+      ],
+      "target_id": "M_PAREGO",
+      "target_type": "method",
+      "term_id": "TERM_PAREGO"
+    },
+    {
+      "abbreviations": [
+        "PHA"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "Benders型の分解(段で分ける)とは別で、シナリオで分ける分解。ADMMと同じく罰則つきの調整反復を使う。",
+      "domain_terms": [
+        "非予測性",
+        "シナリオ分解"
+      ],
+      "label_en": "Progressive hedging",
+      "label_ja": "Progressive hedging法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と別名をmethodへ解決する。",
+      "source_ids": [
+        "S163"
+      ],
+      "synonyms": [
+        "progressive hedging algorithm",
+        "scenario decomposition",
+        "policy aggregation"
+      ],
+      "target_id": "M_PROGRESSIVE_HEDGING",
+      "target_type": "method",
+      "term_id": "TERM_PROGRESSIVE_HEDGING"
+    },
+    {
       "abbreviations": [
         "PGD"
       ],
@@ -1286,6 +1450,60 @@
       "term_id": "TERM_ROUTING_PROBLEM"
     },
     {
+      "abbreviations": [
+        "SAA"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "確率的勾配法(SGD)や確率近似(stochastic approximation, SPSAなど)とは別。SAAは標本を固定して決定的な問題を解く。機械学習の経験リスク最小化は同じ発想の特別な場合。SAASBO(ベイズ最適化)とは無関係。",
+      "domain_terms": [
+        "標本平均問題",
+        "統計的ギャップ推定"
+      ],
+      "label_en": "Sample average approximation",
+      "label_ja": "標本平均近似",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "略称と名称をmethodへ解決する。",
+      "source_ids": [
+        "S160",
+        "S161"
+      ],
+      "synonyms": [
+        "sample-average approximation",
+        "Monte Carlo sampling approximation"
+      ],
+      "target_id": "M_SAA",
+      "target_type": "method",
+      "term_id": "TERM_SAA"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "評価中も安全閾値を守る手法で、違反を許容して学習する制約付きベイズ最適化とは別。",
+      "domain_terms": [
+        "safe set",
+        "安全探索"
+      ],
+      "label_en": "SafeOpt",
+      "label_ja": "SafeOpt法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S146"
+      ],
+      "synonyms": [
+        "safe Bayesian optimization",
+        "safe exploration with Gaussian processes",
+        "安全ベイズ最適化"
+      ],
+      "target_id": "M_SAFEOPT",
+      "target_type": "method",
+      "term_id": "TERM_SAFEOPT"
+    },
+    {
       "abbreviations": [],
       "deprecated_terms": [],
       "disambiguation_note": "SVRGとは別の手法。SAGAはsampleごとの勾配を保存する。",
@@ -1332,6 +1550,34 @@
       "target_id": "M_SARAH",
       "target_type": "method",
       "term_id": "TERM_SARAH"
+    },
+    {
+      "abbreviations": [
+        "SDDP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "通常の動的計画法(M_DYNAMIC_PROGRAMMING、状態を離散化する)とは別。SDDPは将来費用関数をcutで近似する。",
+      "domain_terms": [
+        "多段階確率計画",
+        "将来費用関数",
+        "水力発電計画"
+      ],
+      "label_en": "Stochastic dual dynamic programming",
+      "label_ja": "確率的双対動的計画",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と略称をmethodへ解決する。",
+      "source_ids": [
+        "S164"
+      ],
+      "synonyms": [
+        "dual dynamic programming",
+        "Pereira-Pinto algorithm"
+      ],
+      "target_id": "M_SDDP",
+      "target_type": "method",
+      "term_id": "TERM_SDDP"
     },
     {
       "abbreviations": [
@@ -1413,6 +1659,38 @@
     {
       "abbreviations": [],
       "deprecated_terms": [],
+      "disambiguation_note": "輸送LPを厳密に解くnetwork simplexなどとは別。Sinkhorn法の解はε依存の正則化解。非均衡Sinkhorn法は同じ行の変種で、周辺制約を発散で緩める(別行にしない)。",
+      "domain_terms": [
+        "エントロピー正則化",
+        "行列スケーリング",
+        "Sinkhorn距離",
+        "非均衡最適輸送"
+      ],
+      "label_en": "Sinkhorn algorithm",
+      "label_ja": "Sinkhorn法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称と変種名をmethodへ解決する。",
+      "source_ids": [
+        "S165",
+        "S166",
+        "S167"
+      ],
+      "synonyms": [
+        "Sinkhorn-Knopp",
+        "Sinkhorn iterations",
+        "matrix scaling",
+        "entropic optimal transport",
+        "unbalanced Sinkhorn"
+      ],
+      "target_id": "M_SINKHORN",
+      "target_type": "method",
+      "term_id": "TERM_SINKHORN"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
       "disambiguation_note": null,
       "domain_terms": [
         "SciPy SLSQP"
@@ -1485,6 +1763,33 @@
       "target_id": "M_SR1",
       "target_type": "method",
       "term_id": "TERM_SR1"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "単調な劣モジュラ関数に対する近似保証つきの貪欲法で、一般の貪欲heuristicや組合せlocal searchとは別。",
+      "domain_terms": [
+        "限界利得",
+        "(1-1/e)近似",
+        "被覆問題"
+      ],
+      "label_en": "Greedy submodular maximization",
+      "label_ja": "劣モジュラ関数の貪欲法",
+      "last_verified": "2026-10-10",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "名称をmethodへ解決する。",
+      "source_ids": [
+        "S150"
+      ],
+      "synonyms": [
+        "submodular greedy",
+        "劣モジュラ貪欲法",
+        "lazy greedy"
+      ],
+      "target_id": "M_SUBMODULAR_GREEDY",
+      "target_type": "method",
+      "term_id": "TERM_SUBMODULAR_GREEDY"
     },
     {
       "abbreviations": [
@@ -1594,7 +1899,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "edges": [
     {
       "audience": "learner",
@@ -2776,6 +3081,14 @@
       "label_ja": "BFGS法"
     },
     {
+      "canonical_url": "/methods/M_BOBYQA",
+      "entity_id": "M_BOBYQA",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Bound optimization by quadratic approximation (BOBYQA)",
+      "label_ja": "BOBYQA"
+    },
+    {
       "canonical_url": "/methods/M_BRANCH_BOUND",
       "entity_id": "M_BRANCH_BOUND",
       "entity_type": "method",
@@ -2808,6 +3121,14 @@
       "label_ja": "凹凸手続き(CCCP)"
     },
     {
+      "canonical_url": "/methods/M_CCG",
+      "entity_id": "M_CCG",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Column-and-constraint generation (two-stage robust optimization)",
+      "label_ja": "列・制約生成法(二段階ロバスト最適化)"
+    },
+    {
       "canonical_url": "/methods/M_CMA_ES",
       "entity_id": "M_CMA_ES",
       "entity_type": "method",
@@ -2822,6 +3143,14 @@
       "external_url": null,
       "label_en": "Column generation",
       "label_ja": "列生成"
+    },
+    {
+      "canonical_url": "/methods/M_CONSTRAINED_BO",
+      "entity_id": "M_CONSTRAINED_BO",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Constrained Bayesian optimization",
+      "label_ja": "制約付きベイズ最適化"
     },
     {
       "canonical_url": "/methods/M_CP_SAT",
@@ -2920,6 +3249,14 @@
       "label_ja": "L-BFGS法"
     },
     {
+      "canonical_url": "/methods/M_LEVELSET_TOPOLOGY",
+      "entity_id": "M_LEVELSET_TOPOLOGY",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Level-set method for structural topology optimization",
+      "label_ja": "レベルセット法による形状更新"
+    },
+    {
       "canonical_url": "/methods/M_LEVENBERG_MARQUARDT",
       "entity_id": "M_LEVENBERG_MARQUARDT",
       "entity_type": "method",
@@ -2992,12 +3329,28 @@
       "label_ja": "NSGA-II"
     },
     {
+      "canonical_url": "/methods/M_PAREGO",
+      "entity_id": "M_PAREGO",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "ParEGO (Pareto efficient global optimization)",
+      "label_ja": "ParEGO"
+    },
+    {
       "canonical_url": "/methods/M_PRIMAL_DUAL_CONIC",
       "entity_id": "M_PRIMAL_DUAL_CONIC",
       "entity_type": "method",
       "external_url": null,
       "label_en": "Primal-dual conic interior-point",
       "label_ja": "primal-dual錐内点法"
+    },
+    {
+      "canonical_url": "/methods/M_PROGRESSIVE_HEDGING",
+      "entity_id": "M_PROGRESSIVE_HEDGING",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Progressive hedging",
+      "label_ja": "Progressive hedging法"
     },
     {
       "canonical_url": "/methods/M_PROJECTED_GRADIENT",
@@ -3056,6 +3409,22 @@
       "label_ja": "RMSprop"
     },
     {
+      "canonical_url": "/methods/M_SAA",
+      "entity_id": "M_SAA",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Sample average approximation (SAA)",
+      "label_ja": "標本平均近似(SAA)"
+    },
+    {
+      "canonical_url": "/methods/M_SAFEOPT",
+      "entity_id": "M_SAFEOPT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "SafeOpt (safe Bayesian optimization with Gaussian processes)",
+      "label_ja": "SafeOpt"
+    },
+    {
       "canonical_url": "/methods/M_SAGA",
       "entity_id": "M_SAGA",
       "entity_type": "method",
@@ -3070,6 +3439,14 @@
       "external_url": null,
       "label_en": "Stochastic recursive gradient algorithm",
       "label_ja": "SARAH（確率的再帰勾配法）"
+    },
+    {
+      "canonical_url": "/methods/M_SDDP",
+      "entity_id": "M_SDDP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Stochastic dual dynamic programming (SDDP)",
+      "label_ja": "確率的双対動的計画(SDDP)"
     },
     {
       "canonical_url": "/methods/M_SGD",
@@ -3096,6 +3473,14 @@
       "label_ja": "SIMP密度法"
     },
     {
+      "canonical_url": "/methods/M_SINKHORN",
+      "entity_id": "M_SINKHORN",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Sinkhorn algorithm (entropic optimal transport)",
+      "label_ja": "Sinkhorn法"
+    },
+    {
       "canonical_url": "/methods/M_SLSQP",
       "entity_id": "M_SLSQP",
       "entity_type": "method",
@@ -3118,6 +3503,14 @@
       "external_url": null,
       "label_en": "Symmetric rank-one (SR1) quasi-Newton update",
       "label_ja": "SR1法"
+    },
+    {
+      "canonical_url": "/methods/M_SUBMODULAR_GREEDY",
+      "entity_id": "M_SUBMODULAR_GREEDY",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Greedy maximization of a submodular function",
+      "label_ja": "劣モジュラ関数の貪欲法"
     },
     {
       "canonical_url": "/methods/M_SUCCESSIVE_SHORTEST_PATH",
