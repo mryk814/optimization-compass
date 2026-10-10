@@ -6624,6 +6624,10 @@
           {
             "type": "feature",
             "id": "F_VARIABLE_DOMAIN"
+          },
+          {
+            "type": "content",
+            "id": "concept.hyperparameter-optimization"
           }
         ],
         "review": "reviewed",
