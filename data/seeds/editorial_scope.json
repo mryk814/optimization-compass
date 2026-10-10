@@ -3635,12 +3635,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SAA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は PA049 です。"
+        "note_ja": "標本平均近似 の行そのものです。"
       },
       "source_refs": [
         "E09"
@@ -3688,12 +3693,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CCG"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "列・制約生成法は二段階ロバスト問題の解法で、専用の行や記事はない。"
+        "note_ja": "列・制約生成法(二段階ロバスト最適化) の行そのものです。"
       },
       "source_refs": [
         "E09"
@@ -3710,12 +3720,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_PROGRESSIVE_HEDGING"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "Progressive hedging は確率計画の分解法だが、知識ベースの行・記事には存在せず、計画上の backlog にだけ出てくる。"
+        "note_ja": "Progressive hedging法 の行そのものです。"
       },
       "source_refs": [
         "E09"
@@ -3732,12 +3747,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SDDP"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "確率的双対動的計画は多段確率計画の分解法で、専用の行や記事はなく、backlog にだけ現れる。"
+        "note_ja": "確率的双対動的計画 の行そのものです。"
       },
       "source_refs": [
         "E09"
@@ -4129,12 +4149,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SINKHORN"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "Sinkhorn 法はエントロピー正則化の輸送問題の解法で、専用の行や記事はなく、近い輸送系の行もない。"
+        "note_ja": "Sinkhorn法 の行そのものです。"
       },
       "source_refs": [
         "E11"
@@ -4151,12 +4176,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "variant_of",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_SINKHORN"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "非均衡 Sinkhorn 法は Sinkhorn の変種で、Sinkhorn 自体が未登録のため専用の行や記事はない。"
+        "note_ja": "周辺分布の制約を発散(KL)で緩めた Sinkhorn 法の変種で、同じスケーリング反復を使います。前提・失敗・推薦を別の記事と比較で示せる段階ではないため、別の行にせず M_SINKHORN の別名と本文で扱います(docs/identity-granularity.md)。"
       },
       "source_refs": [
         "E11"
