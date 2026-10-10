@@ -13244,9 +13244,19 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
           "relation_type": "explains",
           "target_id": "M_SIMPLEX",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
         },
         {
           "relation_type": "related_content",
@@ -13274,7 +13284,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "線形計画（LP）の実行可能な基底を保ちながら、被約費用が示す隣の基底へピボットし、目的値を改善する単体法です。"
+      "summary": "線形計画（LP）を、実行可能な頂点から隣の頂点へ移りながら解く方法です。いまは0の変数のうち、増やすと目的が良くなるものを被約費用で選び、ほかの変数のどれかが先に0になるところ（比の最小値）まで進めます。"
     },
     {
       "aliases": [],
@@ -29913,6 +29923,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
           "target_type": "source"
         },
         {
