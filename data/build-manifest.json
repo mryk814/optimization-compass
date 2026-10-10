@@ -135,6 +135,11 @@
       "id": "029",
       "path": "data/migrations/029_stochastic_ml_variants_2.sql",
       "sha256": "298e7be43c38c0f74ca2bcb4ffed7b87b7290b23acd7add1dd3af9ec791a398c"
+    },
+    {
+      "id": "030",
+      "path": "data/migrations/030_smooth_local_variants.sql",
+      "sha256": "edda5e12b206365a94a2c6cb6c6ba419ed2e9442752b248596cf4e260bba7019"
     }
   ],
   "specialized_inputs": [
