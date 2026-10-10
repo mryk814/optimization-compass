@@ -8114,6 +8114,102 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.hyperparameter-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ハイパーパラメータ最適化（HPO）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S037",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA039",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.l1-sparse-regularization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pbt",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "smac",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "tpe",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ハイパーパラメータ最適化（HPO）は、学習の前に人が決める設定を、学習と検証の評価を繰り返して選ぶ定式化です。設定の例は、次数、木の深さ、正則化の強さです。評価1回が高価で、同じ設定でも値が変わり、勾配も得られません。選ぶ過程で検証の点数が甘くなるため、最後の点数は選択に使っていないデータで測ります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.inverse-problem",
       "entity_type": "content",
       "external_url": null,
@@ -33072,7 +33168,9 @@
       "summary": "多目的連続最適化。変数=continuous、目的=multiobjective、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.hyperparameter-optimization"
+      ],
       "canonical_url": "/formulations/PA039",
       "entity_id": "PA039",
       "entity_type": "problem",
@@ -33083,6 +33181,11 @@
           "relation_type": "case",
           "target_id": "hyperparameter-search",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.hyperparameter-optimization",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",

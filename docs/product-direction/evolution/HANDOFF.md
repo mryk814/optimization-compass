@@ -43,12 +43,11 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 
 ## いま開いている作業（2026-10-10 時点）
 
-マージ済み: #308（収録範囲 v1 の承認、ロバスト回帰の操作図、この文書）、#309（手法24個、0.18.22）、#311（件数固定をやめるテスト方針）。
+マージ済み: #308（収録範囲 v1 の承認、ロバスト回帰の操作図、この文書）、#309（手法24個、0.18.22）、#311（件数固定をやめるテスト方針）、#312（記事 PA039 ハイパーパラメータ最適化）。
 
 | PR | ブランチ | 中身 | 次にやること |
 |---|---|---|---|
-| [#312](https://github.com/mryk814/optimization-compass/pull/312) | `claude/eager-ramanujan-cov8ei-pa039` | 記事 PA039 ハイパーパラメータ最適化（数値の照合、3幅の画面確認、台帳の記録まで済み） | CI が緑ならマージします |
-| 0.18.23 の PR | `claude/eager-ramanujan-cov8ei-methods-0.18.23` | 手法11個（migration 034、035）と 0.18.23 の公開生成物 | CI が緑ならマージします。#312 と同じく `site/public/data` を触るので、後からマージする側は main を取り込んで作り直します |
+| 0.18.23 の PR | `claude/eager-ramanujan-cov8ei-methods-0.18.23` | 手法11個（migration 034、035）と 0.18.23 の公開生成物 | CI が緑ならマージし、メンテナーにタグとバンドルを頼みます |
 
 `site/public/data/**` は複数の PR が同時に触ります。後からマージする側は、main を取り込み、`uv run optimization-compass export-site-data --output site/public/data` と報告2本（`scripts/content_quality_report.py`、`scripts/method_content_density_report.py`）で作り直します。生成物の衝突を手で解いてはいけません。
 
@@ -92,7 +91,7 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 
 ## この後の作業の候補（推奨順）
 
-1. #312 と 0.18.23 の PR を出し切ります。生成物は毎回最新の main から作り直します。
+1. 0.18.23 の PR を出し切ります。生成物は毎回最新の main から作り直します。
 2. **残りの `unrepresented` を片付けます。**
    - 部品の4件（Sobol 列、feasibility restoration、interval bounds、homogeneous embedding）: 手法の行ではなく、用語集の項目にして `primitive_in` で結びます。用語集の置き場所と形式は、既存の glossary の行を見て決めます。
    - 問題構造の10件（幾何計画 GP、signomial、行列補完、レベルセットの形状、bin packing、施設配置、minimax、バンディット、非均衡輸送、劣モジュラ）: 新しい問題型（PA）の行、`data/seeds/formulation_atlas.json` の項目、関係の条件を足します。PA の行は migration なので、リリースが要ります。[`docs/formulation-atlas.md`](../../formulation-atlas.md) の recipe B と、`AGENTS.md` の不変条件（循環なし、関係の `note_ja` に条件を書く）に従います。

@@ -44,7 +44,7 @@
 |---|---:|---:|---|
 | 名前と同一性 | 80 | 70 | candidate 0, unrepresented 10, unknown 0 |
 | 定義と根拠 | 80 | 70 | no_canonical_row 10 |
-| 説明 | 80 | 10 | stale 0, in_progress 44, no_article 26 |
+| 説明 | 80 | 11 | stale 0, in_progress 43, no_article 26 |
 | 体験 | 0 | 0 | undecided 80, has_interactive 10 |
 | 転移 | 0 | 0 | undecided 80 |
 
