@@ -24,6 +24,30 @@
 | 5 | Multi-objective optimization | 9/12 | 単一の最良解ではなく非劣解集合を扱う分類差が大きい。 |
 | 6 | Optimal control and manifolds | 8/12 | 変数が軌道であり、力学・幾何制約を持つ分類を代表する。 |
 
+## 収録範囲（editorial-scope-v1, proposed）
+
+軸ごとの件数です。割合や総合点は出しません。対象0件の軸は判定前です。
+
+### 知識トピック（対象 160件、除外 0件、保留 0件、統合 0件）
+
+| 軸 | 対象 | 完了 | 状態内訳 |
+|---|---:|---:|---|
+| 名前と同一性 | 160 | 117 | candidate 3, unrepresented 40, unknown 0 |
+| 定義と根拠 | 160 | 113 | no_canonical_row 47 |
+| 説明 | 160 | 7 | stale 1, in_progress 105, no_article 47 |
+| 体験 | 0 | 0 | undecided 160, has_interactive 21 |
+| 転移 | 0 | 0 | undecided 160 |
+
+### 問題構造（対象 80件、除外 0件、保留 0件、統合 0件）
+
+| 軸 | 対象 | 完了 | 状態内訳 |
+|---|---:|---:|---|
+| 名前と同一性 | 80 | 66 | candidate 5, unrepresented 9, unknown 0 |
+| 定義と根拠 | 80 | 71 | no_canonical_row 9 |
+| 説明 | 80 | 1 | stale 0, in_progress 48, no_article 31 |
+| 体験 | 0 | 0 | undecided 80, has_interactive 7 |
+| 転移 | 0 | 0 | undecided 80 |
+
 ## Integrity issues
 
 - None

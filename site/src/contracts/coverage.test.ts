@@ -40,4 +40,15 @@ describe("CoverageReport parser", () => {
       summary: { ...rawCoverage.summary, baseline: "0.2.0" },
     })).toThrow(/baseline/u);
   });
+
+  test("scope is optional, counted, and strict", () => {
+    const { scope: _scope, ...withoutScope } = rawCoverage;
+    expect(parseCoverageReport(withoutScope).scope).toBeNull();
+    const parsed = parseCoverageReport(rawCoverage);
+    expect(parsed.scope?.units.knowledge_topic.axes.experience.eligible).toBe(0);
+    expect(() => parseCoverageReport({
+      ...rawCoverage,
+      scope: { ...rawCoverage.scope, overall_percent: 40 },
+    })).toThrow(/unknown/u);
+  });
 });
