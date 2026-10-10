@@ -558,11 +558,11 @@
             }
           },
           "identity": {
-            "complete": 117,
+            "complete": 120,
             "eligible": 160,
             "info": {},
             "states": {
-              "candidate": 3,
+              "candidate": 0,
               "unknown": 0,
               "unrepresented": 40
             }
@@ -594,11 +594,11 @@
       "problem_structure": {
         "axes": {
           "claims": {
-            "complete": 71,
+            "complete": 70,
             "eligible": 80,
             "info": {},
             "states": {
-              "no_canonical_row": 9
+              "no_canonical_row": 10
             }
           },
           "experience": {
@@ -612,13 +612,13 @@
             }
           },
           "identity": {
-            "complete": 66,
+            "complete": 70,
             "eligible": 80,
             "info": {},
             "states": {
-              "candidate": 5,
+              "candidate": 0,
               "unknown": 0,
-              "unrepresented": 9
+              "unrepresented": 10
             }
           },
           "lesson": {
@@ -626,8 +626,8 @@
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 48,
-              "no_article": 31,
+              "in_progress": 47,
+              "no_article": 32,
               "stale": 0
             }
           },

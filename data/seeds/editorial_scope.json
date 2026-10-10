@@ -160,10 +160,10 @@
             "id": "M_FISTA"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "Nesterov 先読みは M_MOMENTUM_SGD の実装差として既出で、加速勾配（凸最適化の加速法）は FISTA の外挿と同系統です。どちらの行の変種と読むかは未確定です。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "Nesterov の先読みは M_MOMENTUM_SGD の別名（Nesterov momentum）として、加速の外挿は FISTA の中で使われています。一つの名前が二つの行にまたがる多対多の対応です。"
       },
       "source_refs": [
         "E06"
@@ -1956,9 +1956,9 @@
             "id": "M_BUNDLE"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
         "note_ja": "制約を双対化する部品で、双対分解の説明が bundle 法にあります。問題特徴の行と用語は既にあり、戦略としての独立行はありません。"
       },
       "source_refs": [
@@ -3127,10 +3127,10 @@
             "id": "M_BAYESIAN_OPT_GP"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "ノイズ付き多目的期待改善は BO の多目的獲得関数で、一般論は既存記事にあるが個別説明はない。多目的側 MF_MULTI_OBJECTIVE との区別も必要。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "獲得関数の一般論は G038 と BO の行にありますが、qNEHVI の名前は出てきません。多目的の側（MF_MULTI_OBJECTIVE）にも収めうるため、記事化のときに置き場所を決めます。"
       },
       "source_refs": [
         "E12"
@@ -4512,10 +4512,10 @@
       "mapping": {
         "relation": "unrepresented",
         "refs": [],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "区間による上下界は区間演算の部品だが、知識ベースでは該当する記述が見つからなかった。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "区間演算による上下界の記述は見つかりません（「区間」の出現は時間窓の意味だけです）。"
       },
       "source_refs": [
         "E02"
@@ -4568,16 +4568,12 @@
           {
             "type": "problem",
             "id": "PA007"
-          },
-          {
-            "type": "method",
-            "id": "MF_SMOOTH_LOCAL"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "無制約で滑らかな目的は次元と勾配の有無で PA006 と PA007 に分かれ、候補名はどちらも指定していない。両方を覆う見出しとして扱うのが妥当。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "滑らかな無制約NLPは、次元と勾配の有無で PA006 と PA007 の二つの行に分かれています。二つの行をまとめた見出しとして扱います。"
       },
       "source_refs": [
         "E01"
@@ -5204,16 +5200,12 @@
           {
             "type": "problem",
             "id": "PA003"
-          },
-          {
-            "type": "content",
-            "id": "concept.variable-domain"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "Frobenius 誤差の低ランク近似は PA003 の SVD で閉形式に解ける。因子 U,V を同時に決める形は双線形な残差の非線形最小二乗に近いが、どちらの行も因子分解としては表していない。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "因子 U,V を同時に決める形は非線形最小二乗（PA033）、Frobenius 誤差の低ランク近似は SVD の閉形式（PA003）にあたります。一つの名前が二つの行にまたがる多対多の対応です。"
       },
       "source_refs": [
         "E01"
@@ -6383,21 +6375,12 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "variant_of",
-        "refs": [
-          {
-            "type": "problem",
-            "id": "PA052"
-          },
-          {
-            "type": "problem",
-            "id": "PA013"
-          }
-        ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "バンディットは選んだ行動の結果だけが見える逐次意思決定で、PA052 の regret の枠組みに入る。部分観測の扱いは行として表していない。ノイズ付きの評価（PA013）とも近い。"
+        "relation": "unrepresented",
+        "refs": [],
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "バンディットの名前も部分観測の扱いもリポジトリにありません。収める先の候補は PA052（オンライン最適化）です。"
       },
       "source_refs": [
         "E01"
@@ -6865,10 +6848,10 @@
             "id": "F_VARIABLE_PSD_MATRIX"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "変数が半正定値行列である点は SDP（PA021）と同じだが、SPD 上の幾何的な最適化は Riemann 側の読みを要する。二つの近い行の間にあるため低信頼。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "変数が半正定値行列である点は SDP（PA021）と同じで、SPD 上の幾何的な読みは concept.spd-matrix-geometry が説明します。"
       },
       "source_refs": [
         "E01"
@@ -7036,10 +7019,10 @@
             "id": "F_STRUCTURE_TRANSPORT"
           }
         ],
-        "review": "candidate",
-        "reviewer": null,
-        "reviewed_on": null,
-        "note_ja": "離散の輸送計画は最小費用流（PA028）、割当は PA030 であり、連続の最適輸送はそれらの連続版にあたる。連続の定式化は表されていないため低信頼。"
+        "review": "reviewed",
+        "reviewer": "claude",
+        "reviewed_on": "2026-10-10",
+        "note_ja": "離散の輸送計画は PA028 と特徴 F_STRUCTURE_TRANSPORT が表します。連続の最適輸送と Sinkhorn はまだありません。"
       },
       "source_refs": [
         "E11"
