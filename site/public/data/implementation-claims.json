@@ -3304,7 +3304,7 @@
       "subject_id": "I_NLOPT",
       "valid_from": "2026-07-13",
       "valid_to": null,
-      "value": "M_NELDER_MEAD;M_COBYLA;M_AUGMENTED_LAGRANGIAN;M_DIRECT;M_LBFGS",
+      "value": "M_NELDER_MEAD;M_COBYLA;M_AUGMENTED_LAGRANGIAN;M_DIRECT;M_LBFGS;M_BOBYQA",
       "value_status": "verified",
       "verification_status": "verified"
     },
@@ -8316,7 +8316,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "freshness": {
     "as_of": "2026-10-10",
     "claim_count": 457,

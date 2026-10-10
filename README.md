@@ -36,19 +36,19 @@ Map、教材、可視化、比較は独立した目的地ではなく、問題�
 ## 現在のデータセット
 
 <!-- BEGIN GENERATED DATASET FACTS -->
-現在の公開データセットは **0.18.22** （2026-10-10 release）です。
+現在の公開データセットは **0.18.23** （2026-10-10 release）です。
 
 | 項目 | 件数 |
 |---|---:|
 | Tables | 59 |
-| Rows | 9,336 |
-| Methods | 129 |
+| Rows | 9,405 |
+| Methods | 140 |
 | Problem archetypes | 57 |
 | Implementations | 65 |
-| Sources | 143 |
+| Sources | 159 |
 | Example cases | 29 |
 | Decision rules | 78 |
-| Evidence links | 4,253 |
+| Evidence links | 4,272 |
 
 このブロックはrelease authorityと生成reportから生成します。手作業で件数を変更しません。
 <!-- END GENERATED DATASET FACTS -->

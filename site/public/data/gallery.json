@@ -3617,7 +3617,7 @@
     }
   ],
   "contract_version": "3.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "domains": [
     {
       "domain": "agriculture",

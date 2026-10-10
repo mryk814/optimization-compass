@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.22",
+  "dataset_version": "0.18.23",
   "entities": [
     {
       "aliases": [],
@@ -19969,6 +19969,11 @@
         },
         {
           "relation_type": "implements",
+          "target_id": "M_BOBYQA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
           "target_id": "M_COBYLA",
           "target_type": "method"
         },
@@ -26836,6 +26841,32 @@
       "summary": "gradient差からdense逆Hessian近似を更新する準Newton法。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_BOBYQA",
+      "entity_id": "M_BOBYQA",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "BOBYQA",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S145",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NLOPT",
+          "target_type": "implementation"
+        }
+      ],
+      "summary": "上下限だけを持つ問題に対し、補間で作る二次modelとtrust regionで関数値のみから局所解を探すPowellのDFO。評価点は常に上下限を満たす。"
+    },
+    {
       "aliases": [
         "/learn/branch-and-bound"
       ],
@@ -27198,6 +27229,22 @@
       "summary": "目的を凸関数と凹関数の和に分け、各反復で凹部分を現在点で線形化して凸部分問題を解く。目的が単調に減少する。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_CCG",
+      "entity_id": "M_CCG",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "列・制約生成法(二段階ロバスト最適化)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S162",
+          "target_type": "source"
+        }
+      ],
+      "summary": "二段階ロバスト最適化を、最悪ケースの不確実性を見つけるsubproblemと、見つかったシナリオごとの再計算変数と制約をmasterへ足していく反復で解く方法。masterの下界とsubproblemの上界で収束を判定する。"
+    },
+    {
       "aliases": [
         "/learn/cdcl-sat"
       ],
@@ -27434,6 +27481,27 @@
         }
       ],
       "summary": "列(変数)が膨大なLPを、一部の列だけの制限master問題と、被約費用が負の列を探すpricing問題の反復で解く方法。切断在庫問題のGilmore-Gomoryが起源。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_CONSTRAINED_BO",
+      "entity_id": "M_CONSTRAINED_BO",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "制約付きベイズ最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S147",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S148",
+          "target_type": "source"
+        }
+      ],
+      "summary": "目的関数と未知の不等式制約の両方をGaussian processでmodel化し、制約を満たす確率を重みにしたacquisition(期待改善など)で次の評価点を選ぶベイズ最適化。"
     },
     {
       "aliases": [
@@ -28928,6 +28996,27 @@
       "summary": "L-BFGSを上下限制約へ拡張。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_LEVELSET_TOPOLOGY",
+      "entity_id": "M_LEVELSET_TOPOLOGY",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "レベルセット法による形状更新",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S151",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S152",
+          "target_type": "source"
+        }
+      ],
+      "summary": "構造の境界を暗黙の関数(レベルセット関数)のゼロ等高線で表し、形状微分から得た速度場でHamilton-Jacobi方程式を解いて境界を動かす構造最適化の更新法。境界の分岐・統合による位相変化を扱える。"
+    },
+    {
       "aliases": [
         "/learn/least-squares"
       ],
@@ -30030,6 +30119,22 @@
       "summary": "convex NLP情報からMILP masterへcutを追加するMINLP法。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/M_PAREGO",
+      "entity_id": "M_PAREGO",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "ParEGO",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S149",
+          "target_type": "source"
+        }
+      ],
+      "summary": "反復ごとに乱数の重みで複数目的を拡張Chebyshevスカラー化し、得られた単目的関数にGaussian process(期待改善)を適用して次の評価点を選ぶことで、少ない評価でPareto集合を近似する多目的最適化。"
+    },
+    {
       "aliases": [
         "/learn/particle-swarm"
       ],
@@ -30406,6 +30511,27 @@
         }
       ],
       "summary": "coneのprimal-dual KKT系を解く内点法。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_PROGRESSIVE_HEDGING",
+      "entity_id": "M_PROGRESSIVE_HEDGING",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Progressive hedging法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S163",
+          "target_type": "source"
+        }
+      ],
+      "summary": "確率計画をシナリオごとの部分問題に分け、各シナリオの解を情報構造(非予測性)に沿って集約・調整する反復で、全シナリオに共通の第一段階決定へ収束させるシナリオ分解法。"
     },
     {
       "aliases": [
@@ -30846,6 +30972,43 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/methods/M_SAA",
+      "entity_id": "M_SAA",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "標本平均近似(SAA)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S160",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        }
+      ],
+      "summary": "期待値を含む確率計画を、N個の標本による標本平均に置き換えた決定的な近似問題として解き、標本を取り直して繰り返すことで解の候補と最適性ギャップの統計的な推定を得る方法。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SAFEOPT",
+      "entity_id": "M_SAFEOPT",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SafeOpt",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S146",
+          "target_type": "source"
+        }
+      ],
+      "summary": "未知関数をGaussian processでmodel化し、安全閾値を超えると信頼区間で保証できる領域(safe set)内だけを評価しながら、最適点と安全領域の拡大を両立して探索する手法。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/methods/M_SAGA",
       "entity_id": "M_SAGA",
       "entity_type": "method",
@@ -30875,6 +31038,27 @@
         }
       ],
       "summary": "内側ループで直前の勾配推定を再帰的に更新し、過去の勾配を保存せずに分散を抑える有限和向けの方法。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SDDP",
+      "entity_id": "M_SDDP",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "確率的双対動的計画(SDDP)",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S164",
+          "target_type": "source"
+        }
+      ],
+      "summary": "多段階確率計画を段ごとのDPとして扱い、将来費用関数を、各段の双対解から作る区分線形の下近似(Benders型のcut)で表し、標本化した前進計算と後退計算の反復で改善する方法。"
     },
     {
       "aliases": [
@@ -31231,6 +31415,32 @@
         }
       ],
       "summary": "温度に応じて悪化移動も受理し局所解を脱出。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SINKHORN",
+      "entity_id": "M_SINKHORN",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Sinkhorn法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S165",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S166",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S167",
+          "target_type": "source"
+        }
+      ],
+      "summary": "エントロピー正則化した最適輸送問題の解が行・列のスケーリング行列で書けることを使い、行方向と列方向の正規化を交互に繰り返して輸送計画を求める行列スケーリング法。周辺分布の制約を発散(KL)で緩めた非均衡版も同じ形のスケーリング反復で解く。"
     },
     {
       "aliases": [
@@ -31650,6 +31860,22 @@
         }
       ],
       "summary": "非滑らか凸関数の劣勾配で更新。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/methods/M_SUBMODULAR_GREEDY",
+      "entity_id": "M_SUBMODULAR_GREEDY",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "劣モジュラ関数の貪欲法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S150",
+          "target_type": "source"
+        }
+      ],
+      "summary": "単調な劣モジュラ集合関数を要素数Kの制約の下で最大化するために、限界利得が最大の要素を一つずつ加えるheuristic。最適値の(1-1/e)倍以上が保証される。"
     },
     {
       "aliases": [],
@@ -37363,6 +37589,166 @@
       "label": "Network Flows: Theory, Algorithms, and Applications",
       "relations": [],
       "summary": "Textbook treatment of shortest path, maximum flow and minimum-cost flow algorithms, including label-correcting (Bellman-Ford), augmenting-path, preflow-push and successive shortest path methods."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S145",
+      "entity_id": "S145",
+      "entity_type": "source",
+      "external_url": "https://www.damtp.cam.ac.uk/user/na/NA_papers/NA2009_06.pdf",
+      "label": "The BOBYQA algorithm for bound constrained optimization without derivatives",
+      "relations": [],
+      "summary": "Derivative-free minimization under simple lower and upper bounds using a quadratic model by interpolation, trust-region steps, and the RESCUE recovery routine."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S146",
+      "entity_id": "S146",
+      "entity_type": "source",
+      "external_url": "https://proceedings.mlr.press/v37/sui15.html",
+      "label": "Safe Exploration for Optimization with Gaussian Processes",
+      "relations": [],
+      "summary": "SafeOpt: Gaussian-process optimization that only evaluates points believed to stay above a safety threshold, with a convergence guarantee to the optimum reachable within the safe set."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S147",
+      "entity_id": "S147",
+      "entity_type": "source",
+      "external_url": "https://proceedings.mlr.press/v32/gardner14.html",
+      "label": "Bayesian Optimization with Inequality Constraints",
+      "relations": [],
+      "summary": "Bayesian optimization with Gaussian-process priors on both the objective and inequality constraint functions, using a constraint-aware acquisition for problems where feasibility is as costly to evaluate as the objective."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S148",
+      "entity_id": "S148",
+      "entity_type": "source",
+      "external_url": "https://arxiv.org/abs/1403.5607",
+      "label": "Bayesian Optimization with Unknown Constraints",
+      "relations": [],
+      "summary": "Constrained Bayesian optimization with unknown, possibly noisy constraints modelled by Gaussian processes, with the objective and constraints evaluable separately (decoupled)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S149",
+      "entity_id": "S149",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1109/TEVC.2005.851274",
+      "label": "ParEGO: a hybrid algorithm with on-line landscape approximation for expensive multiobjective optimization problems",
+      "relations": [],
+      "summary": "ParEGO: extension of efficient global optimization to multiobjective problems by repeatedly scalarizing the objectives with randomly drawn weights and fitting a Gaussian-process model that is updated after each evaluation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S150",
+      "entity_id": "S150",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/BF01588971",
+      "label": "An analysis of approximations for maximizing submodular set functions-I",
+      "relations": [],
+      "summary": "For a nondecreasing submodular set function with z(empty) = 0 under a cardinality constraint K, the greedy heuristic attains at least 1 - ((K-1)/K)^K of the optimal value; the bound is tight for each K and tends to (e-1)/e."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S151",
+      "entity_id": "S151",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1016/S0045-7825(02)00559-5",
+      "label": "A level set method for structural topology optimization",
+      "relations": [],
+      "summary": "Level-set representation of the structural boundary that is moved by solving a Hamilton-Jacobi equation with a velocity field from shape sensitivity, allowing topology changes during structural optimization."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S152",
+      "entity_id": "S152",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1016/j.jcp.2003.09.032",
+      "label": "Structural optimization using sensitivity analysis and a level-set method",
+      "relations": [],
+      "summary": "Combines the classical shape derivative with the level-set method for front propagation to optimize elastic structures in two and three dimensions."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S160",
+      "entity_id": "S160",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/S1052623499363220",
+      "label": "The sample average approximation method for stochastic discrete optimization",
+      "relations": [],
+      "summary": "Sample average approximation (SAA): the expectation is replaced by a sample average, the sampled problem is solved, and the procedure is repeated to obtain statistical lower and upper bounds, convergence rates and stopping rules; stated for stochastic discrete optimization."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S161",
+      "entity_id": "S161",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/1.9780898718751",
+      "label": "Lectures on Stochastic Programming: Modeling and Theory",
+      "relations": [],
+      "summary": "Textbook treatment of stochastic programming: two-stage and multistage models, sample average approximation, risk-averse models, and decomposition methods including sampling-based dual dynamic programming."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S162",
+      "entity_id": "S162",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1016/j.orl.2013.05.003",
+      "label": "Solving two-stage robust optimization problems using a column-and-constraint generation method",
+      "relations": [],
+      "summary": "Column-and-constraint generation (C&CG) for two-stage robust optimization: a master problem is enlarged with recourse variables and constraints for scenarios found by a subproblem, giving lower and upper bounds."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S163",
+      "entity_id": "S163",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/moor.16.1.119",
+      "label": "Scenarios and policy aggregation in optimization under uncertainty",
+      "relations": [],
+      "summary": "Progressive hedging (progressive hedging algorithm): scenario subproblems are solved separately and the scenario policies are aggregated so that decisions respect the information available (nonanticipativity)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S164",
+      "entity_id": "S164",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/BF01582895",
+      "label": "Multi-stage stochastic optimization applied to energy planning",
+      "relations": [],
+      "summary": "Stochastic dual dynamic programming (SDDP): the expected cost-to-go functions of stochastic dynamic programming are approximated by piecewise linear functions built from stage dual solutions (Benders-type cuts), avoiding state-space discretization; applied to a 39-reservoir hydrothermal system."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S165",
+      "entity_id": "S165",
+      "entity_type": "source",
+      "external_url": "https://papers.nips.cc/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html",
+      "label": "Sinkhorn distances: lightspeed computation of optimal transport",
+      "relations": [],
+      "summary": "Entropic regularization of the optimal transport problem makes the optimum computable by Sinkhorn matrix scaling, reported to be several orders of magnitude faster than standard transportation solvers for histograms of a few hundred dimensions or more."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S166",
+      "entity_id": "S166",
+      "entity_type": "source",
+      "external_url": "https://projecteuclid.org/euclid.pjm/1102992505",
+      "label": "Concerning nonnegative matrices and doubly stochastic matrices",
+      "relations": [],
+      "summary": "Matrix scaling: repeated row and column normalization of a nonnegative matrix with total support converges to a doubly stochastic matrix of the form D1 A D2 with positive diagonal D1, D2."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S167",
+      "entity_id": "S167",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1090/mcom/3303",
+      "label": "Scaling algorithms for unbalanced optimal transport problems",
+      "relations": [],
+      "summary": "Entropic-regularized unbalanced optimal transport, where the marginal constraints are relaxed by divergence penalties, is solved by generalized Sinkhorn scaling algorithms based on pointwise diagonal scaling of the coupling; also covers unbalanced barycenters and gradient flows."
     },
     {
       "aliases": [],
