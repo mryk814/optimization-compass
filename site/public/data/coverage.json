@@ -533,6 +533,120 @@
       "total": 8
     }
   ],
+  "scope": {
+    "scope_version": "editorial-scope-v1",
+    "status": "proposed",
+    "units": {
+      "knowledge_topic": {
+        "axes": {
+          "claims": {
+            "complete": 113,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "no_canonical_row": 47
+            }
+          },
+          "experience": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {
+              "has_interactive": 21
+            },
+            "states": {
+              "undecided": 160
+            }
+          },
+          "identity": {
+            "complete": 120,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "candidate": 0,
+              "unknown": 0,
+              "unrepresented": 40
+            }
+          },
+          "lesson": {
+            "complete": 8,
+            "eligible": 160,
+            "info": {},
+            "states": {
+              "in_progress": 104,
+              "no_article": 47,
+              "stale": 1
+            }
+          },
+          "transfer": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {},
+            "states": {
+              "undecided": 160
+            }
+          }
+        },
+        "denominator": 160,
+        "excluded": 0,
+        "held": 0,
+        "merged": 0
+      },
+      "problem_structure": {
+        "axes": {
+          "claims": {
+            "complete": 70,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "no_canonical_row": 10
+            }
+          },
+          "experience": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {
+              "has_interactive": 7
+            },
+            "states": {
+              "undecided": 80
+            }
+          },
+          "identity": {
+            "complete": 70,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "candidate": 0,
+              "unknown": 0,
+              "unrepresented": 10
+            }
+          },
+          "lesson": {
+            "complete": 1,
+            "eligible": 80,
+            "info": {},
+            "states": {
+              "in_progress": 47,
+              "no_article": 32,
+              "stale": 0
+            }
+          },
+          "transfer": {
+            "complete": 0,
+            "eligible": 0,
+            "info": {},
+            "states": {
+              "undecided": 80
+            }
+          }
+        },
+        "denominator": 80,
+        "excluded": 0,
+        "held": 0,
+        "merged": 0
+      }
+    }
+  },
   "subjects": [
     {
       "dimensions": {
@@ -10063,7 +10177,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10083,6 +10197,7 @@
             "S014",
             "S016",
             "S055",
+            "S056",
             "S062",
             "primal-simplex"
           ]
@@ -10098,7 +10213,7 @@
           ]
         },
         "source": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10109,6 +10224,7 @@
             "S014",
             "S016",
             "S055",
+            "S056",
             "S062"
           ]
         },

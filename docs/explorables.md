@@ -115,7 +115,8 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | id | 掲載先 | 見せるもの |
 |---|---|---|
 | `gradient-descent-valley` | `method.gradient-descent` | learning rate と谷の細長さで、方向ごとの誤差の倍率がどう決まるか。安定限界 `2/L` |
-| `lp-vertex-walk` | `primal-simplex` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
+| `lp-vertex-walk` | `concept.linear-program` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
+| `simplex-pivot` | `primal-simplex` | 読者が増やす変数を選び、増やす量 θ を動かして比の最小値を見つける。被約費用を「売値 − 使う資源の値段」で計算し、2回のピボットで最適な頂点に着く |
 | `convexity-chord` | `concept.convexity` | 定義の不等式を、2点と混合比で数値として確かめる。局所解と全体の最小の違い |
 | `least-squares-bowl` | `concept.linear-least-squares` | 残差の二乗を正方形の面積で見せ、データの平面とパラメータの平面（お椀）をつなぐ。外れ値1点の引っ張り |
 | `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |

@@ -1,6 +1,25 @@
 export type CoverageStatus = "available" | "partial" | "missing" | "not_applicable";
 export type SubjectType = "method" | "problem" | "feature_family";
 
+export interface ScopeAxisCoverage {
+  eligible: number;
+  complete: number;
+  states: Record<string, number>;
+  info: Record<string, number>;
+}
+export interface ScopeUnitCoverage {
+  denominator: number;
+  excluded: number;
+  held: number;
+  merged: number;
+  axes: Record<string, ScopeAxisCoverage>;
+}
+export interface ScopeCoverage {
+  scope_version: string;
+  status: "proposed" | "approved";
+  units: Record<string, ScopeUnitCoverage>;
+}
+
 export interface CoverageReport {
   contract_version: "1.0.0";
   dataset_version: string;
@@ -28,15 +47,19 @@ export interface CoverageReport {
     proposed_scope: string; source_ids: string[];
   }>;
   integrity_issues: Array<{ code: string; severity: "warning" | "error"; entity_type: string; entity_id: string; detail: string }>;
+  /** Optional: absent or null when the release has no editorial scope seed. Counts only. */
+  scope?: ScopeCoverage | null;
 }
 
 const statuses = ["available", "partial", "missing", "not_applicable"] as const;
 const subjectTypes = ["method", "problem", "feature_family"] as const;
+const scopeUnits = ["knowledge_topic", "problem_structure"] as const;
+const scopeAxes = ["identity", "claims", "lesson", "experience", "transfer"] as const;
 const dimensions = ["map", "recommendation", "content", "visualization", "comparison", "gallery", "implementation", "journey", "source"] as const;
 
 export function parseCoverageReport(input: unknown): CoverageReport {
   const data = object(input, "coverage");
-  exact(data, ["contract_version", "dataset_version", "generated_at", "summary", "subjects", "expectations", "priorities", "integrity_issues"], "coverage");
+  exact(data, ["contract_version", "dataset_version", "generated_at", "summary", "subjects", "expectations", "priorities", "integrity_issues"], "coverage", ["scope"]);
   if (data.contract_version !== "1.0.0") throw new Error("Unsupported coverage contract.");
   const summary = object(data.summary, "summary");
   exact(summary, ["subject_counts", "status_counts", "baseline"], "summary");
@@ -84,12 +107,47 @@ export function parseCoverageReport(input: unknown): CoverageReport {
     return { slice_id: text(row.slice_id, "slice_id"), title_ja: text(row.title_ja, "title_ja"), title_en: text(row.title_en, "title_en"), rank: integer(row.rank, "rank", 1), total: integer(row.total, "total", 0, 12), factors, proposed_scope: text(row.proposed_scope, "proposed_scope"), source_ids: strings(row.source_ids, "source_ids") };
   });
   const integrityIssues = list(data.integrity_issues, "integrity_issues").map((value, index) => { const row = object(value, `integrity_issues[${index}]`); exact(row, ["code", "severity", "entity_type", "entity_id", "detail"], `integrity_issues[${index}]`); return { code: text(row.code, "code"), severity: oneOf(row.severity, ["warning", "error"] as const, "severity"), entity_type: text(row.entity_type, "entity_type"), entity_id: text(row.entity_id, "entity_id"), detail: text(row.detail, "detail") }; });
-  return { contract_version: "1.0.0", dataset_version: text(data.dataset_version, "dataset_version"), generated_at: text(data.generated_at, "generated_at"), summary: { subject_counts: subjectCounts, status_counts: statusCounts, baseline: "not_provided" }, subjects, expectations, priorities, integrity_issues: integrityIssues };
+  const scope = data.scope === undefined || data.scope === null ? null : parseScope(data.scope);
+  return { contract_version: "1.0.0", dataset_version: text(data.dataset_version, "dataset_version"), generated_at: text(data.generated_at, "generated_at"), summary: { subject_counts: subjectCounts, status_counts: statusCounts, baseline: "not_provided" }, subjects, expectations, priorities, integrity_issues: integrityIssues, scope };
 }
+
+function parseScope(input: unknown): ScopeCoverage {
+  const raw = object(input, "scope");
+  exact(raw, ["scope_version", "status", "units"], "scope");
+  const rawUnits = object(raw.units, "scope.units");
+  exact(rawUnits, scopeUnits, "scope.units");
+  const units: Record<string, ScopeUnitCoverage> = {};
+  scopeUnits.forEach((unit) => {
+    const row = object(rawUnits[unit], `scope.units.${unit}`);
+    exact(row, ["denominator", "excluded", "held", "merged", "axes"], `scope.units.${unit}`);
+    const rawAxes = object(row.axes, `scope.units.${unit}.axes`);
+    exact(rawAxes, scopeAxes, `scope.units.${unit}.axes`);
+    const axes: Record<string, ScopeAxisCoverage> = {};
+    scopeAxes.forEach((axis) => {
+      const item = object(rawAxes[axis], `scope.units.${unit}.axes.${axis}`);
+      exact(item, ["eligible", "complete", "states", "info"], `scope.units.${unit}.axes.${axis}`);
+      axes[axis] = {
+        eligible: integer(item.eligible, "eligible", 0),
+        complete: integer(item.complete, "complete", 0),
+        states: counts(item.states, "states"),
+        info: counts(item.info, "info"),
+      };
+    });
+    units[unit] = {
+      denominator: integer(row.denominator, "denominator", 0),
+      excluded: integer(row.excluded, "excluded", 0),
+      held: integer(row.held, "held", 0),
+      merged: integer(row.merged, "merged", 0),
+      axes,
+    };
+  });
+  return { scope_version: text(raw.scope_version, "scope_version"), status: oneOf(raw.status, ["proposed", "approved"] as const, "scope.status"), units };
+}
+function counts(value: unknown, field: string): Record<string, number> { const row = object(value, field); return Object.fromEntries(Object.entries(row).map(([key, count]) => [key, integer(count, `${field}.${key}`, 0)])); }
 
 function object(value: unknown, field: string): Record<string, unknown> { if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`${field} must be an object.`); return value as Record<string, unknown>; }
 function list(value: unknown, field: string): unknown[] { if (!Array.isArray(value)) throw new Error(`${field} must be an array.`); return value; }
-function exact(value: Record<string, unknown>, keys: readonly string[], field: string): void { const wanted = new Set(keys); const unknown = Object.keys(value).filter((key) => !wanted.has(key)); const missing = keys.filter((key) => !(key in value)); if (unknown.length) throw new Error(`${field} has unknown fields: ${unknown.join(", ")}.`); if (missing.length) throw new Error(`${field} is missing fields: ${missing.join(", ")}.`); }
+function exact(value: Record<string, unknown>, keys: readonly string[], field: string, optional: readonly string[] = []): void { const wanted = new Set([...keys, ...optional]); const unknown = Object.keys(value).filter((key) => !wanted.has(key)); const missing = keys.filter((key) => !(key in value)); if (unknown.length) throw new Error(`${field} has unknown fields: ${unknown.join(", ")}.`); if (missing.length) throw new Error(`${field} is missing fields: ${missing.join(", ")}.`); }
 function text(value: unknown, field: string): string { if (typeof value !== "string" || !value.trim()) throw new Error(`${field} must be non-empty.`); return value; }
 function strings(value: unknown, field: string): string[] { return list(value, field).map((item, index) => text(item, `${field}[${index}]`)); }
 function integer(value: unknown, field: string, min: number, max = Number.MAX_SAFE_INTEGER): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < min || value > max) throw new Error(`${field} must be an integer from ${min} to ${max}.`); return value; }

@@ -8,6 +8,7 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "branch-bound-proof": lazy(() => import("./BranchBound")),
   "gradient-descent-valley": lazy(() => import("./GradientDescentValley")),
   "lp-vertex-walk": lazy(() => import("./LpVertexWalk")),
+  "simplex-pivot": lazy(() => import("./SimplexPivot")),
   "convexity-chord": lazy(() => import("./ConvexityChord")),
   "least-squares-bowl": lazy(() => import("./LeastSquaresBowl")),
   "adam-step-ratio": lazy(() => import("./AdamStepRatio")),
