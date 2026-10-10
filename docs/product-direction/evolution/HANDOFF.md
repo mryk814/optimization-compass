@@ -107,6 +107,12 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
    - `recommendation_parity.py --update` を実行します。差分が版の番号だけであることを確かめます。`problem_method_fit` を足していないので、推薦は変わらないはずです。
    - `generate_article_figures.py`、`export-site-data`、報告2本を作り直します。
    - `pytest`（`test_historical_releases.py` は shallow clone では落ちるので除きます）を実行します。
+   - 件数を固定したテストを直します。0.18.22 では #309 の 4dd2fb9 で直しました。0.18.23 で増えるのは、手法 +11、出典 +16（S145–S152、S160–S167）、evidence +19 です。
+     - `tests/test_coverage.py`: `"method"` を 129→140、`len(report.subjects)` を 196→207
+     - `tests/test_evidence.py`: 出典数を 143→159、evidence_targets の合計を 4253→4272
+     - `tests/test_site_export.py`: 出典数を 143→159、合計を 4269→4288
+     - `tests/test_source_health.py`: 143→159
+     - 数は実行して確かめます。増分が migration の行数と合わなければ、テストを合わせずに原因を調べます。
 7. 0.18.22 と同じ形の PR を出し、メンテナーにタグとバンドルを頼みます。
 
 この版で仮に置いた判断です。レビューで変えてよいものです。
@@ -175,6 +181,7 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 - 報告2本（`docs/content-quality-report.md`、`docs/method-content-density-report.md`）は、記事を変えたら作り直します。
 - `generate_lesson_figures.py` で衝突を解いた後に、末尾の `parts.append("</svg>")` と `return "".join(parts) + "\n"` が消えたことがあります。
 - テストの期待値が記事の状態に依存しているものがあります。たとえば `tests/test_formulation_atlas.py` は PA の maturity を固定しています。記事や図を足すと変わります。
+- サイトの `DiagnosePage.test.tsx` の結果ページのテストは約3秒かかります。上限を20秒にしてあります（#308 の a27521c）。
 - `test_historical_releases.py` の3件は、タグのない shallow clone では必ず落ちます。
 - worktree ごとの `.venv` が同期されていないと、ruff の版が違って `format --check` が大量に落ちます。`uv sync --all-extras --dev` を先に実行してください。
 - 外のネットワーク（curl）が使えない環境では、書誌の確認は検索の結果で行い、確かめた範囲を `notes` に書きます。
