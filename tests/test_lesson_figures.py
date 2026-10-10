@@ -14,8 +14,12 @@ from scripts.generate_lesson_figures import (
     lasso_zero_points,
     least_squares_fit,
     least_squares_sse,
+    miqp_big_m_rows,
+    miqp_enumerate,
+    miqp_relaxation,
     mpc_wall_data,
     ridge_solution,
+    vrp_data,
 )
 
 ROOT = Path(__file__).parents[1]
@@ -70,6 +74,49 @@ def test_mpc_wall_figure_uses_the_article_numbers() -> None:
     figure = generate_lesson_figures()["mpc-wall-receding.svg"]
     assert "位置が-0.90まで進んで壁を越えます" in figure
     assert "最小の位置は0.019で、壁を越えません" in figure
+    assert "stroke-dasharray" not in figure
+
+
+def test_vrp_figures_use_the_article_numbers() -> None:
+    data = vrp_data()
+    assert data["split_count"] == 22
+    assert round(data["optimum"], 3) == 35.527  # type: ignore[arg-type]
+    assert data["optimum_routes"] == [[3, 1, 4, 6], [2, 7, 5]]
+    assert round(data["nearest"], 3) == 39.616  # type: ignore[arg-type]
+    assert data["nearest_routes"] == [[4, 6, 7, 5], [3, 1, 2]]
+    assert round(data["heuristic"], 3) == 38.508  # type: ignore[arg-type]
+    assert data["heuristic_routes"] == [[4, 5, 7, 6], [1, 3, 2]]
+    assert round(data["degree_cost"], 3) == 28.389  # type: ignore[arg-type]
+    assert data["degree_routes"] == [[4], [6]]
+    assert data["degree_loops"] == [[1, 3], [2, 5, 7]]
+    figures = generate_lesson_figures()
+    assert "最近傍法と2-optの結果は38.508、全探索の最適は35.527" in figures["vrp-routes.svg"]
+    assert "費用28.389の解が選ばれます" in figures["vrp-subtour.svg"]
+    assert "輪が2つ残り" in figures["vrp-subtour.svg"]
+    assert "stroke-dasharray" not in figures["vrp-routes.svg"] + figures["vrp-subtour.svg"]
+
+
+def test_miqp_figure_uses_the_article_numbers() -> None:
+    found = miqp_enumerate()
+    assert len(found) == 10
+    total, subset, weights = found[0]
+    assert (round(total, 2), subset) == (120.75, (0, 3, 4))
+    assert [round(value, 3) for value in weights] == [0.55, 0.252, 0.198]
+    assert [
+        (round(value, 2), "".join("ABCDE"[i] for i in sub)) for value, sub, _ in found[1:3]
+    ] == [
+        (125.73, "ACE"),
+        (129.75, "ACD"),
+    ]
+    by_subset = {sub: round(value, 2) for value, sub, _ in found}
+    assert by_subset[(0, 4)] == 146.0  # A=0.6, E=0.4: 36 + 100 + 2 * 5
+    bounds = {label: round(bound, 2) for label, bound, _, _ in miqp_big_m_rows()}
+    assert list(bounds.values()) == [102.41, 97.09, 92.59, 92.14, 104.59]
+    value, weights = miqp_relaxation((1.0,) * 5)
+    assert round(value, 2) == 97.09 and round(sum(weights), 6) == 1.0
+    assert round(miqp_big_m_rows()[-1][2], 2) == 125.78
+    figure = generate_lesson_figures()["miqp-big-m-bound.svg"]
+    assert "M ＝ 100では下界92.14、最適値120.75" in figure
     assert "stroke-dasharray" not in figure
 
 

@@ -29,3 +29,20 @@
 照合で分かったことのうち、収録範囲の外で直すものを残します。
 
 - `problem_definition_archetypes` で、`PROBLEM_BILEVEL_REGRESSION` が PA033（非線形最小二乗）、`PROBLEM_FAILED_SIMULATION` が PA054（実験計画）、`PROBLEM_PORTFOLIO_UNCERTAINTY` が PA036（単体）に結ばれています。名前と標準形からは、それぞれ PA046・PA016・確率計画かロバストの行が自然に見えます。結び方の意図を確かめる必要があります（dataset の変更なので別のPRにします）。
+
+## 進み具合（2026-10-10 時点）
+
+| 課題 | 状態 | 記録 |
+|---|---|---|
+| OC-EVOL-001 基準監査 | 完了 | 上の節 |
+| OC-EVOL-002 収録範囲 v1 | 完了（`proposed`。層と採否はオーナーの承認待ち） | [`editorial-scope.md`](../../editorial-scope.md) |
+| OC-EVOL-003 Coverage の分母と品質軸 | 完了 | `coverage.py` の scope 節、Coverage 画面 |
+| OC-EVOL-004 同一性と粒度 | 完了 | [`identity-granularity.md`](../../identity-granularity.md) |
+| OC-EVOL-010 scene・媒体契約の差分 | 完了（提案のみの項目は使う図のPRで足す） | [`explorables.md`](../../explorables.md) の「数値の出どころ」 |
+| OC-EVOL-011 主単体法の証明・感度 | 操作図と本文は完了。動画は未着手 | `simplex-shadow-price` |
+| 辞書の拡張（問題型の記事） | PA006・PA024・PA031・PA035・PA043・PA055 を追加 | `scripts/formulation_backlog.py` で次を選ぶ |
+
+### 決めることが残っているもの
+
+- 収録範囲で「表現なし」になった手法（Frank–Wolfe、Benders、列生成、AdaGrad、Sinkhorn など）に行を足すのは、dataset のリリースです。AGENTS.md の区分では Red にあたります。どの順番で、どの版に入れるかを決めてから、まとめて追加します。
+- OC-EVOL-007（初学者の入口）と OC-EVOL-008（高価な評価の利用者の道筋）は、学習経路の seed を変えます。どの persona を先にするかを決めてから進めます。
