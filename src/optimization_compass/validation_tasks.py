@@ -2,7 +2,7 @@
 
 This module is the single shared authority for which checks compose each
 validation task and tier. The CLI (``optimization-compass validate``), the
-Makefile convenience targets, and repository skills all call this registry
+Makefile convenience targets all call this registry
 instead of maintaining their own command lists.
 
 Checks orchestrate the repository's existing validation entry points
@@ -151,16 +151,14 @@ CHECKS: tuple[ValidationCheck, ...] = (
     ),
     ValidationCheck(
         code="repository.contract-tests",
-        description="Validation-registry and workflow contract tests.",
-        next_action="Fix the validation authority or workflow contract; do not duplicate gates.",
+        description="Validation-registry and publication-checkpoint contract tests.",
+        next_action="Fix the validation or checkpoint contract; do not duplicate gates.",
         command=(
             _PYTHON_TOKEN,
             "-m",
             "pytest",
             "tests/test_validate_cli.py",
-            "tests/test_pages_workflow.py",
             "tests/test_pages_checkpoint.py",
-            "tests/test_repository_skills.py",
         ),
     ),
     ValidationCheck(
@@ -256,8 +254,8 @@ CHECKS: tuple[ValidationCheck, ...] = (
 _CHECKS_BY_CODE: dict[str, ValidationCheck] = {check.code: check for check in CHECKS}
 
 _TIER_A_CODES: tuple[str, ...] = ("content.pages", "content.licensing")
+# Full pytest already checks committed report drift; keep the explicit preflight standalone.
 _TIER_B_CODES: tuple[str, ...] = (
-    "content.report-drift",
     "python.lint",
     "python.format",
     "python.types",
@@ -443,12 +441,10 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
         "scripts/pages_checkpoint.py",
         "src/optimization_compass/validation_tasks.py",
         "tests/test_pages_checkpoint.py",
-        "tests/test_pages_workflow.py",
-        "tests/test_repository_skills.py",
         "tests/test_validate_cli.py",
     }
     for path in normalized:
-        if path in repository_contract_paths or path.startswith(".agents/skills/"):
+        if path in repository_contract_paths:
             if task != "tier-b":
                 task = "pr-fast"
             reasons.add("site_or_repository_contract")

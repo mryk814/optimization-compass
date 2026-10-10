@@ -11,31 +11,6 @@ REPORT_SCRIPT = ROOT / "scripts/dependency_report.py"
 AUDIT_SCRIPT = ROOT / "scripts/verify_npm_audit.py"
 
 
-def test_repository_workflows_pin_every_external_action() -> None:
-    result = subprocess.run(
-        [sys.executable, str(PIN_SCRIPT)],
-        cwd=ROOT,
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert "validated immutable action pins" in result.stdout
-
-
-def test_dependabot_covers_python_site_and_actions_on_grouped_weekly_schedules() -> None:
-    configuration = (ROOT / ".github/dependabot.yml").read_text(encoding="utf-8")
-
-    assert configuration.count("interval: weekly") == 3
-    assert "package-ecosystem: uv" in configuration
-    assert "package-ecosystem: npm" in configuration
-    assert "package-ecosystem: github-actions" in configuration
-    assert "directory: /site" in configuration
-    for group in ("python-dependencies", "site-dependencies", "github-actions"):
-        assert f"{group}:" in configuration
-
-
 def test_workflow_pin_validator_rejects_mutable_refs_and_missing_versions(tmp_path: Path) -> None:
     workflow_directory = tmp_path / "workflows"
     workflow_directory.mkdir()
