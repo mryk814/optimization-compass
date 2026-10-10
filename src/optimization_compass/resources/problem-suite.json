@@ -234,10 +234,10 @@
       "constraint_class": "inner_bounds_and_kkt",
       "dimensionality_policy": {"kind": "fixed", "dimension": 1, "inner_dimension": 2},
       "known_reference_semantics": "The outer variable is one regularization coefficient. Each evaluation solves the fixed two-coefficient nonnegative ridge regression; local residual checks do not establish a global bilevel optimum or a constraint qualification.",
-      "related_problem_ids": ["PA033"],
+      "related_problem_ids": ["PA046", "PA005"],
       "feature_ids": ["F_STRUCTURE_BILEVEL", "F_DERIVATIVE_INNER_ITERATION", "F_STRUCTURE_COMPLEMENTARITY", "F_CONSTRAINT_BOUNDS"],
-      "source_ids": ["S055", "S056", "S064"],
-      "last_verified": "2026-07-19"
+      "source_ids": ["S054", "S055", "S056", "S064"],
+      "last_verified": "2026-10-10"
     },
     {
       "problem_definition_id": "PROBLEM_HYBRID_MODE_DISCOVERY",
@@ -285,10 +285,10 @@
       "constraint_class": "simplex_and_bounds",
       "dimensionality_policy": {"kind": "fixed", "dimension": 4},
       "known_reference_semantics": "The deterministic teaching reference is the best point on the declared 0.05 capped-simplex grid for the eight fixed training scenarios; it is not a population optimum or future-return guarantee.",
-      "related_problem_ids": ["PA036"],
+      "related_problem_ids": ["PA049", "PA036"],
       "feature_ids": ["F_VARIABLE_SIMPLEX", "F_CONSTRAINT_SIMPLEX", "F_CONSTRAINT_BOUNDS", "F_GUARANTEE_UNCERTAINTY"],
       "source_ids": ["S055", "S103"],
-      "last_verified": "2026-07-19"
+      "last_verified": "2026-10-10"
     },
     {
       "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
@@ -319,10 +319,10 @@
       "constraint_class": "implicit_simulation_failure",
       "dimensionality_policy": {"kind": "mixed", "continuous_dimension": 2, "binary_dimension": 1},
       "known_reference_semantics": "The fixed failure ledger has no optimizer-visible optimum; only successful evaluation values are comparable within the declared teaching contract.",
-      "related_problem_ids": ["PA054"],
+      "related_problem_ids": ["PA016"],
       "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_VARIABLE_BINARY", "F_OBJECTIVE_SIMULATION", "F_CONSTRAINT_IMPLICIT"],
       "source_ids": ["S002", "S018", "S031", "S034", "S035", "S060", "S063"],
-      "last_verified": "2026-07-24"
+      "last_verified": "2026-10-10"
     },
     {
       "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",

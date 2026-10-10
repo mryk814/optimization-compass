@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.20",
+  "dataset_version": "0.18.21",
   "definitions": [
     {
       "available_oracles": [
@@ -20,7 +20,7 @@
         "F_CONSTRAINT_BOUNDS"
       ],
       "known_reference_semantics": "The outer variable is one regularization coefficient. Each evaluation solves the fixed two-coefficient nonnegative ridge regression; local residual checks do not establish a global bilevel optimum or a constraint qualification.",
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-10-10",
       "mathematical_family": "bilevel_optimization",
       "name_en": "Bilevel regularization selection with an inner nonnegative regression",
       "name_ja": "非負inner回帰を持つbilevel正則化選択",
@@ -28,9 +28,11 @@
       "objective_form": "nested_least_squares",
       "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
       "related_problem_ids": [
-        "PA033"
+        "PA046",
+        "PA005"
       ],
       "source_ids": [
+        "S054",
         "S055",
         "S056",
         "S064"
@@ -188,7 +190,7 @@
         "F_CONSTRAINT_IMPLICIT"
       ],
       "known_reference_semantics": "The fixed failure ledger has no optimizer-visible optimum; only successful evaluation values are comparable within the declared teaching contract.",
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-10-10",
       "mathematical_family": "simulation_with_implicit_failure_region",
       "name_en": "Black-box simulation design with evaluation failures",
       "name_ja": "失敗を含むblack-box simulation設計",
@@ -196,7 +198,7 @@
       "objective_form": "simulation",
       "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
       "related_problem_ids": [
-        "PA054"
+        "PA016"
       ],
       "source_ids": [
         "S002",
@@ -465,7 +467,7 @@
         "F_GUARANTEE_UNCERTAINTY"
       ],
       "known_reference_semantics": "The deterministic teaching reference is the best point on the declared 0.05 capped-simplex grid for the eight fixed training scenarios; it is not a population optimum or future-return guarantee.",
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-10-10",
       "mathematical_family": "finite_scenario_cvar_portfolio",
       "name_en": "Finite-scenario portfolio allocation with CVaR",
       "name_ja": "有限scenarioによるCVaR配分",
@@ -473,6 +475,7 @@
       "objective_form": "piecewise_linear_convex",
       "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
       "related_problem_ids": [
+        "PA049",
         "PA036"
       ],
       "source_ids": [

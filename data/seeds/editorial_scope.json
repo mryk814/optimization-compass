@@ -5564,6 +5564,10 @@
           {
             "type": "problem",
             "id": "PA024"
+          },
+          {
+            "type": "content",
+            "id": "concept.mixed-integer-quadratic-program"
           }
         ],
         "review": "reviewed",
@@ -5799,6 +5803,10 @@
             "id": "PA031"
           },
           {
+            "type": "content",
+            "id": "concept.vehicle-routing"
+          },
+          {
             "type": "term",
             "id": "TERM_ROUTING_PROBLEM"
           }
@@ -5830,6 +5838,10 @@
             "id": "PA031"
           },
           {
+            "type": "content",
+            "id": "concept.vehicle-routing"
+          },
+          {
             "type": "term",
             "id": "TERM_ROUTING_PROBLEM"
           }
@@ -5859,6 +5871,10 @@
           {
             "type": "problem",
             "id": "PA031"
+          },
+          {
+            "type": "content",
+            "id": "concept.vehicle-routing"
           },
           {
             "type": "problem_definition",
@@ -6451,7 +6467,7 @@
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "CVaR は記事で説明され、有限シナリオの実行例がある。ただし実行例 PROBLEM_PORTFOLIO_UNCERTAINTY は sqlite で PA036（単体上）に結び付いており、CVaR 型を PA049・PA050 の変種として読む方が自然かは要確認。"
+        "note_ja": "CVaR は記事で説明され、有限シナリオの実行例がある。実行例 PROBLEM_PORTFOLIO_UNCERTAINTY は dataset 0.18.21 から PA049（確率計画）を主に、配分の定義域として PA036（単体上）を従に結ぶ。有限シナリオの CVaR は標本による確率計画で、不確実性集合上の最悪値ではないので PA050 には結ばない。"
       },
       "source_refs": [
         "E01"
@@ -7014,7 +7030,7 @@
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "上位・下位の入れ子構造を持つ型で、名称と標準形が PA046 と一致する。実行可能な PROBLEM_BILEVEL_REGRESSION は sqlite で PA033 に結び付いており、PA046 の例としては読めないので、その対応は見直しが必要。"
+        "note_ja": "上位・下位の入れ子構造を持つ型で、名称と標準形が PA046 と一致する。実行可能な PROBLEM_BILEVEL_REGRESSION は dataset 0.18.21 から PA046 を主に、下位の非負 ridge 回帰として PA005（線形最小二乗）を従に結ぶ。"
       },
       "source_refs": [
         "E01"

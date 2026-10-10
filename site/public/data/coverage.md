@@ -1,7 +1,7 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.20`
-- Generated: `2026-10-07T00:00:00+00:00`
+- Dataset: `0.18.21`
+- Generated: `2026-10-10T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
 ## Expected learning artifacts
@@ -44,7 +44,7 @@
 |---|---:|---:|---|
 | 名前と同一性 | 80 | 70 | candidate 0, unrepresented 10, unknown 0 |
 | 定義と根拠 | 80 | 70 | no_canonical_row 10 |
-| 説明 | 80 | 5 | stale 0, in_progress 45, no_article 30 |
+| 説明 | 80 | 9 | stale 0, in_progress 45, no_article 26 |
 | 体験 | 0 | 0 | undecided 80, has_interactive 9 |
 | 転移 | 0 | 0 | undecided 80 |
 

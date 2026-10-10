@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.20",
+  "dataset_version": "0.18.21",
   "expectations": [
     {
       "applicability": "expected",
@@ -331,7 +331,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-10-07T00:00:00Z",
+  "generated_at": "2026-10-10T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 5,
+            "complete": 9,
             "eligible": 80,
             "info": {},
             "states": {
               "in_progress": 45,
-              "no_article": 30,
+              "no_article": 26,
               "stale": 0
             }
           },
@@ -13562,12 +13562,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.mixed-integer-quadratic-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -13594,11 +13594,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA024"
+            "/formulations/PA024",
+            "concept.mixed-integer-quadratic-program"
           ]
         },
         "recommendation": {
@@ -14125,12 +14126,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.vehicle-routing"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -14157,12 +14158,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA031",
-            "EC019"
+            "EC019",
+            "concept.vehicle-routing"
           ]
         },
         "recommendation": {

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.20",
+  "dataset_version": "0.18.21",
   "entities": [
     {
       "aliases": [],
@@ -8551,6 +8551,97 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.mixed-integer-quadratic-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "混合整数二次計画（MIQP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA024",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "outer-approximation-minlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spatial-branch-and-bound",
+          "target_type": "content"
+        }
+      ],
+      "summary": "混合整数二次計画は、凸二次計画の一部の変数に「整数であること」を加えた定式化です。整数条件を外した凸QPの最適値は下界になりますが、整数解との差が残るため、緩和を解きながら変数を決めていく分枝限定法で最適性を示します。二次の行列 Q が半正定値でないと、緩和そのものが凸でなくなり、この下界の保証は成り立ちません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.model-predictive-control",
       "entity_type": "content",
       "external_url": null,
@@ -9878,6 +9969,92 @@
         }
       ],
       "summary": "変数の定義域は、最適化で何を動かせるかを決め、使える定式化・ソルバー・保証の範囲を最初に絞る分類です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.vehicle-routing",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "配送経路問題（VRP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA031",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.knapsack-set-cover",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simulated-annealing",
+          "target_type": "content"
+        }
+      ],
+      "summary": "配送経路問題（VRP）は、depotを出る複数の車両が、各顧客をちょうど1回ずつ回って戻る経路を選び、総移動時間を最小にする定式化です。どの車がどの顧客を、どの順に回るかを同時に決め、容量や時間窓を制約として足せます。顧客が少なければ全探索やMILPで最適を確かめられますが、近似の結果がどれだけ最適に近いかは、最適値を知らなければ言えません。"
     },
     {
       "aliases": [],
@@ -31607,13 +31784,21 @@
       "summary": "混合整数線形計画。変数=mixed、目的=linear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.mixed-integer-quadratic-program"
+      ],
       "canonical_url": "/formulations/PA024",
       "entity_id": "PA024",
       "entity_type": "problem",
       "external_url": null,
       "label": "混合整数二次計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.mixed-integer-quadratic-program",
+          "target_type": "content"
+        }
+      ],
       "summary": "混合整数二次計画。変数=mixed、目的=quadratic、制約=mixed。"
     },
     {
@@ -31705,7 +31890,9 @@
       "summary": "割当・matching。変数=binary、目的=linear、制約=combinatorial。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.vehicle-routing"
+      ],
       "canonical_url": "/formulations/PA031",
       "entity_id": "PA031",
       "entity_type": "problem",
@@ -31716,6 +31903,11 @@
           "relation_type": "case",
           "target_id": "EC019",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.vehicle-routing",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",
@@ -38617,5 +38809,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-10-07T00:00:00Z"
+  "generated_at": "2026-10-10T00:00:00Z"
 }

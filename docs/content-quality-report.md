@@ -1,9 +1,9 @@
 # Content quality report
 
-- Published concept guides: `42`
-- Meeting the concept floor: `42`
+- Published concept guides: `44`
+- Meeting the concept floor: `44`
 - Below the concept floor: `0`
-- Prose review warnings: `549`
+- Prose review warnings: `603`
 
 ## Concept publication floor
 
@@ -26,6 +26,7 @@
 | `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 103 | 6430 | 11 | 4 | 0 | pass |
+| `concept.mixed-integer-quadratic-program` | 157 | 18988 | 17 | 9 | 0 | pass |
 | `concept.model-predictive-control` | 150 | 15178 | 16 | 10 | 0 | pass |
 | `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4444 | 9 | 5 | 0 | pass |
@@ -47,6 +48,7 @@
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 51 | 4699 | 9 | 2 | 0 | pass |
+| `concept.vehicle-routing` | 172 | 16559 | 16 | 9 | 0 | pass |
 | `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 80 | 2156 | 7 | 3 | 0 | pass |
@@ -58,8 +60,8 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 20
-- `sentence.commas`: 265
-- `sentence.long`: 44
+- `sentence.commas`: 313
+- `sentence.long`: 50
 
 | Content | Warnings |
 |---|---:|
@@ -99,6 +101,7 @@
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 8 |
 | `concept.mixed-integer-linear-program` | 7 |
+| `concept.mixed-integer-quadratic-program` | 21 |
 | `concept.model-predictive-control` | 19 |
 | `concept.multiobjective-optimization` | 0 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 0 |
@@ -120,6 +123,7 @@
 | `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
 | `concept.variable-domain` | 0 |
+| `concept.vehicle-routing` | 33 |
 | `constrained-continuous` | 0 |
 | `coordinate-descent` | 0 |
 | `cp-sat` | 2 |
