@@ -35,96 +35,64 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 | 011 | 主単体法を証明・感度・動画へ拡張 | 007, 010 | 操作図と本文は完了。動画は未着手 |
 | 012 | BO の視界制限・予測・評価費 | 008, 010 | 未着手 |
 | 013 | 輸送の対応と正則化を体験 | 009, 010 | 未着手 |
-| 014〜018 | 辞書スライス（射影と線形 oracle／分割法・PDHG／分解と列・制約生成／不確実性・多段階／BO の安全・失敗・多忠実度） | 004 / 008 | 手法の**行**は下の PR で入りました。記事はまだです |
+| 014〜018 | 辞書スライス（射影と線形 oracle／分割法・PDHG／分解と列・制約生成／不確実性・多段階／BO の安全・失敗・多忠実度） | 004 / 008 | 手法の**行**は 0.18.22 と 0.18.23 で入りました。記事はまだです |
 | 019 | 問題構造 80 候補の正準対応 | 004 | STRUCTURE_* の10件が `unrepresented` で残っています |
 | 020〜032 | 判断規則、実装への橋、persona の入口、評価、a11y、動画、実験室ほか | 上記 | 未着手 |
 
 課題ごとの詳しい受入条件は、元のパックの `backlog/OC-EVOL-0NN.md` にあります。パックが手元になければ、オーナーに頼んでください。
 
-## いま開いている作業（push 済み）
+## いま開いている作業（2026-10-10 時点）
 
-| 種類 | ブランチ / PR | 中身 | 次にやること |
+マージ済み: #308（収録範囲 v1 の承認、ロバスト回帰の操作図、この文書）、#309（手法24個、0.18.22）、#311（件数固定をやめるテスト方針）。
+
+| PR | ブランチ | 中身 | 次にやること |
 |---|---|---|---|
-| PR [#308](https://github.com/mryk814/optimization-compass/pull/308) | `claude/eager-ramanujan-cov8ei` | 収録範囲 v1 の承認反映、ロバスト回帰の操作図 `robust-loss-pull`、この引き継ぎ文書 | CI が緑ならマージします。main が進んでいたら、main を取り込み、`export-site-data` と報告2本を作り直してから push します |
-| PR [#309](https://github.com/mryk814/optimization-compass/pull/309)（draft） | `claude/eager-ramanujan-cov8ei-rel-0.18.22` | 手法24個（migration 028〜033）、0.18.22 の公開生成物 | 下の「0.18.22 を仕上げる」 |
-| PR [#311](https://github.com/mryk814/optimization-compass/pull/311)（draft） | `claude/eager-ramanujan-cov8ei-test-counts` | テストの件数固定をやめ、生成元（DB・seed）と突き合わせる形にする | CI が緑ならマージします。#309 より先が望ましく、#309 は取り込むときに件数の行をこちらに合わせます |
-| ブランチ（PR なし） | `claude/eager-ramanujan-cov8ei-pa039` | 記事 PA039 ハイパーパラメータ最適化（数値の照合、3幅の画面確認、台帳の記録まで済み） | 下の「PA039 を出す」 |
-| ブランチ（PR なし） | `claude/eager-ramanujan-cov8ei-methods-0.18.23` | 手法11個（migration 034、035） | 下の「0.18.23 を作る」 |
+| [#312](https://github.com/mryk814/optimization-compass/pull/312) | `claude/eager-ramanujan-cov8ei-pa039` | 記事 PA039 ハイパーパラメータ最適化（数値の照合、3幅の画面確認、台帳の記録まで済み） | CI が緑ならマージします |
+| 0.18.23 の PR | `claude/eager-ramanujan-cov8ei-methods-0.18.23` | 手法11個（migration 034、035）と 0.18.23 の公開生成物 | CI が緑ならマージします。#312 と同じく `site/public/data` を触るので、後からマージする側は main を取り込んで作り直します |
 
-`site/public/data/**` は複数の PR が同時に触ります。後からマージする側は、main を取り込み、`uv run optimization-compass export-site-data --output site/public/data` で作り直します。生成物の衝突を手で解いてはいけません。
+`site/public/data/**` は複数の PR が同時に触ります。後からマージする側は、main を取り込み、`uv run optimization-compass export-site-data --output site/public/data` と報告2本（`scripts/content_quality_report.py`、`scripts/method_content_density_report.py`）で作り直します。生成物の衝突を手で解いてはいけません。
 
-### 0.18.22 を仕上げる（#309）
+### メンテナーの作業: タグとバンドル
 
-1. 先に #308 がマージされていれば、main を #309 のブランチへ取り込みます。`site/public/data` は `export-site-data` で作り直し、報告2本も作り直します。
-   - `uv run python scripts/content_quality_report.py`
-   - `uv run python scripts/method_content_density_report.py`
-2. 生成物の版が 0.18.22 のままかを確かめます。
-   - `uv run python scripts/dataset_publication.py check`
-   - `uv run python scripts/verify_content.py`
-3. CI（tier-b、約22分）が緑になったら、draft を外してマージします。
-4. **メンテナーの作業**: タグと Release `v0.18.22` を作り、バンドル ZIP をアップロードします。
-   - ZIP は作った環境と一緒に消えました。`rebuild_dataset.py` は決定的なので、次の手順でリポジトリの外に作り直せます。
-     1. 公開の元にしたコミット `08f22fa6dda5fc2f4ba8530ff2e2d66a35fe8a9f` を checkout します（版の番号を上げただけで、生成物の公開前の状態です）。
-     2. `uv run python scripts/rebuild_dataset.py --stage --output <外の dir>/stage` を実行します。tree の sha256 は `9f29ef1a9acb66a26c61e9b6d3272fc4ecfaaeb850c9c352b08a6a190039bd61` になるはずです。
-     3. `uv run python scripts/rebuild_dataset.py --publish --staged-directory <外の dir>/stage --bundle-output <外の dir>/bundle --source-commit 08f22fa6dda5fc2f4ba8530ff2e2d66a35fe8a9f --tag v0.18.22` を実行します。
-   - 期待値は `optimization_method_selection_database_v0.18.22_bundle.zip`、6,131,838 バイト、sha256 `e77c833b0f355e417e4821b34623dc1b7f47465f7829316461745bbda8163a41` です。
-   - publish はリポジトリ内の生成物も書き換えます。この checkout は捨ててください。
-   - sha が一致しなければ、アップロードせずに報告してください。
+0.18.22 と 0.18.23 のタグと GitHub Release を作り、バンドル ZIP をアップロードします。ZIP を作った環境は消えるので、次の手順でリポジトリの外に作り直します。`rebuild_dataset.py` は決定的です。
 
-### PA039 を出す
+1. 公開の元にしたコミット（版の番号を上げただけで、生成物の公開前の状態）を checkout します。
+2. `uv run python scripts/rebuild_dataset.py --stage --output <外の dir>/stage` を実行し、tree の sha256 を確かめます。
+3. `uv run python scripts/rebuild_dataset.py --publish --staged-directory <外の dir>/stage --bundle-output <外の dir>/bundle --source-commit <そのコミット> --tag v<版>` を実行します。
+4. ZIP の大きさと sha256 が下の表と一致すれば、アップロードします。一致しなければ、アップロードせずに報告してください。publish はリポジトリ内の生成物も書き換えるので、この checkout は捨てます。
 
-ブランチ `claude/eager-ramanujan-cov8ei-pa039` の 6082525 は、古い main の上にあります。
-1. 最新の main から新しいブランチを切り、この commit を cherry-pick します。
-2. `site/public/data/*` と `docs/content-quality-report.md` で衝突したら、自分の側を捨て、`export-site-data` と報告スクリプトで作り直します。
-3. `uv run python scripts/article_quality.py show concept.hyperparameter-optimization` が「達成」のままかを確かめます。記録日より後に本文が変わっていなければ、stale になりません。
-4. 次を確認してから PR を出します。
-   - `uv run optimization-compass validate content`
-   - `uv run ruff check .`
-   - `uv run ruff format --check .`
-   - `uv run python scripts/generate_lesson_figures.py --check`
-   - `uv run python -m pytest tests/test_lesson_figures.py tests/test_article_quality.py tests/test_content_report_drift.py tests/test_editorial_scope.py -q`
-
-### 0.18.23 を作る（手法11個）
-
-ブランチ `claude/eager-ramanujan-cov8ei-methods-0.18.23` には、2つのコミットがあります。どちらも 0.18.22 の版上げより前の点（57092c1）から分かれています。
-
-| commit | migration | 手法（ファミリー） | 出典 / evidence |
+| 版 | source commit | tree sha256 | ZIP |
 |---|---|---|---|
-| b53d8f9 | 034 | M_BOBYQA（MF_DFO_LOCAL）、M_SAFEOPT・M_CONSTRAINED_BO（MF_SURROGATE_HPO）、M_PAREGO（MF_MULTI_OBJECTIVE）、M_SUBMODULAR_GREEDY（MF_GRAPH_DP）、M_LEVELSET_TOPOLOGY（MF_TOPOLOGY_OPTIMIZATION）、実装の対応 MIM_BOBYQA_NLOPT | S145–S152 / EL004256–4264 |
-| 2a6da88 | 035 | M_SAA・M_CCG（MF_DISCRETE_EXACT）、M_PROGRESSIVE_HEDGING・M_SINKHORN（MF_LP_QP_CONIC）、M_SDDP（MF_GRAPH_DP） | S160–S167 / EL004280–4289 |
+| 0.18.22 | `08f22fa6dda5fc2f4ba8530ff2e2d66a35fe8a9f` | `9f29ef1a9acb66a26c61e9b6d3272fc4ecfaaeb850c9c352b08a6a190039bd61` | 6,131,838 バイト、sha256 `e77c833b0f355e417e4821b34623dc1b7f47465f7829316461745bbda8163a41` |
+| 0.18.23 | `f353246ad11813536b653fc86ef4fb04ae4356d9` | `28976a25a69e579f7c1352e28418441b98f51dd31c8f7841e966cf8cc0a15a73` | 6,306,363 バイト、sha256 `46e7cd81d37f342ae69de393ce352767f73ed2fe60dac33d76cacf8f55328891` |
 
-手順:
-1. #309 がマージされたら、最新の main から新しいブランチを切り、2つの commit を cherry-pick します。
-   - 衝突しやすいのは `data/build-manifest.json`（033 の後ろに 034、035 を並べる）、`tests/test_build_manifest.py`（`range(3, 36)`）、`editorial_scope.json` の3つです。
-2. `uv run optimization-compass validate manifest` を実行します。
-3. 版を 0.18.23 に上げます（3か所）。
-   - `src/optimization_compass/resources/release-authority.json`（`dataset_version` と `release_date`）
-   - `tests/test_dataset_formats.py` の `STAGED_TEST_VERSION`
-   - `tests/test_release_identity.py` の assert
-4. 版上げをコミットします。この commit を `--source-commit` に使います。
-5. `rebuild_dataset.py --stage --output <外>` を実行します（2回ビルドして一致を確かめます）。続けて `--publish --staged-directory … --bundle-output <外> --source-commit <4の commit> --tag v0.18.23` を実行します。
-6. 生成物をそろえます。
-   - `dataset_publication.py prepare --bundle <zip> --output-directory <存在しない外の dir>` を実行し、その出力の CITATION.cff を repo 直下へ、DATASET_CARD.md を `docs/dataset-card.md` へコピーします。そのあと `dataset_publication.py check` を実行します。
-   - `recommendation_parity.py --update` を実行します。差分が版の番号だけであることを確かめます。`problem_method_fit` を足していないので、推薦は変わらないはずです。
-   - `generate_article_figures.py`、`export-site-data`、報告2本を作り直します。
-   - `pytest`（`test_historical_releases.py` は shallow clone では落ちるので除きます）を実行します。
-   - #311 がマージ済みなら、この項目は不要です（件数は生成元から数えます）。まだなら、件数を固定したテストを直します。0.18.22 では #309 の 4dd2fb9 で直しました。0.18.23 で増えるのは、手法 +11、出典 +16（S145–S152、S160–S167）、evidence +19 です。
-     - `tests/test_coverage.py`: `"method"` を 129→140、`len(report.subjects)` を 196→207
-     - `tests/test_evidence.py`: 出典数を 143→159、evidence_targets の合計を 4253→4272
-     - `tests/test_site_export.py`: 出典数を 143→159、合計を 4269→4288
-     - `tests/test_source_health.py`: 143→159
-     - 数は実行して確かめます。増分が migration の行数と合わなければ、テストを合わせずに原因を調べます。
-7. 0.18.22 と同じ形の PR を出し、メンテナーにタグとバンドルを頼みます。
+### 0.18.23 で仮に置いた判断（レビューで変えてよいもの）
 
-この版で仮に置いた判断です。レビューで変えてよいものです。
 - SAA を MF_DISCRETE_EXACT に置きました。合うファミリーがないので、Benders と並べています。
 - Submodular greedy を MF_GRAPH_DP に置きました。前例は M_LOCAL_SEARCH_COMBINATORIAL です。
 - 非均衡 Sinkhorn は行を作らず、M_SINKHORN の別名と出典にしました。TOPIC は `variant_of` です。
 - Sobol 列は部品と判断し、行を作っていません。TOPIC は `unrepresented` のままです。
 
+## 手法を足すリリースの手順
+
+1. 手法を足す migration をコミットします（下の「作業の型」）。
+2. `uv run optimization-compass validate manifest` を実行します。
+3. 版を上げます（3か所）。
+   - `src/optimization_compass/resources/release-authority.json`（`dataset_version` と `release_date`）
+   - `tests/test_dataset_formats.py` の `STAGED_TEST_VERSION`
+   - `tests/test_release_identity.py` の assert
+4. 版上げをコミットします。この commit を `--source-commit` に使います。
+5. `rebuild_dataset.py --stage --output <外>` を実行します（2回ビルドして一致を確かめます）。続けて `--publish --staged-directory … --bundle-output <外> --source-commit <4の commit> --tag v<版>` を実行します。
+6. 生成物をそろえます。
+   - `dataset_publication.py prepare --bundle <zip> --output-directory <存在しない外の dir>` を実行し、出力の CITATION.cff を repo 直下へ、DATASET_CARD.md を `docs/dataset-card.md` へコピーします。そのあと `dataset_publication.py check` を実行します。
+   - `recommendation_parity.py --update` を実行し、差分が版の番号だけであることを確かめます。`problem_method_fit` を足していなければ、推薦は変わらないはずです。
+   - `generate_article_figures.py`、`export-site-data`、報告2本を作り直します。
+   - `pytest`（`test_historical_releases.py` は shallow clone では落ちるので除きます）を実行します。件数は生成元から数えるので（#311）、件数のテストを書き換える必要はありません。
+7. PR を出します。マージ後に、上の「メンテナーの作業」の表へ行を足して、タグとバンドルを頼みます。
+
 ## この後の作業の候補（推奨順）
 
-1. 上の3件（0.18.22、PA039、0.18.23）を順に出します。push 先と PR は1本ずつ、生成物は毎回最新の main から作り直します。
+1. #312 と 0.18.23 の PR を出し切ります。生成物は毎回最新の main から作り直します。
 2. **残りの `unrepresented` を片付けます。**
    - 部品の4件（Sobol 列、feasibility restoration、interval bounds、homogeneous embedding）: 手法の行ではなく、用語集の項目にして `primitive_in` で結びます。用語集の置き場所と形式は、既存の glossary の行を見て決めます。
    - 問題構造の10件（幾何計画 GP、signomial、行列補完、レベルセットの形状、bin packing、施設配置、minimax、バンディット、非均衡輸送、劣モジュラ）: 新しい問題型（PA）の行、`data/seeds/formulation_atlas.json` の項目、関係の条件を足します。PA の行は migration なので、リリースが要ります。[`docs/formulation-atlas.md`](../../formulation-atlas.md) の recipe B と、`AGENTS.md` の不変条件（循環なし、関係の `note_ja` に条件を書く）に従います。
