@@ -140,6 +140,11 @@
       "id": "030",
       "path": "data/migrations/030_smooth_local_variants.sql",
       "sha256": "edda5e12b206365a94a2c6cb6c6ba419ed2e9442752b248596cf4e260bba7019"
+    },
+    {
+      "id": "031",
+      "path": "data/migrations/031_composite_convex_variants.sql",
+      "sha256": "a5ce0f358ee869ce064fe94b6284c6bccfa969a1fb7be05301c97932ebac095d"
     }
   ],
   "specialized_inputs": [

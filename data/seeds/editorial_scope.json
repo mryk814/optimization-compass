@@ -1124,12 +1124,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DOUGLAS_RACHFORD"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "Douglas–Rachford分割の行そのものです。"
       },
       "source_refs": [
         "E04"
@@ -1208,12 +1213,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_FRANK_WOLFE"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_CONSTRAINED_NLP, M_PROJECTED_GRADIENT です。"
+        "note_ja": "Frank–Wolfe法の行そのものです。"
       },
       "source_refs": [
         "E05"
@@ -1288,12 +1298,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_CCCP"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "CCCP の行そのものです。"
       },
       "source_refs": [
         "E04"
@@ -1310,12 +1325,17 @@
       "merged_into": null,
       "decision_note_ja": null,
       "mapping": {
-        "relation": "unrepresented",
-        "refs": [],
+        "relation": "same_entity",
+        "refs": [
+          {
+            "type": "method",
+            "id": "M_DCA"
+          }
+        ],
         "review": "reviewed",
         "reviewer": "claude",
         "reviewed_on": "2026-10-10",
-        "note_ja": "名前も説明もリポジトリにありません。収める先の候補は MF_COMPOSITE_CONVEX です。"
+        "note_ja": "DCアルゴリズムの行そのものです。"
       },
       "source_refs": [
         "E04"
