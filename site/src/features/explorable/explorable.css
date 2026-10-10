@@ -807,3 +807,17 @@
 .sps-gap { stroke: var(--ex-orange-ink); stroke-width: 3; }
 .sps-estimate-dot { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
 .sps-true-dot { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2.5; }
+
+/* Robust loss pull: navy = squared, orange = Huber (the capped, updated rule). */
+.rb-fit-squared { stroke: var(--ex-ink); stroke-width: 2.5; }
+.rb-fit-huber { stroke: var(--ex-orange); stroke-width: 2.5; }
+.rb-label-squared { fill: var(--ex-ink); font-weight: 700; }
+.rb-label-huber { fill: var(--ex-orange-ink); font-weight: 700; }
+.rb-bar-squared { fill: var(--ex-ink); fill-opacity: 0.75; }
+.rb-bar-huber { fill: var(--ex-orange); stroke: var(--ex-orange-ink); stroke-width: 1; }
+.rb-cap { stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.rb-key { margin-left: 0.4rem; font-weight: 700; }
+.rb-key-squared { color: var(--ex-ink); }
+.rb-key-huber { color: var(--ex-orange-ink); }
+.rb-scroll { overflow-x: auto; }
+.rb-table td, .rb-table th { white-space: nowrap; }

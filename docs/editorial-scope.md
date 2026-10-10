@@ -76,7 +76,7 @@ uv run python scripts/editorial_scope.py pending
 
 ## v1 の作り方と判定の基準（2026-10-10）
 
-`editorial-scope-v1` は、引継ぎパックの初稿 `compass-reference-2026-10-draft1`（知識トピック160、問題構造80）を、既存の行・記事と一件ずつ照合して作りました。`status` は `proposed` です。層（core / applied / frontier）と採否は、オーナーが確かめて `approved` にするまで確定しません。
+`editorial-scope-v1` は、引継ぎパックの初稿 `compass-reference-2026-10-draft1`（知識トピック160、問題構造80）を、既存の行・記事と一件ずつ照合して作りました。層（core / applied / frontier）と採否は、2026-10-10 にオーナーが承認し、`status` を `approved` にしました。以後の追加・統合・層の変更は、この版への変更として記録します。
 
 - パックの問題構造のID `PROBLEM_*` は、既存の `problem_definitions` のID（`PROBLEM_OPTIMAL_CONTROL`、`PROBLEM_ROOT_FINDING` など）と同じ文字列になるものがありました。計画用IDが正規IDを覆わないよう、接頭辞を `STRUCTURE_*` に変えています（`PROBLEM_LP` → `STRUCTURE_LP`）。検査は、正規ID・記事IDと同じ文字列のスコープIDを拒否します。
 - `covered_by_family` は、族の行か記事がその名前を出すか説明しているときだけ使います。族の範囲に入りそうでも、名前も説明もリポジトリにないもの（AdaGrad、Frank–Wolfe、Benders分解など）は `unrepresented` とし、収める先の候補を `note_ja` に書いています。

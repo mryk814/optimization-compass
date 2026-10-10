@@ -535,7 +535,7 @@
   ],
   "scope": {
     "scope_version": "editorial-scope-v1",
-    "status": "proposed",
+    "status": "approved",
     "units": {
       "knowledge_topic": {
         "axes": {
@@ -605,7 +605,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 9
+              "has_interactive": 10
             },
             "states": {
               "undecided": 80
@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 9,
+            "complete": 10,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 45,
+              "in_progress": 44,
               "no_article": 26,
               "stale": 0
             }

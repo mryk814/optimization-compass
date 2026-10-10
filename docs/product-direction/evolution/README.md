@@ -1,5 +1,7 @@
 # 発展準備の作業記録（OC-EVOL）
 
+作業を引き継ぐときは、先に [`HANDOFF.md`](HANDOFF.md) を読んでください。
+
 2026-10-10の引継ぎパック（`optimization_compass_handoff_2026-10-10`）にある課題票 OC-EVOL-001〜032 を、このリポジトリの現行方針（[`learning-atlas.md`](../learning-atlas.md)、[`AGENTS.md`](../../../AGENTS.md)）に沿って進めるための記録です。パック本体はリポジトリに取り込みません。課題票のIDだけを、PRと記録の対応づけに使います。
 
 ## OC-EVOL-001：基準監査（2026-10-10）
@@ -22,7 +24,7 @@
 - PR297/298 の本文にある試験結果は作者の申告です。この監査では再実行していません。
 - 画面の確認、リポジトリ全体のテスト、site build は、この票では行っていません。
 
-## OC-EVOL-002：編集上の収録範囲 v1（proposed）
+## OC-EVOL-002：編集上の収録範囲 v1（2026-10-10 承認）
 
 収録範囲は [`data/seeds/editorial_scope.json`](../../../data/seeds/editorial_scope.json)、書き方と判定の基準は [`docs/editorial-scope.md`](../../editorial-scope.md) にあります。件数は `uv run python scripts/editorial_scope.py` で出します。この記録には件数を書き写しません。
 
@@ -35,14 +37,15 @@
 | 課題 | 状態 | 記録 |
 |---|---|---|
 | OC-EVOL-001 基準監査 | 完了 | 上の節 |
-| OC-EVOL-002 収録範囲 v1 | 完了（`proposed`。層と採否はオーナーの承認待ち） | [`editorial-scope.md`](../../editorial-scope.md) |
+| OC-EVOL-002 収録範囲 v1 | 完了（2026-10-10 オーナー承認、`approved`） | [`editorial-scope.md`](../../editorial-scope.md) |
 | OC-EVOL-003 Coverage の分母と品質軸 | 完了 | `coverage.py` の scope 節、Coverage 画面 |
 | OC-EVOL-004 同一性と粒度 | 完了 | [`identity-granularity.md`](../../identity-granularity.md) |
 | OC-EVOL-010 scene・媒体契約の差分 | 完了（提案のみの項目は使う図のPRで足す） | [`explorables.md`](../../explorables.md) の「数値の出どころ」 |
 | OC-EVOL-011 主単体法の証明・感度 | 操作図と本文は完了。動画は未着手 | `simplex-shadow-price` |
 | 辞書の拡張（問題型の記事） | PA006・PA024・PA031・PA035・PA043・PA055 を追加 | `scripts/formulation_backlog.py` で次を選ぶ |
+| 辞書の拡張（手法の行） | 24個を 0.18.22（#309）、11個を 0.18.23 用ブランチに用意 | [`HANDOFF.md`](HANDOFF.md) |
 
 ### 決めることが残っているもの
 
-- 収録範囲で「表現なし」になった手法（Frank–Wolfe、Benders、列生成、AdaGrad、Sinkhorn など）に行を足すのは、dataset のリリースです。AGENTS.md の区分では Red にあたります。どの順番で、どの版に入れるかを決めてから、まとめて追加します。
+- 収録範囲で「表現なし」だった手法は、範囲の順にスイープして行を足すと決めました（オーナー、2026-10-10）。どの版に何が入るかは [`HANDOFF.md`](HANDOFF.md) にあります。
 - OC-EVOL-007（初学者の入口）と OC-EVOL-008（高価な評価の利用者の道筋）は、学習経路の seed を変えます。どの persona を先にするかを決めてから進めます。

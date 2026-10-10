@@ -1,9 +1,9 @@
 {
   "contract_version": "1.0.0",
   "scope_version": "editorial-scope-v1",
-  "status": "proposed",
-  "approved_by": null,
-  "approved_on": null,
+  "status": "approved",
+  "approved_by": "owner",
+  "approved_on": "2026-10-10",
   "based_on": "compass-reference-2026-10-draft1",
   "sources": [
     {
