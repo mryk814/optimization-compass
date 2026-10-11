@@ -1,0 +1,161 @@
+{
+  "status": "passed",
+  "scope": "Independent stdlib toy checks, not repository implementation or browser tests",
+  "bakery_lp": {
+    "vertices": [
+      [
+        "0",
+        "0"
+      ],
+      [
+        "6",
+        "0"
+      ],
+      [
+        "4",
+        "3"
+      ],
+      [
+        "0",
+        "13/3"
+      ]
+    ],
+    "objective_values": [
+      "0",
+      "18",
+      "24",
+      "52/3"
+    ],
+    "optimum": [
+      "4",
+      "3"
+    ],
+    "value": "24",
+    "dual": [
+      "5/7",
+      "6/7"
+    ],
+    "flour_basis_interval": [
+      "26/3",
+      "39"
+    ]
+  },
+  "gradient_descent": [
+    {
+      "alpha": 0.06,
+      "values": [
+        14.5,
+        4.8922,
+        2.34274792,
+        1.575052062112,
+        1.2679660020821633,
+        1.0894372594397994,
+        0.9548923874410068
+      ],
+      "stiff_direction_multiplier": -0.5
+    },
+    {
+      "alpha": 0.08,
+      "values": [
+        14.5,
+        14.1928,
+        13.93278592,
+        13.712710002688,
+        13.526437746275123,
+        13.368776908447265,
+        13.235332775309764
+      ],
+      "stiff_direction_multiplier": -1.0
+    },
+    {
+      "alpha": 0.12,
+      "values": [
+        14.5,
+        51.5488,
+        201.19939072,
+        800.928808173568,
+        3200.7192690496113,
+        12800.557001952018,
+        51200.43134231164
+      ],
+      "stiff_direction_multiplier": -2.0
+    }
+  ],
+  "unsupported_pareto_point": {
+    "points": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        1.2
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "B_beats_C_requires_w_at_least": "6/11",
+    "B_beats_A_requires_w_at_most": "4/9",
+    "simultaneously_possible": false
+  },
+  "entropic_transport": [
+    {
+      "epsilon": 0.1,
+      "plan": [
+        [
+          0.4999773010656488,
+          2.2698934351217197e-05
+        ],
+        [
+          2.2698934351217197e-05,
+          0.4999773010656488
+        ]
+      ],
+      "unregularized_transport_cost": 4.5397868702434395e-05
+    },
+    {
+      "epsilon": 1.0,
+      "plan": [
+        [
+          0.36552928931500245,
+          0.13447071068499755
+        ],
+        [
+          0.13447071068499755,
+          0.36552928931500245
+        ]
+      ],
+      "unregularized_transport_cost": 0.2689414213699951
+    },
+    {
+      "epsilon": 10.0,
+      "plan": [
+        [
+          0.26248959373947,
+          0.23751040626053
+        ],
+        [
+          0.23751040626053,
+          0.26248959373947
+        ]
+      ],
+      "unregularized_transport_cost": 0.47502081252106
+    }
+  ],
+  "newton_saddle": {
+    "function": "x^2-y^2",
+    "start": [
+      1,
+      2
+    ],
+    "one_step": [
+      0,
+      0
+    ],
+    "f_before": -3,
+    "f_after": 0,
+    "stationary_but_not_minimum": true
+  }
+}

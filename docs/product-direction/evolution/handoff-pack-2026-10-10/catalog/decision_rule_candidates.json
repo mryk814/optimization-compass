@@ -1,0 +1,494 @@
+{
+  "rules": [
+    {
+      "candidate_rule_id": "RULE_DRAFT_01",
+      "status": "not_executable_not_approved",
+      "condition_ja": "連続値に見えるが個数は整数か",
+      "proposed_action_ja": "整数性をunknownのまま確認",
+      "effect": "followup",
+      "guardrail_ja": "丸めで実行可能性・最適性を保証しない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_02",
+      "status": "not_executable_not_approved",
+      "condition_ja": "目的ではなく方程式を満たしたい",
+      "proposed_action_ja": "求根を先に提示",
+      "effect": "alternative",
+      "guardrail_ja": "残差二乗の最小値がゼロとは限らない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_03",
+      "status": "not_executable_not_approved",
+      "condition_ja": "残差ベクトルを計算できる",
+      "proposed_action_ja": "最小二乗構造を保持",
+      "effect": "alternative",
+      "guardrail_ja": "外れ値・不均一ノイズ・rankを確認",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_04",
+      "status": "not_executable_not_approved",
+      "condition_ja": "LP構造が確認された",
+      "proposed_action_ja": "専用LP接続を提示",
+      "effect": "candidate",
+      "guardrail_ja": "制約/目的の線形性を確認するまで確定しない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_05",
+      "status": "not_executable_not_approved",
+      "condition_ja": "割当を容量付き流で表現できる",
+      "proposed_action_ja": "専用流アルゴリズムを比較",
+      "effect": "alternative",
+      "guardrail_ja": "追加論理制約が還元を壊さないか確認",
+      "source_refs": [
+        "E14",
+        "E15"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_06",
+      "status": "not_executable_not_approved",
+      "condition_ja": "凸性が不明",
+      "proposed_action_ja": "global保証を保留",
+      "effect": "followup",
+      "guardrail_ja": "見た目の凸性で断定しない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_07",
+      "status": "not_executable_not_approved",
+      "condition_ja": "勾配が無い",
+      "proposed_action_ja": "勾配必須法を無条件に推奨しない",
+      "effect": "guard",
+      "guardrail_ja": "有限差分の費用・ノイズ・安全な摂動を確認",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_08",
+      "status": "not_executable_not_approved",
+      "condition_ja": "微分費が高い",
+      "proposed_action_ja": "oracle費用込みの比較へ",
+      "effect": "warning",
+      "guardrail_ja": "iteration数だけで順位を作らない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_09",
+      "status": "not_executable_not_approved",
+      "condition_ja": "非滑らかな正則化が分離できる",
+      "proposed_action_ja": "近接法候補を調査",
+      "effect": "candidate",
+      "guardrail_ja": "proxの計算可能性を先に確認",
+      "source_refs": [
+        "E04"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_10",
+      "status": "not_executable_not_approved",
+      "condition_ja": "射影が高価だが線形oracleが安い",
+      "proposed_action_ja": "Frank–Wolfe候補を調査",
+      "effect": "candidate",
+      "guardrail_ja": "凸性・可行集合・線形oracleの成立範囲",
+      "source_refs": [
+        "E05"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_11",
+      "status": "not_executable_not_approved",
+      "condition_ja": "評価は高価で少回数",
+      "proposed_action_ja": "BO系と初期設計を比較",
+      "effect": "candidate",
+      "guardrail_ja": "次元・ノイズ・条件付き変数の把握前に一択にしない",
+      "source_refs": [
+        "E12",
+        "E20"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_12",
+      "status": "not_executable_not_approved",
+      "condition_ja": "未観測点の安全が重要",
+      "proposed_action_ja": "安全集合/保証仮定を確認",
+      "effect": "followup",
+      "guardrail_ja": "通常の制約付きBOを安全探索と呼ばない",
+      "source_refs": [
+        "E38"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_13",
+      "status": "not_executable_not_approved",
+      "condition_ja": "計算失敗が混ざる",
+      "proposed_action_ja": "timeout/欠測/制約違反を分離",
+      "effect": "followup",
+      "guardrail_ja": "失敗に任意の大罰点を自動代入しない",
+      "source_refs": [
+        "E12",
+        "E20"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_14",
+      "status": "not_executable_not_approved",
+      "condition_ja": "低忠実度評価がある",
+      "proposed_action_ja": "相関と費用を検査",
+      "effect": "followup",
+      "guardrail_ja": "高忠実度の順位を保存するとは限らない",
+      "source_refs": [
+        "E12",
+        "E20"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_15",
+      "status": "not_executable_not_approved",
+      "condition_ja": "バッチ評価できる",
+      "proposed_action_ja": "並列budgetを明示",
+      "effect": "followup",
+      "guardrail_ja": "逐次と同じ獲得関数を独立適用するだけでよいとは限らない",
+      "source_refs": [
+        "E12",
+        "E20"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_16",
+      "status": "not_executable_not_approved",
+      "condition_ja": "整数保証が必要",
+      "proposed_action_ja": "incumbent・bound・gapを確認",
+      "effect": "guard",
+      "guardrail_ja": "heuristic成功を最適性証明と扱わない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_17",
+      "status": "not_executable_not_approved",
+      "condition_ja": "分離可能なブロックと結合制約",
+      "proposed_action_ja": "分解法の候補を調査",
+      "effect": "candidate",
+      "guardrail_ja": "分解すれば必ず速いとしない",
+      "source_refs": [
+        "E07",
+        "E08"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_18",
+      "status": "not_executable_not_approved",
+      "condition_ja": "不確実性の分布が分からない",
+      "proposed_action_ja": "分布仮定とロバスト集合を別質問",
+      "effect": "followup",
+      "guardrail_ja": "stochastic・robust・DROを同じものにしない",
+      "source_refs": [
+        "E09",
+        "E10"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_19",
+      "status": "not_executable_not_approved",
+      "condition_ja": "多段階で観測後に行動する",
+      "proposed_action_ja": "policyと一回の決定を区別",
+      "effect": "followup",
+      "guardrail_ja": "未来情報を最初の意思決定へ漏らさない",
+      "source_refs": [
+        "E09",
+        "E10"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_20",
+      "status": "not_executable_not_approved",
+      "condition_ja": "複数目的がある",
+      "proposed_action_ja": "重みの主体とParetoを提示",
+      "effect": "followup",
+      "guardrail_ja": "重み付き和がすべての非劣解を取得するとは限らない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_21",
+      "status": "not_executable_not_approved",
+      "condition_ja": "多様体上に変数がある",
+      "proposed_action_ja": "表現と幾何を分離",
+      "effect": "guard",
+      "guardrail_ja": "正規化や座標制約が同じ保証を持つとしない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_22",
+      "status": "not_executable_not_approved",
+      "condition_ja": "離散化した動力学を解いた",
+      "proposed_action_ja": "再構成・刻み感度を要求",
+      "effect": "warning",
+      "guardrail_ja": "離散問題の可行性から連続時間安全へ飛躍しない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_23",
+      "status": "not_executable_not_approved",
+      "condition_ja": "単位・スケール差が大きい",
+      "proposed_action_ja": "スケーリングを診断",
+      "effect": "followup",
+      "guardrail_ja": "単位変更で手法の性格が変わったように見せない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    },
+    {
+      "candidate_rule_id": "RULE_DRAFT_24",
+      "status": "not_executable_not_approved",
+      "condition_ja": "収束statusが出た",
+      "proposed_action_ja": "残差・許容差・モデル妥当性を分ける",
+      "effect": "guard",
+      "guardrail_ja": "solver成功＝実世界の正しい意思決定ではない",
+      "source_refs": [
+        "R09",
+        "E01",
+        "E02"
+      ],
+      "required_tests": [
+        "known成立",
+        "known不成立",
+        "unknown",
+        "矛盾した証拠",
+        "既存除外規則との競合"
+      ],
+      "integration": "既存decision_rules/predicatesの語彙へ照合。新しい推薦器は作らない。"
+    }
+  ]
+}

@@ -1,0 +1,492 @@
+{
+  "version": "1.0",
+  "accessed_date": "2026-10-10",
+  "sources": [
+    {
+      "source_id": "R01",
+      "title": "Optimization Compass README",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/README.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "公開データセット0.18.20、105手法行、57問題型、65実装、29 canonical事例、78判断規則等。",
+      "limitations": "READMEの生成集計値。今回SQLite全行を再集計していない。"
+    },
+    {
+      "source_id": "R02",
+      "title": "Learning Atlas: 2026-09-30の現行方針",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/docs/product-direction/learning-atlas.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "引ける辞書・進める道筋・当てはめる、骨格→教材→投影。旧problem-first方針の後継。",
+      "limitations": "本文中の件数は文書執筆時点の値であり、現在の監査値として流用しない。"
+    },
+    {
+      "source_id": "R03",
+      "title": "生成済みCoverage",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/site/public/data/coverage.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "定義済みexpected learning artifactsがavailable11、baselineなし。",
+      "limitations": "11/11は定義済み期待教材の指標であり、全最適化分野の網羅率ではない。今回検証を再実行していない。"
+    },
+    {
+      "source_id": "R04",
+      "title": "Learning paths seed",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/data/seeds/learning_paths.json",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "formulation-basics、fit-to-dataの2道筋、合計17ステップ参照。",
+      "limitations": "道筋の登録数。学習者による完走・理解を示さない。"
+    },
+    {
+      "source_id": "R05",
+      "title": "ADR0018: sceneから動き・3D・動画へ",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/docs/adr/0018-motion-3d-and-video.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "model・beats・viewの分離、同じ場面から複数投影、数値と媒体の鮮度。",
+      "limitations": "proposedのADR。全項目実装済みとは扱わない。TTS固有モデルやCI公開経路の記述は再確認が必要。"
+    },
+    {
+      "source_id": "R06",
+      "title": "PR297 記事品質台帳",
+      "url": "https://github.com/mryk814/optimization-compass/pull/297",
+      "accessed_date": "2026-10-10",
+      "kind": "repository_pull_request",
+      "supports": "レビューを本文ハッシュと紐付け、変更後stale、品質基準を明示。",
+      "limitations": "取得時open・未マージ。PR記載のテスト結果は作者申告。head 2810d5aa04dcfabfbc186bee44036dcf4ba969e2。"
+    },
+    {
+      "source_id": "R07",
+      "title": "PR298 主単体法の操作図",
+      "url": "https://github.com/mryk814/optimization-compass/pull/298",
+      "accessed_date": "2026-10-10",
+      "kind": "repository_pull_request",
+      "supports": "パン屋LPで読者がピボットを選択。PR297への依存。",
+      "limitations": "取得時open・未マージ。作者申告の動作試験と今回の独立検算を混同しない。head e9ee59c31af7991f170a02d0d24e34ceb3772aca。"
+    },
+    {
+      "source_id": "R08",
+      "title": "AGENTS.md",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/AGENTS.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "編集可能な入力、生成物直接編集禁止、学習者価値、段階検証。",
+      "limitations": "実装時は作業先HEADの版を最優先する。本パッケージは置換しない。"
+    },
+    {
+      "source_id": "R09",
+      "title": "Architecture",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/docs/architecture.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "released SQLite、決定論的推薦、静的Atlas、LLM境界。",
+      "limitations": "設計記述。個別実装の正しさを全検証していない。"
+    },
+    {
+      "source_id": "R10",
+      "title": "PR-only CI",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/.github/workflows/ci.yml",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "PR単位の検証・ビルド・生成差分・ローカルPages成果物検証。",
+      "limitations": "自動Pages公開はこのworkflowに含まれない。古いADR記述より現在のworkflowを優先。"
+    },
+    {
+      "source_id": "R11",
+      "title": "Agent/MCP境界 ADR0015",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/docs/adr/0015-read-only-agent-and-mcp-boundary.md",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "transport非依存のread-only guidance。MCP transportは後続。",
+      "limitations": "MCPの実装済みを意味しない。AIを推薦の第二正本にしない。"
+    },
+    {
+      "source_id": "R12",
+      "title": "推薦用SiteData（部分確認）",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/site/public/data/recommendation/site-data.json",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "method / implementation / alternativeの区別、一部の既存IDと対応。",
+      "limitations": "全レコード照合は未実施。候補の未収録判定にはローカル監査と人手照合が必要。"
+    },
+    {
+      "source_id": "R13",
+      "title": "Site manifest",
+      "url": "https://github.com/mryk814/optimization-compass/blob/3099b8821a2317761dab8fb3eacebb20cfe0fbcd/site/public/data/manifest.json",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "dataset0.18.20、generated_at 2026-10-07、各projectionの所在・contract版。",
+      "limitations": "公開URLの実配信内容とmainの一致までは未確認。"
+    },
+    {
+      "source_id": "R14",
+      "title": "今回のmain snapshot",
+      "url": "https://github.com/mryk814/optimization-compass/commit/3099b8821a2317761dab8fb3eacebb20cfe0fbcd",
+      "accessed_date": "2026-10-10",
+      "kind": "repository",
+      "supports": "2026-10-10T00:41:15ZのPR299 mergeを基準に調査。",
+      "limitations": "実装開始時にHEAD・open PRを再確認。"
+    },
+    {
+      "source_id": "E01",
+      "title": "NEOS Optimization Problem Types",
+      "url": "https://neos-guide.org/guide/types/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "問題分類には連続/離散、凸性、制約、不確実性など独立した軸がある。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E02",
+      "title": "NEOS Algorithms",
+      "url": "https://neos-guide.org/guide/algorithms/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "解法体系・既存手法名を照合する分類の外部基準。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E03",
+      "title": "SciPy optimize",
+      "url": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "最小化・最小二乗・求根の実務入口。手法とAPIを区別する参照。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E04",
+      "title": "Proximal Algorithms — Parikh & Boyd",
+      "url": "https://web.stanford.edu/~boyd/papers/prox_algs.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "proximal operator、分割法、構造を利用する解法の基礎。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E05",
+      "title": "Jaggi 2013: Revisiting Frank-Wolfe",
+      "url": "https://proceedings.mlr.press/v28/jaggi13.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "射影ではなく線形最適化oracleを使う凸最適化の教材。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E06",
+      "title": "Optax optimizers",
+      "url": "https://optax.readthedocs.io/en/latest/api/optimizers.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "勾配系optimizerの候補を検査する公式API一覧。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E07",
+      "title": "GCG",
+      "url": "https://gcg.or.rwth-aachen.de/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "Dantzig–Wolfe、branch-price-and-cut、Benders等の分解構造。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E08",
+      "title": "SCIP Benders cuts",
+      "url": "https://www.scipopt.org/doc/html/BENDERSCUT.php",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "Benders cutの実装境界と拡張性。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E09",
+      "title": "SDDP theory introduction",
+      "url": "https://sddp.dev/stable/explanation/theory_intro/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "多段階確率計画と価値関数の下界近似。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E10",
+      "title": "Pyomo documentation",
+      "url": "https://pyomo.readthedocs.io/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "数理モデル層とsolverを区別する実務接続。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E11",
+      "title": "Python Optimal Transport",
+      "url": "https://pythonot.github.io/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "最適輸送・正則化・関連する計算機能。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E12",
+      "title": "BoTorch tutorials",
+      "url": "https://botorch.org/docs/tutorials",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "BOの制約、多目的、バッチ、多忠実度等の調査入口。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E13",
+      "title": "CVXPY examples",
+      "url": "https://www.cvxpy.org/examples/index.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "凸定式化の分野横断例と実装入口。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E14",
+      "title": "OR-Tools min-cost flow",
+      "url": "https://developers.google.com/optimization/flow/mincostflow",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "容量・供給・需要を持つ最小費用流の具体例。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E15",
+      "title": "OR-Tools assignment as min-cost flow",
+      "url": "https://developers.google.com/optimization/flow/assignment_min_cost_flow",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "割当とネットワーク流の構造的な接続。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E16",
+      "title": "JuMP power systems",
+      "url": "https://jump.dev/JuMP.jl/stable/tutorials/applications/power_systems/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "経済負荷配分からunit commitmentへの定式化の変化。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E17",
+      "title": "JuMP optimal power flow",
+      "url": "https://jump.dev/JuMP.jl/stable/tutorials/applications/optimal_power_flow/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "電力潮流と非凸制約・凸緩和を扱う教材。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E18",
+      "title": "NEOS case studies",
+      "url": "https://neos-guide.org/case-studies/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "医学、生物、電力、経済、物流等へ分野偏りを点検する外部参照。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E19",
+      "title": "Distill: Why Momentum Really Works",
+      "url": "https://distill.pub/2017/momentum/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "連動した図と操作で最適化の振る舞いを説明する表現例。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E20",
+      "title": "Distill: Exploring Bayesian Optimization",
+      "url": "https://distill.pub/2020/bayesian-optimization/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "BOの不確実性と獲得関数を見せる表現例。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E21",
+      "title": "Idyll — UIST 2018 research",
+      "url": "https://idl.uw.edu/papers/idyll",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "データ駆動の説明と操作を組み合わせるオーサリング研究。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E22",
+      "title": "Deslauriers et al. 2019",
+      "url": "https://www.pnas.org/doi/10.1073/pnas.1821936116",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "学習した感覚と測定された学習成果を分けて評価する動機。",
+      "limitations": "大学物理授業の研究。動画・3D・本サイトへの効果を直接証明するものではない。"
+    },
+    {
+      "source_id": "E23",
+      "title": "Remotion useCurrentFrame",
+      "url": "https://www.remotion.dev/docs/use-current-frame",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "フレーム番号によるReact動画表現。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E24",
+      "title": "Remotion terms（版の注意）",
+      "url": "https://www.remotion.dev/docs/terms",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "利用条件・ソフトウェアライセンスの確認入口。",
+      "limitations": "取得時にv5 Upcoming / v4置換予定という文言が併存。利用する実際のpackage版のLICENSE・発効日・組織条件を再確認。料金や利用許諾を本調査で確定していない。"
+    },
+    {
+      "source_id": "E25",
+      "title": "Remotion v4 terms",
+      "url": "https://www.remotion.pro/terms-4-0",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "v5公開予定文書と旧/現行文書の版を区別して確認する必要性。",
+      "limitations": "取得時にv5 Upcoming / v4置換予定という文言が併存。利用する実際のpackage版のLICENSE・発効日・組織条件を再確認。料金や利用許諾を本調査で確定していない。"
+    },
+    {
+      "source_id": "E26",
+      "title": "HyperFrames introduction",
+      "url": "https://hyperframes.heygen.com/introduction",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "HTML/CSS/JSからフレーム単位の動画を作るagent-orientedな候補。",
+      "limitations": "公式資料で機能と構成を確認。統合・ライセンス適合・性能は未検証。作者の比較宣伝を独立ベンチマークと扱わない。"
+    },
+    {
+      "source_id": "E27",
+      "title": "HyperFrames official repository",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "CLI・engine・studio等の構成と公開ライセンスの確認入口。",
+      "limitations": "公式資料で機能と構成を確認。統合・ライセンス適合・性能は未検証。作者の比較宣伝を独立ベンチマークと扱わない。"
+    },
+    {
+      "source_id": "E28",
+      "title": "Manim Community",
+      "url": "https://www.manim.community/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "Pythonで数学アニメーションを作るbuild-time候補。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E29",
+      "title": "Mafs",
+      "url": "https://mafs.dev/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "Reactによる操作可能な2D数学図の候補。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E30",
+      "title": "Mafs animation",
+      "url": "https://mafs.dev/guides/experimental/animation",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "アニメーション機能がexperimentalであること。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E31",
+      "title": "Motion Canvas documentation",
+      "url": "https://motioncanvas.io/docs/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "TypeScriptで解説アニメーションを作る候補。",
+      "limitations": "公式docsは参照可能だが保守状況について外部記述に不一致がある。最終release・issue応答・npm公開を採用前に確認。"
+    },
+    {
+      "source_id": "E32",
+      "title": "Cytoscape.js",
+      "url": "https://js.cytoscape.org/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "関係グラフの探索・操作・レイアウト候補。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E33",
+      "title": "Pyodide Web Worker",
+      "url": "https://pyodide.org/en/stable/usage/webworker.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "ブラウザでPython計算をUIスレッドから分離する入口。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E34",
+      "title": "Pyodide interrupts",
+      "url": "https://pyodide.org/en/stable/usage/keyboard-interrupts.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "割込みとSharedArrayBuffer等の配信条件を確認する必要性。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E35",
+      "title": "JupyterLite",
+      "url": "https://jupyterlite.readthedocs.io/en/stable/",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "静的配信でブラウザ内notebookを提供する候補。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E36",
+      "title": "GitHub Pages official",
+      "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "静的HTML/CSS/JS配信という境界。静的配信とブラウザ内計算は両立する。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E37",
+      "title": "W3C animation from interactions",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "操作由来の動きを無効化できる設計。該当SCはAAA。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    },
+    {
+      "source_id": "E38",
+      "title": "SafeOpt — Sui et al. 2015",
+      "url": "https://proceedings.mlr.press/v37/sui15.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_research",
+      "supports": "安全性を課した探索と、仮定下で到達できる最適性を区別。",
+      "limitations": "実験点の現実安全性を無条件に保証しない。原論文の仮定・初期安全集合・到達可能性をレビューする。"
+    },
+    {
+      "source_id": "E39",
+      "title": "CVXPY TV in-painting",
+      "url": "https://www.cvxpy.org/version/1.8/examples/applications/tv_inpainting.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "画像欠損補間を全変動最小化として示す公式教材。",
+      "limitations": "固定版1.8の例。実装時は採用版と検算し、現行ソルバー比較の根拠には流用しない。"
+    },
+    {
+      "source_id": "E40",
+      "title": "CVXPY quadratic program",
+      "url": "https://www.cvxpy.org/examples/basic/quadratic_program.html",
+      "accessed_date": "2026-10-10",
+      "kind": "primary_documentation",
+      "supports": "二次計画の標準形と基本例。",
+      "limitations": "機能の存在・説明を確認した。Optimization Compassでの統合動作・教育効果を実測したものではない。"
+    }
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "patterns": [
+    {
+      "pattern_id": "EXPERIENCE_01",
+      "slug": "oracle-cockpit",
+      "title_ja": "アルゴリズムの視界",
+      "learning_question": "探索法は何を知っているか",
+      "example": "BO/DFO",
+      "interaction": "真の曲面を隠す → 観測だけで選ぶ → 1点を買う → 裏側を開示",
+      "guardrail": "未観測値をoptimizerへ漏らさない",
+      "shared_observables": "評価費・観測履歴・不確実性",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_02",
+      "slug": "one-step",
+      "title_ja": "一手を選ぶ",
+      "learning_question": "一回の更新で何をしているか",
+      "example": "simplex/Frank–Wolfe",
+      "interaction": "予測 → 操作 → 検算 → 更新理由",
+      "guardrail": "最終軌跡を見るだけで理解したことにしない",
+      "shared_observables": "選択肢・更新前後・不変量",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_03",
+      "slug": "one-assumption",
+      "title_ja": "条件を一つ変える",
+      "learning_question": "何が変わると手法を替えるか",
+      "example": "LP→MILP / smooth→nonsmooth",
+      "interaction": "一条件だけ切替 → 候補/保証/コスト差を表示",
+      "guardrail": "変化した条件以外を固定",
+      "shared_observables": "固定条件・変化条件・候補/除外",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_04",
+      "slug": "domain-morph",
+      "title_ja": "同じ構造を別の世界へ",
+      "learning_question": "どこが共通でどこが違うか",
+      "example": "flow/LP/QP",
+      "interaction": "式を固定 → ラベル/単位を対応 → 追加制約を入れる",
+      "guardrail": "似た比喩を等価な数理モデルと断言しない",
+      "shared_observables": "変数対応・単位・適用条件",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_05",
+      "slug": "certificate",
+      "title_ja": "なぜ終えてよいか",
+      "learning_question": "良い解と最適性の証拠の違い",
+      "example": "LP/BnB",
+      "interaction": "可行解と上下界を並べ → gapを縮め → 証明範囲を読む",
+      "guardrail": "solver statusと現実妥当性を混ぜない",
+      "shared_observables": "primal/dual・gap・許容差",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_06",
+      "slug": "failure-lab",
+      "title_ja": "失敗から戻す",
+      "learning_question": "なぜうまくいかなかったか",
+      "example": "Newton/GD/BO",
+      "interaction": "失敗を再現 → 原因候補 → 最小診断 → 一箇所だけ修正",
+      "guardrail": "失敗の原因を観測なしに一意断定しない",
+      "shared_observables": "症状・仮説・検査・切替条件",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_07",
+      "slug": "portrait-film",
+      "title_ja": "手法の短編ポートレート",
+      "learning_question": "この手法に固有の一手は何か",
+      "example": "全分野の代表手法",
+      "interaction": "見える情報 → 記憶 → 更新 → 得意場面 → 限界",
+      "guardrail": "PVの魅力を性能の普遍順位にしない",
+      "shared_observables": "同じsceneから文章・図・動画",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_08",
+      "slug": "synchronized",
+      "title_ja": "式・図・表をつなぐ",
+      "learning_question": "記号と動きが対応しない",
+      "example": "simplex/least-squares",
+      "interaction": "式の項を選ぶと図の要素・数表の値が対応",
+      "guardrail": "色だけで対応を伝えない",
+      "shared_observables": "選択ID・数値・言語説明",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_09",
+      "slug": "dual-world",
+      "title_ja": "主問題と双対の往復",
+      "learning_question": "影の価格は何を意味するか",
+      "example": "LP/QP",
+      "interaction": "資源を動かす → 主解と双対値を見る → 有効区間を越える",
+      "guardrail": "感度は全範囲の価格ではない",
+      "shared_observables": "basis/active-set・局所有効範囲",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_10",
+      "slug": "budget-race",
+      "title_ja": "予算を揃えた比較",
+      "learning_question": "速いとは何に対してか",
+      "example": "BO/DFO/gradient",
+      "interaction": "iterationではなく評価費を同期し比較",
+      "guardrail": "計算oracle・微分費・初期値を隠さない",
+      "shared_observables": "評価回数・相当費用・停止条件",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_11",
+      "slug": "proof-lens",
+      "title_ja": "証明の仮定を外す",
+      "learning_question": "その結論を言える条件は何か",
+      "example": "convexity/convergence",
+      "interaction": "仮定を一つ無効化 → 反例を実行",
+      "guardrail": "図上のtoyを一般証明の代わりにしない",
+      "shared_observables": "仮定・主張・反例・原典",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_12",
+      "slug": "model-builder",
+      "title_ja": "定式化を組み立てる",
+      "learning_question": "現実の問いをどの形へ写すか",
+      "example": "allocation/flow",
+      "interaction": "決める/良くする/守るを分離 → 単位検査 → 標準形",
+      "guardrail": "LLMが曖昧な価値を勝手に目的関数化しない",
+      "shared_observables": "未確定項目・根拠発言・単位",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_13",
+      "slug": "misconception",
+      "title_ja": "二つの説明を実験で分ける",
+      "learning_question": "どちらの理解が正しいか",
+      "example": "gradient/simplex/Pareto",
+      "interaction": "二つの予測 → 区別できる例 → 観測 → 解説",
+      "guardrail": "誤説明を訂正なしに残さない",
+      "shared_observables": "予測差・反証用入力・解説",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_14",
+      "slug": "landscape-slice",
+      "title_ja": "高次元を切り口で見る",
+      "learning_question": "2Dで見た現象は一般にどう変わるか",
+      "example": "ill-conditioning/manifold",
+      "interaction": "断面・等高線・スペクトルを切替",
+      "guardrail": "高次元全体を2Dの見かけで説明し切らない",
+      "shared_observables": "断面定義・縮約情報・見えていない方向",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_15",
+      "slug": "replay-remix",
+      "title_ja": "同じ場面から自分の説明へ",
+      "learning_question": "説明順を変えると何が伝わるか",
+      "example": "educator",
+      "interaction": "検証済みbeatsの順を変え → 同じ状態を再投影",
+      "guardrail": "数式・数値を台本側で改変しない",
+      "shared_observables": "scene版・言語・字幕・入力hash",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
+      "pattern_id": "EXPERIENCE_16",
+      "slug": "value-board",
+      "title_ja": "価値判断を別レイヤーに置く",
+      "learning_question": "最適化で決められないことは何か",
+      "example": "public allocation/Pareto",
+      "interaction": "複数目的と影響を表示 → 重みの主体を残す",
+      "guardrail": "合意や倫理を単一scoreへ消去しない",
+      "shared_observables": "目的選択者・未合意・影響対象",
+      "minimum_medium": "semantic text + SVG/table",
+      "optional_medium": "seekable interactive/3D only if meaningful/video projection",
+      "evaluation": "操作直後の言い換えと別題材への転移を比較する",
+      "status": "design_proposal",
+      "source_refs": [
+        "R05",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ]
+    }
+  ]
+}
