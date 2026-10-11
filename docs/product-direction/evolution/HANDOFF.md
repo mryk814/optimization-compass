@@ -28,8 +28,8 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 | 004 | 同一性と粒度の対応ルール | 002 | 完了 |
 | 005 | 条件付き関係の意味契約 | 004 | 未着手 |
 | 006 | 俯瞰図と条件レンズ | 005 | 未着手 |
-| 007 | 初学者の辞書→一手→次の問い | 004 | 未着手。**persona の順番が未決定** |
-| 008 | 高価な評価の利用者 journey | 004 | 未着手。**同上** |
+| 007 | 初学者の辞書→一手→次の問い | 004 | 未着手。**オーナーの決定（2026-10-11）: 初学者を先にする** |
+| 008 | 高価な評価の利用者 journey | 004 | 未着手。007 の後に進める |
 | 009 | 分野ブリッジの最小3件 | 005 | 未着手 |
 | 010 | 共有 scene・observable・媒体契約の差分 | 001 | 完了 |
 | 011 | 主単体法を証明・感度・動画へ拡張 | 007, 010 | 操作図と本文は完了。動画は未着手 |
@@ -54,6 +54,10 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 ### メンテナーの作業: タグとバンドル
 
 0.18.22 と 0.18.23 のタグと GitHub Release を作り、バンドル ZIP をアップロードします。ZIP を作った環境は消えるので、次の手順でリポジトリの外に作り直します。`rebuild_dataset.py` は決定的です。
+
+**状況（2026-10-11）**: v0.18.21、v0.18.22、v0.18.23 の Release は、下の手順で作り直した ZIP と manifest を添えて **draft** で作ってあります。添付のダイジェストとサイズは、catalog と下の表に一致することを確かめました。残りは、オーナーが draft を公開し、匿名ダウンロードで sha256 を確かめることだけです。
+
+**同じ sha を再現できる環境**: SQLite 3.45.1 と zlib 1.3 の Linux（Ubuntu 24.04 のシステム Python 3.12）でビルドしてください。SQLite はファイルのヘッダーに書き込んだ版を記録するので、別の版（たとえば Windows の uv が同梱する 3.50.4）では、中身が同じでも DB、ZIP、tree の sha が変わります。Windows では WSL の Ubuntu-24.04 で、`git -c core.autocrlf=false clone` し、`uv venv --python /usr/bin/python3` で作った環境を使うと一致しました。
 
 1. 公開の元にしたコミット（版の番号を上げただけで、生成物の公開前の状態）を checkout します。
 2. `uv run python scripts/rebuild_dataset.py --stage --output <外の dir>/stage` を実行し、tree の sha256 を確かめます。
@@ -97,7 +101,7 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
    - 問題構造の10件（幾何計画 GP、signomial、行列補完、レベルセットの形状、bin packing、施設配置、minimax、バンディット、非均衡輸送、劣モジュラ）: 新しい問題型（PA）の行、`data/seeds/formulation_atlas.json` の項目、関係の条件を足します。PA の行は migration なので、リリースが要ります。[`docs/formulation-atlas.md`](../../formulation-atlas.md) の recipe B と、`AGENTS.md` の不変条件（循環なし、関係の `note_ja` に条件を書く）に従います。
 3. **問題型の記事**: `uv run python scripts/formulation_backlog.py` で次を選びます。PA039 の次の候補は、PA008、PA016、PA020、PA028、PA037、PA040、PA041、PA057（score 3）です。
 4. **手法の記事**: 新しく足した35手法には、まだ記事がありません。OC-EVOL-014〜018 の「辞書スライス」は、行と記事と関係がそろって完了です。
-5. **OC-EVOL-007 / 008**: persona の順番をオーナーに聞いてから始めます。
+5. **OC-EVOL-007 / 008**: オーナーの決定（2026-10-11）により、初学者（007）を先に進め、高価な評価の利用者（008）はその後にします。
 
 ## 作業の型（下位エージェントに渡していた指示の要点）
 
