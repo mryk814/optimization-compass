@@ -474,3 +474,16 @@
 .home-mode .home-primary-actions {
   margin-top: 0.5rem;
 }
+
+.home-beginner-entry {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #214e39;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.home-beginner-entry:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 3px;
+}

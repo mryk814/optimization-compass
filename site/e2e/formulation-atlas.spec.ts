@@ -19,7 +19,7 @@ test("@critical 定式化の辞書で日常の言葉から形を引ける", asyn
 });
 
 test("記事のない型も標準形と候補手法を引ける", async ({ page, baseURL }, testInfo) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/formulations/PA006");
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/formulations/PA019");
   await expect(page.getByText("この形の解説はまだありません")).toBeVisible();
   await expect(page.getByRole("region", { name: "定式化のコンパス" })).toBeVisible();
   await expectNoHighImpactViolations(page, testInfo, "formulation-skeleton");
@@ -61,15 +61,31 @@ test("@critical 道筋の次の問いへ進むと、進み具合が残る", asyn
   await expect(page.getByRole("heading", { level: 1, name: "定式化の最初の一歩" })).toBeVisible();
   await expectNoHighImpactViolations(page, testInfo, "learning-path");
   await page.getByRole("link", { name: "線形計画", exact: true }).click();
-  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("2 / 10");
+  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("2 / 11");
   const next = page.getByRole("complementary", { name: "道筋の次の一歩" });
-  await next.getByRole("link", { name: /次の問い（3 \/ 10）/u }).click();
-  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("3 / 10");
+  await next.getByRole("link", { name: /次の問い（3 \/ 11）/u }).click();
+  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("3 / 11");
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/paths/formulation-basics");
-  await expect(page.getByText("1 / 10 ステップ")).toBeVisible();
+  await expect(page.getByText("1 / 11 ステップ")).toBeVisible();
 });
 
-for (const route of ["/formulations", "/formulations/PA017", "/paths/formulation-basics"]) {
+test("@critical はじめての人は診断なしで道筋に入り、つまずいたら戻って帰ってこられる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
+  await page.getByRole("link", { name: /はじめての人へ/u }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "最適化って、結局なにをするの？" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /定式化の辞書で式から引く/u })).toBeVisible();
+  await expectNoHighImpactViolations(page, testInfo, "beginner-path");
+  await page.getByRole("link", { name: /最初の問いへ/u }).click();
+  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("1 / 4");
+  const next = page.getByRole("complementary", { name: "道筋の次の一歩" });
+  await expect(next.getByRole("heading", { name: "つまずいたら戻る" })).toBeVisible();
+  await next.getByRole("link", { name: /「守ること（制約）」が/u }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "制約の分類" })).toBeVisible();
+  await page.getByRole("link", { name: /1 番目「線形計画」へ帰る/u }).click();
+  await expect(page.getByRole("navigation", { name: "学ぶ道筋での位置" })).toContainText("1 / 4");
+});
+
+for (const route of ["/formulations", "/formulations/PA017", "/paths/formulation-basics", "/paths/what-is-optimization"]) {
   test(`${route} は375pxで横にはみ出さない`, async ({ page, baseURL }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     await gotoAtlasRoute(page, requiredBaseURL(baseURL), route);

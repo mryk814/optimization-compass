@@ -150,10 +150,26 @@ class FormulationAtlasSeed(_Frozen):
     relations: tuple[FormulationRelation, ...]
 
 
+class StumbleLink(_Frozen):
+    """Where a reader goes back to when a step loses them: one named difficulty, one page."""
+
+    trouble_ja: str = Field(min_length=1)
+    target_type: Literal["formulation", "content"]
+    target_id: str = Field(min_length=1)
+
+    @field_validator("trouble_ja")
+    @classmethod
+    def _sentence(cls, value: str) -> str:
+        if not value.endswith("。"):
+            raise ValueError("trouble_ja must end with 。")
+        return value
+
+
 class LearningPathStep(_Frozen):
     target_type: Literal["formulation", "content"]
     target_id: str = Field(min_length=1)
     question_ja: str = Field(min_length=1)
+    stumbles: tuple[StumbleLink, ...] = ()
 
     @field_validator("question_ja")
     @classmethod
@@ -286,6 +302,24 @@ def validate_learning_paths(
             if page is not None:
                 position[page.content_id] = index
                 step_pages[index] = page
+            stumble_keys = [(item.target_type, item.target_id) for item in step.stumbles]
+            _require_unique(
+                [f"{kind}:{target}" for kind, target in stumble_keys],
+                f"{path.path_id} {step.target_id} stumble",
+            )
+            for item in step.stumbles:
+                if (item.target_type, item.target_id) == (step.target_type, step.target_id):
+                    raise ValueError(
+                        f"{path.path_id}: a stumble of {step.target_id} points back to itself"
+                    )
+                if item.target_type == "formulation" and item.target_id not in known_formulations:
+                    raise ValueError(
+                        f"{path.path_id} stumble references unknown formulation {item.target_id}"
+                    )
+                if item.target_type == "content" and item.target_id not in published:
+                    raise ValueError(
+                        f"{path.path_id} stumble references unpublished content {item.target_id}"
+                    )
         for index, page in step_pages.items():
             step = path.steps[index]
             for prerequisite in page.prerequisites:
@@ -447,28 +481,39 @@ def build_learning_path_index(
 
     pages = {page.content_id: page for page in content_pages if page.status == "published"}
     validate_learning_paths(seed, archetype_ids=archetypes, content_pages=pages.values())
+
+    def resolve(target_type: str, target_id: str) -> tuple[str, str, str | None, bool]:
+        """Return the title, route, article content ID, and whether an article exists."""
+        if target_type == "formulation":
+            content_id = formulation_articles.get(target_id)
+            return archetypes[target_id], f"/formulations/{target_id}", content_id, bool(content_id)
+        page = pages[target_id]
+        route = (
+            f"/methods/{page.method_id}"
+            if page.method_id
+            else f"/formulations/{page.canonical_entity_id}"
+            if page.canonical_entity_type == "problem" and page.canonical_entity_id in archetypes
+            else f"/learn/{page.content_id}"
+        )
+        return page.title_ja, route, page.content_id, True
+
     paths: list[dict[str, Any]] = []
     for path in seed.paths:
         steps: list[dict[str, Any]] = []
         for index, step in enumerate(path.steps, start=1):
-            if step.target_type == "formulation":
-                title = archetypes[step.target_id]
-                route = f"/formulations/{step.target_id}"
-                content_id = formulation_articles.get(step.target_id)
-                has_article = content_id is not None
-            else:
-                page = pages[step.target_id]
-                title = page.title_ja
-                content_id = page.content_id
-                route = (
-                    f"/methods/{page.method_id}"
-                    if page.method_id
-                    else f"/formulations/{page.canonical_entity_id}"
-                    if page.canonical_entity_type == "problem"
-                    and page.canonical_entity_id in archetypes
-                    else f"/learn/{page.content_id}"
+            title, route, content_id, has_article = resolve(step.target_type, step.target_id)
+            stumbles = []
+            for item in step.stumbles:
+                stumble_title, stumble_route, _, _ = resolve(item.target_type, item.target_id)
+                stumbles.append(
+                    {
+                        "trouble_ja": item.trouble_ja,
+                        "target_type": item.target_type,
+                        "target_id": item.target_id,
+                        "title_ja": stumble_title,
+                        "route": stumble_route,
+                    }
                 )
-                has_article = True
             steps.append(
                 {
                     "step": index,
@@ -479,6 +524,7 @@ def build_learning_path_index(
                     "route": route,
                     "question_ja": step.question_ja,
                     "has_article": has_article,
+                    "stumbles": stumbles,
                 }
             )
         paths.append(
