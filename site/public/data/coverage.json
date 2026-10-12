@@ -622,13 +622,13 @@
             }
           },
           "lesson": {
-            "complete": 17,
+            "complete": 18,
             "eligible": 80,
             "info": {},
             "states": {
               "in_progress": 37,
               "no_article": 25,
-              "stale": 1
+              "stale": 0
             }
           },
           "transfer": {
