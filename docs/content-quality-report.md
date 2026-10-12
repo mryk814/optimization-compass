@@ -26,7 +26,7 @@
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 114 | 5781 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
-| `concept.mixed-integer-linear-program` | 103 | 8138 | 11 | 4 | 0 | pass |
+| `concept.mixed-integer-linear-program` | 133 | 8970 | 11 | 4 | 0 | pass |
 | `concept.mixed-integer-quadratic-program` | 157 | 18988 | 17 | 9 | 0 | pass |
 | `concept.model-predictive-control` | 150 | 15178 | 16 | 10 | 0 | pass |
 | `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |

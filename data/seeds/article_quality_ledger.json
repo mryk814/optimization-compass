@@ -152,6 +152,25 @@
       },
       "notes": "Sonnetの一次レビュー（全項目pass、数値15件を再計算で一致）をClaudeが本文と照合。指摘の文9件（凸と大域解の主語、等式制約の書き換え、頂点に現れる理由、非有界の断定、クロスオーバー、双対値の単位など）を直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
     },
+    "concept.mixed-integer-linear-program": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "b55eff7f56af",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetが新しい操作図milp-integer-latticeと記事の直しを執筆。Claudeが確かめ項目4の誤り（係数が整数なので上界19.75から整数解は19以下と分かり、(3,1)の最適性は言える）を記事と図の判定文で直した。Sonnetの一次レビュー（7項目fail）を受けてClaudeが書き直し（例を冒頭で明示、標準形の前の一文、例の数値によるつまずき3項目＝big-M 18.75/20.91/17・時間切れ19と21・丸め26と7、困りごと起点の次に読む、根拠のない性能の主張の削除）、Sonnetの再レビューの指摘（SAT/スケジューリングのリンク、文5件）も直した。数値は全件scipyで再計算一致。1280/375/320pxで図の重なり・はみ出し0"
+    },
     "concept.mixed-integer-quadratic-program": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
