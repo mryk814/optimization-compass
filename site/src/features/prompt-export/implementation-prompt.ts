@@ -52,6 +52,46 @@ export const QUALITY_REQUIREMENTS = [
   "機密情報・個人情報・秘密鍵を要求せず、入力にも含めない。",
 ] as const;
 
+/** Units a budget can be counted in (OC-EVOL-008): the brief never leaves the unit implicit. */
+export type BudgetUnit = "unknown" | "evaluations" | "hours" | "money" | "other";
+
+export const BUDGET_UNIT_OPTIONS: ReadonlyArray<{ id: BudgetUnit; label: string }> = [
+  { id: "unknown", label: "unknown（まだ決めていない）" },
+  { id: "evaluations", label: "評価回数" },
+  { id: "hours", label: "時間" },
+  { id: "money", label: "費用" },
+  { id: "other", label: "その他（量の欄に書く）" },
+];
+
+/**
+ * The evaluation contract for expensive or failure-prone evaluations. Each kind of failure is a
+ * separate field, and nothing here is ever filled in by the site: an empty field stays unknown.
+ */
+export interface EvaluationContractForm {
+  enabled: boolean;
+  budget_amount: string;
+  budget_unit: BudgetUnit;
+  known_violation: string;
+  timeout: string;
+  crash: string;
+  noise: string;
+  safe_initial_set: string;
+}
+
+export type EvaluationContractTextField = Exclude<keyof EvaluationContractForm, "enabled" | "budget_unit">;
+
+export const EVALUATION_CONTRACT_FIELDS: ReadonlyArray<{ field: EvaluationContractTextField; label: string; unknownLabel: string }> = [
+  { field: "budget_amount", label: "予算の量（例: 20）", unknownLabel: "evaluation budget amount" },
+  { field: "known_violation", label: "評価する前に分かる制約違反", unknownLabel: "constraint violations known before evaluating" },
+  { field: "timeout", label: "時間切れ（timeout）の扱い。値は分からない", unknownLabel: "timeout handling (value unknown)" },
+  { field: "crash", label: "計算の失敗・非物理的な結果。値は返らない", unknownLabel: "crashes / non-physical results (no value)" },
+  { field: "noise", label: "同じ条件での評価のばらつき（ノイズ）", unknownLabel: "evaluation noise" },
+  { field: "safe_initial_set", label: "安全と確認済みの初期点・領域", unknownLabel: "safe initial set" },
+];
+
+/** Archetypes whose evaluations are expensive, noisy, or may fail; the contract opens by default. */
+export const EXPENSIVE_EVALUATION_ARCHETYPES = new Set(["PA013", "PA014", "PA016", "PA039"]);
+
 export interface PromptFormState {
   intent: string;
   decision_variables: string;
@@ -67,6 +107,7 @@ export interface PromptFormState {
   runtime_environment: string;
   additional_unknowns: string;
   requested_outputs: RequestedOutputId[];
+  evaluation_contract: EvaluationContractForm;
 }
 
 export interface PromptCandidate {
@@ -114,8 +155,19 @@ export interface PromptRelatedEntity {
   canonical_url: string | null;
 }
 
+export interface EvaluationContract {
+  budget: { amount: string; unit: BudgetUnit };
+  known_violation: string;
+  timeout: string;
+  crash: string;
+  noise: string;
+  safe_initial_set: string;
+}
+
 export interface ImplementationPromptPack {
-  contract_version: "1.0.0";
+  contract_version: "1.1.0";
+  /** Present only when the reader included the evaluation contract. */
+  evaluation_contract: EvaluationContract | null;
   dataset_version: string;
   generated_at: string;
   intent: string;
@@ -176,7 +228,7 @@ export interface GalleryPromptInput {
   generatedAt: string;
 }
 
-const UNKNOWN_FIELDS: Array<readonly [keyof Omit<PromptFormState, "additional_unknowns" | "requested_outputs">, string]> = [
+const UNKNOWN_FIELDS: Array<readonly [keyof Omit<PromptFormState, "additional_unknowns" | "requested_outputs" | "evaluation_contract">, string]> = [
   ["intent", "やりたいこと"],
   ["decision_variables", "decision variables"],
   ["objective", "objective / minimize-maximize"],
@@ -207,6 +259,20 @@ function blankForm(): PromptFormState {
     runtime_environment: "unknown",
     additional_unknowns: "",
     requested_outputs: [...DEFAULT_REQUESTED_OUTPUTS],
+    evaluation_contract: blankEvaluationContract(false),
+  };
+}
+
+function blankEvaluationContract(enabled: boolean): EvaluationContractForm {
+  return {
+    enabled,
+    budget_amount: "unknown",
+    budget_unit: "unknown",
+    known_violation: "unknown",
+    timeout: "unknown",
+    crash: "unknown",
+    noise: "unknown",
+    safe_initial_set: "unknown",
   };
 }
 
@@ -456,13 +522,16 @@ export function createDiagnosePromptDraft(input: DiagnosePromptInput): Implement
       ...problemArchetypes.map((item) => ({ entity_type: "problem" as const, entity_id: item.entity_id })),
     ]),
   };
+  const form = blankForm();
+  // Only the leading archetype decides: a long candidate tail often lists an expensive type too.
+  form.evaluation_contract.enabled = EXPENSIVE_EVALUATION_ARCHETYPES.has(problemArchetypes[0]?.entity_id ?? "");
   return {
     dataset_version: support.data.dataset_version,
     generated_at: generatedAt,
     atlas_context: atlasContext,
     source_ids: contextSourceIds(atlasContext),
     quality_requirements: [],
-    initial_form: blankForm(),
+    initial_form: form,
   };
 }
 
@@ -511,6 +580,7 @@ export function createGalleryPromptDraft(input: GalleryPromptInput): Implementat
   form.decision_variables = `X: ${item.variable_domain}\nx: ${item.decision_variables}`;
   form.objective = item.objective;
   form.constraints = item.constraints;
+  form.evaluation_contract.enabled = EXPENSIVE_EVALUATION_ARCHETYPES.has(item.problem_archetype_id);
   return {
     dataset_version: datasetVersion,
     generated_at: generatedAt,
@@ -529,7 +599,62 @@ export function unknownsForForm(form: PromptFormState): string[] {
     .split(/\r?\n/u)
     .map((item) => item.replace(/^[-*]\s*/u, "").trim())
     .filter(Boolean);
-  return uniqueSorted([...fieldUnknowns, ...additional]);
+  const contract = form.evaluation_contract;
+  const contractUnknowns = contract.enabled
+    ? [
+        ...(contract.budget_unit === "unknown" ? ["evaluation budget unit (evaluations / hours / money)"] : []),
+        ...EVALUATION_CONTRACT_FIELDS
+          .filter(({ field }) => normalize(contract[field]) === "unknown")
+          .map(({ unknownLabel }) => unknownLabel),
+      ]
+    : [];
+  return uniqueSorted([...fieldUnknowns, ...contractUnknowns, ...additional]);
+}
+
+function evaluationContract(form: PromptFormState): EvaluationContract | null {
+  const contract = form.evaluation_contract;
+  if (!contract.enabled) return null;
+  return {
+    budget: { amount: normalize(contract.budget_amount), unit: contract.budget_unit },
+    known_violation: normalize(contract.known_violation),
+    timeout: normalize(contract.timeout),
+    crash: normalize(contract.crash),
+    noise: normalize(contract.noise),
+    safe_initial_set: normalize(contract.safe_initial_set),
+  };
+}
+
+function evaluationContractSection(contract: EvaluationContract | null): string[] {
+  if (!contract) return [];
+  const unit = BUDGET_UNIT_OPTIONS.find((option) => option.id === contract.budget.unit)?.label ?? contract.budget.unit;
+  const budget = contract.budget.unit === "unknown"
+    ? `${contract.budget.amount}（単位は unknown。評価回数・時間・費用のどれで数えるかを最初に確認する）`
+    : `${contract.budget.amount}（単位: ${unit}）`;
+  const safe = contract.safe_initial_set === "unknown"
+    ? "unknown — 推測で補わない。安全と確認された点だけを初期点に使い、どこが安全かを確認質問として返す。"
+    : contract.safe_initial_set;
+  return [
+    "## 評価契約（Evaluation contract）",
+    "",
+    `- 予算: ${budget}`,
+    "- 失敗した評価も予算を消費する。成功した評価数と、失敗した評価数を分けて数える。",
+    "",
+    "### 失敗の種類（分けて記録する）",
+    "",
+    `- 評価する前に分かる制約違反: ${contract.known_violation}`,
+    `- 時間切れ（timeout、値は不明）: ${contract.timeout}`,
+    `- 計算の失敗・非物理的な結果（値なし）: ${contract.crash}`,
+    "- 失敗を目的値の罰則（大きな値）に置き換えず、状態として記録する。timeout を制約違反と同じものとして扱わない。",
+    "",
+    `### ノイズ\n\n${contract.noise}`,
+    "",
+    `### 安全な初期集合\n\n${safe}`,
+    "",
+    "### 実行しないこと",
+    "",
+    "- このプロンプトで実験・シミュレーション・外部の計算を実行しない。評価計画、評価契約の案、確認質問だけを返す。",
+    "",
+  ];
 }
 
 export function createImplementationPromptPack(
@@ -537,7 +662,8 @@ export function createImplementationPromptPack(
   form: PromptFormState,
 ): ImplementationPromptPack {
   return {
-    contract_version: "1.0.0",
+    contract_version: "1.1.0",
+    evaluation_contract: evaluationContract(form),
     dataset_version: draft.dataset_version,
     generated_at: draft.generated_at,
     intent: normalize(form.intent),
@@ -608,6 +734,7 @@ export function renderImplementationPromptMarkdown(pack: ImplementationPromptPac
     ...valueSection("Problem scale", pack.user_problem.problem_scale),
     ...valueSection("Evaluation cost", pack.user_problem.evaluation_cost),
     ...valueSection("Computation budget", pack.user_problem.computation_budget),
+    ...evaluationContractSection(pack.evaluation_contract),
     "## Unknowns — 最初に確認すること",
     "",
     ...(pack.unknowns.length > 0 ? pack.unknowns.map((item) => `- ${item}`) : ["- なし"]),

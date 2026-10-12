@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
+  BUDGET_UNIT_OPTIONS,
+  EVALUATION_CONTRACT_FIELDS,
   REQUESTED_OUTPUT_OPTIONS,
   createImplementationPromptPack,
   renderImplementationPromptMarkdown,
   unknownsForForm,
+  type BudgetUnit,
+  type EvaluationContractTextField,
   type ImplementationPromptDraft,
   type PromptFormState,
   type RequestedOutputId,
@@ -15,7 +19,7 @@ interface PromptExportDialogProps {
   onClose(): void;
 }
 
-type TextField = Exclude<keyof PromptFormState, "requested_outputs">;
+type TextField = Exclude<keyof PromptFormState, "requested_outputs" | "evaluation_contract">;
 
 const TEXT_FIELDS: Array<{
   field: TextField;
@@ -71,6 +75,10 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
 
   const updateText = (field: TextField, value: string) => {
     updateForm({ ...form, [field]: value });
+  };
+
+  const updateContract = (patch: Partial<PromptFormState["evaluation_contract"]>) => {
+    updateForm({ ...form, evaluation_contract: { ...form.evaluation_contract, ...patch } });
   };
 
   const updateRequestedOutput = (id: RequestedOutputId, checked: boolean) => {
@@ -137,6 +145,42 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
                 </label>
               ))}
             </div>
+            <details className="prompt-export-contract" open={form.evaluation_contract.enabled}>
+              <summary>評価契約（評価が高価なとき・失敗し得るとき）</summary>
+              <label className="prompt-export-contract-toggle">
+                <input
+                  checked={form.evaluation_contract.enabled}
+                  onChange={(event) => updateContract({ enabled: event.target.checked })}
+                  type="checkbox"
+                />
+                <span>評価契約をプロンプトに含める</span>
+              </label>
+              <p>
+                失敗の種類は欄を分けて書きます。安全な初期集合やノイズが分からなければ、<code>unknown</code> のままにしてください。サイトが推測で補うことはありません。
+              </p>
+              <div className="prompt-export-fields">
+                <label className="prompt-export-field">
+                  <span>予算の単位</span>
+                  <select
+                    disabled={!form.evaluation_contract.enabled}
+                    onChange={(event) => updateContract({ budget_unit: event.target.value as BudgetUnit })}
+                    value={form.evaluation_contract.budget_unit}
+                  >
+                    {BUDGET_UNIT_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
+                  </select>
+                </label>
+                {EVALUATION_CONTRACT_FIELDS.map(({ field, label }) => (
+                  <label className="prompt-export-field" key={field}>
+                    <span>{label}</span>
+                    <input
+                      disabled={!form.evaluation_contract.enabled}
+                      onChange={(event) => updateContract({ [field]: event.target.value } as Record<EvaluationContractTextField, string>)}
+                      value={form.evaluation_contract[field]}
+                    />
+                  </label>
+                ))}
+              </div>
+            </details>
             <fieldset className="prompt-export-presets">
               <legend>作成するもの (Requested outputs)</legend>
               {REQUESTED_OUTPUT_OPTIONS.map((option) => (
