@@ -2202,12 +2202,12 @@ NN_START_B = (0.2, -0.3)
 
 
 def nn_loss(u: float, v: float) -> float:
-    return sum((v * math.tanh(u * x) - y) ** 2 for x, y in zip(NN_X, NN_Y)) / len(NN_X)
+    return sum((v * math.tanh(u * x) - y) ** 2 for x, y in zip(NN_X, NN_Y, strict=True)) / len(NN_X)
 
 
 def nn_gradient(u: float, v: float) -> tuple[float, float]:
     gu = gv = 0.0
-    for x, y in zip(NN_X, NN_Y):
+    for x, y in zip(NN_X, NN_Y, strict=True):
         t = math.tanh(u * x)
         r = v * t - y
         gu += 2 * r * v * x * (1 - t * t) / len(NN_X)

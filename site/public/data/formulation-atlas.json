@@ -857,7 +857,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.bound-constrained-smooth",
       "cues_ja": [
         "物理的に負にならない量や、仕様上の範囲がある値を決める"
       ],
@@ -895,7 +895,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -939,6 +939,7 @@
       "reading_ja": "各変数に上下限だけがある滑らかな最小化です。上下限は射影で簡単に守れるため、一般の制約より扱いやすい型です。",
       "source_ids": [
         "S002",
+        "S056",
         "S065"
       ],
       "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; \\ell\\le x\\le u",
@@ -2084,7 +2085,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.second-order-cone-program",
       "cues_ja": [
         "距離・ノルム・楕円の不確かさが制約に入る"
       ],
@@ -2122,7 +2123,7 @@
       ],
       "family_id": "linear_conic",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2904,7 +2905,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.network-flow",
       "cues_ja": [
         "物・電力・データを、容量のある経路網で送る"
       ],
@@ -2942,7 +2943,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2985,7 +2986,12 @@
       "problem_id": "PA028",
       "reading_ja": "ネットワークの各辺に流す量を、各点での出入りの差と容量を守りながら、費用最小に決めます。",
       "source_ids": [
-        "S054"
+        "S004",
+        "S005",
+        "S016",
+        "S054",
+        "S141",
+        "S144"
       ],
       "standard_form": "\\min_{f}\\; \\sum_{(i,j)\\in E} c_{ij}f_{ij} \\;\\text{ s.t. }\\; \\sum_{j} f_{ij}-\\sum_{j} f_{ji}=b_i,\\; 0\\le f_{ij}\\le u_{ij}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>f</mi></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>E</mi></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>j</mi></mrow></munder><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02212;</mo><munder><mo>&#x02211;</mo><mrow><mi>j</mi></mrow></munder><msub><mi>f</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub><mo>&#x0003D;</mo><msub><mi>b</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mn>0</mn><mo>&#x02264;</mo><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02264;</mo><msub><mi>u</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></div>"
@@ -3845,7 +3851,7 @@
           "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.so3-se3-optimization",
       "cues_ja": [
         "カメラやロボットの姿勢、点群の向き合わせを推定する"
       ],
@@ -3883,7 +3889,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3928,7 +3934,9 @@
       "source_ids": [
         "S041",
         "S044",
-        "S071"
+        "S056",
+        "S071",
+        "S107"
       ],
       "standard_form": "\\min_{R\\in SO(3)}\\; \\sum_i \\|Rp_i-q_i\\|_2^2",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>R</mi><mo>&#x02208;</mo><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>i</mi></munder><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>R</mi><msub><mi>p</mi><mi>i</mi></msub><mo>&#x02212;</mo><msub><mi>q</mi><mi>i</mi></msub><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math></div>"
@@ -4172,7 +4180,7 @@
           "title_ja": "mini-batchで画像分類モデルを学習する"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.neural-network-training",
       "cues_ja": [
         "大量のデータで、多層のモデルを学習させる"
       ],
@@ -4210,7 +4218,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4256,6 +4264,7 @@
         "S047",
         "S048",
         "S049",
+        "S056",
         "S070"
       ],
       "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big),\\quad h_w \\text{ はneural network}",
@@ -4269,7 +4278,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.stochastic-erm",
       "cues_ja": [
         "ロジスティック回帰やSVMを、メモリに乗りきらないデータで学習する"
       ],
@@ -4307,7 +4316,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4352,7 +4361,10 @@
       "source_ids": [
         "S047",
         "S048",
-        "S049"
+        "S049",
+        "S055",
+        "S113",
+        "S114"
       ],
       "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell_i(w)+r(w),\\quad \\ell_i \\text{ は凸},\\; N \\text{ は巨大}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>&#x02113;</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>r</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><msub><mi>&#x02113;</mi><mi>i</mi></msub><mtext>&#x000A0;は凸</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>N</mi><mtext>&#x000A0;は巨大</mtext></mrow></math></div>"
@@ -5874,7 +5886,7 @@
           "title_ja": "2D diffuserの壁面shapeを更新する"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.shape-dependent-domain",
       "cues_ja": [
         "翼・流路・部品の外形を、simulationの結果を見ながら変える"
       ],
@@ -5912,7 +5924,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [],
       "name_en": "Shape optimization on a parameterized domain",
       "name_ja": "形状依存領域の最適化",
@@ -6287,6 +6299,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 24
+    "with_article": 31
   }
 }

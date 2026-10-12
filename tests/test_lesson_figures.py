@@ -14,26 +14,6 @@ from scripts.generate_lesson_figures import (
     box_solution,
     box_unconstrained_minimum,
     box_value,
-    generate_lesson_figures,
-    hpo_search_data,
-    inverse_problem_curve,
-    lasso_lambda_max,
-    lasso_solution,
-    lasso_zero_points,
-    least_squares_fit,
-    least_squares_sse,
-    milp_integer_points,
-    milp_relaxation,
-    miqp_big_m_rows,
-    miqp_enumerate,
-    miqp_relaxation,
-    mpc_wall_data,
-    ridge_solution,
-    socp_center,
-    vrp_data,
-)
-
-
     fin_objective,
     fin_temperature,
     generate_lesson_figures,
@@ -51,13 +31,9 @@ from scripts.generate_lesson_figures import (
     miqp_relaxation,
     mpc_wall_data,
     ridge_solution,
-    socp_center,
-    vrp_data,
-)
-
-
     so3_paths,
     so3_rotation_minimum,
+    socp_center,
     vrp_data,
 )
 

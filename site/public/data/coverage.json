@@ -622,13 +622,13 @@
             }
           },
           "lesson": {
-            "complete": 17,
+            "complete": 18,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 37,
-              "no_article": 25,
-              "stale": 1
+              "in_progress": 41,
+              "no_article": 21,
+              "stale": 0
             }
           },
           "transfer": {
@@ -15287,12 +15287,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.bound-constrained-smooth"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15319,11 +15319,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA008"
+            "/formulations/PA008",
+            "concept.bound-constrained-smooth"
           ]
         },
         "recommendation": {
@@ -16278,12 +16279,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.second-order-cone-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16310,11 +16311,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA020"
+            "/formulations/PA020",
+            "concept.second-order-cone-program"
           ]
         },
         "recommendation": {
@@ -16936,12 +16938,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.network-flow"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16968,11 +16970,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA028"
+            "/formulations/PA028",
+            "concept.network-flow"
           ]
         },
         "recommendation": {
@@ -17688,12 +17691,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.so3-se3-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -17720,11 +17723,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA037",
+            "concept.so3-se3-optimization",
             "so3-attitude-alignment"
           ]
         },
@@ -17943,12 +17947,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.neural-network-training"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -17975,12 +17979,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA040",
-            "EC021"
+            "EC021",
+            "concept.neural-network-training"
           ]
         },
         "recommendation": {
@@ -18026,12 +18031,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.stochastic-erm"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18058,11 +18063,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA041"
+            "/formulations/PA041",
+            "concept.stochastic-erm"
           ]
         },
         "recommendation": {
@@ -19323,12 +19329,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.shape-dependent-domain"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -19355,11 +19361,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA057",
+            "concept.shape-dependent-domain",
             "shape-diffuser"
           ]
         },
