@@ -9,6 +9,10 @@ from scripts.generate_lesson_figures import (
     MILP_NODES,
     OUTPUT,
     WIDTH,
+    box_gradient,
+    box_solution,
+    box_unconstrained_minimum,
+    box_value,
     generate_lesson_figures,
     hpo_search_data,
     inverse_problem_curve,
@@ -196,3 +200,15 @@ def test_milp_tree_figure_uses_the_article_numbers() -> None:
     for text in ("(10/3, 1)", "上界 62/3", "(3, 1.5)", "値 19", "値 20", "上界 18"):
         assert text in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_bound_constrained_box_figure_uses_the_article_numbers() -> None:
+    free = box_unconstrained_minimum()
+    assert (free, box_value(*free)) == ((2.0, 0.0), 2.0)
+    assert box_value(1.0, 0.0) == 3.0
+    x1, x2 = box_solution()
+    assert (round(x1, 6), round(x2, 6), round(box_value(x1, x2), 6)) == (1.0, 0.5, 2.5)
+    assert tuple(round(g, 6) for g in box_gradient(x1, x2)) == (-1.0, 0.0)
+    figure = generate_lesson_figures()["bound-constrained-box.svg"]
+    for text in ("(1, 0.5)", "f = 2.5", "f = 3", "f = 2"):
+        assert text in figure
