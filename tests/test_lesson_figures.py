@@ -6,9 +6,12 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 from scripts.generate_lesson_figures import (
+    FIN_LENGTHS,
     MILP_NODES,
     OUTPUT,
     WIDTH,
+    fin_objective,
+    fin_temperature,
     generate_lesson_figures,
     hpo_search_data,
     inverse_problem_curve,
@@ -141,6 +144,17 @@ def test_hpo_search_figure_uses_the_article_numbers() -> None:
     assert "格子ではlog10 λの値が4種類、ランダムでは16種類" in figure
     assert "格子が0.192、ランダムが0.144" in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_fin_length_figure_uses_the_article_numbers() -> None:
+    lengths = [round(length, 3) for length in FIN_LENGTHS]
+    assert lengths == [1.0, 1.317, 2.063]
+    assert [round(fin_temperature(x, x), 3) for x in FIN_LENGTHS] == [0.648, 0.5, 0.25]
+    assert [round(fin_temperature(x, 0.5), 3) for x in FIN_LENGTHS] == [0.731, 0.676, 0.623]
+    assert [round(fin_objective(x), 3) for x in FIN_LENGTHS] == [-0.512, -0.537, -0.452]
+    figure = generate_lesson_figures()["shape-fin-length.svg"]
+    assert "L=1.317：先端 0.500、間隔 0.329" in figure
+    assert "最小 J=−0.537（L=1.317）" in figure
 
 
 def test_lesson_figures_are_current_and_drawn_at_their_display_width() -> None:
