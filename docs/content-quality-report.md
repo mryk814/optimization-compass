@@ -3,7 +3,7 @@
 - Published concept guides: `45`
 - Meeting the concept floor: `45`
 - Below the concept floor: `0`
-- Prose review warnings: `630`
+- Prose review warnings: `631`
 
 ## Concept publication floor
 
@@ -21,7 +21,7 @@
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
-| `concept.knapsack-set-cover` | 100 | 8793 | 14 | 4 | 0 | pass |
+| `concept.knapsack-set-cover` | 100 | 9522 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 91 | 5669 | 9 | 4 | 0 | pass |
@@ -61,7 +61,7 @@
 - `prose.choppy`: 6
 - `prose.meta`: 5
 - `prose.work-report`: 19
-- `sentence.commas`: 336
+- `sentence.commas`: 337
 - `sentence.long`: 55
 
 | Content | Warnings |
@@ -97,7 +97,7 @@
 | `concept.expensive-black-box` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
-| `concept.knapsack-set-cover` | 2 |
+| `concept.knapsack-set-cover` | 3 |
 | `concept.l1-sparse-regularization` | 33 |
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
