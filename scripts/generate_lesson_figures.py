@@ -2384,15 +2384,15 @@ def _erm_minibatch_svg() -> str:
     start, minimum = data["start"], data["minimum"]
     w0, w1 = data["minimiser"]  # type: ignore[misc]
     parts = _open(
-        "32件の勾配は、全データの勾配のまわりに散らばる",
+        "32件の勾配は、全件の勾配のまわりに散らばる",
         (
             "1万件のロジスティック回帰で、32件ずつ選んで作った勾配200本を、"
-            "全データの勾配と同じ平面に描いた図です。"
-            f"初期点 (0, 0) では全データの勾配が ({start['full'][0]:.3f}, "  # type: ignore[index]
+            "全件の勾配と同じ平面に描いた図です。"
+            f"初期点 (0, 0) では全件の勾配が ({start['full'][0]:.3f}, "  # type: ignore[index]
             f"{_signed(start['full'][1], 3)}) で、"  # type: ignore[index]
             f"200本のうち{start['same']}本が同じ側にあり、ずれのRMSは"  # type: ignore[index]
             f"{start['rms']:.3f}です。"  # type: ignore[index]
-            f"最小点 ({_signed(w0, 3)}, {w1:.3f}) では全データの勾配が0で、"
+            f"最小点 ({_signed(w0, 3)}, {w1:.3f}) では全件の勾配が0で、"
             f"32件の勾配の大きさのRMSは{minimum['rms']:.3f}です。"  # type: ignore[index]
         ),
         780,
@@ -2458,10 +2458,10 @@ def _erm_minibatch_svg() -> str:
         if key == "start":
             note = f"200本のうち{group['same']}本が灰の線の同じ側"  # type: ignore[index]
         else:
-            note = f"全データの勾配は0、32件の勾配はRMS {group['rms']:.3f}"  # type: ignore[index]
+            note = f"全件の勾配は0、32件の勾配はRMS {group['rms']:.3f}"  # type: ignore[index]
         parts.append(_text(20, top + size + 46, note, "note"))
     parts.append(_text(20, 710, "青緑の点：32件で作った勾配（200回）"))
-    parts.append(_text(20, 734, "橙のひし形：全データの勾配"))
+    parts.append(_text(20, 734, "橙のひし形：全件の勾配"))
     parts.append(_text(20, 760, "横は切片の勾配 g₀、縦は傾きの勾配 g₁", "tick"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
