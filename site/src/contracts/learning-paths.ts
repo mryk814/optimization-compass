@@ -1,6 +1,15 @@
 // Contract for data/learning-paths.json (ADR 0017): authored, ordered walks through
 // formulations and content pages, each step carrying the question it answers.
 
+/** Where a reader goes back to when this step loses them (OC-EVOL-007). */
+export interface LearningPathStumble {
+  trouble_ja: string;
+  target_type: "formulation" | "content";
+  target_id: string;
+  title_ja: string;
+  route: string;
+}
+
 export interface LearningPathStep {
   step: number;
   target_type: "formulation" | "content";
@@ -10,6 +19,7 @@ export interface LearningPathStep {
   route: string;
   question_ja: string;
   has_article: boolean;
+  stumbles: LearningPathStumble[];
 }
 
 export interface LearningPath {
@@ -48,6 +58,7 @@ export function parseLearningPaths(raw: unknown): LearningPathIndex {
         route: route(step.route, "step route"),
         question_ja: text(step.question_ja, "question_ja"),
         has_article: step.has_article,
+        stumbles: array(step.stumbles, "stumbles").map((value, at) => parseStumble(value, at)),
       } satisfies LearningPathStep;
     });
     if (steps.length < 2) throw new Error("A learning path needs at least two steps.");
@@ -63,6 +74,24 @@ export function parseLearningPaths(raw: unknown): LearningPathIndex {
   });
   if (new Set(paths.map((path) => path.path_id)).size !== paths.length) throw new Error("Duplicate path ID.");
   return { contract_version: "1.0.0", dataset_version: text(data.dataset_version, "dataset_version"), paths };
+}
+
+/** The first formulation step: a reader who wants the formula can jump there directly. */
+export function formulaShortcut(path: Pick<LearningPath, "steps">): LearningPathStep | undefined {
+  return path.steps.find((step) => step.target_type === "formulation");
+}
+
+function parseStumble(value: unknown, at: number): LearningPathStumble {
+  const item = record(value, `stumbles[${at}]`);
+  const targetType = item.target_type;
+  if (targetType !== "formulation" && targetType !== "content") throw new Error("Unsupported stumble target_type.");
+  return {
+    trouble_ja: text(item.trouble_ja, "trouble_ja"),
+    target_type: targetType,
+    target_id: text(item.target_id, "stumble target_id"),
+    title_ja: text(item.title_ja, "stumble title_ja"),
+    route: route(item.route, "stumble route"),
+  };
 }
 
 export function stepKey(step: Pick<LearningPathStep, "target_type" | "target_id">): string {
