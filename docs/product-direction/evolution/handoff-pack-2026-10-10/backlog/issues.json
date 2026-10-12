@@ -1,0 +1,1178 @@
+{
+  "status": "draft_not_posted",
+  "baseline_sha": "3099b8821a2317761dab8fb3eacebb20cfe0fbcd",
+  "issues": [
+    {
+      "issue_id": "OC-EVOL-001",
+      "title": "基準監査と既存作業の照合",
+      "status": "draft_not_posted",
+      "milestone": "M0",
+      "priority": "P0",
+      "dependencies": [],
+      "source_refs": [
+        "R08",
+        "R14",
+        "R06",
+        "R07"
+      ],
+      "related_existing_work": [
+        "PR297",
+        "PR298"
+      ],
+      "likely_paths": [
+        "AGENTS.md",
+        "data/seeds/",
+        "src/optimization_compass/resources/",
+        "tools/audit_repository.py（本パック内）"
+      ],
+      "goal": "実装先HEAD、未コミット差分、PR297/298、canonical件数とscope候補の照合状態を確定する。",
+      "deliverable": "観測と推測を区別したbaseline JSONと、重複作業の統合メモ。",
+      "acceptance": [
+        "DB/生成物のhashが監査前後で同じ",
+        "一致候補と意味レビュー済みを別状態にする",
+        "unmatchedを未収録確定にしない",
+        "コード/公開に変更を行わない"
+      ],
+      "effort_class": "small",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-002",
+      "title": "編集上の収録範囲v1を定める",
+      "status": "draft_not_posted",
+      "milestone": "M0",
+      "priority": "P0",
+      "dependencies": [
+        "OC-EVOL-001"
+      ],
+      "source_refs": [
+        "E01",
+        "E02",
+        "R02"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/（新scope seed候補。要設計レビュー）"
+      ],
+      "goal": "160/80の初稿を既存の名称・階層・別名と照合し、core/applied/frontierを承認する。",
+      "deliverable": "版付き収録集合、採用/保留/統合理由、種別・別名・canonical対応。",
+      "acceptance": [
+        "105/160等の未照合率を出さない",
+        "variant/primitive/profileを区別",
+        "scope変更理由とレビューを記録",
+        "未知対応をunknownで保持"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-003",
+      "title": "Coverageへ分母と品質軸を統合",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P0",
+      "dependencies": [
+        "OC-EVOL-002"
+      ],
+      "source_refs": [
+        "R03",
+        "R06"
+      ],
+      "related_existing_work": [
+        "PR297",
+        "PR298"
+      ],
+      "likely_paths": [
+        "src/optimization_compass/coverage.py",
+        "site/src/features/coverage/",
+        "data/seeds/article_quality_ledger.json（PR297再確認）"
+      ],
+      "goal": "存在、レビュー、教材、体験、転移を別の集合として集計する。",
+      "deliverable": "生成されるcoverage snapshotと種類別の分子/分母、未照合、stale、対象外。",
+      "acceptance": [
+        "分母追加と完成追加を別表示",
+        "別名を二重計上しない",
+        "PR297のレビュー状態を再利用",
+        "集計値を手編集できない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-004",
+      "title": "同一性と粒度の対応ルール",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-002"
+      ],
+      "source_refs": [
+        "R09",
+        "R12"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/",
+        "src/optimization_compass/entity_links.py"
+      ],
+      "goal": "family・method・variant・primitive・implementationの境界を既存語彙へ写す。",
+      "deliverable": "対応表と既存複合項目の分割/alias方針。",
+      "acceptance": [
+        "旧IDを別概念へ転用しない",
+        "既存URLを維持",
+        "曖昧な多対多対応を明示",
+        "全変更に移行例を付す"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-005",
+      "title": "条件付き関係の意味契約",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E01",
+        "E07",
+        "R09"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/formulation_atlas.json",
+        "src/optimization_compass/formulation_atlas.py",
+        "src/optimization_compass/entity_links.py"
+      ],
+      "goal": "包含、等価変形、緩和、共通部品、学習順、応用を区別する。",
+      "deliverable": "既存schemaとの差分ADR案と最小関係サンプル。",
+      "acceptance": [
+        "等価と緩和を区別",
+        "保証の方向と前提が必須",
+        "学習順と数理的包含を混ぜない",
+        "新namespaceを設計レビュー"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-006",
+      "title": "俯瞰図と条件レンズ",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-005"
+      ],
+      "source_refs": [
+        "R02",
+        "E32"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/visual-system/",
+        "site/src/features/map/",
+        "site/src/contracts/"
+      ],
+      "goal": "全体棚、近傍、条件レンズ、未収録を使い分ける。",
+      "deliverable": "小図/一覧を持つ関係UI。",
+      "acceptance": [
+        "辺の意味が読める",
+        "位置を意味的距離と誤解させない",
+        "キーボードで同じ情報へ到達",
+        "既存canonical routeと戻るを維持"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-007",
+      "title": "初学者の辞書→一手→次の問い",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "R02",
+        "R04",
+        "R07"
+      ],
+      "related_existing_work": [
+        "PR297",
+        "PR298"
+      ],
+      "likely_paths": [
+        "data/seeds/learning_paths.json",
+        "site/src/features/content/",
+        "site/src/App.tsx"
+      ],
+      "goal": "用語を知らない読者が目的・変数・制約を区別して進める入口を作る。",
+      "deliverable": "PERSONA_01/02の動線と転移課題。",
+      "acceptance": [
+        "診断を強制しない",
+        "式へ直行する導線も残す",
+        "つまずきごとに戻れる",
+        "次の問いが明示される"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-008",
+      "title": "高価な評価の利用者journey",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E12",
+        "E38",
+        "R11"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/site_gallery.json",
+        "data/seeds/learning_paths.json",
+        "src/optimization_compass/failure_modes.py"
+      ],
+      "goal": "評価費、失敗型、ノイズ、安全初期集合のunknownを整理する。",
+      "deliverable": "研究者向けの評価契約とbrief出口。",
+      "acceptance": [
+        "timeoutと違反を分ける",
+        "安全条件を補完しない",
+        "予算の単位を明示",
+        "外部実験を実行しない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-009",
+      "title": "分野ブリッジの最小3件",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-005"
+      ],
+      "source_refs": [
+        "E14",
+        "E15",
+        "E11",
+        "E38"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/site_gallery.json",
+        "src/optimization_compass/entity_links.py"
+      ],
+      "goal": "24候補から、一次例と数学的対応を確認した3件を公開候補にする。",
+      "deliverable": "変数/単位/目的/制約/相違/出典を持つbridge。",
+      "acceptance": [
+        "両分野の根拠を確認",
+        "toyと実用事例を区別",
+        "同じ構造と比喩を区別",
+        "tagのみで完成にしない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-010",
+      "title": "共有scene・observable・媒体契約の差分",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-001"
+      ],
+      "source_refs": [
+        "R05"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "src/optimization_compass/resources/explorables.json",
+        "site/src/features/explorable/math/",
+        "site/src/features/explorable/",
+        "site/scripts/record-scene.mjs"
+      ],
+      "goal": "既存ADR/実装から不足するseek・共有状態・freshnessのみ追加する。",
+      "deliverable": "model/view/beats/observableの差分契約と代表fixture。",
+      "acceptance": [
+        "第二の数値モデルを作らない",
+        "提案と実装済みを分ける",
+        "動画の値は同じobservableを使用",
+        "旧sceneを壊さない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-011",
+      "title": "主単体法を証明・感度・動画へ拡張",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-007",
+        "OC-EVOL-010"
+      ],
+      "source_refs": [
+        "R07",
+        "R06",
+        "R05"
+      ],
+      "related_existing_work": [
+        "PR297",
+        "PR298"
+      ],
+      "likely_paths": [
+        "site/src/features/explorable/",
+        "content/methods/primal-simplex.md"
+      ],
+      "goal": "PR298を再利用し、一手→双対証明→感度範囲へつなぐ。",
+      "deliverable": "storyboards/LP_PORTRAIT.mdの実装と数値fixture。",
+      "acceptance": [
+        "最適値24、双対5/7と6/7に一致",
+        "在庫感度の有効範囲を表示",
+        "PR297/298を重複実装しない",
+        "文章だけでも証明が読める"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-012",
+      "title": "BOの視界制限・予測・評価費",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-008",
+        "OC-EVOL-010"
+      ],
+      "source_refs": [
+        "E12",
+        "E20",
+        "E38"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/features/explorable/BayesOptAcquisition.tsx",
+        "site/src/features/explorable/math/"
+      ],
+      "goal": "真の関数を見る学習者視点と、観測だけを使うoptimizer視点を明示する。",
+      "deliverable": "BO_ORACLE台本、観測/情報境界、比較予算。",
+      "acceptance": [
+        "未観測truthをoptimizerへ渡さない",
+        "同じseed/観測で再現",
+        "費用とiterationを区別",
+        "安全保証の有無を明示"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-013",
+      "title": "輸送の対応と正則化を体験",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-009",
+        "OC-EVOL-010"
+      ],
+      "source_refs": [
+        "E11"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/features/explorable/math/（新図候補）",
+        "content/concepts/（既存との照合後）"
+      ],
+      "goal": "2x2輸送から、質量保存・正則化・別分野の対応を説明する。",
+      "deliverable": "TRANSPORT_MORPH台本、最小fixture、対応表。",
+      "acceptance": [
+        "行/列質量0.5を保存",
+        "正則化解と元の最適輸送を区別",
+        "ラベル変換で数学を変えない",
+        "非均衡へ拡張する場合は別契約"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-014",
+      "title": "射影と線形oracleの辞書スライス",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E05",
+        "E04"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "content/methods/",
+        "data/seeds/formulation_atlas.json"
+      ],
+      "goal": "Frank–Wolfeと射影・近接の区別を既存収録へ追加/拡充する。",
+      "deliverable": "個別記事、条件付き関係、簡単な単体上の例。",
+      "acceptance": [
+        "既存項目と照合",
+        "凸性とoracle条件を記載",
+        "一手と失敗条件を検算",
+        "性能の普遍順位を作らない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-015",
+      "title": "分割法・PDHGの辞書スライス",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E04"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "content/methods/",
+        "content/concepts/"
+      ],
+      "goal": "prox/ADMM/PDHG等の違いを構造と必要な操作で整理する。",
+      "deliverable": "原論文確認、鞍点/近接の区別、画像/信号の教育例。",
+      "acceptance": [
+        "個別原論文を追加調査",
+        "同じ名前の異なる更新式を混ぜない",
+        "step条件と演算費を記載",
+        "一般の制約解法と同一視しない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-016",
+      "title": "分解と列・制約生成の辞書スライス",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E07",
+        "E08"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "content/methods/",
+        "data/seeds/site_gallery.json"
+      ],
+      "goal": "Benders、列生成、Dantzig–Wolfe等の関係を一つの小例で示す。",
+      "deliverable": "主問題/部分問題/追加情報の図と検算。",
+      "acceptance": [
+        "最小化/最大化の向きを明記",
+        "cutとcolumnを区別",
+        "整数/凸recourse条件を説明",
+        "分解が常に速いとしない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-017",
+      "title": "不確実性・多段階の辞書スライス",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E09",
+        "E10"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "content/concepts/",
+        "data/seeds/formulation_atlas.json"
+      ],
+      "goal": "stochastic/robust/chance/DROと多段階の区別を作る。",
+      "deliverable": "情報構造付きの在庫/貯水toyとpolicy説明。",
+      "acceptance": [
+        "未来情報を先行行動へ漏らさない",
+        "分布/集合/リスク仮定を別項目",
+        "SDDP成立条件を原典で確認",
+        "一回の最適解とpolicyを区別"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-018",
+      "title": "BOの安全・失敗・多忠実度拡充",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-008"
+      ],
+      "source_refs": [
+        "E12",
+        "E38"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "content/methods/",
+        "src/optimization_compass/failure_modes.py"
+      ],
+      "goal": "通常制約BO、SafeOpt、失敗観測、fidelityの違いを整理する。",
+      "deliverable": "個別条件/除外、失敗taxonomy、判断例。",
+      "acceptance": [
+        "安全初期集合を確認",
+        "失敗を大罰点へ自動代入しない",
+        "高忠実度の順位を仮定しない",
+        "原典の仮定と保証範囲を記載"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-019",
+      "title": "問題構造80候補の正準対応",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "E01",
+        "R02"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "data/seeds/formulation_atlas.json",
+        "src/optimization_compass/problem_instances.py"
+      ],
+      "goal": "problem/profile/隣接問題を混ぜずにscopeを既存辞書へ写す。",
+      "deliverable": "標準形・読み下し・識別cue・近隣の対応。",
+      "acceptance": [
+        "全80を新problem行にしない",
+        "既存57型の対応を保持",
+        "profileの独立軸を保持",
+        "根拠のない定型文を埋めない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-020",
+      "title": "判断規則候補のレビューと回帰例",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004"
+      ],
+      "source_refs": [
+        "R09",
+        "E01",
+        "E03",
+        "E38"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "src/optimization_compass/engine.py",
+        "src/optimization_compass/predicates.py",
+        "tests/fixtures/recommendation_cases.json"
+      ],
+      "goal": "24候補を既存規則に照合し、必要な差分のみ追加する。",
+      "deliverable": "規則差分、unknown/矛盾/除外テスト。",
+      "acceptance": [
+        "exclusion winsを維持",
+        "Python/TS parityを検証",
+        "source IDsを保持",
+        "見た目だけの強い推奨をしない"
+      ],
+      "effort_class": "large",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-021",
+      "title": "実装への橋とbrief出口",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-004",
+        "OC-EVOL-008"
+      ],
+      "source_refs": [
+        "E03",
+        "E10",
+        "E13",
+        "R11"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "src/optimization_compass/agent_service.py",
+        "site/src/features/diagnose/"
+      ],
+      "goal": "代表実装と入出力・status・版・未確定を持ち帰れるようにする。",
+      "deliverable": "modeling/solver/evaluator/orchestrationの対応とJSON brief。",
+      "acceptance": [
+        "AI内蔵を必須にしない",
+        "unknownを保存",
+        "ライセンス/保守は確認日を残す",
+        "実行は別許可"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-022",
+      "title": "persona意図別の入口と戻り道",
+      "status": "draft_not_posted",
+      "milestone": "M1",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-007",
+        "OC-EVOL-008",
+        "OC-EVOL-009"
+      ],
+      "source_refs": [
+        "R02",
+        "R04"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/App.tsx",
+        "data/seeds/learning_paths.json"
+      ],
+      "goal": "10仮説の入口/詰まり/出口を少数の利用目的導線へまとめる。",
+      "deliverable": "intent切替・直接検索・戻る・出口のUX。",
+      "acceptance": [
+        "persona固定選択を強制しない",
+        "専門家の短い経路を残す",
+        "モバイルでも目的が読める",
+        "ユーザー研究未検証と明示"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-023",
+      "title": "学習成果の評価プロトコル",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-011",
+        "OC-EVOL-012"
+      ],
+      "source_refs": [
+        "E22",
+        "E19",
+        "E20"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "docs/（評価計画）",
+        "site/e2e/（振る舞い試験のみ）"
+      ],
+      "goal": "満足と理解を分け、初見課題への転移を測る。",
+      "deliverable": "課題・採点・比較条件・同意/データ最小化。",
+      "acceptance": [
+        "媒体以外の内容差を制御",
+        "AI自己レビューだけでvalidatedにしない",
+        "少人数の探索と効果検証を区別",
+        "失敗した仮説も記録"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-024",
+      "title": "アクセシビリティと軽量な代替",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-010"
+      ],
+      "source_refs": [
+        "E37",
+        "R05"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/features/explorable/",
+        "site/e2e/"
+      ],
+      "goal": "操作図・3D・動画を利用できない場合も同じ知識へ到達可能にする。",
+      "deliverable": "keyboard・focus・reduced-motion・字幕・文章/表の検証。",
+      "acceptance": [
+        "色のみで意味を伝えない",
+        "動画視聴を進行条件にしない",
+        "320/375pxと拡大で操作を確認",
+        "AAA項目をAA義務と誤記しない"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-025",
+      "title": "動画制作3方式の比較PoC",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-011"
+      ],
+      "source_refs": [
+        "E23",
+        "E24",
+        "E25",
+        "E26",
+        "E27"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/scripts/record-scene.mjs",
+        "隔離したPoCディレクトリ（新設は承認後）"
+      ],
+      "goal": "既存recorder、Remotion、HyperFramesを同じsceneで比較する。",
+      "deliverable": "数値一致・字幕・修正工数・render/サイズ・license記録。",
+      "acceptance": [
+        "計算正本は一つ",
+        "採用版LICENSE/発効条件を確認",
+        "有料サービスを無断接続しない",
+        "改善が小さければ現行方式を採る"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-026",
+      "title": "媒体鮮度・出典・再生成",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-025"
+      ],
+      "source_refs": [
+        "R05",
+        "R10"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "src/optimization_compass/derived_media.py",
+        "src/optimization_compass/resources/",
+        "site/scripts/record-scene.mjs"
+      ],
+      "goal": "モデル・view・台本・音声の入力変更を検出し、派生物の再生成を管理する。",
+      "deliverable": "media manifestとstale/再生成/rollback手順。",
+      "acceptance": [
+        "OS/GPU跨ぎのbyte一致を保証しない",
+        "入力hashと数値一致を検査",
+        "古い音声/字幕を検出",
+        "自動公開の変更は別承認"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-027",
+      "title": "任意の小計算をするブラウザ実験室",
+      "status": "draft_not_posted",
+      "milestone": "M3",
+      "priority": "P3",
+      "dependencies": [
+        "OC-EVOL-021",
+        "OC-EVOL-024"
+      ],
+      "source_refs": [
+        "E33",
+        "E34",
+        "E35",
+        "E36"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "site/src/（optional lab、設計後）"
+      ],
+      "goal": "固定toyを越える必要が確認された場合にWorker計算を試す。",
+      "deliverable": "小問題・中断・上限・遅延ロードのPoC。",
+      "acceptance": [
+        "通常の本文に必須読込を追加しない",
+        "中断とメモリ上限",
+        "必要package/WASMを確認",
+        "SharedArrayBuffer要件を実配信で検証"
+      ],
+      "effort_class": "large",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-028",
+      "title": "ローカルcompanionの境界実験",
+      "status": "draft_not_posted",
+      "milestone": "M3",
+      "priority": "P3",
+      "dependencies": [
+        "OC-EVOL-021"
+      ],
+      "source_refs": [
+        "R11",
+        "E03"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "独立companion設計（未実装）"
+      ],
+      "goal": "私有データ/native solver需要を検証し、allowlist runnerを設計する。",
+      "deliverable": "評価契約、権限、result manifest、timeout、失敗型。",
+      "acceptance": [
+        "任意shellを公開しない",
+        "知識DBと利用者データを分離",
+        "外部評価は承認が必要",
+        "安全性/最適性/モデル妥当性を区別"
+      ],
+      "effort_class": "large",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-029",
+      "title": "共同workspaceの価値検証",
+      "status": "draft_not_posted",
+      "milestone": "M3",
+      "priority": "P3",
+      "dependencies": [
+        "OC-EVOL-023",
+        "OC-EVOL-028"
+      ],
+      "source_refs": [
+        "R09",
+        "R11"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "新規ADRのみ。production変更は別承認"
+      ],
+      "goal": "共同で目的・制約・未合意を編集する需要を先に調べる。",
+      "deliverable": "価値仮説、権限/費用/保存/監査/停止条件。",
+      "acceptance": [
+        "hostedを既定にしない",
+        "実需要を確認",
+        "権限をleast privilege",
+        "課金・ユーザーデータ転送を勝手に行わない"
+      ],
+      "effort_class": "large",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-030",
+      "title": "表現コンパイラの限定試作",
+      "status": "draft_not_posted",
+      "milestone": "M3",
+      "priority": "P3",
+      "dependencies": [
+        "OC-EVOL-011",
+        "OC-EVOL-012",
+        "OC-EVOL-013",
+        "OC-EVOL-023"
+      ],
+      "source_refs": [
+        "R05",
+        "E21"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "既存scene/beat契約の上の設計試作"
+      ],
+      "goal": "三題材から共通する表現選択と台本生成を抽出する。",
+      "deliverable": "学習目標→表現候補→検証→レビューの小pipeline。",
+      "acceptance": [
+        "汎用AIを先に作らない",
+        "数理的主張を生成結果だけで承認しない",
+        "不適切な媒体を選ばない例を含む",
+        "外部AI任意・正本の第二化禁止"
+      ],
+      "effort_class": "large",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-031",
+      "title": "成長・鮮度・分野偏りのリリース比較",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-003",
+        "OC-EVOL-009"
+      ],
+      "source_refs": [
+        "R03",
+        "R06"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "src/optimization_compass/coverage.py",
+        "data/releases/"
+      ],
+      "goal": "分母変更・完成・失効・偏りを分けて成長を可視化する。",
+      "deliverable": "固定分母比較と再基準化の二つ、未収録の内訳。",
+      "acceptance": [
+        "過去公開値を上書きしない",
+        "対象外の理由を追跡",
+        "総合scoreへ縮約しない",
+        "レポートを生成する"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    },
+    {
+      "issue_id": "OC-EVOL-032",
+      "title": "最初の発展版の受入・引継ぎ",
+      "status": "draft_not_posted",
+      "milestone": "M2",
+      "priority": "P1",
+      "dependencies": [
+        "OC-EVOL-001",
+        "OC-EVOL-002",
+        "OC-EVOL-003",
+        "OC-EVOL-011",
+        "OC-EVOL-023",
+        "OC-EVOL-024",
+        "OC-EVOL-031"
+      ],
+      "source_refs": [
+        "R08",
+        "R10"
+      ],
+      "related_existing_work": [],
+      "likely_paths": [
+        "docs/",
+        "README.md（既存生成手順経由）"
+      ],
+      "goal": "実装済み/未実装/未検証を分けた発展版をレビュー可能にする。",
+      "deliverable": "対応ゲート結果、画面確認、既存との互換性、次の課題。",
+      "acceptance": [
+        "生成物の直接編集なし",
+        "実行した試験を正確に記録",
+        "教育評価の未完了を隠さない",
+        "公開/mergeは所有者手順に従う"
+      ],
+      "effort_class": "medium",
+      "permission_gate": "repo instructions + owner approval for canonical schema, merge, publishing, external spend, execution permissions",
+      "validation_policy": "既存validation task selector/registryを使用。実行したコマンド・結果・未実行をPRに記載。",
+      "non_goals": [
+        "本票だけでmainへ無断mergeしない",
+        "企画IDをそのままcanonical IDへ挿入しない",
+        "新しい独立した推薦/品質正本を作らない"
+      ]
+    }
+  ]
+}

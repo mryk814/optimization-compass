@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:optimization-compass:proposal:scope-member:1",
+  "title": "Proposed editorial scope member — not a production DB migration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scope_item_id",
+    "scope_version",
+    "entity_kind",
+    "scope_tier",
+    "admission_status",
+    "mapping_status",
+    "canonical_refs",
+    "source_refs"
+  ],
+  "properties": {
+    "scope_item_id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]+$"
+    },
+    "scope_version": {
+      "type": "string"
+    },
+    "entity_kind": {
+      "enum": [
+        "algorithm",
+        "variant",
+        "strategy",
+        "primitive",
+        "problem_archetype",
+        "modeling_profile",
+        "neighboring_problem",
+        "domain_bridge",
+        "experience"
+      ]
+    },
+    "scope_tier": {
+      "enum": [
+        "core",
+        "applied",
+        "frontier"
+      ]
+    },
+    "admission_status": {
+      "enum": [
+        "draft",
+        "approved",
+        "deferred",
+        "retired"
+      ]
+    },
+    "mapping_status": {
+      "enum": [
+        "not_audited",
+        "auto_exact_candidate",
+        "ambiguous",
+        "human_confirmed_existing",
+        "human_confirmed_new",
+        "split_or_alias"
+      ]
+    },
+    "canonical_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision_note": {
+      "type": "string"
+    },
+    "reviewer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

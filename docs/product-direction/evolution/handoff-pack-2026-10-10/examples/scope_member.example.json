@@ -1,0 +1,15 @@
+{
+  "scope_item_id": "TOPIC_FRANK_WOLFE",
+  "scope_version": "compass-reference-2026-10-draft1",
+  "entity_kind": "algorithm",
+  "scope_tier": "core",
+  "admission_status": "draft",
+  "mapping_status": "not_audited",
+  "canonical_refs": [],
+  "source_refs": [
+    "E05"
+  ],
+  "decision_note": "新規行か別名かを監査後に決める。",
+  "reviewer": null,
+  "reviewed_at": null
+}

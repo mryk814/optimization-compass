@@ -1,0 +1,1048 @@
+{
+  "scope_version": "compass-reference-2026-10-draft1",
+  "status": "draft_for_owner_review",
+  "denominator_unit": "problem_structure_topic",
+  "not_a_claim": "80個の新規problem_archetypesを追加する指示ではない",
+  "items": [
+    {
+      "scope_item_id": "PROBLEM_SMOOTH_NLP",
+      "title_ja": "滑らかな無制約NLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BOX_NLP",
+      "title_ja": "箱制約NLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_EQUALITY_NLP",
+      "title_ja": "等式制約NLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_INEQUALITY_NLP",
+      "title_ja": "不等式制約NLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONVEX",
+      "title_ja": "凸最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_LP",
+      "title_ja": "線形計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA017",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONVEX_QP",
+      "title_ja": "凸二次計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA018",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_NONCONVEX_QP",
+      "title_ja": "非凸二次計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONVEX_QCQP",
+      "title_ja": "凸二次制約二次計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_NONCONVEX_QCQP",
+      "title_ja": "非凸QCQP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SOCP",
+      "title_ja": "二次錐計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SDP",
+      "title_ja": "半正定値計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_EXP_CONE",
+      "title_ja": "指数錐計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_POWER_CONE",
+      "title_ja": "べき錐計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_GP",
+      "title_ja": "幾何計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SIGNOMIAL",
+      "title_ja": "符号付き幾何計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_LINEAR_LS",
+      "title_ja": "線形最小二乗",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA005",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_NONLINEAR_LS",
+      "title_ja": "非線形最小二乗",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA033",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ROBUST_REGRESSION",
+      "title_ja": "ロバスト回帰",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA034",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SPARSE_PENALTY",
+      "title_ja": "疎性正則化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": "PA035",
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MATRIX_COMPLETION",
+      "title_ja": "行列補完",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_LOW_RANK",
+      "title_ja": "低ランク因子分解",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_INVERSE_PDE",
+      "title_ja": "PDE逆問題",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_PDE_SHAPE",
+      "title_ja": "PDE制約形状設計",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_DENSITY_TOPOLOGY",
+      "title_ja": "密度法トポロジー",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_LEVELSET_SHAPE",
+      "title_ja": "レベルセット形状設計",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MILP",
+      "title_ja": "混合整数線形計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BINARY_LP",
+      "title_ja": "0-1線形計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MIQP",
+      "title_ja": "混合整数二次計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONVEX_MINLP",
+      "title_ja": "凸MINLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_NONCONVEX_MINLP",
+      "title_ja": "非凸MINLP",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ASSIGNMENT",
+      "title_ja": "割当",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MAXFLOW",
+      "title_ja": "最大流",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MINCOSTFLOW",
+      "title_ja": "最小費用流",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SHORTEST_PATH",
+      "title_ja": "最短路",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_TSP",
+      "title_ja": "巡回セールスマン",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_VRP",
+      "title_ja": "配送経路",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_VRPTW",
+      "title_ja": "時間窓付き配送",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_JOB_SHOP",
+      "title_ja": "ジョブショップ",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CUMULATIVE_SCHEDULE",
+      "title_ja": "累積資源制約スケジューリング",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SET_COVER",
+      "title_ja": "集合被覆",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_KNAPSACK",
+      "title_ja": "ナップサック",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BIN_PACKING",
+      "title_ja": "ビンパッキング",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_FACILITY_LOCATION",
+      "title_ja": "施設配置",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SAT",
+      "title_ja": "SAT",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MAXSAT",
+      "title_ja": "MaxSAT",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CP",
+      "title_ja": "制約充足",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MULTIOBJECTIVE",
+      "title_ja": "多目的最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_LEXICOGRAPHIC",
+      "title_ja": "辞書式優先最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MINIMAX",
+      "title_ja": "ミニマックス",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_TWO_STAGE",
+      "title_ja": "二段階確率計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MULTI_STAGE",
+      "title_ja": "多段階確率計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ROBUST",
+      "title_ja": "ロバスト最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CHANCE",
+      "title_ja": "機会制約",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_DRO",
+      "title_ja": "分布ロバスト",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CVAR",
+      "title_ja": "CVaRを含むリスク最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ONLINE",
+      "title_ja": "オンライン最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BANDIT",
+      "title_ja": "バンディットによる意思決定",
+      "kind": "neighboring_problem",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_EXPENSIVE_BLACKBOX",
+      "title_ja": "高価なブラックボックス",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_NOISY_BLACKBOX",
+      "title_ja": "ノイズ付きブラックボックス",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONDITIONAL_HPO",
+      "title_ja": "条件付き探索空間",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MULTIFIDELITY",
+      "title_ja": "多忠実度評価",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BATCH_ASYNC",
+      "title_ja": "バッチ・非同期評価",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_FAILURE_SAFE",
+      "title_ja": "失敗・安全性を含む評価",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_OPTIMAL_CONTROL",
+      "title_ja": "最適制御",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MPC",
+      "title_ja": "モデル予測制御",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_CONTACT_TRAJECTORY",
+      "title_ja": "接触を含む軌道",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_RIEMANNIAN",
+      "title_ja": "多様体最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ROTATION_POSE",
+      "title_ja": "回転・姿勢SO(3)/SE(3)",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SIMPLEX_GEOMETRY",
+      "title_ja": "確率単体上の最適化",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SPD_PSD",
+      "title_ja": "正定値・半正定値行列上の最適化",
+      "kind": "modeling_profile",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_BILEVEL",
+      "title_ja": "二段階階層最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_MPEC",
+      "title_ja": "相補性制約最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_VI",
+      "title_ja": "変分不等式",
+      "kind": "neighboring_problem",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_EQUILIBRIUM",
+      "title_ja": "ゲーム・均衡",
+      "kind": "neighboring_problem",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_OPTIMAL_TRANSPORT",
+      "title_ja": "最適輸送",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E11"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_UNBALANCED_TRANSPORT",
+      "title_ja": "非均衡最適輸送",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E11"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_SUBMODULAR",
+      "title_ja": "劣モジュラ集合最適化",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_EXPERIMENTAL_DESIGN",
+      "title_ja": "最適実験計画",
+      "kind": "problem_archetype_candidate",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    },
+    {
+      "scope_item_id": "PROBLEM_ROOT_FINDING",
+      "title_ja": "求根・方程式求解",
+      "kind": "neighboring_problem",
+      "mapping_status": "not_audited",
+      "canonical_id_hint": null,
+      "source_refs": [
+        "E01"
+      ],
+      "source_review": "individual_definition_review_required",
+      "admission_question": "既存問題型の別名・特殊例・評価profileではないか。標準形と成立条件を一つ示せるか。",
+      "proposed_action": "classify_and_map_before_adding"
+    }
+  ]
+}

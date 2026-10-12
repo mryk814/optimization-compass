@@ -1,0 +1,214 @@
+{
+  "status": "hypotheses",
+  "personas": [
+    {
+      "persona_id": "PERSONA_01",
+      "slug": "curious",
+      "name_ja": "名前を初めて聞いた人",
+      "entry_query": "最適化って結局なにをするの？",
+      "context": "数式の前提をほぼ持たず、スマートフォンで短く試す",
+      "route": [
+        "辞書の日常語検索",
+        "配分toy",
+        "一手の予測",
+        "用語に戻る"
+      ],
+      "likely_stumbling_block": "最適化＝AIが正解を決めると誤解",
+      "intervention": "目的・制約・未定義の価値を分離し、まず1回だけ手を動かす",
+      "success_criterion": "何を決め/良くし/守るかを自分の言葉で言える",
+      "exit_artifact": "説明カード",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_02",
+      "slug": "student",
+      "name_ja": "微分・線形代数を学んだ学生",
+      "entry_query": "なぜ局所最適が全体最適になるの？",
+      "context": "式は読めるが定理と図がつながっていない",
+      "route": [
+        "道筋",
+        "凸性",
+        "双対証明",
+        "非凸反例",
+        "新しい問題"
+      ],
+      "likely_stumbling_block": "谷底に着けば証明完了だと思う",
+      "intervention": "同じ停留条件が鞍点でも成り立つ反例と証明範囲を並べる",
+      "success_criterion": "初見の反例で保証の適用可否を説明できる",
+      "exit_artifact": "学習ノート",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_03",
+      "slug": "analyst",
+      "name_ja": "データ分析・ML実務者",
+      "entry_query": "Adam以外は何に使うの？",
+      "context": "Python経験あり、数理最適化の分類に不慣れ",
+      "route": [
+        "手法",
+        "oracle/記憶の比較",
+        "最小二乗",
+        "別分野の例"
+      ],
+      "likely_stumbling_block": "すべてを汎用勾配最小化に還元して構造を失う",
+      "intervention": "残差構造や凸性を保持する利点を具体的な計算で見せる",
+      "success_criterion": "汎用手法を使わない理由を1つ挙げられる",
+      "exit_artifact": "実装brief",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_04",
+      "slug": "operations",
+      "name_ja": "配置・予定表を作る担当者",
+      "entry_query": "Excelで作っている割当を改善したい",
+      "context": "制約は具体的だが数学用語を知らない",
+      "route": [
+        "事例",
+        "条件入力",
+        "ハード/希望分離",
+        "CP/MIP比較",
+        "データひな型"
+      ],
+      "likely_stumbling_block": "0-1変数/実行不能/最適性gapを混同",
+      "intervention": "矛盾する条件の小さな集合を説明し、制約変更を本人に戻す",
+      "success_criterion": "自分の入力表と未決定の条件を整理できる",
+      "exit_artifact": "CSV仕様に相当するJSON/brief",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_05",
+      "slug": "scientist",
+      "name_ja": "高価な実験・シミュレーションの研究者",
+      "entry_query": "20回しか評価できず、ときどき計算が失敗する",
+      "context": "評価費は分かるが未知条件・安全性が残る",
+      "route": [
+        "事例",
+        "oracle視点",
+        "失敗型分類",
+        "BO候補",
+        "比較条件",
+        "brief"
+      ],
+      "likely_stumbling_block": "失敗を悪い目的値に置換、安全と実行可能を混同",
+      "intervention": "既知違反/timeout/欠測を分け、探索に使える情報だけ表示",
+      "success_criterion": "未知を残した評価契約と比較予算を作れる",
+      "exit_artifact": "実験・評価契約",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_06",
+      "slug": "implementer",
+      "name_ja": "ライブラリへ接続する開発者",
+      "entry_query": "この定式化を手元で実行したい",
+      "context": "API/データ形式に強く、数学保証は確認したい",
+      "route": [
+        "定式化",
+        "代表実装",
+        "入出力",
+        "status/証明",
+        "最小再現"
+      ],
+      "likely_stumbling_block": "ライブラリ名とアルゴリズム・backendを混同",
+      "intervention": "modeling layer、solver、評価器、orchestratorを別表示",
+      "success_criterion": "固定版の最小例を再現しstatusを正しく読める",
+      "exit_artifact": "再現manifest",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_07",
+      "slug": "educator",
+      "name_ja": "授業・社内勉強会の制作者",
+      "entry_query": "この一手をどう見せれば伝わる？",
+      "context": "内容は分かるが制作時間に制約",
+      "route": [
+        "学習目標検索",
+        "予測課題",
+        "scene",
+        "字幕付き投影",
+        "再利用"
+      ],
+      "likely_stumbling_block": "豪華な映像が理解の証拠だと思う",
+      "intervention": "誤概念・反例・転移課題の入った台本を出す",
+      "success_criterion": "別媒体でも同じ数値と主張を保てる",
+      "exit_artifact": "scene+教材台本",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_08",
+      "slug": "bridge",
+      "name_ja": "他分野へ渡りたい研究者",
+      "entry_query": "うちの問題と同じ構造が他にもある？",
+      "context": "一分野には詳しく周辺語彙に弱い",
+      "route": [
+        "構造検索",
+        "条件付き関係",
+        "domain bridge",
+        "相違点",
+        "元論文"
+      ],
+      "likely_stumbling_block": "共通する名前だけで同じ保証だと推測",
+      "intervention": "変数対応、単位、失われる条件を対応表にする",
+      "success_criterion": "似ている点と似ていない点を両方説明できる",
+      "exit_artifact": "構造対応表",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_09",
+      "slug": "reviewer",
+      "name_ja": "技術判断を承認する人",
+      "entry_query": "なぜその候補で、何を保証しないの？",
+      "context": "長い数式より前提・費用・リスクを知りたい",
+      "route": [
+        "判断要約",
+        "除外理由",
+        "証拠",
+        "感度",
+        "元の問題"
+      ],
+      "likely_stumbling_block": "convergedを実世界で安全/妥当と読む",
+      "intervention": "数値終了・モデル可行性・現実妥当性を別段階にする",
+      "success_criterion": "残る確認事項と責任の所在を列挙できる",
+      "exit_artifact": "判断メモ",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    },
+    {
+      "persona_id": "PERSONA_10",
+      "slug": "civic",
+      "name_ja": "公共・社会の意思決定を学ぶ人",
+      "entry_query": "公平な配分は最適化で決められる？",
+      "context": "数学より価値対立や影響に関心",
+      "route": [
+        "事例",
+        "重み/制約の違い",
+        "Pareto",
+        "当事者影響",
+        "限界"
+      ],
+      "likely_stumbling_block": "一つの最適値が公平性を自動的に定めると誤解",
+      "intervention": "目的を選ぶ人・影響を受ける人をモデル外にも表示",
+      "success_criterion": "最適化で決められる部分と合意が必要な部分を区別",
+      "exit_artifact": "未合意事項リスト",
+      "evidence_status": "design_hypothesis_not_user_research",
+      "accessibility": "全personaでkeyboard・拡大・reduced-motion・字幕/文章・低帯域を横断検査する",
+      "validation": "実利用者のthink-aloudと初見課題で検証。属性から能力・嗜好を決めつけない。"
+    }
+  ]
+}
