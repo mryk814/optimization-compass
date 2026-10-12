@@ -63,7 +63,7 @@
         {
           "content_id": "concept.mixed-integer-linear-program",
           "has_article": true,
-          "question_ja": "パンの個数を整数に限ると、答えと解き方の何が変わるのか。",
+          "question_ja": "作る個数を整数に限ると、答えと解き方の何が変わるのか。",
           "route": "/formulations/PA023",
           "step": 3,
           "stumbles": [

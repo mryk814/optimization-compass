@@ -551,7 +551,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 22
+              "has_interactive": 23
             },
             "states": {
               "undecided": 160
@@ -605,7 +605,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 11
+              "has_interactive": 14
             },
             "states": {
               "undecided": 80

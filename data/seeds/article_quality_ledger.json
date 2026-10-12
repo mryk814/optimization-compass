@@ -77,6 +77,25 @@
         "screen.three-widths": "pass"
       }
     },
+    "concept.knapsack-set-cover": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "aa4abb83dfb5",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Haikuが執筆（既存の操作図branch-bound-proofを主図に埋め込み）、Sonnetが一次レビュー（数値を再計算、pitfalls・observation-to-formula・ui-names・prose.readableがfail）。Claudeが実画面をPlaywrightで操作して確かめ項目を照合し（開始後に選択中の候補のボタンを5回押すと上限13で証明完了、表示は「残る得点の上限」「Aあり／Aなし」）、UI名・観察から式への問い・つまずき3項目の数値（B=4.5の丸め、≥8で4品すべて23、覆えない地区でstatus 2）・重複した出力ブロックを直した。1280/375/320pxで図の重なり・はみ出し0"
+    },
     "concept.l1-sparse-regularization": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
