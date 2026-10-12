@@ -24,6 +24,7 @@ from scripts.generate_lesson_figures import (
     miqp_relaxation,
     mpc_wall_data,
     ridge_solution,
+    socp_center,
     vrp_data,
 )
 
@@ -196,3 +197,17 @@ def test_milp_tree_figure_uses_the_article_numbers() -> None:
     for text in ("(10/3, 1)", "上界 62/3", "(3, 1.5)", "値 19", "値 20", "上界 18"):
         assert text in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_socp_relay_figure_uses_the_article_numbers() -> None:
+    from fractions import Fraction
+
+    centre, weights = socp_center()
+    assert centre == (Fraction(3), Fraction(1))
+    assert weights == (Fraction(1, 3), Fraction(5, 12), Fraction(1, 4))
+    # All three villages are at distance sqrt(10) from the centre, and the weights are positive.
+    for vx, vy in ((0, 0), (6, 0), (2, 4)):
+        assert (vx - 3) ** 2 + (vy - 1) ** 2 == 10
+    figure = generate_lesson_figures()["socp-relay-station.svg"]
+    for text in ("半径 3.6 km", "3.162 km", "Bまで 3.590 km", "(3, 1)", "5/12", "1/4", "1/3"):
+        assert text in figure
