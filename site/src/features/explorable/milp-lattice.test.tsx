@@ -27,6 +27,17 @@ describe("MilpLattice", () => {
     ).toBeGreaterThan(0);
   });
 
+  it("b1=23, b2=5: the rounded (3, 1)=19 is proven optimal because integer profits stay at most ⌊19.75⌋", () => {
+    render(<MilpLattice />);
+
+    fireEvent.change(screen.getByRole("slider", { name: /資源1の上限/u }), { target: { value: "23" } });
+    fireEvent.change(screen.getByRole("slider", { name: /資源2の上限/u }), { target: { value: "5" } });
+
+    expect(
+      screen.getAllByText(/丸めた点 \(3, 1\) は実行できて利益 19、整数の最適解と一致しました。利益の係数が整数なので、整数解の利益は上界を切り捨てた 19 以下です。/u).length,
+    ).toBeGreaterThan(0);
+  });
+
   it("b2=7 widens the gap to 1.50 while the integer optimum stays 20", () => {
     render(<MilpLattice />);
 

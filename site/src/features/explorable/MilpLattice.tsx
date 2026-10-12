@@ -206,7 +206,12 @@ function verdictText(s: MilpSolution): string {
     return `${lp}丸めた点 ${fmtPair(s.rounded[0], s.rounded[1], 0)} は${excessText(s).replace("実行できない", "実行できません")}。${best}`;
   }
   if (s.roundedValue === s.integerValue) {
-    return `${lp}丸めた点 ${fmtPair(s.rounded[0], s.rounded[1], 0)} は実行できて利益 ${fmt(s.roundedValue, 0)}、整数の最適解と一致しました。ただし上界 ${fmt(s.lpValue)} との差 ${fmt(s.gap)} が残り、丸めただけでは最適とは言い切れません。`;
+    // Profit coefficients are integers, so every integer plan earns at most ⌊upper bound⌋.
+    const ceiling = Math.floor(s.lpValue + 1e-9);
+    const proof = s.roundedValue === ceiling
+      ? `利益の係数が整数なので、整数解の利益は上界を切り捨てた ${ceiling} 以下です。この比較から最適だと言えます。根拠は上界との比較で、丸めたこと自体ではありません。`
+      : `上界を切り捨てた ${ceiling} との差が残るので、この上界だけでは最適だと言い切れません。`;
+    return `${lp}丸めた点 ${fmtPair(s.rounded[0], s.rounded[1], 0)} は実行できて利益 ${fmt(s.roundedValue, 0)}、整数の最適解と一致しました。${proof}`;
   }
   return `${lp}丸めた点 ${fmtPair(s.rounded[0], s.rounded[1], 0)} は実行できますが利益 ${fmt(s.roundedValue, 0)} で、${best}`;
 }
