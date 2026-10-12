@@ -150,6 +150,7 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `saddle-newton` | `concept.smooth-low-dimensional-unconstrained` | 始点を動かし、純粋なNewton法が谷底と峠のどちらに着くかを、着いた点の勾配とHessianの固有値（曲率）で見分ける。始点Aは6回で左の谷底、始点Bは3回で峠 |
 | `robust-loss-pull` | `concept.robust-regression` | 観測 (0, 0, 0, m) の最後の値 m とHuberの尺度 δ を動かし、二乗損失とHuber損失の定数当てはめ・各観測の損失の傾きを見比べる。Huber の推定値は min(m/4, δ/3) と一致 |
 | `milp-integer-lattice` | `concept.mixed-integer-linear-program` | 二つの資源の上限 b₁, b₂ を動かし、LP緩和の最適解（上界）・それを丸めた点・整数の最適解を格子点の上で見比べる。既定 (24, 6) は LP (3, 1.5)=21、丸め (3, 2) は両方の制約を破り、整数最適 (4, 0)=20。b₂=4 では LP解が整数でギャップ0、b₂=7 ではギャップ1.5 |
+| `failure-ledger` | `concept.failed-simulation` | 失敗した評価を、状態として記録するか、罰則値 P に置き換えるかを切り替える。7回の評価台帳（成功4・クラッシュ1・時間切れ1・物理的にありえない出力1）を、評価回数 7/20（失敗も数える）の予算メーターと並べる。罰則値 P=10 では、u₁＜0.5 の側の平均が 0.1025（成功1件）から 6.7008 へ、u₁≥0.5 の側が 0.0308 から 2.5231 へ動き、成功どうしの差は記録値の幅の 1.025% になる。P=0 では失敗3件が最良の値 0 と同点。範囲の外の試す点だけが赤の既知の違反で、範囲の中の点は失敗かどうか不明のまま |
 
 ## 次の候補
 
