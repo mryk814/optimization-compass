@@ -42,7 +42,7 @@
 | `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 4130 | 8 | 4 | 0 | pass |
-| `concept.smooth-low-dimensional-unconstrained` | 132 | 12714 | 15 | 11 | 0 | pass |
+| `concept.smooth-low-dimensional-unconstrained` | 132 | 13114 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |

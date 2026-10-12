@@ -605,7 +605,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 10
+              "has_interactive": 11
             },
             "states": {
               "undecided": 80
