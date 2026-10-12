@@ -344,6 +344,18 @@
 .ex-cost-arrow { stroke: var(--ex-orange-ink); stroke-width: 3.5; }
 .ex-probe { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
 
+/* MILP lattice: LP optimum = orange diamond, rounded point = ring (red only when infeasible), integer optimum = teal star */
+.milp-dot-in { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.milp-dot-out { fill: var(--ex-ink-soft); fill-opacity: 0.35; }
+.milp-lp { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
+.milp-round-ok { fill: var(--ex-ground); fill-opacity: 0.6; stroke: var(--ex-teal-ink); stroke-width: 3; }
+.milp-round-bad { fill: var(--ex-red); fill-opacity: 0.25; stroke: var(--ex-red); stroke-width: 3; }
+.milp-best { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; stroke-linejoin: round; }
+.ex-table.milp-table th[scope="row"] { white-space: normal; }
+.ex-table.milp-table td { white-space: nowrap; }
+.milp-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
+.milp-glyph { margin-right: 0.35rem; vertical-align: middle; }
+
 /* Convexity */
 .ex-curve { fill: none; stroke: var(--ex-ink); stroke-width: 3; }
 .ex-chord { fill: none; stroke: var(--ex-orange); stroke-width: 3; }

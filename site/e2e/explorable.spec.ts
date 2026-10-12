@@ -23,6 +23,7 @@ const figures = [
   { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
   { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
   { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
+  { label: "mixed-integer-linear-program", route: "/learn/concept.mixed-integer-linear-program", id: "milp-integer-lattice" },
 ];
 
 for (const figure of figures) {
