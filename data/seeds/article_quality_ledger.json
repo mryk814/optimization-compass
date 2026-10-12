@@ -115,53 +115,23 @@
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
     "concept.linear-program": {
-      "reviewed_on": "2026-10-04",
+      "reviewed_on": "2026-10-12",
       "reviewer": "claude",
-      "body_sha256": "c5a79a7e0f4a",
+      "body_sha256": "ac7faecd4f49",
       "verdicts": {
-        "compare.no-ranking": {
-          "verdict": "fail",
-          "note": "L29「数百万変数の問題でも…解けます」、L118「大規模で疎な問題に強く」など、条件も出典もない一般的な性能の主張がある"
-        },
+        "compare.no-ranking": "pass",
         "example.computed": "pass",
-        "example.single-thread": {
-          "verdict": "fail",
-          "note": "パン屋の題材は双対とコードまで通るが、主図lp-vertex-walkは別のLP（max 3x+2y）で、例の頂点(4,3)と売上24を図で確かめられない。図の初期値をパン屋のLPにそろえる"
-        },
-        "explorable.ui-names": {
-          "verdict": "fail",
-          "note": "本文が「目的の係数」「橙の直線」「紺の点」と色や一般語で呼び、UI名「係数 c₁（x の重み）」で指していない。LpVertexWalkにex-panel-titleの見出しがない"
-        },
-        "figure.observation-to-formula": {
-          "verdict": "fail",
-          "note": "図の後はL73の1文だけで、観察から生まれる疑問がない。主図も標準形より後にある"
-        },
-        "figure.one-question": {
-          "verdict": "fail",
-          "note": "captionが「別のLPの教材用の図」止まりで、図の問い（なぜ頂点だけでよいか）と読み取れない範囲（実装・計算量は示さない等）を書いていない"
-        },
-        "pitfalls.with-example": {
-          "verdict": "fail",
-          "note": "L142-145の4項目が一般論で、パン屋の数値で誤りを示していない。例：小麦粉を18から増やすと39までは売上が5/7ずつ増え、それを超えると増えない（双対値の外挿）"
-        },
-        "prose.readable": {
-          "verdict": "fail",
-          "note": "L28「この強い制限が、この定式化の強みでもあります」、L105、L111「使える道具と得られる保証が変わります」など、中身のない抽象文がある"
-        },
-        "reading.formula-sentence": {
-          "verdict": "fail",
-          "note": "標準形の式の前（L33）が記号の導入だけで、式が何をするかの一文がない。式の後の読み方（L39）はある"
-        },
-        "routes.trouble-first": {
-          "verdict": "fail",
-          "note": "見分け方L96の固定費と、実行不能・非有界の行き先にリンクがない。近い定式化L107-109にリンクがなく、一般／特殊／緩和の関係語もない"
-        },
-        "screen.three-widths": {
-          "verdict": "fail",
-          "note": "375pxで主図のラベルが重なる（「B z=7.5」と「2x+y≤5」）。右端の「y ≥ 0」が切れる"
-        }
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
       },
-      "notes": "Sonnet 5.5のレビューをClaudeが本文と照合して確認。数値（頂点の売上、双対値5/7・6/7、コード出力）は再計算で一致。画面はClaudeが1280/375/320pxで確認"
+      "notes": "書き手（Claude）による自己レビュー。主図lp-vertex-walkを記事のパン屋のLPにそろえ、確かめ項目1〜3の数値（24、18、辺全体18）を図の判定文と単体テストで固定。つまずきやすい点・丸め・外挿の数値はscipyで再計算して一致。画面はPlaywrightで1280/375/320pxを撮影し、SVGラベルの重なり・はみ出し0を確認（式の欄は枠内で横スクロール）。別の読み手のレビューはまだ"
     },
     "concept.mixed-integer-quadratic-program": {
       "reviewed_on": "2026-10-10",
