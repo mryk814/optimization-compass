@@ -89,7 +89,7 @@ export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
   },
   "lp-vertex-walk": {
     question: "線形目的の最適解が、なぜ実行可能領域の頂点だけを調べれば見つかるのか。",
-    fixedConditions: "2変数・2本の不等式と非負制約からなる固定のLP（max 3x+2y の係数を動かす）。",
+    fixedConditions: "記事のパン屋のLP（小麦粉 3x₁+2x₂≤18、バター x₁+3x₂≤13、非負）で、在庫は固定し、1個あたりの売上 c=(c₁, c₂) だけを −4〜4 の範囲で0.5刻みに動かす。初期値は記事と同じ c=(3, 4)。",
     notImplied: "実際のprimal simplex実装のpivot ruleや計算量を示すものではない。隣の頂点へ移る動きは教育用の模式化である。",
     beats: [],
   },
