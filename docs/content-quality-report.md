@@ -19,7 +19,7 @@
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
-| `concept.failed-simulation` | 107 | 10438 | 13 | 11 | 0 | pass |
+| `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
