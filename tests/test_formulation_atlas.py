@@ -155,6 +155,83 @@ def test_paths_resolve_routes_and_stubs(pages, archetype_ids: set[str]) -> None:
     assert stub["route"] == "/formulations/PA034"
 
 
+def test_stumbles_resolve_to_titled_routes(pages, archetype_ids: set[str]) -> None:  # type: ignore[no-untyped-def]
+    index = build_learning_path_index(
+        load_learning_path_seed(PATH_SEED),
+        dataset_version="test",
+        archetypes=dict.fromkeys(archetype_ids, "x"),
+        content_pages=pages,
+        formulation_articles={},
+    )
+    beginner = next(path for path in index["paths"] if path["path_id"] == "what-is-optimization")
+    first, pivot = beginner["steps"][0], beginner["steps"][1]
+    assert first["stumbles"][0]["route"] == "/learn/concept.variable-domain"
+    assert first["stumbles"][0]["title_ja"] == "変数の定義域"
+    assert pivot["stumbles"][0]["route"] == "/formulations/PA017"
+    every_step = [step for path in index["paths"] for step in path["steps"]]
+    assert all(isinstance(step["stumbles"], list) for step in every_step)
+
+
+def test_beginner_path_meets_its_entry_contract() -> None:
+    # OC-EVOL-007: no diagnosis needed, a formula shortcut exists, every step can be stepped
+    # back from, and every step states its question.
+    beginner = next(
+        path
+        for path in load_learning_path_seed(PATH_SEED).paths
+        if path.path_id == "what-is-optimization"
+    )
+    assert any(step.target_type == "formulation" for step in beginner.steps)
+    assert all(step.stumbles for step in beginner.steps)
+    assert all(step.question_ja for step in beginner.steps)
+
+
+def _one_step_path(stumble: dict[str, str]) -> LearningPathSeed:
+    return LearningPathSeed.model_validate(
+        {
+            "contract_version": "1.0.0",
+            "paths": [
+                {
+                    "path_id": "stumble-check",
+                    "title_ja": "t",
+                    "summary_ja": "s",
+                    "goal_ja": "g",
+                    "audience_ja": "a",
+                    "steps": [
+                        {
+                            "target_type": "formulation",
+                            "target_id": "PA017",
+                            "question_ja": "問い。",
+                            "stumbles": [{"trouble_ja": "分からない。", **stumble}],
+                        },
+                        {
+                            "target_type": "formulation",
+                            "target_id": "PA023",
+                            "question_ja": "次の問い。",
+                        },
+                    ],
+                }
+            ],
+        }
+    )
+
+
+@pytest.mark.parametrize(
+    ("stumble", "message"),
+    [
+        ({"target_type": "content", "target_id": "concept.missing"}, "unpublished content"),
+        ({"target_type": "formulation", "target_id": "PA999"}, "unknown formulation"),
+        ({"target_type": "formulation", "target_id": "PA017"}, "points back to itself"),
+    ],
+)
+def test_stumble_must_lead_somewhere_else(  # type: ignore[no-untyped-def]
+    pages, archetype_ids: set[str], stumble: dict[str, str], message: str
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        validate_learning_paths(
+            _one_step_path(stumble), archetype_ids=archetype_ids, content_pages=pages
+        )
+
+
 def test_step_before_its_prerequisite_is_rejected(pages, archetype_ids: set[str]) -> None:  # type: ignore[no-untyped-def]
     seed = LearningPathSeed.model_validate(
         {
