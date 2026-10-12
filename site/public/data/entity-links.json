@@ -8114,6 +8114,67 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.failed-simulation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "失敗・NaNを伴うシミュレーション",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA016",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "失敗・NaNを伴うシミュレーションの最小化は、評価が値を返さない点を含む問題です。失敗は大きな目的値ではなく状態として台帳に残し、実行前に分かる違反・時間切れ・値が得られない失敗を分けて、評価回数の予算に数えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.hyperparameter-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -32622,7 +32683,9 @@
       "summary": "高次元black-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.failed-simulation"
+      ],
       "canonical_url": "/formulations/PA016",
       "entity_id": "PA016",
       "entity_type": "problem",
@@ -32633,6 +32696,11 @@
           "relation_type": "case",
           "target_id": "EC027",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
         },
         {
           "relation_type": "learning_journey",

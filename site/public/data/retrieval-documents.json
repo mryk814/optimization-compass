@@ -9747,6 +9747,249 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "1回に数時間かかるシミュレーションを、20回まで回せるとします。 設計は連続の2つの量 u 1 , u 2 と、二つの方式から選ぶ mode です。 ここまでに7回回したところ、4回は数値が返り、3回は返りませんでした。 返らなかった3回の内訳は次のとおりです。計算が途中で落ちた回が1回、打ち切りの時間までに終わらなかった回が1回、物理的にありえない出力が出た回が1回です。 この3回を台帳にどう書くかで、次に試す点の選び方が変わります。 いちばん自然に見えるのは、「失敗は悪い結果だから大きな数にしておこう」と書く方法です。 ところが、それは起きたことの書き換えです。実際には、値は返っていません。 決めるもの : 連続の2つの量 u 1 , u 2 と、二値の mode 良くしたいもの : 評価が成功した点の目的値 守ること : 範囲 0 ≤ u 1 , u 2 ≤ 1 、評価回数 20 回の予算。失敗した評価も1回に数える 最初に、7回分の台帳を、失敗の扱いを変えながら読みます。 「失敗の扱い」を「罰則値に置き換える」にして、「罰則値 P」のつまみを 0 まで動かしてください。 動かして確かめる図です。JavaScriptが有効なブラウザで表示されます。読み込めない場合は、下の説明で内容を確認してください。 図は、評価した7点を状態ごとの形で示します。青緑の丸が成功です。×がクラッシュ、白抜きの四角が時間切れ、三角が物理的にありえない出力です。数字は評価した順番です。橙のひし形は読者が置く「試す点」で、破線は最も近い記録へ引いています。赤は、範囲の外にある、実行前に違反と分かる点だけに使います。台帳の要約は、本物の代理モデルの代わりに、二つの側の平均と最も近い記録を使います。失敗が起きる領域や、実際の探索手法の振る舞いは示しません。 初期設定の「状態として記録する」では、評価回数 7 / 20 のうち成功が 4、失敗が 3（クラッシュ1・時間切れ1・物理的にありえない出力1）です。残りは 13 回で、成功の 4 回だけを引いた 16 回ではありません。 「罰則値に置き換える」にすると、P は 10 です。 u 1 < 0.5 の側の平均は 0.1025 から 6.7008 へ、 u 1 ≥ 0.5 の側の平均は 0.0308 から 2.5231 へ動きます。成功どうしの差 0.1025 は、記録値の幅 10 の 1.025% に縮みます。 「罰則値 P」を 0 にすると、最小の値 0 に評価1だけでなく、評価2（クラッシュ）・評価4（時間切れ）・評価7（物理的にありえない出力）も並びます。0.05 では、小さい順の上位3件が評価1・評価5・評価2（クラッシュ）になります。評価2・評価4・評価7は同じ 0.05 で並び、評価の順で評価2が先に来ます。 「状態として記録する」に戻して「試す点 u₁」を 1.1 にすると、点は赤い×になり、評価回数は 7 のままです。範囲の中の (0.20, 0.04) に戻すと、最も近い記録は評価2のクラッシュ（距離 0.051）で、この点が実行できるかは台帳から分かりません。 失敗を数に置き換えると、台帳のどの情報が変わってしまうのでしょうか。 それを確かめるために、評価の結果を式で書きます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "失敗・NaNを伴うシミュレーションの最小化は、評価が値を返さない点を含む問題です。失敗は大きな目的値ではなく状態として台帳に残し、実行前に分かる違反・時間切れ・値が得られない失敗を分けて、評価回数の予算に数えます。",
+      "title": "失敗・NaNを伴うシミュレーション"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "失敗を大きな目的値にして、そのまま記録する : P = 10 にすると、 u 1 < 0.5 の側の平均は 0.1025 から 6.7008 になります。 u 1 ≥ 0.5 の側は 0.0308 から 2.5231 です。成功の4件の値の差 0.1025 は、記録値の幅 10 の 1.025% です。記録値全体の幅でそろえて扱う代理モデルなら、 P = 1000000 で成功どうしの差は幅の 1.025e−5% になり、ほとんど見えません。失敗は状態として別に数え、値の平均には入れません。 罰則値を小さくすれば無難だと考える : P = 0 にすると、最小の値 0 に評価2・評価4・評価7が評価1と同点で並びます。 P = 0.05 では、失敗の3件が同じ 0.05 で並び、小さい順の上位3件が評価1・評価5・評価2になります。成功した評価6（0.0874）は、失敗の3件すべての後ろに押し出されます。成功した値の幅は 0 から 0.1025 なので、罰則値は、その幅との大小で意味が変わります。どの数でも、起きていないことを書き足しています。 時間切れを悪い値だと見なす : 評価4を P = 10 にすると、このおもちゃで計算できる 0.1818 の約 55 倍です。時間切れは「悪い値が出た」のではなく「値を待てなかった」です。打ち切りの時間を台帳に書き、値は空にします。 成功した点の近くを、実行できると見なす : 評価3（成功）と評価2（クラッシュ）は、距離 0.304 離れています。台帳から言えるのは、この間のどこかで状態が変わった可能性までです。このおもちゃは失敗の条件 u 1 + u 2 < 0.25 を式で持つので、確かめられます。2点を結ぶ線分の 80% の位置 ( 0.21 , 0.06 ) は成功ですが、90% の位置 ( 0.18 , 0.055 ) は失敗です。式を持たない問題では、この確認ができません。 成功を「安全」と読む : 評価6は成功ですが、台帳にあるのは点 ( 0.70 , 0.42 , 1 ) と値 0.0874 だけです。数値が返ったことは、装置や人への安全を意味しません。安全の条件が台帳にないなら、補わずに「未知」と書きます。 失敗を回数に数えない : 成功の4回だけを数えると、残りは 16 回に見えます。実際は 20 − 7 = 13 回です。この差は、次の評価を計画する段階で効きます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "MADSがブラックボックスの制約を扱うことは、 NOMAD公式サイト と、MADSの原論文（ Mesh Adaptive Direct Search ）に基づきます。Bayes最適化の実装は、 BoTorch公式サイト に基づきます。台帳の例は、このリポジトリのEC027の教材と同じ設計の範囲と目的の式を使い、教材の失敗台帳に合わせて7回に整えた固定データです。標準ライブラリのPythonでコードを実行しています。 この例は、失敗を値に置き換えたときの記録の歪みを示す小さな例です。特定の方法の性能、罰則値の最適な選び方、実際のシミュレーションの安全性は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:困りごとから関連する問題へ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "実際の課題で、次の症状が出たら、対応する記事へ進めます。 評価1回が高価で、試せる回数が数十回しかない → 非常に高価な低次元評価 と、 評価費と予算 値は返るが、入力を少し変えると値が飛ぶ → 決定論的だが不連続なsimulation 同じ入力でも、測るたびに値が変わる → noiseを含むblack-box 設計が数十個あって、探索が広がりすぎる → 高次元black-box 失敗する条件が、実行前の式で書ける → 制約の分類 学習が発散して値が返らない設定が出る → hyperparameter optimization 失敗を伴うシミュレーションと関連する問題の関係 決定論的だが不連続なsimulation : 値が飛ぶことと、値が返らないことは別の問題です。前者は、評価がどの点でも値を返すので比較できます。失敗を大きな目的値で置き換えると、後者を前者に見せかけて探索を誤らせます。 非常に高価な低次元評価 : 評価が高価で回数が限られる点は同じです。値が必ず返る前提ならこの型です。失敗が混ざるなら、この記事の台帳（状態と予算の単位）を足します。 noiseを含むblack-box : 同じ入力で値がばらつく型です。ばらつきは値が返る前提で、失敗は値が返らない点が違います。両方が起きるなら、二つの記録を別々に持ちます。 制約の分類 : 失敗の条件が実行前の式で書けるなら、制約として扱えます。実行しないと分からない失敗は、この記事の台帳に状態として残します。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "設計は ( u 1 , u 2 , mode ) です。成功したときの値は、前の節の F ( x ) で計算します。7回の台帳は次のとおりです。 評価 ( u 1 , u 2 , mode ) 状態 値 1 ( 0.65 , 0.35 , 0 ) 成功 0.0000 2 ( 0.15 , 0.05 , 1 ) クラッシュ なし 3 ( 0.45 , 0.10 , 0 ) 成功 0.1025 4 ( 0.82 , 0.62 , 1 ) 時間切れ なし 5 ( 0.60 , 0.30 , 0 ) 成功 0.0050 6 ( 0.70 , 0.42 , 1 ) 成功 0.0874 7 ( 0.10 , 0.08 , 0 ) 物理的にありえない出力 なし 評価3の値は、 ( 0.45 − 0.65 ) 2 = 0.04 と ( 0.10 − 0.35 ) 2 = 0.0625 の和で、0.1025 です。評価6は 0.0025 + 0.0049 + 0.08 = 0.0874 です。 予算は、7回使って残り 13 回です。成功は4回、失敗は3回で、失敗した3回も評価回数を使っています。 次に、この台帳から二つの側の平均を作ります。 代理モデルは、記録した値から、まだ評価していない点の値を予測するものです。 ここでは最も簡単な予測として、 u 1 < 0.5 の側と u 1 ≥ 0.5 の側それぞれで、記録値を平均します。 失敗の扱い 最小の値 u 1 < 0.5 の側の平均 u 1 ≥ 0.5 の側の平均 成功の差が幅に占める割合 状態として記録する 0（評価1） 0.1025（評価3回のうち成功1回） 0.0308（評価4回のうち成功3回） 失敗を値にしないので定義しない P = 10 に置き換える 0（評価1） 6.7008 2.5231 1.025% P = 1000000 に置き換える 0（評価1） 666666.7008 250000.0231 1.025e−5% 表の最終列は、成功の4件の値の差 0.1025 を、記録した値全体の幅（最大 − 最小）で割った割合です。 P = 10 の u 1 < 0.5 の側は、 ( 10 + 0.1025 + 10 ) / 3 = 6.7008 です。 三つの評価のうち成功は評価3だけなので、平均の大半は罰則値が占めます。 この側には成功した評価3の 0.1025 があるのに、平均は成功だけの平均の約 65 倍（ 6.7008 ÷ 0.1025 ）に膨らみます。 もう一つの使い方は、試す点に最も近い記録を読むことです。 ( 0.20 , 0.04 ) に最も近い記録は評価2のクラッシュで、距離は 0.051 です。最も近い成功は評価3で、距離は 0.2571 です。 「状態として記録する」なら、この点の値は予想せず、実行できるかは不明と読みます。 P = 10 に置き換えると、この点の値を 10 と予想し、実行できないと決めつけます。 台帳に残らない情報 評価4の時間切れで完走していたら、値はいくつだったでしょうか。このおもちゃの式なら、 0.0289 + 0.0729 + 0.08 = 0.1818 と計算できます。 実際の問題は式を持たないので、この値は分かりません。台帳に書けるのは、打ち切りの時間と「値は分からない」だけです。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "失敗を値にしない方法を選ぶ際に見る点は、失敗した点を探索の記録にどう入れるかです。次の表は順位ではなく、条件ごとの入口です。 系統 失敗の扱い方 向く条件・避ける条件 MADS 微分を使わず、成功した点の近くを格子上で調べます。失敗は隠れた制約（実行しないと分からない制約）として扱えます 数個から数十個の設計で、勾配を作れないとき。失敗する領域が採用点の近くに広がると、調べる格子点の多くが値を返さなくなります Bayes最適化 成功した値から代理モデルを作ります。失敗には値がないので、失敗する見込みを別に扱うか、罰則を使うかを設計として選びます 評価が高価で、回数が数十回のとき。罰則を使うなら、罰則値が代理モデルの尺度を壊さないかを確かめます Random Search 履歴を使わず、失敗の割合と場所を測ります 複雑な探索を入れる前に、失敗率の基準を作りたいとき。次元が高いと、有望な領域に当たる保証はありません BFGS 勾配を差分で作ります 失敗や不連続の境界の近くでは、差分が値を欠きます。失敗が起きない範囲に限って使えます ライブラリの既定の設定は、そのライブラリの選択です。この記事の推奨でも、方法の順位でもありません。比較するときは、台帳の形式・予算の単位・失敗の扱いをそろえます。 失敗の状態区分を比べる は、評価不能を大きい目的値へ置き換えない固定の教材です。 次のコードは、小さな例の台帳を、標準ライブラリだけで集計します。 python from math import hypot BUDGET = 20 # 単位は評価回数。失敗も1回に数える def objective ( u1 , u2 , mode ): return ( u1 - 0.65 ) ** 2 + ( u2 - 0.35 ) ** 2 + 0.08 * mode # 1回の評価 = 台帳の1行。失敗の行には値を入れない（None） points = [ ( 0.65 , 0.35 , 0 , \"ok\" ), ( 0.15 , 0.05 , 1 , \"crash\" ), ( 0.45 , 0.10 , 0 , \"ok\" ), ( 0.82 , 0.62 , 1 , \"timeout\" ), ( 0.60 , 0.30 , 0 , \"ok\" ), ( 0.70 , 0.42 , 1 , \"ok\" ), ( 0.10 , 0.08 , 0 , \"nonphysical\" ), ] ledger = [ { \"call\" : i + 1 , \"u1\" : u1 , \"u2\" : u2 , \"mode\" : m , \"status\" : s , \"value\" : round ( objective ( u1 , u2 , m ), 4 ) if s == \"ok\" else None } for i , ( u1 , u2 , m , s ) in enumerate ( points ) ] spent = len ( ledger ) ok = sum ( r [ \"status\" ] == \"ok\" for r in ledger ) print ( spent , ok , spent - ok , BUDGET - spent ) # 7 4 3 13 def half_means ( penalty = None ): out = [] for left in ( True , False ): rows = [ r for r in ledger if ( r [ \"u1\" ] < 0.5 ) == left ] values = [ r [ \"value\" ] if r [ \"value\" ] is not None else penalty for r in rows ] values = [ v for v in values if v is not None ] out . append (( round ( sum ( values ) / len ( values ), 4 ), len ( values ), len ( rows ))) return out print ( half_means ()) # [(0.1025, 1, 3), (0.0308, 3, 4)] print ( half_means ( 10 )) # [(6.7008, 3, 3), (2.5231, 4, 4)] # 成功どうしの差が、記録値の幅の何%か ok_values = [ r [ \"value\" ] for r in ledger if r [ \"value\" ] is not None ] spread = max ( ok_values ) - min ( ok_values ) for p in ( 10 , 1_000_000 ): recorded = ok_values + [ p ] * ( spent - ok ) print ( p , f \" { spread / ( max ( recorded ) - min ( recorded )) * 100 : .3e } \" ) # 10 1.025e+00 / 1000000 1.025e-05 # 試す点 (0.20, 0.04) に最も近い記録（modeは無視） probe = ( 0.20 , 0.04 ) nearest = min ( ledger , key = lambda r : hypot ( r [ \"u1\" ] - probe [ 0 ], r [ \"u2\" ] - probe [ 1 ])) print ( nearest [ \"call\" ], nearest [ \"status\" ], round ( hypot ( nearest [ \"u1\" ] - probe [ 0 ], nearest [ \"u2\" ] - probe [ 1 ]), 3 )) # 2 crash 0.051 最初の出力 7 4 3 13 は、評価回数 7・成功 4・失敗 3・残り 13 回です。 half_means() は成功だけの平均です。 u 1 < 0.5 の側は評価3回のうち成功1回の 0.1025、 u 1 ≥ 0.5 の側は評価4回のうち成功3回の 0.0308 です。 half_means(10) は失敗を 10 の値にした平均で、6.7008 と 2.5231 です。割合は 1.025% と、 P = 1000000 のときの 1.025e−5% です。最後の行は、試す点に最も近い記録が評価2のクラッシュで、距離が 0.051 であることを示します。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "次の式は「範囲の中から目的の値が最も小さい点を選ぶ。ただし、評価が値の代わりに『失敗』を返す点がある」を表します。 min x ∈ X F ( x ) , F ( x ) ∈ ℝ ∪ { fail } 式は「 X の中で F ( x ) が最小の x を選ぶ。ただし F ( x ) は実数か、失敗のどちらか」と読みます。失敗は数ではないので、他の値と大小を比べられません。 記号 意味 例では x 決める設計 ( u 1 , u 2 , mode ) X 実行前に分かる範囲 0 ≤ u 1 , u 2 ≤ 1 、 mode ∈ { 0 , 1 } F ( x ) 成功したときに返る目的値 下の式で計算する値 fail 値が返らなかったという記録 クラッシュ、時間切れ、物理的にありえない出力 B 予算。単位を付けて決める 評価回数 20 この例で成功したときに返る値は、 ( 0.65 , 0.35 ) からの距離の二乗に、 mode の費用を足した値です。 F ( x ) = ( u 1 − 0.65 ) 2 + ( u 2 − 0.35 ) 2 + 0.08 mode 最小化の対象は、成功した評価の値です。失敗は、最小化する量ではなく、台帳に残す事実です。 失敗の種類を分ける 「値がない」という点は同じでも、分かる時点と評価回数の使い方が違います。混ぜて「失敗」と書くと、探索に使える情報が消えます。 種類 いつ分かるか 値 評価回数 台帳での扱い 既知の制約違反 実行する前に、式で分かる 評価しないので未定義 使わない 評価に出さず、違反の理由を残す 時間切れ 打ち切りの時間が来たとき 存在するかもしれないが、分からない 使う 状態を timeout として、値は空にする クラッシュ、物理的にありえない出力 実行した後 得られない 使う 状態を crash や nonphysical として、値は空にする 既知の違反は式で判断できるので、評価に出す前に除けます。他の二つは、実行しないと分かりません。 時間切れの点は、待てば値が返ったかもしれません。値が大きいから打ち切られたのではなく、1回あたりの打ち切りの時間が来ただけです。 予算には単位がある 予算 B は、数と単位の組で決めます。 この記事では評価回数で数えるので、成功も失敗も1回です。 時間で数えるなら、時間切れの評価は打ち切りの時間をそのまま使います。クラッシュは落ちるまでの時間だけです。 費用で数えるなら、失敗した試料の費用も払います。 どの単位でも、台帳に評価ごとの消費量の欄を作り、失敗した評価の分も足します。 成功だけを数えると、残りの予算を多く見積もります。 台帳にない情報は未知のまま 成功した点の近くが、実行できるとは限りません。台帳が言えるのは、評価した点の状態だけです。評価していない点については、「分からない」と書きます。 範囲 X の外は例外で、式から違反と分かります。そのため、図の赤は範囲の外の点だけに使います。 範囲の中の点を「失敗しそうだから」と赤く塗ることはしません。 安全に関わる条件が台帳にないときも、推測で補わず、未知と書いて残します。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.failed-simulation:課題から定式化する",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.failed-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.constraint-class",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:mads",
+        "content:random-search",
+        "problem:PA016",
+        "source:S031",
+        "source:S035",
+        "source:S060"
+      ],
+      "source_ids": [
+        "S031",
+        "S035",
+        "S060"
+      ],
+      "text": "「ときどき計算が落ちるシミュレーションで、20回の評価から設計を選びたい」という課題だけでは、まだこの型とは決まりません。次の4つを順に確かめます。 何を決めるか : 連続の u 1 , u 2 と、二値の mode を決めます。 評価1回は何を返すか : 成功なら目的値、失敗なら状態（クラッシュ・時間切れ・物理的にありえない出力）を返します。値が返るかどうかは、実行した後に分かります。 どのずれを減らすか : 成功した評価の目的値を小さくします。失敗は、値に置き換えず、状態と件数として別に扱います。 何を守り、何を予算とするか : 範囲 0 ≤ u 1 , u 2 ≤ 1 は実行前に守ります。予算は評価回数 20 回で、失敗も1回です。安全の条件などで台帳にないものは、未知として書きます。 次の三つが揃えば、この記事の型です。評価が失敗しうること。失敗には値がないこと。予算を単位つきで数えられること。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.hyperparameter-optimization:30秒でつかむ",
       "dataset_version": "0.18.23",
       "document_id": "content:concept.hyperparameter-optimization",
@@ -51437,6 +51680,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC027",
+        "content:concept.failed-simulation",
         "journey:EC027"
       ],
       "source_ids": [

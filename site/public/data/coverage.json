@@ -605,7 +605,7 @@
             "complete": 0,
             "eligible": 0,
             "info": {
-              "has_interactive": 16
+              "has_interactive": 17
             },
             "states": {
               "undecided": 80
@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 16,
+            "complete": 17,
             "eligible": 80,
             "info": {},
             "states": {
               "in_progress": 38,
-              "no_article": 26,
+              "no_article": 25,
               "stale": 0
             }
           },
@@ -15949,12 +15949,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.failed-simulation"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -15981,12 +15981,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA016",
-            "EC027"
+            "EC027",
+            "concept.failed-simulation"
           ]
         },
         "recommendation": {
