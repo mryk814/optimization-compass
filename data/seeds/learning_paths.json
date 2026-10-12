@@ -45,7 +45,7 @@
         {
           "target_type": "formulation",
           "target_id": "PA023",
-          "question_ja": "パンの個数を整数に限ると、答えと解き方の何が変わるのか。",
+          "question_ja": "作る個数を整数に限ると、答えと解き方の何が変わるのか。",
           "stumbles": [
             {
               "trouble_ja": "連続の量と整数の量で、何が違うのか分からない。",
