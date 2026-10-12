@@ -122,8 +122,11 @@
 }
 
 .ex-slider-value {
+  flex-shrink: 0;
   font-variant-numeric: tabular-nums;
   color: var(--ex-orange-ink);
+  /* A long label wraps instead of splitting the value ("4." / "0") on a phone. */
+  white-space: nowrap;
 }
 
 .ex-slider input[type="range"],

@@ -24,7 +24,7 @@
 | `concept.knapsack-set-cover` | 100 | 8793 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
-| `concept.linear-program` | 91 | 4026 | 9 | 4 | 0 | pass |
+| `concept.linear-program` | 91 | 5669 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 103 | 6430 | 11 | 4 | 0 | pass |
 | `concept.mixed-integer-quadratic-program` | 157 | 18988 | 17 | 9 | 0 | pass |

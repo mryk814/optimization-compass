@@ -18,6 +18,7 @@ import {
 } from "./descent";
 import {
   ARTICLE_LP,
+  ARTICLE_REVENUE,
   feasibleVertices,
   greedyVertexWalk,
   isFeasible,
@@ -113,25 +114,25 @@ describe("gradient descent on the valley", () => {
 describe("LP vertex walk", () => {
   const vertices = feasibleVertices(ARTICLE_LP);
 
-  it("finds the four vertices of the article LP", () => {
+  it("finds the four vertices of the bakery LP", () => {
     expect(vertices).toHaveLength(4);
-    const expected = [[0, 0], [2.5, 0], [1, 3], [0, 4]];
+    const expected = [[0, 0], [6, 0], [4, 3], [0, 13 / 3]];
     for (const [x, y] of expected) {
       expect(vertices.some((v) => Math.hypot(v[0] - x, v[1] - y) < 1e-6)).toBe(true);
     }
   });
 
-  it("agrees with the article: optimum (1, 3) with objective 9", () => {
-    const best = optimalVertices(vertices, [3, 2]);
+  it("agrees with the article: optimum (4, 3) with revenue 24", () => {
+    const best = optimalVertices(vertices, ARTICLE_REVENUE);
     expect(best).toHaveLength(1);
-    expect(vertices[best[0]][0]).toBeCloseTo(1);
+    expect(vertices[best[0]][0]).toBeCloseTo(4);
     expect(vertices[best[0]][1]).toBeCloseTo(3);
-    expect(objectiveValue([3, 2], vertices[best[0]])).toBeCloseTo(9);
+    expect(objectiveValue(ARTICLE_REVENUE, vertices[best[0]])).toBeCloseTo(24);
   });
 
   it("walks from the origin to an optimal vertex, improving every move", () => {
     const start = vertices.findIndex((v) => v[0] === 0 && v[1] === 0);
-    for (const cost of [[3, 2], [1, 3], [-1, 2], [2, -1]] as const) {
+    for (const cost of [[3, 4], [1, 3], [-1, 4], [4, -1]] as const) {
       const path = greedyVertexWalk(vertices, cost, start);
       const values = path.map((index) => objectiveValue(cost, vertices[index]));
       expect(values.every((value, i) => i === 0 || value > values[i - 1])).toBe(true);
@@ -142,19 +143,21 @@ describe("LP vertex walk", () => {
   it("does not move when the cost is zero, and lists an optimal edge for parallel costs", () => {
     const start = vertices.findIndex((v) => v[0] === 0 && v[1] === 0);
     expect(greedyVertexWalk(vertices, [0, 0], start)).toStrictEqual([start]);
-    expect(optimalVertices(vertices, [1, 1])).toHaveLength(2);
+    // Flour edge (6, 0)-(4, 3) for c = (3, 2); butter edge (4, 3)-(0, 13/3) for c = (1, 3).
+    expect(optimalVertices(vertices, [3, 2])).toHaveLength(2);
+    expect(optimalVertices(vertices, [1, 3])).toHaveLength(2);
   });
 
   it("keeps a dragged probe inside the polygon and never beats the best vertex", () => {
     const centre: [number, number] = [1, 1];
-    const pulled = pullIntoPolygon(ARTICLE_LP, centre, [6, 6]);
+    const pulled = pullIntoPolygon(ARTICLE_LP, centre, [9, 9]);
     expect(isFeasible(ARTICLE_LP, pulled, 1e-6)).toBe(true);
     expect(pullIntoPolygon(ARTICLE_LP, centre, [0.5, 0.5])).toEqual([0.5, 0.5]);
-    const best = objectiveValue([3, 2], vertices[optimalVertices(vertices, [3, 2])[0]]);
-    for (let x = -1; x <= 6; x += 0.7) {
-      for (let y = -1; y <= 6; y += 0.7) {
+    const best = objectiveValue(ARTICLE_REVENUE, vertices[optimalVertices(vertices, ARTICLE_REVENUE)[0]]);
+    for (let x = -1; x <= 9; x += 0.7) {
+      for (let y = -1; y <= 7; y += 0.7) {
         const point = pullIntoPolygon(ARTICLE_LP, centre, [x, y]);
-        expect(objectiveValue([3, 2], point)).toBeLessThanOrEqual(best + 1e-6);
+        expect(objectiveValue(ARTICLE_REVENUE, point)).toBeLessThanOrEqual(best + 1e-6);
       }
     }
   });
