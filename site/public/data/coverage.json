@@ -626,9 +626,9 @@
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 38,
+              "in_progress": 37,
               "no_article": 25,
-              "stale": 0
+              "stale": 1
             }
           },
           "transfer": {

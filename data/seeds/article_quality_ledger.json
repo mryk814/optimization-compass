@@ -62,7 +62,7 @@
     "concept.failed-simulation": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
-      "body_sha256": "9faa73efb201",
+      "body_sha256": "28193d1cee00",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -76,7 +76,7 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "一次レビュー: コードと数値を再実行して本文と一致を確認。時間切れの説明で1回の打ち切り時間と予算の混同を直し、P=0.05の同点（評価2・4・7）と評価順での解消を明記。1280/375/320pxでページの横はみ出しなし、標準形の式はmath-blockの横スクロール内、操作図は320pxで枠内。"
+      "notes": "一次レビュー: コードと数値を再実行して本文と一致を確認。時間切れの説明で1回の打ち切り時間と予算の混同を直し、P=0.05の同点（評価2・4・7）と評価順での解消を明記。「課題から定式化する」の末尾に、EC027の評価契約の書き出しへの導線を追加し、ボタン名・欄名を実画面で照合。1280/375/320pxでページの横はみ出しなし、標準形の式はmath-blockの横スクロール内、操作図は320pxで枠内。"
     },
     "concept.hyperparameter-optimization": {
       "reviewed_on": "2026-10-10",
