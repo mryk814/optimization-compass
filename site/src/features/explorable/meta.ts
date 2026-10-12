@@ -14,6 +14,12 @@ export interface ExplorableMeta {
 }
 
 export const EXPLORABLE_META: Readonly<Record<string, ExplorableMeta>> = {
+  "saddle-newton": {
+    question: "勾配が0の点に着いたとき、そこが谷底か峠かを、どう見分けるのか。",
+    fixedConditions: "記事の誤差の指標 f(x)=(x₁²−1)²+x₁x₂+2x₂² の上で、純粋なNewton法（ステップ幅1、厳密な2×2のHessian）を勾配の大きさが10⁻⁸未満になるまで、最大50回繰り返す。始点は記事の始点A (0.5, 1.0)・始点B (0.2, 0.1) か、−1.8≤x₁≤1.8、−1.2≤x₂≤1.2 の範囲で読者が置いた点。Hessianが特異になる x₁=±√(17/48)≈±0.595 の線の上では止める。",
+    notImplied: "この2変数の教材用の関数だけを示す。実際の問題で谷や峠がいくつあるか、直線探索や信頼領域で守ったNewton法・準Newton法の振る舞い、ライブラリの既定の設定は示さない。",
+    beats: [],
+  },
   "robust-loss-pull": {
     question: "外れ値を1つ遠ざけると、二乗損失とHuber損失の当てはめはそれぞれどこまで引っ張られるか。",
     fixedConditions: "観測は (0, 0, 0, m) の4つで、最後の値 m だけを0〜100で動かす。当てはめるのは1つの定数 x。損失は二乗 r²/2 とHuber ρ_δ（尺度 δ は0.25〜10）。Huberの最小点は傾きの合計 Σψ_δ(x−y_i)=0 の根を数値で求め、この配置の閉じた式 min(m/4, δ/3) と一致させる。",

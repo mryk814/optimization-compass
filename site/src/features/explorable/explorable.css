@@ -824,3 +824,8 @@
 .rb-key-huber { color: var(--ex-orange-ink); }
 .rb-scroll { overflow-x: auto; }
 .rb-table td, .rb-table th { white-space: nowrap; }
+
+/* saddle-newton: the level of the saddle is solid and darker (no dash on segment paths). */
+.ex-contour-key { fill: none; stroke: var(--ex-ink); stroke-opacity: 0.75; stroke-width: 2; }
+.ex-saddle path { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.ex-saddle text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; }

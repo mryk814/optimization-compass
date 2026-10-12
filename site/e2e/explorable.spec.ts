@@ -22,6 +22,7 @@ const figures = [
   { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
   { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
   { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
+  { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
 ];
 
 for (const figure of figures) {
