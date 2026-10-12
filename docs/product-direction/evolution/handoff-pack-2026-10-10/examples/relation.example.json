@@ -1,0 +1,26 @@
+{
+  "relation_id": "REL_PROPOSED_MILP_LP",
+  "from_ref": "PROBLEM_LP",
+  "to_ref": "PROBLEM_MILP",
+  "relation_type": "relaxation_of",
+  "conditions": [
+    "元問題は最小化MILP",
+    "整数性のみを外す",
+    "目的と残りの制約を同一に保つ",
+    "最適値を比較できる状況を明示する"
+  ],
+  "claim_strength": "bound_only",
+  "preserved": [
+    "元の整数可行解は緩和側でも可行"
+  ],
+  "lost": [
+    "整数性",
+    "緩和解から元の実行可能解を得る保証"
+  ],
+  "bound_direction": "lower_bound_minimization",
+  "source_refs": [
+    "E01",
+    "E07"
+  ],
+  "review_status": "draft"
+}

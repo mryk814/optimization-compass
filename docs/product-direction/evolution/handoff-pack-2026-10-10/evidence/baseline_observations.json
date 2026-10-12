@@ -1,0 +1,59 @@
+{
+  "baseline_sha": "3099b8821a2317761dab8fb3eacebb20cfe0fbcd",
+  "dataset_version": "0.18.20",
+  "observations": [
+    {
+      "metric": "methods_table_rows_readme",
+      "value": 105,
+      "source_ref": "R01",
+      "verification": "generated_readme_read_not_recomputed"
+    },
+    {
+      "metric": "problem_archetypes_readme",
+      "value": 57,
+      "source_ref": "R01",
+      "verification": "generated_readme_read_not_recomputed"
+    },
+    {
+      "metric": "implementations_readme",
+      "value": 65,
+      "source_ref": "R01",
+      "verification": "generated_readme_read_not_recomputed"
+    },
+    {
+      "metric": "canonical_example_cases_readme",
+      "value": 29,
+      "source_ref": "R01",
+      "verification": "do_not_conflate_with_gallery_cases"
+    },
+    {
+      "metric": "decision_rules_readme",
+      "value": 78,
+      "source_ref": "R01",
+      "verification": "generated_readme_read_not_recomputed"
+    },
+    {
+      "metric": "authored_learning_paths",
+      "value": 2,
+      "source_ref": "R04",
+      "verification": "seed_read"
+    },
+    {
+      "metric": "authored_step_references",
+      "value": 17,
+      "source_ref": "R04",
+      "verification": "10_plus_7_from_seed"
+    },
+    {
+      "metric": "expected_artifacts_available_report",
+      "value": 11,
+      "source_ref": "R03",
+      "verification": "report_read_not_whole_atlas_coverage"
+    }
+  ],
+  "full_sqlite_audit": false,
+  "browser_interaction": false,
+  "repository_test_run": false,
+  "scope_semantic_mapping": false,
+  "note": "Public primary sources and repository reads were performed. Clone failed due to DNS; no full clone/test claim."
+}

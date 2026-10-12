@@ -1,0 +1,127 @@
+{
+  "status": "research_not_installed",
+  "selection_rule": "one_shared_scene_three_rendering_paths_before_new_runtime_dependencies",
+  "libraries": [
+    {
+      "library_id": "existing-scene",
+      "name": "現行React/SVG/Three + recorder",
+      "decision": "retain_first",
+      "role": "scene・数値・録画を既存契約のまま延長",
+      "poc": "既存コードにseek/字幕/同じ状態の投影を足せるか",
+      "source_refs": [
+        "R05"
+      ],
+      "risks": "現行workflowは自動deployをしない。ADRの公開経路は見直す。"
+    },
+    {
+      "library_id": "remotion",
+      "name": "Remotion",
+      "decision": "bounded_poc",
+      "role": "React構成からフレーム単位動画を編集",
+      "poc": "同じsceneから30秒のLP場面を作り既存録画と比較",
+      "source_refs": [
+        "E23"
+      ],
+      "risks": "利用package版のLICENSEと条件を確認。v5 Upcomingとv4置換予定の資料が併存。費用・ライセンスを確定していない。"
+    },
+    {
+      "library_id": "hyperframes",
+      "name": "HyperFrames",
+      "decision": "bounded_poc",
+      "role": "HTML/CSS/JS資産をagentが編集できる動画制作",
+      "poc": "現行数学viewを再実装せずHTML埋込/adapterで使えるか",
+      "source_refs": [
+        "E26"
+      ],
+      "risks": "公式構成を調査した段階。品質・性能・採用版ライセンスはPoCで確認。有料サービス接続を前提にしない。"
+    },
+    {
+      "library_id": "manim",
+      "name": "Manim Community",
+      "decision": "optional_buildtime",
+      "role": "線形代数・証明・幾何の説明動画",
+      "poc": "canonical observable JSONを入力に図だけ生成できるか",
+      "source_refs": [
+        "E28"
+      ],
+      "risks": "Python側に別の数式を手で書き直すと正本が二重化する。動画専用の依存として分離。"
+    },
+    {
+      "library_id": "mafs",
+      "name": "Mafs",
+      "decision": "optional_if_measurable_gain",
+      "role": "2D数学図のReactオーサリング",
+      "poc": "同じ小図で自前SVGより変更工数が減るか",
+      "source_refs": [
+        "E29"
+      ],
+      "risks": "animationはexperimentalと公式記載。数値・timelineの正本にはしない。"
+    },
+    {
+      "library_id": "motion-canvas",
+      "name": "Motion Canvas",
+      "decision": "watchlist",
+      "role": "TSの解説動画オーサリング",
+      "poc": "保守状態を調べてから数値入力とseekの適合を見る",
+      "source_refs": [
+        "E31"
+      ],
+      "risks": "公式docsだけで長期保守を保証しない。依存追加をまだ推奨しない。"
+    },
+    {
+      "library_id": "cytoscape",
+      "name": "Cytoscape.js",
+      "decision": "optional_graph_adapter",
+      "role": "typed graphの探索・レイアウト",
+      "poc": "条件付き関係を探索でき、一覧表・キーボード代替を保てるか",
+      "source_refs": [
+        "E32"
+      ],
+      "risks": "force layoutの見た目を意味的距離と呼ばない。現行viewを丸ごと置換しない。"
+    },
+    {
+      "library_id": "pyodide",
+      "name": "Pyodide + Worker",
+      "decision": "optional_expert_lab",
+      "role": "静的サイト内で小さなPython実験",
+      "poc": "小問題の時間/メモリ/中断/転送量を測る",
+      "source_refs": [
+        "E33"
+      ],
+      "risks": "通常起動時に読込まない。SharedArrayBuffer割込みは配信条件を確認し、Worker terminateを代替にする。"
+    },
+    {
+      "library_id": "jupyterlite",
+      "name": "JupyterLite",
+      "decision": "later_optional",
+      "role": "再現notebookの持ち帰り/実験",
+      "poc": "初心者動線から分離した実験室を作れるか",
+      "source_refs": [
+        "E35"
+      ],
+      "risks": "通常の本文にnotebook UIを押し付けない。必要なsolverのWASM対応を別途検査。"
+    },
+    {
+      "library_id": "idyll",
+      "name": "Idyll",
+      "decision": "inspiration_not_migration",
+      "role": "文章と操作が同じデータに反応する文法",
+      "poc": "現在のMarkdown/explorableで再現できるパターンを抽出",
+      "source_refs": [
+        "E21"
+      ],
+      "risks": "現行authoringを捨てる提案ではない。"
+    },
+    {
+      "library_id": "tts",
+      "name": "プロバイダ非依存TTS adapter",
+      "decision": "optional_buildtime",
+      "role": "字幕と同じ台本からナレーション",
+      "poc": "記号の読み・実測音声長・字幕同期・再配布条件を確認",
+      "source_refs": [
+        "R05"
+      ],
+      "risks": "固有モデルのGA/品質/権利は未確認。声の複製・課金・外部送信は承認なしで行わない。"
+    }
+  ]
+}

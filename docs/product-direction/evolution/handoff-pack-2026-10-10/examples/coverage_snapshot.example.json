@@ -1,0 +1,15 @@
+{
+  "example_only": true,
+  "counts_are_hypothetical": true,
+  "scope_version": "example-scope-not-baseline",
+  "approved_scope": 12,
+  "identity_confirmed": 9,
+  "lessons_reviewed": 6,
+  "media_eligible": 5,
+  "media_verified": 2,
+  "bridges_eligible": 3,
+  "bridges_reviewed": 1,
+  "stale_reviews": 1,
+  "unresolved_mapping": 3,
+  "comment": "9/12、6/12、2/5、1/3を別表示。実リポジトリの数値として利用禁止。"
+}

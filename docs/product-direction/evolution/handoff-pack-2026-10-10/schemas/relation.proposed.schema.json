@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:optimization-compass:proposal:relation:1",
+  "title": "Proposed typed relation envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "relation_id",
+    "from_ref",
+    "to_ref",
+    "relation_type",
+    "conditions",
+    "claim_strength",
+    "source_refs",
+    "review_status"
+  ],
+  "properties": {
+    "relation_id": {
+      "type": "string"
+    },
+    "from_ref": {
+      "type": "string"
+    },
+    "to_ref": {
+      "type": "string"
+    },
+    "relation_type": {
+      "enum": [
+        "special_case_of",
+        "exact_reformulation_of",
+        "relaxation_of",
+        "uses_primitive",
+        "shares_mechanism",
+        "learning_prerequisite",
+        "applied_to",
+        "alternative_under",
+        "fails_under",
+        "historical_influence"
+      ]
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_strength": {
+      "enum": [
+        "definition",
+        "conditional_equivalence",
+        "bound_only",
+        "mechanistic_analogy",
+        "documented_application",
+        "hypothesis"
+      ]
+    },
+    "preserved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lost": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bound_direction": {
+      "enum": [
+        "lower_bound_minimization",
+        "upper_bound_maximization",
+        "not_applicable",
+        "unknown"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "review_status": {
+      "enum": [
+        "draft",
+        "reviewed",
+        "stale"
+      ]
+    }
+  }
+}

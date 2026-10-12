@@ -1,0 +1,455 @@
+{
+  "status": "proposal",
+  "bridges": [
+    {
+      "bridge_id": "BRIDGE_01",
+      "domains": [
+        "物流の配送量",
+        "人員と仕事の割当"
+      ],
+      "shared_structure": "最小費用流",
+      "variable_mapping": "辺の流量 ↔ 人と仕事の対応、容量 ↔ 人数上限",
+      "where_analogy_breaks": "時間窓・複数技能の組合せが増えると単純な流への還元が失われる",
+      "source_refs": [
+        "E14",
+        "E15"
+      ],
+      "evidence_status": "official_examples_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_02",
+      "domains": [
+        "食品の配合",
+        "発電の経済負荷配分"
+      ],
+      "shared_structure": "線形計画",
+      "variable_mapping": "配合量 ↔ 発電量、成分制約 ↔ 需要制約",
+      "where_analogy_breaks": "発電機の起動停止・非線形効率はLPの外",
+      "source_refs": [
+        "E16",
+        "E18"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_03",
+      "domains": [
+        "投資配分",
+        "線形システムの有限時間制御"
+      ],
+      "shared_structure": "凸二次計画",
+      "variable_mapping": "配分ベクトル ↔ 制御系列、二次リスク ↔ 二次追従誤差",
+      "where_analogy_breaks": "金融リスク推定と制御の動力学誤差は同じ不確実性ではない",
+      "source_refs": [
+        "E13",
+        "E40"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_04",
+      "domains": [
+        "画像欠損の補間",
+        "センサー時系列の区分的な復元"
+      ],
+      "shared_structure": "全変動・近接/主双対法",
+      "variable_mapping": "画素差分 ↔ 時間差分、観測一致 ↔ 計測一致",
+      "where_analogy_breaks": "空間2Dの境界条件を時間1Dへそのまま持ち込まない",
+      "source_refs": [
+        "E39",
+        "E04"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_05",
+      "domains": [
+        "実験条件の探索",
+        "機械学習ハイパーパラメータ"
+      ],
+      "shared_structure": "ベイズ最適化",
+      "variable_mapping": "測定条件 ↔ 学習設定、実験費 ↔ 学習時間",
+      "where_analogy_breaks": "並列性・ノイズ・条件付き変数・実験安全性が違う",
+      "source_refs": [
+        "E12",
+        "E20"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_06",
+      "domains": [
+        "工場の配置",
+        "電力設備容量計画"
+      ],
+      "shared_structure": "Benders分解",
+      "variable_mapping": "先に決める建設 ↔ 容量、後で決める運用 ↔ dispatch",
+      "where_analogy_breaks": "整数recourseの扱いと凸性を同一視しない",
+      "source_refs": [
+        "E07",
+        "E08",
+        "E16"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_07",
+      "domains": [
+        "貯水池運用",
+        "在庫補充"
+      ],
+      "shared_structure": "多段階確率計画・SDDP",
+      "variable_mapping": "貯水量 ↔ 在庫、流入 ↔ 需要、価値関数 ↔ 将来費用",
+      "where_analogy_breaks": "段階独立性や状態モデルの仮定を明示する",
+      "source_refs": [
+        "E09"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_08",
+      "domains": [
+        "地理的な物資輸送",
+        "画像の色分布の対応"
+      ],
+      "shared_structure": "最適輸送・Sinkhorn",
+      "variable_mapping": "物資量 ↔ 色ヒストグラム質量、距離 ↔ 色間費用",
+      "where_analogy_breaks": "色の近さは輸送距離と同じ意味を持たず、正則化解も元問題と異なる",
+      "source_refs": [
+        "E11"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_09",
+      "domains": [
+        "計測点の選択",
+        "代表文書の選択"
+      ],
+      "shared_structure": "集合選択・劣モジュラ近似",
+      "variable_mapping": "観測の追加価値 ↔ 内容被覆の追加価値",
+      "where_analogy_breaks": "情報価値が常に劣モジュラとは限らない",
+      "source_refs": [
+        "E01",
+        "E18"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_10",
+      "domains": [
+        "航空機部品の軽量化",
+        "熱を逃がす材料配置"
+      ],
+      "shared_structure": "PDE制約・トポロジー",
+      "variable_mapping": "剛性状態 ↔ 温度状態、材料密度 ↔ 導熱材密度",
+      "where_analogy_breaks": "支配方程式・設計依存性・製造制約は別々に検証",
+      "source_refs": [
+        "R05",
+        "E02"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_11",
+      "domains": [
+        "観測データから物性推定",
+        "画像から幾何推定"
+      ],
+      "shared_structure": "非線形最小二乗",
+      "variable_mapping": "材料パラメータ ↔ カメラ/形状、測定残差 ↔ 再投影残差",
+      "where_analogy_breaks": "同定可能性と幾何のゲージ自由度は別の説明が必要",
+      "source_refs": [
+        "E03"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_12",
+      "domains": [
+        "看護配置の教育例",
+        "工場の勤務割当"
+      ],
+      "shared_structure": "整数計画・CP",
+      "variable_mapping": "人員と時間帯 ↔ 作業者と時間帯、資格制約 ↔ 技能制約",
+      "where_analogy_breaks": "人の希望・公平・法令を数値目標へ勝手に置換しない",
+      "source_refs": [
+        "E18",
+        "E15"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_13",
+      "domains": [
+        "授業時間割",
+        "製造ジョブスケジューリング"
+      ],
+      "shared_structure": "CP・資源制約",
+      "variable_mapping": "教室の非重複 ↔ 機械の非重複",
+      "where_analogy_breaks": "教材では利用可能時間のみ。教育上の価値を目的関数と同一視しない",
+      "source_refs": [
+        "E01",
+        "E18"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_14",
+      "domains": [
+        "救援物資配送の教材",
+        "商業物流"
+      ],
+      "shared_structure": "施設配置・経路",
+      "variable_mapping": "拠点 ↔ 倉庫、被災地点 ↔ 顧客",
+      "where_analogy_breaks": "緊急時の公平・欠測・通行不能は費用最小化だけでは表せない",
+      "source_refs": [
+        "E14",
+        "E18"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_15",
+      "domains": [
+        "保護区域選定",
+        "広告/情報の被覆"
+      ],
+      "shared_structure": "集合被覆・選択",
+      "variable_mapping": "生息域カバー ↔ 対象集合カバー、予算 ↔ 選択数",
+      "where_analogy_breaks": "保全効果の独立性・生態系相互作用を仮定している",
+      "source_refs": [
+        "E18"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_16",
+      "domains": [
+        "農作計画の教材",
+        "在庫と販売計画"
+      ],
+      "shared_structure": "二段階確率計画",
+      "variable_mapping": "作付け ↔ 発注、収量 ↔ 需要、後続売買 ↔ recourse",
+      "where_analogy_breaks": "シナリオ分布が変わると決定の意味も変わる",
+      "source_refs": [
+        "E10",
+        "E09"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_17",
+      "domains": [
+        "ロボットの姿勢推定",
+        "方向データの平均"
+      ],
+      "shared_structure": "多様体最適化",
+      "variable_mapping": "回転行列 ↔ 方向表現、接空間更新 ↔ 幾何を守る変化",
+      "where_analogy_breaks": "球面・SO(3)・SPDは異なる空間で同じ射影は使えない",
+      "source_refs": [
+        "R05",
+        "E02"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_18",
+      "domains": [
+        "通信資源の配分",
+        "分散推定"
+      ],
+      "shared_structure": "分離可能凸最適化・ADMM",
+      "variable_mapping": "各利用者の局所変数 ↔ 各観測拠点、合意制約 ↔ 一致",
+      "where_analogy_breaks": "通信制限・遅延下の収束条件を通常ADMMから流用しない",
+      "source_refs": [
+        "E04"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_19",
+      "domains": [
+        "低価格な試験の選別",
+        "学習の早期停止"
+      ],
+      "shared_structure": "多忠実度・逐次資源配分",
+      "variable_mapping": "簡易試験 ↔ 短時間学習、精密試験 ↔ 完全学習",
+      "where_analogy_breaks": "低忠実度の順位が高忠実度で保たれるとは限らない",
+      "source_refs": [
+        "E12"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_20",
+      "domains": [
+        "経路費用の下界",
+        "配送計画の最適性確認"
+      ],
+      "shared_structure": "緩和と証明書",
+      "variable_mapping": "整数解 ↔ incumbent、緩和解 ↔ 下界",
+      "where_analogy_breaks": "下界が良くても実行可能な計画を得たことにはならない",
+      "source_refs": [
+        "E07",
+        "E14"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_21",
+      "domains": [
+        "機器の安全な設定探索",
+        "安全制約下の推薦の教育例"
+      ],
+      "shared_structure": "SafeOpt型探索",
+      "variable_mapping": "安全初期点 ↔ 許容設定、評価値 ↔ 効用",
+      "where_analogy_breaks": "論文の安全概念と物理的安全・倫理的許容を混同しない",
+      "source_refs": [
+        "E38"
+      ],
+      "evidence_status": "primary_paper_bridge_needs_editorial_review",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_22",
+      "domains": [
+        "公共予算配分",
+        "製品の性能と費用"
+      ],
+      "shared_structure": "多目的・Pareto集合",
+      "variable_mapping": "予算配分 ↔ 設計変数、複数価値 ↔ 複数性能",
+      "where_analogy_breaks": "重みは自然定数ではなく誰の価値判断かを残す",
+      "source_refs": [
+        "E01",
+        "E13"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_23",
+      "domains": [
+        "市場の均衡",
+        "接触力学の教材"
+      ],
+      "shared_structure": "相補性・変分不等式",
+      "variable_mapping": "価格と余剰 ↔ 隙間と反力",
+      "where_analogy_breaks": "同じ相補性形式でも安定性・物理法則・主体行動は別",
+      "source_refs": [
+        "E01",
+        "E18"
+      ],
+      "evidence_status": "research_queue",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    },
+    {
+      "bridge_id": "BRIDGE_24",
+      "domains": [
+        "機械設計の設計変数",
+        "ニューラルモデルの重み"
+      ],
+      "shared_structure": "スケーリング・曲率・前処理",
+      "variable_mapping": "単位/感度の差 ↔ 曲率の差、変換座標 ↔ 更新幾何",
+      "where_analogy_breaks": "統計的学習の汎化と数値条件改善を同一視しない",
+      "source_refs": [
+        "E03",
+        "E19"
+      ],
+      "evidence_status": "proposed_teaching_bridge",
+      "verified_end_to_end": false,
+      "application_evidence_required": "両分野の一次事例、対象の実在/教育toyの別、数式対応と失われる条件を個別レビュー",
+      "experience": "同じ構造の数式・図を保持し、単位・ラベル・追加制約を切り替える",
+      "denominator_eligible": false
+    }
+  ]
+}
