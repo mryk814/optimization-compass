@@ -309,8 +309,8 @@
     },
     {
       "problem_id": "PA040",
-      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big),\\quad h_w \\text{ はneural network}",
-      "reading_ja": "neural networkの重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
+      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big)",
+      "reading_ja": "h_w は重み w をもつneural networkです。その重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
       "cues_ja": ["大量のデータで、多層のモデルを学習させる"]
     },
     {

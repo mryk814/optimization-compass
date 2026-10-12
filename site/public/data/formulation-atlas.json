@@ -4259,7 +4259,7 @@
       "name_en": "Neural network training",
       "name_ja": "neural network学習",
       "problem_id": "PA040",
-      "reading_ja": "neural networkの重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
+      "reading_ja": "h_w は重み w をもつneural networkです。その重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
       "source_ids": [
         "S047",
         "S048",
@@ -4267,8 +4267,8 @@
         "S056",
         "S070"
       ],
-      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big),\\quad h_w \\text{ はneural network}",
-      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>&#x02113;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>h</mi><mi>w</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><msub><mi>y</mi><mi>i</mi></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><msub><mi>h</mi><mi>w</mi></msub><mtext>&#x000A0;はneural&#x000A0;network</mtext></mrow></math></div>"
+      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big)",
+      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>&#x02113;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>h</mi><mi>w</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><msub><mi>y</mi><mi>i</mi></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo></mrow></math></div>"
     },
     {
       "alternatives": [
