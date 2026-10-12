@@ -183,6 +183,9 @@ function HomePage() {
               <Link className="home-primary-action" to="/paths">道筋から学び始める</Link>
               <Link className="home-secondary-action" to="/formulations">定式化の辞書を引く</Link>
             </div>
+            <Link className="home-beginner-entry" to="/paths/what-is-optimization">
+              はじめての人へ: 最適化って、結局なにをするの？ →
+            </Link>
           </section>
           <section aria-labelledby="home-mode-solve" className="home-mode home-mode-solve">
             <h2 id="home-mode-solve">解く</h2>

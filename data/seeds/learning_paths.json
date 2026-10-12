@@ -2,6 +2,83 @@
   "contract_version": "1.0.0",
   "paths": [
     {
+      "path_id": "what-is-optimization",
+      "title_ja": "最適化って、結局なにをするの？",
+      "summary_ja": "パン屋が在庫の範囲で何を何個焼くかという一つの問いから始めます。決めるもの・良くしたいもの・守ることを分け、一手ずつ予測しながら答えへ近づき、整数の条件と別の選択問題へ考え方を移します。",
+      "goal_ja": "身近な問いについて、何を決め、何を良くし、何を守るかを自分の言葉で言え、同じ見方を別の配分や選択の問題へ当てはめられるようになります。",
+      "audience_ja": "最適化という言葉は聞いたことがあるが、数式の前提はほとんどない人",
+      "steps": [
+        {
+          "target_type": "formulation",
+          "target_id": "PA017",
+          "question_ja": "限られた材料で何を何個作るかは、何を決め、何を良くし、何を守る問題なのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "「決めるもの」が、個数なのか割合なのか選択なのか分からない。",
+              "target_type": "content",
+              "target_id": "concept.variable-domain"
+            },
+            {
+              "trouble_ja": "「守ること（制約）」が、何を指しているのか分からない。",
+              "target_type": "content",
+              "target_id": "concept.constraint-class"
+            }
+          ]
+        },
+        {
+          "target_type": "content",
+          "target_id": "primal-simplex",
+          "question_ja": "どの品目を増やすと売上が伸び、どの在庫が先に尽きるかを、一手ずつ予測できるか。",
+          "stumbles": [
+            {
+              "trouble_ja": "図の多角形や直線が、パン屋のどの数字に当たるのか分からない。",
+              "target_type": "formulation",
+              "target_id": "PA017"
+            },
+            {
+              "trouble_ja": "角（頂点）で止めてよい理由が分からない。",
+              "target_type": "content",
+              "target_id": "concept.convexity"
+            }
+          ]
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA023",
+          "question_ja": "パンの個数を整数に限ると、答えと解き方の何が変わるのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "連続の量と整数の量で、何が違うのか分からない。",
+              "target_type": "content",
+              "target_id": "concept.variable-domain"
+            },
+            {
+              "trouble_ja": "整数に限る前の答えが、どこで決まったのかを思い出したい。",
+              "target_type": "content",
+              "target_id": "primal-simplex"
+            }
+          ]
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA032",
+          "question_ja": "予算の範囲でどの案件を採用するかという別の問いにも、同じ見方を当てはめられるか。",
+          "stumbles": [
+            {
+              "trouble_ja": "「選ぶ・選ばない」を数で表す方法が分からない。",
+              "target_type": "formulation",
+              "target_id": "PA023"
+            },
+            {
+              "trouble_ja": "何を決め、何を良くし、何を守るかの分け方を、もう一度確かめたい。",
+              "target_type": "formulation",
+              "target_id": "PA017"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path_id": "formulation-basics",
       "title_ja": "定式化の最初の一歩",
       "summary_ja": "線形計画を起点に、二次・整数・データへの当てはめへ形を一つずつ広げ、形が変わると解き方と保証がどう変わるかをたどります。",
@@ -21,12 +98,43 @@
         {
           "target_type": "content",
           "target_id": "concept.convexity",
-          "question_ja": "近くで一番低い点が、全体でも一番低いと言えるのはどんなときか。"
+          "question_ja": "近くで一番低い点が、全体でも一番低いと言えるのはどんなときか。",
+          "stumbles": [
+            {
+              "trouble_ja": "「凸」が図の上で何を指すのか分からない。",
+              "target_type": "formulation",
+              "target_id": "PA017"
+            }
+          ]
+        },
+        {
+          "target_type": "formulation",
+          "target_id": "PA006",
+          "question_ja": "勾配が0の点に着いたら、それで一番低い点だと言ってよいのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "「近くで一番低い」と「全体で一番低い」の違いが分からない。",
+              "target_type": "content",
+              "target_id": "concept.convexity"
+            }
+          ]
         },
         {
           "target_type": "content",
           "target_id": "primal-simplex",
-          "question_ja": "線形計画の答えは、なぜ頂点を順にたどれば見つかるのか。"
+          "question_ja": "線形計画の答えは、なぜ頂点を順にたどれば見つかるのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "頂点を順にたどってよい理由が分からない。",
+              "target_type": "content",
+              "target_id": "concept.convexity"
+            },
+            {
+              "trouble_ja": "線形計画の式の各記号が、何を表すのか分からない。",
+              "target_type": "formulation",
+              "target_id": "PA017"
+            }
+          ]
         },
         {
           "target_type": "formulation",
@@ -36,12 +144,26 @@
         {
           "target_type": "formulation",
           "target_id": "PA023",
-          "question_ja": "「整数であること」を一つ足すだけで、何が難しくなるのか。"
+          "question_ja": "「整数であること」を一つ足すだけで、何が難しくなるのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "連続の量と整数の量で、何が違うのか分からない。",
+              "target_type": "content",
+              "target_id": "concept.variable-domain"
+            }
+          ]
         },
         {
           "target_type": "content",
           "target_id": "branch-and-bound",
-          "question_ja": "整数の問題を、緩和による下界と分岐でどう絞り込むのか。"
+          "question_ja": "整数の問題を、緩和による下界と分岐でどう絞り込むのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "「緩和」が何を外した問題なのか分からない。",
+              "target_type": "formulation",
+              "target_id": "PA023"
+            }
+          ]
         },
         {
           "target_type": "formulation",
@@ -51,7 +173,14 @@
         {
           "target_type": "formulation",
           "target_id": "PA033",
-          "question_ja": "モデルが非線形になると、何が失われ、何が残るのか。"
+          "question_ja": "モデルが非線形になると、何が失われ、何が残るのか。",
+          "stumbles": [
+            {
+              "trouble_ja": "線形の最小二乗で、何が解けていたのかを思い出したい。",
+              "target_type": "formulation",
+              "target_id": "PA005"
+            }
+          ]
         },
         {
           "target_type": "content",

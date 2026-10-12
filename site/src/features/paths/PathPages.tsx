@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { stepKey, type LearningPath, type LearningPathStep } from "../../contracts/learning-paths";
+import { formulaShortcut, stepKey, type LearningPath, type LearningPathStep } from "../../contracts/learning-paths";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { rememberActivePath, usePathProgress } from "./path-progress";
 import { usePaths } from "./use-paths";
@@ -86,6 +86,7 @@ export function PathPage() {
   }
   const done = Math.min(doneCount(path.path_id), path.steps.length);
   const next = nextStep(path, isDone);
+  const shortcut = formulaShortcut(path);
   return (
     <article className="atlas-page path-detail">
       <header className="path-hero">
@@ -100,6 +101,15 @@ export function PathPage() {
         <Link className="path-primary-action" to={next.route}>
           {done === 0 ? "最初の問いへ" : "次の問いへ"}: {next.title_ja} →
         </Link>
+        {shortcut && shortcut.route !== next.route ? (
+          <Link className="path-formula-shortcut" to={shortcut.route}>
+            順を飛ばして式から読む: {shortcut.title_ja} →
+          </Link>
+        ) : (
+          <Link className="path-formula-shortcut" to="/formulations">
+            順を飛ばして、定式化の辞書で式から引く →
+          </Link>
+        )}
       </header>
       <ol className="path-steps">
         {path.steps.map((step) => {

@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, test } from "vitest";
 
 import { compassNeighbors, formulationMatches, parseFormulationAtlas, relationSentence } from "./formulation-atlas";
-import { parseLearningPaths, stepsAtRoute } from "./learning-paths";
+import { formulaShortcut, parseLearningPaths, stepsAtRoute } from "./learning-paths";
 
 const dataDirectory = resolve(__dirname, "../../public/data");
 const atlas = parseFormulationAtlas(JSON.parse(readFileSync(resolve(dataDirectory, "formulation-atlas.json"), "utf8")));
@@ -51,6 +51,25 @@ describe("learning path contract", () => {
         expect(step.route).toBe(`/formulations/${step.target_id}`);
       }
     }
+  });
+
+  test("the beginner path can be entered, stepped back from, and skipped to its formula", () => {
+    const beginner = paths.paths.find((item) => item.path_id === "what-is-optimization");
+    expect(beginner).toBeDefined();
+    expect(formulaShortcut(beginner!)?.route).toBe("/formulations/PA017");
+    for (const step of beginner!.steps) {
+      expect(step.question_ja).toMatch(/。$/u);
+      expect(step.stumbles.length).toBeGreaterThan(0);
+      for (const stumble of step.stumbles) expect(stumble.route).not.toBe(step.route);
+    }
+  });
+
+  test("rejects a stumble whose route leaves the app", () => {
+    const raw = JSON.parse(readFileSync(resolve(dataDirectory, "learning-paths.json"), "utf8"));
+    raw.paths[0].steps[0].stumbles = [{
+      trouble_ja: "x。", target_type: "content", target_id: "x", title_ja: "x", route: "//evil.example",
+    }];
+    expect(() => parseLearningPaths(raw)).toThrow(/in-app route/u);
   });
 
   test("finds the path position of a page from its route", () => {
