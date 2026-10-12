@@ -34,8 +34,8 @@
 |---|---:|---:|---|
 | 名前と同一性 | 160 | 156 | candidate 0, unrepresented 4, unknown 0 |
 | 定義と根拠 | 160 | 149 | no_canonical_row 11 |
-| 説明 | 160 | 9 | stale 1, in_progress 104, no_article 46 |
-| 体験 | 0 | 0 | undecided 160, has_interactive 22 |
+| 説明 | 160 | 10 | stale 1, in_progress 103, no_article 46 |
+| 体験 | 0 | 0 | undecided 160, has_interactive 23 |
 | 転移 | 0 | 0 | undecided 160 |
 
 ### 問題構造（対象 80件、除外 0件、保留 0件、統合 0件）
@@ -44,8 +44,8 @@
 |---|---:|---:|---|
 | 名前と同一性 | 80 | 70 | candidate 0, unrepresented 10, unknown 0 |
 | 定義と根拠 | 80 | 70 | no_canonical_row 10 |
-| 説明 | 80 | 12 | stale 0, in_progress 42, no_article 26 |
-| 体験 | 0 | 0 | undecided 80, has_interactive 11 |
+| 説明 | 80 | 16 | stale 0, in_progress 38, no_article 26 |
+| 体験 | 0 | 0 | undecided 80, has_interactive 15 |
 | 転移 | 0 | 0 | undecided 80 |
 
 ## Integrity issues

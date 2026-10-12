@@ -24,4 +24,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "inverse-problem-alpha": lazy(() => import("./InverseProblemAlpha")),
   "robust-loss-pull": lazy(() => import("./RobustLossPull")),
   "saddle-newton": lazy(() => import("./SaddleNewton")),
+  "milp-integer-lattice": lazy(() => import("./MilpLattice")),
 };

@@ -77,6 +77,25 @@
         "screen.three-widths": "pass"
       }
     },
+    "concept.knapsack-set-cover": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "aa4abb83dfb5",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Haikuが執筆（既存の操作図branch-bound-proofを主図に埋め込み）、Sonnetが一次レビュー（数値を再計算、pitfalls・observation-to-formula・ui-names・prose.readableがfail）。Claudeが実画面をPlaywrightで操作して確かめ項目を照合し（開始後に選択中の候補のボタンを5回押すと上限13で証明完了、表示は「残る得点の上限」「Aあり／Aなし」）、UI名・観察から式への問い・つまずき3項目の数値（B=4.5の丸め、≥8で4品すべて23、覆えない地区でstatus 2）・重複した出力ブロックを直した。1280/375/320pxで図の重なり・はみ出し0"
+    },
     "concept.l1-sparse-regularization": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -117,7 +136,7 @@
     "concept.linear-program": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
-      "body_sha256": "ac7faecd4f49",
+      "body_sha256": "f2d32d32dc8b",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -131,7 +150,26 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "書き手（Claude）による自己レビュー。主図lp-vertex-walkを記事のパン屋のLPにそろえ、確かめ項目1〜3の数値（24、18、辺全体18）を図の判定文と単体テストで固定。つまずきやすい点・丸め・外挿の数値はscipyで再計算して一致。画面はPlaywrightで1280/375/320pxを撮影し、SVGラベルの重なり・はみ出し0を確認（式の欄は枠内で横スクロール）。別の読み手のレビューはまだ"
+      "notes": "Sonnetの一次レビュー（全項目pass、数値15件を再計算で一致）をClaudeが本文と照合。指摘の文9件（凸と大域解の主語、等式制約の書き換え、頂点に現れる理由、非有界の断定、クロスオーバー、双対値の単位など）を直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.mixed-integer-linear-program": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "b55eff7f56af",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetが新しい操作図milp-integer-latticeと記事の直しを執筆。Claudeが確かめ項目4の誤り（係数が整数なので上界19.75から整数解は19以下と分かり、(3,1)の最適性は言える）を記事と図の判定文で直した。Sonnetの一次レビュー（7項目fail）を受けてClaudeが書き直し（例を冒頭で明示、標準形の前の一文、例の数値によるつまずき3項目＝big-M 18.75/20.91/17・時間切れ19と21・丸め26と7、困りごと起点の次に読む、根拠のない性能の主張の削除）、Sonnetの再レビューの指摘（SAT/スケジューリングのリンク、文5件）も直した。数値は全件scipyで再計算一致。1280/375/320pxで図の重なり・はみ出し0"
     },
     "concept.mixed-integer-quadratic-program": {
       "reviewed_on": "2026-10-10",
@@ -192,7 +230,7 @@
     "concept.smooth-low-dimensional-unconstrained": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
-      "body_sha256": "66e3d2c95280",
+      "body_sha256": "e230a5c13088",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -206,7 +244,7 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "書き手（Claude）による自己レビュー。主図を操作図saddle-newtonに替え、静止図は小さな例の全反復の後へ移した。確かめ項目の数値（A: 6回で左の谷底、曲率3.80と8.95／B: 3回で峠、曲率±4.12／(0.9, 0)付近: 3〜5回で右の谷底）は生成スクリプトの関数で再計算し、図の判定文と単体テストで固定。画面はPlaywrightで1280/375/320pxを撮影し、SVGラベルの重なり・はみ出し0を確認。別の読み手のレビューはまだ"
+      "notes": "Sonnetの一次レビュー（数値19件を再計算で一致。figure.one-questionとprose.readableがfail）をClaudeが本文と照合して修正。静止図のcaptionに読み取れない範囲を足し、Newton法が二次の近似の『最小点』ではなく停留点へ跳ぶと直した（始点AのHessianは不定）。二次収束の明記など文6件も直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
     },
     "concept.vehicle-routing": {
       "reviewed_on": "2026-10-10",

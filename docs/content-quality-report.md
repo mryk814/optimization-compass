@@ -3,7 +3,7 @@
 - Published concept guides: `45`
 - Meeting the concept floor: `45`
 - Below the concept floor: `0`
-- Prose review warnings: `630`
+- Prose review warnings: `629`
 
 ## Concept publication floor
 
@@ -21,12 +21,12 @@
 | `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
-| `concept.knapsack-set-cover` | 100 | 8793 | 14 | 4 | 0 | pass |
+| `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
-| `concept.linear-program` | 91 | 5669 | 9 | 4 | 0 | pass |
+| `concept.linear-program` | 114 | 5781 | 9 | 4 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
-| `concept.mixed-integer-linear-program` | 103 | 6430 | 11 | 4 | 0 | pass |
+| `concept.mixed-integer-linear-program` | 133 | 8970 | 11 | 4 | 0 | pass |
 | `concept.mixed-integer-quadratic-program` | 157 | 18988 | 17 | 9 | 0 | pass |
 | `concept.model-predictive-control` | 150 | 15178 | 16 | 10 | 0 | pass |
 | `concept.multiobjective-optimization` | 143 | 6668 | 13 | 7 | 0 | pass |
@@ -42,7 +42,7 @@
 | `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 4130 | 8 | 4 | 0 | pass |
-| `concept.smooth-low-dimensional-unconstrained` | 132 | 13114 | 15 | 11 | 0 | pass |
+| `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
@@ -60,7 +60,7 @@
 - `number.overprecise`: 209
 - `prose.choppy`: 6
 - `prose.meta`: 5
-- `prose.work-report`: 19
+- `prose.work-report`: 18
 - `sentence.commas`: 336
 - `sentence.long`: 55
 
@@ -102,7 +102,7 @@
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
 | `concept.manifold` | 8 |
-| `concept.mixed-integer-linear-program` | 7 |
+| `concept.mixed-integer-linear-program` | 6 |
 | `concept.mixed-integer-quadratic-program` | 21 |
 | `concept.model-predictive-control` | 19 |
 | `concept.multiobjective-optimization` | 0 |
