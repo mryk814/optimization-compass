@@ -28,6 +28,7 @@ from scripts.generate_lesson_figures import (
     miqp_relaxation,
     mpc_wall_data,
     ridge_solution,
+    socp_center,
     vrp_data,
 )
 
@@ -211,4 +212,18 @@ def test_bound_constrained_box_figure_uses_the_article_numbers() -> None:
     assert tuple(round(g, 6) for g in box_gradient(x1, x2)) == (-1.0, 0.0)
     figure = generate_lesson_figures()["bound-constrained-box.svg"]
     for text in ("(1, 0.5)", "f = 2.5", "f = 3", "f = 2"):
+        assert text in figure
+
+
+def test_socp_relay_figure_uses_the_article_numbers() -> None:
+    from fractions import Fraction
+
+    centre, weights = socp_center()
+    assert centre == (Fraction(3), Fraction(1))
+    assert weights == (Fraction(1, 3), Fraction(5, 12), Fraction(1, 4))
+    # All three villages are at distance sqrt(10) from the centre, and the weights are positive.
+    for vx, vy in ((0, 0), (6, 0), (2, 4)):
+        assert (vx - 3) ** 2 + (vy - 1) ** 2 == 10
+    figure = generate_lesson_figures()["socp-relay-station.svg"]
+    for text in ("半径 3.6 km", "3.162 km", "Bまで 3.590 km", "(3, 1)", "5/12", "1/4", "1/3"):
         assert text in figure
