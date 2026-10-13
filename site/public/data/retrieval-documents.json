@@ -9275,6 +9275,246 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "乾燥機のダイヤル x を、0 から 1 の間で決めます。工場には1バッチの総コスト F を返すsimulatorがあります。 F は電力と不良品の損失を合わせた値で、小さいほど良いとします。 simulatorの中では、ダイヤルが 0.55 に届いた所で運転のプログラムが切り替わります。同じダイヤルを何度入れても同じコストが返り、計算が落ちることもありません。ところが 0.55 をまたぐと、コストが急に変わります。 ダイヤルを少しずつ動かして、坂を下ればよいように見えます。しかし 0.55 の手前の坂が下る先は 0.25 付近の谷で、0.55 の先には別の谷が 0.80 付近にあります。どちらの谷に入るかは、そこまでの動かし方で決まります。 決めるもの : ダイヤル x （0 から 1） 良くしたいもの : simulatorが返す1バッチの総コスト F ( x ) 守ること : 範囲 0 ≤ x ≤ 1 だけです。運転が切り替わる 0.55 は制約ではなく、 F の中に埋まっている段差です まず図の点線の縦線を見て、白抜きの丸と紺の丸の高さを読んでください。次に、出発の橙の丸から、白い四角の 0.50 と 0.60 に動いたときの高さを比べてください。 乾燥機のダイヤル：教材用の式から計算した総コスト。実際のsimulatorや手法の性能は表さない 0.55 の直前で F は 0.58 に近づきます。ちょうど 0.55 では 0.325 で、段差は − 0.255 です。白抜きの丸は 0.58 で、実際に返る値は紺の丸の 0.325 です。0.55 ちょうどは、0.55 以上の式に入ります。 出発の 0.10 では F = 0.445 です。0.50 に動くと 0.525 に上がり、0.60 に動くと 0.28 に下がります。0.50 と 0.60 は 0.1 しか離れていないのに、結果が逆になります。 二つの谷の底は、0.25 で F = 0.4 、0.80 で F = 0.2 です。0.25 は 0.55 未満の範囲では最小ですが、全体の最小ではありません。 0.55 の近くで傾きを測ると、何が読めるのでしょうか。この疑問に、次の節の式と小さな例が答えます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "決定論的だが不連続なsimulationの最小化は、同じ入力なら必ず同じ値が返るのに、入力を少し動かすと値が飛ぶ関数を範囲の中で最小にする問題です。段差の前後で式が別物になるので、勾配や差分の傾きは頼りになりません。値の比較だけで進む探索でも、行き先は出発点と探索幅に左右されます。",
+      "title": "決定論的だが不連続なsimulation"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "探索幅を細かくすれば、全体の最小に着くと考える : 出発点 0.10 から探索幅 0.4 で始めた探索は、幅を細かくしても 0.25 の F = 0.4 に止まります。段差の先の 0.80 にある F = 0.2 は、幅を半分にしても見えません。幅を細かくして上がるのは、止まった谷の中の精度だけです。 傾きがほぼ 0 の点を、最小と読む : 0.25 は傾きが 0 で、0.55 未満では最小です。ところが全体の最小の F = 0.2 は、段差の先の 0.80 にあります。傾きを読んで分かるのは、いま立っている谷の中のことです。 差分の傾きの符号をそのまま信じる : x = 0.54 の差分は幅しだいで変わり、1.16 と − 11.59 と − 1.105 になります。幅 0.001 の差分は「 x を減らすと下がる」と言います。幅 0.01 と 0.1 の差分は「 x を増やすと下がる」と言います。差分の幅が、どこまで先を見るかを決めているからです。幅を決めたら、2点が段差をまたいでいないかを確かめます。 値が飛ぶのをnoiseと見なして繰り返し評価する : F ( 0.30 ) を5回評価しても、5回とも 0.405 です。同じ入力を繰り返しても新しい情報は得られません。評価が高価なら、その分の予算を失います。 評価回数が少ない探索を、良い探索と見なす : 出発点 0.10 では、探索幅 0.4 の探索が 27 回で F = 0.4 に止まります。探索幅 0.5 の探索は 35 回で F = 0.2 に止まります。評価回数が少ない側が、高い値で終わっています。評価回数と値は別々に読みます。 出発点を一つ決めて終わりにする : 出発点 0.30 でも、探索幅 0.1 なら 0.25、0.4 なら 0.80 に着きます。出発点と探索幅を変えた複数の探索を比べ、着いた谷の値を見ます。評価回数の予算が許す範囲に限ります。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "値の比較だけで進む方法の収束の議論が、極限点の近くでの関数の性質を条件にすることは、Audet と Dennis の原論文（S060）に基づきます。Nelder–Meadが関数値の大小だけを使う手続きであることは、原論文（S063）に基づきます。 例の数値は、上のコードを標準ライブラリのPythonで再現できます。式と係数は教材用で、実際のsimulatorの挙動や、手法ごとの速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "最も簡単な、値の比較だけで進む探索を使います。出発点 x 0 と最初の探索幅 s を決め、次を繰り返します。 現在の点から + s と − s の点を、この順に評価する（範囲の外は評価しない） 先に F が下がった点に動く 下がる点がなければ、 s を半分にする s が 10 − 4 以下になったら止める この探索は微分を使いません。値を比べるだけなので、段差があっても動きます。以下は、出発点 0.10 と、探索幅 0.4 と 0.5 の2通りです。 探索幅 0.4 の場合、最初に試す 0.50 は F = 0.525 で、0.445 より高くなります。 − 0.4 は範囲の外です。そこで幅を 0.2 に半分にして、0.30（ F = 0.405 ）に動きます。 探索幅 0.5 の場合、最初に試す 0.60 は F = 0.28 で、0.445 より低くなります。そのまま 0.60 に動きます。 探索幅の初期値 動いた点 F 動いたときの幅 累計評価回数 0.4 0.30 0.405 0.2 3 0.4 0.25 0.400 0.05 9 0.5 0.60 0.280 0.5 2 0.5 0.85 0.205 0.25 4 0.5 0.7875 0.2003 0.0625 9 探索幅 0.4 の探索は、0.25 で F = 0.4 に動いた後に改善が見つからず、27 回の評価で止まります。幅を 10 − 4 以下まで半分にしても、同じです。探索幅 0.5 の探索は表の後も 0.8 に近づき、 F = 0.2 になって 35 回の評価で止まります。 二つの探索は、同じ出発点と同じ F から始めて、別の谷に着きます。分かれ目は、最初に試す点が 0.50 か 0.60 かです。0.50 は段差の手前にあり、0.60 は段差の先にあります。 1001点の格子に全部当てると、最小は x = 0.8 の F = 0.2 です。探索幅 0.5 の探索はその谷に入り、探索幅 0.4 の探索は入りません。ただしこれは、この F とこの2通りの設定についての結果です。どちらの設定が良いかは、この例からは言えません。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "次の式は「範囲の中から、simulatorの出力 F が最も小さくなる入力を選ぶ。ただし F は決定論的で、どこかで値が飛ぶ」を表します。 min x ∈ [ ℓ , u ] F ( x ) , F は決定論的だが不連続 この式は「範囲 [ ℓ , u ] の中で F ( x ) が最小の x を選ぶ」と読みます。 F の値は同じ x なら変わりません。ただし、 x をわずかに動かしたとき、 F がわずかにしか変わらないとは限りません。 記号 意味 例では x 決める入力 ダイヤル [ ℓ , u ] 入力の範囲 [ 0 , 1 ] F ( x ) simulatorが返す値 1バッチの総コスト c 値が飛ぶ入力 0.55 例の F は、 c = 0.55 で二つの式を切り替えます。 F ( x ) = { 0.40 + 2 ( x − 0.25 ) 2 ( x < 0.55 ) [ 2pt ] 0.20 + 2 ( x − 0.80 ) 2 ( x ≥ 0.55 ) 0.55 未満では底が 0.25 の放物線、0.55 以上では底が 0.80 の放物線です。ちょうど 0.55 は 0.55 以上の式に入るので、0.55 での値は 0.325 です。 決定論的であることと、滑らかであることは別です 同じ入力を何度呼んでも同じ値が返る性質を決定論的と呼びます。例では、 F ( 0.30 ) を何度評価しても 0.405 です。 一方で滑らかさは、入力を少し動かしたとき値も少ししか動かない性質です。段差のある F は、決定論的でも滑らかではありません。この二つを分けておくと、値が揺れる問題（ PA013 ）や、値が返らない問題（ PA016 ）と区別できます。 傾きは、段差をまたぐかどうかで変わります 勾配法は、傾きを使って次の点を決めます。傾きを数式で得られないときは、前後の2点の値の差から作る差分で代用します。 例で x = 0.54 の真の傾きは 4 ( 0.54 − 0.25 ) = 1.16 です。ところが、差分の幅 h を変えると、同じ点で別の傾きが出ます。 h = 0.001 なら 1.16、 h = 0.01 なら − 11.59 、 h = 0.1 なら − 1.105 です。 h = 0.01 と 0.1 は 0.55 をまたぐので、傾きの符号まで逆になります。 保証は局所の探索幅まで 微分を使わず値の比較だけで進む探索では、止まった点について言えることは限られます。調べた近傍の点の中に改善がなかった、というところまでです。 MADS の収束の議論（S060）は、極限点の近くで F がLipschitz連続であるといった条件のもとで、極限点が局所的な停留点（Clarkeの意味）になると述べるものです。大域最小に着くことや、段差を越えることは約束しません。例の F は 0.55 のすぐ近くでLipschitz連続ではないので、探索が 0.55 に集まるなら、この条件は成り立ちません。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:次に読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "noiseを含むblack-box（PA013） : 同じ入力で値が揺れるとき、繰り返して平均を取る考え方 失敗・NaNを伴うsimulation（PA016） : 値が返らない点を、大きな目的値に置き換えず台帳に残す MADS : 格子上の近傍調査で、微分を使わずに進む手法と、収束の議論が置く条件 Nelder–Mead : 単体の頂点の値の大小だけで進む手法",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:見分け方",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "この型は定式化の図鑑で「不連続決定論black-box」と呼ばれています。次の言葉が課題に出てきたら、この型を疑います。 閾値を超えると別の処理に入る、場合分けを含むsimulatorの出力を良くしたい 内部で離散的な丸めや選択があり、入力を少し変えると出力が飛ぶ 同じ入力で再実行すると、毎回同じ値が返る 値は必ず返る（失敗はない） 別の型へ進む兆候は、困りごとから探せます。 同じ入力でも毎回値が変わる → noiseを含むblack-box（PA013） 。例なら、 F ( 0.30 ) を再評価して値が変わるなら、この型ではありません 入力によっては値が返らない → 失敗・NaNを伴うsimulation（PA016） 。段差の先は値が返っているので、失敗として扱う理由はありません。大きな目的値で埋めると探索を誤らせることがあります 角や折れ目はあるが、値は連続でつながっている → 一般非滑らか局所（PA011） 評価1回が高価で、試せる回数が数十回しかない → 非常に高価な低次元評価（PA014）",
+      "title": "見分け方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:解き方の系統",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "表は順位ではなく、段差のある F に対して何を手がかりに進むかの違いです。例の数値は、この記事の F と、指定した出発点・探索幅についてのものです。 系統 進み方 段差に対して 勾配法（ BFGS など）と差分 傾きから次の点を決める x = 0.54 の傾きが差分の幅で 1.16、 − 11.59 、 − 1.105 と変わる。段差をまたぐ幅では、傾きが向きの手がかりにならない 値の比較だけで進む局所探索（ Pattern Search ・ MADS ・ Nelder–Mead ） 近傍の点の値を比べて動く 傾きを使わないので動く。例の探索はこの系統の最小の骨格で、出発点 0.10 から探索幅 0.4 なら 0.25、0.5 なら 0.80 に着く Bayes最適化 評価した点から代理モデルを作る 代理モデルが滑らかさを仮定する場合、段差の前後をなだらかにつないでしまうことがある。段差をどう扱うかは、代理モデルの設計しだい 格子・ランダム探索 履歴を使わず広く試す 1001点の格子なら最小は 0.8 の 0.2 が分かるが、評価を1001回払う Nelder–Meadの原論文（S063）の手続きも、関数値の大小だけを使います。表は方法の順位ではありません。 次のコードは、例の F と探索を、標準ライブラリだけで動かします。 python CLIFF = 0.55 def dryer ( x ): \"\"\"1バッチの総コスト F。ダイヤル x が 0.55 以上で運転が切り替わる。\"\"\" if x < CLIFF : return 0.40 + 2.0 * ( x - 0.25 ) ** 2 return 0.20 + 2.0 * ( x - 0.80 ) ** 2 # 決定論的: 同じ入力は何度呼んでも同じ値。値が返らない点もない print ( dryer ( 0.30 ) == dryer ( 0.30 ), dryer ( 0.10 ), dryer ( 0.55 )) # True 0.445 0.325 # 段差: 0.55 の直前と、ちょうど 0.55 print ( round ( dryer ( 0.55 - 1e-9 ), 4 ), dryer ( 0.55 )) # 0.58 0.325 def central_slope ( x , h ): return ( dryer ( x + h ) - dryer ( x - h )) / ( 2 * h ) # x = 0.54 の真の傾きは 4(x - 0.25) = 1.16。差分の幅だけが違う for h in ( 0.001 , 0.01 , 0.1 ): print ( h , round ( central_slope ( 0.54 , h ), 3 )) # 0.001 1.16 / 0.01 -11.59 / 0.1 -1.105 def compass ( x0 , step , tol = 1e-4 ): \"\"\"比較だけを使う探索。+step、-step の順に試し、最初の改善を採る。なければ step を半分にする。\"\"\" x , fx , calls = x0 , dryer ( x0 ), 1 while step > tol : for cand in ( x + step , x - step ): if 0.0 <= cand <= 1.0 : calls += 1 if dryer ( cand ) < fx : x , fx = cand , dryer ( cand ) break else : step /= 2 return round ( x , 3 ), round ( fx , 3 ), calls for x0 , step in (( 0.10 , 0.4 ), ( 0.10 , 0.5 ), ( 0.30 , 0.1 ), ( 0.30 , 0.4 )): print ( x0 , step , compass ( x0 , step )) # 0.1 0.4 (0.25, 0.4, 27) # 0.1 0.5 (0.8, 0.2, 35) # 0.3 0.1 (0.25, 0.4, 23) # 0.3 0.4 (0.8, 0.2, 27) # 1001点の格子に全部当てた参照: 最小は x = 0.8 の F = 0.2 grid = [ i / 1000 for i in range ( 1001 )] print ( min (( dryer ( x ), x ) for x in grid )) # (0.2, 0.8) 最初の出力は、同じ入力が同じ値を返すことを示します。出発点の値は 0.445 で、ちょうど 0.55 の値は 0.325 です。2番目の出力は、0.55 の直前の 0.58 とちょうど 0.55 の 0.325 で、図の段差と一致します。 central_slope の3行は、同じ点 x = 0.54 で幅だけを変えた差分の傾きです。1.16 は真の傾きに一致し、後ろの2つは 0.55 をまたぐ幅の値です。 compass の4行は、小さな例の2通り（出発点 0.10）に、出発点 0.30 の2通りを足したものです。出発点 0.30 でも、探索幅 0.1 なら 0.25 に、0.4 なら 0.80 に着きます。評価回数は 23 から 35 回で、少ない回数で止まった探索が良い値とは限りません。最後の出力は、1001点の格子の最小で、0.8 の 0.2 です。",
+      "title": "解き方の系統"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.discontinuous-simulation:近い定式化",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.discontinuous-simulation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "problem:PA012",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S060",
+        "S063"
+      ],
+      "text": "noiseを含むblack-box（PA013）は、値が飛ぶ理由が違います : 同じ入力でばらつくなら、繰り返して平均を取れます。例の F ( 0.30 ) を5回評価しても、5回とも 0.405 で、平均を取る意味はありません。段差があるのに繰り返しで均そうとすると、評価の回数を無駄にします。 失敗・NaNを伴うsimulation（PA016）は、値が返らない型です : 例では、0.55 の前後のどちらでも値が返ります。段差の先を「悪い値」で置き換える必要はありません。実際に 0.55 の値は 0.325 で、直前の 0.58 より低いからです。 一般非滑らか局所（PA011）は、値が連続でつながる型です : 絶対値や最大値のような折れ目がある関数が当てはまります。例の F は 0.55 でつながっていないので、この型ではなく、PA012 です。 非常に高価な低次元評価（PA014）は、評価の費用が主題です : 段差を持つ F の評価が高価なら、両方の性質を同時に持ちます。そのときは、評価回数の予算を先に決めます。",
+      "title": "近い定式化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.dynamics-defect:1個のノルムだけで安心しない",
       "dataset_version": "0.18.23",
       "document_id": "content:concept.dynamics-defect",
@@ -12324,6 +12564,285 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "工場で、同じ機械を何台動かすかを決めます。1台動かすごとに固定費 6 がかかります。各台は負荷 q で動かし、販売益は1台あたり 8 q 、運転費は q 2 です。負荷は 2.4 まで、市場が引き取る総量は 10 までとします。 台数は整数で、負荷は連続です。負荷を上げると販売益は増えますが、運転費は二乗で増えます。そのため、台数を増やして負荷を分けるほうが得かどうかが、固定費との引き合いになります。 決めるもの : 台数 n （整数）と、各台の負荷 q （連続） 良くしたいもの : 固定費と運転費の合計から販売益を引いた値 f 。小さいほど良く、負なら黒字です 守ること : 0 ≤ q ≤ 2.4 、総量 n q ≤ 10 、 1 ≤ n ≤ 6 運転費が q 2 なので、 n と q の積を含む非線形の式になります。整数条件を外すと台数が 4.17 台のような値になり、台数を整数に戻すと、どの整数を選ぶかを比べる必要があります。 次の図で、まず「① 台数 n を実数にした緩和」のパネルにある橙の丸（台数を実数にした最小点）を探してください。次に、紺の点（整数の台数）と値を見比べてください。最後に、「② 4と5の間を除いて分ける」のパネルで、橙の輪で囲まれた点を確かめてください。 機械の台数の例、固定費6・販売益8q・運転費q²・負荷上限2.4・総量上限10：台数を実数にした値の曲線と、n を 4 と 5 の間で分けた様子。教材用の式で、実際の工場の費用は示しません 「① 台数 n を実数にした緩和」の最小は、 n = 25 / 6 ≈ 4.17 で値 − 31.0 です。台数が整数でないので、実行できる計画ではありません。 整数の台数に丸めた n = 4 の値は − 29.76 です。ところが、整数の台数の中で最良なのは n = 5 で、値は − 30.0 です。四捨五入では最良の台数に届きません。 「② 4と5の間を除いて分ける」では、 n ≤ 4 の節点の最良が − 29.76 、 n ≥ 5 の節点の最良が − 30.0 です。どちらの節点も整数の台数で最良に着いたので、 − 30.0 が最適値だと言えます。 台数を実数にした値 − 31.0 が、整数の最適値 − 30.0 の下界だと言えるのは、どんな条件のときでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "混合整数非線形計画は、目的か制約に非線形の式を含む問題で、一部の変数に整数条件を加えた定式化です。整数条件を外した連続緩和が凸なら、その最適値が下界になり、分枝限定法で最適性を示せます。連続緩和が凸でないと、局所解法が返す値は下界とは限らず、大域的な下界を作る手法が要ります。",
+      "title": "混合整数非線形計画（MINLP）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "台数を実数にした緩和の解を丸めて答えにする : 緩和の n = 4.17 を丸めると n = 4 で、値は − 29.76 です。最適な n = 5 の − 30.0 より 0.24 大きくなります。丸めた点は、実行できる計画ではあっても、最良の計画ではありません。 緩和の値を、達成できる値と読む : 緩和の − 31.0 は台数を実数にした値なので、整数の台数では達成できません。整数の最適値 − 30.0 との差 1.0 が、整数条件の分の差です。下界は「これより良い値は出ない」という保証で、達成できる値ではありません。 非凸な形のまま、局所解法の値を下界と読む : ( n , q ) の形の Hessian は固有値が − 1.12 と 9.12 で、凸ではありません。非凸な緩和で局所解が真の下界より大きいと、その値で枝を切ったときに最適解を含む枝を捨てます。この形に局所解法を6つの出発点から当てると、全部が n = 4.167 、値 − 31.0 に着きます。一致したのは、この例の形が素直だったからです。凸性は一致の回数から導けません。凸性が確かめられた x = n q の形なら、一回の解で下界の保証が得られます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "分枝限定法が各節点で連続緩和を解くことは、 Knitro の文書 の記述に基づきます。この文書は、凸の問題では最適性が示され、非凸の問題では大域解への収束が保証されないとも述べています。MIP と MINLP を扱うソルバーの枠組みは SCIP の文書 に基づきます。凸関数での局所解と大域解の一致は、Nocedal と Wright の教科書『Numerical Optimization』に基づきます。 minimize の引数は SciPy の文書 に基づきます。コードは SciPy 1.18.1 と NumPy 2.5.3 で実行しています。 機械の例は、教材用に作った2変数の式です。実際の工場の費用や、手法の一般的な速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:困りごとから関連する問題へ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "実際の課題で次の症状が出たら、対応する記事へ進みます。 非線形の式がなく、目的も制約も線形 → 混合整数線形計画 非線形が目的の凸な二次式だけで、制約は線形 → 混合整数二次計画 整数条件を外した連続緩和の解き方を知りたい → 一般滑らか制約付きNLP 整数変数がなく、二次の式が非凸 → 非凸QP/QCQP 整数変数は選ぶ・選ばないだけで、制約が容量1本 → ナップサック問題・集合被覆問題 混合整数非線形計画と関連する問題の関係 混合整数線形計画 : 非線形の式を線形にすると MILP です。MILP は連続緩和が線形計画なので常に凸で、分枝限定法の各節点の下界が正しくなります。MINLP では、この下界の正しさが連続緩和の凸性に依存します。 混合整数二次計画 : 目的が二次式で制約が線形のとき、MINLP の特別な場合です。条件は Q が半正定値かどうかで、MINLP の凸か非凸かの区別と同じ形です。機械の例は x 2 / n の項があり、二次式ではないので、MIQP の範囲を出ます。 一般滑らか制約付きNLP : 整数条件を外すと、この型になります。ただし、一般の NLP では局所解しか保証されないので、緩和の値は下界とは限りません。 非凸QP/QCQP : 整数変数がなくても非凸な二次式があると、局所解が大域解とは限りません。MINLP の連続緩和が非凸のとき、同じ困難が各節点に現れます。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "固定費 6 の機械を、販売益 8 q 、運転費 q 2 で動かします。負荷の上限は 2.4 、総量の上限は 10 です。台数 n は 1 から 6 の整数、負荷 q は連続とし、どの台も同じ負荷で動かします。乱数は使いません。 機械の例・台数を固定して全列挙する n を固定すると、残る変数は q だけです。 q の傾き n ( 2 q − 8 ) は q < 4 で負なので、 q は上限 min ( 2.4 , 10 / n ) まで上げるのが最良です。 台数 n 負荷 q 値 f 1 2.4 −7.44 2 2.4 −14.88 3 2.4 −22.32 4 2.4 −29.76 5 2 −30.0 6 1.667 −27.33 4台までは、台数を増やすたびに値が 7.44 ずつ下がります。5台では総量の上限 10 に当たって負荷が 2 に下がり、値は − 30.0 です。6台では負荷が 1.667 まで下がり、固定費の増加が上回って値は上がります。最適は n = 5 で、値は − 30.0 です。 機械の例・台数を実数にした緩和を解く x = n q を使った形 6 n + x 2 / n − 8 x で、 n を実数にして解きます。総量が上限 10 に当たる点では、 f = 6 n + 100 / n − 80 で、この式の最小は n ≈ 4.08 です。ところが、負荷の上限 2.4 から n ≥ 10 / 2.4 、つまり n ≥ 25 / 6 ≈ 4.167 が必要です。そのため、最小は負荷の上限と総量の上限が同時に効く n = 25 / 6 で、値は次のとおりです。 6 · 25 6 + 100 25 / 6 − 80 = 25 + 24 − 80 = − 31 緩和の最小 − 31 は、整数の最適値 − 30 より 1 小さい値です。機械の例の連続緩和は、 x 2 / n の形で書くと凸なので、この − 31 は整数の最適値の下界です。 機械の例・ n を 4 と 5 の間で分ける 緩和の最適解 n = 25 / 6 は整数ではありません。整数の n は n ≤ 4 か n ≥ 5 のどちらかなので、この二つに分けても、整数の候補は失われません。 追加した範囲 緩和の最適解 下界 次の判断 1 ≤ n ≤ 6 n = 25 / 6 , x = 10 −31.0 n で分ける n ≤ 4 n = 4 , x = 9.6 −29.76 整数解。暫定解にする n ≥ 5 n = 5 , x = 10 −30.0 整数解。暫定解を更新する 二つの節点とも整数の台数で最良に着いたので、分けた範囲の外に、これらより良い整数解はありません。最適値は − 30.0 で、台数は 5 です。 n ≥ 5 の節点を先に解いていれば、暫定解 − 30.0 が先に決まります。 n ≤ 4 の節点の下界 − 29.76 は − 30.0 より大きいので、この枝にはこれ以上良い解がなく、探索を打ち切れます。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "次の表は順位ではなく、連続緩和が凸かどうかに応じた入口です。 系統 進み方 向く条件・避ける条件 分枝限定法 連続緩和のNLPを各節点で解き、整数変数を分けて下界で枝を切る 緩和が凸なら、各節点の下界が正しく、最適性を示せます。非凸なら、局所解の値で枝を切ると最適解を失うことがあります Outer Approximation 整数を固定した連続NLPと、凸な式の接平面を集めたMILPを交互に解く 凸MINLPのときの方法です。非凸だと接平面が最適解を切り落とすことがあります 空間分枝限定法 連続変数の範囲も分け、各領域で凸な下界を作る 非凸MINLPで大域的な下界が要るときの候補です。計算は重くなります branch-and-cut 分枝に加えて、緩和を締める制約を足す 線形の部分が大きいときに、下界と暫定解の差を縮めます 全列挙 整数変数の組合せごとに連続NLPを解く 整数変数が少ないときだけです。機械の例は6通りです ライブラリの既定の設定は、そのライブラリの選択です。この記事の推奨でも、手法の順位でもありません。ソルバーが凸のMINLPだけを前提にするか、非凸も大域的に扱うかは、製品とバージョンで違います。たとえばKnitroの文書は、主に凸の問題を対象に設計されたと述べています。非凸の問題では、大域解への収束を保証しないとも述べています。 次のコードは、機械の例を SciPy の SLSQP で解きます。ここでは、分枝限定法を手で実装し、各節点で連続NLPを解いています。この例の節点は3つです。 python import numpy as np from scipy.optimize import minimize FIXED , PRICE , Q_MAX , MARKET = 6.0 , 8.0 , 2.4 , 10.0 def cost ( n , q ): \"\"\"n 台が負荷 q で動くときの、固定費 + 運転費 - 販売益\"\"\" return FIXED * n + n * q ** 2 - PRICE * n * q # 1. n を固定して全列挙する。傾き n(2q-8) は q<4 で負なので、q は上限まで上げる for n in range ( 1 , 7 ): q = min ( Q_MAX , MARKET / n ) print ( n , round ( q , 4 ), round ( cost ( n , q ), 2 )) # 1 2.4 -7.44 # 2 2.4 -14.88 # 3 2.4 -22.32 # 4 2.4 -29.76 # 5 2.0 -30.0 # 6 1.6667 -27.33 # 2. 総出力 x = n q に置き換えると、目的は 6n + x^2/n - 8x。n の範囲を渡して緩和を解く def relax ( lo , hi ): def f ( v ): return FIXED * v [ 0 ] + v [ 1 ] ** 2 / v [ 0 ] - PRICE * v [ 1 ] cons = [{ \"type\" : \"ineq\" , \"fun\" : lambda v : Q_MAX * v [ 0 ] - v [ 1 ]}] r = minimize ( f , [( lo + hi ) / 2 , MARKET / 2 ], method = \"SLSQP\" , constraints = cons , bounds = [( lo , hi ), ( 0 , MARKET )], options = { \"ftol\" : 1e-12 }) return r . x [ 0 ], r . fun print ( * np . round ( relax ( 1 , 6 ), 4 )) # 4.1667 -31.0 # 3. 凸性の確かめ: (n, q) の形と (n, x) の形で、目的の Hessian の固有値を比べる print ( np . linalg . eigvalsh ([[ 0 , 2 * 2.4 - 8 ], [ 2 * 2.4 - 8 , 2 * 4 ]]) . round ( 2 )) # [-1.12 9.12] worst = min ( np . linalg . eigvalsh ([[ 2 * x ** 2 / n ** 3 , - 2 * x / n ** 2 ], [ - 2 * x / n ** 2 , 2 / n ]])[ 0 ] for n in np . linspace ( 1 , 6 , 26 ) for x in np . linspace ( 0 , 10 , 26 ) ) print ( worst > - 1e-9 ) # True # 3b. (n, q) の形のまま、出発点を変えて局所解法で緩和を解く ends = set () for start in [( 1 , 0.5 ), ( 3 , 1 ), ( 6 , 2 ), ( 2 , 2.4 ), ( 6 , 0.2 ), ( 5 , 2 )]: r = minimize ( lambda v : cost ( * v ), start , method = \"SLSQP\" , bounds = [( 1 , 6 ), ( 0 , Q_MAX )], constraints = [{ \"type\" : \"ineq\" , \"fun\" : lambda v : MARKET - v [ 0 ] * v [ 1 ]}]) ends . add (( round ( float ( r . x [ 0 ]), 3 ), round ( float ( r . fun ), 3 ))) print ( ends ) # {(4.167, -31.0)} # 4. 分枝限定法: 緩和値を下界にして、n を整数の境で二つに分ける best , queue , log = np . inf , [( 1 , 6 )], [] while queue : lo , hi = queue . pop () n , bound = relax ( lo , hi ) if bound >= best - 1e-9 : log . append ( f \"n in [ { lo } , { hi } ]: 下界 { bound : .2f } で枝刈り\" ) elif abs ( n - round ( n )) < 1e-6 : best = bound log . append ( f \"n in [ { lo } , { hi } ]: n= { round ( n ) } 整数解 { bound : .2f } \" ) else : log . append ( f \"n in [ { lo } , { hi } ]: n= { n : .4f } 下界 { bound : .2f } 、n<= { int ( n ) } と n>= { int ( n ) + 1 } に分枝\" ) queue += [( int ( n ) + 1 , hi ), ( lo , int ( n ))] print ( * log , sep = \" \\n \" ) # n in [1, 6]: n=4.1667 下界 -31.00、n<=4 と n>=5 に分枝 # n in [1, 4]: n=4 整数解 -29.76 # n in [5, 6]: n=5 整数解 -30.00 print ( best ) # -30.0 最初の6行は全列挙で、最良の n = 5 の値 − 30.0 を示します。 4.1667 -31.0 は、台数を実数にした緩和の最小です。続く [-1.12 9.12] は、 ( n , q ) の形の Hessian が凸でないことを示します。 True は、 ( n , x ) の形の Hessian が格子上で半正定値であることを示します。 {(4.167, -31.0)} は、凸でない形でも6つの出発点が同じ点に着いたことを表します。最後の4行が分枝限定法の記録で、全列挙と同じ − 30.0 に着きます。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "次の式は「いくつかの変数に整数条件を課し、非線形の目的 f を、非線形の制約 g ≤ 0 のもとで最小にする」を表します。 min x f ( x ) s.t. g ( x ) ≤ 0 , x j ∈ ℤ ( j ∈ I ) 添字の集合 I に入る変数だけが整数で、残りは連続です。 f か g のどちらかに非線形の式が入っていれば、この型です。 記号 意味 機械の例では x 決める変数。 I の変数は整数 ( n , q ) 、台数と負荷 f ( x ) 最小にする目的 6 n + n q 2 − 8 n q g ( x ) ≤ 0 制約の式 q − 2.4 ≤ 0 、 n q − 10 ≤ 0 、 1 − n ≤ 0 、 n − 6 ≤ 0 I 整数にする変数の添字 { n } 連続緩和が凸かどうかで、下界の保証が分かれる 整数条件 x j ∈ ℤ を外した問題を、連続緩和と呼びます。最小化では、緩和の最適値は整数の最適値以下なので、下界になります。ただし、これが下界として使えるのは、緩和の最適値を実際に求められたときです。 連続緩和が凸（ f が凸関数、 g のそれぞれが凸関数）なら、局所解がそのまま大域解です。局所解法が返す値を、下界として使えます。この条件を満たす問題を凸MINLPと呼びます。 連続緩和が凸でないと、局所解法が返す点は大域解とは限りません。返った値が真の下界より大きいと、その値で枝を切ると、最適解を含む枝を捨てることがあります。 同じ機械の例でも、書き方で凸かどうかが変わります。 ( n , q ) で書いた目的 6 n + n q 2 − 8 n q の Hessian は次の行列です。 ( 0 2 q − 8 2 q − 8 2 n ) この行列式は − ( 2 q − 8 ) 2 です。 q ≠ 4 なら負なので、固有値の符号が異なり、凸ではありません。 総量 x = n q を変数にすると、目的は 6 n + x 2 / n − 8 x に変わります。制約 x ≤ 2.4 n と x ≤ 10 は線形です。この目的の Hessian は次の行列です。 ( 2 x 2 / n 3 − 2 x / n 2 − 2 x / n 2 2 / n ) 行列式は 4 x 2 / n 4 − 4 x 2 / n 4 = 0 、対角成分は n > 0 で 0 以上です。固有値は 0 と非負の値なので、 n > 0 で凸関数です。 どちらも同じ問題を表しますが、凸性を確かめられるのは後者です。 保証は条件つきで、MILPやMIQPとは次の点で分かれる 型 非線形の入り方 連続緩和 混合整数線形計画 入らない 線形計画。常に凸 混合整数二次計画 目的の二次式だけ。制約は線形 Q が半正定値なら凸QP この型 目的か制約の任意の非線形の式 f と g が凸関数のときだけ凸 機械の例は、 x 2 / n の項があるので、目的が二次式ではありません。そのため、MIQPではなく、この型で扱います。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.mixed-integer-nonlinear-program:課題から定式化する",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.mixed-integer-nonlinear-program",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:concept.constrained-nlp",
+        "content:concept.convexity",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.mixed-integer-quadratic-program",
+        "content:outer-approximation-minlp",
+        "content:spatial-branch-and-bound",
+        "problem:PA025",
+        "source:S002",
+        "source:S021",
+        "source:S029",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S021",
+        "S029",
+        "S056"
+      ],
+      "text": "「機械を何台動かし、各台をどれだけの負荷で動かすか決めたい」という課題から、次の4つを順に確かめます。 何を決めるか : 台数と負荷です。台数は整数で、負荷は連続です。整数の変数と連続の変数が混ざります。 何を良くしたいか : 固定費と運転費から販売益を引いた値を小さくします。運転費が負荷の二乗なので、目的は非線形です。 何を守るか : 負荷の上限、総量の上限、台数の範囲です。制約はすべて線形に書けます。非線形になるのは目的です。 どこまで保証がほしいか : 最適性の証明がほしいなら、連続緩和が凸になる書き方を探します。機械の例では、総量 x = n q を変数にすると凸になります。 整数変数があり、目的か制約に非線形の式が入るなら、この型です。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-quadratic-program:30秒でつかむ",
       "dataset_version": "0.18.23",
       "document_id": "content:concept.mixed-integer-quadratic-program",
@@ -14137,6 +14656,666 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "パン工房で、オーブンの設定温度を決めます。温度は0から1に直した目盛りで、焼き上がりを採点した点数は小さいほど良いとします。 同じ温度で焼いても、生地の状態や庫内の温度むらのせいで、点数は毎回少し違います。1回焼くたびに、点数に平均0・標準偏差0.2のばらつきが乗るとします。 焼ける回数は60回です。60通りの温度を1回ずつ焼くと、いちばん点数の良い温度がすぐ見つかりそうに見えます。ところが、1回の点数は真の点数とばらつきの合計なので、たまたまばらつきが良い側に出た温度が選ばれやすくなります。 そこで温度の数を減らし、温度ごとに複数回焼いて平均で比べる方法も考えられます。 この例の真の点数は 2 ( x − 0.6 ) 2 で、温度0.6で最小の0になります。ただし焼く側は、この式を知りません。見えるのはばらつきの乗った点数だけです。 決めるもの : 設定温度 x 良くしたいもの : 点数の期待値（同じ温度を何度も焼いたときの平均的な点数） 守ること : 焼く回数は60回まで。温度は0から1の範囲 次の図は、同じ60回を二通りに使った結果です。まず「① 60温度を1回ずつ」のパネルで橙の輪を探し、輪の位置の点数と、パネルの下に書かれた真の点数を見比べてください。続いて「② 12温度を5回ずつ」のパネルで、黒の四角（5回の平均）の最小に輪が付いていることを確かめてください。 同じ60回の焼き方：乱数種0の1回分。ばらつきは平均0・標準偏差0.2の正規分布で、点数は教材用の式。どちらの配分が良いかは示さない 「① 60温度を1回ずつ」では、最良の観測は − 0.380 です。ところが、その温度（約0.508）の真の点数は 0.017 で、観測より約0.4悪い値です。真の点数は0以上なので、 − 0.380 は実際には出ない値で、ばらつきが良い側に出ただけです。 「② 12温度を5回ずつ」では、最良の平均は − 0.077 で、選ばれた温度（0.625）の真の点数は 0.001 です。5回の平均にしても、真の点数より低く出ています。 黒の四角は、緑の線から上下にずれています。5回の平均の標準偏差は 0.2 / 5 ≈ 0.089 で、緑の線のすぐ近くの温度どうしは、この大きさのずれの中で順位が入れ替わります。 どちらのパネルも青い点は60個で、焼いた回数と同じです。違いは、60個を60か所に散らすか、12か所に5個ずつ集めるかだけです。 「観測の最小値」と「真の点数」はなぜずれ、その大きさはどう見積もればよいのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "noiseを含むblack-boxは、同じ入力で評価しても毎回違う値が返るときに、値の期待値を最小にする定式化です。1回の値の差には評価のばらつきが混ざるので、複数回の平均で比べます。平均の最小値は実際より良く見えやすいため、選んだ後に新しく測り直した値で確かめます。",
+      "title": "noiseを含むblack-box"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "1回の値の差から、良い入力を決める : 温度0.5と0.6の真の点数の差は0.02ですが、1回ずつ焼くと47.2%の確率で順位が逆になります。5回の平均にしても43.7%です。ばらつき0.2に比べて差が小さいときは、順位の入れ替わりを前提に、差を大きく取った入力を比べます。 最小の観測を、達成できる値として報告する : 60温度を1回ずつ焼くと最良の観測は − 0.380 ですが、その温度の真の点数は 0.017 でした。2000回の繰り返しの平均でも、報告した値は真の点数より約0.42低く出ます。選んだ入力を新しく測り直した値を、報告に使います。例では5回の測り直しが − 0.039 で、標準偏差 0.089 の幅を持ちます。 温度の数を増やすほど、良い入力が見つかると考える : k = 60 では選んだ温度の真の点数の平均が0.041で、 k = 12 の0.025より大きくなりました。1温度あたりの回数が減り、順位の入れ替わりが増えたからです。反対に k = 2 まで減らすと、0.6に近い温度がなくなり、0.045に悪化します。この表で最小なのは k = 4 の0.010ですが、これは、この例の σ と予算と関数の形と格子の位置で決まる結果です。 k = 4 を勧める根拠にはなりません。 ばらつきの大きさを測らずに、回数を決める : 同じ温度0.6を5回焼くと、標準偏差は0.222でした。真の点数が近い温度どうしの差が0.02なら、この標準偏差の10分の1以下で、順位を判定できません。回数を決める前に、同じ入力を数回測ります。 ばらつきを含む値を、決定論的な値として扱う : 差分で勾配を作る方法は、ばらつきの乗った値の差を勾配として読みます。温度を0.01動かしたときの真の点数の差は、 x = 0.5 付近で約0.004ですが、1回のばらつきは0.2です。差が埋もれるので、差分の幅や平均する回数は、ばらつきの大きさと合わせて決めます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "期待値を標本平均で置き換えて解く方法は、Kleywegt・Shapiro・Homem-de-Melloの論文（S160）に基づきます。標本問題の最適値が真の最適値の下側の推定になることも同じ論文にあり、教科書『Lectures on Stochastic Programming』（S161）も扱っています。ベイズ最適化で観測のばらつきを扱うことは、Frazierのチュートリアル（S059）と、BoTorchの公式文書（S035）に基づきます。平均の標準偏差が σ / n になることは、評価ごとのばらつきが互いに独立で、標準偏差が同じ σ のときに成り立つ標準的な統計の結果です。 例の数値は、上のコードを標準ライブラリのPythonで実行して再現できます。ばらつきは平均0・標準偏差0.2の正規分布で、 x によらず足されます。乱数種は、図の2配分が0、2000回の繰り返しが1です。同じ温度を5回焼く確認には2を使います。点数の式と温度の範囲は教材用の値で、実際のオーブンの特性や、特定の手法の性能は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "設定は「30秒でつかむ」のとおりです。 f ( x ) = 2 ( x − 0.6 ) 2 、 σ = 0.2 、予算は60回です。温度は0から1を k 等分した各区間の中央に置き、乱数種は0を使います。 オーブンの例・2つの配分を乱数種0で比べる 配分 選ばれた温度 報告した値 真の点数 ① 60温度を1回ずつ 0.508 −0.380（最良の観測） 0.017 ② 12温度を5回ずつ 0.625 −0.077（最良の平均） 0.001 真の点数は 2 ( 0.508 − 0.6 ) 2 ≈ 0.017 と 2 ( 0.625 − 0.6 ) 2 ≈ 0.001 で、手で計算し直せます。 選んだ温度 0.625 を新しく5回焼くと、平均は − 0.039 でした。報告した − 0.077 より、真の点数 0.001 に近い値です。新しい5回は選ぶ前のばらつきを含まないので、選んだことによる偏りがありません。ただしこの平均にも、標準偏差 0.089 のばらつきが残っています。 この結果は乱数種0の1回分です。別の乱数種では順位が逆になることもあります。そこで、同じ手順を2000回繰り返して、平均的な様子を見ます。 オーブンの例・予算の分け方で変わる点 温度の数 k 1温度あたりの回数 n 選んだ温度の真の点数の平均 報告した値 − 真の点数の平均 60 1 0.041 −0.422 30 2 0.032 −0.248 12 5 0.025 −0.109 6 10 0.023 −0.048 4 15 0.010 −0.013 2 30 0.045 0.0 2000回の繰り返しの平均で、報告した最小の値は、 k が大きいほど真の点数より低く出ます。 k = 60 では約0.42低く、 k = 12 では約0.11低くなります。選んだ温度の真の点数は、 k = 4 までは k を減らすと小さくなり、 k = 2 では温度の網目が粗すぎて悪化します。 この表は、このオーブンの例（ σ = 0.2 、予算60）の数値です。 k = 4 の0.010が小さいのは、4等分の中央に0.625があって真の最小0.6に近いという、この格子の位置の都合も効いています。別の σ や予算では、分け方の良し悪しが変わります。 f の形や格子が違っても変わります。どの k が良いかを示す表でも、 k = 4 を勧める表でもありません。 オーブンの例・隣り合う温度の順位はどれだけ信頼できるか 真の最小の温度0.6と、別の温度を比べたとき、 n 回平均で順位が逆になる確率を計算します。差の標準偏差は σ 2 / n なので、逆になる確率は正規分布の下側確率で求まります。 比べる温度 真の点数の差 n = 1 で逆になる確率 n = 5 で逆になる確率 0.5 0.02 0.472 0.437 0.4 0.08 0.389 0.264 0.2 0.32 0.129 0.006 温度0.5と0.6の差は0.02で、ばらつき0.2の10分の1です。1回でも5回でも、順位はほぼ当てずっぽうです。差が0.32まで開けば、5回の平均で0.6%まで下がります。 そのため、選び間違えても損が小さくて済むなら、真の点数が近い温度の優劣を少ない回数で決めなくても構いません。損は、差の0.02程度に収まるからです。逆に差が大きい温度を取り違えるのを避けるために、繰り返しを使います。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "次の式は「温度 x を選び、ばらつきの乱数 ξ で値が変わる評価 F ( x , ξ ) の期待値を最小にする。ただし観測できるのは F ( x , ξ ) の1回分だけ」を表します。 min x f ( x ) , f ( x ) = 𝔼 ξ [ F ( x , ξ ) ] 式は「 ξ をいろいろに振ったときの F の平均 f ( x ) が最小になる x を選ぶ」と読みます。 f ( x ) そのものは見えません。見えるのは、評価するたびに ξ が新しく引かれた F ( x , ξ ) です。 記号 意味 オーブンの例では x 決める入力 設定温度（0から1の目盛り） ξ 評価のたびに変わる乱数 生地の状態や庫内の温度むら F ( x , ξ ) 1回の評価で見える値 1回焼いた点数 2 ( x − 0.6 ) 2 + ξ f ( x ) F の期待値。最小にしたい量 2 ( x − 0.6 ) 2 σ ばらつきの標準偏差 0.2 B 評価の予算 焼く回数60回 この例では ξ が平均0・標準偏差 σ = 0.2 の正規分布に従い、 x によらず同じ大きさで足されます。実際の問題では、ばらつきの大きさが x によって違うことがあります。 平均にするとばらつきが n 分の1になる 同じ x を n 回評価した平均 F ¯ は、 f ( x ) の推定値です。評価ごとのばらつきが互いに独立で、標準偏差が σ なら、平均の標準偏差は σ / n です。例では、 n = 1 で 0.2 、 n = 5 で 0.089 になります。 期待値を標本平均で置き換えて解く考え方は、sample average approximation (SAA) と呼ばれます。S160 は、この方法を確率的な離散最適化に当てはめたときの、統計的な下界・上界と収束の速さを扱っています。 平均の最小値は、実際より良く見える 温度ごとの平均を比べ、最小の温度を選ぶと、選んだ後の平均は f の値より低く出る傾向があります。ばらつきが良い側に出た温度ほど選ばれやすいからです。 K 個の候補の平均 F ¯ i について、一般に次の関係が成り立ちます。 𝔼 [ min i F ¯ i ] ≤ min i 𝔼 [ F ¯ i ] この式は「平均の最小値の期待は、期待値の最小値より小さいか、等しい」と読みます。SAAの標本問題の最適値が、真の最適値の下側の推定になるのは、この関係によります（S160）。この関係が成り立つ条件は、候補が有限個で、平均が有限の期待値を持つことです。 同じ予算の使い方は、温度の数と繰り返しの数の分け方 予算 B を k 個の温度に等分すると、温度ごとの繰り返しは n = B / k です。 k を増やすと温度の網目は細かくなりますが、1温度あたりの平均は粗くなります。 k を減らすと平均は安定しますが、真の最小の温度を取りこぼします。 この分け方の最適な比は、ばらつきの大きさと予算に加えて、 f の形でも変わります。次の節で、例の数値でこの変わり方を見ます。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:次に読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "非常に高価な低次元評価（PA014） : 同じ入力で同じ値が返る場合の、代理モデルを使った探索 決定論的だが不連続なsimulation（PA012） : ばらつきではなく、値の飛びが問題になる場合 失敗・NaNを伴うシミュレーション（PA016） : 評価が値を返さない入力がある場合 ベイズ最適化 : 観測のばらつきを代理モデルに含める方法",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:見分け方",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "次の言葉が課題に出てきたら、この型を疑います。 同じ条件で測り直すと、値が毎回違う（実験、A/Bテスト、乱数を含むシミュレーション） 値の差が小さいとき、本当の差なのか偶然なのか判断できない 評価1回の値より、何度も測ったときの平均で良し悪しを決めたい 最初の確かめは、同じ入力を数回評価することです。オーブンの例で温度0.6を5回焼くと、点数は 0.468 , − 0.133 , 0.079 , 0.029 , 0.167 で、標準偏差は 0.222 でした。真の点数は0なので、5回のばらつきが約0.2あると分かります。5回とも同じ値が返るなら、次の一覧の別の型です。 別の型へ進む兆候は次のとおりです。 同じ入力なら必ず同じ値が返るが、入力を少し変えると値が飛ぶ → 決定論的だが不連続なsimulation（PA012） 評価が失敗して、値が返らない入力がある → 失敗・NaNを伴うシミュレーション（PA016） 値は毎回同じで、1回の評価が高価で数十回しか試せない → 非常に高価な低次元評価（PA014） ばらつきの分布が分かっていて、 f ( x ) を式や数値積分で計算できる → 期待値を計算して、通常の最適化として解く",
+      "title": "見分け方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:解き方の系統",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "どの系統も、ばらつきをどう扱うかが違います。次の表は順位ではなく、条件ごとの入口です。 系統 ばらつきの扱い方 向く条件・避ける条件 反復平均と、格子または一様乱数の候補（ Random Search ） 候補の温度を決めて、温度ごとに n 回測って平均にします 実装が単純です。予算 B を温度の数と繰り返しに分ける必要があり、分け方は上の表のように条件で変わります ベイズ最適化 観測のばらつきを代理モデルに含め、観測がない温度の平均を滑らかに推定します 評価が高価で、回数が数十回のとき。ばらつきの仮定が実際と合わないと、推定が歪みます（S059、S035） SPSA ランダムな一方向の正負2評価から下り方向を推定します。推定にもばらつきが乗ります 変数が多く、勾配が見えないとき。更新幅の列と、同一点の再評価で進み具合を確かめます CMA-ES 集団の順位から分布を更新します。ばらつきで順位が入れ替わるので、同じ点を再評価して順位の安定を確かめてから使います 評価が安く、世代あたりに多数の点を試せるとき ライブラリの既定の設定は、そのライブラリの選択です。この記事の推奨でも、系統の順位でもありません。比較するときは、評価の予算と乱数種と再評価の回数をそろえます。 次のコードは、例の数値を標準ライブラリだけで再現します。 python import math import random import statistics SIGMA = 0.2 # 焼くたびに加わるばらつきの標準偏差 BUDGET = 60 # 焼く回数の上限 def true_score ( x ): return 2.0 * ( x - 0.6 ) ** 2 # 真の点数（実際には見えない） def bake ( x , rng ): return true_score ( x ) + rng . gauss ( 0.0 , SIGMA ) # 1回焼いて得る点数 def temperatures ( k ): return [( i + 0.5 ) / k for i in range ( k )] # 0〜1を等間隔に分けた k 温度 def pick ( k , rng ): \"\"\"k 温度を BUDGET//k 回ずつ焼き、平均が最小の温度を返す\"\"\" n = BUDGET // k xs = temperatures ( k ) means = [ sum ( bake ( x , rng ) for _ in range ( n )) / n for x in xs ] best = min ( range ( k ), key = means . __getitem__ ) return xs [ best ], means [ best ] rng = random . Random ( 0 ) for k in ( 60 , 12 ): x , mean = pick ( k , rng ) print ( k , BUDGET // k , round ( x , 3 ), round ( mean , 3 ), round ( true_score ( x ), 3 )) # 60 1 0.508 -0.38 0.017 # 12 5 0.625 -0.077 0.001 fresh = sum ( bake ( x , rng ) for _ in range ( 5 )) / 5 # 選んだ温度を新しく5回焼く print ( round ( fresh , 3 ), round ( SIGMA / math . sqrt ( 5 ), 3 )) # -0.039 0.089 def wrong_order ( n , gap ): \"\"\"真の差が gap の2温度を、n 回平均で逆に並べる確率（正規分布の誤差のとき）\"\"\" z = gap / ( SIGMA * math . sqrt ( 2.0 / n )) return 0.5 * ( 1.0 + math . erf ( - z / math . sqrt ( 2.0 ))) for x in ( 0.5 , 0.4 , 0.2 ): # 最良の 0.6 と比べる温度 gap = true_score ( x ) - true_score ( 0.6 ) print ( x , round ( gap , 2 ), [ round ( wrong_order ( n , gap ), 3 ) for n in ( 1 , 5 )]) # 0.5 0.02 [0.472, 0.437] # 0.4 0.08 [0.389, 0.264] # 0.2 0.32 [0.129, 0.006] def repeat ( k , reps = 2000 , seed = 1 ): \"\"\"選んだ温度の真の点数の平均と、(報告した平均 - 真の点数) の平均\"\"\" rng = random . Random ( seed ) n = BUDGET // k xs = temperatures ( k ) chosen , gap = [], [] for _ in range ( reps ): means = [ sum ( bake ( x , rng ) for _ in range ( n )) / n for x in xs ] best = min ( range ( k ), key = means . __getitem__ ) chosen . append ( true_score ( xs [ best ])) gap . append ( means [ best ] - true_score ( xs [ best ])) return round ( statistics . fmean ( chosen ), 3 ), round ( statistics . fmean ( gap ), 3 ) + 0.0 for k in ( 60 , 30 , 12 , 6 , 4 , 2 ): print ( k , BUDGET // k , repeat ( k )) # 60 1 (0.041, -0.422) # 30 2 (0.032, -0.248) # 12 5 (0.025, -0.109) # 6 10 (0.023, -0.048) # 4 15 (0.01, -0.013) # 2 30 (0.045, 0.0) print ( round ( true_score ( 0.5 ) - true_score ( 0.51 ), 4 )) # 0.0038 rng = random . Random ( 2 ) same = [ bake ( 0.6 , rng ) for _ in range ( 5 )] # 同じ温度を5回焼く print ([ round ( v , 3 ) for v in same ], round ( statistics . stdev ( same ), 3 )) # [0.468, -0.133, 0.079, 0.029, 0.167] 0.222 最初の2行は、図の2つの配分の結果です。温度、報告した値、真の点数の順に並びます。 -0.039 0.089 は、選んだ温度を新しく5回焼いた平均と、その標準偏差の理論値です。 wrong_order の出力は、真の差が近い温度どうしの順位が、5回の平均でも入れ替わりうることを表します。 repeat の出力は、2000回の繰り返しの平均で、 k を増やすほど報告した値が真の点数より低く出ることを表します。最後の行は、同じ温度0.6を5回焼いた点数とその標準偏差です。 乱数は random.Random の gauss で作っています。乱数の実装が違う環境では、数値が変わることがあります。",
+      "title": "解き方の系統"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.noisy-black-box:近い定式化",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.noisy-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:random-search",
+        "content:spsa",
+        "problem:PA013",
+        "source:S035",
+        "source:S059",
+        "source:S160",
+        "source:S161"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S160",
+        "S161"
+      ],
+      "text": "決定論的だが不連続なsimulation（PA012） : 値が飛ぶ点は同じですが、同じ入力なら毎回同じ値が返ります。オーブンの例で5回焼いて値が揃うなら、こちらです。ばらつきがないので、1回の評価の値をそのまま比べられます。PA013では、1回の値の差を信じてはいけません。 失敗・NaNを伴うシミュレーション（PA016） : 値が返らない評価を含みます。PA013では、すべての評価が値を返しますが、その値が毎回違います。両方が起きるなら、失敗は状態として台帳に残し、返った値のばらつきは平均で扱います。 非常に高価な低次元評価（PA014） : 評価が高価で回数が限られる点は同じです。評価が決定論的なら代理モデルは観測点を通りますが、PA013では通りません。観測誤差を代理モデルに含めて、平均の推定を滑らかにします。 期待値の最小化（確率計画） : ξ の分布が分かっていて、 f ( x ) を式や数値積分で計算できるなら、PA013ではなく通常の最適化の問題です。PA013の特徴は、 F ( x , ξ ) の標本しか手に入らないことです。",
+      "title": "近い定式化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "装置に二つのつまみ x 1 、 x 2 があり、どちらも − 1 から 1 の範囲で回せます。装置の損失は、つまみを回した量から決まります。 一つずつのつまみは、回すほど損失が増えます。ところが、二つを同じ向きに回すと、組み合わせの効果で損失が減ります。逆向きに回すと損失が増えます。 損失は、次の式で決まります。 f = x 1 2 + x 2 2 − 3 x 1 x 2 + 0.5 ( x 1 + x 2 ) 損失が減る向きへ少しずつ回すと、どこかで止まります。止まった位置が、範囲の中で最も損失の小さい位置かどうかは、止まった位置を見ても分かりません。 決めるもの : つまみの位置 ( x 1 , x 2 ) 良くしたいもの : 上の損失 f を小さくする 守ること : 各つまみが − 1 以上 1 以下 次の図は、この損失の等高線と、361通りの出発点から損失を減らす向きへ進んだ行き先です。 まず「出発点ごとの行き先」のパネルで、橙の四角と緑の丸の境目を探してください。次に「損失の等高線」のパネルで、青い菱形の鞍点が、その境目の上にあるかを確かめます。 つまみ2個の例：損失は f=x₁²+x₂²−3x₁x₂+0.5(x₁+x₂)、範囲は −1 以上 1 以下です。出発点は範囲を19×19に分けた格子の中心で、行き先は刻み幅0.1・500回の射影勾配法の結果です。ほかの局所解法の行き先や、実際の装置の損失は示しません 「損失の等高線」のパネルでは、緑の角 ( − 1 , − 1 ) と橙の角 ( 1 , 1 ) のどちらも、まわりの範囲の中で損失が低くなっています。値は − 2 と 0 で、二つは同じ高さではありません。 「出発点ごとの行き先」のパネルの境目は、この格子の分類では直線で、式は x 1 + x 2 = 1 です。青い菱形の鞍点 ( 0.5 , 0.5 ) も 0.5 + 0.5 = 1 を満たし、この線の上にあります。 361点のうち、橙の四角は45点、緑の丸は316点です。橙の四角から出発すると、損失 − 2 の位置には着きません。この数は、この例と刻み幅0.1の射影勾配法についての値です。 鞍点に着いた出発点は0点です。直線 x 1 + x 2 = 1 の上では、傾きの ( 1 , 1 ) 方向の成分が0です。そのため、この直線の上から出発すると点は直線から出ず、鞍点へ近づきます。 ( 0 , 1 ) から出発すると、500回で ( 0.5 , 0.5 ) に着きます。この格子の中心は、どれもこの直線の上にありません。 橙の四角から出発した計算は、 ( 1 , 1 ) に着いて「これ以上、損失を減らす向きがない」と止まります。止まったという報告だけから、別の位置にもっと低い損失があることが分かるでしょうか。 その問いに、標準形と小さな例で答えます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "非凸QP・QCQPは、二次の目的や二次の制約を持ち、その行列が半正定値とは限らない定式化です。局所解法が止まった点が最良とは限りません。凸緩和で作った下界と、見つけた実行可能解の差が許容内に入ったとき、その解が最良だと確かめられます。",
+      "title": "非凸QP・QCQP"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "対角成分が正なので凸だと思う : Q 0 の対角成分は 1 と 1 で、どちらも正です。それでも行列式は 1 − 2.25 = − 1.25 で負、固有値は − 0.5 と 2.5 です。対角線 x 1 = x 2 = s の上では損失が s − s 2 になり、 s = 0.5 で最大になります。半正定値かどうかは、対角成分ではなく固有値で確かめます。 局所解法が止まった点を最良と思う : ( 0.9 , 0.2 ) から出発した射影勾配法は、 ( 1 , 1 ) で損失 0 に止まります。しかし最小値は − 2 です。出発点が直線 x 1 + x 2 = 1 の上なら、鞍点 ( 0.5 , 0.5 ) に止まり、傾きは0で損失は 0.25 です。停止の報告は、局所解の条件を示すだけです。最良かどうかは、下界との差で確かめます。 緩和の解を答えとして使う : McCormick緩和の解は ( − 0.25 , − 0.25 ) で、緩和の値は − 3.125 です。この点の実際の損失は − 0.3125 で、値が合いません。緩和は w = 1 としますが、実際の積は 0.0625 だからです。緩和の最小値は「これ以下にはならない」という下界で、緩和の解は元の問題の答えとは限りません。 変数の範囲を外す : 範囲がなければ、対角線 x 1 = x 2 = s 上の損失 s − s 2 はいくらでも下がります。 s = 10 で − 90 、 s = 100 で − 9900 です。McCormickの包絡は、有限の上下限から作るので、範囲がないと作れません。つまみの例では、箱を x 1 ≤ 0 に狭めると、下界が − 3.125 から − 2.1125 に上がりました。この例では、範囲が広いと下界が弱くなりました。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "凸性と局所解・大域解の関係と、二次制約の凸性は、Boyd and Vandenberghe『 Convex Optimization 』に基づきます。半正定値緩和による非凸二次問題の下界も、同じ本で確かめられます。局所解法が停留点に着くことは、Nocedal and Wright『 Numerical Optimization 』で確認できます。非凸の項を箱ごとの凸緩和で挟んで分ける方法は、 SCIP と Gurobi の文書で確かめられます。コードには CVXPY ・ Clarabel ・ SciPy を使います。実行環境はPython 3.12・CVXPY 1.9.3・Clarabel 0.11.1・SciPy 1.18.1・NumPy 2.5.3です。 この例は、局所解が二つあることと、下界の作り方を示す2変数の小さな例です。局所解法やソルバーの速さ、実際の装置の損失は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "つまみ2個の損失 f を、範囲 − 1 ≤ x 1 , x 2 ≤ 1 で最小にします。乱数は使いません。 つまみの例・局所解を全部数える 範囲の中で、損失を減らす向きが残らない位置を、すべて挙げます。損失の傾き（勾配）は次の式です。 ∇ f = ( 2 x 1 − 3 x 2 + 0.5 , 2 x 2 − 3 x 1 + 0.5 ) つまみが下限 − 1 にあるなら、その成分の傾きが0以上のとき、増やしても損失は増えます。上限 1 にあるなら、傾きが0以下のとき、減らしても損失は増えます。範囲の中なら、傾きが0です。この条件を、つまみごとに、下限・上限・範囲の中の三通りで調べます。 候補 傾き 判定 f ( − 1 , − 1 ) ( 1.5 , 1.5 ) 両方が下限で、傾きは0以上。局所解 − 2 ( 1 , 1 ) ( − 0.5 , − 0.5 ) 両方が上限で、傾きは0以下。局所解 0 ( − 1 , 1 ) ( − 4.5 , 5.5 ) x 1 が下限なのに傾きが負。 x 1 を増やすと下がる 5 ( 1 , − 1 ) ( 5.5 , − 4.5 ) x 1 が上限なのに傾きが正。 x 1 を減らすと下がる 5 一方が ± 1 、他方が範囲の中 他方の傾きを0にする値が 1.25 または − 1.75 範囲の外にあるので候補がない 両方が範囲の中 $(0.5,,0.5)$ で傾きが0 鞍点（次の段落） 0.25 ( 0.5 , 0.5 ) では、対角線 x 1 = x 2 = s の上で損失が s − s 2 になります。この関数は s = 0.5 で最大なので、対角線に沿って動くと損失が下がります。傾きが0でも、局所解ではありません。 損失の局所解は ( − 1 , − 1 ) の − 2 と、 ( 1 , 1 ) の 0 の二つで、最小値は − 2 です。対角線と直角な方向（ x 1 = − x 2 = s ）では、損失が 5 s 2 で、どの s でも 0 以上です。この方向ごとの曲がり方の違いが、 Q 0 の固有値 − 0.5 と 2.5 です。 つまみの例・出発点から局所解法を走らせる 射影勾配法は、勾配の逆向きへ 0.1 だけ進み、範囲の外へ出たら境界へ戻します。 ( 0.9 , 0.2 ) からの最初の一歩は、勾配が ( 1.7 , − 1.8 ) なので、 ( 0.73 , 0.38 ) へ進みます。 この計算を続けると、 ( 0.9 , 0.2 ) は ( 1 , 1 ) に着き、 ( 0.3 , 0.3 ) は ( − 1 , − 1 ) に着きます。この格子の分類の境目 x 1 + x 2 = 1 に対し、 0.9 + 0.2 = 1.1 は超え、 0.3 + 0.3 = 0.6 は超えません。 ( 1 , 1 ) に着いた計算は、局所解の条件を満たします。ただし損失は 0 で、最小値の − 2 より大きい値です。 つまみの例・下界を作って確かめる 局所解法の報告だけでは、 − 2 が最小かどうか分かりません。そこで、元の問題より易しい問題を作り、その最小値を下界にします。 積 x 1 x 2 を新しい変数 w に置き換え、箱 [ − 1 , 1 ] 2 の上で w を挟む線形の不等式を足します。これがMcCormick包絡です。損失では w の係数が − 3 なので、 w を大きくしたくなります。効くのは w の上限を与える二本です。 w ≤ 1 + x 1 − x 2 , w ≤ 1 − x 1 + x 2 対角線 x 1 = x 2 = s では、どちらも w ≤ 1 です。そこで w = 1 とすると、損失は 2 s 2 + s − 3 になり、 s = − 0.25 で最小値 − 3.125 をとります。全体の最小値も、後のコードの出力で − 3.125 と確かめられます。 元の問題の実行可能な点 x は、 w = x 1 x 2 とすれば、緩和の制約も満たします。損失の値は変わりません。そのため、緩和の最小値 − 3.125 は、元の最小値より小さいか等しい値です。つまり、損失が − 3.125 より小さい位置は、範囲の中にありません。 ここで得られた解は ( − 0.25 , − 0.25 ) で、損失は − 0.3125 です。緩和の最小値 − 3.125 とは一致しません。緩和は w = 1 としていますが、実際の積 x 1 x 2 は 0.0625 だからです。 下界が − 3.125 、見つけた最良の損失が − 2 なので、最小値は − 3.125 から − 2 の間にあります。差は 1.125 です。この差を縮めるために、箱を二つに割って、それぞれで同じ計算をします。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "次の式は「二次の損失を、二次以下の不等式と変数の範囲を守って最小にする」を表します。 min x x ⊤ Q 0 x + c 0 ⊤ x s.t. x ⊤ Q i x + c i ⊤ x ≤ b i ( i = 1 , … , m ) , ℓ ≤ x ≤ u 式は「 x を範囲 [ ℓ , u ] の中で動かし、 m 本の二次の不等式を守りながら、二次の損失を最小にする」と読みます。 Q i は対称行列で、半正定値でなくてもかまいません。 Q i = 0 の制約は線形の制約です。 記号 意味 例では x 決める連続変数 つまみの位置 ( x 1 , x 2 ) Q 0 , c 0 目的の二次と一次の係数。 Q 0 は半正定値とは限らない Q 0 の対角成分は 1 , 1 、非対角成分は − 1.5 。 c 0 = ( 0.5 , 0.5 ) Q i , c i , b i 二次の不等式の係数。二次の項がなければ線形の制約 使わない（ m = 0 ） ℓ , u 変数の下限と上限 − 1 と 1 凸になる条件 二次の式 x ⊤ Q x は、 Q の固有値がすべて0以上のとき、どの方向にも下に曲がりません。この性質を Q ⪰ 0 （半正定値）と書きます。次の二つが両方とも成り立つとき、問題は凸です。 目的の Q 0 が半正定値である 不等式 ≤ の制約の Q i が、すべて半正定値である 二次の等式制約は、 Q i = 0 の線形な場合だけ凸です。凸なら、局所解は大域解です（Boyd and Vandenberghe）。さらに Q i = 0 だけなら 凸二次計画 、不等式が x ⊤ Q i x ≤ s （ Q i ⪰ 0 ）なら、 二次錐計画 の制約として書けます。 この条件が一つでも崩れると、非凸QP・QCQPです。例の損失では、 Q 0 の固有値が − 0.5 と 2.5 です。負の固有値があるので、損失は凸ではありません。 二次錐計画との境目は、不等号の向きにも現れます。 ‖ x ‖ 2 ≤ r は二次錐の制約で凸ですが、 ‖ x ‖ 2 ≥ r （原点から r 以上離れる）は非凸です。 r = 1 のとき、点 ( − 1 , 0 ) と ( 1 , 0 ) はどちらも満たしますが、二点の中点 ( 0 , 0 ) は距離が 0 で満たしません。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:次に読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "行列がすべて半正定値と分かった → 凸二次計画 ：凸なら局所解が大域解になる理由と、有効制約法などの解き方 制約が距離の上限だけで、二乗の項がない → 二次錐計画 ：長さが不等号の小さい側にある制約の扱い 緩和で下界を作りたい → 半正定値計画 ：積を行列の成分に置き換える持ち上げと、階数の条件 箱を割って下界と最良の損失の差を詰めたい → 空間分枝限定法 ：割り方と、差が許容内に入るまでの流れ",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:見分け方",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "次のような条件が課題にあれば、非凸QP・QCQPを疑います。 二つの変数の積 x i x j が、損失や制約に入る 二次の式の行列が半正定値かどうか、確かめていない 「点から距離 r 以上離れる」「面積を a 以上にする」のような、二次の不等式の向きが凸と逆になる制約がある 局所解法で、出発点を変えると結果が変わる 一方で、次の場合は別の型を確かめます。 Q 0 と Q i の固有値がすべて0以上だった → 凸になります。 凸二次計画 か 二次錐計画 として解けます 変数の一部が整数である → 整数条件の入った型です。二次の部分が凸なら 混合整数二次計画 を確かめます 損失や制約が二次では書けない滑らかな式である → 一般滑らか制約付きNLP です 二乗の和を最小にしたいだけで、制約がない → 非凸ではなく、 線形最小二乗 です",
+      "title": "見分け方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:解き方の系統",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "非凸QP・QCQPでは、「より良い点を探す」道具と、「これ以上良い点がないと示す」道具を分けます。次の表は順位ではなく、何を保証するかの違いです。 系統 進み方 保証できること 結果を読むときに見るもの 局所解法（ SQP 、 非線形内点法 、射影勾配法など） 出発点から損失を減らす向きへ進み、停留点で止まる 滑らかな問題で、停止条件を満たす点（KKT点）に着く。大域解とは限らない（Nocedal and Wright） 停止した点の損失、出発点を変えたときの違い マルチスタート 出発点を変えて局所解法を繰り返す 見つけた最良の損失は、最小値の上界。最小値に届いたかは分からない 出発点ごとの行き先、最良の損失 凸緩和（McCormick、 Shor緩和 ） 非凸な項を、元の可行集合を含む凸な式に置き換えて解く 緩和が有効なら、最小化の下界。McCormickは変数に有限の上下限が要る 下界、緩和の解と元の問題の差 空間分枝限定法 箱を割り、箱ごとの下界で、最良の損失より悪い箱を捨てる 下界と最良の損失の差が許容内なら、その許容つきで最適。割る回数が有限で済むとは限らない 下界と最良の損失の差、残った箱の数 非凸の二次の式を空間分枝限定法で扱えるかは、ソルバーとバージョンで違います。各ソルバーの文書（ SCIP 、 Gurobi など）で、扱える項と設定を確かめます。 次のコードは、つまみの例を解きます。局所解法・McCormick緩和・Shor緩和・箱を割る探索の順に並べています。 python import cvxpy as cp import numpy as np from scipy.optimize import minimize Q = np . array ([[ 1.0 , - 1.5 ], [ - 1.5 , 1.0 ]]) # f(x) = x^T Q x + c^T x、-1 <= x <= 1 c = np . array ([ 0.5 , 0.5 ]) def f ( x ): return float ( x @ Q @ x + c @ x ) def grad ( x ): return 2 * Q @ x + c print ( np . round ( np . linalg . eigvalsh ( Q ), 3 )) # [-0.5 2.5] corners = [ np . array ([ a , b ]) for a in ( - 1.0 , 1.0 ) for b in ( - 1.0 , 1.0 )] print ([ round ( f ( p ), 2 ) for p in corners ]) # [-2.0, 5.0, 5.0, 0.0] saddle = np . linalg . solve ( 2 * Q , - c ) print ( saddle , round ( f ( saddle ), 3 )) # [0.5 0.5] 0.25 print ([( 3 * s - 0.5 ) / 2 for s in ( 1 , - 1 )]) # [1.25, -1.75] def projected_gradient ( x , step = 0.1 , iterations = 500 ): x = np . array ( x , dtype = float ) for _ in range ( iterations ): x = np . clip ( x - step * grad ( x ), - 1.0 , 1.0 ) return x first = np . array ([ 0.9 , 0.2 ]) print ( np . clip ( first - 0.1 * grad ( first ), - 1 , 1 )) # [0.73 0.38] for start in ([ 0.9 , 0.2 ], [ 0.3 , 0.3 ]): end = projected_gradient ( start ) print ( start , np . round ( end , 3 ), round ( f ( end ), 3 )) # 出力は下のコメント result = minimize ( f , start , jac = grad , method = \"L-BFGS-B\" , bounds = [( - 1 , 1 )] * 2 ) print ( \"L-BFGS-B\" , np . round ( result . x , 3 ), round ( result . fun , 3 )) # 出力は下のコメント # [0.9, 0.2] [1. 1.] 0.0 # L-BFGS-B [-1. -1.] -2.0 # [0.3, 0.3] [-1. -1.] -2.0 # L-BFGS-B [-1. -1.] -2.0 def mccormick ( lo , hi ): \"\"\"箱 lo <= x <= hi の上で x1*x2 を w に置き換えた凸緩和。下界と、その解を返す。\"\"\" x , w = cp . Variable ( 2 ), cp . Variable () constraints = [ x >= lo , x <= hi , w >= lo [ 0 ] * x [ 1 ] + lo [ 1 ] * x [ 0 ] - lo [ 0 ] * lo [ 1 ], w >= hi [ 0 ] * x [ 1 ] + hi [ 1 ] * x [ 0 ] - hi [ 0 ] * hi [ 1 ], w <= hi [ 0 ] * x [ 1 ] + lo [ 1 ] * x [ 0 ] - hi [ 0 ] * lo [ 1 ], w <= lo [ 0 ] * x [ 1 ] + hi [ 1 ] * x [ 0 ] - lo [ 0 ] * hi [ 1 ], ] objective = cp . square ( x [ 0 ]) + cp . square ( x [ 1 ]) - 3 * w + c @ x problem = cp . Problem ( cp . Minimize ( objective ), constraints ) problem . solve ( solver = \"CLARABEL\" ) return problem . value , x . value bound , x_relaxed = mccormick ( np . array ([ - 1.0 , - 1.0 ]), np . array ([ 1.0 , 1.0 ])) print ( round ( bound , 4 ), np . round ( x_relaxed , 3 )) # -3.125 [-0.25 -0.25] print ( round ( f ( x_relaxed ), 4 )) # -0.3125 # Shor緩和：Z = [[X, x], [x^T, 1]] を半正定値にして、x x^T を X に置き換える Z = cp . Variable (( 3 , 3 ), PSD = True ) shor = cp . Problem ( cp . Minimize ( cp . trace ( Q @ Z [: 2 , : 2 ]) + c @ Z [: 2 , 2 ]), [ Z [ 2 , 2 ] == 1 , Z [ 0 , 0 ] <= 1 , Z [ 1 , 1 ] <= 1 ], ) shor . solve ( solver = \"CLARABEL\" ) print ( round ( shor . value , 4 ), np . round ( Z . value [: 2 , 2 ], 3 )) # -2.0 [-1. -1.] print ( np . linalg . matrix_rank ( Z . value [: 2 , : 2 ], tol = 1e-6 )) # 1 def spatial_branch_and_bound ( tolerance = 1e-4 ): lo , hi = np . array ([ - 1.0 , - 1.0 ]), np . array ([ 1.0 , 1.0 ]) bound , x = mccormick ( lo , hi ) best = projected_gradient ( x ) # 箱の中の点なので、f(best) は最小値の上界になる print ( \"root\" , round ( bound , 4 ), round ( f ( best ), 4 )) # root -3.125 -2.0 nodes = [( bound , lo , hi )] while nodes : nodes . sort ( key = lambda node : node [ 0 ]) bound , lo , hi = nodes . pop ( 0 ) if f ( best ) - bound <= tolerance : break k = int ( np . argmax ( hi - lo )) middle = ( lo [ k ] + hi [ k ]) / 2 for side in ( 0 , 1 ): lo2 , hi2 = lo . copy (), hi . copy () if side == 0 : hi2 [ k ] = middle else : lo2 [ k ] = middle value , x = mccormick ( lo2 , hi2 ) candidate = projected_gradient ( x ) if f ( candidate ) < f ( best ): best = candidate kept = value < f ( best ) - tolerance if kept : nodes . append (( value , lo2 , hi2 )) print ( lo2 . tolist (), hi2 . tolist (), round ( value , 4 ), \"kept\" if kept else \"pruned\" ) # 出力は下のコメント return best best = spatial_branch_and_bound () # [-1.0, -1.0] [0.0, 1.0] -2.1125 kept # [0.0, -1.0] [1.0, 1.0] -1.0125 pruned # [-1.0, -1.0] [0.0, 0.0] -2.0 pruned # [-1.0, 0.0] [0.0, 1.0] -0.0625 pruned print ( np . round ( best , 3 ), round ( f ( best ), 3 )) # [-1. -1.] -2.0 x = cp . Variable ( 2 ) try : cp . Problem ( cp . Minimize ( cp . quad_form ( x , Q )), [ x >= - 1 , x <= 1 ]) . solve ( solver = \"CLARABEL\" ) except cp . error . DCPError : print ( \"DCPError\" ) # DCPError # 範囲の上下限を外すと、対角線上で損失はいくらでも下がる print ( f ( np . array ([ 10.0 , 10.0 ])), f ( np . array ([ 100.0 , 100.0 ]))) # -90.0 -9900.0 # 距離の下限 ||x|| >= 1 は、2点が満たしても中点が満たさない points = np . array ([[ - 1.0 , 0.0 ], [ 1.0 , 0.0 ]]) print ( np . linalg . norm ( points , axis = 1 ), np . linalg . norm ( points . mean ( axis = 0 ))) # [1. 1.] 0.0 最初の数行は、小さな例の確認です。 Q の固有値は − 0.5 と 2.5 で、角の損失は − 2 , 5 , 5 , 0 、傾きが0になる内部の点は ( 0.5 , 0.5 ) で損失 0.25 です。辺の上で傾きが0になる値は 1.25 と − 1.75 で、範囲の外です。 射影勾配法は、 ( 0.9 , 0.2 ) から損失 0 の ( 1 , 1 ) へ、 ( 0.3 , 0.3 ) から損失 − 2 の ( − 1 , − 1 ) へ着きます。 L-BFGS-B は、同じ ( 0.9 , 0.2 ) から ( − 1 , − 1 ) へ着きました。出発点が同じでも、局所解法が違うと行き先は変わりえます。これは、どちらの手法が良いかを示すものではありません。 L-BFGS-B の設定は、ライブラリの既定のままです。 McCormick緩和は、ルートの箱で下界 − 3.125 を返します。緩和の解 ( − 0.25 , − 0.25 ) の損失は − 0.3125 で、下界と食い違います。その点から射影勾配法を走らせると ( − 1 , − 1 ) の損失 − 2 に着き、これが最良の損失の初期値です。 Shor緩和の最小値は − 2 で、解は ( − 1 , − 1 ) です。行列 X の階数は1なので、 X = x x ⊤ が成り立ち、緩和の解が元の問題の可行解になっています。この例では、緩和の下界が最小値と一致しました。 箱を割る探索は、ルートで下界 − 3.125 、最良の損失 − 2 から始めます。 x 1 を 0 で割ると、 x 1 ≤ 0 の箱の下界は − 2.1125 で、 x 1 ≥ 0 の箱は − 1.0125 です。後者は最良の損失 − 2 より大きいので、この箱に − 2 より良い点はなく、捨てます。 残った箱を x 2 で割ると、下界は − 2.0 と − 0.0625 になります。前者は最良の損失 − 2 と許容 10 − 4 の範囲で一致し、後者は − 2 より大きいので、どちらも捨てます。探索は2回の分割で終わり、「許容 10 − 4 つきで、最小値は − 2 」と確かめられました。この回数は、この例と、中点で割る選び方の値です。 最後の DCPError は、CVXPYが x ⊤ Q x の最小化を凸と判定できず、 Q が半正定値でないために受け付けなかったことを表します。",
+      "title": "解き方の系統"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonconvex-qp-qcqp:近い定式化",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonconvex-qp-qcqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:concept.semidefinite-program",
+        "content:interior-point-nlp",
+        "content:multi-start",
+        "content:spatial-branch-and-bound",
+        "content:sqp",
+        "problem:PA019",
+        "source:S002",
+        "source:S010",
+        "source:S014",
+        "source:S021",
+        "source:S024",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S010",
+        "S014",
+        "S021",
+        "S024",
+        "S055",
+        "S056"
+      ],
+      "text": "形が似ている: 凸二次計画 : 式の形は同じでも、 Q 0 が半正定値かどうかで、局所解が大域解になるかが変わります。つまみの例の Q 0 は固有値 − 0.5 を持つので、凸二次計画ではありません。 凸と非凸が分かれる: 二次錐計画 : 距離の上限 ‖ y ‖ 2 ≤ s のように、長さが不等号の小さい側にあれば凸で、二次錐計画の制約です。長さが大きい側にある ‖ y ‖ 2 ≥ r は非凸で、この記事の型です。 緩和の先: 半正定値計画 : 積 x i x j を行列変数 X の成分に置き換える緩和（Shor緩和）で、下界を作れます。元の問題の最小値以下の値になります。つまみの例では、範囲から導ける X i i ≤ 1 を足します。すると緩和の最小値は − 2 で、元の最小値と一致しました。 X の階数が1になったためです。階数が1にならない問題では、一致するとは限りません。 より一般: 一般滑らか制約付きNLP : 二次の式は、滑らかな式の特別な場合です。非凸QP・QCQPは、二次であることを使って、緩和の下界を線形や半正定値の式で作れます。",
+      "title": "近い定式化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.nonlinear-least-squares:30秒でつかむ",
       "dataset_version": "0.18.23",
       "document_id": "content:concept.nonlinear-least-squares",
@@ -14332,6 +15511,276 @@
         "S056"
       ],
       "text": "測った位置から「揺れの大きさと速さを知りたい」という課題を、次の順で式にします。 何を推定するか ：揺れの大きさを振幅 a 、速さを角周波数 ω とします。 観測をどう予測するか ：時刻0につり合いの位置を通ったと仮定し、時刻 t i の位置を a sin ( ω t i ) と書きます。 ω が sin の中に入るので、予測はパラメータについて線形ではありません。 どのずれを減らすか ：観測と予測の縦の差を二乗して足します。 パラメータに条件があるか ：0.5秒おきの観測で区別できる範囲として、 0 < ω ≤ 2 π を付けます。 パラメータについて非線形な予測と残差の二乗和という二つの条件が揃えば、非線形最小二乗として定式化できます。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "4地点の観測値を、二つの駅 A と B が配信するデータで説明します。駅はそれぞれ2列のデータを持ち、係数は x 1 , x 2 （駅A）と x 3 , x 4 （駅B）の4つです。契約は駅の単位です。使うなら2列とも契約し、使わないなら2列とも外します。 誤差の二乗和だけを最小にすると、どの駅の列にも小さな係数が付き、契約を絞れません。そこで駅ごとの係数ベクトルの長さに罰則を足します。長さは原点で尖っているので、この罰則には原点に勾配がありません。その代わり、一歩の中で「勾配で誤差を下げる」と「罰則に従って駅ごとに長さを縮める」を順に行うと、効き目の弱い駅の2列がまとめて0になります。 決めるもの : 4つの係数 x 1 , … , x 4 （一般には、連続変数のベクトル） 良くしたいもの : 誤差の二乗和の半分と、駅ごとの係数の長さの和の9倍との合計 守ること : 制約はありません。罰則が「駅ごとに0へ寄せる」役を持ちます 次の図は、最初の一歩を駅ごとに描いたものです。まず二つのパネルで、紺の丸 v （勾配の一歩で動いた点）が橙の円の中か外かを確かめ、橙の丸（縮めた後の点）がどこに移ったかを見比べてください。 駅の例、λ=9、一歩の大きさ0.05：一歩目の v と縮めた後の点。4変数の教材用の式で、実際の観測条件は示しません パネル「駅A（x₁, x₂）」の v = ( 0.85 , 0.55 ) は、長さ 1.012 で円の外にあります。橙の丸は、 v から原点の向きに長さ 0.45 だけ縮んだ ( 0.472 , 0.306 ) です。 パネル「駅B（x₃, x₄）」の v = ( 0.3 , 0.25 ) は、長さ 0.391 で円の中にあります。橙の丸は、丸ごと ( 0 , 0 ) に落ちます。 円の半径 0.45 は、一歩の大きさ 0.05 と罰則の強さ 9 の積です。駅Aでは、 v から橙の丸へ引いた線が原点の方を向きます。縮めるのは長さだけで、向きは変わりません。 駅Bは最初の一歩で0に落ちます。駅Aは0に落ちず、解でも勾配は0になりません。それでは、どの条件が成り立てば止まってよいのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "非滑らか凸複合は、微分できる凸関数と、角のある凸関数の和を最小にする定式化です。角のある部分には勾配がないので、近接作用素という操作で一歩ごとに処理します。この操作が式で書けるなら、一歩の大きさを勾配の変わりやすさの逆数以下に取ると、滑らかな部分の勾配の一歩と近接作用素の繰り返しだけで全体の最小点に着きます。",
+      "title": "非滑らか凸複合"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "駅の中を、成分ごとの罰則に取り替える : 同じ λ = 9 で各係数の絶対値の和を罰則にすると、解は ( 0.889 , 0 , 0 , 0 ) です。駅Bは0になりますが、駅Aも2列目だけが0になります。駅単位で契約する課題では、駅Aの2列目だけを外せません。この点の目的値は 13.944 で、 x ⋆ の 12.119 より大きくなります。この点では二つの罰則の値が一致するので、比べられます。「駅ごとに使う、使わない」を決めたいときは、駅ごとの長さの罰則を使います。 勾配の長さが0になるまで反復する : 解での勾配の長さは 9.649 で、反復を重ねても0に近づきません。「勾配の長さが 10 − 6 未満になったら止める」と書くと、反復の上限まで回ります。止める判定には、一歩で動いた長さを η で割った値（近接勾配写像の大きさ）を使います。この例では34回目で 10 − 8 未満になります。 一歩の大きさを大きくして速くしようとする : η = 0.2 にすると、 1 / L = 0.0737 だけでなく 2 / L = 0.147 も超えます。点は ( 1.889 , 1.222 , 0 , 0 ) （目的値 21.962 ）と原点（ 17.5 ）を往復し続け、解に着きません。保証は、 η ≤ 1 / L のときのものです。 係数が0の駅を、観測と無関係だと読む : 罰則なしの解は ( 1.5 , 0.75 , 0 , 0.25 ) で、駅Bの x 4 は 0.25 です。この解は観測を誤差0で説明し、罰則込みの目的値は 17.343 です。 λ = 9 で駅Bが0になるのは、駅Bの勾配の長さ 3.479 が λ に届かないからです。 λ を 0.3 に下げると、駅Bの係数が戻ります。0は、この λ とこのデータでの判定です。 λ の数値だけを引き継ぐ : 観測値を10倍にすると、解が0になる λ の下限は 20.248 から 202.48 に増えます。誤差の二乗和をデータ数で割る書き方の資料では、 λ の数値の意味が 1 / m 倍になります。 λ は、 λ max との比で読みます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "最小点の条件と凸関数の劣微分は、Boyd と Vandenberghe の教科書『Convex Optimization』に基づきます。 近接作用素の定義と近接勾配法は、 Parikh と Boyd の「Proximal Algorithms」 に基づきます。ノルムの近接作用素（長さを縮める式）も、同じ文献に基づきます。目的値の単調な減少と 1 / k の上界は、 Beck と Teboulle の論文 に基づきます。同じ論文は、外挿を加えた FISTA の上界 O ( 1 / k 2 ) も与えます。コードは SciPy 1.18.1 と NumPy 2.5.3 で実行しています。 駅の例の式は、教材用に作った4変数の二次式です。実際の観測条件や、手法の一般的な速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:困りごとから関連する問題へ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "実際の課題で次の症状が出たら、対応する記事へ進みます。 角のある部分が、各係数の絶対値の和だけである → L1・sparse regularization 角のある部分が凸でなく、近接作用素が分からない → 一般非滑らか局所 罰則がなく、誤差の二乗和だけである → 線形最小二乗 駅ごとの長さを、補助変数 t s ≥ ‖ x s ‖ の錐の制約で書きたい → 二次錐計画 罰則ではなく、変数どうしを結ぶ制約がある → 一般滑らか制約付きNLP 滑らかな部分だけで、角がない → 滑らかな低次元無制約 非滑らか凸複合と関連する問題の関係 L1・sparse regularization : 罰則を各係数の絶対値の和にした特別な場合です。近接作用素は成分ごとの soft-threshold になり、駅の例の「駅」が1成分だけの駅になります。 一般非滑らか局所 : 角があっても、凸で g の構造が分かれば近接作用素が使えます。構造が分からない非凸では、局所解を探す型になり、この記事の大域的な保証は使えません。 二次錐計画 : 駅ごとの長さ ‖ x s ‖ は、補助変数 t s と制約 ‖ x s ‖ ≤ t s で書き換えられます。駅の例は二次錐計画としても解けます。近接作用素が使えない g では、この書き換えが入口になります。 線形最小二乗 : g = 0 とすると、駅の例は誤差の二乗和だけの問題に戻ります。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "4つの観測値を b = ( 4 , 3 , 3 , 1 ) とし、教材用の整数の行列 A を次のように置きます。 A = ( 2 1 0 1 1 2 1 0 2 0 1 0 0 1 0 1 ) 最初の2列が駅A、後の2列が駅Bです。罰則の強さは λ = 9 、一歩の大きさは η = 0.05 、始点は原点です。 L = 13.566 なので 1 / L = 0.0737 で、 η は条件を満たします。乱数は使いません。 駅の例・最初の一歩を手で追う 原点での勾配は、次の値です。 ∇ f ( 0 ) = − A ⊤ b = ( − 17 , − 11 , − 6 , − 5 ) 一歩の大きさ 0.05 を使うと、 v = − 0.05 ∇ f ( 0 ) は次の点です。 v = ( 0.85 , 0.55 , 0.3 , 0.25 ) 駅Aの長さは 0.85 2 + 0.55 2 = 1.012 、駅Bは 0.3 2 + 0.25 2 = 0.391 です。縮める量は τ = 0.05 × 9 = 0.45 です。 駅A: 1.012 > 0.45 なので、倍率 1 − 0.45 / 1.012 = 0.555 をかけて ( 0.472 , 0.306 ) になります。 駅B: 0.391 ≤ 0.45 なので、 ( 0 , 0 ) になります。 図の二つのパネルと同じ数値です。目的値は、原点の 17.5 から 13.034 に下がります。 駅の例・反復を追う 反復 x 1 x 2 x 3 x 4 目的値 F 0 0 0 0 0 17.5 1 0.4722 0.3055 0 0 13.0341 2 0.6693 0.4273 0 0 12.2758 3 0.7522 0.4750 0 0 12.1464 4 0.7873 0.4932 0 0 12.1241 34 0.8145 0.5026 0 0 12.1193 駅Bは1回目で0になります。2回目から4回目も、駅Bの v の長さは 0.45 以内（ 0.263 から 0.189 ）で、0のままです。駅Aは0でない値のまま、解に近づきます。 34回目は、停止の判定を満たした反復です。一歩で動いた長さを η で割った値が、 10 − 8 未満になりました。 解での目的値 12.1193 は、誤差の部分 3.506 と罰則 8.614 の合計です。罰則は 9 × 0.957 で、 0.957 は駅Aの係数の長さです。 駅の例・最小点の条件を確かめる 解 x ⋆ での勾配について、駅ごとの長さを見ます。駅Aは 9.000 、駅Bは 3.479 です。 駅Aの長さは、 λ = 9 にちょうど等しくなります。向きも合っていて、 − ∇ A f / λ と x A の向きは、どちらも ( 0.851 , 0.525 ) です。駅Bは 3.479 ≤ 9 で、0のまま動かない条件を満たします。勾配全体の長さは 9.649 で、0ではありません。 別の経路でも確かめます。勾配を使わない Nelder–Mead 法を ( 1 , 1 , 1 , 1 ) から始めると、目的値 12.11933 に着きます。解は約 ( 0.814 , 0.503 , 0 , 0 ) で、近接勾配法の 12.1193 と一致します。 収束の上界も確かめます。 η = 0.05 、始点 0 のとき、上界は ‖ x ⋆ ‖ 2 / ( 2 η k ) です。1回目の差は 0.9148 で上界は 9.16 、2回目は 0.1565 と 4.58 、3回目は 0.0271 と 3.053 です。上界は成り立ちますが、実際の差のほうがずっと小さく、この上界は実際の速さの目安にはなりません。 駅の例・罰則の強さ λ を動かす λ x 1 x 2 x 3 x 4 0（罰則なし） 1.5 0.75 0 0.25 0.3 1.4961 0.7962 -0.0117 0.0605 0.5 1.4821 0.8055 0 0 9 0.8145 0.5026 0 0 20 0.0177 0.0115 0 0 20.25 0 0 0 0 λ = 0.3 では駅Bの係数が残り、 0.5 では丸ごと0です。 λ を上げると駅Aの係数の長さが連続的に縮み、 λ = 20 でほぼ0、 20.25 で0になります。 解が0になるのは、原点での勾配 − A ⊤ b の駅ごとの長さが、すべて λ 以下のときです。この例の長さは、駅Aが 20.248 、駅Bが 7.810 です。したがって条件は λ ≥ 20.248 で、 λ = 9 はこの値の 0.44 倍です。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "次の表は順位ではなく、条件ごとの入口です。 系統 角のある部分の扱い方 向く条件・避ける条件 近接勾配法 一歩ごとに、勾配の一歩の後で近接作用素をかけます ∇ f の定数 L が分かる、または後退探索で刻みを決められ、近接作用素が安く計算できるとき FISTA 近接勾配法に外挿を足します 近接勾配法と同じ条件が成り立つとき。目的ギャップの上界は O ( 1 / k 2 ) ですが、目的値が反復ごとに下がるとは限りません 座標降下法 変数（または駅）を一つずつ、他を固定して最小にします 罰則が駅ごとに分かれていて、駅ごとの最小化が式で書けるとき ADMM f と g を別々の部分問題に分けて交互に解きます f と g の両方に近接作用素があり、部分問題に分けたいとき。罰則係数の調整が要ります 劣勾配法 角のある点で、劣勾配の一つを使います 近接作用素が分からないが g が凸なとき。駅ごとにちょうど0へ落ちる保証はなく、減る刻みの設定が要ります 二次錐計画のソルバー 長さを錐の制約に書き換えて解きます 駅の数と列数が小さく、書き換えを自分で作れるとき ライブラリの既定の設定は、そのライブラリの選択です。この記事の推奨でも、手法の順位でもありません。 次のコードは、駅の例を近接勾配法で解き、本文の数値をすべて計算します。Nelder–Mead 法の結果は、近接勾配法と同じ値になるかを見るためのもので、手法の比較には使いません。 python import numpy as np from scipy.optimize import minimize A = np . array ([[ 2 , 1 , 0 , 1 ], [ 1 , 2 , 1 , 0 ], [ 2 , 0 , 1 , 0 ], [ 0 , 1 , 0 , 1 ]], dtype = float ) b = np . array ([ 4.0 , 3.0 , 3.0 , 1.0 ]) groups = [[ 0 , 1 ], [ 2 , 3 ]] # 駅Aの二つの列、駅Bの二つの列 lam , step = 9.0 , 0.05 def f ( x ): return 0.5 * np . sum (( A @ x - b ) ** 2 ) def grad ( x ): return A . T @ ( A @ x - b ) def group_norms ( x ): return np . array ([ np . linalg . norm ( x [ g ]) for g in groups ]) def objective ( x ): return f ( x ) + lam * group_norms ( x ) . sum () def prox ( v , tau ): \"\"\"グループごとの block soft-threshold: 長さを tau だけ縮め、tau 以内なら丸ごと 0\"\"\" out = np . zeros_like ( v ) for g in groups : length = np . linalg . norm ( v [ g ]) if length > tau : out [ g ] = ( 1 - tau / length ) * v [ g ] return out def solve ( lam = lam , step = step , tol = 1e-8 , max_iter = 200000 ): \"\"\"近接勾配法。一歩で点が動いた長さ/step（近接勾配写像の大きさ）が tol 未満で止める\"\"\" x = np . zeros ( 4 ) for k in range ( 1 , max_iter + 1 ): x_next = prox ( x - step * grad ( x ), step * lam ) moved = np . linalg . norm ( x - x_next ) / step x = x_next if moved < tol : return x , k return x , max_iter L = np . linalg . eigvalsh ( A . T @ A ) . max () # f の勾配の Lipschitz 定数 mu = np . linalg . eigvalsh ( A . T @ A ) . min () # 最小固有値。正なら f は強凸 print ( round ( L , 3 ), round ( 1 / L , 4 ), step * lam , round ( mu , 3 )) # 13.566 0.0737 0.45 0.187 # 最初の一歩: 勾配の一歩で v、続けて prox v = - step * grad ( np . zeros ( 4 )) print ( v , group_norms ( v ) . round ( 3 )) # [0.85 0.55 0.3 0.25] [1.012 0.391] print ( prox ( v , step * lam ) . round ( 4 )) # [0.4722 0.3055 0. 0. ] # 反復の様子 x = np . zeros ( 4 ) print ( 0 , x , objective ( x )) # 0 [0. 0. 0. 0.] 17.5 for k in range ( 1 , 5 ): x = prox ( x - step * grad ( x ), step * lam ) print ( k , x . round ( 4 ), round ( objective ( x ), 4 )) # 1 [0.4722 0.3055 0. 0. ] 13.0341 # 2 [0.6693 0.4273 0. 0. ] 12.2758 # 3 [0.7522 0.475 0. 0. ] 12.1464 # 4 [0.7873 0.4932 0. 0. ] 12.1241 x_star , n_iter = solve () print ( n_iter , x_star . round ( 4 ), round ( objective ( x_star ), 4 )) # 34 [0.8145 0.5026 0. 0. ] 12.1193 print ( round ( f ( x_star ), 3 ), round ( lam * group_norms ( x_star ) . sum (), 3 )) # 3.506 8.614 # 最小点の条件: 駅Aは勾配の長さがちょうど lam で向きが -x_A、駅Bは lam 以下 g = grad ( x_star ) print ([ round ( float ( np . linalg . norm ( g [ idx ])), 3 ) for idx in groups ]) # [9.0, 3.479] print (( - g [: 2 ] / lam ) . round ( 3 ), ( x_star [: 2 ] / np . linalg . norm ( x_star [: 2 ])) . round ( 3 )) # [0.851 0.525] [0.851 0.525] print ( round ( float ( np . linalg . norm ( g )), 3 )) # 9.649 勾配の長さは 0 にならない # 勾配を使わない探索を (1, 1, 1, 1) から始めても、同じ値に着く res = minimize ( objective , np . ones ( 4 ), method = \"Nelder-Mead\" , options = { \"xatol\" : 1e-10 , \"fatol\" : 1e-12 , \"maxiter\" : 20000 }, ) print ( res . x . round ( 3 ) + 0.0 , round ( res . fun , 5 )) # [0.814 0.503 0. 0. ] 12.11933 # 収束の上界 F(x_k) - F* <= |x_star|^2 / (2 step k)（x_0 = 0、step <= 1/L のとき） x = np . zeros ( 4 ) for k in range ( 1 , 4 ): x = prox ( x - step * grad ( x ), step * lam ) gap = objective ( x ) - objective ( x_star ) print ( k , round ( gap , 4 ), round ( float ( np . sum ( x_star ** 2 )) / ( 2 * step * k ), 3 )) # 1 0.9148 9.16 / 2 0.1565 4.58 / 3 0.0271 3.053 # 駅の中を要素ごとの絶対値（L1）に取り替えると y = np . zeros ( 4 ) for _ in range ( 5000 ): w = y - step * grad ( y ) y = np . sign ( w ) * np . maximum ( np . abs ( w ) - step * lam , 0.0 ) print ( y . round ( 4 ), round ( f ( y ) + lam * np . abs ( y ) . sum (), 4 )) # [0.8889 0. 0. 0.] 13.9444 # 刻みを 0.2 にすると（2/L = 0.147 を超える） z = np . zeros ( 4 ) for k in range ( 1 , 5 ): z = prox ( z - 0.2 * grad ( z ), 0.2 * lam ) print ( k , z . round ( 3 ) + 0.0 , round ( objective ( z ), 3 )) # 1 [1.889 1.222 0. 0. ] 21.962 / 2 [0. 0. 0. 0.] 17.5 / 3, 4 は同じ繰り返し # lam を動かす: lam_max 以上なら解は 0 lam_max = max ( np . linalg . norm (( A . T @ b )[ idx ]) for idx in groups ) print ( round ( lam_max , 3 ), round ( lam / lam_max , 2 )) # 20.248 0.44 x_ls = np . linalg . solve ( A , b ) # 罰則なし（lam = 0）の解。A は正方で可逆 print ( x_ls . round ( 2 ) + 0.0 , round ( f ( x_ls ), 3 ), round ( objective ( x_ls ), 3 )) # [1.5 0.75 0. 0.25] 0.0 17.343 for l in ( 0.3 , 0.5 , 9.0 , 20.0 , 20.25 ): print ( l , solve ( lam = l , tol = 1e-9 )[ 0 ] . round ( 4 ) + 0.0 ) # 0.3 [ 1.4961 0.7962 -0.0117 0.0605] # 0.5 [1.4821 0.8055 0. 0. ] # 9.0 [0.8145 0.5026 0. 0. ] # 20.0 [0.0177 0.0115 0. 0. ] # 20.25 [0. 0. 0. 0.] 最初の行は、 L が 13.566 、 1 / L が 0.0737 であることを示します。縮める量は 0.45 、最小固有値は 0.187 です。 次の2行は、最初の一歩の v と、縮めた後の点です。反復の表の1回目から4回目と、34回目の x ⋆ は、 solve の出力と一致します。 駅Aの勾配の長さは 9.0 で、 − ∇ A f / λ と x A の向きが一致します。駅Bは 3.479 です。勾配全体の長さは 9.649 のままです。 Nelder–Mead 法は、同じ値 12.11933 に着きます。収束の上界は、3回目まで成り立ちます。 成分ごとの絶対値の罰則は ( 0.8889 , 0 , 0 , 0 ) を返し、 η = 0.2 は2点の往復になります。 最後の表の出力は、本文の λ を動かした表と同じです。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "次の式は「滑らかな凸関数 f と、角のある凸関数 g の和 F を最小にする」を表します。 min x ∈ ℝ n F ( x ) = f ( x ) + g ( x ) 式は「 f は微分でき、 g は凸であれば微分できなくてよい。両方の合計が最小になる x を選ぶ」と読みます。この記事の保証には、次の条件が付きます。 f は凸で、勾配 ∇ f の変わりやすさが定数 L で押さえられる（Lipschitz連続）こと。 g は凸で、次に述べる近接作用素が計算できること。 記号 意味 駅の例では x 決める変数 ( x 1 , x 2 , x 3 , x 4 ) 。 x A = ( x 1 , x 2 ) 、 x B = ( x 3 , x 4 ) f ( x ) 滑らかな凸関数 1 2 ‖ A x − b ‖ 2 。 A は 4 × 4 、 b は4つの観測値 g ( x ) 角のある凸関数 9 ( ‖ x A ‖ + ‖ x B ‖ ) 。各駅の係数ベクトルの長さの和の9倍 L ∇ f の変わりやすさの上限。 f が二次式なら A ⊤ A の最大固有値 13.566 η 一歩の大きさ。 η ≤ 1 / L が保証の条件 0.05 （ 1 / L = 0.0737 ） 近接作用素は「 g を小さくしながら、動かしすぎない」操作 g の近接作用素は、次の h v ( u ) を最小にする点 u を返します。 h v ( u ) は、 g の値と、 v から動いた距離の二乗の 1 / ( 2 τ ) 倍の和です。 h v ( u ) = g ( u ) + 1 2 τ ‖ u − v ‖ 2 p r o x τ g ( v ) = argmin u h v ( u ) g が駅ごとの長さの和 λ ∑ s ‖ x s ‖ なら、駅 s ごとに独立に解けます。 τ = η λ とすると、答えは次の式です。 p r o x τ g ( v ) s = max ( 0 , 1 − τ ‖ v s ‖ ) v s 駅ごとに、 v s の長さを τ だけ縮め、向きは保ちます。長さが τ 以内なら、駅の係数を丸ごと0にします。この式が閉じた形で書けることが、駅の例で近接勾配法を使える理由です。各係数に別々の絶対値の罰則を課す L1 では、同じ操作が成分ごとの soft-threshold になります。 一歩は、勾配の一歩と近接作用素の組です。 v k = x k − η ∇ f ( x k ) x k + 1 = p r o x η g ( v k ) 式は「まず f だけを見て勾配の逆向きに η 進み、次にその点を g の罰則に従って引き戻す」と読みます。 最小点の条件は、勾配と罰則の傾きが打ち消し合うこと F が凸なので、 x が最小点であることは、 ∇ f ( x ) と g の傾き（劣勾配）の和が0を含むことと同じです。駅の例では、駅ごとに次の二つの場合に分かれます。 駅の位置 最小点で成り立つこと 読み方 x s ≠ 0 ∇ s f ( x ) = − λ x s / ‖ x s ‖ 勾配の長さがちょうど λ で、向きは − x s の方向 x s = 0 ‖ ∇ s f ( x ) ‖ ≤ λ 勾配が罰則 λ に届かないので、0のまま動かない 制約のない滑らかな問題では、勾配が0になる点が最小点でした。この型では、0でない駅でも勾配は0になりません。罰則の傾きと釣り合って、長さがちょうど λ になります。 停止の判定には、勾配の長さではなく、近接勾配写像の大きさを使います。近接勾配写像は、次の式で定めます。 G η ( x ) = x − p r o x η g ( x − η ∇ f ( x ) ) η G η ( x ) = 0 は、一歩進めても点が動かないことを表し、最小点の条件と同じ意味です。 保証の範囲 次の四つの条件がそろうと、下の三つが成り立ちます。 f が凸で、 ∇ f が L -Lipschitz である g が凸である 近接作用素を厳密に計算できる η ≤ 1 / L である 成り立つことは次のとおりです。 目的 F ( x k ) は、反復ごとに増えません。 k 回目の目的値の差には、次の上界があり、 1 / k の速さで0に近づきます。 F は凸なので、停留点は大域的な最小点です。 上界は、始点 x 0 と最小点 x ⋆ の距離で決まります。 F ( x k ) − F ( x ⋆ ) ≤ ‖ x 0 − x ⋆ ‖ 2 2 η k 式は「 k 回目の目的値の差は、始点と最小点の距離の二乗を 2 η k で割った値以下」と読みます。 駅の例の A ⊤ A の最小固有値は 0.187 で正です。 f が強凸なので、最小点はただ一つに決まります。 A ⊤ A が特異なら、最小点が複数あることがあります。 これらは f が凸で、 g の近接作用素が分かる場合の保証です。 g を凸でない罰則（たとえば0でない係数の個数）に取り替えると、大域的な最小点に着く保証は使えません。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.nonsmooth-convex-composite:課題から定式化する",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.nonsmooth-convex-composite",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:bundle-method",
+        "content:concept.convexity",
+        "content:concept.l1-sparse-regularization",
+        "content:concept.linear-least-squares",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "problem:PA010",
+        "source:S055",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "text": "「観測を説明するデータ源を、駅の単位で絞りたい」という課題から、次の4つを順に確かめます。 何を決めるか : 各データ列の係数です。連続の値で、駅ごとに2列がまとまります。 良くしたいものは何か : 観測とのずれの二乗和を表す、滑らかな凸関数 f です。勾配が式で書けることを確かめます。 角のある部分は何か : 駅ごとの長さの和 g です。凸で、近接作用素が閉じた式（長さを τ 縮める）で書けることを確かめます。書けなければ、一歩の中でそれ自体が最適化問題になります。 どこまで保証がほしいか : f が凸で η ≤ 1 / L なら、大域的な最小点に着きます。 λ は手元の誤差では選べません。 λ を上げるほど誤差は増えるからです。取り置いたデータでの誤差など、別の物差しで選びます。 滑らかな凸関数と、近接作用素が分かる凸関数の和なら、この型です。",
       "title": "課題から定式化する"
     },
     {
@@ -16935,6 +18384,306 @@
         "S106"
       ],
       "text": "PDE制約付き最適化（PA045） は、この型を含む一般の形です。 状態方程式を制約に持つ点は同じで、PA045 の領域を固定すると、設計変数は係数や入力になります。 領域が設計変数で動くときがこの型で、境界の動く分が微分に加わります。 離散化すると、 一般の制約付きNLP（PA009） の形になります。 節点の温度を未知数にし、離散の状態方程式を等式制約にします。 ただし、離散問題の最適は連続問題の最適と同じではありません。4要素の例では、1.3355 と 1.317 が違いました。 トポロジー最適化 は、形が似て見えても設計の空間が違います。 この型は、穴の数やつながり方を固定したまま境界を動かします。 材料の密度やレベルセットで設計すると、つながり方の変化も許せます。 cashocsの2.0の論文（ S105 ）は、形状最適化とトポロジー最適化を別の手順として扱っています。 形の評価を値だけ返す箱として扱うと、 非常に高価な低次元評価（PA014） や 失敗・NaNを伴うシミュレーション（PA016） の形になります。 微分が作れず、形の変数が数個のときに、この見方を使います。 メッシュが壊れて値が返らない評価は、大きな値ではなく失敗として記録します。",
+      "title": "近い定式化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:30秒でつかむ",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "配送の拠点Sから客先Tへ、バンが向かいます。途中に交差点A・B・Cがあり、一方通行の道が7本あります。道ごとの所要時間（分）は次のとおりです。 道 所要時間 S→A 2 S→B 4 S→T 12 A→B 5 A→T 6 B→C 1 C→T 2 経路の選び方は一つではありません。道の数が最も少ないのはSからTへの直行ですが、12分かかります。最初の道が最も速いのはS→Aの2分ですが、その先でどれだけかかるかは、たどってみないと分かりません。 決めるもの : 7本の道のうち、どれを通るか。SからTまで一続きになる経路を一本選ぶ 良くしたいもの : 通る道の所要時間の合計 守ること : Sから出てTに着くこと。途中の点では、入った道の次に出る道があること 次の図は、同じ7本の道で3通りの選び方を比べたものです。まず道路網の図で、太い橙の道をSからたどり、各点の下の「d=」の値を読んでください。続いて、図の「道の数が最少」「次の道が最安」「合計が最小」の3行で、各行の分数を比べてください。 拠点Sから客先Tへ：辺の数字は所要時間（分）、dはSからの最短時間。時間は教材用の値で、実際の道路網や手法の速さは表さない 「道の数が最少」では、S→Tの1本で済みます。ただし所要時間は12分で、4通りの経路のうち最長です。 「次の道が最安」では、Sで最も速いS→A（2分）を選び、Aで最も速いA→B（5分。A→Tは6分）を選び、B→C→Tへ進みます。合計は 2 + 5 + 1 + 2 = 10 分です。 「合計が最小」のS→B→C→Tでは、最初の道S→Bが4分で、S→Aより2分遅くなります。それでも合計は 4 + 1 + 2 = 7 分で、10分より3分短くなります。 太い道の上では、dが道の時間ぶんだけ増えます。Bの4にB→Cの1を足すとCの5、さらにC→Tの2を足すとTの7です。Aのdは2ですが、Aを通る経路はTまで最短にならないので、太い道に入っていません。 一本ずつ選ぶ方法では7分に届かず、各点のdを使うと7分が出てきました。dは何を表し、どう求めるのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:overview",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "最短路問題は、点と向きのある道でできた網で、始点から終点までの経路を一本選びます。通る道の重み（時間や費用）の合計を最小にする定式化です。重みがすべて非負ならDijkstra法で解け、負の重みがあっても負閉路がなければBellman–Ford法で解けます。供給が1単位で容量のない最小費用流としても書けます。",
+      "title": "最短路問題"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:つまずきやすい点",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "各点で最も速い道を選び続ける : 例では、Sで最安のS→A（2分）を選び、Aで最安のA→B（5分）を選びます。すると、S→A→B→C→Tの10分になります。最短の7分より3分長く、最初の道を一つ変えるだけで差が出ます。一歩先の値で決めず、dで比べます。 道の数が最少の経路を最短だと考える : 例で道の数が最少のS→Tは12分で、4通りの経路のうち最長です。重みは道の数ではなく、道ごとの値の合計です。道の数を数えたいなら、すべての重みを1にして解き直します。 負の重みがあっても、Dijkstra法で確定した値が使える : S→Aを5分、A→Bを-3分に変えます。Dijkstra法は、Sの次にBを確定し、Tを7分と返します。ところが、S→A→B→C→Tは 5 − 3 + 1 + 2 = 5 分です。Bはいったん4で確定した後に、Aを経由して2になる道があり、確定した値が下がります。Bellman–Ford法と linprog は、どちらも5を返します。負の重みがあるときは、Dijkstra法を使わないでください。 負閉路があっても、答えが一つ決まる : C→Aを-7分で足すと、A→B→C→Aの合計が 5 + 1 − 7 = − 1 になります。一周するたびに1分減るので、最短の時間は決まりません。Bellman–Ford法は、道を見直す5回目にも更新があり、負閉路を報告します。 linprog の状態は3（非有界）です。容量のない形では、周回の流量にも上限がないからです。容量のある最小費用流なら、周回の流量が容量で抑えられるので、この問題は起きません。負の重みを含むデータなら、解く前に負閉路の有無を確かめます。 点ごとの最短値だけで、経路全体の条件も扱える : 通る道を2本までにすると、答えは変わります。点ごとの d をそのまま使うと、最短路S→B→C→Tは道が3本なので、条件を破ります。条件を守る最短は、S→A→Tの8分です。状態を（点, 使った本数）に増やすと、道を1本・2本・3本まで許した最短値が12・8・7分と求まります。本数のような経路全体の条件は、状態を増やすか、 混合整数線形計画（PA023） で解きます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:出典と再現条件",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "最短路の標準形と最適性の条件は、Ahuja・Magnanti・Orlinの教科書『Network Flows』（S144）に基づきます。条件とは、どの道でも d i + c i j ≥ d j が成り立つことです。Dijkstra法が使える非負の重みという条件と、負閉路の扱いも、同じ教科書（S144）にあります。閉路のない網で一巡して解く方法も同様です。同じ教科書に、最短路と最小費用流・線形計画との関係、整数の答えが出る性質もあります。最短路の動的計画法による定式化は、Bellmanの論文（S140）に基づきます。問題型としての位置づけは、NEOS Guideの問題型の解説（S054）に基づきます。 linprog と HiGHS の使い方は、SciPyの公式文書（S004）とHiGHSの公式文書（S016）に基づきます。 例の数値は、SciPy 1.18.1 の linprog （ method=\"highs\" ）と、上のコードで再現できます。Bellman–Ford法の「n回目にも更新があれば負閉路」は、点の数を n として、始点から行ける負閉路の検出に使う標準の結果です。時間は教材用の値で、実際の道路網の規模や、手法ごとの速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:小さな例",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "設定は「30秒でつかむ」の表のとおりです。始点はS、終点はTで、乱数は使いません。 7本の道の例・点ごとに最短値を求める どの道もSからTへ向かう向きにしか走っていないので、S・A・B・C・Tの順に、各点の d を一度ずつ求めれば足ります。点ごとに、入る道から候補を作り、最小のものを選びます。 点 入る道ごとの候補 d 最短の入り道 S 始点 0 なし A S→A: 0 + 2 2 S→A B S→B: 0 + 4 = 4 、A→B: 2 + 5 = 7 4 S→B C B→C: 4 + 1 5 B→C T S→T: 0 + 12 = 12 、A→T: 2 + 6 = 8 、C→T: 5 + 2 = 7 7 C→T Tから最短の入り道をさかのぼると、T←C←B←Sで、経路はS→B→C→Tです。Aまでの最短値は2ですが、Aの先のA→BとA→Tはどちらも他の候補に負けます。そのため、Aは最短路に入りません。経路は全部で4通りあり、合計は7・8・10・12分です。 7本の道の例・Dijkstra法で解く Dijkstra法は、暫定値が最小の点を一つ取り出して確定し、その点から出る道で隣の暫定値を更新します。更新するのは、新しい値が小さいときだけです。 順 確定する点 d 更新 1 S 0 A=2、B=4、T=12 2 A 2 Bは 2 + 5 = 7 で4より大きいので据え置き。T=8 3 B 4 C=5 4 C 5 T=7 5 T 7 終了 確定した順はS・A・B・C・Tで、各点の値は上の表と一致します。順2でTの暫定値は12から8に、順4で8から7に下がりました。確定するまで暫定値は下がることがあります。確定した値が後から変わらないのは、重みがすべて非負のときです。この条件が外れる例は「つまずきやすい点」で示します。 読み取り: 各道の余裕 最短値 d を使って、道ごとの余裕 d i + c i j − d j を計算します。 道 d i + c i j − d j 読み方 S→A 0 + 2 − 2 = 0 最短値を与える道 S→B 0 + 4 − 4 = 0 最短値を与える道 S→T 0 + 12 − 7 = 5 直行は最短より5分長い A→B 2 + 5 − 4 = 3 Aを経由すると3分長い A→T 2 + 6 − 7 = 1 Aから直接着くと1分長い B→C 4 + 1 − 5 = 0 最短値を与える道 C→T 5 + 2 − 7 = 0 最短値を与える道 余裕はすべて0以上です。余裕が0の道は、S→A・S→B・B→C・C→Tの4本です。Sからこの4本だけをたどると、S→Aの先では進めず、S→B→C→Tだけが終点に届きます。Aは余裕0の道が1本入るだけで、出る道が両方とも余裕が正だからです。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:標準形を読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "次の式は「始点から終点までの経路を選び、通る道の重みの合計を最小にする」を表します。 min P : s → t ∑ ( i , j ) ∈ P c i j この式は「点 s から点 t へ着く経路 P のうち、 P が通る道 ( i , j ) の重み c i j を足した値が最小のもの」と読みます。 記号 意味 例では s , t 始点と終点 拠点Sと客先T c i j 道 ( i , j ) の重み（時間・費用・距離） 所要時間。S→Bは4、B→Cは1 P s から t への経路（決めるもの） 最適ではS→B→C→T d i s から点 i までの最短の合計 d A = 2 、 d B = 4 、 d C = 5 、 d T = 7 点ごとの最短値で、経路の合計を段階に分ける 経路は選び方が組み合わせで増えますが、点ごとの最短値 d i を使うと、一つの式に分けられます。 d j = min ( i , j ) ∈ E ( d i + c i j ) , d s = 0 この式は「点 j に着く最短の合計は、 j に入る道ごとに『手前の点の最短値＋その道の重み』を計算した最小値」と読みます。この式が成り立つのは、始点から行ける範囲に負閉路がない網です。負閉路とは、重みの合計が負になる閉路です。負閉路があると、周回するたびに合計が減り、最短値が決まりません。 最適性の条件も同じ形です。どの道 ( i , j ) でも d i + c i j ≥ d j が成り立ち、最短路の上の道では等号になります。左辺から右辺を引いた d i + c i j − d j を、この記事では道の「余裕」と呼びます。標準の用語では被約費用で、 ネットワークフロー（PA028） の価格を p i = − d i とした値 c i j + p j − p i に一致します。余裕が0の道だけをたどると、最短路が見つかります。 容量のない最小費用流としての形 同じ問題を、道ごとに流す量 x i j ≥ 0 を選ぶ形でも書けます。始点から1単位を出し、終点で1単位を受け取り、途中の点では入る量と出る量を等しくします。 min x ≥ 0 ∑ ( i , j ) c i j x i j s.t. ∑ j x i j − ∑ j x j i = b i , b s = 1 , b t = − 1 , b i = 0 ( i ≠ s , t ) ネットワークフロー（PA028） で、供給を1単位にし、容量の上限を外した場合です。この形の係数行列は、PA028と同じ完全単模（totally unimodular）の性質を持ちます。供給が整数の1単位なので、整数条件を付けなくても、最適解として0か1の x i j が得られます。ただし、始点から行ける負閉路がない場合です。 ソルバーごとの書き方の違い グラフ専用のライブラリは、道の一覧と始点・終点を受け取り、経路を返します。一般の線形計画ソルバーには、上の保存則を等式制約の行列として自分で組み立てます。どちらも同じ問題で、例の答えは7分です。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:次に読む",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "Dijkstra法とA*探索 : 確定の順番と、見積りで探索の範囲を絞る仕組み ネットワークフロー（PA028） : 容量と複数単位が加わるとき 動的計画法 : 状態を増やして、経路全体の条件を扱う 配送経路問題（PA031） : 顧客を1回ずつ回る巡回路",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:見分け方",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "次の言葉が課題に出てきたら、この型を疑います。 地点を結ぶ道の中から、最短・最安・最速の一本を選ぶ 道ごとに時間・距離・費用が決まっていて、経路の合計で比べる 経路の途中で選べるのは、次にどの道へ進むかだけ 別の型へ進む兆候は、困りごとから探せます。 道に容量があり、複数の荷物を同時に流す → ネットワークフロー（PA028） 。複数の荷物が同じ道を取り合うなら、一本の最短路だけでは足りません 顧客を1軒ずつ回って戻る順番を決めたい → 配送経路問題（PA031） 人と仕事を1対1で組み合わせたい → 割当・matching（PA030） 通れる道の本数や時間窓のような条件が経路全体に付く → 混合整数線形計画（PA023） 。状態を増やす方法は、「つまずきやすい点」の最後の項目で示します 道の重みに負の値がある → 解き方の系統の表で、使える方法の条件を確かめます",
+      "title": "見分け方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:解き方の系統",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "次の表は、条件に合う方法を探すためのものです。速さの順位ではなく、使える条件の違いを示します。 系統 進み方 成り立つ条件 例での様子 Dijkstra法 暫定値が最小の点を確定し、隣を更新する 重みがすべて非負 S、A、B、C、Tの順に確定する Bellman–Ford法 全部の道を、更新がなくなるまで繰り返し見直す 負の重みも可。始点から行ける負閉路がないこと（あれば検出できる） 道を「30秒でつかむ」の表の順に見ると、1巡目で全点の値が決まり、2巡目は更新がない 閉路のない網の一巡 点を前から後ろへの順に並べ、 d を一度ずつ求める 網に閉路がない（負の重みも可） S、A、B、C、Tの順に5点を一度ずつ見る 動的計画法 の見方 d j の式を、状態を増やして解く 状態の数が数え上げられる 「つまずきやすい点」で、点と使った本数を状態にする 線形計画 流れの形で等式制約にして解く 供給が1単位、容量の上限なし SciPyの linprog （HiGHS）が、整数条件なしで0か1の流量を返す 次のコードは、例の経路を数え上げ、3通りの方法で解きます。解く方法はDijkstra法・Bellman–Ford法・ linprog です。重みや道を変えた場合も計算します。 python import heapq from scipy.optimize import linprog nodes = [ \"S\" , \"A\" , \"B\" , \"C\" , \"T\" ] # (始点, 終点): 所要時間（分）。道は一方通行 minutes = { ( \"S\" , \"A\" ): 2 , ( \"S\" , \"B\" ): 4 , ( \"S\" , \"T\" ): 12 , ( \"A\" , \"B\" ): 5 , ( \"A\" , \"T\" ): 6 , ( \"B\" , \"C\" ): 1 , ( \"C\" , \"T\" ): 2 , } def routes ( node = \"S\" , seen = ( \"S\" ,)): \"\"\"Sから同じ点を通らずにTへ着く経路を、すべて数え上げる\"\"\" if node == \"T\" : return [ seen ] found = [] for tail , head in minutes : if tail == node and head not in seen : found += routes ( head , seen + ( head ,)) return found def total ( route , arcs = minutes ): return sum ( arcs [ edge ] for edge in zip ( route , route [ 1 :])) for route in sorted ( routes (), key = total ): print ( \"→\" . join ( route ), total ( route )) # S→B→C→T 7 # S→A→T 8 # S→A→B→C→T 10 # S→T 12 # 各点で、いま一番安い道を選び続ける（確定した後は戻らない） here , greedy = \"S\" , [ \"S\" ] while here != \"T\" : here = min (( v for u , v in minutes if u == here ), key = lambda v : minutes [ greedy [ - 1 ], v ]) greedy . append ( here ) print ( \"→\" . join ( greedy ), total ( greedy )) # S→A→B→C→T 10 def dijkstra ( arcs ): \"\"\"暫定距離が最小の点を確定し、そこから出る道で隣の暫定距離を更新する\"\"\" dist , queue , done = { \"S\" : 0 }, [( 0 , \"S\" )], [] while queue : d , node = heapq . heappop ( queue ) if node in done : continue done . append ( node ) # この時点で d を最終値として扱う for ( tail , head ), weight in arcs . items (): if tail == node and head not in done and d + weight < dist . get ( head , 10 ** 9 ): dist [ head ] = d + weight heapq . heappush ( queue , ( dist [ head ], head )) return { n : dist [ n ] for n in done }, done dist , order = dijkstra ( minutes ) print ( order , dist ) # ['S', 'A', 'B', 'C', 'T'] {'S': 0, 'A': 2, 'B': 4, 'C': 5, 'T': 7} # 最適性の条件: どの道でも d(始点)+時間-d(終点) >= 0。最短路の道では 0 slack = { f \" { u } → { v } \" : dist [ u ] + w - dist [ v ] for ( u , v ), w in minutes . items ()} print ( slack ) # {'S→A': 0, 'S→B': 0, 'S→T': 5, 'A→B': 3, 'A→T': 1, 'B→C': 0, 'C→T': 0} def bellman_ford ( arcs ): \"\"\"全部の道を n 回まで見直す。n 回目にも更新があれば負閉路\"\"\" dist = { n : float ( \"inf\" ) for n in nodes } dist [ \"S\" ] = 0 for _ in range ( len ( nodes )): changed = False for ( tail , head ), weight in arcs . items (): if dist [ tail ] + weight < dist [ head ]: dist [ head ], changed = dist [ tail ] + weight , True if not changed : return dist return \"negative cycle\" def flow_form ( arcs ): \"\"\"1単位をSからTへ流す線形計画（容量の上限なし）\"\"\" keys = list ( arcs ) supply = { \"S\" : 1 , \"A\" : 0 , \"B\" : 0 , \"C\" : 0 , \"T\" : - 1 } rows = [[( u == n ) - ( v == n ) for u , v in keys ] for n in nodes ] return linprog ( [ arcs [ k ] for k in keys ], A_eq = rows , b_eq = [ supply [ n ] for n in nodes ], bounds = ( 0 , None ), method = \"highs\" , ) res = flow_form ( minutes ) print ( res . fun , [ round ( f ) for f in res . x ]) # 7.0 [0, 1, 0, 0, 0, 1, 1] # 負の時間: S→Aを5分、A→Bを-3分にする neg = { ** minutes , ( \"S\" , \"A\" ): 5 , ( \"A\" , \"B\" ): - 3 } print ( dijkstra ( neg )) # ({'S': 0, 'B': 4, 'A': 5, 'C': 5, 'T': 7}, ['S', 'B', 'A', 'C', 'T']) print ( bellman_ford ( neg )[ \"T\" ], flow_form ( neg ) . fun ) # 5 5.0 # 負閉路: C→Aを-7分で足す（A→B→C→Aの合計は 5+1-7=-1） loop = { ** minutes , ( \"C\" , \"A\" ): - 7 } print ( bellman_ford ( loop ), flow_form ( loop ) . status ) # negative cycle 3 def with_road_limit ( limit ): \"\"\"通れる道を limit 本までにする。状態は（点, 使った本数）\"\"\" best = { \"S\" : 0 } for _ in range ( limit ): step = dict ( best ) for ( tail , head ), weight in minutes . items (): if tail in best and best [ tail ] + weight < step . get ( head , 10 ** 9 ): step [ head ] = best [ tail ] + weight best = step return best [ \"T\" ] print ([ with_road_limit ( k ) for k in ( 1 , 2 , 3 )]) # [12, 8, 7] 最初の出力は、4通りの経路と合計です。7分のS→B→C→Tが唯一の最短路で、「次の道が最安」の規則が選ぶ10分の経路との差が3分です。 dijkstra の確定順と値は、小さな例の表と一致します。 slack は、道ごとの余裕で、0の道がS→A・S→B・B→C・C→Tの4本です。 flow_form の出力7.0は、費用の最小値です。流量の並びは minutes の順で、S→B・B→C・C→Tの3本だけが1です。整数条件を付けていないのに、0か1の流量が返ります。 status は、 linprog が返す終了の種類で、3は「非有界」です。次の節の負閉路の例で、この3が現れます。",
+      "title": "解き方の系統"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.shortest-path:近い定式化",
+      "dataset_version": "0.18.23",
+      "document_id": "content:concept.shortest-path",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.network-flow",
+        "content:concept.vehicle-routing",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "problem:PA029",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S140",
+        "source:S144"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
+      ],
+      "text": "ネットワークフロー（PA028）の特別な場合です : 供給が1単位で、容量の上限がなければ、最小費用流は最短路になります。分かれ目は、容量のある道に複数単位を流すかどうかです。最短路は1単位を一本の経路で運ぶので、道が混み合うことを式に入れる必要がありません。容量付きの最小費用流の解き方は、PA028の記事で読めます。 配送経路問題（PA031）とは別の型です : 一本の最短路は、道の重みから多項式時間で解ける形です。複数の顧客を1回ずつ回る巡回路は、最短路を並べても解けず、訪問順と割当を同時に決めます。例で、客先Tのほかに通るべき地点が増えると、最短値の表だけでは答えが決まらなくなります。 整数計画（PA023）の形でも書けます : 経路上の道を0-1の変数で選ぶ形にして、道の本数や時間窓の条件を足せます。ただし、条件を足すと、整数の答えが自然に出る完全単模の性質が失われることがあります。",
       "title": "近い定式化"
     },
     {
@@ -53727,7 +55476,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA010",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.nonsmooth-convex-composite"
+      ],
       "source_ids": [
         "S055",
         "S066",
@@ -53759,7 +55510,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA012",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.discontinuous-simulation"
+      ],
       "source_ids": [
         "S031",
         "S033"
@@ -53774,7 +55527,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA013",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.noisy-black-box"
+      ],
       "source_ids": [
         "S032",
         "S035",
@@ -53888,7 +55643,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA019",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.nonconvex-qp-qcqp"
+      ],
       "source_ids": [
         "S021",
         "S024",
@@ -53998,7 +55755,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA025",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.mixed-integer-nonlinear-program"
+      ],
       "source_ids": [
         "S021",
         "S029"
@@ -54065,7 +55824,9 @@
       "dataset_version": "0.18.23",
       "document_id": "problem:PA029",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.shortest-path"
+      ],
       "source_ids": [
         "S054"
       ],

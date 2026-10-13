@@ -8037,6 +8037,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.discontinuous-simulation",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.dynamics-defect",
       "asset_type": "content",
       "policy": "warning",
@@ -8109,6 +8115,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.mixed-integer-nonlinear-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.mixed-integer-quadratic-program",
       "asset_type": "content",
       "policy": "warning",
@@ -8145,7 +8157,25 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.noisy-black-box",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.nonconvex-qp-qcqp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.nonlinear-least-squares",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.nonsmooth-convex-composite",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8206,6 +8236,12 @@
     },
     {
       "asset_id": "concept.shape-dependent-domain",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.shortest-path",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

@@ -7996,6 +7996,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.discontinuous-simulation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "決定論的だが不連続なsimulation",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA012",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "決定論的だが不連続なsimulationの最小化は、同じ入力なら必ず同じ値が返るのに、入力を少し動かすと値が飛ぶ関数を範囲の中で最小にする問題です。段差の前後で式が別物になるので、勾配や差分の傾きは頼りになりません。値の比較だけで進む探索でも、行き先は出発点と探索幅に左右されます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.dynamics-defect",
       "entity_id": "concept.dynamics-defect",
       "entity_type": "content",
@@ -8779,6 +8830,82 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.mixed-integer-nonlinear-program",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "混合整数非線形計画（MINLP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA025",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constrained-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "outer-approximation-minlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spatial-branch-and-bound",
+          "target_type": "content"
+        }
+      ],
+      "summary": "混合整数非線形計画は、目的か制約に非線形の式を含む問題で、一部の変数に整数条件を加えた定式化です。整数条件を外した連続緩和が凸なら、その最適値が下界になり、分枝限定法で最適性を示せます。連続緩和が凸でないと、局所解法が返す値は下界とは限らず、大域的な下界を作る手法が要ります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.mixed-integer-quadratic-program",
       "entity_type": "content",
       "external_url": null,
@@ -9270,6 +9397,163 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.noisy-black-box",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "noiseを含むblack-box",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S160",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA013",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spsa",
+          "target_type": "content"
+        }
+      ],
+      "summary": "noiseを含むblack-boxは、同じ入力で評価しても毎回違う値が返るときに、値の期待値を最小にする定式化です。1回の値の差には評価のばらつきが混ざるので、複数回の平均で比べます。平均の最小値は実際より良く見えやすいため、選んだ後に新しく測り直した値で確かめます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.nonconvex-qp-qcqp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非凸QP・QCQP",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA019",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-start",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spatial-branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "非凸QP・QCQPは、二次の目的や二次の制約を持ち、その行列が半正定値とは限らない定式化です。局所解法が止まった点が最良とは限りません。凸緩和で作った下界と、見つけた実行可能解の差が許容内に入ったとき、その解が最良だと確かめられます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.nonlinear-least-squares",
       "entity_type": "content",
       "external_url": null,
@@ -9317,6 +9601,82 @@
         }
       ],
       "summary": "非線形最小二乗は、パラメータについて非線形なモデルと観測のずれの二乗和を最小にする定式化です。二乗和の地形には谷がいくつもでき、一度では解けません。各反復でその場の線形最小二乗を解いて進みますが、どの谷に着くかは始点と進み方で変わります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.nonsmooth-convex-composite",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非滑らか凸複合",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S067",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA010",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bundle-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.l1-sparse-regularization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "coordinate-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "非滑らか凸複合は、微分できる凸関数と、角のある凸関数の和を最小にする定式化です。角のある部分には勾配がないので、近接作用素という操作で一歩ごとに処理します。この操作が式で書けるなら、一歩の大きさを勾配の変わりやすさの逆数以下に取ると、滑らかな部分の勾配の一歩と近接作用素の繰り返しだけで全体の最小点に着きます。"
     },
     {
       "aliases": [],
@@ -9992,6 +10352,72 @@
         }
       ],
       "summary": "形状依存領域の最適化は、物体の形を決めると計算する領域そのものが変わり、その領域で状態方程式を解いて性能を評価する定式化です。形を動かすと境界とメッシュと状態が一緒に変わるので、目的の微分には境界が動く分と状態が変わる分の両方が入ります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.shortest-path",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "最短路問題",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S140",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA029",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.network-flow",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.vehicle-routing",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        }
+      ],
+      "summary": "最短路問題は、点と向きのある道でできた網で、始点から終点までの経路を一本選びます。通る道の重み（時間や費用）の合計を最小にする定式化です。重みがすべて非負ならDijkstra法で解け、負の重みがあっても負閉路がなければBellman–Ford法で解けます。供給が1単位で容量のない最小費用流としても書けます。"
     },
     {
       "aliases": [],
@@ -33145,13 +33571,21 @@
       "summary": "一般滑らか制約付きNLP。変数=continuous、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.nonsmooth-convex-composite"
+      ],
       "canonical_url": "/formulations/PA010",
       "entity_id": "PA010",
       "entity_type": "problem",
       "external_url": null,
       "label": "非滑らか凸複合",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.nonsmooth-convex-composite",
+          "target_type": "content"
+        }
+      ],
       "summary": "非滑らか凸複合。変数=continuous、目的=composite、制約=unconstrained。"
     },
     {
@@ -33165,23 +33599,39 @@
       "summary": "一般非滑らか局所。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.discontinuous-simulation"
+      ],
       "canonical_url": "/formulations/PA012",
       "entity_id": "PA012",
       "entity_type": "problem",
       "external_url": null,
       "label": "不連続決定論black-box",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        }
+      ],
       "summary": "不連続決定論black-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.noisy-black-box"
+      ],
       "canonical_url": "/formulations/PA013",
       "entity_id": "PA013",
       "entity_type": "problem",
       "external_url": null,
       "label": "noiseを含むblack-box",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.noisy-black-box",
+          "target_type": "content"
+        }
+      ],
       "summary": "noiseを含むblack-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
@@ -33327,13 +33777,21 @@
       "summary": "凸二次計画。変数=continuous、目的=quadratic、制約=linear。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.nonconvex-qp-qcqp"
+      ],
       "canonical_url": "/formulations/PA019",
       "entity_id": "PA019",
       "entity_type": "problem",
       "external_url": null,
       "label": "非凸QP/QCQP",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.nonconvex-qp-qcqp",
+          "target_type": "content"
+        }
+      ],
       "summary": "非凸QP/QCQP。変数=continuous、目的=quadratic、制約=mixed。"
     },
     {
@@ -33429,13 +33887,21 @@
       "summary": "混合整数二次計画。変数=mixed、目的=quadratic、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.mixed-integer-nonlinear-program"
+      ],
       "canonical_url": "/formulations/PA025",
       "entity_id": "PA025",
       "entity_type": "problem",
       "external_url": null,
       "label": "混合整数非線形計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.mixed-integer-nonlinear-program",
+          "target_type": "content"
+        }
+      ],
       "summary": "混合整数非線形計画。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
@@ -33505,13 +33971,21 @@
       "summary": "network flow。変数=graph、目的=linear、制約=combinatorial。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.shortest-path"
+      ],
       "canonical_url": "/formulations/PA029",
       "entity_id": "PA029",
       "entity_type": "problem",
       "external_url": null,
       "label": "最短路",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.shortest-path",
+          "target_type": "content"
+        }
+      ],
       "summary": "最短路。変数=graph、目的=linear、制約=combinatorial。"
     },
     {

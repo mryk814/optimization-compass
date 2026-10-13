@@ -2627,14 +2627,14 @@ def composite_solution(tolerance: float = 1e-8) -> tuple[list[float], int]:
 
 
 def _composite_panel(top: float, title: str, indices: tuple[int, int], names: str) -> list[str]:
-    """One group's v-plane (150 px per unit): the zero disc, v, and prox(v)."""
+    """One group's v-plane (112.5 px per unit, -0.55 to 1.05): the zero disc, v, and prox(v)."""
     x = [0.0] * 4
     v, moved = composite_step(x)
     i, j = indices
     radius = COMPOSITE_STEP * COMPOSITE_LAMBDA
     length = math.hypot(v[i], v[j])
-    px = _scale(-0.15, 1.05, 56, 236)
-    py = _scale(1.05, -0.15, top + 12, top + 192)
+    px = _scale(-0.55, 1.05, 56, 236)
+    py = _scale(1.05, -0.55, top + 12, top + 192)
     unit = px(1.0) - px(0.0)
     parts = [
         _text(20, top, title, "title"),
@@ -2683,7 +2683,7 @@ def _composite_group_svg() -> str:
             f"({moved[0]:.3f}, {moved[1]:.3f}) になります。"
             f"駅Bの v は ({v[2]:g}, {v[3]:g}) で長さ {lengths[1]:.3f}、円の中なので (0, 0) です。"
         ),
-        560,
+        610,
     )
     parts.extend(_composite_panel(66, "駅A（x₁, x₂）", COMPOSITE_GROUPS[0], "₁₂"))
     parts.extend(_composite_panel(316, "駅B（x₃, x₄）", COMPOSITE_GROUPS[1], "₃₄"))
