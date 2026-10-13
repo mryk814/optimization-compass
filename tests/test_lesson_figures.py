@@ -19,6 +19,8 @@ from scripts.generate_lesson_figures import (
     least_squares_sse,
     milp_integer_points,
     milp_relaxation,
+    minlp_interval_min,
+    minlp_value,
     miqp_big_m_rows,
     miqp_enumerate,
     miqp_relaxation,
@@ -194,5 +196,26 @@ def test_milp_tree_figure_uses_the_article_numbers() -> None:
     assert max(solved[n][1] for n in ("left_left", "left_right", "right")) == 20
     figure = generate_lesson_figures()["milp-relaxation-tree.svg"]
     for text in ("(10/3, 1)", "上界 62/3", "(3, 1.5)", "値 19", "値 20", "上界 18"):
+        assert text in figure
+    assert "stroke-dasharray" not in figure
+
+
+def test_minlp_figure_uses_the_article_numbers() -> None:
+    values = {n: round(minlp_value(n), 2) for n in range(1, 7)}
+    assert values == {1: -7.44, 2: -14.88, 3: -22.32, 4: -29.76, 5: -30.0, 6: -27.33}
+    relaxed_n, relaxed_value = minlp_interval_min(1.0, 6.0)
+    assert round(relaxed_n, 3) == 4.167 and round(relaxed_value, 6) == -31.0
+    assert round(relaxed_n) == 4 and min(values, key=values.get) == 5
+    left_n, left_value = minlp_interval_min(1.0, 4.0)
+    right_n, right_value = minlp_interval_min(5.0, 6.0)
+    assert (round(left_n, 6), round(left_value, 2)) == (4.0, -29.76)
+    assert (round(right_n, 6), round(right_value, 2)) == (5.0, -30.0)
+    figure = generate_lesson_figures()["minlp-relaxation-branch.svg"]
+    for text in (
+        "緩和の最小：n=4.17、値 −31.0",
+        "丸めた n=4：値 −29.76",
+        "n≤4 の節点：n=4、値 −29.76",
+        "n≥5 の節点：n=5、値 −30.0",
+    ):
         assert text in figure
     assert "stroke-dasharray" not in figure
