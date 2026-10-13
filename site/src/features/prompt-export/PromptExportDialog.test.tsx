@@ -14,10 +14,10 @@ import { parseSiteData } from "../../contracts/site-data";
 import { createGalleryPromptDraft } from "./implementation-prompt";
 import { PromptExportDialog } from "./PromptExportDialog";
 
-function draft() {
+function draft(caseId = "EC019") {
   const gallery = parseGalleryIndex(structuredClone(rawGallery));
-  const item = gallery.cases.find((entry) => entry.case_id === "EC019");
-  if (!item) throw new Error("EC019 fixture is missing.");
+  const item = gallery.cases.find((entry) => entry.case_id === caseId);
+  if (!item) throw new Error(`${caseId} fixture is missing.`);
   const data = parseSiteData(structuredClone(rawSiteData));
   return createGalleryPromptDraft({
     item,
@@ -74,5 +74,32 @@ describe("PromptExportDialog", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Markdownをコピー" }));
     expect(await screen.findByText(/コピーできませんでした/u)).toBeVisible();
+  });
+});
+
+describe("PromptExportDialog evaluation contract (OC-EVOL-008)", () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  test("a failure-prone case opens the contract, and choosing a unit writes it into the preview", () => {
+    render(<PromptExportDialog draft={draft("EC027")} onClose={vi.fn()} />);
+    const preview = screen.getByLabelText("実装用プロンプトのMarkdownプレビュー") as HTMLTextAreaElement;
+    expect(screen.getByLabelText("評価契約をプロンプトに含める")).toBeChecked();
+    expect(preview.value).toContain("単位は unknown");
+
+    fireEvent.change(screen.getByLabelText("予算の量（例: 20）"), { target: { value: "20" } });
+    fireEvent.change(screen.getByLabelText("予算の単位"), { target: { value: "evaluations" } });
+
+    expect(preview.value).toContain("- 予算: 20（単位: 評価回数）");
+    expect(preview.value).toContain("unknown — 推測で補わない。");
+  });
+
+  test("a case without expensive evaluation leaves the contract off", () => {
+    render(<PromptExportDialog draft={draft()} onClose={vi.fn()} />);
+    expect(screen.getByLabelText("評価契約をプロンプトに含める")).not.toBeChecked();
+    const preview = screen.getByLabelText("実装用プロンプトのMarkdownプレビュー") as HTMLTextAreaElement;
+    expect(preview.value).not.toContain("## 評価契約");
   });
 });

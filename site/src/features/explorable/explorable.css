@@ -356,6 +356,28 @@
 .milp-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
 .milp-glyph { margin-right: 0.35rem; vertical-align: middle; }
 
+/* Failure ledger: success = teal circle, crash = cross, timeout = open square, nonphysical = triangle (navy);
+   red appears only for a probe that is a known violation. */
+.fl-panel .ex-canvas { max-width: 34rem; margin-inline: auto; }
+.fl-domain { fill: none; stroke: var(--ex-ink); stroke-width: 2; }
+.fl-ok { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.fl-crash { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; stroke-linecap: round; }
+.fl-timeout { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2.5; }
+.fl-nonphysical { fill: var(--ex-ink); fill-opacity: 0.18; stroke: var(--ex-ink); stroke-width: 2.5; stroke-linejoin: round; }
+.fl-replaced { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.fl-probe { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; stroke-linejoin: round; }
+.fl-probe-known { fill: none; stroke: var(--ex-red); stroke-width: 3.5; stroke-linecap: round; }
+.fl-link { stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.fl-call { font-weight: 700; fill: var(--ex-ink); }
+.fl-probe-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.fl-meter { display: flex; flex-wrap: wrap; gap: 3px; margin: 0.25rem 0; }
+.fl-cell { box-sizing: border-box; width: 14px; height: 14px; border: 1.5px solid var(--ex-ink-soft); border-radius: 2px; background: var(--ex-panel); }
+.fl-cell-ok { border-color: var(--ex-teal-ink); background: var(--ex-teal); }
+.fl-cell-fail { border-color: var(--ex-ink); background: var(--ex-ink); }
+.ex-table.fl-table th[scope="row"] { white-space: normal; }
+.ex-table.fl-table td { white-space: normal; }
+.fl-glyph { margin-right: 0.35rem; vertical-align: middle; }
+
 /* Convexity */
 .ex-curve { fill: none; stroke: var(--ex-ink); stroke-width: 3; }
 .ex-chord { fill: none; stroke: var(--ex-orange); stroke-width: 3; }

@@ -1511,7 +1511,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1679,7 +1679,7 @@
           "title_ja": "途中で失敗するシミュレーションから設計を探す"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.failed-simulation",
       "cues_ja": [
         "meshが壊れる、solverが収束しない、NaNが返る入力がある"
       ],
@@ -1717,7 +1717,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "skeleton",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1761,7 +1761,8 @@
       "reading_ja": "評価そのものが失敗して値が返らない点を含む最小化です。失敗を目的値の大きさと混同しない扱いが必要です。",
       "source_ids": [
         "S031",
-        "S035"
+        "S035",
+        "S060"
       ],
       "standard_form": "\\min_{x\\in X}\\; F(x),\\quad F(x)\\in\\mathbb{R}\\cup\\{\\text{fail}\\}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>&#x0211D;</mi><mo>&#x0222A;</mo><mo stretchy=\"false\">&#x0007B;</mo><mtext>fail</mtext><mo stretchy=\"false\">&#x0007D;</mo></mrow></math></div>"
@@ -6286,6 +6287,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 23
+    "with_article": 24
   }
 }

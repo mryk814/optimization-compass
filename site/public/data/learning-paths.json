@@ -388,6 +388,94 @@
       ],
       "summary_ja": "線形最小二乗から出発し、非線形モデル、外れ値、疎性、逆問題へと、当てはめの問題を一段ずつ広げます。",
       "title_ja": "データに合わせる"
+    },
+    {
+      "audience_ja": "シミュレーションや実験の設定を選ぶ立場で、評価1回が高く、ときどき計算が落ちる問題を抱えている人",
+      "goal_ja": "高価な評価の課題について、予算の単位、制約違反・時間切れ・計算の失敗の区別、分からないまま残る条件を書き出し、失敗を大きな値に置き換えずに次の評価を計画できるようになります。",
+      "path_id": "expensive-evaluation",
+      "route": "/paths/expensive-evaluation",
+      "steps": [
+        {
+          "content_id": "concept.expensive-black-box",
+          "has_article": true,
+          "question_ja": "数十回しか評価できないとき、次に試す1点を選ぶには、問題の何を書き留めればよいのか。",
+          "route": "/formulations/PA014",
+          "step": 1,
+          "stumbles": [
+            {
+              "route": "/learn/concept.evaluation-cost",
+              "target_id": "concept.evaluation-cost",
+              "target_type": "content",
+              "title_ja": "評価費と予算",
+              "trouble_ja": "予算を回数で数えるか時間で数えるかを、もう一度確かめたい。"
+            },
+            {
+              "route": "/learn/concept.derivative-free",
+              "target_id": "concept.derivative-free",
+              "target_type": "content",
+              "title_ja": "微分を使わない最適化",
+              "trouble_ja": "微分を使わずに探す方法を、一通り見ておきたい。"
+            }
+          ],
+          "target_id": "PA014",
+          "target_type": "formulation",
+          "title_ja": "非常に高価な低次元評価"
+        },
+        {
+          "content_id": "concept.failed-simulation",
+          "has_article": true,
+          "question_ja": "評価が値を返さないとき、失敗を台帳にどう残し、予算にどう数えるのか。",
+          "route": "/formulations/PA016",
+          "step": 2,
+          "stumbles": [
+            {
+              "route": "/formulations/PA014",
+              "target_id": "PA014",
+              "target_type": "formulation",
+              "title_ja": "非常に高価な低次元評価",
+              "trouble_ja": "評価が高価で回数が限られる問題の書き方に戻りたい。"
+            },
+            {
+              "route": "/learn/concept.constraint-class",
+              "target_id": "concept.constraint-class",
+              "target_type": "content",
+              "title_ja": "制約の分類",
+              "trouble_ja": "失敗する条件が、実行前の式で書けるかどうかを判断したい。"
+            }
+          ],
+          "target_id": "PA016",
+          "target_type": "formulation",
+          "title_ja": "失敗・NaNを伴うsimulation"
+        },
+        {
+          "content_id": "bayesian-optimization",
+          "has_article": true,
+          "question_ja": "成功した評価と失敗の記録から、次に試す1点をどう選ぶのか。",
+          "route": "/methods/M_BAYESIAN_OPT_GP",
+          "step": 3,
+          "stumbles": [
+            {
+              "route": "/formulations/PA016",
+              "target_id": "PA016",
+              "target_type": "formulation",
+              "title_ja": "失敗・NaNを伴うsimulation",
+              "trouble_ja": "失敗を大きな値に置き換えてよいのか迷う。"
+            },
+            {
+              "route": "/formulations/PA014",
+              "target_id": "PA014",
+              "target_type": "formulation",
+              "title_ja": "非常に高価な低次元評価",
+              "trouble_ja": "代理モデルが予測しているものを、問題の書き方から読み直したい。"
+            }
+          ],
+          "target_id": "bayesian-optimization",
+          "target_type": "content",
+          "title_ja": "ベイズ最適化"
+        }
+      ],
+      "summary_ja": "1回に数時間かかるシミュレーションを、決まった回数だけ回す場面から始めます。数十回の評価で次の1点を選ぶ問題として書き、値が返らない評価を状態として台帳に残してから、成功と失敗の記録で次の点を選ぶ方法へ進みます。予算を何の単位で数えるかに迷ったら、評価費と予算の記事へ戻れます。",
+      "title_ja": "評価1回が高いとき、何を書き留めて次の1点を選ぶの？"
     }
   ]
 }

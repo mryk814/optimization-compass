@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `45`
-- Meeting the concept floor: `45`
+- Published concept guides: `46`
+- Meeting the concept floor: `46`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -18,7 +18,8 @@
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
-| `concept.expensive-black-box` | 98 | 7597 | 10 | 4 | 0 | pass |
+| `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
+| `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
@@ -95,6 +96,7 @@
 | `concept.dynamics-defect` | 1 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
+| `concept.failed-simulation` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 2 |

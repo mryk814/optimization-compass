@@ -55,7 +55,8 @@ describe("ImplementationPromptPack", () => {
 
     expect(first).toEqual(second);
     expect(renderImplementationPromptMarkdown(first)).toBe(renderImplementationPromptMarkdown(second));
-    expect(first.contract_version).toBe("1.0.0");
+    expect(first.contract_version).toBe("1.1.0");
+    expect(first.evaluation_contract).toBeNull();
     expect(first.dataset_version).toBe(rawSiteData.dataset_version);
     expect(first.generated_at).toBe("2026-07-15T05:00:00.000Z");
     expect(first.atlas_context.alternatives_first.length).toBeGreaterThan(0);
@@ -126,5 +127,58 @@ describe("ImplementationPromptPack", () => {
       support: artifacts,
       generatedAt: "2026-07-15T05:00:00.000Z",
     })).toThrow(/implementation is missing/u);
+  });
+});
+
+describe("Evaluation contract (OC-EVOL-008)", () => {
+  function failedSimulationDraft() {
+    const artifacts = support();
+    const item = parseGalleryIndex(structuredClone(rawGallery)).cases.find((entry) => entry.case_id === "EC027");
+    if (!item) throw new Error("EC027 fixture is missing.");
+    return createGalleryPromptDraft({
+      item,
+      datasetVersion: artifacts.data.dataset_version,
+      support: artifacts,
+      generatedAt: "2026-10-12T00:00:00.000Z",
+    });
+  }
+
+  test("opens for a failure-prone case and keeps every failure kind and the safe set separate and unknown", () => {
+    const draft = failedSimulationDraft();
+    expect(draft.initial_form.evaluation_contract.enabled).toBe(true);
+    const pack = createImplementationPromptPack(draft, draft.initial_form);
+    expect(pack.evaluation_contract?.budget.unit).toBe("unknown");
+    expect(pack.unknowns).toEqual(expect.arrayContaining([
+      "evaluation budget unit (evaluations / hours / money)",
+      "safe initial set",
+      "timeout handling (value unknown)",
+      "constraint violations known before evaluating",
+    ]));
+    const markdown = renderImplementationPromptMarkdown(pack);
+    expect(markdown).toContain("## 評価契約（Evaluation contract）");
+    expect(markdown).toContain("- 時間切れ（timeout、値は不明）: unknown");
+    expect(markdown).toContain("- 評価する前に分かる制約違反: unknown");
+    expect(markdown).toContain("unknown — 推測で補わない。");
+    expect(markdown).toContain("失敗を目的値の罰則（大きな値）に置き換えず");
+    expect(markdown).toContain("実験・シミュレーション・外部の計算を実行しない");
+  });
+
+  test("states the unit once the reader picks it, and drops it from the unknowns", () => {
+    const draft = failedSimulationDraft();
+    const form = structuredClone(draft.initial_form);
+    form.evaluation_contract = { ...form.evaluation_contract, budget_amount: "20", budget_unit: "evaluations" };
+    const pack = createImplementationPromptPack(draft, form);
+    expect(pack.unknowns).not.toContain("evaluation budget unit (evaluations / hours / money)");
+    expect(renderImplementationPromptMarkdown(pack)).toContain("- 予算: 20（単位: 評価回数）");
+  });
+
+  test("is left out entirely when the reader turns it off", () => {
+    const draft = failedSimulationDraft();
+    const form = structuredClone(draft.initial_form);
+    form.evaluation_contract.enabled = false;
+    const pack = createImplementationPromptPack(draft, form);
+    expect(pack.evaluation_contract).toBeNull();
+    expect(renderImplementationPromptMarkdown(pack)).not.toContain("## 評価契約");
+    expect(pack.unknowns).not.toContain("safe initial set");
   });
 });
