@@ -69,3 +69,12 @@ INSERT INTO evidence_links (
 ('EL004293', 'S171', 'problem_archetypes', 'PA048', 'row', '線形相補性問題 z≥0, w=q+Mz≥0, zᵀw=0 の解の存在と一意性（P行列）、Lemke法などの解法。', 'supporting_or_primary', 'high', '2026-10-13'),
 ('EL004294', 'S172', 'problem_archetypes', 'PA048', 'row', '線形相補性系を、隣り合う端点をたどる道筋で解く構成的な方法（Lemke法）。非退化を仮定する。', 'supporting_or_primary', 'high', '2026-10-13'),
 ('EL004295', 'S170', 'problem_archetypes', 'PA048', 'row', '相補性系を制約に持つ最適化（MPEC）。相補性問題の拡張として扱う。', 'supporting_or_primary', 'medium', '2026-10-13');
+
+-- S039 (pymoo official documentation) was last verified on 2026-07-13, so with this release dated 2026-10-13 it passed the 90-day
+-- freshness limit for official documentation and turned the multi-objective learning journey's source review stale. The site was
+-- checked again on 2026-10-13: it is still the official pymoo documentation (version 0.6.2) and still lists NSGA-II among its
+-- algorithms, so only the access date and a note are updated; the supported claim is unchanged.
+UPDATE sources
+SET accessed_date = '2026-10-13',
+    notes = 'Re-verified on 2026-10-13: https://pymoo.org/ is the pymoo 0.6.2 documentation, links the anyoptimization/pymoo repository, and lists NSGA-II among its algorithms.'
+WHERE source_id = 'S039';

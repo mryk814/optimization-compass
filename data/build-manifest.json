@@ -169,7 +169,7 @@
     {
       "id": "036",
       "path": "data/migrations/036_bilevel_complementarity_sources.sql",
-      "sha256": "a3b754f877fafd73fc461ea1e8df3e2f800557b692c931e0074467581ae6c0d3"
+      "sha256": "684b6a7631a6051e963a63fd2face068cd20e77678c7a94ffba3632b1341caf7"
     }
   ],
   "specialized_inputs": [
