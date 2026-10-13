@@ -2865,7 +2865,7 @@ def oven_figure_data(seed: int = OVEN_FIGURE_SEED) -> list[dict[str, object]]:
     return panels
 
 
-def _signed(value: float) -> str:
+def _signed_3dp(value: float) -> str:
     return f"{value:.3f}".replace("-", "−")
 
 
@@ -2876,10 +2876,10 @@ def _noisy_oven_svg() -> str:
         "同じ60回の焼き方",
         (
             "焼成温度を決めるために60回焼く2つの配分です。"
-            f"60温度を1回ずつ測ると、最良の観測は{_signed(first['means'][first['best']])}"  # type: ignore[index]
+            f"60温度を1回ずつ測ると、最良の観測は{_signed_3dp(first['means'][first['best']])}"  # type: ignore[index]
             f"で、その温度の真の点数は{first['true_at_best']:.3f}です。"
             f"12温度を5回ずつ測ると、平均が最小の温度の平均は"
-            f"{_signed(second['means'][second['best']])}"  # type: ignore[index]
+            f"{_signed_3dp(second['means'][second['best']])}"  # type: ignore[index]
             f"で、真の点数は{second['true_at_best']:.3f}です（乱数種{OVEN_FIGURE_SEED}の1回分）。"
         ),
         618,
@@ -2929,7 +2929,7 @@ def _noisy_oven_svg() -> str:
             _text(
                 20,
                 top + height + 48,
-                f"{what} {_signed(bm)}、真の点数 {panel['true_at_best']:.3f}",
+                f"{what} {_signed_3dp(bm)}、真の点数 {panel['true_at_best']:.3f}",
                 "note",
             )
         )
