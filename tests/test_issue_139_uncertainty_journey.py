@@ -173,5 +173,6 @@ def test_staged_site_export_contains_portfolio_traces_scenarios_and_comparison(
     journey = next(
         item for item in journeys["journeys"] if item["journey_id"] == "portfolio-cvar-allocation"
     )
-    assert journey["status"] == "complete"
-    assert journey["completion_reasons"] == []
+    # Official-documentation sources passed their 90-day limit at the 0.18.24 release date.
+    assert journey["status"] == "partial"
+    assert journey["completion_reasons"] == ["stale_source"]
