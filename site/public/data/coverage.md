@@ -34,7 +34,7 @@
 |---|---:|---:|---|
 | 名前と同一性 | 160 | 156 | candidate 0, unrepresented 4, unknown 0 |
 | 定義と根拠 | 160 | 149 | no_canonical_row 11 |
-| 説明 | 160 | 10 | stale 1, in_progress 103, no_article 46 |
+| 説明 | 160 | 11 | stale 1, in_progress 102, no_article 46 |
 | 体験 | 0 | 0 | undecided 160, has_interactive 23 |
 | 転移 | 0 | 0 | undecided 160 |
 
@@ -44,7 +44,7 @@
 |---|---:|---:|---|
 | 名前と同一性 | 80 | 70 | candidate 0, unrepresented 10, unknown 0 |
 | 定義と根拠 | 80 | 70 | no_canonical_row 10 |
-| 説明 | 80 | 18 | stale 0, in_progress 37, no_article 25 |
+| 説明 | 80 | 21 | stale 0, in_progress 34, no_article 25 |
 | 体験 | 0 | 0 | undecided 80, has_interactive 17 |
 | 転移 | 0 | 0 | undecided 80 |
 

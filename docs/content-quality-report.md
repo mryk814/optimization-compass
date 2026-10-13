@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `46`
-- Meeting the concept floor: `46`
+- Published concept guides: `48`
+- Meeting the concept floor: `48`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -9,7 +9,9 @@
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
+| `concept.bilevel-optimization` | 129 | 9623 | 15 | 8 | 0 | pass |
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
+| `concept.complementarity-problem` | 108 | 11257 | 13 | 4 | 0 | pass |
 | `concept.constrained-nlp` | 99 | 9923 | 12 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
 | `concept.convex-quadratic-program` | 102 | 6344 | 12 | 4 | 0 | pass |
@@ -86,7 +88,9 @@
 | `cma-es` | 0 |
 | `cobyla` | 8 |
 | `cobyqa` | 3 |
+| `concept.bilevel-optimization` | 0 |
 | `concept.chance-risk-contract` | 0 |
+| `concept.complementarity-problem` | 0 |
 | `concept.constrained-nlp` | 6 |
 | `concept.constraint-class` | 0 |
 | `concept.convex-quadratic-program` | 4 |

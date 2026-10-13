@@ -4790,7 +4790,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.bilevel-optimization",
       "cues_ja": [
         "価格を決めると相手が最適に反応する",
         "hyperparameterを決めると学習がparameterを決める"
@@ -4829,7 +4829,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4872,7 +4872,11 @@
       "problem_id": "PA046",
       "reading_ja": "上位の決定 x に対して、下位の主体が自分の最適化で y を決めます。上位は下位の反応を見越して x を選びます。",
       "source_ids": [
-        "S054"
+        "S054",
+        "S055",
+        "S168",
+        "S169",
+        "S170"
       ],
       "standard_form": "\\min_{x}\\; F\\big(x,y^{*}\\big) \\;\\text{ s.t. }\\; y^{*}\\in\\arg\\min_{y}\\, f(x,y)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><mi>x</mi><mo>&#x0002C;</mo><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo>&#x02208;</mo><mi>\\arg</mi><msub><mo>min</mo><mrow><mi>y</mi></mrow></msub><mspace width=\"0.167em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -4988,7 +4992,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.complementarity-problem",
       "cues_ja": [
         "接触・摩擦・KKT条件のように「どちらかが0」という条件がある"
       ],
@@ -5026,7 +5030,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5070,7 +5074,11 @@
       "reading_ja": "二つの非負の量のうち、各成分でどちらか一方は必ず0になる条件を満たす点を求めます。",
       "source_ids": [
         "S054",
-        "S056"
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
       ],
       "standard_form": "\\text{find } x \\;\\text{ s.t. }\\; x\\ge 0,\\; F(x)\\ge 0,\\; x^\\top F(x)=0",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>find&#x000A0;</mtext><mi>x</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>x</mi><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msup><mi>x</mi><mo>&#x022A4;</mo></msup><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math></div>"
@@ -6287,6 +6295,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 24
+    "with_article": 26
   }
 }
