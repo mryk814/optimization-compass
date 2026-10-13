@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.23",
+  "dataset_version": "0.18.24",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -185,7 +185,7 @@
       "intents": [],
       "query": "SciPy Optimization documentation",
       "query_id": "evidence-source",
-      "result_count": 93,
+      "result_count": 95,
       "top_document_ids": [
         "source:S001",
         "source:S082",

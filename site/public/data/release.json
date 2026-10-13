@@ -1,6 +1,6 @@
 {
-  "database_sha256": "1bc4b246c11477a33735aa1eb292a916fea4627302e913251da195763fb8d95b",
-  "dataset_version": "0.18.23",
-  "release_date": "2026-10-10",
+  "database_sha256": "463b513719dd46fe157f18b12a2af32aeda32441318ee6524fefa187a860e04a",
+  "dataset_version": "0.18.24",
+  "release_date": "2026-10-13",
   "schema_version": 1
 }
