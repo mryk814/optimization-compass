@@ -40,6 +40,25 @@
       },
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
+    "concept.bilevel-optimization": {
+      "reviewed_on": "2026-10-14",
+      "reviewer": "claude",
+      "body_sha256": "06e3224c4f1e",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。楽観的・悲観的の違いで変わるのは最適値と最大化する価格の存在であると修正し、内側の打ち切りの主張をこの初期値と刻みに限定。S168〜S170に帰する主張がsupported_claimの範囲内であることを確認。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
     "concept.bound-constrained-smooth": {
       "reviewed_on": "2026-10-13",
       "reviewer": "claude",
@@ -58,6 +77,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算して一致。記号表の長いインライン式を成分ごとに分割。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.complementarity-problem": {
+      "reviewed_on": "2026-10-14",
+      "reviewer": "claude",
+      "body_sha256": "517b39d6d6cd",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。Lemke法がMによっては解に着かずに止まることを明記、記号表と導入の行列を数式ブロックへ。図の直線（w₁=0、w₂=0）と交点(1/6, 2/3)を手計算で照合。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
     "concept.discontinuous-simulation": {
       "reviewed_on": "2026-10-13",

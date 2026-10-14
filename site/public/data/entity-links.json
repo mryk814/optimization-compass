@@ -7524,6 +7524,57 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.bilevel-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "二階層最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S168",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S169",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S170",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA046",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.hyperparameter-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nested-equilibrium-complementarity-hybrid",
+          "target_type": "content"
+        }
+      ],
+      "summary": "二階層最適化は、上位の決定を選ぶとき、下位の主体が自分の最適化でその決定への反応を決める問題です。上位は反応を見越して選びます。下位の解が一つに決まるなら、反応を上位の決定の関数として書き、一つの問題に直せます。決まらないなら、どの解を採るかを先に決めます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.bound-constrained-smooth",
       "entity_type": "content",
       "external_url": null,
@@ -7662,6 +7713,67 @@
         }
       ],
       "summary": "確率制約は制約違反の確率を扱います。CVaR・ロバスト最適化・確率計画・DROとの違いを、目的・制約・保証範囲で整理します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.complementarity-problem",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "相補性問題（LCP・NCP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S170",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S171",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S172",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA048",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nested-equilibrium-complementarity-hybrid",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        }
+      ],
+      "summary": "相補性問題は、非負の二つのベクトルについて、各成分で必ずどちらか一方が0になる点を求める問題です。接触力とすき間やKKT条件の乗数と余裕のように、「あるなら、もう一方はない」という切り替えを一つの条件として書きます。"
     },
     {
       "aliases": [],
@@ -34491,13 +34603,21 @@
       "summary": "PDE制約付き最適化。変数=continuous、目的=general_nonlinear、制約=implicit。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.bilevel-optimization"
+      ],
       "canonical_url": "/formulations/PA046",
       "entity_id": "PA046",
       "entity_type": "problem",
       "external_url": null,
       "label": "bilevel optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.bilevel-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "bilevel optimization。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
@@ -34511,13 +34631,21 @@
       "summary": "game・equilibrium・VI。変数=continuous、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.complementarity-problem"
+      ],
       "canonical_url": "/formulations/PA048",
       "entity_id": "PA048",
       "entity_type": "problem",
       "external_url": null,
       "label": "相補性問題",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.complementarity-problem",
+          "target_type": "content"
+        }
+      ],
       "summary": "相補性問題。変数=continuous、目的=general_nonlinear、制約=nonlinear。"
     },
     {

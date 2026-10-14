@@ -7261,6 +7261,240 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:30秒でつかむ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "売り手が商品の価格 x を決めます。買い手は、その価格を見て、自分にとって最も得な購入量 y を決めます。買い手は、買う量が増えるほど追加の負担が重くなるので、価格が上がると買う量を減らします。 売り手が選ぶのは価格だけで、購入量は選べません。それでも売り手は、売上 x · y を最大にしたいので、価格を決める前に「その価格なら買い手はいくつ買うか」を読む必要があります。 決めるもの : 上位の価格 x （0 から 6）。購入量 y は、価格への反応として下位が決める 良くしたいもの : 上位の売上 x · y 。下位は別に、自分の費用を最小にしている 守ること : 価格の範囲 0 ≤ x ≤ 6 と、購入量 y ≥ 0 この例の買い手は、費用 1 2 y 2 + x y − 4 y を最小にする購入量を選びます。次の図の①は、その購入量を価格ごとに描いたものです。 まず「② 価格 x と売上」で、橙の直線（購入量が 3 のままだと見なした売上）と緑の曲線（買い手が反応した実際の売上）が、 x = 1 を過ぎてどう分かれるかを見てください。 売り手と買い手の例：価格 x を 0 から 6 まで動かしたときの買い手の購入量と売上。この教材用の 1 組の式での計算で、実際の市場の需要は表しません ①のパネルで、購入量は価格 0 で 4、価格 2 で 2 です。価格が 4 に届くと買い手は何も買わず、購入量は 0 になります。 ②のパネルで、緑の曲線は x = 2 で最大の 4 になります。橙の直線は x = 1 で緑と同じ 3 ですが、 x = 6 では 18 まで増えます。実際の売上は、 x = 6 で 0 です。 橙の直線に従うと、売り手は価格を上限の 6 まで上げます。その価格で買い手は買わないので、期待した 18 は手に入りません。 売り手が見るべきなのは、価格を固定したときの購入量ではなく、購入量が価格にどう反応するかです。この反応を、式でどう書けばよいのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:overview",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "二階層最適化は、上位の決定を選ぶとき、下位の主体が自分の最適化でその決定への反応を決める問題です。上位は反応を見越して選びます。下位の解が一つに決まるなら、反応を上位の決定の関数として書き、一つの問題に直せます。決まらないなら、どの解を採るかを先に決めます。",
+      "title": "二階層最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:つまずきやすい点",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "購入量 y も売り手が選べると見なす : 購入量を 0 から 4 の整数として同時に選ぶと、 x = 6 と y = 4 で売上 24 になります。ところが、買い手は x = 6 では買わないので、実際の売上は 0 です。 y は、 x に対する下位の最適な反応でなければなりません。 ある価格での購入量を、ほかの価格でも使う : x = 1 での購入量 3 を固定すると、売上は 3 x で増えて x = 6 で 18 に見えます。しかし、実際の x = 6 の売上は 0 です。反応は価格で変わります。 下位を途中で打ち切る : x = 2 で、刻み 0.5 の勾配法を y = 0 から始めると、1, 2, 3 回の y は 1.0, 1.5, 1.75 です。そのときの売上は 2.0, 3.0, 3.5 ですが、買い手が実際に買う量は 2 で売上は 4 なので、3.5 は実際の売上ではありません。この初期値と刻みでは、打ち切っても売上を最大にする価格は x = 2 のままですが、売上の値は真の値と違います。打ち切った回数と残差は、外側の評価と別に記録します。 下位の解が一つでないのに、 y * と書く : 別の例の x = 2 では、買い手の最適解は 0 から 1 のすべての値です。楽観的なら売上 2、悲観的なら 0 で、答えが変わります。どちらを採るかを先に決めます。 下位が凸と確かめずに、KKT条件へ置き換える : 置き換えが最適性と同値になることは、下位が凸で制約想定を満たすとき（S055）に確かめられます。例の下位は y について強い凸で、制約が y ≥ 0 だけなので、この条件を満たします。非凸の下位では、KKT条件を満たす点が最適とは限りません。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:出典と再現条件",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "二階層最適化の一般の定式化とMPECとの関係は、Colson らの概説（S168）に基づきます。下位の解が一つなら一段の問題になること、解が一つでないときの楽観的・悲観的な方法は、Dempe の教科書（S169）に基づきます。下位を最適性の条件へ置き換えた問題は、Luo らの教科書（S170）に基づきます。凸の問題でKKT条件が最適性と同値になることは、Boyd と Vandenberghe の教科書（S055）に基づきます。例の価格と購入量は、この記事のために作った式で、実際の市場の需要は表しません。標準ライブラリのPythonでコードを実行しています。 この例は、下位の反応を入れて一つの問題にする考え方と、楽観・悲観の違いを示す小さな例です。特定の方法の性能、下位が非凸の場合の解き方、実際の価格設定の最適な決め方は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:困りごとから関連する問題へ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "実際の課題で、次の症状が出たら、対応する記事へ進めます。 学習の設定（正則化の強さなど）を決めると、学習がパラメータを決める → ハイパーパラメータ最適化 下位をKKT条件に置き換えると、相補性 λ y = 0 が出てくる → 相補性問題 上位と下位が順番ではなく、互いの決定を見ながら同時に決める → ゲーム・均衡・変分不等式 下位を何度も数値で解き、打ち切りの精度や解の選び方を記録したい → 入れ子・均衡・相補性・ハイブリッド構造 二階層最適化と関連する問題の関係 ハイパーパラメータ最適化 : 下位が学習、上位が検証損失の最小化という二段の問題で、二階層最適化の特殊な場合です。設定ごとに学習を1回解く費用と、検証損失の見積もりの揺れは、HPOの記事で扱います。 相補性問題 : 下位が凸で制約想定を満たすなら、KKT条件へ置き換えて、相補性制約付きの問題（MPCC）にできます。相補性制約の性質と解き方は、PA048の記事で読みます。 ゲーム・均衡・変分不等式 : 二階層は、上位が先に決めて、下位が反応する順序を持ちます。両者が同時に、互いの決定を前提に決めるなら、均衡の問題です。 入れ子・均衡・相補性・ハイブリッド構造 : 入れ子の数値実装で、内側の許容誤差・残差・解の選択規則を記録する語彙を扱います。この記事は、一つの価格の例で、下位の解が一つに決まるときと楽観・悲観の選び方を読みました。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:小さな例",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "設定は 30秒でつかむと同じです。買い手の費用 f ( x , y ) = 1 2 y 2 + x y − 4 y 、売り手の売上 x y 、価格の範囲 0 ≤ x ≤ 6 です。 価格ごとに、買い手の反応と売上を表にする 価格 x 買い手の購入量 y * ( x ) 売上 x y * ( x ) 0 4 0 1 3 3 2 2 4 3 1 3 4 0 0 5 0 0 6 0 0 x ≤ 4 では y * = 4 − x なので、売上は φ の符号を戻して x ( 4 − x ) です。微分 4 − 2 x が 0 になる x = 2 で最大になり、購入量 2、売上 4 です。 x ≥ 4 では購入量が 0 なので、売上も 0 です。表の値は、後のコードの1番目の出力と一致します。 KKT条件で置き換えると、二つの場合になる 下位を前の節のKKT条件に置き換えると、 λ y = 0 が場合分けを生みます。 λ = 0 の場合 : y = 4 − x で、 y ≥ 0 から x ≤ 4 です。売上 x ( 4 − x ) を最大にして、 x = 2 、売上 4 です。 y = 0 の場合 : λ = x − 4 ≥ 0 から x ≥ 4 です。売上は 0 です。 たとえば x = 5 では y = 0 と λ = 1 が、三つの条件をすべて満たします。二つの場合のうち売上が大きいのは前者で、最初の方法と同じ答え（ x = 2 ）になります。 別の例：下位の解が一つに決まらないとき この小節だけ、別の例を使います。買い手は購入量 0 ≤ y ≤ 1 を選び、費用 ( x − 2 ) y を最小にします。売り手は同じく売上 x y を最大にし、価格は 0 ≤ x ≤ 4 です。 x < 2 : 係数 x − 2 が負なので、 y = 1 だけが最適です。 x > 2 : 係数が正なので、 y = 0 だけが最適です。 x = 2 : 費用が y によらず 0 なので、 0 ≤ y ≤ 1 のすべてが最適です。 価格 x 楽観的な売上 悲観的な売上 1.99 1.99 1.99 2.00 2.00 0.00 2.01 0.00 0.00 x = 2 で、楽観的なら買い手は y = 1 を選び、売上は 2 です。悲観的なら y = 0 を選び、売上は 0 です。楽観的な問題では、 x = 2 が売上 2 の最適な価格です。悲観的な問題では、 x = 2 の売上が 0 なので、2 に届く価格がありません。価格を 2 に近づけると、売上も 2 に近づきます。ただし 2 は超えません。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "二階層の問題を解くときに見る点は、下位の解が一つに決まるか、下位が凸かどうかです。次の表は順位ではなく、条件ごとの入口です。 系統 進み方 向く条件・避ける条件 下位を解いて一つの問題にする 外側の x ごとに下位を解き、 φ ( x ) を外側の目的として最小にします（S169） 下位の解が一つで、式か数値で求まるとき。評価1回が下位の求解1回なので、下位が高価だと外側の予算を圧迫します 下位を最適性の条件で置き換える KKT条件を制約として足し、上位と下位の変数を一つの問題で同時に解きます（S170） 下位が凸で制約想定を満たすとき（S055）。相補性の扱いは 相補性問題 で読みます。下位が非凸なら、置き換えが最適性と同値になる保証はありません 楽観・悲観を分けて扱う 下位の解の集合から、上位に都合のよい解か不都合な解を採る規則を決めます（S169） 下位の解が複数あるとき。採る規則を先に決めないと、上位の目的が定義されません どの系統でも、評価回数と下位を打ち切った精度と、採った解の規則を記録します。この記事の数値は、小さな例での挙動を読むためのもので、系統の優劣は示しません。 次のコードは、小さな例を標準ライブラリだけで確かめます。 python def follower_solve ( x ): \"\"\"下位: min_{y>=0} 0.5*y**2 + x*y - 4*y。y について強凸なので解は一つ。\"\"\" return max ( 0.0 , 4.0 - x ) # 勾配 y + x - 4 = 0 を y >= 0 で切る def revenue ( x , y ): return x * y # 上位は売上 x*y を最大にする # 1. 入れ子: x ごとに下位を解き、一変数の問題にする print ([( x , follower_solve ( x ), revenue ( x , follower_solve ( x ))) for x in ( 0 , 1 , 2 , 3 , 4 )]) # [(0, 4.0, 0.0), (1, 3.0, 3.0), (2, 2.0, 4.0), (3, 1.0, 3.0), (4, 0.0, 0.0)] grid = [ i / 100 for i in range ( 601 )] # 価格 0 から 6 まで 0.01 刻み best = max ( grid , key = lambda x : revenue ( x , follower_solve ( x ))) print ( best , follower_solve ( best ), revenue ( best , follower_solve ( best ))) # 2.0 2.0 4.0 # 2. 誤り: 下位の変数 y も上位が自由に選べると見なす（y は 0 から 4 の整数） x_bad , y_bad = max ((( x , y ) for x in range ( 7 ) for y in range ( 5 )), key = lambda p : p [ 0 ] * p [ 1 ]) print ( x_bad , y_bad , revenue ( x_bad , y_bad ), revenue ( x_bad , follower_solve ( x_bad ))) # 6 4 24 0.0 # 3. 誤り: 購入量が x=1 のときの 3 のままだと見なす print ( 3 * 6 , revenue ( 6 , follower_solve ( 6 ))) # 18 0.0 # 4. KKT 条件（下位が凸なので最適性と同値）: y + x - 4 - lam = 0, y >= 0, lam >= 0, lam*y = 0 for x in ( 2 , 5 ): y = follower_solve ( x ) lam = y + x - 4 print ( x , y , lam , lam * y ) # 2 2.0 0.0 0.0 / 5 0.0 1.0 0.0 # 5. 下位を k 回の勾配法で打ち切る（x=2、刻み 0.5、y=0 から開始） for k in ( 1 , 2 , 3 , 10 ): y = 0.0 for _ in range ( k ): y -= 0.5 * ( y + 2 - 4 ) print ( k , y , revenue ( 2 , y )) # 1 1.0 2.0 / 2 1.5 3.0 / 3 1.75 3.5 / 10 1.998046875 3.99609375 # 6. 下位の解が一つに決まらない例: follower は (x-2)*y を 0<=y<=1 で最小化する def follower_set ( x ): # 解の集合 [lo, hi] return ( 1.0 , 1.0 ) if x < 2 else ( 0.0 , 0.0 ) if x > 2 else ( 0.0 , 1.0 ) for x in ( 1.99 , 2.0 , 2.01 ): lo , hi = follower_set ( x ) print ( x , x * hi , x * lo ) # 1.99 1.99 1.99 / 2.0 2.0 0.0 / 2.01 0.0 0.0 出力は上から順に次のとおりです。 1番目は、価格 0 から 4 までの購入量と売上で、先の表と同じです。 best は 0.01 刻みの価格で調べた最良で、価格 2.0 のとき購入量 2.0、売上 4.0 です。 2番目の 6 4 24 0.0 は、購入量を自由に選ぶと売上が 24 に見えますが、買い手の反応を入れると 0 になることを示します。 3番目の 18 0.0 は、購入量を固定した見込みと、実際の売上です。 4番目は、 x = 2 で y = 2 と λ = 0 、 x = 5 で y = 0 と λ = 1 です。どちらも λ y = 0 を満たします。 5番目は、勾配法を 1, 2, 3, 10 回で打ち切ったときの y と売上です。10 回でも 3.996 で、真の 4 には届きません。 6番目は、価格が 1.99 と 2.00 と 2.01 のときの、楽観的な売上（第2列）と悲観的な売上（第3列）です。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:標準形を読む",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "次の式は「上位が x を選ぶ。ただし、 x を決めたときの y は、下位が自分の目的 f を最小にして決める」を表します。 min x ∈ X F ( x , y * ) s.t. y * ∈ \\arg min y ∈ Y f ( x , y ) 式は「 x を決めると、下位の最適な反応の集合から y * が決まる。上位は、その y * を入れた目的 F を最小にする x を選ぶ」と読みます。上位が下位の反応を制約として持つ形で、Colson らの概説（S168）が一般の定式化として示しています。 記号 意味 例では x 上位の決定 価格（0 から 6） y 下位の決定。下位が自分で選ぶ 買い手の購入量（0 以上） F ( x , y ) 上位の目的。 x と下位の反応 y の両方で決まる − x y （売上を最大にするので符号を反転） f ( x , y ) 下位の目的。 x を与えられた値として最小にする 1 2 y 2 + x y − 4 y X , Y 上位と下位の許される範囲 0 ≤ x ≤ 6 、 y ≥ 0 y * x を決めたときの、下位の最適な反応 max ( 0 , 4 − x ) 下位の解が一つに決まるときは、一つの問題になる 下位の問題が、どの x に対しても最適解を一つだけ持つなら、その解を y * ( x ) と書けます。このとき二階層の問題は、暗に定義された目的を持つ一段の問題 min x ∈ X φ ( x ) , φ ( x ) = F ( x , y * ( x ) ) になります。この整理は Dempe の教科書（S169）にあります。例では、買い手の費用が y について強い凸（二乗の項の係数が正）です。 f の微分 y + x − 4 を 0 とし、 y ≥ 0 で切った y * ( x ) = max ( 0 , 4 − x ) が唯一の最適解です。上位の目的は φ ( x ) = − x max ( 0 , 4 − x ) になり、 x だけの関数です。 下位の解が一つに決まらないときは、先に採る解を決める 下位の最適解が複数あると、 y * が一つに決まらず、上位の目的の値も決まりません。Dempe（S169）は、この場合に楽観的な方法と悲観的な方法を区別しています。 楽観的 : 下位の最適解のうち、上位に最も都合のよい解を採ります。 悲観的 : 下位の最適解のうち、上位に最も不都合な解を採ります。 どちらを採るかで、上位の最適値が変わることや、最適な x が存在するかどうかが変わることがあります。次の節の別の例で確かめます。 下位が凸なら、最適性の条件で置き換えられる 下位が凸の問題で、制約想定（Slater の条件など）を満たすなら、下位の最適性はKKT条件と同値です（S055）。そのため、下位の最小化を、KKT条件の等式と不等式で置き換えた一段の問題を書けます。Luo らの教科書（S170）は、このように下位をその最適性の条件へ置き換えた二階層の問題を、MPEC（均衡制約付き最適化）として扱っています。 例の下位は y ≥ 0 の制約を持つので、KKT条件は、乗数 λ ≥ 0 を使った次の三つです。 y + x − 4 − λ = 0 , y ≥ 0 , λ ≥ 0 , λ y = 0 最後の λ y = 0 が相補性で、 y と λ の少なくとも一方が 0 であることを表します。この種の制約の性質と解き方は、 相補性問題 で読みます。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.bilevel-optimization:課題から定式化する",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.bilevel-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:concept.hyperparameter-optimization",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "problem:PA046",
+        "source:S055",
+        "source:S168",
+        "source:S169",
+        "source:S170"
+      ],
+      "source_ids": [
+        "S055",
+        "S168",
+        "S169",
+        "S170"
+      ],
+      "text": "「価格を決めると相手が最適に反応し、その反応で結果が決まる」という課題だけでは、二階層とは決まりません。次の4つを順に確かめます。 上位は何を決めるか : 価格 x です。下位が決める購入量 y は、上位の変数に入れません。 下位は何を最小にするか : 買い手は、 x を所与として費用 f ( x , y ) を最小にします。下位の目的、変数、範囲を式で書けることが条件です。 下位の解は一つに決まるか : 例では、 y について強い凸なので一つです。決まらないなら、楽観的か悲観的かを先に決めます。 上位は何を良くしたいか : 売上 F = − x y です。下位の反応 y * ( x ) を入れて、 x の関数にします。 次の三つが揃えば、この記事の型です。下位が自分の目的で最適化して決めること。上位がその反応を見越して決めること。下位の解の選び方が決まっていること。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:30秒でつかむ",
       "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
@@ -7788,6 +8022,267 @@
       ],
       "text": "不確実な値を ξ 、制約関数を g(x, ξ) とすると、代表的な確率制約は次の形です。 Pr { g ( x , ξ ) ≤ 0 } ≥ 1 − α . α は許容する違反確率です。ここで指定しているのは、明示した分布と確率モデルのもとでの制約充足です。 α=0.05 と書いただけで、未知の分布や将来の全データに対する安全保証になるわけではありません。 実装や事例では、少なくとも次を一緒に残します。 何が揺らぐか。パラメータ、観測ノイズ、外乱の区別 ξ の分布、推定方法、独立性や定常性の仮定 α の値と、確率を評価する単位 分布を推定した標本と、性能を確認する評価用標本の分割 違反の定義、許容誤差、未観測条件への外挿範囲 有限シナリオのうち何件で制約を満たしたかを数えるだけなら、まずは標本上での制約充足率です。シナリオの生成規則と評価データが別に固定されていない限り、それを確率保証と呼びません。",
       "title": "確率制約は制約違反の確率を指定する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:30秒でつかむ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "薄い板を、床の上の2点 A と B で支える場面を考えます。荷重をかけると、床がなければ板は A で 1.0、B で 1.5 だけ床にめり込みます。 床は、接触した点でだけ板を押し返します。押し返す力を z A , z B 、押し返した後の板と床のすき間を w A , w B とします。 ところが、A と B が実際に接触するかどうかは、解く前には分かりません。接触していればすき間は0で、力が働きます。離れていれば力は0で、すき間があります。 力を加えると板は持ち上がります。A に 1 の力を加えると、A は 2、B は 1 だけ持ち上がります。B に 1 の力を加えると、B は 2、A は 1 だけ持ち上がります。したがって、すき間は力の一次式です。 w A = − 1 + 2 z A + z B , w B = − 1.5 + z A + 2 z B 決めるもの : 接触力 z A , z B （すき間 w A , w B は力から決まる） 良くしたいもの : 特になし（最小化する目的関数はなく、条件をすべて満たす点を探す） 守ること : z ≥ 0 、 w ≥ 0 、各点で z i w i = 0 （力とすき間の少なくとも一方が0） まず、図の4つの丸のうち、薄緑の領域の中にあるものを探してください。各丸は、「A が接触」「B が接触」の組み合わせを仮定したときの力 ( z A , z B ) です。薄緑の領域は、二つのすき間がどちらも0以上になる範囲です。 板の例：z₁、z₂ は A、B の接触力。線 w₁=0、w₂=0 の交点が、AとBがともに接触する候補です。教材用の小さな例で、実際の接触解析の性能は示しません。 「接触なし」の丸は原点 ( 0 , 0 ) にあります。力が0なので、すき間は q = ( − 1 , − 1.5 ) そのままで、どちらも負です。板が床にめり込む状態は許されません。 「Aだけ」の丸は ( 0.5 , 0 ) です。A のすき間は0ですが、B のすき間が − 1 になります。「Bだけ」の丸は ( 0 , 0.75 ) で、A のすき間が − 0.25 になります。 「AとB」の丸は、線 w A = 0 と線 w B = 0 の交点 ( 0.1667 , 0.6667 ) です。ここだけが薄緑の領域にあり、力は二つとも正、すき間は二つとも0です。 4通りのうち、解が一つだけだったのは偶然でしょうか。点が増えると、調べる通りは何通りになるのでしょうか。標準形と、その条件を読みます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:overview",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "相補性問題は、非負の二つのベクトルについて、各成分で必ずどちらか一方が0になる点を求める問題です。接触力とすき間やKKT条件の乗数と余裕のように、「あるなら、もう一方はない」という切り替えを一つの条件として書きます。",
+      "title": "相補性問題（LCP・NCP）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:つまずきやすい点",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "解が一つに決まると思い込む : M ′ と q ′ では、3つの点 ( 1 , 0 ) と ( 0 , 1 ) と ( 1 / 3 , 1 / 3 ) が解です。P行列でない M では、一意性は保証されません。元の M は主小行列式が 2 , 2 , 3 で、P行列だったから一意でした。 Lemkeの方法が解を返したら、他にないと見なす : M ′ に使うと ( 1 , 0 ) が返りますが、 ( 0 , 1 ) と ( 1 / 3 , 1 / 3 ) も解です。方法は、解を一つ見つける手続きです。解の全体を列挙しません。 両方が0になる成分を数え損なう : q ″ = ( − 1 , − 0.5 ) では、「Aだけ」と「AとB」が同じ点 ( 0.5 , 0 ) になります。活性集合の数が、解の数ではありません。この境界は退化で、Lemke の保証の前提を外れます。 すべての相補性問題が最小化問題だと考える : 非対称な M 3 のLCPには、解 z = ( 0 , 0.75 ) があります。ところが、 q + M 3 z はどの関数の勾配でもありません。勾配のヤコビ行列は対称なのに、 M 3 は非対称だからです。この場合は凸二次計画へ書き換えず、この記事の形のまま扱います。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:小さな例",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "設定は30秒でつかむと同じです。行列と定数項は次のとおりで、添字を A , B とします。 M = ( 2 1 1 2 ) , q = ( − 1 , − 1.5 ) 各点について「接触している（ w i = 0 ）」か「離れている（ z i = 0 ）」を選ぶと、 2 2 = 4 通りです。この選び方を、接触している点の集合で呼び、活性集合といいます。活性集合を一つ決めれば、残りは線形方程式を解くだけです。 接触している点 解く式 ( z A , z B ) ( w A , w B ) 判定 なし z = 0 ( 0 , 0 ) ( − 1 , − 1.5 ) w < 0 A 2 z A = 1 ( 0.5 , 0 ) ( 0 , − 1 ) w B < 0 B 2 z B = 1.5 ( 0 , 0.75 ) ( − 0.25 , 0 ) w A < 0 A と B M z = − q ( 0.1667 , 0.6667 ) ( 0 , 0 ) 解 最後の行は、次の連立方程式の解です。 ( 2 1 1 2 ) ( z A z B ) = ( 1 1.5 ) ⇒ z = ( 1 6 , 2 3 ) 解は「A が 0.1667、B が 0.6667 の力で押し返される」と読めます。荷重は A より B で深く効くので、B のほうが強く押し返され、2点とも接触します。 解が一つに決まる条件 M の主小行列式は 2 , 2 , 3 で、すべて正です。主小行列式がすべて正の行列をP行列といいます。 M がP行列なら、LCPの解はどんな q に対しても一つだけです（Cottle–Pang–Stone）。 対称な M が正定値なら、主小行列式はすべて正になります。この例で4通りのうち解が一つだったのは、 q ではなく M の性質によります。 同じ題材で M だけを替える この小節だけ、 M ′ = ( 1 2 2 1 ) 、 q ′ = ( − 1 , − 1 ) を使います。主小行列式は 1 , 1 , − 3 で、P行列ではありません。 このとき、解は3つあります。A だけが接触して z = ( 1 , 0 ) 、B だけが接触して z = ( 0 , 1 ) 、両方が接触して z = ( 1 / 3 , 1 / 3 ) です。P行列でない M では、一意性を前提にできません。 境界で二つの条件が重なる場合 元の M のまま q ″ = ( − 1 , − 0.5 ) にすると、「Aだけ」と「AとB」の2通りが、同じ点 z = ( 0.5 , 0 ) を与えます。B では z B = 0 と w B = 0 が同時に成り立っています。このように、ある成分で両方が0になる状態を退化といいます。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:標準形を読む",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "次の式は「非負の z を選ぶ。 z から決まる w も非負で、各成分の積は0」を表します。 find z ≥ 0 such that w = F ( z ) ≥ 0 , z ⊤ w = 0 式は「 z も w = F ( z ) も非負で、内積 z ⊤ w が0になる z を探す」と読みます。 z i w i はどれも0以上なので、合計が0になるのは、各成分で z i = 0 か w i = 0 のときに限られます。これが相補性です。 記号 意味 例では z 決める非負の量 接触力 ( z A , z B ) w z から決まる非負の量 すき間 ( w A , w B ) F z から w を作る写像 F ( z ) = q + M z M 力に対するすき間の変化を表す行列 対称な2×2行列（小さな例に書きます） q z = 0 のときの w ( − 1 , − 1.5 ) 線形と非線形：LCPとNCP F ( z ) = q + M z と一次式のものが、線形相補性問題（linear complementarity problem、LCP）です。この記事の例はLCPです。 F が非線形なら、非線形相補性問題（NCP）です。NCPは、非負象限の上の変分不等式と同じ問題です。変分不等式の一般形は ゲーム・均衡・変分不等式 で扱います。 相補性はKKT条件から来る x ≥ 0 の範囲で f ( x ) を最小にする問題のKKT条件は、次の三つです。 ∇ f ( x ) ≥ 0 , x ≥ 0 , x i ∂ f ∂ x i = 0 ( 各 i ) 最後の式が相補的スラックネスで、各成分で x i と勾配のどちらかが0になります。つまり F = ∇ f とおくと、KKT条件はNCPです。 f ( x ) = 1 2 x ⊤ M x + q ⊤ x で M が対称なら ∇ f = q + M x なので、LCPです。さらに M が正定値なら f は凸で、KKT条件を満たす点が最小解です。この記事の M は対称で正定値なので、接触の例の解は、次の凸二次計画の解でもあります。 min z ≥ 0 1 2 z ⊤ M z + q ⊤ z 逆に、非対称な M のLCPには、対応する最小化問題が存在するとは限りません。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:次に読む",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "二階層最適化（bilevel optimization） ：下位問題のKKT条件が相補性制約になる、上位と下位の二段の問題です。 ゲーム・均衡・変分不等式 ：非負象限とは限らない集合の上へ広げた形です。 入れ子・均衡・相補性・ハイブリッド構造 ：相補性を厳密に満たしたか、近似したかを分けて記録します。 凸二次計画 ： M が対称で正定値のときの、最小化としての見方です。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:見分け方",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "条件に「どちらかが0」がある（力とすき間、摩擦、KKT条件の乗数と余裕）→ この記事の形です。 最小化したい目的が別にあり、その制約に相補性が入っている → 相補性制約付きの最適化問題（MPEC）です。下位問題の最適性条件が相補性になる二段の問題は、 二階層最適化（bilevel optimization） です。 f の最小化で、制約が x ≥ 0 だけ → 相補性の形にせず、 凸二次計画 などの最小化問題として解けます。 M が非対称、または F が勾配でないときだけ、この記事の形が必要です。 F ( x ) = 0 の根を求めるだけで、非負や「どちらかが0」の条件がない → 方程式の根探索 です。 非負象限とは限らない集合の上で、条件を書きたい → 変分不等式 です。",
+      "title": "見分け方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:解き方の系統",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "次の表は、方法の順位ではなく、進み方と保証が成り立つ条件の対応です。 系統 進み方 保証と条件 活性集合の枚挙 2 n 通りの各活性集合で線形方程式を解き、符号を確かめます 全部調べれば、解があるかどうかが分かります。 n = 20 で 2 20 = 1048576 通りです 枢軸法（Lemkeの方法） 人工変数を入れ、隣り合う端点へ1回ずつ移ります。目的関数は減らしません 非退化を仮定すると、隣り合う端点をたどる経路が解に至ります（Lemke 1965）。退化すると前提が崩れます。 M によっては、解に着かず別の端で止まることもあり、いつも解を返す方法ではありません 凸二次計画のソルバー M が対称で正定値のとき、KKT条件が最小化問題と一致するので、最小化として解きます M が対称で正定値であること 根探索への書き換え min ( z i , w i ) = 0 は、 z i ≥ 0 、 w i ≥ 0 、 z i w i = 0 と同じ条件です。この等式の残差を小さくします 非線形の F でも使えますが、この等式は滑らかではありません。収束の保証は、 F と方法の条件に依存します 解の存在や一意性は、行列のクラスごとに Cottle–Pang–Stone が整理しています。この記事は、P行列の一意性と、例の範囲だけを使います。 次のコードは、標準ライブラリだけで小さな例の活性集合を全部調べます。 M を替えた場合と、Lemkeの方法の経路も確かめます。数は分数で計算し、小数に丸めて表示します。 python from fractions import Fraction as Fr from itertools import combinations def rnd ( v ): return tuple ( round ( float ( x ), 4 ) for x in v ) def solve_set ( M , q , S ): \"\"\"S の添字で w_i = 0、それ以外で z_i = 0 とおいたときの (z, w)。\"\"\" n = len ( q ) z = [ Fr ( 0 )] * n if S : a = [[ M [ i ][ j ] for j in S ] + [ - q [ i ]] for i in S ] # M_SS z_S = -q_S を消去法で解く for c in range ( len ( S )): p = next ( r for r in range ( c , len ( S )) if a [ r ][ c ] != 0 ) a [ c ], a [ p ] = a [ p ], a [ c ] a [ c ] = [ x / a [ c ][ c ] for x in a [ c ]] for r in range ( len ( S )): if r != c : a [ r ] = [ x - a [ r ][ c ] * y for x , y in zip ( a [ r ], a [ c ])] for k , i in enumerate ( S ): z [ i ] = a [ k ][ - 1 ] w = [ q [ i ] + sum ( M [ i ][ j ] * z [ j ] for j in range ( n )) for i in range ( n )] return z , w def solutions ( M , q ): \"\"\"全ての活性集合を調べ、z >= 0 かつ w >= 0 になるものを返す。\"\"\" out = [] for k in range ( len ( q ) + 1 ): for S in combinations ( range ( len ( q )), k ): z , w = solve_set ( M , q , S ) if min ( z + w ) >= 0 : out . append (( S , rnd ( z ), rnd ( w ))) return out def det2 ( M ): return M [ 0 ][ 0 ] * M [ 1 ][ 1 ] - M [ 0 ][ 1 ] * M [ 1 ][ 0 ] # 添字 0 が点A、1 が点B M = [[ Fr ( 2 ), Fr ( 1 )], [ Fr ( 1 ), Fr ( 2 )]] q = [ Fr ( - 1 ), Fr ( - 3 , 2 )] for S in ((), ( 0 ,), ( 1 ,), ( 0 , 1 )): z , w = solve_set ( M , q , S ) print ( S , rnd ( z ), rnd ( w )) # () (0.0, 0.0) (-1.0, -1.5) # (0,) (0.5, 0.0) (0.0, -1.0) # (1,) (0.0, 0.75) (-0.25, 0.0) # (0, 1) (0.1667, 0.6667) (0.0, 0.0) print ( solutions ( M , q )) # [((0, 1), (0.1667, 0.6667), (0.0, 0.0))] print ( M [ 0 ][ 0 ], M [ 1 ][ 1 ], det2 ( M )) # 2 2 3 # Mだけを替える。主小行列式 1, 1, -3 なのでP行列ではない M2 = [[ Fr ( 1 ), Fr ( 2 )], [ Fr ( 2 ), Fr ( 1 )]] q2 = [ Fr ( - 1 ), Fr ( - 1 )] print ( det2 ( M2 )) # -3 for sol in solutions ( M2 , q2 ): print ( sol ) # ((0,), (1.0, 0.0), (0.0, 1.0)) # ((1,), (0.0, 1.0), (1.0, 0.0)) # ((0, 1), (0.3333, 0.3333), (0.0, 0.0)) # 元のMで q だけを替え、z_B = w_B = 0 になる境界の場合 q3 = [ Fr ( - 1 ), Fr ( - 1 , 2 )] for sol in solutions ( M , q3 ): print ( sol ) # ((0,), (0.5, 0.0), (0.0, 0.0)) # ((0, 1), (0.5, 0.0), (0.0, 0.0)) # 非対称なM。主小行列式 2, 2, 4 でP行列だが、勾配 q + Mz にはならない M3 = [[ Fr ( 2 ), Fr ( 2 )], [ Fr ( 0 ), Fr ( 2 )]] print ( det2 ( M3 ), solutions ( M3 , q )) # 4 [((1,), (0.0, 0.75), (0.5, 0.0))] def lemke ( M , q ): \"\"\"人工変数 z0 を入れ、隣り合う端点へ1回ずつ枢軸をとる。\"\"\" n = len ( q ) name = [ f \"w { c } \" for c in \"AB\" [: n ]] + [ f \"z { c } \" for c in \"AB\" [: n ]] + [ \"z0\" ] # z0 は人工変数 T = [[ Fr ( i == j ) for j in range ( n )] + [ - x for x in M [ i ]] + [ Fr ( - 1 ), q [ i ]] for i in range ( n )] basis = list ( range ( n )) r , enter = min ( range ( n ), key = lambda i : q [ i ]), 2 * n # 最も負の行で z0 を入れる path , tie = [], False while True : T [ r ] = [ x / T [ r ][ enter ] for x in T [ r ]] for i in range ( n ): if i != r : T [ i ] = [ x - T [ i ][ enter ] * y for x , y in zip ( T [ i ], T [ r ])] leaving , basis [ r ] = basis [ r ], enter path . append ( f \" { name [ enter ] } in, { name [ leaving ] } out\" ) if leaving == 2 * n : break enter = leaving + n if leaving < n else leaving - n # 抜けた変数の相棒を入れる ratios = { i : T [ i ][ - 1 ] / T [ i ][ enter ] for i in range ( n ) if T [ i ][ enter ] > 0 } best = min ( ratios . values ()) rows = [ i for i , v in ratios . items () if v == best ] tie |= len ( rows ) > 1 # 比が同点なら退化 r = rows [ 0 ] z = [ next (( T [ i ][ - 1 ] for i in range ( n ) if basis [ i ] == n + j ), Fr ( 0 )) for j in range ( n )] return rnd ( z ), path , tie print ( lemke ( M , q )) # ((0.1667, 0.6667), ['z0 in, wB out', 'zB in, wA out', 'zA in, z0 out'], False) print ( lemke ( M , q3 )[ 1 :]) # (['z0 in, wA out', 'zA in, z0 out'], True) print ( lemke ( M2 , q2 )[ 0 ]) # (1.0, 0.0) # 対称で正定値な元の M では、凸二次計画の最小点も同じ点になる（刻み 1/60 の格子で探す） def energy ( z ): return sum ( z [ i ] * M [ i ][ j ] * z [ j ] for i in range ( 2 ) for j in range ( 2 )) / 2 + sum ( q [ i ] * z [ i ] for i in range ( 2 ) ) grid = [( Fr ( a , 60 ), Fr ( b , 60 )) for a in range ( 61 ) for b in range ( 61 )] best = min ( grid , key = energy ) print ( rnd ( best ), round ( float ( energy ( best )), 4 )) # (0.1667, 0.6667) -0.5833 最初の4行は、表の4通りです。 solutions(M, q) は、 z ≥ 0 かつ w ≥ 0 になる活性集合だけを返し、A と B がともに接触する1通りです。 M の主小行列式は 2 , 2 , 3 です。 M ′ では、 det2 が − 3 で、3つの活性集合が解になります。 q ″ では、 (0,) と (0, 1) が同じ ( 0.5 , 0 ) を返します。 非対称な M 3 = ( 2 2 0 2 ) は、主小行列式が 2 , 2 , 4 でP行列です。そのため、解は z = ( 0 , 0.75 ) の一つだけです。 lemke(M, q) の経路は3回の枢軸です。人工変数 z 0 を入れて B のすき間を抜き、次に B の力を入れて A のすき間を抜きます。最後に A の力を入れて z 0 を抜きます。 着いた先は ( 0.1667 , 0.6667 ) で、表の解と一致します。比の同点は起きていません（ False ）。 q ″ では、比が同点になり、 True と表示されます。退化なので、非退化の仮定は満たされません。 M ′ では ( 1 , 0 ) を返し、3つある解のうち一つだけを返します。 最後の1行は、凸二次計画の目的関数を刻み 1 / 60 の格子で最小化した点です。LCPの解 ( 0.1667 , 0.6667 ) と一致し、目的値は − 0.5833 です。 小さな例の数値であり、一般の速さや方法の優劣は示しません。",
+      "title": "解き方の系統"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.complementarity-problem:近い定式化",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.complementarity-problem",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.constraint-class",
+        "content:concept.convex-quadratic-program",
+        "content:concept.nested-equilibrium-complementarity-hybrid",
+        "content:concept.root-finding",
+        "problem:PA048",
+        "source:S055",
+        "source:S056",
+        "source:S170",
+        "source:S171",
+        "source:S172"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S170",
+        "S171",
+        "S172"
+      ],
+      "text": "ゲーム・均衡・変分不等式 ：NCPは、非負象限の上の変分不等式と同値です。集合が非負象限でなければ、相補性の形には書けません。 二階層最適化（bilevel optimization） ：下位問題が凸で、最適性がKKT条件で言い換えられるときに、相補性制約が上位の問題の制約に入ります（MPEC）。MPECの理論は Luo–Pang–Ralph にまとまっています。この記事は、相補性の条件を満たす点を求める部分だけを扱います。 入れ子・均衡・相補性・ハイブリッド構造 ：相補性を厳密に満たしたか、緩和や平滑化で近似したかを分けて記録する記事です。この記事は、問題の形と、解の存在・一意性を読みます。 凸二次計画 ： M が対称で正定値なら、LCPは凸二次計画のKKT条件です。",
+      "title": "近い定式化"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -56164,7 +56659,9 @@
       "dataset_version": "0.18.24",
       "document_id": "problem:PA046",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.bilevel-optimization"
+      ],
       "source_ids": [
         "S054"
       ],
@@ -56193,7 +56690,9 @@
       "dataset_version": "0.18.24",
       "document_id": "problem:PA048",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.complementarity-problem"
+      ],
       "source_ids": [
         "S054",
         "S056"

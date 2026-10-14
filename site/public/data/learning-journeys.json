@@ -8181,6 +8181,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.bilevel-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.bound-constrained-smooth",
       "asset_type": "content",
       "policy": "warning",
@@ -8188,6 +8194,12 @@
     },
     {
       "asset_id": "concept.chance-risk-contract",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.complementarity-problem",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
