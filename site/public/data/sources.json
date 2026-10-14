@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.23",
+  "dataset_version": "0.18.24",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -35,7 +35,7 @@
       "source_type": "vendor_manual"
     }
   ],
-  "generated_at": "2026-10-10T00:00:00Z",
+  "generated_at": "2026-10-13T00:00:00Z",
   "sources": [
     {
       "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
@@ -22318,7 +22318,7 @@
       "title": "Ray Tune"
     },
     {
-      "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
+      "access_note": "Re-verified on 2026-10-13: https://pymoo.org/ is the pymoo 0.6.2 documentation, links the anyoptimization/pymoo repository, and lists NSGA-II among its algorithms.",
       "currentness_status": "verified_current",
       "evidence_targets": [
         {
@@ -22630,7 +22630,7 @@
           "target_type": "visualization"
         }
       ],
-      "last_verified": "2026-07-13",
+      "last_verified": "2026-10-13",
       "license": "unknown",
       "official_url": "https://pymoo.org/",
       "publication_date": null,
@@ -62602,6 +62602,170 @@
       "source_type": "original_paper",
       "supported_claim": "Entropic-regularized unbalanced optimal transport, where the marginal constraints are relaxed by divergence penalties, is solved by generalized Sinkhorn scaling algorithms based on pointwise diagonal scaling of the coupling; also covers unbalanced barycenters and gradient flows.",
       "title": "Scaling algorithms for unbalanced optimal transport problems"
+    },
+    {
+      "access_note": "Annals of Operations Research 153(1), 235-256 (September 2007), Springer, DOI 10.1007/s10479-007-0176-2. Journal, volume, issue, pages, date and DOI confirmed on 2026-10-13 against the RePEc/IDEAS record; the scope in supported_claim follows the abstract indexed there. Not to be confused with the same authors' 2005 survey in 4OR 3(2), DOI 10.1007/s10288-005-0071-0, which is not recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "上位問題の制約に下位問題の最適解が入る二段の問題。下位問題を最適性条件で置き換えるとMPECにつながる。",
+          "confidence": "high",
+          "evidence_link_id": "EL004290",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "bilevel optimization",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA046",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-13",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/s10479-007-0176-2",
+      "publication_date": "2007-09-01",
+      "publisher": "Benoit Colson; Patrice Marcotte; Gilles Savard",
+      "source_id": "S168",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Survey of bilevel optimization: a leader problem constrained by the optimal response of a follower problem, its general formulation, fields of application, solution approaches, and the connection between bilevel problems and mathematical programs with equilibrium constraints (MPEC).",
+      "title": "An overview of bilevel optimization"
+    },
+    {
+      "access_note": "Kluwer Academic Publishers (now Springer), Nonconvex Optimization and Its Applications 61, 2002, ISBN 978-1-4020-0631-9 (hardback), 978-0-306-48045-4 (electronic), DOI 10.1007/b101970. Publisher, series, volume, ISBNs and DOI confirmed on 2026-10-13 against the Springer DOI listing and library catalog records; supported_claim follows the publisher description and the catalog table of contents.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "下位問題の解が一つに決まるなら一段の問題に帰着し、決まらないなら楽観的・悲観的の二つの解き方を区別する。",
+          "confidence": "high",
+          "evidence_link_id": "EL004291",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "bilevel optimization",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA046",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-13",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/b101970",
+      "publication_date": "2002-05-01",
+      "publisher": "Stephan Dempe",
+      "source_id": "S169",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on bilevel programming: when the lower-level problem has a unique optimal solution for every parameter the problem reduces to a one-level problem with an implicitly defined objective; when the lower-level solution is not unique, the optimistic (weak) and pessimistic (strong) approaches are distinguished; linear bilevel problems, optimality conditions, solution algorithms and discrete bilevel problems.",
+      "title": "Foundations of Bilevel Programming"
+    },
+    {
+      "access_note": "Cambridge University Press, 1996, ISBN 978-0-521-57290-3 (hardback), online 2011, DOI 10.1017/CBO9780511983658. Publisher, year, ISBN and DOI confirmed on 2026-10-13 against Cambridge Core and library catalog records; supported_claim follows the preface on Cambridge Core and the published chapter list.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "下位問題を相補性条件や変分不等式で表すと、平衡制約付き数理計画（MPEC）になる。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004292",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "bilevel optimization",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA046",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        },
+        {
+          "canonical_url": null,
+          "claim_summary": "相補性系を制約に持つ最適化（MPEC）。相補性問題の拡張として扱う。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004295",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "相補性問題",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA048",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-13",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1017/CBO9780511983658",
+      "publication_date": "1996-11-13",
+      "publisher": "Zhi-Quan Luo; Jong-Shi Pang; Daniel Ralph",
+      "source_id": "S170",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on mathematical programs with equilibrium constraints (MPEC): constrained optimization problems whose core constraints are a parametric variational inequality or complementarity system, including bilevel programs whose lower level is replaced by its optimality conditions; exact penalization, first- and second-order optimality conditions, and algorithms.",
+      "title": "Mathematical Programs with Equilibrium Constraints"
+    },
+    {
+      "access_note": "SIAM Classics in Applied Mathematics 60, 2009 (originally Academic Press, Boston, 1992), ISBN 978-0-89871-686-3 (print), 978-0-89871-900-0 (electronic), DOI 10.1137/1.9780898719000. Authors, publisher, ISBNs and DOI confirmed on 2026-10-13 against the Crossref record; series, volume and original edition confirmed against a library catalog record; chapter titles from a bookseller listing. Page-level claims are not recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "線形相補性問題 z≥0, w=q+Mz≥0, zᵀw=0 の解の存在と一意性（P行列）、Lemke法などの解法。",
+          "confidence": "high",
+          "evidence_link_id": "EL004293",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "相補性問題",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA048",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-13",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/1.9780898719000",
+      "publication_date": "2009-01-01",
+      "publisher": "Richard W. Cottle; Jong-Shi Pang; Richard E. Stone",
+      "source_id": "S171",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Textbook on the linear complementarity problem (LCP): find z >= 0 with w = q + Mz >= 0 and z^T w = 0; existence and multiplicity of solutions in terms of matrix classes (including P-matrices, for which the LCP has a unique solution for every q), pivoting methods including Lemke's method, iterative methods, geometry and degree theory, and sensitivity analysis.",
+      "title": "The Linear Complementarity Problem"
+    },
+    {
+      "access_note": "Management Science 11(7), 681-689 (May 1965), INFORMS, DOI 10.1287/mnsc.11.7.681. Journal, volume, issue, pages, month and DOI confirmed on 2026-10-13 against the RePEc/IDEAS record; supported_claim follows the abstract indexed there. The 1964 Lemke and Howson SIAM paper is a separate publication and is not recorded.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "線形相補性系を、隣り合う端点をたどる道筋で解く構成的な方法（Lemke法）。非退化を仮定する。",
+          "confidence": "high",
+          "evidence_link_id": "EL004294",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "相補性問題",
+          "last_verified": "2026-10-13",
+          "supported_field": "row",
+          "target_id": "PA048",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-13",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1287/mnsc.11.7.681",
+      "publication_date": "1965-05-01",
+      "publisher": "C. E. Lemke",
+      "source_id": "S172",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Constructive method for the linear complementarity system covering quadratic programming and equilibrium points of bimatrix games: it follows a path of adjacent extreme points to a solution under a non-degeneracy assumption, without reducing an objective function along the way (Lemke's method).",
+      "title": "Bimatrix equilibrium points and mathematical programming"
     }
   ]
 }

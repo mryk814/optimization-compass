@@ -14,7 +14,10 @@ describe("LearningJourney parser", () => {
       .toBe("/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH");
     expect(pilot?.scenarios.find((scenario) => scenario.role === "failure_contrast")?.scenario_id)
       .toBe("SCENARIO_CONSTRAINED_DISK");
-    expect(pilot?.status).toBe("complete");
+    // Official-documentation sources verified on 2026-07-13 passed their 90-day freshness limit at the
+    // 0.18.24 release date, so journeys citing them are partial with only the source review missing.
+    expect(pilot?.status).toBe("partial");
+    expect(pilot?.completion_reasons).toEqual(["stale_source"]);
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
     expect(index.summary.status_counts).toEqual({
@@ -29,7 +32,7 @@ describe("LearningJourney parser", () => {
       comparisons: [{ comparison_id: "COMPARE_PARETO_PREFERENCE" }],
     });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
-    expect(parameterEstimation?.status).toBe("complete");
+    expect(parameterEstimation?.status).toBe("partial");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
       .toBe("SCENARIO_EXPONENTIAL_FIT_TRF");
     expect(parameterEstimation?.comparisons[0]?.comparison_id)
@@ -37,8 +40,8 @@ describe("LearningJourney parser", () => {
     const discreteAllocation = index.journeys.find(
       (journey) => journey.journey_id === "budget-allocation",
     );
-    expect(discreteAllocation?.status).toBe("complete");
-    expect(discreteAllocation?.completion_reasons).toEqual([]);
+    expect(discreteAllocation?.status).toBe("partial");
+    expect(discreteAllocation?.completion_reasons).toEqual(["stale_source"]);
     expect(Object.fromEntries(
       discreteAllocation?.scenarios.map((scenario) => [scenario.role, scenario.scenario_id]) ?? [],
     )).toEqual({
@@ -47,7 +50,8 @@ describe("LearningJourney parser", () => {
     });
     expect(discreteAllocation?.comparisons[0]?.comparison_id)
       .toBe("COMPARE_KNAPSACK_BNB_BUDGET");
-    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual([]);
+    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions)
+      .toEqual(["source_review"]);
     expect(index.orphan_assets.some((item) => item.policy === "warning")).toBe(true);
   });
 
@@ -59,7 +63,9 @@ describe("LearningJourney parser", () => {
 
   test("rejects a complete journey with a missing dimension", () => {
     const changed = structuredClone(rawJourneys);
-    const assessment = changed.assessments[0];
+    const assessment = changed.assessments.find(
+      (item) => item.journey_id === "traffic-signal-tradeoff",
+    )!;
     assessment.dimensions.primary_scenario.state = "missing";
     (assessment.dimensions.primary_scenario.reason_codes as string[]).push(
       "missing_primary_scenario",

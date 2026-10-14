@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.23",
+  "dataset_version": "0.18.24",
   "entities": [
     {
       "aliases": [],
@@ -39012,6 +39012,56 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/sources/S168",
+      "entity_id": "S168",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s10479-007-0176-2",
+      "label": "An overview of bilevel optimization",
+      "relations": [],
+      "summary": "Survey of bilevel optimization: a leader problem constrained by the optimal response of a follower problem, its general formulation, fields of application, solution approaches, and the connection between bilevel problems and mathematical programs with equilibrium constraints (MPEC)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S169",
+      "entity_id": "S169",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/b101970",
+      "label": "Foundations of Bilevel Programming",
+      "relations": [],
+      "summary": "Monograph on bilevel programming: when the lower-level problem has a unique optimal solution for every parameter the problem reduces to a one-level problem with an implicitly defined objective; when the lower-level solution is not unique, the optimistic (weak) and pessimistic (strong) approaches are distinguished; linear bilevel problems, optimality conditions, solution algorithms and discrete bilevel problems."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S170",
+      "entity_id": "S170",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1017/CBO9780511983658",
+      "label": "Mathematical Programs with Equilibrium Constraints",
+      "relations": [],
+      "summary": "Monograph on mathematical programs with equilibrium constraints (MPEC): constrained optimization problems whose core constraints are a parametric variational inequality or complementarity system, including bilevel programs whose lower level is replaced by its optimality conditions; exact penalization, first- and second-order optimality conditions, and algorithms."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S171",
+      "entity_id": "S171",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/1.9780898719000",
+      "label": "The Linear Complementarity Problem",
+      "relations": [],
+      "summary": "Textbook on the linear complementarity problem (LCP): find z >= 0 with w = q + Mz >= 0 and z^T w = 0; existence and multiplicity of solutions in terms of matrix classes (including P-matrices, for which the LCP has a unique solution for every q), pivoting methods including Lemke's method, iterative methods, geometry and degree theory, and sensitivity analysis."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S172",
+      "entity_id": "S172",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1287/mnsc.11.7.681",
+      "label": "Bimatrix equilibrium points and mathematical programming",
+      "relations": [],
+      "summary": "Constructive method for the linear complementarity system covering quadratic programming and equilibrium points of bimatrix games: it follows a path of adjacent extreme points to a solution under a non-degeneracy assumption, without reducing an objective function along the way (Lemke's method)."
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
@@ -41444,5 +41494,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-10-10T00:00:00Z"
+  "generated_at": "2026-10-13T00:00:00Z"
 }

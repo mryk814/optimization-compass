@@ -24,14 +24,22 @@ describe("CoveragePage", () => {
     expect(screen.getByRole("heading", { name: "学習経路の接続状況" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "参照整合性" })).toBeVisible();
     expect(screen.getByText(`${rawJourneys.summary.status_counts.complete}件完了`)).toBeVisible();
-    expect(screen.getByText(/目標5件を達成/u)).toBeVisible();
+    const { complete } = rawJourneys.summary.status_counts;
+    const target = rawJourneys.summary.target_complete_journeys;
+    expect(screen.getByText(complete >= target
+      ? new RegExp(`目標${target}件を達成`, "u")
+      : `目標${target}件まであと${target - complete}件`)).toBeVisible();
     expect(screen.getByRole("region", { name: "学習経路の接続状況一覧（表）" })).toBeVisible();
     const mobileJourneyList = document.querySelector<HTMLElement>(".journey-mobile-list");
     expect(mobileJourneyList).toBeInTheDocument();
     const firstComplete = rawJourneys.journeys.find((journey) => journey.status === "complete");
     expect(firstComplete).toBeDefined();
     expect(mobileJourneyList).toHaveTextContent(`完了した学習経路${rawJourneys.summary.status_counts.complete}件`);
-    expect(mobileJourneyList).not.toHaveTextContent("次に必要な接続");
+    if (rawJourneys.journeys.some((journey) => journey.status !== "complete")) {
+      expect(mobileJourneyList).toHaveTextContent("次に必要な接続");
+    } else {
+      expect(mobileJourneyList).not.toHaveTextContent("次に必要な接続");
+    }
     expect(screen.getByText(/未接続の成果物:/u)).toBeVisible();
     expect(screen.queryByText(new RegExp(rawJourneys.orphan_assets[0].asset_id, "u"))).not.toBeInTheDocument();
     expect(screen.getByText(`${rawCoverage.subjects.length}件中24件を表示`)).toBeVisible();

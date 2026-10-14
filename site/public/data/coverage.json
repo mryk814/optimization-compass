@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.23",
+  "dataset_version": "0.18.24",
   "expectations": [
     {
       "applicability": "expected",
@@ -331,7 +331,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-10-10T00:00:00Z",
+  "generated_at": "2026-10-13T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -18503,11 +18503,14 @@
           "target_ids": []
         },
         "source": {
-          "count": 1,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "S054"
+            "S054",
+            "S168",
+            "S169",
+            "S170"
           ]
         },
         "visualization": {
@@ -18662,12 +18665,15 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S054",
-            "S056"
+            "S056",
+            "S170",
+            "S171",
+            "S172"
           ]
         },
         "visualization": {
