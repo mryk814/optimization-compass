@@ -568,11 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 10,
+            "complete": 11,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 103,
+              "in_progress": 102,
               "no_article": 46,
               "stale": 1
             }
@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 18,
+            "complete": 34,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 37,
-              "no_article": 25,
+              "in_progress": 28,
+              "no_article": 18,
               "stale": 0
             }
           },
@@ -15287,12 +15287,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.bound-constrained-smooth"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15319,11 +15319,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA008"
+            "/formulations/PA008",
+            "concept.bound-constrained-smooth"
           ]
         },
         "recommendation": {
@@ -15453,12 +15454,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.nonsmooth-convex-composite"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15485,11 +15486,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA010"
+            "/formulations/PA010",
+            "concept.nonsmooth-convex-composite"
           ]
         },
         "recommendation": {
@@ -15615,12 +15617,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.discontinuous-simulation"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15647,11 +15649,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA012"
+            "/formulations/PA012",
+            "concept.discontinuous-simulation"
           ]
         },
         "recommendation": {
@@ -15695,12 +15698,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.noisy-black-box"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15727,11 +15730,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA013"
+            "/formulations/PA013",
+            "concept.noisy-black-box"
           ]
         },
         "recommendation": {
@@ -16197,12 +16201,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.nonconvex-qp-qcqp"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16229,11 +16233,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA019"
+            "/formulations/PA019",
+            "concept.nonconvex-qp-qcqp"
           ]
         },
         "recommendation": {
@@ -16278,12 +16283,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.second-order-cone-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16310,11 +16315,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA020"
+            "/formulations/PA020",
+            "concept.second-order-cone-program"
           ]
         },
         "recommendation": {
@@ -16691,12 +16697,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.mixed-integer-nonlinear-program"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16723,11 +16729,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA025"
+            "/formulations/PA025",
+            "concept.mixed-integer-nonlinear-program"
           ]
         },
         "recommendation": {
@@ -16936,12 +16943,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.network-flow"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16968,11 +16975,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA028"
+            "/formulations/PA028",
+            "concept.network-flow"
           ]
         },
         "recommendation": {
@@ -17015,12 +17023,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.shortest-path"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -17047,11 +17055,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA029"
+            "/formulations/PA029",
+            "concept.shortest-path"
           ]
         },
         "recommendation": {
@@ -17688,12 +17697,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.so3-se3-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -17720,11 +17729,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA037",
+            "concept.so3-se3-optimization",
             "so3-attitude-alignment"
           ]
         },
@@ -17943,12 +17953,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.neural-network-training"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -17975,12 +17985,13 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA040",
-            "EC021"
+            "EC021",
+            "concept.neural-network-training"
           ]
         },
         "recommendation": {
@@ -18026,12 +18037,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.stochastic-erm"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18058,11 +18069,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA041"
+            "/formulations/PA041",
+            "concept.stochastic-erm"
           ]
         },
         "recommendation": {
@@ -19329,12 +19341,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.shape-dependent-domain"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -19361,11 +19373,12 @@
           ]
         },
         "map": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/formulations/PA057",
+            "concept.shape-dependent-domain",
             "shape-diffuser"
           ]
         },

@@ -40,6 +40,44 @@
       },
       "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
     },
+    "concept.bound-constrained-smooth": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "a1dade67f352",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算して一致。記号表の長いインライン式を成分ごとに分割。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.discontinuous-simulation": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "f8daf13c0b08",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。MADSの保証を条件つきの局所的な停留点に限定、図鑑名「不連続決定論black-box」を明記、BOの行を条件つきに。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
     "concept.expensive-black-box": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
@@ -209,6 +247,25 @@
       },
       "notes": "Sonnetが新しい操作図milp-integer-latticeと記事の直しを執筆。Claudeが確かめ項目4の誤り（係数が整数なので上界19.75から整数解は19以下と分かり、(3,1)の最適性は言える）を記事と図の判定文で直した。Sonnetの一次レビュー（7項目fail）を受けてClaudeが書き直し（例を冒頭で明示、標準形の前の一文、例の数値によるつまずき3項目＝big-M 18.75/20.91/17・時間切れ19と21・丸め26と7、困りごと起点の次に読む、根拠のない性能の主張の削除）、Sonnetの再レビューの指摘（SAT/スケジューリングのリンク、文5件）も直した。数値は全件scipyで再計算一致。1280/375/320pxで図の重なり・はみ出し0"
     },
+    "concept.mixed-integer-nonlinear-program": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "577a6d0381e4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。行列の改行の欠落を修正、x=nqの形の凸性をヘッセ行列（行列式0・対角非負）で示した、意味の通らない一文と長いインライン式を修正。1280/375/320pxで横のはみ出しなし、数式の表示崩れなし、図はスマホ幅で目視。"
+    },
     "concept.mixed-integer-quadratic-program": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -246,6 +303,101 @@
         "screen.three-widths": "pass"
       }
     },
+    "concept.network-flow": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "8a2e5cbc4809",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。完全単模性を十分条件として書き直し、満杯の辺の被約費用を0以下に、逐次最短路と矛盾する一文を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.neural-network-training": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "91c02540a43f",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。停留点へ近づく条件（下界と勾配のLipschitz連続）を明記し、L-BFGSの記述と保証の範囲を限定。更新式のインライン式を分割し、標準形の説明を式の外へ移して375pxのはみ出し（428px）を解消。図はスマホ幅で目視。"
+    },
+    "concept.noisy-black-box": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "c644b6904942",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。2000回の表でk=4が良い理由（中点が真の最小に近い）と非推奨を明記、条件のない助言を条件つきに、節の参照を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.nonconvex-qp-qcqp": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "a83b1bd65757",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）+ 統合時の検算: 数値は一致。盆地の境界を格子の分類に限定、長いインライン式を数式ブロックへ。レビューが誤って書き換えた鞍点の説明を、直線x₁+x₂=1上から出発すると鞍点へ近づく（(0,1)から500回で(0.5,0.5)）という計算に合わせて修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.nonsmooth-convex-composite": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "178e3f891fdb",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。FISTAの説明をO(1/k²)と非単調に修正、要約に刻み幅の条件を追加、式の後の読み方を補足。図の円が枠からはみ出し下の説明が切れていたのを修正（軸範囲と高さ）。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
     "concept.robust-regression": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -265,6 +417,63 @@
       },
       "notes": "操作図robust-loss-pullを追加。m=10/50, δ=1でHuber 1/3、二乗 m/4を手で確認。1280/375/320pxで確認。"
     },
+    "concept.second-order-cone-program": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "8035caf47e8b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算し、半径3.6kmの重なり領域の縦の上端を1.98から1.99に修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.shape-dependent-domain": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "036ede062321",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値と閉形式を確認。凡例の位置、状態変化項が負になる理由（∂u/∂L=−sinh x/cosh²L<0）、リンク名を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.shortest-path": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "3d3911c296e0",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。造語「余裕」に定義を付けPA028の被約費用と対応づけ、完全単模の性質に負閉路なしの条件、Bellman–Fordの1巡目の記述を走査順に限定。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
     "concept.smooth-low-dimensional-unconstrained": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
@@ -283,6 +492,44 @@
         "screen.three-widths": "pass"
       },
       "notes": "Sonnetの一次レビュー（数値19件を再計算で一致。figure.one-questionとprose.readableがfail）をClaudeが本文と照合して修正。静止図のcaptionに読み取れない範囲を足し、Newton法が二次の近似の『最小点』ではなく停留点へ跳ぶと直した（始点AのHessianは不定）。二次収束の明記など文6件も直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.so3-se3-optimization": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "e2802e5d816c",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。長いインライン式を数式ブロックへ移し、根拠のないライブラリ既定の注記を削除。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.stochastic-erm": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "113e7a3608a3",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。凸性の理由、重複なしの一様抽出、σ(w)の定義を追加。図の「全データ」を本文の「全件」に統一。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
     "concept.vehicle-routing": {
       "reviewed_on": "2026-10-10",

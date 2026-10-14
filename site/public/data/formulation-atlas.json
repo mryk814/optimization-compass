@@ -857,7 +857,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.bound-constrained-smooth",
       "cues_ja": [
         "物理的に負にならない量や、仕様上の範囲がある値を決める"
       ],
@@ -895,7 +895,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -939,6 +939,7 @@
       "reading_ja": "各変数に上下限だけがある滑らかな最小化です。上下限は射影で簡単に守れるため、一般の制約より扱いやすい型です。",
       "source_ids": [
         "S002",
+        "S056",
         "S065"
       ],
       "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; \\ell\\le x\\le u",
@@ -1061,7 +1062,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.nonsmooth-convex-composite",
       "cues_ja": [
         "誤差の項に、疎性や上下限を促す罰則を足している"
       ],
@@ -1099,7 +1100,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1257,7 +1258,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.discontinuous-simulation",
       "cues_ja": [
         "閾値・場合分け・離散的な内部処理を含むsimulatorの出力を良くしたい"
       ],
@@ -1295,7 +1296,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1339,7 +1340,9 @@
       "reading_ja": "同じ入力なら同じ値を返すものの、値が飛ぶsimulationを最小にします。勾配は信用できません。",
       "source_ids": [
         "S031",
-        "S033"
+        "S033",
+        "S060",
+        "S063"
       ],
       "standard_form": "\\min_{x\\in[\\ell,u]}\\; F(x),\\quad F \\text{ は決定論的だが不連続なsimulation}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mi>&#x02113;</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">]</mo></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>F</mi><mtext>&#x000A0;は決定論的だが不連続なsimulation</mtext></mrow></math></div>"
@@ -1356,7 +1359,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.noisy-black-box",
       "cues_ja": [
         "実験・乱数を含むsimulation・A/Bテストの結果を良くしたい"
       ],
@@ -1394,7 +1397,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1439,7 +1442,9 @@
       "source_ids": [
         "S032",
         "S035",
-        "S059"
+        "S059",
+        "S160",
+        "S161"
       ],
       "standard_form": "\\min_{x}\\; \\mathbb{E}_{\\xi}\\big[F(x,\\xi)\\big],\\quad \\text{観測できるのは } F(x,\\xi) \\text{ だけ}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><msub><mi>&#x1D53C;</mi><mrow><mi>&#x003BE;</mi></mrow></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">[</mo><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>&#x003BE;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">]</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mtext>観測できるのは&#x000A0;</mtext><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>&#x003BE;</mi><mo stretchy=\"false\">&#x00029;</mo><mtext>&#x000A0;だけ</mtext></mrow></math></div>"
@@ -1988,7 +1993,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.nonconvex-qp-qcqp",
       "cues_ja": [
         "積 x_i x_j が目的や制約に入り、行列が半正定値とは限らない"
       ],
@@ -2026,7 +2031,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2069,9 +2074,14 @@
       "problem_id": "PA019",
       "reading_ja": "二次の目的や二次の制約を持ち、凸とは限らない型です。見た目は凸QPに近くても、大域解の保証は急に難しくなります。",
       "source_ids": [
+        "S002",
+        "S010",
+        "S014",
         "S021",
         "S024",
-        "S028"
+        "S028",
+        "S055",
+        "S056"
       ],
       "standard_form": "\\min_{x}\\; x^\\top Q_0 x + c_0^\\top x \\;\\text{ s.t. }\\; x^\\top Q_i x + c_i^\\top x\\le b_i,\\quad Q_i \\text{ は不定値も可}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><msup><mi>x</mi><mo>&#x022A4;</mo></msup><msub><mi>Q</mi><mn>0</mn></msub><mi>x</mi><mo>&#x0002B;</mo><msubsup><mi>c</mi><mn>0</mn><mo>&#x022A4;</mo></msubsup><mi>x</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msup><mi>x</mi><mo>&#x022A4;</mo></msup><msub><mi>Q</mi><mi>i</mi></msub><mi>x</mi><mo>&#x0002B;</mo><msubsup><mi>c</mi><mi>i</mi><mo>&#x022A4;</mo></msubsup><mi>x</mi><mo>&#x02264;</mo><msub><mi>b</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mspace width=\"1em\" /><msub><mi>Q</mi><mi>i</mi></msub><mtext>&#x000A0;は不定値も可</mtext></mrow></math></div>"
@@ -2084,7 +2094,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.second-order-cone-program",
       "cues_ja": [
         "距離・ノルム・楕円の不確かさが制約に入る"
       ],
@@ -2122,7 +2132,7 @@
       ],
       "family_id": "linear_conic",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2602,7 +2612,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.mixed-integer-nonlinear-program",
       "cues_ja": [
         "設備の数や種類を選びながら、非線形な物理モデルも守る"
       ],
@@ -2640,7 +2650,7 @@
       ],
       "family_id": "integer_combinatorial",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2683,8 +2693,10 @@
       "problem_id": "PA025",
       "reading_ja": "非線形の目的・制約と整数変数が同時にある型です。連続緩和も非凸になり得るため、最も難しい部類に入ります。",
       "source_ids": [
+        "S002",
         "S021",
-        "S029"
+        "S029",
+        "S056"
       ],
       "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x)\\le 0,\\; x_j\\in\\mathbb{Z}\\;(j\\in I)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>j</mi></msub><mo>&#x02208;</mo><mi>&#x02124;</mi><mspace width=\"0.278em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>j</mi><mo>&#x02208;</mo><mi>I</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -2904,7 +2916,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.network-flow",
       "cues_ja": [
         "物・電力・データを、容量のある経路網で送る"
       ],
@@ -2942,7 +2954,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2985,7 +2997,12 @@
       "problem_id": "PA028",
       "reading_ja": "ネットワークの各辺に流す量を、各点での出入りの差と容量を守りながら、費用最小に決めます。",
       "source_ids": [
-        "S054"
+        "S004",
+        "S005",
+        "S016",
+        "S054",
+        "S141",
+        "S144"
       ],
       "standard_form": "\\min_{f}\\; \\sum_{(i,j)\\in E} c_{ij}f_{ij} \\;\\text{ s.t. }\\; \\sum_{j} f_{ij}-\\sum_{j} f_{ji}=b_i,\\; 0\\le f_{ij}\\le u_{ij}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>f</mi></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>E</mi></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>j</mi></mrow></munder><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02212;</mo><munder><mo>&#x02211;</mo><mrow><mi>j</mi></mrow></munder><msub><mi>f</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub><mo>&#x0003D;</mo><msub><mi>b</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mn>0</mn><mo>&#x02264;</mo><msub><mi>f</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02264;</mo><msub><mi>u</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></div>"
@@ -3002,7 +3019,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.shortest-path",
       "cues_ja": [
         "地点を結ぶ道の中で、最短・最安・最速の一本を選ぶ"
       ],
@@ -3040,7 +3057,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3083,7 +3100,11 @@
       "problem_id": "PA029",
       "reading_ja": "始点から終点までの経路のうち、辺の重みの合計が最小のものを選びます。",
       "source_ids": [
-        "S054"
+        "S004",
+        "S016",
+        "S054",
+        "S140",
+        "S144"
       ],
       "standard_form": "\\min_{P:\\,s\\to t}\\; \\sum_{(i,j)\\in P} c_{ij}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>P</mi><mi>:</mi><mspace width=\"0.167em\" /><mi>s</mi><mo>&#x02192;</mo><mi>t</mi></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>P</mi></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></div>"
@@ -3845,7 +3866,7 @@
           "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.so3-se3-optimization",
       "cues_ja": [
         "カメラやロボットの姿勢、点群の向き合わせを推定する"
       ],
@@ -3883,7 +3904,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3928,7 +3949,9 @@
       "source_ids": [
         "S041",
         "S044",
-        "S071"
+        "S056",
+        "S071",
+        "S107"
       ],
       "standard_form": "\\min_{R\\in SO(3)}\\; \\sum_i \\|Rp_i-q_i\\|_2^2",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>R</mi><mo>&#x02208;</mo><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>i</mi></munder><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>R</mi><msub><mi>p</mi><mi>i</mi></msub><mo>&#x02212;</mo><msub><mi>q</mi><mi>i</mi></msub><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math></div>"
@@ -4172,7 +4195,7 @@
           "title_ja": "mini-batchで画像分類モデルを学習する"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.neural-network-training",
       "cues_ja": [
         "大量のデータで、多層のモデルを学習させる"
       ],
@@ -4210,7 +4233,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4251,15 +4274,16 @@
       "name_en": "Neural network training",
       "name_ja": "neural network学習",
       "problem_id": "PA040",
-      "reading_ja": "neural networkの重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
+      "reading_ja": "h_w は重み w をもつneural networkです。その重みを、データ全体の平均損失が小さくなるように決めます。非凸で、確率的勾配で進みます。",
       "source_ids": [
         "S047",
         "S048",
         "S049",
+        "S056",
         "S070"
       ],
-      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big),\\quad h_w \\text{ はneural network}",
-      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>&#x02113;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>h</mi><mi>w</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><msub><mi>y</mi><mi>i</mi></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><msub><mi>h</mi><mi>w</mi></msub><mtext>&#x000A0;はneural&#x000A0;network</mtext></mrow></math></div>"
+      "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell\\big(h_w(x_i),y_i\\big)",
+      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>&#x02113;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>h</mi><mi>w</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><msub><mi>y</mi><mi>i</mi></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo></mrow></math></div>"
     },
     {
       "alternatives": [
@@ -4269,7 +4293,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.stochastic-erm",
       "cues_ja": [
         "ロジスティック回帰やSVMを、メモリに乗りきらないデータで学習する"
       ],
@@ -4307,7 +4331,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4352,7 +4376,10 @@
       "source_ids": [
         "S047",
         "S048",
-        "S049"
+        "S049",
+        "S055",
+        "S113",
+        "S114"
       ],
       "standard_form": "\\min_{w}\\; \\frac1N\\sum_{i=1}^N \\ell_i(w)+r(w),\\quad \\ell_i \\text{ は凸},\\; N \\text{ は巨大}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>w</mi></mrow></msub><mspace width=\"0.278em\" /><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>&#x02113;</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>r</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><msub><mi>&#x02113;</mi><mi>i</mi></msub><mtext>&#x000A0;は凸</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>N</mi><mtext>&#x000A0;は巨大</mtext></mrow></math></div>"
@@ -5874,7 +5901,7 @@
           "title_ja": "2D diffuserの壁面shapeを更新する"
         }
       ],
-      "content_id": null,
+      "content_id": "concept.shape-dependent-domain",
       "cues_ja": [
         "翼・流路・部品の外形を、simulationの結果を見ながら変える"
       ],
@@ -5912,7 +5939,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [],
       "name_en": "Shape optimization on a parameterized domain",
       "name_ja": "形状依存領域の最適化",
@@ -6287,6 +6314,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 24
+    "with_article": 37
   }
 }
