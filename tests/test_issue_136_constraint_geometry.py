@@ -214,9 +214,8 @@ def test_staged_release_exports_a_complete_so3_learning_journey(tmp_path: Path) 
         item for item in payload["journeys"] if item["case_id"] == "so3-attitude-alignment"
     )
 
-    # Official-documentation sources passed their 90-day limit at the 0.18.24 release date.
-    assert journey["status"] == "partial"
-    assert journey["completion_reasons"] == ["stale_source"]
+    assert journey["status"] == "complete"
+    assert journey["completion_reasons"] == []
     assert journey["problem_instance_ids"] == ["INSTANCE_SO3_ATTITUDE_FIXED_3"]
     assert {item["role"] for item in journey["scenarios"]} == {"primary", "sensitivity"}
     assert [item["comparison_id"] for item in journey["comparisons"]] == [

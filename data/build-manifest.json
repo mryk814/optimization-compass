@@ -170,6 +170,11 @@
       "id": "036",
       "path": "data/migrations/036_bilevel_complementarity_sources.sql",
       "sha256": "684b6a7631a6051e963a63fd2face068cd20e77678c7a94ffba3632b1341caf7"
+    },
+    {
+      "id": "037",
+      "path": "data/migrations/037_formulation_sources_batch.sql",
+      "sha256": "8ed878a65645e0b0da4cf8a13193d653eafc7acaa1440171d3c911e4f921eb5e"
     }
   ],
   "specialized_inputs": [
