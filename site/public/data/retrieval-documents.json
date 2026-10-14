@@ -8026,6 +8026,258 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:30秒でつかむ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "雑貨店が、1年に1200個売れる商品を仕入れます。仕入れの注文には1回ごとに手数料1500円がかかり、倉庫に置いた在庫には、1個を1年置くたびに10円の保管費がかかります。需要は一定の速さで続き、在庫が0になったときに次の注文が届くものとします。 一度にたくさん注文すれば、注文の回数と手数料は減りますが、在庫が増えて保管費がかさみます。小口で何度も注文すれば、保管費は減りますが手数料がかさみます。1回の注文量を何個にすると、1年の費用の合計が最小になるでしょうか。 この費用は式で書け、注文量で微分した式も書けます。微分が0になる条件を紙の上で解けば、注文量を変えながら試す反復は要りません。 決めるもの : 1回の注文量 Q （一般には、連続変数のベクトル） 良くしたいもの : 1年の費用の合計 f ( Q ) 。式で書け、微分も式で書けます 守ること : 特になし。ただし、この式が意味を持つのは Q > 0 の範囲です 次の図は、注文量ごとの1年の費用です。まず「合計」の曲線の底を探し、その真下で「発注費」と「保管費」の2本の曲線がどうなっているかを見てください。 注文量と年間の費用（発注1回1500円、年間需要1200個、保管費1個1年10円）：合計が最小になる注文量と、その点での内訳。教材用の費用モデルで、実際の店の仕入れ方や手法の速さは示しません 合計の曲線の底は Q = 600 で、1年の費用は 6000 円です。 底の真下で、発注費と保管費が交わります。どちらも 3000 円で、合計の半分ずつです。 底の近くは平らです。注文量が500個でも合計は 6100 円、800個でも 6250 円で、底から離れても費用は急には増えません。 底でちょうど2本の曲線が交わるのは、偶然でしょうか。それとも、底の条件から必ずそうなるのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:overview",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "閉形式解候補は、最小点の条件を式変形だけで解き、答えを問題のデータから直接計算できる式として書き下せる定式化です。反復計算は要らず、データが変わっても同じ式に入れ直すだけで済みます。ただし式が返すのは勾配が0になる点なので、それが最小点だと言えるのは、定義域と曲率の条件を確かめたときです。",
+      "title": "閉形式解候補"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:つまずきやすい点",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "勾配が0になる点を、そのまま最小点にする : f ′ ( Q ) = 0 から出る方程式 Q 2 = 360000 の解は Q = ± 600 の2つです。 Q = − 600 でも勾配は0ですが、費用は − 6000 円になり、 f ″ ( − 600 ) = − 1 / 60 で曲率は負です。この点は、注文量が負の側で費用が最大になる点で、最小点ではありません。定義域と f ″ の符号を確かめてから、候補を選びます。 導いた式を、確かめずに使う : 保管費の「平均在庫は半分」を落とし、保管費を h Q と書き違えたとします。このときの式は K D / h ≈ 424.3 で、本当の費用 f で測ると 6364 円です。正しい式の 6000 円より約6%高くなります。導いた式は、 Q * での勾配が0に近いかを数値で確かめます。中心差分で測ると、 Q = 600 では 0.0 、誤った式の 424.3 では − 5.0 です。 式の答えを、運用上の制約を確かめずに採用する : トラックが1回に500個までしか運べないとします。式の答え Q = 600 は範囲を外れます。 Q < 600 では f ′ ( Q ) < 0 なので、費用は500個まで下がり続け、範囲の中の最小点は Q = 500 の 6100 円です。式の答えより100円高く、これが制約付きの答えです。上下限があるときは、上下限を扱う手法に渡して解きます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:出典と再現条件",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "最小点の勾配が0であるという必要条件と、曲率による判定は、Nocedal と Wright の教科書『Numerical Optimization』に基づきます。凸な関数では勾配が0の点が最小点であることは、Boyd と Vandenberghe の『Convex Optimization』に基づきます。 minimize の手法と bounds の引数は、 SciPy の scipy.optimize.minimize の文書 に基づきます。コードは SciPy 1.18.1 と NumPy 2.5.3 で実行しています。 注文量の例の費用は、需要が一定で在庫が0になったときに次の注文が届くという、教材用の単純なモデルです。実際の店の仕入れ方や、手法の一般的な速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:困りごとから関連する問題へ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "実際の課題で次の症状が出たら、対応する記事へ進みます。 勾配の式 f ′ ( Q ) = 0 を変形しても、 Q について解けない → 滑らかな低次元無制約（PA006） 勾配が0になる条件を、式ではなく方程式として数値で解きたい → 方程式の求根（PA004） 容量や最低発注量のように、 Q に上下限がある → 上下限制約付き滑らか（PA008） 目的が、観測値と予測のずれの二乗和 → 線形最小二乗（PA005） 勾配が0の条件が、未知数と同じ数の線形な等式になる → 線形方程式系（PA002） 閉形式解候補と関連する問題の関係 滑らかな低次元無制約（PA006） : 制約のない滑らかな問題の最小点では勾配が0なので、その方程式を記号的に解ければ反復計算は要りません。解けない形のときは、勾配や曲率を使う反復法に移ります。 方程式の求根（PA004） : 勾配が0の条件は、方程式を解く問題でもあります。ただし勾配が0の点には、最小点以外の停留点も含まれるので、解いた後に曲率などで最小点かどうかを確かめます。 上下限制約付き滑らか（PA008） : 注文量の例では、上限が500個になると、式の答え600個は範囲の外になります。上限の縁に乗った変数は、勾配が0にならないまま最小点になります。 線形最小二乗（PA005） : 二乗和を最小にする条件は、正規方程式という線形な等式になり、これを解けば答えが得られます。数値的には、正規方程式を直接解くより、QR分解や特異値分解を使います。 線形方程式系（PA002） : 目的が凸な二次関数なら、勾配は変数の一次式になり、勾配が0の条件は未知数と同じ数の線形な等式です。注文量の例の費用は二次関数ではないので、この形にはなりません。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:小さな例",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "発注1回 K = 1500 円、年間需要 D = 1200 個、保管費 h = 10 円とします。乱数は使いません。 注文量の例・勾配を0にして解く 勾配の式から Q * = 600 が得られました。1年の費用は次のとおりです。 f ( 600 ) = 1500 · 1200 600 + 10 · 600 2 = 3000 + 3000 = 6000 注文量を変えたときの内訳は、次の表のとおりです。 注文量 Q 発注費 保管費 合計 300 6000 1500 7500 500 3600 2500 6100 600 3000 3000 6000 800 2250 4000 6250 1200 1500 6000 7500 600個のとき、発注費と保管費が3000円で等しく、合計が最小です。300個と1200個の合計は、どちらも7500円です。600の半分と2倍を選ぶと、発注費と保管費が入れ替わるだけだからです。 注文量の例・データを変えて解き直す 需要が4倍の D = 4800 個になったとします。式に入れ直すだけで、次の値が得られます。 Q * = 2 · 1500 · 4800 10 = 1440000 = 1200 需要が4倍になっても、最適な注文量は2倍の1200個です。このときの費用は 2 · 6000 = 12000 円で、需要が4倍なら費用は2倍になります。これらは、上の費用モデルが成り立つ範囲での値です。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "次の表は順位ではなく、条件ごとの入口です。 系統 進み方 向く条件・避ける条件 式で解く 勾配の式を解いた式 ϕ に、データを入れる 勾配の式が変形で解け、範囲と曲率の条件を確かめられるとき。式が導けない形では使えません BFGS法 勾配から曲率を推定しながら、反復して勾配が0の点を探す 勾配が得られるとき。式で解ける問題でも、式の答えと照らし合わせる相手になります L-BFGS-B法 上下限を守りながら、勾配から曲率を推定して反復する 注文量に上限があるときのように、式の答えが範囲の外に出る場合 ライブラリの既定の設定は、そのライブラリの選択です。この記事の推奨でも、手法の順位でもありません。 次のコードでは、制約なしのBFGS法が10回の反復で式と同じ点に着きます。この回数は、初期点を Q = 200 に置いたこの1変数の例と、SciPyの停止条件での値です。手法の速さの比較には使えません。 次のコードは、注文量の例を式と SciPy の minimize で解き、つまずきやすい点の数値も計算します。 python import numpy as np from scipy.optimize import minimize K , D , h = 1500.0 , 1200.0 , 10.0 # 発注1回の費用（円）、年間の需要（個）、保管費（円/個/年） def cost ( q , D = D ): return K * D / q + h * q / 2 def slope ( q ): return - K * D / q ** 2 + h / 2 def curvature ( q ): return 2 * K * D / q ** 3 def closed_form ( K , D , h ): \"\"\"f'(Q) = 0 を Q について解いた式\"\"\" return np . sqrt ( 2 * K * D / h ) q = closed_form ( K , D , h ) print ( q , cost ( q ), K * D / q , h * q / 2 ) # 600.0 6000.0 3000.0 3000.0 print ( slope ( q ), round ( curvature ( q ), 4 )) # 0.0 0.0167 # 需要が4倍のとき: 式にデータを入れ直すだけで解ける q4 = closed_form ( K , 4 * D , h ) print ( q4 , cost ( q4 , D = 4 * D )) # 1200.0 12000.0 # 勾配が0になる点は、Q<0 側にもある print ( slope ( - q ), cost ( - q ), round ( curvature ( - q ), 4 )) # 0.0 -6000.0 -0.0167 def central_diff ( g , x , e = 1e-3 ): return ( g ( x + e ) - g ( x - e )) / ( 2 * e ) # 保管費の「1/2」を落とした誤りの式は、勾配を測ると見つかる q_wrong = np . sqrt ( K * D / h ) print ( q_wrong . round ( 1 ), cost ( q_wrong ) . round ( 1 )) # 424.3 6364.0 print ( central_diff ( cost , q ) . round ( 3 ), central_diff ( cost , q_wrong ) . round ( 3 )) # 0.0 -5.0 # 上限 500 個の制約付きで、反復法に解かせる bounded = minimize ( lambda x : cost ( x [ 0 ]), [ 200.0 ], jac = lambda x : [ slope ( x [ 0 ])], method = \"L-BFGS-B\" , bounds = [( 1.0 , 500.0 )], ) print ( bounded . x , bounded . fun , bounded . nit ) # [500.] 6100.0 5 print ( slope ( 500.0 )) # -2.2 # 制約なしの BFGS も、式と同じ点に着く free = minimize ( lambda x : cost ( x [ 0 ]), [ 200.0 ], jac = lambda x : [ slope ( x [ 0 ])], method = \"BFGS\" ) print ( free . x . round ( 3 ), round ( free . fun , 3 ), free . nit ) # [600.] 6000.0 10 最初の2行は、式の答えが Q = 600 で、費用が 6000 円であることを示します。発注費と保管費はどちらも 3000 円で、勾配は 0 、曲率は正です。 1200.0 12000.0 は、需要が4倍のときの答えです。 0.0 -6000.0 -0.0167 は、 Q = − 600 でも勾配が0であることを示します。費用は負で、曲率も負なので、この点は最小点ではありません。 424.3 6364.0 は、誤った式の答えを本当の費用で測った値です。続く 0.0 -5.0 は、中心差分で測った勾配です。正しい式の答えでは0で、誤った式の答えでは − 5 になります。 [500.] 6100.0 5 は、上限500個のもとで、範囲の端の Q = 500 が答えになることを表します。そこでの勾配 − 2.2 は負なので、上限を上げれば費用は下がります。最後の行は、制約なしのBFGS法が式と同じ Q = 600 に着くことを示します。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:標準形を読む",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "次の式は「最小点では勾配が0になるので、その条件を満たす点を、データだけで書かれた式として求める」を表します。 ∇ f ( x * ) = 0 ⇒ x * = ϕ ( data ) 式は「勾配が0になる点 x * を、データを入れれば答えが出る式 ϕ で書く」と読みます。この式で得られるのは、最小点の候補です。 記号 意味 注文量の例では x * 勾配が0になる点。最小点の候補 注文量 Q * f 最小にする関数 f ( Q ) = K D Q + h Q 2 data 式の中の定数 発注1回の費用 K = 1500 円、年間の需要 D = 1200 個、保管費 h = 10 円 ϕ データから候補を計算する式（閉形式） ϕ ( K , D , h ) = 2 K D / h f ( Q ) の第1項は発注費です。1年に D / Q 回注文し、1回が K 円かかります。第2項は保管費です。在庫は Q 個から0個まで一定の速さで減るので、平均の在庫は Q / 2 個で、1個あたり年 h 円がかかります。 勾配の式を解くと、閉形式が得られる f を Q で微分すると、次の式になります。 f ′ ( Q ) = − K D Q 2 + h 2 この式を0とおいて Q について解くと、 Q 2 = 2 K D / h から、 Q > 0 の範囲で次の式が得られます。 Q * = 2 K D h 例の数値を入れると、次のとおりです。 Q * = 2 · 1500 · 1200 10 = 360000 = 600 図で底の真下に2本の曲線が交わっていたのは、この式からも読めます。 f ′ ( Q ) = 0 は K D / Q 2 = h / 2 と同じで、両辺に Q をかけると K D / Q = h Q / 2 になります。左辺が発注費、右辺が保管費なので、最小点では2つが等しくなります。 勾配が0の点が最小点と言える条件 式が返すのは、勾配が0になる点です。最小点の候補であって、最小点であることは式の外で確かめます。 確かめること 注文量の例での結果 候補が、式の意味のある範囲に入っているか Q * = 600 > 0 で入っている 候補で、曲率の符号が正か f ″ ( Q ) = 2 K D / Q 3 は Q > 0 で正。 Q = 600 では 1 / 60 範囲を狭める制約がないか この節の範囲では制約なし。上限がある場合は、つまずきやすい点で扱う Q > 0 のすべての点で f ″ ( Q ) > 0 なので、 f は Q > 0 の範囲で凸です。凸な関数では、勾配が0の点は最小点です。そのため、 Q * = 600 は Q > 0 の範囲での最小点です。 f ″ が正の範囲が一部だけなら、言えるのはその範囲の局所最小点までです。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.closed-form-candidate:課題から定式化する",
+      "dataset_version": "0.18.24",
+      "document_id": "content:concept.closed-form-candidate",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.linear-least-squares",
+        "content:concept.root-finding",
+        "content:concept.smooth-low-dimensional-unconstrained",
+        "content:concept.variable-domain",
+        "content:lbfgsb",
+        "problem:PA001",
+        "source:S002",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S055",
+        "S056"
+      ],
+      "text": "「1回の注文量を、1年の費用が最小になるように決めたい」という課題から、次の4つを順に確かめます。 何を決めるか : 1回の注文量 Q です。個数は整数ですが、ここでは連続の値として扱います。 何を良くしたいか : 発注費と保管費の合計 f ( Q ) = K D / Q + h Q / 2 を小さくします。 f は式で書け、微分も式で書けます。 何を守るか : Q > 0 の範囲だけを考えます。トラックの容量のような上限があれば、守る条件が増えます。 どこまで保証がほしいか : Q > 0 の範囲での最小点です。 f ″ > 0 が範囲全体で成り立つので、勾配が0の点が最小点になります。 目的が微分できる式で書け、勾配の式を変形で解けるなら、この型です。そのうえで、範囲と曲率の条件を確かめます。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.complementarity-problem:30秒でつかむ",
       "dataset_version": "0.18.24",
       "document_id": "content:concept.complementarity-problem",
@@ -55817,7 +56069,9 @@
       "dataset_version": "0.18.24",
       "document_id": "problem:PA001",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.closed-form-candidate"
+      ],
       "source_ids": [
         "S055",
         "S056"

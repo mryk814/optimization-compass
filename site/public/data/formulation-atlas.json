@@ -153,7 +153,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.closed-form-candidate",
       "cues_ja": [
         "二次関数や指数関数の組み合わせで、微分して0と置くと解けそう",
         "同じ形の問題をパラメータだけ変えて何度も解く"
@@ -192,7 +192,7 @@
       ],
       "family_id": "reduce_first",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "利用可能",
@@ -235,6 +235,7 @@
       "problem_id": "PA001",
       "reading_ja": "最適性の条件を式変形だけで解き、答えを式として書き下せる場合です。",
       "source_ids": [
+        "S002",
         "S055",
         "S056"
       ],
@@ -6322,6 +6323,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 39
+    "with_article": 40
   }
 }
