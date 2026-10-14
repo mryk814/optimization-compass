@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.24",
+  "dataset_version": "0.18.25",
   "freshness_policy": [
     {
       "max_age_days": 180,
@@ -35,7 +35,7 @@
       "source_type": "vendor_manual"
     }
   ],
-  "generated_at": "2026-10-13T00:00:00Z",
+  "generated_at": "2026-10-14T00:00:00Z",
   "sources": [
     {
       "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
@@ -62766,6 +62766,454 @@
       "source_type": "original_paper",
       "supported_claim": "Constructive method for the linear complementarity system covering quadratic programming and equilibrium points of bimatrix games: it follows a path of adjacent extreme points to a solution under a non-degeneracy assumption, without reducing an objective function along the way (Lemke's method).",
       "title": "Bimatrix equilibrium points and mathematical programming"
+    },
+    {
+      "access_note": "SIAM, 1997, ISBN 978-0-89871-361-9 (print), 978-0-89871-957-4 (ebook). DOI 10.1137/1.9780898719574. Crossref REST API (api.crossref.org/works/10.1137/1.9780898719574) checked 2026-10-14: title, authors, year, publisher, ISBNs. SIAM page returned 403, so no publisher description was read; the claim is limited to the well-known lecture structure (SVD, QR, eigenvalue problems) - confirm against the TOC before final use. Covers SVD low-rank approximation and Rayleigh quotient/eigenvalue algorithms. Alternative: Golub & Van Loan, Matrix Computations 4th ed. (not verified; JHU Press DOI not checked).",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "対称行列の二次形式の最小化は最小固有値の固有ベクトルで与えられ、SVDによる低ランク近似や固有値解法を標準教科書が体系的に扱っています。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004296",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "固有値・特異値問題",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA003",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        },
+        {
+          "canonical_url": null,
+          "claim_summary": "連立一次方程式を LU・Cholesky 分解や共役勾配法で解く方法と、条件数による誤差の増え方を扱う標準的な教科書です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004297",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "線形方程式に還元",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA002",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/1.9780898719574",
+      "publication_date": "1997-01-01",
+      "publisher": "Lloyd N. Trefethen; David Bau, III",
+      "source_id": "S173",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Textbook treatment of numerical linear algebra: the singular value decomposition and low-rank approximation, QR factorization and least squares, conditioning and stability, Gaussian elimination (LU) and Cholesky factorization for linear systems, eigenvalue algorithms including the Rayleigh quotient and QR iteration, and Krylov subspace iterations including Arnoldi, Lanczos and conjugate gradients.",
+      "title": "Numerical Linear Algebra"
+    },
+    {
+      "access_note": "SIAM / MPS-SIAM Series on Optimization, 2001, ISBN 978-0-89871-491-3 (Crossref lists 9780898714913 and 9780898718829). DOI 10.1137/1.9780898718829. Crossref REST API (api.crossref.org/works/10.1137/1.9780898718829) checked 2026-10-14: title, authors, year, publisher, ISBNs. Crossref title has no subtitle (the usual subtitle 'Analysis, Algorithms, and Engineering Applications' is unconfirmed, so omitted). No publisher description read (403). Claim is from the known scope of the book, not a read description.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "線形・二次錐・半正定値計画を含む錐最適化の標準形、双対理論、内点法を体系的に扱う専門書です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004298",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "一般錐最適化",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA022",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        },
+        {
+          "canonical_url": null,
+          "claim_summary": "不確かな錐計画のrobust対応を含む錐最適化の理論的基盤を与えます。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004299",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "robust optimization",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA050",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/1.9780898718829",
+      "publication_date": "2001-01-01",
+      "publisher": "Aharon Ben-Tal; Arkadi Nemirovski",
+      "source_id": "S174",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on conic optimization (linear, conic quadratic and semidefinite programming), their duality theory, interior-point algorithms, and engineering applications including robust optimization.",
+      "title": "Lectures on Modern Convex Optimization"
+    },
+    {
+      "access_note": "Journal of Optimization Theory and Applications 169(3), 1042-1068 (2016). DOI 10.1007/s10957-016-0892-3. Crossref REST API (api.crossref.org/works/10.1007/s10957-016-0892-3) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages. Online date 2016-02-22, print issue June 2016. Abstract not in Crossref; claim restricted to title-level statement plus the known abstract point (infeasibility/unboundedness certificates) - confirm. Primary reference for SCS (S013).",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "一般の凸錐計画を、自己双対埋め込みへの演算子分割（ADMM）で解く一次法の原論文です。",
+          "confidence": "high",
+          "evidence_link_id": "EL004300",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "一般錐最適化",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA022",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/s10957-016-0892-3",
+      "publication_date": "2016-02-22",
+      "publisher": "Brendan O'Donoghue; Eric Chu; Neal Parikh; Stephen Boyd",
+      "source_id": "S175",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Method for solving convex cone programs by applying operator splitting (ADMM) to the homogeneous self-dual embedding, which also yields certificates of infeasibility or unboundedness (the algorithm behind SCS).",
+      "title": "Conic Optimization via Operator Splitting and Homogeneous Self-Dual Embedding"
+    },
+    {
+      "access_note": "IOS Press, Frontiers in Artificial Intelligence and Applications 336, 2021, ISBN 978-1-64368-160-3. DOI 10.3233/FAIA336. Crossref REST API (api.crossref.org/works/10.3233/FAIA336) checked 2026-10-14: title, authors, year, publisher, editors/ISBN; publisher page ebooks.iospress.nl/volume/handbook-of-satisfiability-second-edition read via WebFetch (description, editors, chapter list: Ch.4 Conflict-Driven Clause Learning SAT Solvers by Marques-Silva, Lynce, Malik; proof complexity chapters; the preface mentions a new core-based MaxSAT chapter but its title was not visible). Authors are editors; cite chapter-level (Ch.4 for CDCL). Optional extra for NP-completeness of SAT: Cook 1971, STOC '71 pp.151-158, DOI 10.1145/800157.805047 (Crossref-verified).",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "SATの探索アルゴリズム（CDCL）・符号化・MaxSATを含む標準的なハンドブックです。",
+          "confidence": "high",
+          "evidence_link_id": "EL004301",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "SAT・MaxSAT",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA027",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.3233/FAIA336",
+      "publication_date": "2021-02-02",
+      "publisher": "Armin Biere; Marijn Heule; Hans van Maaren; Toby Walsh (editors)",
+      "source_id": "S176",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Edited handbook covering SAT theory and practice: search algorithms including conflict-driven clause learning, encodings, proof complexity, hard instances, and solvers; the second edition adds a core-based MaxSAT chapter per its preface.",
+      "title": "Handbook of Satisfiability (Second Edition)"
+    },
+    {
+      "access_note": "Naval Research Logistics Quarterly 2(1-2), 83-97 (1955). DOI 10.1002/nav.3800020109. Crossref REST API (api.crossref.org/works/10.1002/nav.3800020109) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages; abstract read from Crossref. Original Hungarian method. Integrality of the LP relaxation is not in the abstract; do not cite this source for it.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "割当問題（人と仕事の一対一対応で総得点を最大化）を解くハンガリー法の原論文です。",
+          "confidence": "high",
+          "evidence_link_id": "EL004302",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "割当・matching",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA030",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1002/nav.3800020109",
+      "publication_date": "1955-03-01",
+      "publisher": "H. W. Kuhn",
+      "source_id": "S177",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Given numerical scores for n persons on n jobs, the assignment problem seeks an assignment maximizing the total score; the paper exploits ideas of two Hungarian mathematicians to give a new solution method.",
+      "title": "The Hungarian method for the assignment problem"
+    },
+    {
+      "access_note": "Journal of Guidance, Control, and Dynamics 21(2), 193-207 (1998). DOI 10.2514/2.4231. Crossref REST API (api.crossref.org/works/10.2514/2.4231) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages. Abstract not retrieved; claim limited to title-level statement. Standard survey for direct vs indirect trajectory optimization; complements S102, S042, S043.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "軌道最適化を直接法・間接法に分けて整理した標準的なサーベイ論文です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004303",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "軌道最適化",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA044",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.2514/2.4231",
+      "publication_date": "1998-03-01",
+      "publisher": "John T. Betts",
+      "source_id": "S178",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Survey of numerical methods for trajectory optimization, i.e., optimal control problems solved by indirect and direct (transcription to nonlinear programming) approaches.",
+      "title": "Survey of Numerical Methods for Trajectory Optimization"
+    },
+    {
+      "access_note": "Springer Series in Operations Research and Financial Engineering, Springer, Volume I, ISBN 978-0-387-95580-3. DOI 10.1007/b97543. Crossref REST API (api.crossref.org/works/10.1007/b97543) checked 2026-10-14: title, authors, year, publisher, ISBN. Crossref issued year is 2004 (volume I print copyright is commonly 2003 - unconfirmed) and its authors appear as an editors field. Springer page redirected to login; no description read. Claim limited to title-level scope. Add volume II if algorithms are cited.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "変分不等式・相補性問題の定式化と解の存在・一意性を扱う標準的な専門書です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004304",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "game・equilibrium・VI",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA047",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/b97543",
+      "publication_date": "2004-01-01",
+      "publisher": "Francisco Facchinei; Jong-Shi Pang",
+      "source_id": "S179",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on finite-dimensional variational inequalities and complementarity problems: formulation, existence and uniqueness of solutions, and applications to equilibrium problems (volume I); algorithms are in volume II (DOI 10.1007/b97544, not checked).",
+      "title": "Finite-Dimensional Variational Inequalities and Complementarity Problems"
+    },
+    {
+      "access_note": "Princeton University Press, Princeton Series in Applied Mathematics, 2009, ISBN 978-0-691-14368-2. DOI 10.1515/9781400831050. Crossref REST API (api.crossref.org/works/10.1515/9781400831050) checked 2026-10-14: title, authors, year, publisher, ISBN (Crossref issued 2009-12-31 is the e-book date); publisher description read at press.princeton.edu (uncertain LP first, relation of uncertainty sets to chance constraints, uncertain conic quadratic and semidefinite problems, multistage problems; published August 30, 2009). Primary book for PA050. Optional: Bertsimas & Sim 2004, Oper. Res. 52(1), 35-53, DOI 10.1287/opre.1030.0065 (not Crossref-checked).",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "不確実な線形・錐計画のrobust対応問題と不確実集合の選び方を体系的に扱う標準的な専門書です。",
+          "confidence": "high",
+          "evidence_link_id": "EL004305",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "robust optimization",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA050",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1515/9781400831050",
+      "publication_date": "2009-08-30",
+      "publisher": "Aharon Ben-Tal; Laurent El Ghaoui; Arkadi Nemirovski",
+      "source_id": "S180",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on robust optimization: uncertain linear programs and their robust counterparts, the relation between uncertainty sets and chance-constrained approaches, uncertain conic quadratic and semidefinite problems, and multistage (adjustable) problems.",
+      "title": "Robust Optimization"
+    },
+    {
+      "access_note": "IEEE Transactions on Automatic Control 54(1), 48-61 (2009). DOI 10.1109/TAC.2008.2009515. Crossref REST API (api.crossref.org/works/10.1109/TAC.2008.2009515) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages. Abstract not retrieved; claim limited to title-level statement. Covers decentralized (no central coordinator) consensus; complements S061 ADMM.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "中央の調整役なしにネットワーク上で各主体の目的の和を最小化する分散劣勾配法の原論文です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004306",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "分散・合意最適化",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA051",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1109/TAC.2008.2009515",
+      "publication_date": "2009-01-01",
+      "publisher": "Angelia Nedic; Asuman Ozdaglar",
+      "source_id": "S181",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Distributed subgradient method in which agents minimize the sum of their local convex objectives by combining local subgradient steps with averaging over a network, with convergence analysis.",
+      "title": "Distributed Subgradient Methods for Multi-Agent Optimization"
+    },
+    {
+      "access_note": "Foundations and Trends in Optimization 2(3-4), 157-325 (2016). DOI 10.1561/2400000013. Crossref REST API (api.crossref.org/works/10.1561/2400000013) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages; abstract read from Crossref (optimization as a process; learning from experience as more of the problem is observed). Regret/OGD content is from the monograph's known scope, not the abstract. Abstract does not mention regret explicitly; verify the TOC (regret, OGD, FTRL) before final use. Zinkevich 2003 (ICML) not DOI-verified.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "目的が毎回変わる状況での逐次最適化（online convex optimization）とregretを体系的に扱う標準的な専門書です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004307",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "online optimization",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA052",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1561/2400000013",
+      "publication_date": "2016-08-30",
+      "publisher": "Elad Hazan",
+      "source_id": "S182",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Monograph presenting optimization as a process in which a method learns as it goes, i.e., online convex optimization, for settings where a comprehensive model is infeasible.",
+      "title": "Introduction to Online Convex Optimization"
+    },
+    {
+      "access_note": "Automatica 38(1), 3-20 (2002). DOI 10.1016/S0005-1098(01)00174-1. Crossref REST API (api.crossref.org/works/10.1016/S0005-1098(01)00174-1) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages. Abstract not retrieved; claim limited to title-level and well-known result (multiparametric QP gives piecewise affine control law). Check abstract on publisher page before final use.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "parameterを含む二次計画の解がparameterの区分アフィン関数になることを示した、explicit MPCの基礎論文です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004308",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "反復parametric optimization",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA053",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1016/S0005-1098(01)00174-1",
+      "publication_date": "2002-01-01",
+      "publisher": "Alberto Bemporad; Manfred Morari; Vivek Dua; Efstratios N. Pistikopoulos",
+      "source_id": "S183",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Shows that the constrained linear quadratic regulator, a quadratic program parametrized by the state, has a piecewise affine solution on a polyhedral partition of the parameter space (explicit MPC via multiparametric programming).",
+      "title": "The explicit linear quadratic regulator for constrained systems"
+    },
+    {
+      "access_note": "SIAM Classics in Applied Mathematics, 2006, ISBN 978-0-89871-604-7 (Crossref lists 9780898716047 and 9780898719109). DOI 10.1137/1.9780898719109. Crossref REST API (api.crossref.org/works/10.1137/1.9780898719109) checked 2026-10-14: title, authors, year, publisher, ISBNs. SIAM page returned 403; no description read. Claim limited to title-level scope and known contents (information matrices, D-optimality, equivalence theorem). Optional original: Kiefer & Wolfowitz 1960, Canad. J. Math. 12, 363-366, DOI 10.4153/CJM-1960-030-4 (not checked).",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "情報行列の基準（D最適など）と等価定理に基づく実験計画の最適化を体系的に扱う標準的な専門書です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004309",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "実験計画",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA054",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/1.9780898719109",
+      "publication_date": "2006-01-01",
+      "publisher": "Friedrich Pukelsheim",
+      "source_id": "S184",
+      "source_quality": "primary",
+      "source_type": "textbook",
+      "supported_claim": "Monograph on optimal design of experiments: information matrices, optimality criteria such as D-optimality, approximate designs, and the general equivalence theorem.",
+      "title": "Optimal Design of Experiments"
+    },
+    {
+      "access_note": "The Annals of Mathematical Statistics 35(1), 73-101 (1964). DOI 10.1214/aoms/1177703732. Crossref REST API (api.crossref.org/works/10.1214/aoms/1177703732) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages. Abstract not retrieved; claim limited to title-level topic (robust M-estimation). Foundation of the Huber loss offered in S003/S041.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "外れ値を含む観測に強いM推定とHuber損失を導入した原論文です。",
+          "confidence": "medium",
+          "evidence_link_id": "EL004310",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "外れ値を含むparameter estimation",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA056",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1214/aoms/1177703732",
+      "publication_date": "1964-03-01",
+      "publisher": "Peter J. Huber",
+      "source_id": "S185",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Introduces robust M-estimation of a location parameter under contamination of the error distribution, including the minimax (Huber) loss.",
+      "title": "Robust Estimation of a Location Parameter"
+    },
+    {
+      "access_note": "Communications of the ACM 24(6), 381-395 (1981). DOI 10.1145/358669.358692. Crossref REST API (api.crossref.org/works/10.1145/358669.358692) checked 2026-10-14: title, authors, year, publisher, volume/issue/pages; abstract read from Crossref. Full title has the subtitle 'a paradigm for model fitting with applications to image analysis and automated cartography' (from memory, Crossref gives only the short form). Use Crossref title.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": null,
+          "claim_summary": "大きな割合の誤差を含むデータにもモデルを当てはめられるRANSACの原論文です。",
+          "confidence": "high",
+          "evidence_link_id": "EL004311",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "外れ値を含むparameter estimation",
+          "last_verified": "2026-10-14",
+          "supported_field": "row",
+          "target_id": "PA056",
+          "target_table": "problem_archetypes",
+          "target_type": "problem"
+        }
+      ],
+      "last_verified": "2026-10-14",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1145/358669.358692",
+      "publication_date": "1981-06-01",
+      "publisher": "Martin A. Fischler; Robert C. Bolles",
+      "source_id": "S186",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "RANSAC: a paradigm for fitting a model to experimental data that can interpret and smooth data containing a significant percentage of gross errors.",
+      "title": "Random sample consensus"
     }
   ]
 }
