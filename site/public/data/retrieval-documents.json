@@ -7262,7 +7262,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7291,7 +7291,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7320,7 +7320,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7349,7 +7349,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7378,7 +7378,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:困りごとから関連する問題へ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7407,7 +7407,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7436,7 +7436,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:数値計算の方法を選ぶ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7465,7 +7465,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -7494,7 +7494,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.bound-constrained-smooth:課題から定式化する",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.bound-constrained-smooth",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9276,7 +9276,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9300,7 +9300,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9324,7 +9324,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9348,7 +9348,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9372,7 +9372,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9396,7 +9396,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9420,7 +9420,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9444,7 +9444,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9468,7 +9468,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -9492,7 +9492,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.discontinuous-simulation:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.discontinuous-simulation",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12565,7 +12565,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12596,7 +12596,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12627,7 +12627,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12658,7 +12658,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12689,7 +12689,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:困りごとから関連する問題へ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12720,7 +12720,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12751,7 +12751,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:数値計算の方法を選ぶ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12782,7 +12782,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -12813,7 +12813,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.mixed-integer-nonlinear-program:課題から定式化する",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.mixed-integer-nonlinear-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -13977,7 +13977,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14010,7 +14010,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14043,7 +14043,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14076,7 +14076,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14109,7 +14109,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14142,7 +14142,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14175,7 +14175,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14208,7 +14208,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14241,7 +14241,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14274,7 +14274,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.network-flow:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.network-flow",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14307,7 +14307,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14342,7 +14342,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14377,7 +14377,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14412,7 +14412,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14447,7 +14447,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14482,7 +14482,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14517,7 +14517,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14552,7 +14552,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14587,7 +14587,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14622,7 +14622,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.neural-network-training:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.neural-network-training",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14657,7 +14657,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14687,7 +14687,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14717,7 +14717,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14747,7 +14747,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14777,7 +14777,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14807,7 +14807,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14837,7 +14837,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14867,7 +14867,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14897,7 +14897,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14927,7 +14927,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.noisy-black-box:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.noisy-black-box",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14957,7 +14957,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -14993,7 +14993,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15029,7 +15029,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15065,7 +15065,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15101,7 +15101,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15137,7 +15137,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15173,7 +15173,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15209,7 +15209,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15245,7 +15245,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15281,7 +15281,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonconvex-qp-qcqp:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonconvex-qp-qcqp",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15517,7 +15517,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15547,7 +15547,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15577,7 +15577,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15607,7 +15607,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15637,7 +15637,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:困りごとから関連する問題へ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15667,7 +15667,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15697,7 +15697,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:数値計算の方法を選ぶ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15727,7 +15727,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -15757,7 +15757,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.nonsmooth-convex-composite:課題から定式化する",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.nonsmooth-convex-composite",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17504,7 +17504,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17535,7 +17535,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17566,7 +17566,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17597,7 +17597,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17628,7 +17628,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17659,7 +17659,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17690,7 +17690,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17721,7 +17721,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17752,7 +17752,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -17783,7 +17783,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.second-order-cone-program",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18093,7 +18093,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18126,7 +18126,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18159,7 +18159,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18192,7 +18192,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18225,7 +18225,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18258,7 +18258,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18291,7 +18291,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18324,7 +18324,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18357,7 +18357,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shape-dependent-domain:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shape-dependent-domain",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18390,7 +18390,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18420,7 +18420,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18450,7 +18450,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18480,7 +18480,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18510,7 +18510,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18540,7 +18540,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18570,7 +18570,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18600,7 +18600,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18630,7 +18630,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -18660,7 +18660,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.shortest-path:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.shortest-path",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19650,7 +19650,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19681,7 +19681,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19712,7 +19712,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19743,7 +19743,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19774,7 +19774,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19805,7 +19805,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:次に読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19836,7 +19836,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:見分け方",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19867,7 +19867,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:解き方の系統",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -19898,7 +19898,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.so3-se3-optimization:近い定式化",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.so3-se3-optimization",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20129,7 +20129,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:30秒でつかむ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20165,7 +20165,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:overview",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20201,7 +20201,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:つまずきやすい点",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20237,7 +20237,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:出典と再現条件",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20273,7 +20273,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:困りごとから関連する問題へ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20309,7 +20309,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:小さな例",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20345,7 +20345,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:数値計算の方法を選ぶ",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20381,7 +20381,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:標準形を読む",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
@@ -20417,7 +20417,7 @@
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
       "chunk_id": "content:concept.stochastic-erm:課題から定式化する",
-      "dataset_version": "0.18.23",
+      "dataset_version": "0.18.24",
       "document_id": "content:concept.stochastic-erm",
       "license": "CC-BY-4.0",
       "relation_context": [
