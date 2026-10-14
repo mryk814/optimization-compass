@@ -568,11 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 11,
+            "complete": 12,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 102,
+              "in_progress": 101,
               "no_article": 46,
               "stale": 1
             }
@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 34,
+            "complete": 37,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 28,
+              "in_progress": 25,
               "no_article": 18,
               "stale": 0
             }
@@ -18455,12 +18455,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.bilevel-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18487,11 +18487,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA046"
+            "/formulations/PA046",
+            "concept.bilevel-optimization"
           ]
         },
         "recommendation": {
@@ -18617,12 +18618,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.complementarity-problem"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18649,11 +18650,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA048"
+            "/formulations/PA048",
+            "concept.complementarity-problem"
           ]
         },
         "recommendation": {

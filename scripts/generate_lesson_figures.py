@@ -2467,6 +2467,107 @@ def _erm_minibatch_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Bilevel optimization (content/concepts/bilevel-optimization.md): a seller sets the price x,
+# a buyer picks the quantity y that minimises 0.5 y^2 + x y - 4 y over y >= 0.
+BILEVEL_X_MAX = 6.0
+BILEVEL_ASSUMED_QUANTITY = 3.0  # the quantity at x = 1, wrongly held fixed
+
+
+def _bilevel_response(x: float) -> float:
+    """The buyer's unique best quantity: the gradient y + x - 4 = 0 clipped at y >= 0."""
+    return max(0.0, 4.0 - x)
+
+
+def _bilevel_data() -> dict[str, object]:
+    xs = [i / 100 for i in range(int(BILEVEL_X_MAX * 100) + 1)]
+    revenue = [x * _bilevel_response(x) for x in xs]
+    best = max(range(len(xs)), key=lambda index: revenue[index])
+    return {
+        "xs": xs,
+        "response": [_bilevel_response(x) for x in xs],
+        "revenue": revenue,
+        "assumed": [BILEVEL_ASSUMED_QUANTITY * x for x in xs],
+        "best_x": xs[best],
+        "best_y": _bilevel_response(xs[best]),
+        "best_revenue": revenue[best],
+        "assumed_at_max": BILEVEL_ASSUMED_QUANTITY * BILEVEL_X_MAX,
+        "actual_at_max": revenue[-1],
+    }
+
+
+def _bilevel_axes(
+    parts: list[str],
+    left: float,
+    right: float,
+    top: float,
+    bottom: float,
+    x_ticks: Sequence[float],
+    y_ticks: Sequence[float],
+    px: Callable[[float], float],
+    py: Callable[[float], float],
+    x_label: str,
+) -> None:
+    parts.append(f'<path d="M{left} {top}V{bottom}H{right}" fill="none" stroke="{GRID}"/>')
+    for value in x_ticks:
+        parts.append(_text(px(value), bottom + 20, f"{value:g}", "tick", "middle"))
+    for value in y_ticks:
+        parts.append(_text(left - 8, py(value) + 5, f"{value:g}", "tick", "end"))
+    parts.append(_text(right, bottom + 40, x_label, "tick", "end"))
+
+
+def _bilevel_svg() -> str:
+    data = _bilevel_data()
+    xs: list[float] = data["xs"]  # type: ignore[assignment]
+    best_x, best_y = data["best_x"], data["best_y"]
+    best_revenue = data["best_revenue"]
+    assumed_at_max, actual_at_max = data["assumed_at_max"], data["actual_at_max"]
+    parts = _open(
+        "価格に反応する買い手",
+        (
+            "「① 価格 x と買い手の購入量」では、購入量が価格 4 まで直線で 4 から 0 へ減り、"
+            "4 以上では 0 です。「② 価格 x と売上」では、実際の売上が x=2 で最大の 4 になり、"
+            "購入量が 3 のままと見なした売上 3x は x=6 で 18 まで増えますが、"
+            "実際の x=6 の売上は 0 です。"
+        ),
+        584,
+    )
+    left, right = 64.0, 420.0
+    px = _scale(0.0, BILEVEL_X_MAX, left, right)
+
+    parts.append(_text(20, 60, "① 価格 x と買い手の購入量 y"))
+    py1 = _scale(0.0, 4.0, 200, 84)
+    _bilevel_axes(parts, left, right, 80, 200, (0, 2, 4, 6), (0, 2, 4), px, py1, "価格 x")
+    parts.append(_polyline([(px(x), py1(_bilevel_response(x))) for x in xs], POINT, 3))
+    parts.append(f'<circle cx="{px(best_x):.1f}" cy="{py1(best_y):.1f}" r="7" fill="{LINE}"/>')
+    parts.append(_text(px(best_x) + 12, py1(best_y) - 8, f"x={best_x:g} で y={best_y:g}"))
+
+    parts.append(_text(20, 296, "② 価格 x と売上 x·y"))
+    py2 = _scale(0.0, 18.0, 480, 316)
+    _bilevel_axes(parts, left, right, 312, 480, (0, 2, 4, 6), (0, 4, 18), px, py2, "価格 x")
+    parts.append(
+        _polyline([(px(x), py2(a)) for x, a in zip(xs, data["assumed"], strict=True)], UPDATE, 3)
+    )
+    parts.append(
+        _polyline([(px(x), py2(r)) for x, r in zip(xs, data["revenue"], strict=True)], LINE, 3)
+    )
+    parts.append(
+        f'<circle cx="{px(best_x):.1f}" cy="{py2(best_revenue):.1f}" r="7" fill="{LINE}"/>'
+    )
+    parts.append(_text(px(best_x) + 12, py2(best_revenue) + 22, f"最大 {best_revenue:g}"))
+    parts.append(
+        _text(px(BILEVEL_X_MAX) - 6, py2(assumed_at_max) + 22, f"{assumed_at_max:g}", "", "end")
+    )
+    parts.append(
+        _text(px(BILEVEL_X_MAX) - 6, py2(actual_at_max) - 10, f"{actual_at_max:g}", "", "end")
+    )
+    parts.append(f'<rect x="20" y="526" width="20" height="12" fill="{UPDATE}"/>')
+    parts.append(_text(48, 537, "購入量が 3 のままと見なした売上 3x"))
+    parts.append(f'<rect x="20" y="550" width="20" height="12" fill="{LINE}"/>')
+    parts.append(_text(48, 561, "買い手が反応した実際の売上"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 # Shape-dependent domain (content/concepts/shape-dependent-domain.md): a cooling fin of length L
 # with -u'' + u = 0 on (0, L), u(0) = 1, u'(L) = 0, so u(x) = cosh(L - x) / cosh(L) and the
 # heat leaving the surface is tanh(L). The design minimizes J(L) = 0.25 L - tanh(L).
@@ -3332,6 +3433,114 @@ def _path_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Linear complementarity problem (content/concepts/complementarity-problem.md): a plate on two
+# floor points. w = q + M z, z >= 0, w >= 0, z_i w_i = 0 for each of the two contact points.
+LCP_M = ((Fraction(2), Fraction(1)), (Fraction(1), Fraction(2)))
+LCP_Q = (Fraction(-1), Fraction(-3, 2))
+
+
+def _lcp_solve_set(
+    matrix: Sequence[Sequence[Fraction]], q: Sequence[Fraction], active: Sequence[int]
+) -> tuple[list[Fraction], list[Fraction]]:
+    """Exact (z, w) for one complementary choice: w_i = 0 on `active`, z_i = 0 elsewhere."""
+    z = [Fraction(0), Fraction(0)]
+    if len(active) == 1:
+        i = active[0]
+        z[i] = -q[i] / matrix[i][i]
+    elif len(active) == 2:
+        det = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+        z[0] = (-q[0] * matrix[1][1] + q[1] * matrix[0][1]) / det
+        z[1] = (-q[1] * matrix[0][0] + q[0] * matrix[1][0]) / det
+    w = [q[i] + sum(matrix[i][j] * z[j] for j in range(2)) for i in range(2)]
+    return z, w
+
+
+def lcp_contact_data() -> list[dict[str, object]]:
+    """The four complementary active sets of the contact example and whether each is a solution."""
+    rows: list[dict[str, object]] = []
+    for active in ((), (0,), (1,), (0, 1)):
+        z, w = _lcp_solve_set(LCP_M, LCP_Q, active)
+        rows.append({"active": active, "z": z, "w": w, "ok": min(z + w) >= 0})
+    return rows
+
+
+def _lcp_number(value: Fraction) -> str:
+    if value.denominator == 1:
+        return str(value.numerator)
+    return f"{float(value):.3f}".rstrip("0")
+
+
+def _lcp_contact_svg() -> str:
+    rows = lcp_contact_data()
+    lower, upper = (0.0, 0.0), (0.65, 1.05)  # z1 and z2 range of the plot window
+    left, right, top, bottom = 62, 416, 58, 340
+    sx = _scale(lower[0], upper[0], left, right)
+    sy = _scale(lower[1], upper[1], bottom, top)
+    q1, q2 = float(LCP_Q[0]), float(LCP_Q[1])
+    # w1 = q1 + 2 z1 + z2 = 0 and w2 = q2 + z1 + 2 z2 = 0 as lines z2 = f(z1).
+    line1 = lambda z1: -(q1 + float(LCP_M[0][0]) * z1) / float(LCP_M[0][1])  # noqa: E731
+    line2 = lambda z1: -(q2 + float(LCP_M[1][0]) * z1) / float(LCP_M[1][1])  # noqa: E731
+    corner = rows[3]["z"]
+    cx, cy = float(corner[0]), float(corner[1])  # type: ignore[index]
+    parts = _open(
+        "4つの活性集合の判定",
+        (
+            "二つの接触点の例で、各点が接触しているかどうかの4通りを z1 と z2 の平面に描きます。"
+            "どちらの接触点も接触している候補だけが z も w も非負で、解です。"
+        ),
+        488,
+    )
+    shade = [
+        (lower[0], upper[1]),
+        (lower[0], line1(0.0)),
+        (cx, cy),
+        (upper[0], line2(upper[0])),
+        (upper[0], upper[1]),
+    ]
+    polygon = " ".join(f"{sx(x):.1f},{sy(y):.1f}" for x, y in shade)
+    parts.append(f'<polygon points="{polygon}" fill="{RING}" fill-opacity="0.45"/>')
+    parts.append(
+        f'<path d="M{left} {top}V{bottom}H{right}" fill="none" stroke="{INK}" stroke-width="1.5"/>'
+    )
+    for value in (0.0, 0.5):
+        parts.append(_text(sx(value), bottom + 20, f"{value:g}", "tick", "middle"))
+    for value in (0.0, 0.5, 1.0):
+        parts.append(_text(left - 8, sy(value) + 5, f"{value:g}", "tick", "end"))
+    parts.append(_text(right, bottom + 40, "z₁（点Aの接触力）", "", "end"))
+    parts.append(_text(left - 8, top - 8, "z₂（点B）", "", "start"))
+    parts.append(_polyline([(sx(0.0), sy(line1(0.0))), (sx(0.5), sy(line1(0.5)))], LINE, 2.5))
+    parts.append(
+        _polyline([(sx(0.0), sy(line2(0.0))), (sx(upper[0]), sy(line2(upper[0])))], LINE, 2.5)
+    )
+    parts.append(_text(sx(0.3) - 12, sy(line1(0.3)) + 5, "w₁=0", "note", "end"))
+    parts.append(_text(sx(0.58), sy(line2(0.58)) + 24, "w₂=0", "note", "middle"))
+    names = {(): "接触なし", (0,): "Aだけ", (1,): "Bだけ", (0, 1): "AとB"}
+    for row in rows:
+        z = row["z"]
+        ok = bool(row["ok"])
+        px_, py_ = sx(float(z[0])), sy(float(z[1]))  # type: ignore[index]
+        color = UPDATE if ok else POINT
+        if ok:
+            parts.append(f'<circle cx="{px_:.1f}" cy="{py_:.1f}" r="7" fill="{color}"/>')
+        else:
+            parts.append(
+                f'<circle cx="{px_:.1f}" cy="{py_:.1f}" r="7" fill="#ffffff" '
+                f'stroke="{color}" stroke-width="2"/>'
+            )
+        mark = "解" if ok else "w<0"
+        dx = 14 if row["active"] != (0,) else -12
+        anchor = "start" if row["active"] != (0,) else "end"
+        dy = -14 if row["active"] != () else -12
+        parts.append(
+            _text(px_ + dx, py_ + dy, f"{names[row['active']]}（{mark}）", "", anchor)  # type: ignore[index]
+        )
+    parts.append(_text(20, 424, "橙の点：z≧0 かつ w≧0 を満たす候補（解）"))
+    parts.append(_text(20, 448, "薄緑：w₁≧0 かつ w₂≧0 の領域", "note"))
+    parts.append(_text(20, 472, "白抜き：w に負の成分があり、解ではない", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -3361,6 +3570,8 @@ def generate_lesson_figures() -> dict[str, str]:
         "nonconvex-qp-basins.svg": _ncqp_basins_svg(),
         "minlp-relaxation-branch.svg": _minlp_svg(),
         "shortest-path-routes.svg": _path_svg(),
+        "bilevel-pricing-response.svg": _bilevel_svg(),
+        "complementarity-active-sets.svg": _lcp_contact_svg(),
     }
 
 
