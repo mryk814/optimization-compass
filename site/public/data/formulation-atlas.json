@@ -757,7 +757,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.high-dimensional-smooth-unconstrained",
       "cues_ja": [
         "変数が数千〜数百万あり、自動微分で勾配は取れる"
       ],
@@ -795,7 +795,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -838,8 +838,10 @@
       "problem_id": "PA007",
       "reading_ja": "変数が非常に多い滑らかな最小化です。Hessianを持てないため、勾配と少量の履歴だけで進みます。",
       "source_ids": [
+        "S002",
         "S019",
         "S046",
+        "S055",
         "S056"
       ],
       "standard_form": "\\min_{x\\in\\mathbb{R}^n}\\; f(x),\\quad \\nabla f \\text{ が使える},\\; n \\text{ は大きい}",
@@ -6322,6 +6324,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 39
+    "with_article": 40
   }
 }

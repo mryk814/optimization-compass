@@ -42,6 +42,7 @@ from scripts.generate_lesson_figures import (
     ncqp_projected_gradient,
     ncqp_starts,
     ncqp_value,
+    pa007_runs,
     ridge_solution,
     so3_paths,
     so3_rotation_minimum,
@@ -504,3 +505,15 @@ def test_lcp_active_set_figure_uses_the_article_numbers() -> None:
     for text in ("接触なし（w&lt;0）", "Aだけ（w&lt;0）", "Bだけ（w&lt;0）", "AとB（解）"):
         assert text in figure
     assert figure.count('fill="#b3532d"') == 1  # only the solution is drawn filled
+
+
+def test_high_dimensional_smooth_figure_uses_the_article_numbers() -> None:
+    runs = pa007_runs()
+    counts = {name: (run["iterations"], len(run["history"])) for name, run in runs.items()}
+    assert counts == {"GD": (5883, 5884), "CG": (151, 310), "L-BFGS": (144, 151)}
+    for run in runs.values():
+        assert round(run["f"], 6) == 0.047872
+        assert run["history"][-1] <= 1e-6 < run["history"][-2]
+    figure = generate_lesson_figures()["large-smooth-deblur.svg"]
+    for text in ("全体の誤差 5.8%", "全体の誤差 2.2%", "5884回", "310回", "151回", "位置 180〜240"):
+        assert text in figure
