@@ -8409,6 +8409,92 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.general-nonsmooth-local",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "一般非滑らか局所",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA011",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bundle-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonsmooth-convex-composite",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.smooth-low-dimensional-unconstrained",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一般非滑らか局所は、折れ目のある関数を、凸とは限らないまま局所的に最小にする定式化です。折れ目では勾配が定まらず、一歩の大きさを固定した勾配降下法は、折れ目をまたいで揺れ続けます。目標にするのは、勾配が0になる点ではなく、折れ目の上でも定義できる停留点（Clarkeの意味）です。この停留点は、最小点とは限りません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.hyperparameter-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -33701,13 +33787,21 @@
       "summary": "非滑らか凸複合。変数=continuous、目的=composite、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.general-nonsmooth-local"
+      ],
       "canonical_url": "/formulations/PA011",
       "entity_id": "PA011",
       "entity_type": "problem",
       "external_url": null,
       "label": "一般非滑らか局所",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.general-nonsmooth-local",
+          "target_type": "content"
+        }
+      ],
       "summary": "一般非滑らか局所。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
