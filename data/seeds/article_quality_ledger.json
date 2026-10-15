@@ -157,7 +157,7 @@
     "concept.high-dimensional-smooth-unconstrained": {
       "reviewed_on": "2026-10-15",
       "reviewer": "codex",
-      "body_sha256": "e368fea95642",
+      "body_sha256": "9317fe101bdd",
       "verdicts": {
         "compare.no-ranking": "pass",
         "example.computed": "pass",
@@ -171,7 +171,7 @@
         "routes.trouble-first": "pass",
         "screen.three-widths": "pass"
       },
-      "notes": "別担当の独立レビューで保証・停止条件・評価費用を照合。全文Pythonと図テスト27件の計算証拠を使用。1280/375/320pxで本文・図・数式・比較表を目視し、320pxで数値改行が生じた表を4列へ整理して再確認。証拠: root output/playwright/handoff-01825/PA007-*.png。"
+      "notes": "別担当の保証・停止条件・費用レビューと掲載Python照合。図はraw軌跡から各桁の基準への初回到達回数へ変更し、表示範囲をcaptionに明記。境界/計算値/摂動のfocused3件、ruff両方、report drift確認。1280/375/320pxで新図・本文・数値表を目視。証拠: root output/playwright/handoff-01825/PA007-*.png。Linuxの図一致は次CIで最終確認。"
     },
     "concept.hyperparameter-optimization": {
       "reviewed_on": "2026-10-10",

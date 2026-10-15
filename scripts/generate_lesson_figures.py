@@ -3631,6 +3631,18 @@ def pa007_runs() -> dict[str, dict[str, Any]]:
     return runs
 
 
+def pa007_milestones(history: list[float]) -> list[tuple[int, int]]:
+    """Return first evaluation at or below each decade, rather than raw gradient values."""
+    milestones = []
+    for exponent in range(0, -7, -1):
+        threshold = 10.0**exponent
+        for evaluation, value in enumerate(history, start=1):
+            if value <= threshold:
+                milestones.append((evaluation, exponent))
+                break
+    return milestones
+
+
 def _pa007_decade(value: int) -> str:
     superscript = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
     return "10" + str(value).translate(superscript)
@@ -3655,8 +3667,9 @@ def _pa007_deblur_svg() -> str:
             f"勾配の最大成分が1e-6以下になるまでの勾配の評価回数は、"
             f"勾配降下法が{counts['GD']}回、共役勾配法が{counts['CG']}回、"
             f"L-BFGS法が{counts['L-BFGS']}回。"
+            "収束の線は各桁の基準以下に初めてなった評価回数を結び、評価ごとの軌跡は示さない。"
         ),
-        630,
+        654,
     )
     left, right = 56, 416
     px = _scale(PA007_WINDOW[0], PA007_WINDOW[1], left, right)
@@ -3695,8 +3708,10 @@ def _pa007_deblur_svg() -> str:
     )
     for name, color in (("GD", MUTED), ("CG", POINT), ("L-BFGS", UPDATE)):
         history = runs[name]["history"]
-        keep = [i for i in range(len(history)) if i < 300 or i % 20 == 0 or i == len(history) - 1]
-        points = [(qx(math.log10(i + 1)), qy(math.log10(history[i]))) for i in keep]
+        points = [
+            (qx(math.log10(evaluation)), qy(exponent))
+            for evaluation, exponent in pa007_milestones(history)
+        ]
         parts.append(_polyline(points, color, 2.0))
     parts.append(_text(right, bottom + 46, "勾配の評価回数", "", "end"))
     for row, (_name, color, label) in enumerate(
@@ -3709,6 +3724,7 @@ def _pa007_deblur_svg() -> str:
         y = 568 + 22 * row
         parts.append(f'<path d="M20 {y - 5}H44" fill="none" stroke="{color}" stroke-width="3"/>')
         parts.append(_text(54, y, label))
+    parts.append(_text(20, 636, "線：各桁の基準以下になった最初の評価", "note"))
     parts.append(_text(20, 542, "灰の横線：停止の基準 10⁻⁶", "note"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
