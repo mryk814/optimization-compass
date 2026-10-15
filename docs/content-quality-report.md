@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `61`
-- Meeting the concept floor: `61`
+- Published concept guides: `62`
+- Meeting the concept floor: `62`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -24,6 +24,7 @@
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
+| `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
@@ -116,6 +117,7 @@
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.failed-simulation` | 0 |
+| `concept.high-dimensional-black-box` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 2 |

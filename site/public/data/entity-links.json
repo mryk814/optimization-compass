@@ -8409,6 +8409,107 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.high-dimensional-black-box",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "高次元black-box",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA015",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.noisy-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spsa",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "turbo-saasbo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "高次元black-boxは、勾配が得られないまま、数十本以上の変数を同時に決める最小化の定式化です。評価回数が決まっていると、変数が増えても試せる点は増えないので、空間を埋める密度は変数の数とともに指数的に下がります。値を左右する変数が少ない、滑らかで雑音がないといった構造が使えるかどうかを、条件として確かめてから手法を選びます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.hyperparameter-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -33805,13 +33906,21 @@
       "summary": "非常に高価な低次元評価。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.high-dimensional-black-box"
+      ],
       "canonical_url": "/formulations/PA015",
       "entity_id": "PA015",
       "entity_type": "problem",
       "external_url": null,
       "label": "高次元black-box",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.high-dimensional-black-box",
+          "target_type": "content"
+        }
+      ],
       "summary": "高次元black-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {

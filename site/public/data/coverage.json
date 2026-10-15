@@ -15873,12 +15873,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.high-dimensional-black-box"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15905,11 +15905,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA015"
+            "/formulations/PA015",
+            "concept.high-dimensional-black-box"
           ]
         },
         "recommendation": {
