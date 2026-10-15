@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `61`
-- Meeting the concept floor: `61`
+- Published concept guides: `62`
+- Meeting the concept floor: `62`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -12,6 +12,7 @@
 | `concept.bilevel-optimization` | 129 | 9623 | 15 | 8 | 0 | pass |
 | `concept.bound-constrained-smooth` | 127 | 10653 | 15 | 12 | 0 | pass |
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
+| `concept.closed-form-candidate` | 145 | 8325 | 13 | 10 | 0 | pass |
 | `concept.complementarity-problem` | 108 | 11257 | 13 | 4 | 0 | pass |
 | `concept.constrained-nlp` | 99 | 9923 | 12 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
@@ -104,6 +105,7 @@
 | `concept.bilevel-optimization` | 0 |
 | `concept.bound-constrained-smooth` | 0 |
 | `concept.chance-risk-contract` | 0 |
+| `concept.closed-form-candidate` | 0 |
 | `concept.complementarity-problem` | 0 |
 | `concept.constrained-nlp` | 6 |
 | `concept.constraint-class` | 0 |
