@@ -2134,6 +2134,8 @@ caption {
 }
 .markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
+/* Let the table scroll instead of squeezing a formula into the adjacent cell. */
+.markdown-body table math { min-width: max-content; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }
 .callout { margin: .75rem 0; padding: .6rem .7rem; border: 1px solid #cfd8d1; border-left: 4px solid #6c9a7f; border-radius: .35rem; background: #f5f8f3; }
 .callout-warning { border-color: #dfc7a8; border-left-color: #b36b2c; background: #fff9ef; }

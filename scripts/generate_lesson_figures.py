@@ -3647,7 +3647,7 @@ def _pa002_circuit_svg() -> str:
                 x, wire_y - 42, f"v{'₁₂₃'[index]} = {_pa002_value(voltage[index])} V", "", "middle"
             )
         )
-    parts.append(_text(20, 364, "どの導線も導電率 1 S。電流 = 電圧差 × 1 S", "note"))
+    parts.append(_text(20, 364, "各抵抗は 1 S。電流 = 電圧差 × 1 S", "note"))
     parts.append(_text(20, 388, f"接点2：流入 {amps['w12']} A、流出 {amps['w23']} A"))
     parts.append(_text(20, 412, f"接地へ：{amps['g1']} + {amps['g3']} = {total} A"))
     parts.append("</svg>")

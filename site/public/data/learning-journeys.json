@@ -8115,6 +8115,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.linear-system",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.manifold",
       "asset_type": "content",
       "policy": "warning",

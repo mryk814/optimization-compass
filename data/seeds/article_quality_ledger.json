@@ -266,6 +266,25 @@
       },
       "notes": "Sonnetの一次レビュー（全項目pass、数値15件を再計算で一致）をClaudeが本文と照合。指摘の文9件（凸と大域解の主語、等式制約の書き換え、頂点に現れる理由、非有界の断定、クロスオーバー、双対値の単位など）を直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
     },
+    "concept.linear-system": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "6a5f49b0b877",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当の独立レビューとPython出力照合。単位変換と物理量変更、conductance用語を修正。S173は公式目次と公開要旨の確認範囲で採用。1280/375/320pxで本文・回路図・数式表を目視し、横スクロールと目次を確認。共有数式表の重なりは回帰E2Eの失敗→修正後通過、他記事の見た目3件とbuildも通過。証拠: root output/playwright/handoff-01825/PA002-*.png。"
+    },
     "concept.mixed-integer-linear-program": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",

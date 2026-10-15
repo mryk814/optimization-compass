@@ -8829,6 +8829,82 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.linear-system",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "線形方程式",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S173",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA002",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.inverse-problem",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        }
+      ],
+      "summary": "線形方程式は、未知数の数と同じ数の一次式の等式を、すべて同時に満たす値を求める定式化です。最小にする量はなく、係数の行列が正則なら答えは一つに決まります。行列がほぼ特異だと、残差が小さくても解は大きくずれるため、解く前に条件数を確かめます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.manifold",
       "entity_id": "concept.manifold",
       "entity_type": "content",
@@ -33533,13 +33609,21 @@
       "summary": "閉形式解候補。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.linear-system"
+      ],
       "canonical_url": "/formulations/PA002",
       "entity_id": "PA002",
       "entity_type": "problem",
       "external_url": null,
       "label": "線形方程式に還元",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.linear-system",
+          "target_type": "content"
+        }
+      ],
       "summary": "線形方程式に還元。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {

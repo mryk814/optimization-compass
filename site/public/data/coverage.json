@@ -14796,12 +14796,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.linear-system"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -14828,11 +14828,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA002"
+            "/formulations/PA002",
+            "concept.linear-system"
           ]
         },
         "recommendation": {
