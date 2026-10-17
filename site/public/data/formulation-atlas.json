@@ -1585,7 +1585,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.high-dimensional-black-box",
       "cues_ja": [
         "数百個のparameterを持つsimulatorを、中身を見ずに調整したい"
       ],
@@ -1623,7 +1623,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1666,8 +1666,12 @@
       "problem_id": "PA015",
       "reading_ja": "勾配が得られないまま、多くの変数を同時に決めます。次元が増えると探索の効率が急に落ちます。",
       "source_ids": [
+        "S002",
         "S033",
-        "S035"
+        "S035",
+        "S056",
+        "S058",
+        "S059"
       ],
       "standard_form": "\\min_{x\\in[\\ell,u]}\\; F(x),\\quad \\text{勾配なし},\\; n \\text{ は大きい}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mi>&#x02113;</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">]</mo></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mtext>勾配なし</mtext><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>n</mi><mtext>&#x000A0;は大きい</mtext></mrow></math></div>"
@@ -6327,6 +6331,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 41
+    "with_article": 42
   }
 }

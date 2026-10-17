@@ -173,6 +173,25 @@
       },
       "notes": "執筆者以外のレビューでClarke微分の解析式・全方向非負の証明・MADS方向条件を照合し、数値実行と図テスト27件の証拠を確認。有限方向検査を停留証明と区別。壊れた表を復元、課題4要素を追加。1280/375/320pxで本文・図・式・各数値表を目視、目次開閉を確認。表内MathMLの共通修正はPA002の回帰検証と同じ。証拠: root output/playwright/handoff-01825/PA011-*.png。"
     },
+    "concept.high-dimensional-black-box": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "0391899674eb",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当によるPython出力再現と本文照合。格子が予算内の次元、勾配回数と評価数、noiseの題材内の例を修正。固定章構成へ整理し数値表を分割・数式化。1280/375/320pxで本文・図・数式・全数値表を目視し、1275や10が途中改行されないことと目次開閉を確認。共有MathML修正はPA002の回帰検証と同一。証拠: root output/playwright/handoff-01825/PA015-*.png。"
+    },
     "concept.hyperparameter-optimization": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
