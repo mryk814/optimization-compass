@@ -78,6 +78,25 @@
       },
       "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算して一致。記号表の長いインライン式を成分ごとに分割。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
+    "concept.closed-form-candidate": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "e13bfcb3c9df",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "執筆者とは別の担当による数値再実行と本文照合。1280/375/320pxで初期画面・図・数式・表を目視し、目次開閉を確認。証拠: output/playwright/handoff-01825/PA001-*.png（root worktree）。"
+    },
     "concept.complementarity-problem": {
       "reviewed_on": "2026-10-14",
       "reviewer": "claude",

@@ -14716,12 +14716,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.closed-form-candidate"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -14748,11 +14748,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA001"
+            "/formulations/PA001",
+            "concept.closed-form-candidate"
           ]
         },
         "recommendation": {
