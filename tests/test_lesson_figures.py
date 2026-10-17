@@ -504,3 +504,28 @@ def test_lcp_active_set_figure_uses_the_article_numbers() -> None:
     for text in ("接触なし（w&lt;0）", "Aだけ（w&lt;0）", "Bだけ（w&lt;0）", "AとB（解）"):
         assert text in figure
     assert figure.count('fill="#b3532d"') == 1  # only the solution is drawn filled
+
+
+def test_linear_system_figure_uses_the_article_numbers() -> None:
+    from fractions import Fraction
+
+    from scripts.generate_lesson_figures import _pa002_circuit_data
+
+    data = _pa002_circuit_data()
+    assert data["voltage"] == [Fraction(9, 4), Fraction(3, 2), Fraction(3, 4)]
+    assert data["pivots"] == [Fraction(2), Fraction(3, 2), Fraction(4, 3)]
+    # Kirchhoff's current law at every node: what leaves equals what is injected.
+    assert (data["ground_1"], data["wire_12"]) == (Fraction(9, 4), Fraction(3, 4))
+    assert data["ground_1"] + data["wire_12"] == 3
+    assert data["wire_12"] == data["wire_23"] == data["ground_3"]
+    figure = generate_lesson_figures()["linear-system-circuit.svg"]
+    for text in (
+        "v₁ = 2.25 V",
+        "v₂ = 1.5 V",
+        "v₃ = 0.75 V",
+        "0.75 A",
+        "2.25 A",
+        "2.25 + 0.75 = 3 A",
+    ):
+        assert text in figure
+    assert "stroke-dasharray" not in figure
