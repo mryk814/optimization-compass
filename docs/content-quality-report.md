@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `65`
-- Meeting the concept floor: `65`
+- Published concept guides: `66`
+- Meeting the concept floor: `66`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -27,6 +27,7 @@
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
+| `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
@@ -123,6 +124,7 @@
 | `concept.failed-simulation` | 0 |
 | `concept.general-nonsmooth-local` | 0 |
 | `concept.high-dimensional-black-box` | 0 |
+| `concept.high-dimensional-smooth-unconstrained` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 2 |

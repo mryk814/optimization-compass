@@ -8662,6 +8662,92 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.high-dimensional-smooth-unconstrained",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "高次元・勾配利用可能",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA007",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.smooth-low-dimensional-unconstrained",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "nonlinear-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "高次元・勾配利用可能は、変数が非常に多い滑らかな関数を、制約なしで最小にする定式化です。勾配は安く計算できる一方、密なHessian（二階微分の行列）を持つ記憶や分解の費用が問題になります。勾配と少数の履歴を使う方法や、Hessianとの積だけを使う方法が候補です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.hyperparameter-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -33972,13 +34058,21 @@
       "summary": "滑らかな低次元無制約。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.high-dimensional-smooth-unconstrained"
+      ],
       "canonical_url": "/formulations/PA007",
       "entity_id": "PA007",
       "entity_type": "problem",
       "external_url": null,
       "label": "高次元・勾配利用可能",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.high-dimensional-smooth-unconstrained",
+          "target_type": "content"
+        }
+      ],
       "summary": "高次元・勾配利用可能。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
