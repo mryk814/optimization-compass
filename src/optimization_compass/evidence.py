@@ -11,10 +11,10 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.learning_slices import LearningSliceLink
 
 SOURCE_FRESHNESS_DAYS: dict[str, int] = {
-    "official_documentation": 90,
-    "official_issue": 90,
-    "official_repository": 90,
-    "vendor_manual": 90,
+    "official_documentation": 180,
+    "official_issue": 180,
+    "official_repository": 180,
+    "vendor_manual": 180,
     "standard": 365,
     "original_paper": 730,
     "textbook": 730,

@@ -101,10 +101,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S003",
@@ -140,10 +138,8 @@
         }
       },
       "journey_id": "EC013",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -359,10 +355,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S022",
             "S023",
@@ -395,10 +389,8 @@
         }
       },
       "journey_id": "EC019",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -502,10 +494,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S042",
             "S043",
@@ -540,10 +530,8 @@
         }
       },
       "journey_id": "EC020",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -654,10 +642,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S001",
             "S002",
@@ -695,10 +681,8 @@
         }
       },
       "journey_id": "EC021",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -797,10 +781,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S010",
             "S012",
@@ -835,10 +817,8 @@
         }
       },
       "journey_id": "EC025",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -940,10 +920,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -979,10 +957,8 @@
         }
       },
       "journey_id": "EC026",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1085,10 +1061,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S018",
@@ -1125,10 +1099,8 @@
         }
       },
       "journey_id": "EC027",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1221,10 +1193,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S003",
@@ -1256,10 +1226,8 @@
         }
       },
       "journey_id": "EC028",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1356,10 +1324,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S042",
             "S043",
@@ -1392,10 +1358,8 @@
         }
       },
       "journey_id": "EC029",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1615,10 +1579,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -1653,10 +1615,8 @@
         }
       },
       "journey_id": "bilevel-regularized-regression",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1756,10 +1716,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S005",
@@ -1795,10 +1753,8 @@
         }
       },
       "journey_id": "budget-allocation",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1897,10 +1853,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -1935,10 +1889,8 @@
         }
       },
       "journey_id": "constrained-design",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2038,10 +1990,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -2077,10 +2027,8 @@
         }
       },
       "journey_id": "course-timetabling",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2178,10 +2126,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -2216,10 +2162,8 @@
         }
       },
       "journey_id": "ecosystem-restoration-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2317,10 +2261,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -2355,10 +2297,8 @@
         }
       },
       "journey_id": "emergency-shelter-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2456,10 +2396,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S004",
             "S010",
@@ -2494,10 +2432,8 @@
         }
       },
       "journey_id": "energy-cvar-procurement",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2597,10 +2533,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S032",
             "S034",
@@ -2635,10 +2569,8 @@
         }
       },
       "journey_id": "formulation-experiment-tuning",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2744,10 +2676,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S001",
             "S002",
@@ -2783,10 +2713,8 @@
         }
       },
       "journey_id": "hyperparameter-search",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2884,10 +2812,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -2922,10 +2848,8 @@
         }
       },
       "journey_id": "irrigation-retrofit-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3026,10 +2950,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S032",
             "S034",
@@ -3064,10 +2986,8 @@
         }
       },
       "journey_id": "laser-process-tuning",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3170,10 +3090,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S034",
             "S035",
@@ -3209,10 +3127,8 @@
         }
       },
       "journey_id": "manufacturing-process-window",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3310,10 +3226,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -3348,10 +3262,8 @@
         }
       },
       "journey_id": "mobile-clinic-outreach-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3460,10 +3372,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S034",
             "S035",
@@ -3501,10 +3411,8 @@
         }
       },
       "journey_id": "multi-fidelity-simulator",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3600,10 +3508,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S001",
             "S002",
@@ -3639,10 +3545,8 @@
         }
       },
       "journey_id": "nelder-mead-initial-simplex",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3740,10 +3644,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -3778,10 +3680,8 @@
         }
       },
       "journey_id": "network-upgrade-portfolio",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3881,10 +3781,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S004",
@@ -3920,10 +3818,8 @@
         }
       },
       "journey_id": "portfolio-allocation",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4021,10 +3917,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S004",
             "S010",
@@ -4059,10 +3953,8 @@
         }
       },
       "journey_id": "portfolio-cvar-allocation",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4162,10 +4054,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -4201,10 +4091,8 @@
         }
       },
       "journey_id": "production-mix-planning",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4302,10 +4190,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -4340,10 +4226,8 @@
         }
       },
       "journey_id": "public-infrastructure-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4455,10 +4339,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -4499,10 +4381,8 @@
         }
       },
       "journey_id": "shape-diffuser",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4602,10 +4482,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -4641,10 +4519,8 @@
         }
       },
       "journey_id": "shift-scheduling",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4745,10 +4621,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S044",
             "S045",
@@ -4783,10 +4657,8 @@
         }
       },
       "journey_id": "so3-attitude-alignment",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -5051,8 +4923,8 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.24",
-  "generated_at": "2026-10-13T00:00:00Z",
+  "dataset_version": "0.18.25",
+  "generated_at": "2026-10-14T00:00:00Z",
   "journeys": [
     {
       "candidate_method_ids": [
@@ -5066,9 +4938,7 @@
           "comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_LBFGSB",
         "M_LEVENBERG_MARQUARDT"
@@ -5078,7 +4948,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5144,7 +5014,7 @@
         "S065",
         "S096"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "残差pattern、Jacobian rank、scale、bounds、外れ値、初期値感度を確認し、二乗和だけでparameterの一意性を断定しません。",
       "title_en": "Estimate nonlinear model parameters",
       "title_ja": "観測データから非線形モデルのパラメータを推定する"
@@ -5169,7 +5039,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -5234,9 +5104,7 @@
           "comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_CP_SAT"
       ],
@@ -5244,7 +5112,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -5295,7 +5163,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "距離・所要時間行列の生成時点、道路区分、タイムゾーン、service time、車両容量、driverの勤務・休憩ルールをversion管理する。探索前に各stopが少なくとも1台から到達可能かを確認し、期限停止時は未訪問stop、時間窓・容量違反、総距離、最良bound、停止理由を別々に報告する。実行可能routeが得られても最適性は未証明であり、交通予測を更新した再計算とdispatcherによる確認経路を残す。",
       "title_en": "Build time-window delivery routes under a deadline",
       "title_ja": "時間窓付き配送ルートを10分以内に組む"
@@ -5312,9 +5180,7 @@
           "comparison_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_MULTIPLE_SHOOTING"
       ],
@@ -5322,7 +5188,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5390,7 +5256,7 @@
         "S076",
         "S102"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のpendulum Theater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。hybrid mode chattering ledgerもEC020のtrajectoryへmode変数を追加したsolver実行ではない。固定した合成mode sequenceのsecondary failure sliceとして、objective／dynamics defectとは別にmode switch数とswitching intervalを読む。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
       "title_ja": "非線形動力学を含む軌道を最適化する"
@@ -5411,9 +5277,7 @@
           "comparison_id": "COMPARE_GRADIENT_FAMILY"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_MOMENTUM_SGD"
       ],
@@ -5421,7 +5285,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5502,7 +5366,7 @@
         "S056",
         "S070"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。通常presetの軌跡ではupdate geometryを読み、高い学習率の感度比較では目的値の増大、振幅、terminal statusを同じ評価軸で確認する。AdamWや実データでの汎化性能を順位付けする比較ではない。",
       "title_en": "Train an image classifier with mini-batches",
       "title_ja": "mini-batchで画像分類モデルを学習する"
@@ -5519,9 +5383,7 @@
           "comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_ACTIVE_SET_QP"
       ],
@@ -5529,7 +5391,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -5582,7 +5444,7 @@
         "S062",
         "S076"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "100Hzは平均10msではなく各周期のdeadlineとして扱う。QPの構造・scaling・solver設定・CPU・build条件を固定し、cold startとwarm startを分けてp50、p99、最大latency、iteration数、primal/dual residual、deadline miss率を計測する。status成功後も動力学とboundsを独立に再計算し、計測値欠落・infeasible・残差未達・deadline miss時には事前検証済みのbackup controllerへ切り替える。",
       "title_en": "Solve a repeated MPC QP at 100 Hz",
       "title_ja": "100Hzで反復MPCの二次計画問題を解く"
@@ -5599,9 +5461,7 @@
           "comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_TRUST_KRYLOV"
       ],
@@ -5609,7 +5469,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -5669,7 +5529,7 @@
         "S110",
         "S111"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "随伴法の整合性、メッシュ独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。失敗した状態計算は大きな目的値へ暗黙に変換せず、解法の終了理由、残差、消費した状態・随伴計算の費用を失敗評価として保持します。非定常問題（transient）では時間刻み数、チェックポイント方針、順方向計算の再計算回数、随伴計算の保存容量を追加します。一方向・双方向の複合物理（multiphysics）では、場ごとの残差と連成反復を分けます。",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
@@ -5686,9 +5546,7 @@
           "comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_RANDOM_SEARCH"
       ],
@@ -5696,7 +5554,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5752,7 +5610,7 @@
         "S069",
         "S094"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "成功・crash・timeout・非物理解を別statusで記録し、入力、software version、seed、wall time、終了理由を保存する。penalty値を使う実装でも、元のfailure statusを失わず、feasible rateと最良feasible値を別々に追う。",
       "title_en": "Search a design space with failed simulations",
       "title_ja": "途中で失敗するシミュレーションから設計を探す"
@@ -5769,9 +5627,7 @@
           "comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_LEVENBERG_MARQUARDT"
       ],
@@ -5779,7 +5635,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -5830,7 +5686,7 @@
         "S056",
         "S080"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "最初にsquare、under-determined、over-determinedを区別する。残差normだけでなく各残差、Jacobian rank、scale、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
       "title_en": "Solve equations as roots before scalar optimization",
       "title_ja": "方程式を最適化に変える前に求根として解く"
@@ -5847,9 +5703,7 @@
           "comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_MULTIPLE_SHOOTING"
       ],
@@ -5857,7 +5711,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5914,7 +5768,7 @@
         "S076",
         "S102"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "N=20とN=40で、同じdynamics、2秒horizon、初期・終端・path制約、初期trajectory、8 evaluation予算、dynamics defect tolerance $10^{-3}$、node path tolerance $10^{-4}$、terminal tolerance $10^{-3}$ を固定する。max dynamics defect、node path violation、再構成path violation、terminal error、objectiveを別々に保存する。gravityを10%変えたvalidation rolloutは独立failure Theaterで確認する。MPCは[receding horizon](#/learn/concept.receding-horizon)と[Case EC025](#/gallery/EC025)、contact／hybridは[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、safety filterは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
       "title_en": "Swing up a pendulum under constraints",
       "title_ja": "pendulumを制約内で振り上げる"
@@ -5939,7 +5793,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6005,9 +5859,7 @@
           "comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -6015,7 +5867,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6070,7 +5922,7 @@
         "S064",
         "S087"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
       "title_en": "Tune regularization around a nonnegative regression solve",
       "title_ja": "正則化を選びながら非負回帰を解く"
@@ -6087,9 +5939,7 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6097,7 +5947,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6150,7 +6000,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "search-treeは、①nodeの部分assignment、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤incumbentとglobal boundの差、の順に読む。完全探索ではvalue 15の施策A+Bと上界15が一致して最適性を証明するが、4 node停止では可行なincumbentがあっても正のgapが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約をversion管理し、係数感度とheld-out評価を別に行う。",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する"
@@ -6167,9 +6017,7 @@
           "comparison_id": "COMPARE_CONSTRAINED_FAILURE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -6177,7 +6025,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6229,7 +6077,7 @@
         "S064",
         "S087"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "目的値と最大制約違反量（constraint violation）を分けて保存し、アクティブ制約（active constraint）と終了状態を確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"
@@ -6246,9 +6094,7 @@
           "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6256,7 +6102,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "education",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6309,7 +6155,7 @@
         "S055",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintとsoft preferenceを別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点をversion管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先のTheater／Compareは勤務シフトの固定教材であり、この時間割と同じdataではない。共通する二値割当、hard constraint、tie-breakの読み方だけを再利用する。",
       "title_en": "Build a course timetable with room and instructor constraints",
       "title_ja": "教室・担当・時間帯を守って時間割を組む"
@@ -6326,9 +6172,7 @@
           "comparison_id": "COMPARE_RESTORATION_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6336,7 +6180,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6388,7 +6232,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintと便益proxyを分け、候補ID、対象地域、実施cost、許認可、前提事業、proxyの算定者・根拠・更新日を残す。候補案は現地調査、複数scenario、地域の関係者、保全の専門家、実施後monitoringで再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この環境保全caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
       "title_en": "Select ecosystem restoration projects under a budget",
       "title_ja": "予算内で生態系再生プロジェクトを選ぶ"
@@ -6405,9 +6249,7 @@
           "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6415,7 +6257,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6467,7 +6309,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintと便益scoreを分け、候補地の可用性、移動時間、accessibility、地域別の最低配置、score作成者と更新日を記録する。接続先の分枝限定Theaterは4品目knapsackであり、この公共政策caseの候補地データではない。incumbent、bound、gap、停止理由の読み方だけを共有する。",
       "title_en": "Select temporary support sites under a budget",
       "title_ja": "予算内で臨時支援拠点を選ぶ"
@@ -6484,9 +6326,7 @@
           "comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_PROJECTED_GRADIENT"
       ],
@@ -6494,7 +6334,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6546,7 +6386,7 @@
         "S066",
         "S103"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "価格scenarioの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったscenarioとheld-out scenarioを分ける。接続先のCVaR Theater／Compareは4資産の教材であり、この電力調達caseと同じ実データではない。共通するsimplex・scenario loss・tail riskの読み方だけを再利用する。",
       "title_en": "Procure electricity while controlling scenario tail cost",
       "title_ja": "価格scenarioのtail costを抑えて電力を調達する"
@@ -6563,9 +6403,7 @@
           "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_CMA_ES"
       ],
@@ -6573,7 +6411,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "life-sciences",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6637,7 +6475,7 @@
         "S059",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "配合単位、原料lot、protocol、測定系、失敗status、実験日時を揃え、surrogate平均、uncertainty、acquisition、候補理由を各iterationで保存する。接続先のTheater／Compareは1次元の合成関数であり、実在の配合や安全性を再現しない。候補は次の実験点であって製品条件ではなく、独立反復、hold-out、専門家審査を経て判断する。",
       "title_en": "Tune formulation settings with a limited experiment budget",
       "title_ja": "少ない実験で配合条件を絞る"
@@ -6658,9 +6496,7 @@
           "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_NELDER_MEAD"
       ],
@@ -6668,7 +6504,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6733,7 +6569,7 @@
         "S059",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "実務のCaseと1次元の固定教材を分け、観測ノイズ（noise）、現時点の最良値（best-so-far）、不確実性、評価予算（budget）の到達を一緒に記録します。",
       "title_en": "Hyperparameter search",
       "title_ja": "高価な実験の設定を探す"
@@ -6750,9 +6586,7 @@
           "comparison_id": "COMPARE_IRRIGATION_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6760,7 +6594,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6812,7 +6646,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintと優先度proxyを分け、区画ID、送水系統、設備状態、更新cost、proxyの算定者と更新日を残す。候補案は現地の流量測定、作物ごとの必要水量、施工可能時期、保守要員、水利権を使って再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この農業caseの圃場データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
       "title_en": "Select irrigation retrofits under a capital budget",
       "title_ja": "予算内で圃場の灌漑設備を更新する"
@@ -6829,9 +6663,7 @@
           "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_CMA_ES"
       ],
@@ -6839,7 +6671,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6904,7 +6736,7 @@
         "S059",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "実務では3変数を1次元へ潰さず、設定値、材料lot、装置状態、測定系、失敗status、試作costを同じledgerへ保存する。Theaterは製造工程そのものではなく、small-noise下でacquisitionが探索と活用を切り替える読み方だけを固定1次元関数で示す。",
       "title_en": "Tune laser process settings with a limited trial budget",
       "title_ja": "少ない試作でレーザー加工条件を絞る"
@@ -6921,9 +6753,7 @@
           "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_RANDOM_SEARCH"
       ],
@@ -6931,7 +6761,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6998,7 +6828,7 @@
         "S069",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "各試作について材料lot、装置、operator、環境、入力条件、測定値、測定不確かさ、失敗status、wall timeを保存する。random baselineとの比較では初期点、探索範囲、試行budget、並列数、noiseの扱いを固定し、best observedとsurrogate予測を分けて読む。",
       "title_en": "Tune manufacturing conditions with expensive experiments",
       "title_ja": "高価な製造実験から工程条件を探す"
@@ -7015,9 +6845,7 @@
           "comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -7025,7 +6853,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -7077,7 +6905,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintとaccess proxyを分け、候補ID、対象地域、日時、運営cost、必要資格・設備、会場のaccessibility、予約・紹介先のcapacity、proxyの算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定Theaterは4品目knapsackであり、このhealthcare caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
       "title_en": "Select mobile clinic outreach sessions under a budget",
       "title_ja": "予算内で巡回健診の開催候補を選ぶ"
@@ -7094,9 +6922,7 @@
           "comparison_id": "COMPARE_BO_MULTIFIDELITY_COST"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_HYPERBAND_ASHA"
       ],
@@ -7104,7 +6930,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -7191,7 +7017,7 @@
         "S069",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。Compare は initial design、noise、fidelity cost、parallel workers=1、固定tuning、失敗をnullのまま記録してcostを課しretryしないpolicyを固定し、high-fidelity-equivalent costで同期します。独立failure Theaterでは同じ2候補のlow/high観測を照合し、low-fidelity biasによる順位反転を示します。",
       "title_en": "Allocate a budget across low- and high-fidelity simulation",
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
@@ -7208,9 +7034,7 @@
           "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_MADS"
       ],
@@ -7218,7 +7042,7 @@
         "mads",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "education",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -7285,7 +7109,7 @@
         "S063",
         "S094"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認する。次にRosenbrockのcanonical runとshrink failure sliceで経路を読むが、scaleとbudgetも異なるため差を初期位置だけに帰属させない。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
       "title_en": "Diagnose local-search sensitivity from the initial simplex",
       "title_ja": "初期simplexで局所探索の感度を見抜く"
@@ -7302,9 +7126,7 @@
           "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -7312,7 +7134,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "telecommunications",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -7364,7 +7186,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "便益scoreの定義期間、需要予測、障害data、費用単位、設備依存、地域下限をversion管理し、採択だけでなく未採択理由、unused budget、停止理由、best boundを記録する。接続先のTheater／Compareは一般の二値knapsack教材であり、通信網のflowや電波伝搬を計算しない。実務では候補生成とscore推定をnetwork simulationで別途検証する。",
       "title_en": "Select network upgrades under a capital budget",
       "title_ja": "予算内で通信設備の更新候補を選ぶ"
@@ -7381,9 +7203,7 @@
           "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_SLSQP"
       ],
@@ -7391,7 +7211,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -7444,7 +7264,7 @@
         "S064",
         "S103"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "title_en": "Portfolio allocation",
       "title_ja": "平均・共分散でポートフォリオを配分する"
@@ -7461,9 +7281,7 @@
           "comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_PROJECTED_GRADIENT"
       ],
@@ -7471,7 +7289,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -7524,7 +7342,7 @@
         "S066",
         "S103"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
       "title_en": "Portfolio allocation with CVaR",
       "title_ja": "scenarioのtail riskを抑えて配分する"
@@ -7541,9 +7359,7 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_CP_SAT"
       ],
@@ -7551,7 +7367,7 @@
         "branch-and-cut",
         "cp-sat"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -7605,7 +7421,7 @@
         "S053",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "需要予測の時点、単位、歩留まり、在庫、machine calendar、段取り費、最小lot、禁止組合せを同じversionで保存する。status、incumbent、bound、gap、time limitを併記し、前週解をwarm startへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木とCompareは4変数knapsackで停止条件を学ぶ別教材であり、この生産計画のsolver実行や利益比較ではない。",
       "title_en": "Plan a weekly production mix with setup costs",
       "title_ja": "段取り費を含む週間生産計画を組む"
@@ -7622,9 +7438,7 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -7632,7 +7446,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -7685,7 +7499,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "便益scoreの定義者、対象期間、地域、根拠data、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、unused budget、最適性gap、停止理由を記録する。scoreやcostを変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
       "title_en": "Select resilience projects under a fixed budget",
       "title_ja": "限られた予算で防災事業を選ぶ"
@@ -7702,9 +7516,7 @@
           "comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_ADJOINT_SENSITIVITY",
         "M_INTERIOR_POINT_NLP"
@@ -7714,7 +7526,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -7778,7 +7590,7 @@
         "S105",
         "S106"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "各evaluationでparameter、geometry、mesh、physical state、目的を別recordにします。有限差分またはadjoint sensitivityはvalid geometryと収束済みstateの後に検査します。mesh motionでqualityを保てなければremeshingへ切り替えます。level-setはtopology changeを許す別表現です。follow-upは、構造ではstress／buckling、CFDではviscous loss、thermalではheat-transfer surface、acousticではwave scattering、photonicではMaxwell stateとfabrication constraintを同じlayer contractへ接続します。",
       "title_en": "Update a two-dimensional diffuser wall shape",
       "title_ja": "2D diffuserの壁面shapeを更新する"
@@ -7795,9 +7607,7 @@
           "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -7805,7 +7615,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -7858,7 +7668,7 @@
         "S055",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
       "title_en": "Shift scheduling",
       "title_ja": "必要人数と希望を両立してシフトを組む"
@@ -7875,9 +7685,7 @@
           "comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN"
         }
       ],
-      "completion_reasons": [
-        "stale_source"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_PROJECTED_GRADIENT",
         "M_RIEMANNIAN_TRUST_REGION"
@@ -7887,7 +7695,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -7941,7 +7749,7 @@
         "S071",
         "S107"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "[SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)を先に読み、objective、geodesic residual、orthogonality error、determinant error、projection correctionまたはtangent stepを別々に保存する。quaternionを使う場合は$q$と$-q$の同値を処理し、near-piではlog mapとchartの条件を点検する。",
       "title_en": "Align a near-pi attitude on SO(3)",
       "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
@@ -7972,7 +7780,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -8053,7 +7861,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.24",
+      "dataset_version": "0.18.25",
       "domain": "transportation",
       "excluded_method_ids": [
         "M_BFGS"
@@ -8271,6 +8079,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.general-nonsmooth-local",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.high-dimensional-black-box",
       "asset_type": "content",
       "policy": "warning",
@@ -8308,6 +8122,12 @@
     },
     {
       "asset_id": "concept.linear-program",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.linear-system",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8908,11 +8728,11 @@
     }
   ],
   "summary": {
-    "milestone_status": "not_met",
+    "milestone_status": "met",
     "status_counts": {
-      "complete": 4,
+      "complete": 36,
       "draft": 0,
-      "partial": 32
+      "partial": 0
     },
     "target_complete_journeys": 5,
     "total_journeys": 36

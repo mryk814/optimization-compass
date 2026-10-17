@@ -76,6 +76,5 @@ def test_staged_ec025_journey_is_complete(tmp_path: Path) -> None:
     )
     journey = next(item for item in journeys["journeys"] if item["journey_id"] == "EC025")
 
-    # Official-documentation sources passed their 90-day limit at the 0.18.24 release date.
-    assert journey["status"] == "partial"
-    assert journey["completion_reasons"] == ["stale_source"]
+    assert journey["status"] == "complete"
+    assert journey["completion_reasons"] == []

@@ -150,6 +150,22 @@ test(
 // with exactly the same typography and reading column (docs/content-reading-principles.md §11),
 // so a page-specific stylesheet cannot quietly restyle one kind of article.
 const referenceArticle = "/learn/concept.linear-least-squares";
+test("表の数式が320pxでも隣のセルへはみ出さない", async ({ page, baseURL }) => {
+  for (const width of [1280, 375, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/formulations/PA002");
+    const table = page.locator(".markdown-body table").filter({ hasText: "解の相対誤差" });
+    await expect(table).toBeVisible();
+    const math = table.locator("math");
+    expect(await math.count()).toBeGreaterThan(0);
+    const overflow = await math.evaluateAll((elements) => elements
+      .filter((element) => element.scrollWidth > element.clientWidth + 1)
+      .map((element) => element.textContent));
+    expect(overflow, `${width}px: 数式をセル幅へ押し込まない`).toEqual([]);
+    await expectNoPageOverflow(page);
+  }
+});
+
 const articleKinds = [
   { kind: "method with explorable", route: "/learn/adam" },
   { kind: "method without explorable", route: "/learn/bfgs" },

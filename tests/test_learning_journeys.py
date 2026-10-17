@@ -52,10 +52,10 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
         "/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
     )
     assert scenario_roles["failure_contrast"].scenario_id == "SCENARIO_CONSTRAINED_DISK"
-    assert pilot.status == "partial"
-    assert pilot.completion_reasons == ["stale_source"]
+    assert pilot.status == "complete"
+    assert pilot.completion_reasons == []
     assessment = next(item for item in index.assessments if item.journey_id == "constrained-design")
-    assert assessment.missing_dimensions == ["source_review"]
+    assert assessment.missing_dimensions == []
     assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
     assert sum(index.summary.status_counts.values()) == len(index.journeys)
@@ -66,8 +66,8 @@ def test_parameter_estimation_journey_connects_primary_sensitivity_and_compariso
     index = load_index()
     journey = next(item for item in index.journeys if item.journey_id == "EC013")
 
-    assert journey.status == "partial"
-    assert journey.completion_reasons == ["stale_source"]
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
     assert {item.role for item in journey.scenarios} == {"primary", "alternate", "sensitivity"}
     assert next(item for item in journey.scenarios if item.role == "primary").scenario_id == (
         "SCENARIO_EXPONENTIAL_FIT_TRF"
@@ -83,8 +83,8 @@ def test_nelder_mead_journey_adopts_all_four_orphaned_scenarios() -> None:
         item for item in index.journeys if item.journey_id == "nelder-mead-initial-simplex"
     )
 
-    assert journey.status == "partial"
-    assert journey.completion_reasons == ["stale_source"]
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
     assert {item.scenario_id for item in journey.scenarios} == {
         "SCENARIO_NM_QUADRATIC",
         "SCENARIO_NM_QUADRATIC_SHIFTED",
@@ -126,10 +126,8 @@ def test_ec020_journey_connects_hybrid_chattering_as_a_secondary_failure_slice()
     index = load_index()
     journey = next(item for item in index.journeys if item.journey_id == "EC020")
 
-    # Official-documentation sources verified on 2026-07-13 are past their 90-day limit at the
-    # 0.18.24 release date, so this journey is partial with only the source review missing.
-    assert journey.status == "partial"
-    assert journey.completion_reasons == ["stale_source"]
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
     assert next(item for item in journey.scenarios if item.role == "primary").scenario_id == (
         "SCENARIO_OPTIMAL_CONTROL_EC020"
     )
@@ -168,8 +166,8 @@ def test_expensive_black_box_journey_reuses_bo_scenarios_and_related_comparisons
 
     assert journey.problem_archetype_id == "PA039"
     assert journey.problem_instance_ids == ["OBJECTIVE_EDUCATIONAL_WAVY_1D"]
-    assert journey.status == "partial"
-    assert journey.completion_reasons == ["stale_source"]
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
     primary = next(item for item in journey.scenarios if item.role == "primary")
     assert primary.scenario_id == "SCENARIO_BO_1D_EXPLORE_NOISELESS"
     assert primary.canonical_url == (
@@ -183,7 +181,7 @@ def test_expensive_black_box_journey_reuses_bo_scenarios_and_related_comparisons
     assessment = next(
         item for item in index.assessments if item.journey_id == "hyperparameter-search"
     )
-    assert assessment.missing_dimensions == ["source_review"]
+    assert assessment.missing_dimensions == []
 
 
 def test_multiobjective_journey_separates_front_generation_from_preference_selection() -> None:

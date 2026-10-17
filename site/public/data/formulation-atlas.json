@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.24",
+  "dataset_version": "0.18.25",
   "families": [
     {
       "family_id": "reduce_first",
@@ -249,7 +249,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.linear-system",
       "cues_ja": [
         "つり合い・保存則・回路のように、線形の等式が未知数の数だけある"
       ],
@@ -287,7 +287,7 @@
       ],
       "family_id": "reduce_first",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "利用可能",
@@ -331,7 +331,9 @@
       "reading_ja": "未知数と同じ数の線形な等式を満たす値を求めます。最小化ではなく、線形代数で直接解きます。",
       "source_ids": [
         "S054",
-        "S056"
+        "S055",
+        "S056",
+        "S173"
       ],
       "standard_form": "\\text{find } x\\in\\mathbb{R}^n \\;\\text{ s.t. }\\; Ax=b",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>find&#x000A0;</mtext><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>A</mi><mi>x</mi><mo>&#x0003D;</mo><mi>b</mi></mrow></math></div>"
@@ -1158,7 +1160,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.general-nonsmooth-local",
       "cues_ja": [
         "最大値・絶対値・場合分けを含む目的で、凸性は分からない"
       ],
@@ -1196,7 +1198,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1239,8 +1241,11 @@
       "problem_id": "PA011",
       "reading_ja": "角や折れ目があり、凸とも限らない関数の局所解を探します。勾配の代わりに劣勾配や直接探索を使います。",
       "source_ids": [
+        "S002",
         "S018",
         "S031",
+        "S055",
+        "S056",
         "S060"
       ],
       "standard_form": "\\min_{x}\\; f(x),\\quad f \\text{ は局所Lipschitzだが微分できない点を持つ}",
@@ -6326,6 +6331,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 40
+    "with_article": 42
   }
 }
