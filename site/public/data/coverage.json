@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.24",
+  "dataset_version": "0.18.25",
   "expectations": [
     {
       "applicability": "expected",
@@ -331,7 +331,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-10-13T00:00:00Z",
+  "generated_at": "2026-10-14T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -14797,12 +14797,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.linear-system"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -14829,11 +14829,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA002"
+            "/formulations/PA002",
+            "concept.linear-system"
           ]
         },
         "recommendation": {
@@ -14845,12 +14846,13 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S054",
-            "S056"
+            "S056",
+            "S173"
           ]
         },
         "visualization": {
@@ -14925,12 +14927,13 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S054",
-            "S071"
+            "S071",
+            "S173"
           ]
         },
         "visualization": {
@@ -15537,12 +15540,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.general-nonsmooth-local"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15569,11 +15572,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA011"
+            "/formulations/PA011",
+            "concept.general-nonsmooth-local"
           ]
         },
         "recommendation": {
@@ -15874,12 +15878,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.high-dimensional-black-box"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -15906,11 +15910,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA015"
+            "/formulations/PA015",
+            "concept.high-dimensional-black-box"
           ]
         },
         "recommendation": {
@@ -16498,14 +16503,16 @@
           "target_ids": []
         },
         "source": {
-          "count": 4,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S010",
             "S013",
             "S014",
-            "S028"
+            "S028",
+            "S174",
+            "S175"
           ]
         },
         "visualization": {
@@ -16912,12 +16919,13 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S022",
-            "S053"
+            "S053",
+            "S176"
           ]
         },
         "visualization": {
@@ -17152,11 +17160,12 @@
           "target_ids": []
         },
         "source": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "S054"
+            "S054",
+            "S177"
           ]
         },
         "visualization": {
@@ -18337,13 +18346,14 @@
           "target_ids": []
         },
         "source": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S042",
             "S043",
-            "S050"
+            "S050",
+            "S178"
           ]
         },
         "visualization": {
@@ -18587,12 +18597,13 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S054",
-            "S055"
+            "S055",
+            "S179"
           ]
         },
         "visualization": {
@@ -18831,11 +18842,13 @@
           "target_ids": []
         },
         "source": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "S055"
+            "S055",
+            "S174",
+            "S180"
           ]
         },
         "visualization": {
@@ -18910,11 +18923,12 @@
           "target_ids": []
         },
         "source": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "S061"
+            "S061",
+            "S181"
           ]
         },
         "visualization": {
@@ -18989,11 +19003,12 @@
           "target_ids": []
         },
         "source": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "S054"
+            "S054",
+            "S182"
           ]
         },
         "visualization": {
@@ -19068,13 +19083,14 @@
           "target_ids": []
         },
         "source": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S012",
             "S016",
-            "S043"
+            "S043",
+            "S183"
           ]
         },
         "visualization": {
@@ -19149,13 +19165,14 @@
           "target_ids": []
         },
         "source": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S035",
             "S055",
-            "S059"
+            "S059",
+            "S184"
           ]
         },
         "visualization": {
@@ -19312,12 +19329,14 @@
           "target_ids": []
         },
         "source": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S003",
-            "S041"
+            "S041",
+            "S185",
+            "S186"
           ]
         },
         "visualization": {

@@ -173,6 +173,44 @@
       },
       "notes": "一次レビュー: コードと数値を再実行して本文と一致を確認。時間切れの説明で1回の打ち切り時間と予算の混同を直し、P=0.05の同点（評価2・4・7）と評価順での解消を明記。「課題から定式化する」の末尾に、EC027の評価契約の書き出しへの導線を追加し、ボタン名・欄名を実画面で照合。1280/375/320pxでページの横はみ出しなし、標準形の式はmath-blockの横スクロール内、操作図は320pxで枠内。"
     },
+    "concept.general-nonsmooth-local": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "baa7e9b9156e",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "執筆者以外のレビューでClarke微分の解析式・全方向非負の証明・MADS方向条件を照合し、数値実行と図テスト27件の証拠を確認。有限方向検査を停留証明と区別。壊れた表を復元、課題4要素を追加。1280/375/320pxで本文・図・式・各数値表を目視、目次開閉を確認。表内MathMLの共通修正はPA002の回帰検証と同じ。証拠: root output/playwright/handoff-01825/PA011-*.png。"
+    },
+    "concept.high-dimensional-black-box": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "0391899674eb",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当によるPython出力再現と本文照合。格子が予算内の次元、勾配回数と評価数、noiseの題材内の例を修正。固定章構成へ整理し数値表を分割・数式化。1280/375/320pxで本文・図・数式・全数値表を目視し、1275や10が途中改行されないことと目次開閉を確認。共有MathML修正はPA002の回帰検証と同一。証拠: root output/playwright/handoff-01825/PA015-*.png。"
+    },
     "concept.hyperparameter-optimization": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -284,6 +322,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "Sonnetの一次レビュー（全項目pass、数値15件を再計算で一致）をClaudeが本文と照合。指摘の文9件（凸と大域解の主語、等式制約の書き換え、頂点に現れる理由、非有界の断定、クロスオーバー、双対値の単位など）を直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.linear-system": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "6a5f49b0b877",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当の独立レビューとPython出力照合。単位変換と物理量変更、conductance用語を修正。S173は公式目次と公開要旨の確認範囲で採用。1280/375/320pxで本文・回路図・数式表を目視し、横スクロールと目次を確認。共有数式表の重なりは回帰E2Eの失敗→修正後通過、他記事の見た目3件とbuildも通過。証拠: root output/playwright/handoff-01825/PA002-*.png。"
     },
     "concept.mixed-integer-linear-program": {
       "reviewed_on": "2026-10-12",

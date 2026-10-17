@@ -13,6 +13,7 @@ See docs/teaching-article-playbook.md §5.4.
 from __future__ import annotations
 
 import argparse
+import functools
 import html
 import itertools
 import json
@@ -3618,6 +3619,413 @@ def _pa001_cost_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# High-dimensional black box (content/concepts/high-dimensional-black-box.md): a device with n
+# knobs in [0, 1], score = mean squared miss from 0.6. 200 evaluations are spent on random points.
+_PA015_BUDGET = 200
+_PA015_IDEAL = 0.6
+_PA015_BOX_HALF = 0.1  # the "small box" is 0.5 <= every knob <= 0.7, side 0.2
+_PA015_BOX_DIMS = (1, 2, 3, 4, 5, 6)
+_PA015_SEARCH_DIMS = (2, 5, 10, 20, 50)
+_PA015_REPS = 200
+_PA015_SEED = 0
+_PA015_CACHE: dict[int, dict[str, float]] = {}
+
+
+def _pa015_score(x: Sequence[float]) -> float:
+    return sum((v - _PA015_IDEAL) ** 2 for v in x) / len(x)
+
+
+def _pa015_score_two(x: Sequence[float]) -> float:
+    return ((x[0] - _PA015_IDEAL) ** 2 + (x[1] - _PA015_IDEAL) ** 2) / 2
+
+
+def _pa015_median_best(n: int, score: Callable[[Sequence[float]], float]) -> float:
+    rng = random.Random(_PA015_SEED)
+    bests = sorted(
+        min(score([rng.random() for _ in range(n)]) for _ in range(_PA015_BUDGET))
+        for _ in range(_PA015_REPS)
+    )
+    return (bests[_PA015_REPS // 2 - 1] + bests[_PA015_REPS // 2]) / 2
+
+
+def _pa015_expected_hits(n: int) -> float:
+    return _PA015_BUDGET * (2 * _PA015_BOX_HALF) ** n
+
+
+def _pa015_search_data() -> dict[int, dict[str, float]]:
+    if not _PA015_CACHE:
+        for n in _PA015_SEARCH_DIMS:
+            _PA015_CACHE[n] = {
+                "all": _pa015_median_best(n, _pa015_score),
+                "two": _pa015_median_best(n, _pa015_score_two),
+            }
+    return _PA015_CACHE
+
+
+def _pa015_typical_score() -> float:
+    return (0.4**3 + 0.6**3) / 3  # mean score of a uniformly drawn knob position
+
+
+def _pa015_label(value: float) -> str:
+    return f"{value:.3g}" if value >= 0.01 else f"{value:.2g}"
+
+
+def _pa015_budget_svg() -> str:
+    search = _pa015_search_data()
+    parts = _open(
+        "つまみの数と、200回の届き方",
+        (
+            "つまみの数を増やしたとき、200回の評価で何が変わるかを2つのパネルで示します。"
+            "小箱（全部のつまみが0.5から0.7）に入る点の期待数は、つまみ3本で"
+            f"{_pa015_label(_pa015_expected_hits(3))}、4本で{_pa015_label(_pa015_expected_hits(4))}です。"
+            "ランダム探索の最良スコアの中央値は、つまみ2本で"
+            f"{search[2]['all']:.4f}、50本で{search[50]['all']:.4f}です。"
+        ),
+        618,
+    )
+    px_left, px_right = 56.0, 420.0
+
+    # Panel 1: expected number of random points inside the small box, log scale.
+    top, height = 74.0, 150.0
+    low, high = 0.01, 100.0
+    py = _scale(math.log10(low), math.log10(high), top + height, top)
+    parts.append(_text(20, top - 12, "① 小箱に入る点の期待数（200点中）"))
+    parts.append(
+        f'<path d="M{px_left:.0f} {top:.0f}V{top + height:.0f}H{px_right:.0f}" fill="none" '
+        f'stroke="{GRID}" stroke-width="1.5"/>'
+    )
+    for tick in (0.01, 1.0, 100.0):
+        parts.append(_text(48, py(math.log10(tick)) + 5, f"{tick:g}", "", "end"))
+        parts.append(
+            f'<path d="M52 {py(math.log10(tick)):.1f}H{px_right:.0f}" stroke="{GRID}" '
+            'stroke-width="0.8" opacity="0.6"/>'
+        )
+    slot = (px_right - px_left) / len(_PA015_BOX_DIMS)
+    for index, n in enumerate(_PA015_BOX_DIMS):
+        value = _pa015_expected_hits(n)
+        center = px_left + slot * (index + 0.5)
+        color = LINE if value >= 1.0 else UPDATE
+        y_top = py(math.log10(value))
+        parts.append(
+            f'<rect x="{center - 17:.1f}" y="{y_top:.1f}" width="34" '
+            f'height="{top + height - y_top:.1f}" fill="{color}" opacity="0.85"/>'
+        )
+        parts.append(_text(center, y_top - 6, _pa015_label(value), "", "middle"))
+        parts.append(_text(center, top + height + 22, str(n), "", "middle"))
+    parts.append(
+        f'<path d="M{px_left:.0f} {py(0.0):.1f}H{px_right:.0f}" stroke="{INK}" '
+        'stroke-width="1.5" stroke-dasharray="5 4"/>'
+    )
+    parts.append(_text(20, top + height + 48, "横軸：つまみの数 n　縦軸：期待個数（対数）", "note"))
+
+    # Panel 2: median best score of 200 random points, linear scale.
+    top = 74.0 + 262.0
+    py = _scale(0.1, 0.0, top, top + height)
+    parts.append(_text(20, top - 12, "② ランダム200点の最良スコア（中央値）"))
+    parts.append(
+        f'<path d="M{px_left:.0f} {top:.0f}V{top + height:.0f}H{px_right:.0f}" fill="none" '
+        f'stroke="{GRID}" stroke-width="1.5"/>'
+    )
+    for tick in (0.0, 0.05, 0.1):
+        parts.append(_text(48, py(tick) + 5, f"{tick:g}", "", "end"))
+        parts.append(
+            f'<path d="M52 {py(tick):.1f}H{px_right:.0f}" stroke="{GRID}" stroke-width="0.8" '
+            'opacity="0.6"/>'
+        )
+    typical = _pa015_typical_score()
+    parts.append(
+        f'<path d="M{px_left:.0f} {py(typical):.1f}H{px_right:.0f}" stroke="{UPDATE}" '
+        'stroke-width="2" stroke-dasharray="6 4"/>'
+    )
+    parts.append(
+        _text(px_right, py(typical) + 20, f"ランダムな1点の平均 {typical:.3f}", "note", "end")
+    )
+    slot = (px_right - px_left) / len(_PA015_SEARCH_DIMS)
+    for index, n in enumerate(_PA015_SEARCH_DIMS):
+        center = px_left + slot * (index + 0.5)
+        value, two = search[n]["all"], search[n]["two"]
+        y_top = py(value)
+        parts.append(
+            f'<rect x="{center - 20:.1f}" y="{y_top:.1f}" width="40" '
+            f'height="{top + height - y_top:.1f}" fill="{LINE}" opacity="0.85"/>'
+        )
+        parts.append(_text(center, y_top - 6, f"{value:.4f}".rstrip("0"), "", "middle"))
+        parts.append(_text(center, top + height + 22, str(n), "", "middle"))
+        cy = py(two)
+        parts.append(
+            f'<path d="M{center:.1f} {cy - 8:.1f}L{center + 8:.1f} {cy:.1f}'
+            f'L{center:.1f} {cy + 8:.1f}L{center - 8:.1f} {cy:.1f}Z" fill="{INK}"/>'
+        )
+    parts.append(_text(20, top + height + 48, "横軸：つまみの数 n　縦軸：スコア", "note"))
+    parts.append(_text(20, 566, "緑の棒：全部のつまみが効く　黒のひし形：2本だけ効く"))
+    parts.append(_text(20, 590, "橙の棒：期待数が1個未満　破線：期待数1個", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# General nonsmooth local (content/concepts/general-nonsmooth-local.md): two pumps with outputs
+# x1, x2. cost(x) = 3|x1 - x2| + |(|t - 2| - 1)| + 0.2 t with t = (x1 + x2) / 2.
+PA011_START = (2.6, 1.2)
+PA011_STEP = 0.1
+PA011_STEPS = 16
+PA011_LEVELS = (0.5, 1.0, 1.5, 2.5, 4.0)
+
+
+def _pa011_cost(x1: float, x2: float) -> float:
+    t = (x1 + x2) / 2
+    return 3 * abs(x1 - x2) + abs(abs(t - 2) - 1) + 0.2 * t
+
+
+def _pa011_sign(value: float) -> int:
+    return (value > 0) - (value < 0)
+
+
+def _pa011_slope(x1: float, x2: float) -> tuple[float, float]:
+    """Gradient where it exists; on a kink select an element of the Clarke subdifferential."""
+    t = (x1 + x2) / 2
+    s = _pa011_sign(x1 - x2)
+    m = _pa011_sign(abs(t - 2) - 1) * _pa011_sign(t - 2) + 0.2
+    return 3 * s + m / 2, -3 * s + m / 2
+
+
+def _pa011_descent(
+    start: tuple[float, float] = PA011_START,
+    step: float = PA011_STEP,
+    iterations: int = PA011_STEPS,
+) -> list[tuple[float, float]]:
+    """Gradient descent with a fixed step length."""
+    path = [start]
+    for _ in range(iterations):
+        g = _pa011_slope(*path[-1])
+        path.append((path[-1][0] - step * g[0], path[-1][1] - step * g[1]))
+    return path
+
+
+def _pa011_gradient_norm(x: tuple[float, float]) -> float:
+    return math.hypot(*_pa011_slope(*x))
+
+
+def _pa011_compass(
+    start: tuple[float, float],
+    step: float,
+    directions: Sequence[tuple[int, int]],
+    tolerance: float = 1e-4,
+) -> tuple[tuple[float, float], float, int]:
+    """Poll the directions in order, take the first sufficient decrease, else halve the step."""
+    x, fx, calls = start, _pa011_cost(*start), 1
+    while step > tolerance:
+        for d in directions:
+            y = (x[0] + step * d[0], x[1] + step * d[1])
+            calls += 1
+            fy = _pa011_cost(*y)
+            if fy < fx - 1e-9:
+                x, fx = y, fy
+                break
+        else:
+            step /= 2
+    return x, fx, calls
+
+
+def _pa011_clarke_derivative(x: tuple[float, float], d: tuple[float, float]) -> float:
+    """Exact support function of the adjacent piecewise-affine gradients."""
+    t, u = (x[0] + x[1]) / 2, x[0] - x[1]
+    dt, du = (d[0] + d[1]) / 2, d[0] - d[1]
+    if t in (1.0, 2.0, 3.0):
+        mode = max(-0.8 * dt, 1.2 * dt)
+    else:
+        m = _pa011_sign(abs(t - 2) - 1) * _pa011_sign(t - 2) + 0.2
+        mode = m * dt
+    imbalance = 3 * abs(du) if u == 0 else 3 * _pa011_sign(u) * du
+    return imbalance + mode
+
+
+def _pa011_clarke_minimum(x: tuple[float, float]) -> float:
+    """Smallest exact generalized derivative sampled over 360 unit directions."""
+    return min(
+        _pa011_clarke_derivative(
+            x, (math.cos(math.radians(degrees)), math.sin(math.radians(degrees)))
+        )
+        for degrees in range(360)
+    )
+
+
+@functools.cache
+def _pa011_kink_valley_svg() -> str:
+    path = _pa011_descent()
+    low, high = 0.5, 3.5
+    px = _scale(low, high, 56, 416)  # 120 px per unit on both axes
+    py = _scale(low, high, 412, 52)
+    parts = _open(
+        "折れ目の谷の上の勾配降下法",
+        (
+            "費用 3|x1-x2| + ||t-2|-1| + 0.2t（t は x1 と x2 の平均）の等高線。"
+            "x1=x2 の谷の上に、費用 0.2 の谷底 (1, 1)、費用 0.6 の谷底 (3, 3)、"
+            f"費用 {_pa011_cost(2, 2):g} の山の折れ目 (2, 2) がある。"
+            f"出発 ({PA011_START[0]:g}, {PA011_START[1]:g}) の費用は "
+            f"{_pa011_cost(*PA011_START):g}。一歩の大きさ {PA011_STEP:g} の勾配降下法は、"
+            "谷を左右にまたぎながら谷底の方へ進む。"
+        ),
+        566,
+    )
+    parts.append(
+        '<clipPath id="pa011-clip"><rect x="56" y="52" width="360" height="360"/></clipPath>'
+    )
+    parts.append(f'<path d="M56 52V412H416V52Z" fill="none" stroke="{GRID}"/>')
+    parts.append('<g clip-path="url(#pa011-clip)">')
+    for level in PA011_LEVELS:
+        segments = _contour_segments(_pa011_cost, level, (low, high), (low, high), (180, 180))
+        data = "".join(
+            f"M{px(a[0]):.1f} {py(a[1]):.1f}L{px(b[0]):.1f} {py(b[1]):.1f}" for a, b in segments
+        )
+        parts.append(f'<path d="{data}" fill="none" stroke="{RING}" stroke-width="1.5"/>')
+    parts.append(
+        f'<path d="M{px(low):.1f} {py(low):.1f}L{px(high):.1f} {py(high):.1f}" '
+        f'stroke="{GRID}" stroke-width="1.2" stroke-dasharray="4 4"/>'
+    )
+    parts.append(_polyline([(px(x), py(y)) for x, y in path], UPDATE, 2.5))
+    for x, y in path[1:]:
+        parts.append(f'<circle cx="{px(x):.1f}" cy="{py(y):.1f}" r="3" fill="{UPDATE}"/>')
+    parts.append("</g>")
+    sx, sy = px(PA011_START[0]), py(PA011_START[1])
+    parts.append(f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(_text(sx - 12, sy + 24, "出発", "", "end"))
+    for bottom in (1.0, 3.0):
+        parts.append(
+            f'<circle cx="{px(bottom):.1f}" cy="{py(bottom):.1f}" r="6.5" fill="{POINT}"/>'
+        )
+    parts.append(_text(px(1) - 12, py(1) + 24, f"谷底 {_pa011_cost(1, 1):g}", "", "end"))
+    parts.append(_text(px(3) - 12, py(3) - 12, f"谷底 {_pa011_cost(3, 3):.1f}", "", "end"))
+    parts.append(
+        f'<circle cx="{px(2):.1f}" cy="{py(2):.1f}" r="7" fill="#f7f8f3" '
+        f'stroke="{POINT}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(px(2) + 14, py(2) + 26, f"山 {_pa011_cost(2, 2):g}", ""))
+    for value in (1, 2, 3):
+        parts.append(_text(px(value), 432, f"{value}", "tick", "middle"))
+        parts.append(_text(48, py(value) + 5, f"{value}", "tick", "end"))
+    parts.append(_text(416, 454, "x₁ ポンプ1の出力", "tick", "end"))
+    parts.append(_text(62, 70, "x₂ ポンプ2", "tick"))
+    parts.append(_text(20, 482, "橙：一歩 0.1 の勾配降下法の16回", "note"))
+    parts.append(_text(20, 506, f"橙の丸：出発 (2.6, 1.2)、費用 {_pa011_cost(*PA011_START):g}"))
+    parts.append(_text(20, 530, "破線：谷 x₁ = x₂（出力が等しい線）"))
+    parts.append(_text(20, 554, "紺の丸：谷底、白い丸：山の折れ目"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Linear system (content/concepts/linear-system.md): three nodes in a row, nodes 1 and 3 joined to
+# ground by conductance 1 S, every wire 1 S, 3 A injected at node 1. A x = b with
+# A = [[2, -1, 0], [-1, 2, -1], [0, -1, 2]] and b = (3, 0, 0).
+PA002_MATRIX = ((2, -1, 0), (-1, 2, -1), (0, -1, 2))
+PA002_INJECTION = (3, 0, 0)
+
+
+def _pa002_circuit_data() -> dict[str, object]:
+    """Exact node voltages, the elimination pivots and the current in every wire."""
+    rows = [
+        [Fraction(v) for v in row] + [Fraction(r)]
+        for row, r in zip(PA002_MATRIX, PA002_INJECTION, strict=True)
+    ]
+    pivots: list[Fraction] = []
+    for i in range(3):
+        pivots.append(rows[i][i])
+        for j in range(i + 1, 3):
+            factor = rows[j][i] / rows[i][i]
+            rows[j] = [a - factor * c for a, c in zip(rows[j], rows[i], strict=True)]
+    voltage = [Fraction(0)] * 3
+    for i in (2, 1, 0):
+        tail = sum(rows[i][j] * voltage[j] for j in range(i + 1, 3))
+        voltage[i] = (rows[i][3] - tail) / rows[i][i]
+    return {
+        "voltage": voltage,
+        "pivots": pivots,
+        "wire_12": voltage[0] - voltage[1],
+        "wire_23": voltage[1] - voltage[2],
+        "ground_1": voltage[0],
+        "ground_3": voltage[2],
+    }
+
+
+def _pa002_value(value: Fraction) -> str:
+    return f"{float(value):g}"
+
+
+def _pa002_arrow(x: float, y: float, direction: str) -> str:
+    if direction == "right":
+        points = f"{x - 7:.1f},{y - 6:.1f} {x + 7:.1f},{y:.1f} {x - 7:.1f},{y + 6:.1f}"
+    else:
+        points = f"{x - 6:.1f},{y - 7:.1f} {x:.1f},{y + 7:.1f} {x + 6:.1f},{y - 7:.1f}"
+    return f'<polygon points="{points}" fill="{UPDATE}"/>'
+
+
+def _pa002_circuit_svg() -> str:
+    data = _pa002_circuit_data()
+    voltage: list[Fraction] = data["voltage"]  # type: ignore[assignment]
+    nodes = (110.0, 235.0, 360.0)
+    wire_y, ground_y = 160.0, 290.0
+    amps = {
+        "w12": _pa002_value(data["wire_12"]),  # type: ignore[arg-type]
+        "w23": _pa002_value(data["wire_23"]),  # type: ignore[arg-type]
+        "g1": _pa002_value(data["ground_1"]),  # type: ignore[arg-type]
+        "g3": _pa002_value(data["ground_3"]),  # type: ignore[arg-type]
+    }
+    total = _pa002_value(data["ground_1"] + data["ground_3"])  # type: ignore[operator]
+    parts = _open(
+        "接点の電圧と電流",
+        (
+            "3つの接点を一列につないだ回路。接点1に外から3 Aを流し込み、"
+            "接点1と接点3は接地につながる。"
+            f"電圧は接点1が{_pa002_value(voltage[0])} V、接点2が{_pa002_value(voltage[1])} V、"
+            f"接点3が{_pa002_value(voltage[2])} V。接点1と接点2の間と接点2と接点3の間を"
+            f"それぞれ{amps['w12']} Aが流れ、接地へは接点1から{amps['g1']} A、"
+            f"接点3から{amps['g3']} A流れる。"
+        ),
+        420,
+    )
+    parts.append(
+        f'<line x1="24" y1="{wire_y}" x2="86" y2="{wire_y}" stroke="{UPDATE}" stroke-width="3"/>'
+    )
+    parts.append(_pa002_arrow(86, wire_y, "right"))
+    parts.append(_text(55, wire_y - 14, "3 A", "", "middle"))
+    for a, c in ((nodes[0], nodes[1]), (nodes[1], nodes[2])):
+        parts.append(
+            f'<line x1="{a + 22:.1f}" y1="{wire_y}" x2="{c - 22:.1f}" y2="{wire_y}" '
+            f'stroke="{LINE}" stroke-width="3"/>'
+        )
+        mid = (a + c) / 2
+        parts.append(_pa002_arrow(mid, wire_y, "right"))
+    parts.append(_text((nodes[0] + nodes[1]) / 2, wire_y - 14, f"{amps['w12']} A", "", "middle"))
+    parts.append(_text((nodes[1] + nodes[2]) / 2, wire_y - 14, f"{amps['w23']} A", "", "middle"))
+    for x, key in ((nodes[0], "g1"), (nodes[2], "g3")):
+        parts.append(
+            f'<line x1="{x:.1f}" y1="{wire_y + 22}" x2="{x:.1f}" y2="{ground_y}" '
+            f'stroke="{LINE}" stroke-width="3"/>'
+        )
+        parts.append(_pa002_arrow(x, (wire_y + ground_y) / 2, "down"))
+        parts.append(_text(x + 14, (wire_y + ground_y) / 2 + 5, f"{amps[key]} A"))
+    parts.append(_text(nodes[1], 240, "接地なし", "tick", "middle"))
+    parts.append(
+        f'<line x1="70" y1="{ground_y}" x2="400" y2="{ground_y}" stroke="{INK}" stroke-width="3"/>'
+    )
+    parts.append(_text(235, ground_y + 28, "接地（0 V）", "", "middle"))
+    for index, x in enumerate(nodes):
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{wire_y}" r="22" fill="#e3eee6" '
+            f'stroke="{POINT}" stroke-width="2.5"/>'
+        )
+        parts.append(_text(x, wire_y + 6, str(index + 1), "", "middle"))
+        parts.append(
+            _text(
+                x, wire_y - 42, f"v{'₁₂₃'[index]} = {_pa002_value(voltage[index])} V", "", "middle"
+            )
+        )
+    parts.append(_text(20, 364, "各抵抗は 1 S。電流 = 電圧差 × 1 S", "note"))
+    parts.append(_text(20, 388, f"接点2：流入 {amps['w12']} A、流出 {amps['w23']} A"))
+    parts.append(_text(20, 412, f"接地へ：{amps['g1']} + {amps['g3']} = {total} A"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -3650,6 +4058,9 @@ def generate_lesson_figures() -> dict[str, str]:
         "bilevel-pricing-response.svg": _bilevel_svg(),
         "complementarity-active-sets.svg": _lcp_contact_svg(),
         "closed-form-order-cost.svg": _pa001_cost_svg(),
+        "high-dimensional-black-box-budget.svg": _pa015_budget_svg(),
+        "general-nonsmooth-kink-valley.svg": _pa011_kink_valley_svg(),
+        "linear-system-circuit.svg": _pa002_circuit_svg(),
     }
 
 

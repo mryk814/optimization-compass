@@ -412,6 +412,46 @@ def test_noisy_black_box_figure_uses_the_article_numbers() -> None:
     assert "stroke-dasharray" not in figure
 
 
+def test_high_dimensional_black_box_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        _pa015_expected_hits,
+        _pa015_search_data,
+        _pa015_typical_score,
+    )
+
+    # Expected number of the 200 points inside the small box 0.5 <= every knob <= 0.7.
+    assert [round(_pa015_expected_hits(n), 4) for n in (1, 2, 3, 4, 5, 6)] == [
+        40.0,
+        8.0,
+        1.6,
+        0.32,
+        0.064,
+        0.0128,
+    ]
+    assert round(_pa015_typical_score(), 4) == 0.0933
+    # Median over 200 repetitions (seed 0) of the best score among 200 random points.
+    search = _pa015_search_data()
+    assert [round(search[n]["all"], 4) for n in (2, 5, 10, 20, 50)] == [
+        0.0005,
+        0.0109,
+        0.0269,
+        0.0429,
+        0.0601,
+    ]
+    assert [round(search[n]["two"], 4) for n in (2, 5, 10, 20, 50)] == [
+        0.0005,
+        0.0006,
+        0.0005,
+        0.0005,
+        0.0006,
+    ]
+    figure = generate_lesson_figures()["high-dimensional-black-box-budget.svg"]
+    for text in ("① 小箱に入る点の期待数（200点中）", "② ランダム200点の最良スコア（中央値）"):
+        assert text in figure
+    for text in ("0.0128", "0.0109", "0.0601", "ランダムな1点の平均 0.093"):
+        assert text in figure
+
+
 def test_nonconvex_qp_figure_uses_the_article_numbers() -> None:
     # Local minima at the corners (-1, -1) and (1, 1); (0.5, 0.5) is a saddle.
     assert (ncqp_value(-1, -1), ncqp_value(1, 1), ncqp_value(1, -1), ncqp_value(-1, 1)) == (
@@ -532,6 +572,85 @@ def test_closed_form_order_cost_figure_uses_the_article_numbers() -> None:
         "最小の 6000 円",
         "発注費 KD/Q。Q=600 で 3000 円",
         "保管費 hQ/2。Q=600 で 3000 円",
+    ):
+        assert text in figure
+    assert "stroke-dasharray" not in figure
+
+
+def test_general_nonsmooth_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        PA011_START,
+        _pa011_clarke_derivative,
+        _pa011_clarke_minimum,
+        _pa011_compass,
+        _pa011_cost,
+        _pa011_descent,
+        _pa011_gradient_norm,
+        _pa011_slope,
+    )
+
+    assert round(_pa011_cost(*PA011_START), 6) == 5.48
+    assert tuple(round(v, 6) for v in _pa011_slope(1.5001, 1.4999)) == (3.6, -2.4)
+    assert tuple(round(v, 6) for v in _pa011_slope(1.4999, 1.5001)) == (-2.4, 3.6)
+    # The valley x1 = x2 holds two valley bottoms and a concave kink between them.
+    assert [round(_pa011_cost(t, t), 6) for t in (1.0, 2.0, 3.0)] == [0.2, 1.4, 0.6]
+    assert round(_pa011_cost(1.5, 1.5), 6) == 0.8
+    # Fixed-step gradient descent crosses the valley 14 times in 16 steps and never sees a
+    # small gradient.
+    path = _pa011_descent(iterations=200)
+    gaps = [a - b for a, b in path[:17]]
+    assert sum(gaps[i] * gaps[i + 1] < 0 for i in range(16)) == 14
+    assert round(min(_pa011_gradient_norm(p) for p in path), 3) == 4.28
+    assert round(min(_pa011_cost(*p) for p in path), 3) == 0.8
+    assert [round(g, 6) for g in gaps[:5]] == [1.4, 0.8, 0.2, -0.4, 0.2]
+    axes = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    both = [*axes, (1, 1), (-1, -1), (1, -1), (-1, 1)]
+    for start, directions, expected in (
+        (PA011_START, axes, ((1.2, 1.2), 0.44, 68)),
+        (PA011_START, both, ((1.0, 1.0), 0.2, 168)),
+        ((2.0, 2.0), axes, ((2.0, 2.0), 1.4, 53)),
+        ((2.0, 2.0), both, ((3.0, 3.0), 0.6, 115)),
+    ):
+        point, value, calls = _pa011_compass(start, 0.5, directions)
+        assert ((round(point[0], 3), round(point[1], 3)), round(value, 3), calls) == expected
+    # The Clarke minimum is negative at a point with a descent direction, positive at the kinks.
+    assert round(_pa011_clarke_minimum((1.5, 1.5)), 3) == -0.849
+    assert round(_pa011_clarke_minimum((2.0, 2.0)), 3) == 0.566
+    # The exact generalized derivative includes slopes from both sides of the concave kink.
+    assert _pa011_clarke_derivative((2.0, 2.0), (1.0, 1.0)) == 1.2
+    assert _pa011_clarke_derivative((2.0, 2.0), (-1.0, -1.0)) == 0.8
+    assert _pa011_clarke_derivative((1.5, 1.5), (-1.0, -1.0)) == -1.2
+    figure = generate_lesson_figures()["general-nonsmooth-kink-valley.svg"]
+    for text in ("谷底 0.2", "谷底 0.6", "山 1.4", "費用 5.48", "一歩 0.1"):
+        assert text in figure
+
+
+def test_general_nonsmooth_article_python_is_executable() -> None:
+    article = (ROOT / "content/concepts/general-nonsmooth-local.md").read_text(encoding="utf-8")
+    code = article.split("```python\n", 1)[1].split("```", 1)[0]
+    compile(code, "general-nonsmooth-local.md", "exec")
+
+
+def test_linear_system_figure_uses_the_article_numbers() -> None:
+    from fractions import Fraction
+
+    from scripts.generate_lesson_figures import _pa002_circuit_data
+
+    data = _pa002_circuit_data()
+    assert data["voltage"] == [Fraction(9, 4), Fraction(3, 2), Fraction(3, 4)]
+    assert data["pivots"] == [Fraction(2), Fraction(3, 2), Fraction(4, 3)]
+    # Kirchhoff's current law at every node: what leaves equals what is injected.
+    assert (data["ground_1"], data["wire_12"]) == (Fraction(9, 4), Fraction(3, 4))
+    assert data["ground_1"] + data["wire_12"] == 3
+    assert data["wire_12"] == data["wire_23"] == data["ground_3"]
+    figure = generate_lesson_figures()["linear-system-circuit.svg"]
+    for text in (
+        "v₁ = 2.25 V",
+        "v₂ = 1.5 V",
+        "v₃ = 0.75 V",
+        "0.75 A",
+        "2.25 A",
+        "2.25 + 0.75 = 3 A",
     ):
         assert text in figure
     assert "stroke-dasharray" not in figure

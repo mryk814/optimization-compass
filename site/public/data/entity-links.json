@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.24",
+  "dataset_version": "0.18.25",
   "entities": [
     {
       "aliases": [],
@@ -8475,6 +8475,193 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.general-nonsmooth-local",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "一般非滑らか局所",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA011",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bundle-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonsmooth-convex-composite",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.smooth-low-dimensional-unconstrained",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一般非滑らか局所は、折れ目のある関数を、凸とは限らないまま局所的に最小にする定式化です。折れ目では勾配が定まらず、一歩の大きさを固定した勾配降下法は、折れ目をまたいで揺れ続けます。目標にするのは、勾配が0になる点ではなく、折れ目の上でも定義できる停留点（Clarkeの意味）です。この停留点は、最小点とは限りません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.high-dimensional-black-box",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "高次元black-box",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA015",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.noisy-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "spsa",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "turbo-saasbo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "高次元black-boxは、勾配が得られないまま、数十本以上の変数を同時に決める最小化の定式化です。評価回数が決まっていると、変数が増えても試せる点は増えないので、空間を埋める密度は変数の数とともに指数的に下がります。値を左右する変数が少ない、滑らかで雑音がないといった構造が使えるかどうかを、条件として確かめてから手法を選びます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.hyperparameter-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -8892,6 +9079,82 @@
         }
       ],
       "summary": "線形計画は、決める量に比例する費用の合計を、同じく比例と足し算だけで書ける不等式を守りながら最小にする定式化です。最適解があれば可行領域の頂点のどれかが最適になり、双対問題の値と比べて、それより良い解がないことを確かめられます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.linear-system",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "線形方程式",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S173",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA002",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.inverse-problem",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        }
+      ],
+      "summary": "線形方程式は、未知数の数と同じ数の一次式の等式を、すべて同時に満たす値を求める定式化です。最小にする量はなく、係数の行列が正則なら答えは一つに決まります。行列がほぼ特異だと、残差が小さくても解は大きくずれるため、解く前に条件数を確かめます。"
     },
     {
       "aliases": [],
@@ -33607,13 +33870,21 @@
       "summary": "閉形式解候補。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.linear-system"
+      ],
       "canonical_url": "/formulations/PA002",
       "entity_id": "PA002",
       "entity_type": "problem",
       "external_url": null,
       "label": "線形方程式に還元",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.linear-system",
+          "target_type": "content"
+        }
+      ],
       "summary": "線形方程式に還元。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
@@ -33775,13 +34046,21 @@
       "summary": "非滑らか凸複合。変数=continuous、目的=composite、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.general-nonsmooth-local"
+      ],
       "canonical_url": "/formulations/PA011",
       "entity_id": "PA011",
       "entity_type": "problem",
       "external_url": null,
       "label": "一般非滑らか局所",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.general-nonsmooth-local",
+          "target_type": "content"
+        }
+      ],
       "summary": "一般非滑らか局所。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
@@ -33879,13 +34158,21 @@
       "summary": "非常に高価な低次元評価。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.high-dimensional-black-box"
+      ],
       "canonical_url": "/formulations/PA015",
       "entity_id": "PA015",
       "entity_type": "problem",
       "external_url": null,
       "label": "高次元black-box",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.high-dimensional-black-box",
+          "target_type": "content"
+        }
+      ],
       "summary": "高次元black-box。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
@@ -39264,6 +39551,146 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/sources/S173",
+      "entity_id": "S173",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/1.9780898719574",
+      "label": "Numerical Linear Algebra",
+      "relations": [],
+      "summary": "Textbook treatment of numerical linear algebra: the singular value decomposition and low-rank approximation, QR factorization and least squares, conditioning and stability, Gaussian elimination (LU) and Cholesky factorization for linear systems, eigenvalue algorithms including the Rayleigh quotient and QR iteration, and Krylov subspace iterations including Arnoldi, Lanczos and conjugate gradients."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S174",
+      "entity_id": "S174",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/1.9780898718829",
+      "label": "Lectures on Modern Convex Optimization",
+      "relations": [],
+      "summary": "Monograph on conic optimization (linear, conic quadratic and semidefinite programming), their duality theory, interior-point algorithms, and engineering applications including robust optimization."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S175",
+      "entity_id": "S175",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s10957-016-0892-3",
+      "label": "Conic Optimization via Operator Splitting and Homogeneous Self-Dual Embedding",
+      "relations": [],
+      "summary": "Method for solving convex cone programs by applying operator splitting (ADMM) to the homogeneous self-dual embedding, which also yields certificates of infeasibility or unboundedness (the algorithm behind SCS)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S176",
+      "entity_id": "S176",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.3233/FAIA336",
+      "label": "Handbook of Satisfiability (Second Edition)",
+      "relations": [],
+      "summary": "Edited handbook covering SAT theory and practice: search algorithms including conflict-driven clause learning, encodings, proof complexity, hard instances, and solvers; the second edition adds a core-based MaxSAT chapter per its preface."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S177",
+      "entity_id": "S177",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1002/nav.3800020109",
+      "label": "The Hungarian method for the assignment problem",
+      "relations": [],
+      "summary": "Given numerical scores for n persons on n jobs, the assignment problem seeks an assignment maximizing the total score; the paper exploits ideas of two Hungarian mathematicians to give a new solution method."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S178",
+      "entity_id": "S178",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.2514/2.4231",
+      "label": "Survey of Numerical Methods for Trajectory Optimization",
+      "relations": [],
+      "summary": "Survey of numerical methods for trajectory optimization, i.e., optimal control problems solved by indirect and direct (transcription to nonlinear programming) approaches."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S179",
+      "entity_id": "S179",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/b97543",
+      "label": "Finite-Dimensional Variational Inequalities and Complementarity Problems",
+      "relations": [],
+      "summary": "Monograph on finite-dimensional variational inequalities and complementarity problems: formulation, existence and uniqueness of solutions, and applications to equilibrium problems (volume I); algorithms are in volume II (DOI 10.1007/b97544, not checked)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S180",
+      "entity_id": "S180",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1515/9781400831050",
+      "label": "Robust Optimization",
+      "relations": [],
+      "summary": "Monograph on robust optimization: uncertain linear programs and their robust counterparts, the relation between uncertainty sets and chance-constrained approaches, uncertain conic quadratic and semidefinite problems, and multistage (adjustable) problems."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S181",
+      "entity_id": "S181",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1109/TAC.2008.2009515",
+      "label": "Distributed Subgradient Methods for Multi-Agent Optimization",
+      "relations": [],
+      "summary": "Distributed subgradient method in which agents minimize the sum of their local convex objectives by combining local subgradient steps with averaging over a network, with convergence analysis."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S182",
+      "entity_id": "S182",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1561/2400000013",
+      "label": "Introduction to Online Convex Optimization",
+      "relations": [],
+      "summary": "Monograph presenting optimization as a process in which a method learns as it goes, i.e., online convex optimization, for settings where a comprehensive model is infeasible."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S183",
+      "entity_id": "S183",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1016/S0005-1098(01)00174-1",
+      "label": "The explicit linear quadratic regulator for constrained systems",
+      "relations": [],
+      "summary": "Shows that the constrained linear quadratic regulator, a quadratic program parametrized by the state, has a piecewise affine solution on a polyhedral partition of the parameter space (explicit MPC via multiparametric programming)."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S184",
+      "entity_id": "S184",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/1.9780898719109",
+      "label": "Optimal Design of Experiments",
+      "relations": [],
+      "summary": "Monograph on optimal design of experiments: information matrices, optimality criteria such as D-optimality, approximate designs, and the general equivalence theorem."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S185",
+      "entity_id": "S185",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1214/aoms/1177703732",
+      "label": "Robust Estimation of a Location Parameter",
+      "relations": [],
+      "summary": "Introduces robust M-estimation of a location parameter under contamination of the error distribution, including the minimax (Huber) loss."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S186",
+      "entity_id": "S186",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1145/358669.358692",
+      "label": "Random sample consensus",
+      "relations": [],
+      "summary": "RANSAC: a paradigm for fitting a model to experimental data that can interpret and smooth data containing a significant percentage of gross errors."
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
@@ -41696,5 +42123,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-10-13T00:00:00Z"
+  "generated_at": "2026-10-14T00:00:00Z"
 }
