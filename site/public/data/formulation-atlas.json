@@ -1160,7 +1160,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.general-nonsmooth-local",
       "cues_ja": [
         "最大値・絶対値・場合分けを含む目的で、凸性は分からない"
       ],
@@ -1198,7 +1198,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -1241,8 +1241,11 @@
       "problem_id": "PA011",
       "reading_ja": "角や折れ目があり、凸とも限らない関数の局所解を探します。勾配の代わりに劣勾配や直接探索を使います。",
       "source_ids": [
+        "S002",
         "S018",
         "S031",
+        "S055",
+        "S056",
         "S060"
       ],
       "standard_form": "\\min_{x}\\; f(x),\\quad f \\text{ は局所Lipschitzだが微分できない点を持つ}",
@@ -6324,6 +6327,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 40
+    "with_article": 41
   }
 }
