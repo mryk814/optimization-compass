@@ -558,3 +558,28 @@ def test_general_nonsmooth_article_python_is_executable() -> None:
     article = (ROOT / "content/concepts/general-nonsmooth-local.md").read_text(encoding="utf-8")
     code = article.split("```python\n", 1)[1].split("```", 1)[0]
     compile(code, "general-nonsmooth-local.md", "exec")
+
+
+def test_linear_system_figure_uses_the_article_numbers() -> None:
+    from fractions import Fraction
+
+    from scripts.generate_lesson_figures import _pa002_circuit_data
+
+    data = _pa002_circuit_data()
+    assert data["voltage"] == [Fraction(9, 4), Fraction(3, 2), Fraction(3, 4)]
+    assert data["pivots"] == [Fraction(2), Fraction(3, 2), Fraction(4, 3)]
+    # Kirchhoff's current law at every node: what leaves equals what is injected.
+    assert (data["ground_1"], data["wire_12"]) == (Fraction(9, 4), Fraction(3, 4))
+    assert data["ground_1"] + data["wire_12"] == 3
+    assert data["wire_12"] == data["wire_23"] == data["ground_3"]
+    figure = generate_lesson_figures()["linear-system-circuit.svg"]
+    for text in (
+        "v₁ = 2.25 V",
+        "v₂ = 1.5 V",
+        "v₃ = 0.75 V",
+        "0.75 A",
+        "2.25 A",
+        "2.25 + 0.75 = 3 A",
+    ):
+        assert text in figure
+    assert "stroke-dasharray" not in figure

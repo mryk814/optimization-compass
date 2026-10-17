@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `62`
-- Meeting the concept floor: `62`
+- Published concept guides: `63`
+- Meeting the concept floor: `63`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -31,6 +31,7 @@
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 114 | 5781 | 9 | 4 | 0 | pass |
+| `concept.linear-system` | 120 | 13469 | 15 | 11 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 133 | 8970 | 11 | 4 | 0 | pass |
 | `concept.mixed-integer-nonlinear-program` | 138 | 10227 | 14 | 9 | 0 | pass |
@@ -124,6 +125,7 @@
 | `concept.l1-sparse-regularization` | 33 |
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
+| `concept.linear-system` | 0 |
 | `concept.manifold` | 8 |
 | `concept.mixed-integer-linear-program` | 6 |
 | `concept.mixed-integer-nonlinear-program` | 0 |

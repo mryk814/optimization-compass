@@ -14,10 +14,8 @@ describe("LearningJourney parser", () => {
       .toBe("/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH");
     expect(pilot?.scenarios.find((scenario) => scenario.role === "failure_contrast")?.scenario_id)
       .toBe("SCENARIO_CONSTRAINED_DISK");
-    // Official-documentation sources verified on 2026-07-13 passed their 90-day freshness limit at the
-    // 0.18.24 release date, so journeys citing them are partial with only the source review missing.
-    expect(pilot?.status).toBe("partial");
-    expect(pilot?.completion_reasons).toEqual(["stale_source"]);
+    expect(pilot?.status).toBe("complete");
+    expect(pilot?.completion_reasons).toEqual([]);
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
     expect(index.summary.status_counts).toEqual({
@@ -32,7 +30,7 @@ describe("LearningJourney parser", () => {
       comparisons: [{ comparison_id: "COMPARE_PARETO_PREFERENCE" }],
     });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
-    expect(parameterEstimation?.status).toBe("partial");
+    expect(parameterEstimation?.status).toBe("complete");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
       .toBe("SCENARIO_EXPONENTIAL_FIT_TRF");
     expect(parameterEstimation?.comparisons[0]?.comparison_id)
@@ -40,8 +38,8 @@ describe("LearningJourney parser", () => {
     const discreteAllocation = index.journeys.find(
       (journey) => journey.journey_id === "budget-allocation",
     );
-    expect(discreteAllocation?.status).toBe("partial");
-    expect(discreteAllocation?.completion_reasons).toEqual(["stale_source"]);
+    expect(discreteAllocation?.status).toBe("complete");
+    expect(discreteAllocation?.completion_reasons).toEqual([]);
     expect(Object.fromEntries(
       discreteAllocation?.scenarios.map((scenario) => [scenario.role, scenario.scenario_id]) ?? [],
     )).toEqual({
@@ -50,8 +48,7 @@ describe("LearningJourney parser", () => {
     });
     expect(discreteAllocation?.comparisons[0]?.comparison_id)
       .toBe("COMPARE_KNAPSACK_BNB_BUDGET");
-    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions)
-      .toEqual(["source_review"]);
+    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual([]);
     expect(index.orphan_assets.some((item) => item.policy === "warning")).toBe(true);
   });
 
