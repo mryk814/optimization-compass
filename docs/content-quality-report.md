@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `62`
-- Meeting the concept floor: `62`
+- Published concept guides: `66`
+- Meeting the concept floor: `66`
 - Below the concept floor: `0`
 - Prose review warnings: `629`
 
@@ -12,6 +12,7 @@
 | `concept.bilevel-optimization` | 129 | 9623 | 15 | 8 | 0 | pass |
 | `concept.bound-constrained-smooth` | 127 | 10653 | 15 | 12 | 0 | pass |
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
+| `concept.closed-form-candidate` | 145 | 8325 | 13 | 10 | 0 | pass |
 | `concept.complementarity-problem` | 108 | 11257 | 13 | 4 | 0 | pass |
 | `concept.constrained-nlp` | 99 | 9923 | 12 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
@@ -24,6 +25,8 @@
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
+| `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
+| `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
@@ -31,6 +34,7 @@
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 114 | 5781 | 9 | 4 | 0 | pass |
+| `concept.linear-system` | 120 | 13469 | 15 | 11 | 0 | pass |
 | `concept.manifold` | 61 | 5628 | 9 | 3 | 0 | pass |
 | `concept.mixed-integer-linear-program` | 133 | 8970 | 11 | 4 | 0 | pass |
 | `concept.mixed-integer-nonlinear-program` | 138 | 10227 | 14 | 9 | 0 | pass |
@@ -105,6 +109,7 @@
 | `concept.bilevel-optimization` | 0 |
 | `concept.bound-constrained-smooth` | 0 |
 | `concept.chance-risk-contract` | 0 |
+| `concept.closed-form-candidate` | 0 |
 | `concept.complementarity-problem` | 0 |
 | `concept.constrained-nlp` | 6 |
 | `concept.constraint-class` | 0 |
@@ -117,6 +122,8 @@
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.failed-simulation` | 0 |
+| `concept.general-nonsmooth-local` | 0 |
+| `concept.high-dimensional-black-box` | 0 |
 | `concept.high-dimensional-smooth-unconstrained` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
@@ -124,6 +131,7 @@
 | `concept.l1-sparse-regularization` | 33 |
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
+| `concept.linear-system` | 0 |
 | `concept.manifold` | 8 |
 | `concept.mixed-integer-linear-program` | 6 |
 | `concept.mixed-integer-nonlinear-program` | 0 |
