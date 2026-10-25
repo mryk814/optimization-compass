@@ -863,3 +863,24 @@
 .ex-contour-key { fill: none; stroke: var(--ex-ink); stroke-opacity: 0.75; stroke-width: 2; }
 .ex-saddle path { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
 .ex-saddle text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; }
+
+/* Convex QP projection: target = orange cross, nearest point = teal star, level circle through it */
+.qp-level { fill: none; stroke: var(--ex-orange); stroke-width: 3; }
+.qp-link { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.qp-vertex { fill: var(--ex-ground); stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.qp-vertex-best { fill: var(--ex-teal); stroke: var(--ex-ink); }
+.qp-target { fill: none; stroke: var(--ex-orange-ink); stroke-width: 3.5; stroke-linecap: round; }
+.qp-best { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; stroke-linejoin: round; }
+.ex-table.qp-table th[scope="row"] { white-space: normal; }
+.ex-table.qp-table td { white-space: nowrap; }
+.qp-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.qp-edge-tight { stroke: var(--ex-orange-ink); stroke-width: 5; }
+.qp-edge-active { stroke: var(--ex-orange); stroke-width: 7; stroke-linecap: round; }
+.qp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 4; }
+.qp-bars { display: grid; gap: 0.35rem; margin-bottom: 0.6rem; }
+.qp-bar-row { display: grid; grid-template-columns: minmax(7rem, 1.2fr) 2fr minmax(5rem, auto); gap: 0.5rem; align-items: center; font-size: var(--type-label); }
+.qp-bar-track { height: 0.9rem; background: var(--ex-panel); border: 1px solid var(--ex-line); border-radius: 3px; overflow: hidden; }
+.qp-bar { height: 100%; background: var(--ex-ink-soft); transition: width 120ms linear; }
+.qp-bar-on { background: var(--ex-orange); }
+.qp-bar-value { text-align: right; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .qp-bar { transition: none; } }

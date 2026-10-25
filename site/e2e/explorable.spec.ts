@@ -24,6 +24,7 @@ const figures = [
   { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
   { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
   { label: "mixed-integer-linear-program", route: "/learn/concept.mixed-integer-linear-program", id: "milp-integer-lattice" },
+  { label: "convex-quadratic-program", route: "/learn/concept.convex-quadratic-program", id: "convex-qp-projection" },
   { label: "failed-simulation", route: "/learn/concept.failed-simulation", id: "failure-ledger" },
 ];
 
