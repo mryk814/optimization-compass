@@ -243,9 +243,21 @@
   outline-offset: 2px;
 }
 
+/*
+ * The player follows the stage: on a figure taller than the screen (a phone, a figure with many panels)
+ * it stays at the bottom of the viewport while any part of the figure is visible, so pressing
+ * 「1つ進む」 and watching the panel it changes happen on the same screen.
+ */
 .ex-player {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   display: grid;
   gap: 0.5rem;
+  margin: 0 -0.9rem;
+  padding: 0.5rem 0.9rem;
+  border-top: 1px solid var(--ex-line);
+  background: var(--ex-ground);
 }
 
 .ex-player-buttons {
