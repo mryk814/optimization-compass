@@ -26,5 +26,6 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "saddle-newton": lazy(() => import("./SaddleNewton")),
   "milp-integer-lattice": lazy(() => import("./MilpLattice")),
   "convex-qp-projection": lazy(() => import("./ConvexQpProjection")),
+  "variable-domain-switch": lazy(() => import("./VariableDomain")),
   "failure-ledger": lazy(() => import("./FailureLedger")),
 };

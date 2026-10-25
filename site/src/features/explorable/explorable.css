@@ -354,6 +354,14 @@
 .ex-table.milp-table th[scope="row"] { white-space: normal; }
 .ex-table.milp-table td { white-space: nowrap; }
 .milp-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
+.vd-relaxed { fill: var(--ex-teal); fill-opacity: 0.12; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.vd-level-relaxed { stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 6 5; }
+.vd-gap { stroke: var(--ex-orange); stroke-width: 3; stroke-dasharray: 2 5; stroke-linecap: round; }
+.vd-gap-label { fill: var(--ex-ink); font-size: 14px; font-weight: 600; }
+.vd-segment { stroke: var(--ex-teal); stroke-width: 5; stroke-linecap: round; }
+.ex-table.vd-table th[scope="row"] { white-space: normal; }
+.ex-table.vd-table td { white-space: nowrap; }
+.vd-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
 .milp-glyph { margin-right: 0.35rem; vertical-align: middle; }
 
 /* Failure ledger: success = teal circle, crash = cross, timeout = open square, nonphysical = triangle (navy);
