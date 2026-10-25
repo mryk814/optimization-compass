@@ -926,3 +926,63 @@
 .qp-bar-on { background: var(--ex-orange); }
 .qp-bar-value { text-align: right; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { .qp-bar { transition: none; } }
+/* Root finding (Newton / bisection): orange = the moving point and tangent, teal = the root. */
+.nr-grid { stroke: var(--ex-line); stroke-width: 1; stroke-dasharray: 3 4; }
+.nr-root { stroke: var(--ex-teal); stroke-width: 2; stroke-dasharray: 6 4; }
+.nr-tangent-line { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.nr-cross { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
+.nr-drop { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 4 4; }
+.nr-old { fill: var(--ex-ink-soft); stroke: var(--ex-ground); stroke-width: 1.5; }
+.nr-from { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.nr-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.nr-bracket { fill: var(--ex-teal); fill-opacity: 0.14; }
+.nr-bracket-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.nr-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1; }
+.nr-bar-now { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+
+/* Simplex projection: orange = what is subtracted, teal = what remains, grey = clipped to zero. */
+.sp-zero { stroke: var(--ex-ink); stroke-width: 1.5; }
+.sp-wish { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-taken { fill: var(--ex-orange); fill-opacity: 0.28; stroke: none; }
+.sp-kept { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-kept-zero { fill: none; stroke: none; }
+.sp-negative { fill: var(--ex-ink-soft); fill-opacity: 0.22; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-ghost line { stroke: var(--ex-ink); stroke-width: 3; }
+.sp-ghost text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.sp-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.sp-meter-track { fill: var(--ex-line); }
+.sp-meter-fill { fill: var(--ex-orange); }
+.sp-meter-ok { fill: var(--ex-teal); }
+.sp-bracket { fill: var(--ex-orange); fill-opacity: 0.16; }
+.sp-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.sp-marker-ok { fill: var(--ex-teal); }
+
+/* SDP slice: teal = feasible, orange = on the boundary, red = infeasible (the only red). */
+.psd-region { fill: var(--ex-teal); fill-opacity: 0.12; stroke: none; }
+.psd-edge { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-fixed { stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.psd-feasible-segment { stroke: var(--ex-teal); stroke-width: 6; stroke-linecap: round; opacity: 0.7; }
+.psd-point { transition: transform 0.18s ease-out; }
+.psd-dot { stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-dot-inside { fill: var(--ex-teal); }
+.psd-dot-boundary { fill: var(--ex-orange); }
+.psd-dot-outside { fill: var(--ex-red); }
+.psd-forbidden { fill: var(--ex-red); fill-opacity: 0.08; }
+.psd-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; transition: y 0.18s ease-out, height 0.18s ease-out; }
+.psd-bar-zero { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+.psd-bar-negative { fill: var(--ex-red); stroke: var(--ex-red-ink); }
+
+/* PDE heat source: teal = temperature misfit, orange = heat-source penalty. */
+.pde-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.pde-gap { stroke: var(--ex-orange); stroke-width: 3; }
+.pde-wall { fill: var(--ex-ink); }
+.pde-heater { stroke: var(--ex-orange-ink); stroke-width: 4; }
+.pde-heater-head { fill: var(--ex-orange-ink); }
+.pde-bar-misfit { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.pde-bar-penalty { fill: var(--ex-orange); stroke: var(--ex-orange-ink); stroke-width: 1.5; }
+.pde-best { stroke: var(--ex-ink); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.pde-curve-misfit { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
+.pde-curve-penalty { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.pde-label-misfit { fill: var(--ex-teal-ink); font-weight: 700; }
+.pde-label-penalty { fill: var(--ex-orange-ink); font-weight: 700; }
+.pde-marker { transition: transform 0.15s ease-out; }

@@ -148,6 +148,10 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | `coordinate-descent-walk` | `coordinate-descent` | 一座標の断面の最小と全体の収束の違い。谷の向き・曲率比・座標の結びつきによる軌跡、掃引ごとの停止と予算打ち切り |
 | `inverse-problem-alpha` | `concept.inverse-problem` | 罰則の重みαを対数目盛りで動かし、復元した分布・真の分布との誤差・観測とのずれ（雑音の大きさδとの比較）を同じ計算で見る |
 | `saddle-newton` | `concept.smooth-low-dimensional-unconstrained` | 始点を動かし、純粋なNewton法が谷底と峠のどちらに着くかを、着いた点の勾配とHessianの固有値（曲率）で見分ける。始点Aは6回で左の谷底、始点Bは3回で峠 |
+| `newton-root-residual` | `concept.root-finding` | 残差 `t²+t−1` の曲線で、接線を引き、F=0 との交点へ印を滑らせ、曲線へ落とす1手を再生する。根の周りを手ごとに拡大し、残差の桁数が 0.7 → 2.2 → 5.1 → 10.9 と倍々に伸びる様子。二分法（区間を半分）との比較 |
+| `simplex-projection-theta` | `concept.simplex-optimization` | 希望量 (0.9, 0.3, 0.05) から共通の量 θ を引いて負を0に切る。合計が1に戻る θ=0.1 を、再生が区間の半分化で探す。合計で割る配分との違い |
+| `sdp-psd-boundary` | `concept.semidefinite-program` | `[[1, r], [r, 4]]` の r を動かし、(r, s) 平面の点と二つの固有値で、r=2 の境界で固有値が0になり、超えると負になること |
+| `pde-heat-source-balance` | `concept.pde-constrained-program` | 熱源 q を動かすと状態 u が計算し直され、温度のずれと熱源の罰則の積み上げ、J(q) の曲線上のマーカー。q=4.5 で二つの項が等しく、合計0.5が最小 |
 | `robust-loss-pull` | `concept.robust-regression` | 観測 (0, 0, 0, m) の最後の値 m とHuberの尺度 δ を動かし、二乗損失とHuber損失の定数当てはめ・各観測の損失の傾きを見比べる。Huber の推定値は min(m/4, δ/3) と一致 |
 | `milp-integer-lattice` | `concept.mixed-integer-linear-program` | 二つの資源の上限 b₁, b₂ を動かし、LP緩和の最適解（上界）・それを丸めた点・整数の最適解を格子点の上で見比べる。既定 (24, 6) は LP (3, 1.5)=21、丸め (3, 2) は両方の制約を破り、整数最適 (4, 0)=20。b₂=4 では LP解が整数でギャップ0、b₂=7 ではギャップ1.5 |
 | `convex-qp-projection` | `concept.convex-quadratic-program` | 目標 p と合計の上限 b を動かし、三角形の中で目標に最も近い点（二乗距離の最小点）を、効いている制約の組を全部試して厳密に求める。既定 p=(3,2), b=3 では辺の途中 (2,1)、λ=2、目的値2で、頂点だけを比べると4。p=(5,0) は頂点 (3,0) で λ が 4 と 4、p=(1,1) は内部で λ=0。b を0.1緩めた改善の予測0.2と解き直し0.195 |

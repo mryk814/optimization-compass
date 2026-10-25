@@ -29,4 +29,8 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "variable-domain-switch": lazy(() => import("./VariableDomain")),
   "gauss-newton-lm-steps": lazy(() => import("./GaussNewtonLm")),
   "failure-ledger": lazy(() => import("./FailureLedger")),
+  "newton-root-residual": lazy(() => import("./NewtonRootResidual")),
+  "simplex-projection-theta": lazy(() => import("./SimplexProjectionTheta")),
+  "sdp-psd-boundary": lazy(() => import("./PsdSliceBoundary")),
+  "pde-heat-source-balance": lazy(() => import("./PdeHeatSourceBalance")),
 };

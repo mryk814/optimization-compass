@@ -28,6 +28,10 @@ const figures = [
   { label: "variable-domain", route: "/learn/concept.variable-domain", id: "variable-domain-switch" },
   { label: "gauss-newton", route: "/learn/gauss-newton", id: "gauss-newton-lm-steps" },
   { label: "failed-simulation", route: "/learn/concept.failed-simulation", id: "failure-ledger" },
+  { label: "root-finding", route: "/learn/concept.root-finding", id: "newton-root-residual" },
+  { label: "simplex-optimization", route: "/learn/concept.simplex-optimization", id: "simplex-projection-theta" },
+  { label: "semidefinite-program", route: "/learn/concept.semidefinite-program", id: "sdp-psd-boundary" },
+  { label: "pde-constrained-program", route: "/learn/concept.pde-constrained-program", id: "pde-heat-source-balance" },
 ];
 
 for (const figure of figures) {
