@@ -31,6 +31,10 @@ last_reviewed: 2026-09-30
 成分ごとの大小だけでは、行列の整合性は決まりません。
 すべての方向で二次形式が負にならないことが、行列全体への条件です。
 
+![2×2行列の対角成分を1と4に固定し、非対角成分rと2列目の対角成分sの平面で、半正定値になる範囲を示す図。s≥r²の上側が可行で、r=-2から2までが可行な線分。](./figures/sdp-psd-slice.svg "1と4の対角成分を固定した2×2行列の可行範囲")
+
+図の緑の線分は、非対角成分 $r$ が取れる範囲です。境界の点Bでは行列式が0になり、最適解はここにあります。点Cは全成分が正でも、行列式が負なので可行ではありません。この図は二変数の断面だけを示し、3×3以上の行列や目的の等高線は描いていません。
+
 ## 標準形を読む
 
 対称行列 $X$ を選び、半正定値という条件と線形の等式を守って費用を最小にします。
@@ -41,13 +45,13 @@ $$
 \langle A_i,X\rangle=b_i,\quad i=1,\ldots,m,\qquad X\succeq0
 $$
 
-| 記号 | 意味 |
-|---|---|
-| $X$ | 決める対称行列 |
-| $C$ | 目的の各成分に掛ける係数の対称行列 |
-| $A_i,b_i$ | 線形等式 $i$ の係数行列と右辺 |
-| $\langle A,X\rangle$ | $\operatorname{tr}(A^TX)$。対応する全成分の積の和 |
-| $X\succeq0$ | すべての方向 $v$ に対して $v^TXv\ge0$ という条件 |
+| 記号 | 意味 | 例では |
+|---|---|---|
+| $X$ | 決める対称行列 | 最適解は $X_{11}=1$、$X_{12}=2$、$X_{22}=4$ |
+| $C$ | 目的の各成分に掛ける係数の対称行列 | $C_{12}=C_{21}=-\tfrac12$、ほかは $0$ |
+| $A_i,b_i$ | 線形等式 $i$ の係数行列と右辺 | $X_{11}=1$ を表す $A_1$ と $b_1=1$、$X_{22}=4$ を表す $A_2$ と $b_2=4$ |
+| $\langle A,X\rangle$ | $\operatorname{tr}(A^TX)$。対応する全成分の積の和 | $\langle A_1,X\rangle=1$、$\langle A_2,X\rangle=4$ |
+| $X\succeq0$ | すべての方向 $v$ に対して $v^TXv\ge0$ という条件 | 成り立つのは $-2\le r\le2$ のとき |
 
 対称行列なら、半正定値であることは「すべての固有値が非負」と同値です。
 目的と等式は行列成分について線形です。
@@ -145,20 +149,19 @@ problem.solve(solver="SCS", eps=1e-8, max_iters=10000)
 if problem.status != cp.OPTIMAL:
     raise RuntimeError(problem.status)
 
-print(problem.status)
-print(np.round(x.value, 6))
-print("objective:", round(problem.value, 6))
-print("eigenvalues:", np.round(np.linalg.eigvalsh(x.value), 6))
+print(problem.status)  # optimal
+print("X:", np.round(x.value, 6).tolist())  # X: [[1.0, 2.0], [2.0, 4.0]]
+print("objective:", round(problem.value, 6))  # objective: -2.0
+print("eigenvalues:", np.round(np.linalg.eigvalsh(x.value), 6).tolist())  # eigenvalues: [-0.0, 5.0]
 ```
 
 実行結果を小数点以下6桁へ丸めると、次の値になります。
 
 ```text
 optimal
-[[1. 2.]
- [2. 4.]]
+X: [[1.0, 2.0], [2.0, 4.0]]
 objective: -2.0
-eigenvalues: [-0.  5.]
+eigenvalues: [-0.0, 5.0]
 ```
 
 元の精度では、最小固有値が丸め誤差の範囲でわずかに負になる場合があります。
