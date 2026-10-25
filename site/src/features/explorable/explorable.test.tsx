@@ -326,6 +326,8 @@ describe("ConvexityChord", () => {
     fireEvent.click(screen.getByRole("radio", { name: /二つの谷/ }));
 
     expect(screen.getAllByText(/この関数は凸ではありません/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/θ が 0\.\d+ から [\d.]+ のあたり/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/e-3/)).toBeNull();
   });
 
   it("plays theta from 0 to 1 and flags the moment the chord dips below the graph", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { act, ADVANCED, CAPACITY, certificate, fractionalItem, ITEMS, nodeId, relaxation, SCENARIOS, splitEffect, startSearch, totals, type Choice } from "./branchBound";
+import { act, ADVANCED, branchLabel, CAPACITY, certificate, decisionOrder, fractionalItem, pathTo, ITEMS, nodeId, relaxation, SCENARIOS, splitEffect, startSearch, totals, type Choice } from "./branchBound";
 
 const choices: Choice[] = Array.from({ length: 2 ** ITEMS.length }, (_, mask) => ITEMS.map((_, i) => (mask >> i & 1) as 0 | 1));
 const feasible = choices.filter((choice) => totals(choice).weight <= CAPACITY);
@@ -49,9 +49,10 @@ describe("fractional knapsack proof", () => {
     expect(rejected.frontier).toBe(state.frontier);
     expect(certificate(state).proven).toBe(false);
     state = act(state, "root", "open");
-    state = act(state, "0", "prune");
-    state = act(state, "1", "open");
-    state = act(state, "11", "open");
+    expect(certificate(state).upper).toBeCloseTo(15);
+    state = act(state, "2:1", "open");
+    expect(certificate(state).upper).toBeCloseTo(15);
+    state = act(state, "1:1,2:1", "open");
     expect(certificate(state).lower).toBe(13);
     expect(certificate(state).upper).toBeCloseTo(14.4);
     expect(certificate(state).proven).toBe(false);
@@ -98,27 +99,38 @@ describe.each(SCENARIOS)("$title exhaustive certificate", (scenario) => {
     }
   });
 });
-it("lowers the bound only when the split item is the one the bound packs partly", () => {
+// Expected values come from scratchpad/bnb_tree.py, which branches on the fractional item.
+it("splits on the item the relaxation packs partly, and the first split lowers the bound", () => {
   const root = splitEffect([]);
-  expect(root.splitItem).toBe(0);
   expect(root.fractional).toBe(2);
+  expect(root.splitItem).toBe(2);
   expect(root.parentBound).toBeCloseTo(46 / 3);
-  expect(root.children.map((child) => child.bound)).toEqual([expect.closeTo(46 / 3), expect.closeTo(12.6)]);
-  expect(root.lowersBound).toBe(false);
+  expect(root.children.map((child) => child.take)).toEqual([1, 0]);
+  expect(root.children.map((child) => child.bound)).toEqual([expect.closeTo(15), expect.closeTo(14.4)]);
+  expect(root.lowersBound).toBe(true);
+  expect(root.remaining).toBeCloseTo(15);
 
-  const withA = splitEffect([1]);
-  expect(withA.splitItem).toBe(1);
-  expect(withA.fractional).toBe(2);
-  expect(withA.lowersBound).toBe(false);
+  const withB = splitEffect([null, null, 1]);
+  expect(withB.splitItem).toBe(1);
+  expect(withB.children.map((child) => child.bound)).toEqual([expect.closeTo(15), expect.closeTo(14.2)]);
+  // The larger child keeps the parent's bound: splitting does not always lower the maximum at once.
+  expect(withB.lowersBound).toBe(false);
 
-  const withAD = splitEffect([1, 1]);
-  expect(withAD.splitItem).toBe(withAD.fractional);
-  expect(withAD.children[0].feasible).toBe(false);
-  expect(withAD.children[1].bound).toBeCloseTo(14.4);
-  expect(withAD.lowersBound).toBe(true);
-  expect(withAD.remaining).toBeCloseTo(14.4);
+  const withBD = splitEffect([null, 1, 1]);
+  expect(withBD.splitItem).toBe(0);
+  expect(withBD.children[0].feasible).toBe(false);
+  expect(withBD.children[1].bound).toBeCloseTo(12.6);
+  expect(withBD.lowersBound).toBe(true);
   expect(fractionalItem([1, 1, 0])).toBe(3);
   expect(fractionalItem([1, 1, 0, 0])).toBe(-1);
+});
+it("names a node by its decisions and recovers the order they were made in", () => {
+  expect(nodeId([])).toBe("root");
+  expect(nodeId([null, 1, 1])).toBe("1:1,2:1");
+  expect(decisionOrder([null, 1, 1])).toEqual([2, 1]);
+  expect(decisionOrder([0, 1, 1])).toEqual([2, 1, 0]);
+  expect(pathTo([0, 1, 1]).map(nodeId)).toEqual(["root", "2:1", "1:1,2:1", "0:0,1:1,2:1"]);
+  expect(branchLabel([null, 1, 1])).toBe("Bを入れる → Dを入れる");
 });
 it("has a genuine eight-item greedy trap and a density-order-independent relaxation", () => {
   let room = ADVANCED.capacity;

@@ -18,7 +18,8 @@
 .bnb-range { position: relative; display: flex; height: 12px; background: var(--ex-line); border-radius: 4px; overflow: hidden; }
 .bnb-range span:first-child { background: var(--ex-teal); }
 .bnb-range span:nth-child(2) { background: var(--ex-orange); }
-.bnb-range span { transition: width .8s ease; }
+.bnb-range-gap { animation: bnb-shrink .9s ease-out; }
+@keyframes bnb-shrink { from { width: var(--from); } }
 .bnb-range-ghost { position: absolute; top: 0; bottom: 0; width: 0; border-left: 3px dashed var(--ex-ink); animation: bnb-ghost 2.4s ease-out forwards; }
 .bnb-dropped { padding: 0 .2em; border-radius: .25em; animation: bnb-dropped 1.4s ease-out; }
 .bnb-subheading { font-weight: 700; }
@@ -33,7 +34,7 @@
 @keyframes bnb-ghost { 0%, 70% { opacity: 1; } 100% { opacity: .55; } }
 @keyframes bnb-dropped { from { background: var(--ex-orange); color: #fff; } to { background: transparent; } }
 @keyframes bnb-fadein { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .bnb-range span, .bnb-range-ghost, .bnb-dropped, .bnb-split-result { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { .bnb-range-gap,.bnb-range-ghost, .bnb-dropped, .bnb-split-result { transition: none; animation: none; } }
 .bnb-equation { font-variant-numeric: tabular-nums; font-weight: 600; overflow-wrap: anywhere; }
 .bnb-overview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .75rem; align-items: start; }
 .bnb-change { display: grid; gap: .35rem; min-width: 0; }

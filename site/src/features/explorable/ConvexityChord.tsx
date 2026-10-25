@@ -131,7 +131,7 @@ export default function ConvexityChord() {
   };
 
   const verdictText = violated
-    ? `点a・bの間で、線分がグラフより下に入る区間があります（θ が ${fmt(violations[0][0])} から ${fmt(violations[violations.length - 1][1])} のあたり）。定義の不等式が破れるので、この関数は凸ではありません。`
+    ? `点a・bの間で、線分がグラフより下に入る区間があります（θ が ${plainDecimal(violations[0][0])} から ${plainDecimal(violations[violations.length - 1][1])} のあたり）。定義の不等式が破れるので、この関数は凸ではありません。`
     : fn.convex
       ? "どの混合比θでも、線分はグラフの上か同じ高さにあります。この関数は凸なので、どの2点を選んでもこうなります。"
       : "この2点の間では違反は見つかりません。ただし、一組の点で破れなかったことは凸性の証明になりません。aとbを谷の両側へ動かしてください。";
@@ -307,6 +307,11 @@ export default function ConvexityChord() {
       summary={summary}
     />
   );
+}
+
+/** A ratio in [0, 1] as a plain decimal such as 0.004, never in exponent form. */
+export function plainDecimal(value: number): string {
+  return value.toFixed(3).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "");
 }
 
 interface TraceSvgProps {
