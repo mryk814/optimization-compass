@@ -10,6 +10,10 @@ import {
   chordReading,
   descendFrom,
   globalMinimum,
+  slackTrace,
+  SWEEP_STEPS,
+  sweepReach,
+  sweepTheta,
   violationIntervals,
   type CurveFunction,
 } from "./math/convexity";
@@ -19,17 +23,24 @@ import { useReplayOnChange, useTimeline } from "./useTimeline";
 
 const BOUNDS: Bounds = { xMin: -3, xMax: 3, yMin: -0.6, yMax: 4.7 };
 const ASPECT = 0.58;
+const TRACE_ASPECT = 0.3;
+const SWEEP_STEPS_PER_SECOND = 4;
 
 export default function ConvexityChord() {
   const [functionId, setFunctionId] = useState<CurveFunction["id"]>("quadratic");
   const fn = CURVE_FUNCTIONS.find((item) => item.id === functionId) ?? CURVE_FUNCTIONS[0];
   const [a, setA] = useState(fn.defaultA);
   const [b, setB] = useState(fn.defaultB);
-  const [theta, setTheta] = useState(0.5);
+  const [sliderTheta, setSliderTheta] = useState(0.5);
+  const [sweeping, setSweeping] = useState(false);
   const [descending, setDescending] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
   const { ref: stageRef, viewport } = useStageViewport(BOUNDS, ASPECT);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
+  const sweep = useTimeline(SWEEP_STEPS, SWEEP_STEPS_PER_SECOND);
+  // While the sweep is on, theta follows the clock; otherwise it is the slider's value.
+  const theta = sweeping ? sweepTheta(sweep.position) : sliderTheta;
+  const reach = sweeping ? sweepReach(sweep.position) : 1;
 
   const switchFunction = (id: CurveFunction["id"]) => {
     const next = CURVE_FUNCTIONS.find((item) => item.id === id) ?? CURVE_FUNCTIONS[0];
@@ -37,6 +48,16 @@ export default function ConvexityChord() {
     setA(next.defaultA);
     setB(next.defaultB);
     setDescending(false);
+    if (sweeping) sweep.restart();
+  };
+  const startSweep = () => {
+    setDescending(false);
+    setSweeping(true);
+    sweep.restart();
+  };
+  const moveSlider = (value: number) => {
+    setSweeping(false);
+    setSliderTheta(value);
   };
 
   const graph = useMemo(() => {
@@ -53,6 +74,22 @@ export default function ConvexityChord() {
   const downhill = useMemo(() => (descending ? descendFrom(fn, a) : [a]), [descending, fn, a]);
   const minimum = useMemo(() => globalMinimum(fn), [fn]);
   const timeline = useTimeline(downhill.length - 1, 8);
+
+  // The gap between chord and graph for every theta: the curve the sweep draws.
+  const trace = useMemo(() => slackTrace(fn.f, a, b), [fn, a, b]);
+  const traceBounds = useMemo<Bounds>(() => {
+    const slacks = trace.map((sample) => sample.slack);
+    const low = Math.min(0, ...slacks);
+    const high = Math.max(0, ...slacks);
+    const pad = Math.max(0.15 * (high - low), 0.2);
+    return { xMin: -0.12, xMax: 1.08, yMin: low - pad, yMax: high + pad };
+  }, [trace]);
+  const { ref: traceRef, viewport: traceViewport } = useStageViewport(traceBounds, TRACE_ASPECT, {
+    below: 520,
+    aspect: 0.42,
+    bounds: traceBounds,
+  });
+  const traceScale = useMemo(() => makeScale(traceViewport), [traceViewport]);
 
   useReplayOnChange(timeline, `${descending}|${a}|${functionId}`);
 
@@ -103,7 +140,7 @@ export default function ConvexityChord() {
       ? `aから下ると x=${fmt(stopped)} で止まり、これが全体の最小点です。`
       : `aから下ると x=${fmt(stopped)}（f=${fmt(fn.f(stopped))}）で止まりますが、全体の最小値は f=${fmt(minimum.value)}（x=${fmt(minimum.x)}）です。局所的に下れなくなっても、全体の最小とは限りません。`
     : "";
-  const summary = `${fn.label}。a=${fmt(a)}、b=${fmt(b)}、混合比θ=${fmt(theta)}。${verdictText}${descentText}`;
+  const summary = `${fn.label}。a=${fmt(a)}、b=${fmt(b)}、混合比θ=${fmt(sliderTheta)}。${verdictText}${descentText}`;
 
   return (
     <ExplorableFrame
@@ -121,14 +158,19 @@ export default function ConvexityChord() {
             label="混合比 θ"
             max={1}
             min={0}
-            onChange={setTheta}
+            onChange={moveSlider}
             step={0.01}
             value={theta}
           />
-          <div className="ex-button-row">
+          <div className="ex-button-row cvx-actions">
+            <button className="ex-action" onClick={startSweep} type="button">
+              ▶ θを0から1へ動かして再生
+            </button>
             <button
               className="ex-action"
               onClick={() => {
+                setSweeping(false);
+                sweep.pause();
                 setDescending(true);
                 if (descending) timeline.restart();
               }}
@@ -140,15 +182,23 @@ export default function ConvexityChord() {
         </>
       }
       id="convexity-chord"
-      player={descending
+      player={sweeping
         ? (
             <PlayerBar
-              positionText={`${step} / ${downhill.length - 1} 回`}
-              stepLabel="下る回数"
-              timeline={timeline}
+              positionText={`θ = ${fmt(theta)}（${sweep.position < SWEEP_STEPS / 2 ? "0から1へ" : "1から0へ"}）`}
+              stepLabel="θの動き"
+              timeline={sweep}
             />
           )
-        : undefined}
+        : descending
+          ? (
+              <PlayerBar
+                positionText={`${step} / ${downhill.length - 1} 回`}
+                stepLabel="下る回数"
+                timeline={timeline}
+              />
+            )
+          : undefined}
       readout={
         <>
           <section aria-label="定義の不等式を数値で確かめる" className="ex-equation">
@@ -164,12 +214,18 @@ export default function ConvexityChord() {
               markup={numericMarkup(fn, a, b, theta, reading.atMix, reading.chord, reading.slack < 0)}
             />
           </section>
+          {fn.id === "quadratic" && (
+            <p className="ex-hint">
+              この関数では、差は 0.35 × θ(1−θ) × (a−b)² = 0.35 × {fmt(theta * (1 - theta))} × {fmt((a - b) ** 2)} = {fmt(reading.slack)} です。θ(1−θ) は θ=0.5 で最大になるので、差の記録は山になります。
+            </p>
+          )}
           <p className={`ex-verdict ${violated ? "ex-tone-bad" : "ex-tone-good"}`}>{verdictText}</p>
           {descentText && <p className="ex-verdict ex-tone-slow">{descentText}</p>}
         </>
       }
       stage={
-        <div className="ex-canvas" ref={stageRef}>
+        <>
+        <div className={sweeping && reading.slack < 0 ? "ex-canvas cvx-flash" : "ex-canvas"} ref={stageRef}>
         <svg className="ex-svg" ref={svgRef} viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
           <rect className="ex-ground" height={viewport.height} width={viewport.width} />
           <g className="ex-axes">
@@ -232,9 +288,81 @@ export default function ConvexityChord() {
           />
         </svg>
         </div>
+        <section aria-label="差の記録" className="ex-panel cvx-trace">
+          <p className="ex-panel-title">差の記録（弦の高さ − 曲線の高さ）を θ ごとに描く</p>
+          <div className="ex-canvas" ref={traceRef}>
+            <TraceSvg
+              reach={reach}
+              scale={traceScale}
+              slack={reading.slack}
+              sweeping={sweeping}
+              theta={theta}
+              trace={trace}
+              viewport={traceViewport}
+            />
+          </div>
+        </section>
+        </>
       }
       summary={summary}
     />
+  );
+}
+
+interface TraceSvgProps {
+  trace: ReturnType<typeof slackTrace>;
+  viewport: ReturnType<typeof useStageViewport>["viewport"];
+  scale: Scale;
+  theta: number;
+  slack: number;
+  reach: number;
+  sweeping: boolean;
+}
+
+/** The record of "chord minus graph" against theta; it is drawn as the sweep reaches each theta. */
+function TraceSvg({ trace, viewport, scale, theta, slack, reach, sweeping }: TraceSvgProps) {
+  const built = trace.filter((sample) => sample.theta <= reach + 1e-9);
+  const pieces: Array<{ bad: boolean; points: Array<readonly [number, number]> }> = [];
+  built.forEach((sample, index) => {
+    if (index === 0) return;
+    const previous = built[index - 1];
+    const bad = (sample.slack + previous.slack) / 2 < -1e-9;
+    const tail = pieces[pieces.length - 1];
+    if (tail && tail.bad === bad) tail.points.push([sample.theta, sample.slack]);
+    else pieces.push({ bad, points: [[previous.theta, previous.slack], [sample.theta, sample.slack]] });
+  });
+  const current = slack;
+  const below = current < -1e-9;
+  const zeroY = scale.py(0);
+  return (
+    <svg aria-hidden="true" className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+      <rect className="ex-ground" height={viewport.height} width={viewport.width} />
+      <g className="ex-axes">
+        <line x1={scale.px(0)} x2={scale.px(1)} y1={zeroY} y2={zeroY} />
+        {[0, 0.5, 1].map((value) => (
+          <text key={value} textAnchor="middle" x={scale.px(value)} y={viewport.height - 6}>{value === 0.5 ? "θ=0.5" : value}</text>
+        ))}
+        <text textAnchor="end" x={scale.px(0) - 8} y={zeroY + 5}>0</text>
+      </g>
+      <path className="cvx-ghost" d={polylinePath(trace.map((sample) => [sample.theta, sample.slack] as const), scale)} />
+      {pieces.map((piece, index) => (
+        <path
+          className={piece.bad ? "cvx-trace-line cvx-trace-bad" : "cvx-trace-line"}
+          d={polylinePath(piece.points, scale)}
+          key={index}
+        />
+      ))}
+      <line className={below ? "ex-gap ex-gap-bad" : "ex-gap"} x1={scale.px(theta)} x2={scale.px(theta)} y1={zeroY} y2={scale.py(current)} />
+      {below && sweeping && (
+        <circle className="cvx-pulse" cx={scale.px(theta)} cy={scale.py(current)} r={10} />
+      )}
+      <circle className={below ? "ex-on-chord ex-on-chord-bad" : "ex-on-chord"} cx={scale.px(theta)} cy={scale.py(current)} r={7} />
+      {below && (
+        <text className="cvx-warning" textAnchor="middle" x={clamp(scale.px(theta), 90, viewport.width - 90)} y={Math.max(20, zeroY - 14)}>
+          0を下回った: 弦が曲線より下
+        </text>
+      )}
+    </svg>
   );
 }
 

@@ -37,7 +37,40 @@ export function relaxation(choice: Choice, scenario: Scenario = INTRO) {
   }
   return { feasible: true, bound, fill };
 }
-export const nodeId = (choice: Choice) => choice.join("") || "root";
+/** Index of the item the relaxation packs only partly (0 < part < 1), or -1 when it packs whole items only. */
+export function fractionalItem(choice: Choice, scenario: Scenario = INTRO): number {
+  const { feasible, fill } = relaxation(choice, scenario);
+  if (!feasible) return -1;
+  return fill.findIndex((part, i) => i >= choice.length && part > 1e-12 && part < 1 - 1e-12);
+}
+export interface SplitEffect {
+  /** The item an "open" decides next: the first undecided one, in the fixed order. */
+  splitItem: number;
+  /** The item the parent's bound packs only partly. This is why the bound is not reachable. */
+  fractional: number;
+  parentBound: number;
+  children: { take: 0 | 1; feasible: boolean; bound: number; drop: number }[];
+  /** The larger child bound: what is left of the parent's bound after the split. */
+  remaining: number;
+  /** True when deciding the split item takes the fractional part away from the bound. */
+  lowersBound: boolean;
+}
+/** What opening a node does to its bound: the parent's bound against each child's. */
+export function splitEffect(choice: Choice, scenario: Scenario = INTRO): SplitEffect {
+  const parentBound = relaxation(choice, scenario).bound;
+  const children = ([1, 0] as const).map((take) => {
+    const child = relaxation([...choice, take], scenario);
+    return { take, feasible: child.feasible, bound: child.bound, drop: child.feasible ? parentBound - child.bound : Infinity };
+  });
+  const remaining = Math.max(...children.map((child) => child.bound));
+  return {
+    splitItem: choice.length,
+    fractional: fractionalItem(choice, scenario),
+    parentBound, children, remaining,
+    lowersBound: remaining < parentBound - 1e-9,
+  };
+}
+export const nodeId =(choice: Choice) => choice.join("") || "root";
 export const branchLabel = (choice: Choice, scenario: Scenario = INTRO) => choice.length
   ? choice.map((take, i) => `${scenario.items[i].name}${take ? "を入れる" : "を外す"}`).join(" → ")
   : "根：まだ何も固定していない";

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { ExplorableFrame } from "./ExplorableFrame";
-import { act, INTRO, SCENARIOS, certificate, nodeId, relaxation, startSearch, totals, type Choice, type SearchState, type Scenario } from "./math/branchBound";
+import { act, INTRO, SCENARIOS, certificate, fractionalItem, nodeId, relaxation, splitEffect, startSearch, totals, type Choice, type SearchState, type Scenario } from "./math/branchBound";
 import "./branch-bound.css";
 
 // Round displayed upper bounds outwards, so the label never understates the bound.
@@ -74,6 +74,25 @@ function BranchFocus({ state, onSelect }: { state: SearchState; onSelect: (id: s
   </div>;
 }
 
+// What the last split did: which item was decided, which item was the fraction, and each child's bound.
+function SplitResult({ choice, scenario }: { choice: Choice; scenario: Scenario }) {
+  const effect = splitEffect(choice, scenario);
+  const names = scenario.items.map((item) => item.name);
+  const fall = (drop: number) => (drop > 1e-9 ? `${upperText(drop)} 点下がる` : "変わらない");
+  return <div className="bnb-split-result" role="group" aria-label="分けた品と上限の変化">
+    <p>
+      <span className="bnb-tag bnb-tag-split">分けた品 {names[effect.splitItem]}</span>
+      {effect.fractional >= 0 && <span className="bnb-tag bnb-tag-frac">端数だった品 {names[effect.fractional]}</span>}
+    </p>
+    <ul>{effect.children.map((child) => <li key={child.take}>
+      {names[effect.splitItem]}{child.take ? "を入れる" : "を入れない"}：{child.feasible ? `上限 ${upperText(child.bound)} 点（${fall(child.drop)}）` : "容量超過"}
+    </li>)}</ul>
+    <p>{effect.lowersBound
+      ? `端数だった ${names[effect.fractional]} が決まり、親の上限 ${upperText(effect.parentBound)} 点は ${upperText(effect.remaining)} 点まで下がりました。`
+      : `${names[effect.splitItem]}を決めても端数の ${effect.fractional >= 0 ? names[effect.fractional] : "品"} は残るので、大きいほうの上限は ${upperText(effect.remaining)} 点のままです。`}</p>
+  </div>;
+}
+
 export default function BranchBound() {
   const [scenario, setScenario] = useState<Scenario>(INTRO);
   const ITEMS = scenario.items;
@@ -113,6 +132,7 @@ export default function BranchBound() {
   const bounds = state ? certificate(state) : undefined;
   const last = state?.closed.at(-1);
   const previous = history.length > 1 ? certificate(history[history.length - 2]) : undefined;
+  const upperDropped = Boolean(previous && bounds && previous.upper > bounds.upper + 1e-9);
   const selected = state?.frontier.find((node) => nodeId(node) === selectedId) ?? (state ? preferred(state.frontier, scenario) : undefined);
   const begin = () => {
     preserveScroll();
@@ -138,6 +158,9 @@ export default function BranchBound() {
     const title = candidateTitle(node, scenario);
     const removable = !r.feasible || r.bound <= bounds!.lower;
     const integral = r.feasible && r.fill.every((part) => part === 0 || part === 1);
+    const canSplit = r.feasible && !removable && !integral && node.length < ITEMS.length;
+    const fractional = r.feasible ? fractionalItem(node, scenario) : -1;
+    const effect = canSplit ? splitEffect(node, scenario) : undefined;
     return <article className={`bnb-candidate${!r.feasible ? " bnb-infeasible" : ""}`} aria-label={`${title}の候補`} data-candidate-id={nodeId(node)} id="bnb-selected-candidate" tabIndex={-1} ref={cardRef}>
       <div className="bnb-candidate-heading"><span>選択中の候補</span><ConditionChips choice={node} scenario={scenario}/></div>
       <div className="bnb-ceiling"><span>この枝の上限</span><strong>{r.feasible ? `${upperText(r.bound)}点` : "⚠ 容量超過"}</strong><span>{r.feasible ? `${r.bound <= bounds!.lower ? "≤" : ">"} 全体最高記録 ${bounds!.lower}点` : "この条件では袋に入りません"}</span></div>
@@ -148,14 +171,28 @@ export default function BranchBound() {
       </div>
       <div className="bnb-detail-drawers">
       {node.length < ITEMS.length && <details className="bnb-undecided"><summary aria-label={`未決定 ${ITEMS.length - node.length}品を見る`}>未決定 {ITEMS.length - node.length}品</summary><div className="bnb-icon-row">{ITEMS.slice(node.length).map((item) => <span key={item.name}><ItemIcon name={item.name}/>{item.name}</span>)}</div></details>}
-      {r.feasible && <details className="bnb-bound-details"><summary aria-label={`なぜ最高でも${upperText(r.bound)}点？ 詰め方を見る`}>上限の根拠</summary>
+      {r.feasible && <section className="bnb-bound-details" aria-label={`なぜ最高でも${upperText(r.bound)}点？ 詰め方`}>
+        <p className="bnb-subheading">上限の根拠</p>
         <p>未決定の品は分割してよいことにし、重さあたりの得点が高い順に詰めます。</p>
-        <div className="bnb-fill" aria-label={`${title}の分割してよい詰め方`}>{ITEMS.map((item, i) => <div key={item.name}><span>{item.name}{i < node.length ? "（決定済）" : ""}</span><progress max={1} value={r.fill[i]} aria-label={`${item.name}の詰めた割合`} /><span>{Math.round(r.fill[i] * 100)}%</span></div>)}</div>
+        <div className="bnb-fill" aria-label={`${title}の分割してよい詰め方`}>{ITEMS.map((item, i) => {
+          const part = r.fill[i] ?? 0;
+          const isFractional = i === fractional;
+          const isSplit = i === node.length && canSplit;
+          return <div className={isFractional ? "is-fractional" : isSplit ? "is-split" : undefined} key={item.name}>
+            <span>{item.name}{i < node.length ? "（決定済）" : ""}
+              {isFractional && <em className="bnb-tag bnb-tag-frac">端数</em>}
+              {isSplit && <em className="bnb-tag bnb-tag-split">次に分ける</em>}</span>
+            <progress max={1} value={part} aria-label={`${item.name}の詰めた割合`} /><span>{Math.round(part * 100)}%</span></div>;
+        })}</div>
         <p className="bnb-equation">{r.fill.map((part, i) => `${ITEMS[i].value}×${Number(part.toFixed(3))}`).join(" + ")} ≈ {upperText(r.bound)} 点</p>
+        {fractional >= 0 && <p>{ITEMS[fractional].name}は {Math.round(r.fill[fractional] * 100)}% しか入りません。丸ごとの袋ではありえない端数が、この上限を押し上げています。</p>}
+        {canSplit && effect && <p className="bnb-split-preview">{ITEMS[node.length].name}を決めたとき：{effect.children.map((child) => `${child.take ? "入れる" : "入れない"}なら ${child.feasible ? `上限 ${upperText(child.bound)} 点` : "容量超過"}`).join("、")}。{effect.lowersBound
+          ? ` 端数だった ${ITEMS[effect.fractional].name} が決まるので、大きいほうの上限は ${upperText(effect.parentBound)} 点から ${upperText(effect.remaining)} 点へ下がります。`
+          : ` 端数の ${effect.fractional >= 0 ? ITEMS[effect.fractional].name : "品"} はまだ決まらないので、大きいほうの上限は ${upperText(effect.remaining)} 点のまま下がりません。`}</p>}
         <p>分割を許して得た最高点なので、丸ごと選ぶ得点はこれを超えません。表示は丸めています。</p>
         {!removable && <button className="bnb-question" type="button" onClick={() => step(node, "prune")}>この枝は終了できる？</button>}
         {feedback?.id === nodeId(node) && <p className="bnb-feedback" role="status">{feedback.text}</p>}
-      </details>}
+      </section>}
       </div>
     </article>;
   };
@@ -185,8 +222,8 @@ export default function BranchBound() {
     stage={state && bounds ? <div className="bnb-workspace">
       <p className="bnb-count">全{2 ** ITEMS.length}通りに対し、今調べる候補は{state.frontier.length}枠です。各枠は未決定の品の組合せをまとめています。</p>
       <div className="bnb-proof" aria-label="最適性の証明の進み具合">
-        <div className="bnb-meter"><span>全体最高記録 <strong>{bounds.lower}</strong></span><span>残る得点の上限 <strong>{upperText(bounds.upper)}</strong></span></div>
-        <div className="bnb-range" aria-hidden="true"><span style={{ width: `${bounds.lower / relaxation([], scenario).bound * 100}%` }} /><span style={{ width: `${(bounds.upper - bounds.lower) / relaxation([], scenario).bound * 100}%` }} /></div>
+        <div className="bnb-meter"><span>全体最高記録 <strong>{bounds.lower}</strong></span><span>残る得点の上限 <strong className={upperDropped ? "bnb-dropped" : undefined} key={`${history.length}-${bounds.upper}`}>{upperText(bounds.upper)}</strong></span></div>
+        <div className="bnb-range" aria-hidden="true"><span style={{ width: `${bounds.lower / relaxation([], scenario).bound * 100}%` }} /><span style={{ width: `${(bounds.upper - bounds.lower) / relaxation([], scenario).bound * 100}%` }} />{upperDropped && previous && <i className="bnb-range-ghost" key={history.length} style={{ left: `${previous.upper / relaxation([], scenario).bound * 100}%` }} />}</div>
         <p className="bnb-equation">{bounds.lower} ≤ 最適値 ≤ {upperText(bounds.upper)}</p>
         <p>{history.length === 1 && !bounds.proven ? `選んだ袋の${bounds.lower}点は記録です。もっと高い得点がないことは、枝の上限を調べて確かめます。` : bounds.proven ? `${bounds.lower === score.value ? "最初に選んだ袋が最適でした。" : ""}記録と上限が一致しました。これより高い得点はありません。最適性を証明できました。` : `まだ最大 ${upperText(bounds.gap)} 点よくなる可能性を否定できていません。`}</p>
       </div>
@@ -196,6 +233,7 @@ export default function BranchBound() {
           {last?.reason === "bound" && <span> 上限 {upperText(relaxation(last.choice, scenario).bound)} ≤ 記録 {bounds.lower}。</span>}
           {last?.reason === "infeasible" && <span> 重量 {totals(last.choice, scenario).weight} &gt; 容量 {CAPACITY}。</span>}
           {previous && (previous.lower !== bounds.lower || previous.upper !== bounds.upper) && <span> 記録 {previous.lower} → {bounds.lower}、上限 {upperText(previous.upper)} → {upperText(bounds.upper)}。</span>}</p>
+        {last?.reason === "split" && <SplitResult choice={last.choice} scenario={scenario} />}
         <BranchFocus state={state} onSelect={selectCandidate} />
         {last?.reason === "leaf" && <div className="bnb-recorded"><p>記録した完成形：{selectedNames(state.best, scenario)}、{bounds.lower}点</p><Packing choice={state.best} scenario={scenario} /></div>}
       </div>

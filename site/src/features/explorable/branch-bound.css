@@ -15,9 +15,25 @@
 .bnb-proof { display: grid; gap: .4rem; padding: .65rem; border: 1px solid var(--ex-line); background: var(--ex-panel); border-radius: .4rem; }
 .bnb-meter { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
 .bnb-meter strong { font-size: 1.3em; }
-.bnb-range { display: flex; height: 12px; background: var(--ex-line); border-radius: 4px; overflow: hidden; }
+.bnb-range { position: relative; display: flex; height: 12px; background: var(--ex-line); border-radius: 4px; overflow: hidden; }
 .bnb-range span:first-child { background: var(--ex-teal); }
-.bnb-range span:last-child { background: var(--ex-orange); }
+.bnb-range span:nth-child(2) { background: var(--ex-orange); }
+.bnb-range span { transition: width .8s ease; }
+.bnb-range-ghost { position: absolute; top: 0; bottom: 0; width: 0; border-left: 3px dashed var(--ex-ink); animation: bnb-ghost 2.4s ease-out forwards; }
+.bnb-dropped { padding: 0 .2em; border-radius: .25em; animation: bnb-dropped 1.4s ease-out; }
+.bnb-subheading { font-weight: 700; }
+.bnb-tag { display: inline-block; margin-left: .35em; padding: 0 .4em; border-radius: .3em; font-size: var(--type-label); font-style: normal; font-weight: 700; line-height: 1.5; }
+.bnb-tag-frac { background: #fff3e6; color: var(--ex-orange-ink); border: 1px solid var(--ex-orange); }
+.bnb-tag-split { background: var(--ex-teal-wash); color: var(--ex-teal-ink); border: 1px solid var(--ex-teal-ink); }
+.bnb-fill > div.is-fractional progress { outline: 2px solid var(--ex-orange); outline-offset: 2px; }
+.bnb-fill > div.is-split { background: var(--ex-teal-wash); }
+.bnb-split-result { display: grid; gap: .3rem; padding: .5rem; border-left: 3px solid var(--ex-teal-ink); background: var(--ex-teal-wash); animation: bnb-fadein .6s ease-out; }
+.bnb-split-result ul { margin: 0; padding-left: 1.2rem; font-variant-numeric: tabular-nums; }
+.bnb-split-preview { padding: .4rem .5rem; background: #fff3e6; border-left: 3px solid var(--ex-orange); }
+@keyframes bnb-ghost { 0%, 70% { opacity: 1; } 100% { opacity: .55; } }
+@keyframes bnb-dropped { from { background: var(--ex-orange); color: #fff; } to { background: transparent; } }
+@keyframes bnb-fadein { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .bnb-range span, .bnb-range-ghost, .bnb-dropped, .bnb-split-result { transition: none; animation: none; } }
 .bnb-equation { font-variant-numeric: tabular-nums; font-weight: 600; overflow-wrap: anywhere; }
 .bnb-overview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .75rem; align-items: start; }
 .bnb-change { display: grid; gap: .35rem; min-width: 0; }
@@ -60,7 +76,7 @@
 .bnb-icon-row > span { display: grid; justify-items: center; }
 .bnb-question { padding: .3rem; border: 1px solid var(--ex-line); background: var(--ex-ground); color: var(--ex-ink); font: inherit; text-align: left; }
 .bnb-fill { display: grid; gap: .3rem; margin: .5rem 0; }
-.bnb-fill > div { display: grid; grid-template-columns: 6em minmax(0, 1fr) 3em; align-items: center; gap: .35rem; }
+.bnb-fill > div { display: grid; grid-template-columns: 10em minmax(0, 1fr) 3em; align-items: center; gap: .35rem; }
 .bnb-fill progress { width: 100%; height: 12px; accent-color: var(--ex-orange); }
 .bnb-feedback { border-left: 3px solid var(--ex-teal); padding: .5rem; background: var(--ex-teal-wash); }
 .bnb-log summary { display: flex; align-items: center; }
@@ -91,7 +107,9 @@
 @media (max-width: 640px) { .bnb-items { grid-template-columns: minmax(0, 1fr); } }
 
 .bnb-detail-drawers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .3rem .75rem; }
-.bnb-detail-drawers details[open] { grid-column: 1 / -1; }
+.bnb-detail-drawers details[open], .bnb-detail-drawers .bnb-bound-details { grid-column: 1 / -1; }
+.bnb-bound-details { display: grid; gap: .5rem; padding-top: .4rem; }
+@media (max-width: 640px) { .bnb-fill > div { grid-template-columns: 1fr 3em; } .bnb-fill > div progress { grid-column: 1 / -1; grid-row: 2; } .bnb-fill > div > span:last-child { grid-row: 1; grid-column: 2; } }
 
 .bnb-workspace { overflow-anchor: none; }
 .bnb-infeasible .bnb-capacity { color: #a32718; }

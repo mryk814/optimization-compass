@@ -9,6 +9,7 @@ import { CompiledContent } from "../content/CompiledContent";
 import ConvexityChord from "./ConvexityChord";
 import GradientDescentValley from "./GradientDescentValley";
 import LpVertexWalk from "./LpVertexWalk";
+import NonlinearFitLandscape from "./NonlinearFitLandscape";
 import { axisRate, runDescent, valleyCurvatures } from "./math/descent";
 import { EXPLORABLE_META } from "./meta";
 import { numberSetting, stringSetting } from "./scene";
@@ -286,6 +287,32 @@ describe("LpVertexWalk", () => {
   });
 });
 
+describe("NonlinearFitLandscape", () => {
+  it("steps the descent and shows the bowl's promise against the real sum of squares", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.click(screen.getByRole("button", { name: "1手進める" }));
+    const scrub = screen.getByLabelText("反復 k");
+
+    fireEvent.change(scrub, { target: { value: "1" } });
+    const panel = within(screen.getByRole("region", { name: "1手の予測と実際" }));
+    expect(panel.getByText("1手目：お椀の予測と、実際の二乗和")).toBeTruthy();
+    expect(panel.getByText("5.420")).toBeTruthy();
+    expect(panel.getByText("0.245")).toBeTruthy();
+    expect(panel.getByText("2.234")).toBeTruthy();
+  });
+
+  it("shows plain Gauss–Newton overshoot on the far start (ω = 3)", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.change(screen.getByRole("slider", { name: /周波数 ω/ }), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "3" } });
+
+    const panel = within(screen.getByRole("region", { name: "1手の予測と実際" }));
+    expect(panel.getByText("3手目：お椀の予測と、実際の二乗和")).toBeTruthy();
+    expect(panel.getByText(/お椀は 1\.737 減ると予測しました。実際は 1\.3e9 増えました/)).toBeTruthy();
+  });
+});
+
 describe("ConvexityChord", () => {
   it("accepts every pair of points for a convex function", () => {
     render(<ConvexityChord />);
@@ -299,6 +326,29 @@ describe("ConvexityChord", () => {
     fireEvent.click(screen.getByRole("radio", { name: /二つの谷/ }));
 
     expect(screen.getAllByText(/この関数は凸ではありません/).length).toBeGreaterThan(0);
+  });
+
+  it("plays theta from 0 to 1 and flags the moment the chord dips below the graph", () => {
+    render(<ConvexityChord />);
+    fireEvent.click(screen.getByRole("radio", { name: /二つの谷/ }));
+    fireEvent.click(screen.getByRole("button", { name: /θを0から1へ動かして再生/ }));
+    const scrub = screen.getByLabelText("θの動き");
+
+    fireEvent.change(scrub, { target: { value: "0" } });
+    expect(screen.queryByText(/0を下回った/)).toBeNull();
+
+    fireEvent.change(scrub, { target: { value: "5" } });
+    expect(screen.getByText(/0を下回った/)).toBeTruthy();
+    expect(screen.getAllByText(/θ = 0\.50/).length).toBeGreaterThan(0);
+  });
+
+  it("builds the hump 0.35 theta (1 - theta) (a - b)^2 for the convex quadratic", () => {
+    render(<ConvexityChord />);
+    fireEvent.click(screen.getByRole("button", { name: /θを0から1へ動かして再生/ }));
+    fireEvent.change(screen.getByLabelText("θの動き"), { target: { value: "5" } });
+
+    expect(screen.getByText(/0\.35 × 0\.25 × 11\.56 = 1\.01/)).toBeTruthy();
+    expect(screen.queryByText(/0を下回った/)).toBeNull();
   });
 
   it("shows that a local stop is not the global minimum", () => {

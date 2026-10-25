@@ -6,6 +6,12 @@ import {
   chordReading,
   descendFrom,
   globalMinimum,
+  quadraticHump,
+  slackTrace,
+  SWEEP_HALF,
+  SWEEP_STEPS,
+  sweepReach,
+  sweepTheta,
   violationIntervals,
 } from "./convexity";
 import {
@@ -205,6 +211,36 @@ describe("convexity chord", () => {
     const reading = chordReading(quadratic.f, -2, 2, 0.25);
     expect(reading.mix).toBeCloseTo(0.25 * -2 + 0.75 * 2);
     expect(reading.chord).toBeCloseTo(quadratic.f(-2));
+  });
+
+  it("sweeps theta from 0 to 1 and back, one step at a time", () => {
+    expect(sweepTheta(0)).toBe(0);
+    expect(sweepTheta(SWEEP_HALF)).toBe(1);
+    expect(sweepTheta(SWEEP_STEPS)).toBe(0);
+    expect(sweepTheta(SWEEP_HALF / 2)).toBeCloseTo(0.5);
+    expect(sweepTheta(SWEEP_HALF + SWEEP_HALF / 2)).toBeCloseTo(0.5);
+    expect(sweepReach(SWEEP_STEPS)).toBe(1);
+    expect(sweepReach(SWEEP_HALF / 2)).toBeCloseTo(0.5);
+  });
+
+  it("traces the quadratic gap as the hump 0.35 theta (1 - theta) (a - b)^2", () => {
+    const trace = slackTrace(quadratic.f, -1.8, 1.6);
+    for (const sample of trace) {
+      expect(sample.slack).toBeCloseTo(quadraticHump(0.35, -1.8, 1.6, sample.theta), 12);
+    }
+    const peak = trace.reduce((best, sample) => (sample.slack > best.slack ? sample : best));
+    expect(peak.theta).toBeCloseTo(0.5);
+    expect(peak.slack).toBeCloseTo(0.35 * 0.25 * 3.4 ** 2, 12);
+    expect(trace[0].slack).toBeCloseTo(0, 12);
+    expect(trace.at(-1)!.slack).toBeCloseTo(0, 12);
+  });
+
+  it("makes the double-well gap dip below zero between the ends, where the sweep must flash", () => {
+    const trace = slackTrace(doubleWell.f, -1.5, 1.5);
+    expect(Math.min(...trace.map((sample) => sample.slack))).toBeLessThan(-1);
+    expect(trace[0].slack).toBeCloseTo(0, 12);
+    expect(trace.at(-1)!.slack).toBeCloseTo(0, 12);
+    expect(trace.some((sample) => sample.theta === 0.5 && sample.slack < 0)).toBe(true);
   });
 
   it("stops in different valleys depending on the start, and only one is global", () => {

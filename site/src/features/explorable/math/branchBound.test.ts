@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { act, ADVANCED, CAPACITY, certificate, ITEMS, nodeId, relaxation, SCENARIOS, startSearch, totals, type Choice } from "./branchBound";
+import { act, ADVANCED, CAPACITY, certificate, fractionalItem, ITEMS, nodeId, relaxation, SCENARIOS, splitEffect, startSearch, totals, type Choice } from "./branchBound";
 
 const choices: Choice[] = Array.from({ length: 2 ** ITEMS.length }, (_, mask) => ITEMS.map((_, i) => (mask >> i & 1) as 0 | 1));
 const feasible = choices.filter((choice) => totals(choice).weight <= CAPACITY);
@@ -97,6 +97,28 @@ describe.each(SCENARIOS)("$title exhaustive certificate", (scenario) => {
       expect(certificate(state)).toEqual({ lower: exact, upper: exact, gap: 0, proven: true });
     }
   });
+});
+it("lowers the bound only when the split item is the one the bound packs partly", () => {
+  const root = splitEffect([]);
+  expect(root.splitItem).toBe(0);
+  expect(root.fractional).toBe(2);
+  expect(root.parentBound).toBeCloseTo(46 / 3);
+  expect(root.children.map((child) => child.bound)).toEqual([expect.closeTo(46 / 3), expect.closeTo(12.6)]);
+  expect(root.lowersBound).toBe(false);
+
+  const withA = splitEffect([1]);
+  expect(withA.splitItem).toBe(1);
+  expect(withA.fractional).toBe(2);
+  expect(withA.lowersBound).toBe(false);
+
+  const withAD = splitEffect([1, 1]);
+  expect(withAD.splitItem).toBe(withAD.fractional);
+  expect(withAD.children[0].feasible).toBe(false);
+  expect(withAD.children[1].bound).toBeCloseTo(14.4);
+  expect(withAD.lowersBound).toBe(true);
+  expect(withAD.remaining).toBeCloseTo(14.4);
+  expect(fractionalItem([1, 1, 0])).toBe(3);
+  expect(fractionalItem([1, 1, 0, 0])).toBe(-1);
 });
 it("has a genuine eight-item greedy trap and a density-order-independent relaxation", () => {
   let room = ADVANCED.capacity;

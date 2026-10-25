@@ -13,7 +13,9 @@ import {
   SPRING_T,
   SPRING_Y,
   sse,
+  stepReading,
   type Descent,
+  type StepReading,
   type Iterate,
   type Method,
   type Params,
@@ -87,8 +89,9 @@ export default function NonlinearFitLandscape() {
   const shown = tour.beat ? fromBeat(tour.beat.settings, chosen) : chosen;
   const run = useMemo(() => descend(shown.method, shown.start), [shown.method, shown.start]);
   const length = run.path.length - 1;
-  const timeline = useTimeline(length, 1.4);
-  useReplayOnChange(timeline, `${shown.method}:${shown.start.a}:${shown.start.w}:${shown.descending}`);
+  const timeline = useTimeline(length, 0.9);
+  // Pressing "この点から下る" or "1手進める" starts the descent itself, so the key leaves out `descending`.
+  useReplayOnChange(timeline, `${shown.method}:${shown.start.a}:${shown.start.w}`);
   // A guided beat walks its descent at an even pace; otherwise the reader's player decides.
   const position = !shown.descending
     ? 0
@@ -99,6 +102,22 @@ export default function NonlinearFitLandscape() {
   const head = shown.descending ? iterateAt(run, position) : shown.start;
   const visibleRun: Descent = shown.descending ? { ...run, path: run.path.slice(0, step + 1) } : { ...run, path: [run.path[0]] };
   const finished = shown.descending && step === length;
+  const reading = shown.descending ? stepReading(run.path, position) : undefined;
+  // The bowl stays where its step began while the head moves toward its bottom.
+  const anchor = reading ? reading.from : shown.start;
+
+  const startDescent = () => {
+    setChosen((value) => ({ ...value, descending: true }));
+    if (timeline.reducedMotion) timeline.finish();
+    else timeline.restart();
+  };
+  const stepOnce = () => {
+    if (!shown.descending) {
+      setChosen((value) => ({ ...value, descending: true }));
+      timeline.seek(0);
+    }
+    timeline.playToNextStep();
+  };
 
   const setStart = (update: Partial<Params>) => setChosen((value) => ({
     ...value,
@@ -167,11 +186,10 @@ export default function NonlinearFitLandscape() {
             />
           )}
           <div className="ex-button-row">
-            <button
-              className="ex-action"
-              onClick={() => setChosen((value) => ({ ...value, descending: true }))}
-              type="button"
-            >
+            <button className="ex-action" onClick={stepOnce} type="button">
+              1手進める
+            </button>
+            <button className="ex-action" onClick={startDescent} type="button">
               この点から下る
             </button>
             <button className="ex-action" onClick={() => setChosen(INITIAL)} type="button">最初の点に戻す</button>
@@ -182,21 +200,25 @@ export default function NonlinearFitLandscape() {
       player={shown.descending ? <PlayerBar positionText={`k = ${step} / ${length}`} stepLabel="反復 k" timeline={timeline} /> : undefined}
       readout={<Readout descending={shown.descending} finished={finished} head={head} last={last} run={run} step={step} start={shown.start} />}
       stage={
-        <div className="ex-twin">
-          <DataPanel head={head} />
-          {shown.view === "contour"
-            ? (
-              <ContourPanel
-                descending={shown.descending}
-                fixed={tour.active}
-                head={head}
-                onMove={(w, a) => setStart({ a, w })}
-                run={visibleRun}
-                start={shown.start}
-              />
-            )
-            : <SurfacePanel camera={camera} head={head} run={visibleRun} />}
-        </div>
+        <>
+          <div className="ex-twin">
+            <DataPanel head={head} />
+            {shown.view === "contour"
+              ? (
+                <ContourPanel
+                  anchor={anchor}
+                  descending={shown.descending}
+                  fixed={tour.active}
+                  head={head}
+                  onMove={(w, a) => setStart({ a, w })}
+                  run={visibleRun}
+                  start={shown.start}
+                />
+              )
+              : <SurfacePanel camera={camera} head={head} run={visibleRun} />}
+          </div>
+          {reading && <StepPanel reading={reading} />}
+        </>
       }
       summary={summary}
       tour={tour}
@@ -262,7 +284,59 @@ function DataPanel({ head }: { head: Params }) {
   );
 }
 
+const BAR_CEILING = 1.5;
+
+function barPercent(value: number, level: number): number {
+  return Math.max(0, Math.min(100, (value / (level * BAR_CEILING)) * 100));
+}
+
+/** The bowl's promise against the real landscape for the step in progress, drawn as three bars. */
+function StepPanel({ reading }: { reading: StepReading }) {
+  const worse = reading.actual > reading.startSse;
+  const done = reading.fraction >= 1;
+  const rows: Array<{ key: string; label: string; value: number; className: string }> = [
+    { key: "start", label: "出発点の二乗和", value: reading.startSse, className: "nls-bar-start" },
+    { key: "predicted", label: "お椀の予測", value: reading.predicted, className: "nls-bar-predicted" },
+    { key: "actual", label: "実際の二乗和", value: reading.actual, className: worse ? "nls-bar-actual nls-bar-worse" : "nls-bar-actual" },
+  ];
+  const marker = barPercent(reading.startSse, reading.startSse);
+  return (
+    <section aria-label="1手の予測と実際" className="ex-panel nls-step">
+      <p className="ex-panel-title">{reading.index + 1}手目：お椀の予測と、実際の二乗和</p>
+      <div className="nls-bars">
+        {rows.map((row) => {
+          const clipped = row.value > reading.startSse * BAR_CEILING;
+          return (
+            <div className="nls-bar-row" key={row.key}>
+              <span className="nls-bar-label">{row.label}</span>
+              <span aria-hidden="true" className="nls-bar-track">
+                <span className={`nls-bar ${row.className}${clipped ? " nls-bar-clipped" : ""}`} style={{ width: `${barPercent(row.value, reading.startSse)}%` }} />
+                <span className="nls-bar-mark" style={{ left: `${marker}%` }} />
+              </span>
+              <span className="nls-bar-value">{fmt(row.value, 3)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <p className={`ex-verdict ${!done ? "ex-tone-swing" : reading.overshoot ? "ex-tone-bad" : "ex-tone-good"}`}>
+        {stepSentence(reading, done)}
+      </p>
+    </section>
+  );
+}
+
+function stepSentence(reading: StepReading, done: boolean): string {
+  if (!done) return "ω と a がお椀の底へ向かって動いています。お椀の予測は下がり続けますが、実際の二乗和がついてくるかは別です。";
+  const promised = `お椀は ${fmt(reading.predictedDecrease, 3)} 減ると予測しました。`;
+  if (reading.overshoot) return `${promised}実際は ${fmt(-reading.actualDecrease, 3)} 増えました。`;
+  const ratio = reading.predictedDecrease > 0 ? reading.actualDecrease / reading.predictedDecrease : 1;
+  if (ratio >= 0.95) return `${promised}実際は ${fmt(reading.actualDecrease, 3)} 減り、予測とほぼ重なりました。`;
+  return `${promised}実際に減ったのは ${fmt(reading.actualDecrease, 3)} で、予測の ${fmt(ratio * 100, 0)}% でした。`;
+}
+
 interface ContourPanelProps {
+  /** Where the bowl is built: the start of the step in progress. */
+  anchor: Params;
   start: Params;
   head: Params;
   run: Descent;
@@ -271,7 +345,7 @@ interface ContourPanelProps {
   onMove(w: number, a: number): void;
 }
 
-function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPanelProps) {
+function ContourPanel({ anchor, start, head, run, descending, fixed, onMove }: ContourPanelProps) {
   const { ref, viewport } = useStageViewport(PARAM_BOUNDS, 0.8);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -287,7 +361,7 @@ function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPa
     event.preventDefault();
     onMove(snap(start.w + delta[0]), snap(start.a + delta[1]));
   };
-  const bottom = bowlBottom(head);
+  const bottom = bowlBottom(anchor);
   const handleProps = fixed
     ? { className: "ex-handle is-fixed" }
     : {
@@ -313,10 +387,10 @@ function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPa
           <rect className="ex-ground" height={viewport.height} width={viewport.width} />
           <ParamAxes scale={scale} viewport={viewport} />
           <LandscapeContours scale={scale} />
-          <BowlContours head={head} scale={scale} />
+          <BowlContours head={anchor} scale={scale} />
           {bottom && inView(bottom) && (
             <g className="nls-bowl-bottom">
-              <line x1={scale.px(head.w)} x2={scale.px(bottom.w)} y1={scale.py(head.a)} y2={scale.py(bottom.a)} />
+              <line x1={scale.px(anchor.w)} x2={scale.px(bottom.w)} y1={scale.py(anchor.a)} y2={scale.py(bottom.a)} />
               <circle cx={scale.px(bottom.w)} cy={scale.py(bottom.a)} r={5} />
             </g>
           )}

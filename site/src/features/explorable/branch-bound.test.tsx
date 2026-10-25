@@ -136,3 +136,22 @@ it("separates an already optimal seed from the remaining proof", () => {
     expect(screen.getByText(/最初に選んだ袋が最適でした/)).toBeVisible();
   }
 });
+it("shows the fractional item inline and drops the upper bound when that item is split", () => {
+  const { container } = render(<BranchBound />); seed(["A", "B"]);
+  const withA = select("Aあり");
+  expect(withA.getByText("端数")).toBeVisible();
+  expect(withA.getByText("次に分ける")).toBeVisible();
+  expect(container.querySelector(".bnb-split-preview")).toHaveTextContent("下がりません");
+  click("D 入れる／入れない");
+  expect(container.querySelector(".bnb-split-result")).toHaveTextContent("分けた品 D");
+  expect(container.querySelector(".bnb-split-result")).toHaveTextContent("大きいほうの上限は 15.34 点のまま");
+  expect(container.querySelector(".bnb-range-ghost")).toBeNull();
+
+  select("Aあり・Dあり");
+  expect(container.querySelector(".bnb-split-preview")).toHaveTextContent("15.34 点から 14.4 点へ下がります");
+  click("B 入れる／入れない");
+  expect(container.querySelector(".bnb-split-result")).toHaveTextContent("端数だった品 B");
+  expect(container.querySelector(".bnb-split-result")).toHaveTextContent("下がりました");
+  expect(container.querySelector(".bnb-range-ghost")).not.toBeNull();
+  expect(container.querySelector(".bnb-dropped")).toHaveTextContent("14.4");
+});

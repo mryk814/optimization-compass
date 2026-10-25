@@ -169,6 +169,57 @@ export function descend(method: Method, start: Params): Descent {
   return method === "gn" ? gaussNewton(start) : levenbergMarquardt(start);
 }
 
+/**
+ * One step of a descent, read at a point along it: the bowl built at the step's start
+ * predicts one sum of squares, and the real landscape gives another.
+ */
+export interface StepReading {
+  /** Index of the step: it goes from path[index] to path[index + 1]. */
+  index: number;
+  /** How far along the step, 0 to 1. */
+  fraction: number;
+  from: Iterate;
+  to: Iterate;
+  head: Params;
+  /** Sum of squares at the step's start: the level both predictions are measured against. */
+  startSse: number;
+  /** The bowl's value at the head. It falls to `to.predicted` when the step is complete. */
+  predicted: number;
+  /** The real sum of squares at the head. It reaches `to.sse` when the step is complete. */
+  actual: number;
+  /** Fall the bowl promised for the whole step (startSse - to.predicted). */
+  predictedDecrease: number;
+  /** Fall the step actually gave (startSse - to.sse). Negative when the sum of squares rose. */
+  actualDecrease: number;
+  /** True when the whole step ended higher than it started. */
+  overshoot: boolean;
+}
+
+/** The step in progress (or the last finished one) at a fractional position along the path. */
+export function stepReading(path: readonly Iterate[], position: number): StepReading | undefined {
+  if (path.length < 2) return undefined;
+  // A whole number means "that many steps are done", so it reads the step just finished.
+  const index = Math.min(Math.max(Math.ceil(position - 1e-9) - 1, 0), path.length - 2);
+  const fraction = Math.min(Math.max(position - index, 0), 1);
+  const from = path[index];
+  const to = path[index + 1];
+  const head = { a: from.a + (to.a - from.a) * fraction, w: from.w + (to.w - from.w) * fraction };
+  const predictedEnd = to.predicted ?? linearizedSse(from, to);
+  return {
+    index,
+    fraction,
+    from,
+    to,
+    head,
+    startSse: from.sse,
+    predicted: linearizedSse(from, head),
+    actual: sse(head),
+    predictedDecrease: from.sse - predictedEnd,
+    actualDecrease: from.sse - to.sse,
+    overshoot: to.sse > from.sse,
+  };
+}
+
 /** Bottom of the linearized bowl at p: the full Gauss–Newton point. */
 export function bowlBottom(p: Params): Params | undefined {
   const step = solve2(normal(p), 0, 0);
