@@ -24,7 +24,7 @@ import { useTimeline } from "./useTimeline";
 import "./gauss-newton-lm.css";
 
 const ID = "gauss-newton-lm-steps";
-const DATA_BOUNDS: Bounds = { xMin: -0.3, xMax: 4.4, yMin: -0.4, yMax: 6.2 };
+const DATA_BOUNDS: Bounds = { xMin: -0.3, xMax: 4.4, yMin: -0.4, yMax: 7 };
 const PARAM_BOUNDS: Bounds = { xMin: -0.4, xMax: 1.4, yMin: 0, yMax: 8 };
 const LEVELS = [0.01, 0.05, 0.25, 1, 3, 8, 16, 32, 64];
 const OPTIMUM: FitPoint = { a: 5.07867619, k: 0.50493273 };
@@ -33,7 +33,7 @@ const S_MAX = 1.25;
 const ALONG_BOUNDS: Bounds = { xMin: -0.1, xMax: S_MAX, yMin: 0, yMax: 1 };
 const ALONG_FLOOR = -0.12;
 const LOG_LOW = -6;
-const LOG_HIGH = 3;
+const LOG_HIGH = 3.6;
 const STARTS = {
   far: { a: 1, k: 0.1 },
   near: { a: 5, k: 0.3 },
@@ -201,7 +201,7 @@ function DataPanel({ head, flying, settled, frac }: { head: FitPoint; flying: Tr
                 <text x={6} y={scale.py(y) - 4}>{y}</text>
               </g>
             ))}
-            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>時刻 t</text>
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>時刻 t</text>
           </g>
           {ghost && (
             <path
@@ -293,7 +293,7 @@ function ParamPanel({ run, start, done, head, focus, progress }: ParamProps) {
                 <text x={6} y={scale.py(a) - 4}>{a}</text>
               </g>
             ))}
-            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>減衰率 k</text>
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>減衰率 k</text>
             <text className="ex-axis-name" x={30} y={16}>振幅 a</text>
           </g>
           <Contours scale={scale} />
@@ -425,6 +425,7 @@ function GainPanel({ run, done }: { run: Run; done: number }) {
             <text x={6} y={scale.py(-3) + 4}>増加↓</text>
             <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={scale.py(0) - 6}>試行 n</text>
           </g>
+          {shown.length === 0 && <text className="ex-axis-name" textAnchor="middle" x={viewport.width / 2} y={viewport.height / 2}>1つ進むと、ここに棒が出ます</text>}
           {shown.map((trial, index) => {
             const n = index + 1;
             const predicted = bar(n, trial.predicted, -barWidth);
@@ -476,8 +477,9 @@ function LambdaPanel({ run, done, mode }: { run: Run; done: number; mode: FitMod
             {Array.from({ length: total }, (_, index) => index + 1).map((n) => (
               <text key={n} textAnchor="middle" x={scale.px(n)} y={viewport.height - 6}>{n}</text>
             ))}
-            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>試行 n</text>
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>試行 n</text>
           </g>
+          {shown.length === 0 && <text className="ex-axis-name" textAnchor="middle" x={viewport.width / 2} y={viewport.height / 2}>1つ進むと、ここに点が出ます</text>}
           {mode === "lm" && lambdaPoints.length > 1 && <path className="gl-lambda-line" d={polylinePath(lambdaPoints, scale)} fill="none" />}
           {mode === "lm" && shown.map((t, i) => (
             <circle className={t.accepted ? "gl-lambda-dot" : "gl-lambda-dot is-rejected"} cx={scale.px(i + 1)} cy={scale.py(lambdaPoints[i][1])} key={`l${i}`} r={5} />
@@ -489,7 +491,7 @@ function LambdaPanel({ run, done, mode }: { run: Run; done: number; mode: FitMod
         </svg>
       </div>
       <p className="ex-hint">
-        {mode === "lm" ? "橙の丸が λ（中が白い丸は捨てた試行）、" : "Gauss–Newton法は λ=0 なので丸はありません。"}紺の四角が一手の長さです。捨てるたびに λ が上がり、一手が短くなります。
+        {mode === "lm" ? "橙の丸が λ（中が白い丸は捨てた試行）、" : "Gauss–Newton法は λ=0 なので丸はありません。"}紺の四角が一手の長さです。{mode === "lm" ? "捨てるたびに λ が10倍になり、λ が大きいほど一手は短くなります。" : ""}
       </p>
     </figure>
   );
