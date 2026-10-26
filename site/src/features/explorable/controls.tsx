@@ -133,7 +133,7 @@ export function PlayerBar({ timeline, stepLabel, positionText, showButtonNames =
           title="最後まで進める"
           type="button"
         >
-          {showButtonNames ? "⏭ 最後まで" : "⏭"}
+          {showButtonNames ? "⏭ 最後まで進める" : "⏭"}
         </button>
         <label className="ex-speed">
           <span>速さ</span>
