@@ -18,7 +18,7 @@
 | `basin-hopping` | `M_BASIN_HOPPING` | 113 | 3842 | 14 | 1 | pass |
 | `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 129 | 9562 | 16 | 1 | pass |
 | `bfgs` | `M_BFGS` | 49 | 7599 | 12 | 1 | pass |
-| `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 10030 | 14 | 2 | pass |
+| `branch-and-bound` | `M_BRANCH_BOUND` | 56 | 13559 | 15 | 2 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 61 | 5872 | 12 | 2 | pass |
 | `bundle-method` | `M_BUNDLE` | 59 | 5739 | 9 | 1 | pass |
 | `cdcl-sat` | `M_CDCL_SAT` | 44 | 3802 | 12 | 1 | pass |
@@ -55,7 +55,7 @@
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 61 | 2512 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 70 | 5406 | 10 | 1 | pass |
 | `fista` | `M_FISTA` | 50 | 4917 | 14 | 1 | pass |
-| `gauss-newton` | `M_GAUSS_NEWTON` | 54 | 7490 | 12 | 1 | pass |
+| `gauss-newton` | `M_GAUSS_NEWTON` | 54 | 9000 | 12 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 58 | 2956 | 12 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 53 | 3247 | 12 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 56 | 3221 | 14 | 1 | pass |
@@ -63,7 +63,7 @@
 | `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 120 | 6007 | 12 | 1 | pass |
 | `lbfgs` | `M_LBFGS` | 67 | 8156 | 18 | 1 | pass |
 | `lbfgsb` | `M_LBFGSB` | 49 | 6010 | 10 | 1 | pass |
-| `least-squares` | `M_LEVENBERG_MARQUARDT` | 57 | 9316 | 17 | 2 | pass |
+| `least-squares` | `M_LEVENBERG_MARQUARDT` | 57 | 12140 | 17 | 2 | pass |
 | `local-search-combinatorial` | `M_LOCAL_SEARCH_COMBINATORIAL` | 59 | 4980 | 13 | 1 | pass |
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 66 | 3570 | 18 | 1 | pass |
 | `mads` | `M_MADS` | 53 | 3359 | 12 | 1 | pass |
