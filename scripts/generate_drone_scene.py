@@ -1,11 +1,11 @@
 """Generate the compact static projection; optimization stays offline."""
 
-import hashlib
 import json
 from pathlib import Path
 from typing import Any
 
 from optimization_compass.drone_scene import generate_drone_scene
+from optimization_compass.scene_fingerprint import generator_input_sha256
 
 
 def rounded(value: Any) -> Any:
@@ -24,12 +24,7 @@ def main() -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     scene = rounded(generate_drone_scene())
     module_path = root / "src/optimization_compass/drone_scene.py"
-    scene["generator_input_sha256"] = hashlib.sha256(
-        b"".join(
-            path.read_text(encoding="utf-8").encode("utf-8")
-            for path in (module_path, Path(__file__), root / "uv.lock")
-        )
-    ).hexdigest()
+    scene["generator_input_sha256"] = generator_input_sha256(root, module_path, Path(__file__))
     output.write_text(
         json.dumps(scene, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8"
     )
