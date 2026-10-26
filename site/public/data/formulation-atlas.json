@@ -491,7 +491,7 @@
       ],
       "family_id": "reduce_first",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "利用可能",
@@ -1941,7 +1941,7 @@
       ],
       "family_id": "linear_conic",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2246,7 +2246,7 @@
       ],
       "family_id": "linear_conic",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3811,7 +3811,7 @@
       ],
       "family_id": "continuous_nonlinear",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4765,7 +4765,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",

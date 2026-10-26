@@ -24,7 +24,14 @@ const figures = [
   { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
   { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
   { label: "mixed-integer-linear-program", route: "/learn/concept.mixed-integer-linear-program", id: "milp-integer-lattice" },
+  { label: "convex-quadratic-program", route: "/learn/concept.convex-quadratic-program", id: "convex-qp-projection" },
+  { label: "variable-domain", route: "/learn/concept.variable-domain", id: "variable-domain-switch" },
+  { label: "gauss-newton", route: "/learn/gauss-newton", id: "gauss-newton-lm-steps" },
   { label: "failed-simulation", route: "/learn/concept.failed-simulation", id: "failure-ledger" },
+  { label: "root-finding", route: "/learn/concept.root-finding", id: "newton-root-residual" },
+  { label: "simplex-optimization", route: "/learn/concept.simplex-optimization", id: "simplex-projection-theta" },
+  { label: "semidefinite-program", route: "/learn/concept.semidefinite-program", id: "sdp-psd-boundary" },
+  { label: "pde-constrained-program", route: "/learn/concept.pde-constrained-program", id: "pde-heat-source-balance" },
 ];
 
 for (const figure of figures) {

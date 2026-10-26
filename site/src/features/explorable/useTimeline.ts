@@ -25,6 +25,11 @@ export interface Timeline {
   /** Show the finished state immediately. */
   finish(): void;
   stepForward(): void;
+  /**
+   * Play on to the next whole step and stop there, so one step is seen moving rather than jumping.
+   * With reduced motion it jumps, like stepForward.
+   */
+  playToNextStep(): void;
   stepBackward(): void;
   setSpeed(speed: TimelineSpeed): void;
 }
@@ -72,9 +77,12 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
   const [speed, setSpeed] = useState<TimelineSpeed>(1);
   const positionRef = useRef(0);
   positionRef.current = position;
+  // When set, playback stops at this position instead of running to the end.
+  const stopAtRef = useRef<number | undefined>(undefined);
 
   const seek = useCallback((next: number) => {
     const clamped = Math.min(Math.max(next, 0), length);
+    stopAtRef.current = undefined;
     positionRef.current = clamped;
     setPosition(clamped);
     setPlaying(false);
@@ -96,10 +104,12 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
       // precede performance.now(), which would otherwise make the first delta negative.
       const elapsed = last === undefined ? 0 : Math.max(0, (now - last) / 1000);
       last = now;
-      const next = Math.min(length, positionRef.current + elapsed * stepsPerSecond * speed);
+      const limit = Math.min(length, stopAtRef.current ?? length);
+      const next = Math.min(limit, positionRef.current + elapsed * stepsPerSecond * speed);
       positionRef.current = next;
       setPosition(next);
-      if (next >= length) {
+      if (next >= limit) {
+        stopAtRef.current = undefined;
         setPlaying(false);
         return;
       }
@@ -115,6 +125,7 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
 
   const play = useCallback(() => {
     if (reducedMotion) return;
+    stopAtRef.current = undefined;
     if (positionRef.current >= length) {
       positionRef.current = 0;
       setPosition(0);
@@ -124,6 +135,7 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
   const pause = useCallback(() => setPlaying(false), []);
   const toggle = useCallback(() => (playing ? pause() : play()), [pause, play, playing]);
   const restart = useCallback(() => {
+    stopAtRef.current = undefined;
     positionRef.current = 0;
     setPosition(0);
     setPlaying(!reducedMotion);
@@ -133,6 +145,15 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
     () => seek(Math.floor(positionRef.current + 1e-9) + 1),
     [seek],
   );
+  const playToNextStep = useCallback(() => {
+    const target = Math.min(length, Math.floor(positionRef.current + 1e-9) + 1);
+    if (reducedMotion || target <= positionRef.current) {
+      seek(target);
+      return;
+    }
+    stopAtRef.current = target;
+    setPlaying(true);
+  }, [length, reducedMotion, seek]);
   const stepBackward = useCallback(
     () => seek(Math.ceil(positionRef.current - 1e-9) - 1),
     [seek],
@@ -154,6 +175,7 @@ export function useTimeline(length: number, stepsPerSecond = 5): Timeline {
     restart,
     finish,
     stepForward,
+    playToNextStep,
     stepBackward,
     setSpeed,
   };

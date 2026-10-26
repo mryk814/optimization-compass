@@ -2117,7 +2117,8 @@ caption {
 .markdown-body code:not(pre code) { padding: .08rem .25rem; border-radius: .2rem; background: #ecefe9; color: #7a321e; font-size: .88rem; }
 .markdown-body blockquote { margin: .9rem 0; padding: .65rem .8rem; border-left: 3px solid #8ead9c; background: #ecefe9; color: #34453b; font-size: .9rem; line-height: 1.75; }
 .markdown-body blockquote p { margin: 0; }
-.markdown-body table { display: block; max-width: 100%; overflow-x: auto; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+/* Tables scroll sideways instead of breaking numbers: the page-wide overflow-wrap:anywhere would split 0.900 into 0.90 / 0. */
+.markdown-body table { display: block; max-width: 100%; overflow-x: auto; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; overflow-wrap: normal; }
 .markdown-body th, .markdown-body td { padding: .4rem .5rem; border: 1px solid #d5dbd2; text-align: left; vertical-align: top; }
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }

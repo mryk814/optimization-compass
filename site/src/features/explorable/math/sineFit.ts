@@ -31,6 +31,26 @@ export function bestAmplitude(w: number, ys: readonly number[] = SPRING_Y): numb
   return ss > 1e-12 ? sy / ss : 0;
 }
 
+/** Smallest sum of squares reachable at this ω once the amplitude is chosen optimally. */
+export function profileSse(w: number): number {
+  return sse({ a: bestAmplitude(w), w });
+}
+
+export interface Valley {
+  w: number;
+  sse: number;
+}
+
+/** Local minima of the ω-profile over [lo, hi], found on a fine grid. */
+export function profileValleys(lo = 0.2, hi = 5.8, samples = 5600): Valley[] {
+  const values = Array.from({ length: samples + 1 }, (_, i) => profileSse(lo + ((hi - lo) * i) / samples));
+  const valleys: Valley[] = [];
+  for (let i = 1; i < samples; i += 1) {
+    if (values[i] < values[i - 1] && values[i] <= values[i + 1]) valleys.push({ w: lo + ((hi - lo) * i) / samples, sse: values[i] });
+  }
+  return valleys;
+}
+
 /** Columns of the Jacobian: ∂r/∂a = sin(ωt), ∂r/∂ω = a t cos(ωt). */
 export function jacobian({ a, w }: Params): Array<readonly [number, number]> {
   return SPRING_T.map((t) => [Math.sin(w * t), a * t * Math.cos(w * t)] as const);
@@ -85,7 +105,7 @@ export interface Iterate extends Params {
   sse: number;
   /** Sum of squares the local bowl predicted for this point; undefined for the start. */
   predicted?: number;
-  /** Levenberg–Marquardt damping used to reach this point. */
+  /** Levenberg–Marquardt damping λ of the accepted trial that reached this point. */
   lambda?: number;
 }
 
@@ -95,6 +115,12 @@ export interface Descent {
   path: Iterate[];
   outcome: Outcome;
 }
+
+/**
+ * Observations are 0.5 s apart, so ω and ω + 4π give the same eight predictions:
+ * 4π · (k / 2) = 2πk for every observation time.
+ */
+export const ALIAS_SHIFT = 4 * Math.PI;
 
 /** Best fit found by both methods from good starts (see the article's small example). */
 export const GLOBAL_MINIMUM: Iterate = { a: 1.98586, w: 2.00189, sse: 0.19012 };
@@ -146,19 +172,21 @@ export function levenbergMarquardt(start: Params, maxSteps = 30, initialLambda =
     const current = sse(p);
     let accepted: Params | undefined;
     let step: Params | undefined;
+    let used = lambda;
     while (lambda <= 1e8) {
       step = solve2(n, lambda * (n.aa + 1e-12), lambda * (n.ww + 1e-12));
       if (!step) break;
       const trial = { a: p.a + step.a, w: p.w + step.w };
       if (sse(trial) < current) {
         accepted = trial;
+        used = lambda;
         lambda = Math.max(lambda / 3, 1e-7);
         break;
       }
       lambda *= 2;
     }
     if (!accepted || !step) { stop = "stalled"; break; }
-    path.push({ ...accepted, sse: sse(accepted), predicted: linearizedSse(p, accepted), lambda });
+    path.push({ ...accepted, sse: sse(accepted), predicted: linearizedSse(p, accepted), lambda: used });
     p = accepted;
     if (settled(path)) { stop = "settled"; break; }
   }
@@ -167,6 +195,57 @@ export function levenbergMarquardt(start: Params, maxSteps = 30, initialLambda =
 
 export function descend(method: Method, start: Params): Descent {
   return method === "gn" ? gaussNewton(start) : levenbergMarquardt(start);
+}
+
+/**
+ * One step of a descent, read at a point along it: the bowl built at the step's start
+ * predicts one sum of squares, and the real landscape gives another.
+ */
+export interface StepReading {
+  /** Index of the step: it goes from path[index] to path[index + 1]. */
+  index: number;
+  /** How far along the step, 0 to 1. */
+  fraction: number;
+  from: Iterate;
+  to: Iterate;
+  head: Params;
+  /** Sum of squares at the step's start: the level both predictions are measured against. */
+  startSse: number;
+  /** The bowl's value at the head. It falls to `to.predicted` when the step is complete. */
+  predicted: number;
+  /** The real sum of squares at the head. It reaches `to.sse` when the step is complete. */
+  actual: number;
+  /** Fall the bowl promised for the whole step (startSse - to.predicted). */
+  predictedDecrease: number;
+  /** Fall the step actually gave (startSse - to.sse). Negative when the sum of squares rose. */
+  actualDecrease: number;
+  /** True when the whole step ended higher than it started. */
+  overshoot: boolean;
+}
+
+/** The step in progress (or the last finished one) at a fractional position along the path. */
+export function stepReading(path: readonly Iterate[], position: number): StepReading | undefined {
+  if (path.length < 2) return undefined;
+  // A whole number means "that many steps are done", so it reads the step just finished.
+  const index = Math.min(Math.max(Math.ceil(position - 1e-9) - 1, 0), path.length - 2);
+  const fraction = Math.min(Math.max(position - index, 0), 1);
+  const from = path[index];
+  const to = path[index + 1];
+  const head = { a: from.a + (to.a - from.a) * fraction, w: from.w + (to.w - from.w) * fraction };
+  const predictedEnd = to.predicted ?? linearizedSse(from, to);
+  return {
+    index,
+    fraction,
+    from,
+    to,
+    head,
+    startSse: from.sse,
+    predicted: linearizedSse(from, head),
+    actual: sse(head),
+    predictedDecrease: from.sse - predictedEnd,
+    actualDecrease: from.sse - to.sse,
+    overshoot: to.sse > from.sse,
+  };
 }
 
 /** Bottom of the linearized bowl at p: the full Gauss–Newton point. */

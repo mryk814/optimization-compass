@@ -39,4 +39,12 @@ describe("article body style contract", () => {
     }
     expect(violations).toEqual([]);
   });
+
+  it("keeps numbers whole in article and figure tables", () => {
+    // `.content-detail` wraps long words anywhere; tables inherit it unless they reset it,
+    // and a narrow column then splits 0.900 into "0.90" and "0".
+    const styles = readFileSync(join(SOURCE, "styles.css"), "utf8");
+    const rule = styles.match(/^\.markdown-body table \{([^}]*)\}/m);
+    expect(rule?.[1]).toMatch(/overflow-wrap:\s*normal/);
+  });
 });
