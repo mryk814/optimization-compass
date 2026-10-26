@@ -37,3 +37,9 @@
 .gl-ghost-toggle { display: flex; align-items: center; gap: .5rem; min-height: 44px; font-weight: 700; }
 .gl-ghost-toggle input { width: 1.25rem; height: 1.25rem; }
 @media (prefers-reduced-motion: reduce) { .gl-reject.is-flash path { animation: none; } }
+.gl-start-line { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 8 5; }
+.gl-start-label { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.gl-mark line { stroke: var(--ex-ink); stroke-width: 1.5; stroke-opacity: .55; }
+.gl-mark-lin { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 1.5; }
+.gl-mark-act { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 1.5; }
+.gl-short-label { fill: var(--ex-orange-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }

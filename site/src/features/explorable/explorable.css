@@ -1066,3 +1066,7 @@
 .cvx-gap-fill { fill: var(--ex-teal); fill-opacity: 0.18; stroke: none; }
 .cvx-gap-fill-bad { fill: var(--ex-red); fill-opacity: 0.3; }
 .cvx-to-band { stroke: var(--ex-orange-ink); stroke-width: 3; stroke-dasharray: 5 4; }
+.nls-profile-line { stroke: var(--ex-ink); stroke-width: 2.5; }
+.nls-profile-valley { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2; }
+.nls-profile-start { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 5 4; }
+.nls-profile-label { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }

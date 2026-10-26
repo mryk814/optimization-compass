@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { acceptedPath, alongStep, cost, costHistory, pointAfter, runTrials, trialAt } from "./expFit";
+import { acceptedPath, alongStep, cost, costHistory, observationReadings, pointAfter, runTrials, trialAt } from "./expFit";
 
 // Expected values come from numpy / scipy (scratchpad gnlm_ref.py), the same arithmetic as the articles.
 const FAR = { a: 1, k: 0.1 };
@@ -149,5 +149,21 @@ describe("exponential fit running example", () => {
     const gn = costHistory(runTrials("gn", FAR, 0), FAR, 3);
     expect(gn.rejected).toHaveLength(0);
     expect(gn.current[2].cost).toBeCloseTo(29.3211, 4);
+  });
+});
+
+describe("per-observation reading of a trial", () => {
+  it("shows the linearization opening up at trial 1 of Gauss–Newton from the far start", () => {
+    const [one] = runTrials("gn", FAR, 0).trials;
+    const readings = observationReadings(one);
+    // y + r + Jp and y + r(x+p), from scipy (scratchpad fix2_numbers.py).
+    const linear = [4.74592, 3.34220, 2.16266, 1.17736, 0.35999];
+    const actual = [4.74592, 1.49940, 0.47371, 0.14966, 0.04728];
+    readings.forEach((reading, index) => {
+      expect(reading.linearized).toBeCloseTo(linear[index], 4);
+      expect(reading.actual).toBeCloseTo(actual[index], 4);
+    });
+    // At t = 0 the amplitude is linear, so the two agree exactly.
+    expect(readings[0].linearized).toBeCloseTo(readings[0].actual, 9);
   });
 });

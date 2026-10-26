@@ -31,6 +31,26 @@ export function bestAmplitude(w: number, ys: readonly number[] = SPRING_Y): numb
   return ss > 1e-12 ? sy / ss : 0;
 }
 
+/** Smallest sum of squares reachable at this ω once the amplitude is chosen optimally. */
+export function profileSse(w: number): number {
+  return sse({ a: bestAmplitude(w), w });
+}
+
+export interface Valley {
+  w: number;
+  sse: number;
+}
+
+/** Local minima of the ω-profile over [lo, hi], found on a fine grid. */
+export function profileValleys(lo = 0.2, hi = 5.8, samples = 5600): Valley[] {
+  const values = Array.from({ length: samples + 1 }, (_, i) => profileSse(lo + ((hi - lo) * i) / samples));
+  const valleys: Valley[] = [];
+  for (let i = 1; i < samples; i += 1) {
+    if (values[i] < values[i - 1] && values[i] <= values[i + 1]) valleys.push({ w: lo + ((hi - lo) * i) / samples, sse: values[i] });
+  }
+  return valleys;
+}
+
 /** Columns of the Jacobian: ∂r/∂a = sin(ωt), ∂r/∂ω = a t cos(ωt). */
 export function jacobian({ a, w }: Params): Array<readonly [number, number]> {
   return SPRING_T.map((t) => [Math.sin(w * t), a * t * Math.cos(w * t)] as const);

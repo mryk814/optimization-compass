@@ -409,3 +409,23 @@ describe("ConvexityChord", () => {
     expect(screen.getAllByText(/全体の最小とは限りません/).length).toBeGreaterThan(0);
   });
 });
+
+describe("NonlinearFitLandscape ω-profile", () => {
+  it("draws five valleys and moves the start marker with the ω slider", () => {
+    const { container } = render(<NonlinearFitLandscape />);
+    expect(screen.getByText("ω ごとの最小の二乗和（a は ω ごとに最良）")).toBeTruthy();
+    expect(container.querySelectorAll(".nls-profile-valley").length).toBe(5);
+    const before = container.querySelector(".nls-profile-start")!.getAttribute("x1");
+    fireEvent.change(screen.getByRole("slider", { name: /周波数 ω/ }), { target: { value: "4" } });
+    expect(container.querySelector(".nls-profile-start")!.getAttribute("x1")).not.toBe(before);
+    expect(screen.getByText(/いま 4\.00、値 13\.66/)).toBeTruthy();
+  });
+
+  it("titles the iteration table visibly", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "1" } });
+    const region = within(screen.getByRole("region", { name: "反復の記録" }));
+    expect(region.getByText("反復の記録")).toBeTruthy();
+  });
+});

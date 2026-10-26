@@ -10,6 +10,8 @@ import {
   descend,
   GLOBAL_MINIMUM,
   linearizedSse,
+  profileSse,
+  profileValleys,
   residuals,
   SPRING_T,
   SPRING_Y,
@@ -228,6 +230,7 @@ export default function NonlinearFitLandscape() {
               )
               : <SurfacePanel camera={camera} head={head} run={visibleRun} />}
           </div>
+          <ProfilePanel descending={shown.descending} head={head} start={shown.start} />
           {reading && <StepPanel reading={reading} />}
         </>
       }
@@ -318,6 +321,57 @@ function DataPanel({ head, ghost, alias }: DataPanelProps) {
           紫の破線は ω+4π={fmt(head.w + ALIAS_SHIFT)} の曲線です。0.5秒おきの8つの観測の時刻では、実線（ω={fmt(head.w)}）と同じ値を通り、時刻の間では別の曲線になります。
         </p>
       )}
+    </figure>
+  );
+}
+
+const PROFILE_BOUNDS: Bounds = { xMin: W_RANGE[0], xMax: W_RANGE[1], yMin: -1.5, yMax: 16 };
+const PROFILE_SAMPLES = Array.from({ length: 281 }, (_, i) => {
+  const w = W_RANGE[0] + ((W_RANGE[1] - W_RANGE[0]) * i) / 280;
+  return [w, profileSse(w)] as const;
+});
+const PROFILE_VALLEYS = profileValleys();
+
+/** Sum of squares at each ω once the amplitude is chosen best: the five valleys, with the start ω moving along. */
+function ProfilePanel({ start, head, descending }: { start: Params; head: Params; descending: boolean }) {
+  const { ref, viewport } = useStageViewport(PROFILE_BOUNDS, 0.42);
+  const scale = useMemo(() => makeScale(viewport), [viewport]);
+  const startY = profileSse(start.w);
+  const headInView = descending && head.w >= W_RANGE[0] && head.w <= W_RANGE[1];
+  return (
+    <figure className="ex-panel nls-profile">
+      <figcaption className="ex-panel-title">ω ごとの最小の二乗和（a は ω ごとに最良）</figcaption>
+      <div className="ex-canvas" ref={ref}>
+        <svg className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+          <rect className="ex-ground" height={viewport.height} width={viewport.width} />
+          <g className="ex-axes">
+            {[1, 2, 3, 4, 5].map((w) => (
+              <g key={`w${w}`}>
+                <line x1={scale.px(w)} x2={scale.px(w)} y1={0} y2={viewport.height} />
+                <text textAnchor="middle" x={scale.px(w)} y={viewport.height - 6}>{w}</text>
+              </g>
+            ))}
+            {[0, 5, 10, 15].map((v) => (
+              <g key={`v${v}`}>
+                <line x1={0} x2={viewport.width} y1={scale.py(v)} y2={scale.py(v)} />
+                <text x={6} y={scale.py(v) - 4}>{v}</text>
+              </g>
+            ))}
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>周波数 ω</text>
+          </g>
+          <path className="nls-profile-line" d={polylinePath(PROFILE_SAMPLES, scale)} fill="none" />
+          {PROFILE_VALLEYS.map((valley) => (
+            <circle className="nls-profile-valley" cx={scale.px(valley.w)} cy={scale.py(valley.sse)} key={valley.w} r={4} />
+          ))}
+          <text className="nls-profile-label" x={scale.px(GLOBAL_MINIMUM.w) + 10} y={scale.py(GLOBAL_MINIMUM.sse) - 4}>最良 {fmt(GLOBAL_MINIMUM.sse, 2)}</text>
+          <line className="nls-profile-start" x1={scale.px(start.w)} x2={scale.px(start.w)} y1={0} y2={viewport.height - 24} />
+          <circle className="ex-observation" cx={scale.px(start.w)} cy={scale.py(startY)} r={6} />
+          {headInView && <circle className="ex-head" cx={scale.px(head.w)} cy={scale.py(profileSse(head.w))} r={7} />}
+        </svg>
+      </div>
+      <p className="ex-hint">
+        各 ω で振幅 a を線形最小二乗で決めたときの二乗和です。縦線と黒い点が始点の ω（いま {fmt(start.w)}、値 {fmt(startY, 2)}）で、「周波数 ω（始点）」を動かすと谷の間を移ります。小さな丸が5つの谷の底で、深いのは ω=2.00 の一つだけです。{descending ? "橙の丸は下っている途中の ω です。" : ""}
+      </p>
     </figure>
   );
 }
@@ -551,6 +605,7 @@ function Readout({ run, start, head, last, step, descending, finished }: Readout
   return (
     <>
       <section aria-label="反復の記録">
+        <p className="ex-panel-title">反復の記録</p>
         <table className="ex-table">
           <thead>
             <tr>

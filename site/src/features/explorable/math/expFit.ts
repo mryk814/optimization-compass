@@ -149,6 +149,27 @@ export function alongStep(trial: Trial, s: number): { actual: number; model: num
   return { actual: cost(point), model };
 }
 
+export interface ObservationReading {
+  t: number;
+  observed: number;
+  /** y + (r + J p): where the linearized model says the curve will pass after the whole step. */
+  linearized: number;
+  /** y + r(x + p): where the curve really passes after the whole step. */
+  actual: number;
+}
+
+/** Per observation: the linearized prediction against the real value at the end of a trial's step. */
+export function observationReadings(trial: Trial): ObservationReading[] {
+  const r = residuals(trial.from);
+  const after = residuals(trial.candidate);
+  return jacobian(trial.from).map(([ja, jk], index) => ({
+    t: EXP_T[index],
+    observed: EXP_Y[index],
+    linearized: EXP_Y[index] + r[index] + ja * trial.step.a + jk * trial.step.k,
+    actual: EXP_Y[index] + after[index],
+  }));
+}
+
 /** The parameter points a run has visited: the start, then every accepted candidate among the first `count` trials. */
 export function acceptedPath(run: Run, start: FitPoint, count = run.trials.length): FitPoint[] {
   const path = [start];

@@ -13,6 +13,7 @@ import {
   EXP_Y,
   MAX_TRIALS,
   modelAt,
+  observationReadings,
   pointAfter,
   runTrials,
   type FitMode,
@@ -41,6 +42,9 @@ const STARTS = {
   near: { a: 5, k: 0.3 },
 } as const;
 type StartKey = keyof typeof STARTS;
+
+/** A step arrow shorter than this many pixels is stretched to it, so the direction stays readable. */
+const MIN_ARROW_PX = 14;
 
 const lambdaOf = (logLambda: number) => 10 ** logLambda;
 const lambdaText = (value: number) => (value === 0 ? "0" : value >= 100 ? value.toFixed(0) : value >= 1 ? value.toFixed(1) : value.toPrecision(2));
@@ -169,7 +173,7 @@ export default function GaussNewtonLm() {
       stage={
         <>
           <div className="ex-twin">
-            <DataPanel flying={flying} frac={frac} head={head} settled={settled} />
+            <DataPanel flying={flying} frac={frac} head={head} landed={!flying && done > 0 ? settled : undefined} settled={settled} />
             <ParamPanel done={done} focus={focus} ghost={ghost} head={head} progress={progress} run={run} start={start} />
           </div>
           <div className="ex-twin">
@@ -187,7 +191,7 @@ export default function GaussNewtonLm() {
   );
 }
 
-function DataPanel({ head, flying, settled, frac }: { head: FitPoint; flying: Trial | undefined; settled: Trial | undefined; frac: number }) {
+function DataPanel({ head, flying, settled, frac, landed }: { head: FitPoint; flying: Trial | undefined; settled: Trial | undefined; frac: number; landed: Trial | undefined }) {
   const { ref, viewport } = useStageViewport(DATA_BOUNDS, 0.75);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const curve = (p: FitPoint) => {
@@ -199,6 +203,9 @@ function DataPanel({ head, flying, settled, frac }: { head: FitPoint; flying: Tr
     return polylinePath(points, scale);
   };
   const ghost = flying && !flying.accepted ? flying : settled && !settled.accepted ? settled : undefined;
+  const readings = landed ? observationReadings(landed) : [];
+  const yAt = (value: number) => scale.py(clamp(value, DATA_BOUNDS.yMin, DATA_BOUNDS.yMax));
+  const offset = 9;
   return (
     <figure className="ex-panel">
       <figcaption className="ex-panel-title">観測点と曲線</figcaption>
@@ -233,12 +240,22 @@ function DataPanel({ head, flying, settled, frac }: { head: FitPoint; flying: Tr
           {EXP_T.map((t, index) => (
             <line className="ex-residual" key={`r${index}`} x1={scale.px(t)} x2={scale.px(t)} y1={scale.py(EXP_Y[index])} y2={scale.py(clamp(modelAt(head, t), DATA_BOUNDS.yMin, DATA_BOUNDS.yMax))} />
           ))}
+          {readings.map((reading, index) => (
+            <g className="gl-mark" key={`m${index}`}>
+              <line x1={scale.px(reading.t) - offset} x2={scale.px(reading.t) + offset} y1={yAt(reading.linearized)} y2={yAt(reading.actual)} />
+              <rect className="gl-mark-lin" height={9} width={9} x={scale.px(reading.t) - offset - 4.5} y={yAt(reading.linearized) - 4.5} />
+              <circle className="gl-mark-act" cx={scale.px(reading.t) + offset} cy={yAt(reading.actual)} r={5} />
+            </g>
+          ))}
           {EXP_T.map((t, index) => (
             <circle className="ex-observation" cx={scale.px(t)} cy={scale.py(EXP_Y[index])} key={`p${index}`} r={6} />
           ))}
         </svg>
       </div>
-      <p className="ex-hint">実線が現在の曲線{ghost ? "、赤い破線が捨てる試行の曲線" : ""}です。</p>
+      <p className="ex-hint">
+        実線が現在の曲線{ghost ? "、赤い破線が捨てる試行の曲線" : ""}です。
+        {readings.length > 0 ? "試行の終わりでは、各観測の時刻に、一手の先で線形モデルが予想する値（青緑の四角）と、実際にその曲線が通る値（橙の丸）を並べます。二つが離れた時刻ほど、線形化が外れています。" : ""}
+      </p>
     </figure>
   );
 }
@@ -250,6 +267,21 @@ const Contours = memo(function Contours({ scale }: { scale: Scale }) {
   }, [scale]);
   return <g>{paths.map((d, index) => <path className="ex-contour" d={d} key={LEVELS[index]} />)}</g>;
 });
+
+interface Arrow {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
+/** Stretches an arrow that would be a dot to MIN_ARROW_PX, keeping its direction. */
+function stretched(arrow: Arrow): Arrow {
+  const length = Math.hypot(arrow.x1 - arrow.x0, arrow.y1 - arrow.y0);
+  if (length === 0 || length >= MIN_ARROW_PX) return arrow;
+  const k = MIN_ARROW_PX / length;
+  return { ...arrow, x1: arrow.x0 + (arrow.x1 - arrow.x0) * k, y1: arrow.y0 + (arrow.y1 - arrow.y0) * k };
+}
 
 function arrowHead(x0: number, y0: number, x1: number, y1: number): string {
   const angle = Math.atan2(y1 - y0, x1 - x0);
@@ -284,12 +316,15 @@ function ParamPanel({ run, start, done, head, focus, progress, ghost }: ParamPro
   trail.push(headAt);
   let stepArrow: { x0: number; y0: number; x1: number; y1: number } | undefined;
   let gradArrow: { x0: number; y0: number; x1: number; y1: number } | undefined;
+  let shortLabel = false;
   if (focus) {
     const [fx, fy] = at(focus.from);
     const tip = at({ a: focus.from.a + progress * focus.step.a, k: focus.from.k + progress * focus.step.k });
-    stepArrow = { x0: scale.px(fx), y0: scale.py(fy), x1: scale.px(tip[0]), y1: scale.py(tip[1]) };
+    stepArrow = stretched({ x0: scale.px(fx), y0: scale.py(fy), x1: scale.px(tip[0]), y1: scale.py(tip[1]) });
     const gradTip = at({ a: focus.from.a + focus.gradDir.a * focus.stepLength, k: focus.from.k + focus.gradDir.k * focus.stepLength });
-    gradArrow = { x0: scale.px(fx), y0: scale.py(fy), x1: scale.px(gradTip[0]), y1: scale.py(gradTip[1]) };
+    gradArrow = stretched({ x0: scale.px(fx), y0: scale.py(fy), x1: scale.px(gradTip[0]), y1: scale.py(gradTip[1]) });
+    const [endX, endY] = at({ a: focus.from.a + focus.step.a, k: focus.from.k + focus.step.k });
+    shortLabel = Math.hypot(scale.px(endX) - scale.px(fx), scale.py(endY) - scale.py(fy)) < MIN_ARROW_PX;
   }
   const ghostPoints: Array<readonly [number, number]> = ghost ? acceptedPath(ghost, start).map(at) : [];
   const rejectedFocus = focus !== undefined && !focus.accepted;
@@ -358,6 +393,9 @@ function ParamPanel({ run, start, done, head, focus, progress, ghost }: ParamPro
               <path d={arrowHead(gradArrow.x0, gradArrow.y0, gradArrow.x1, gradArrow.y1)} />
             </g>
           )}
+          {shortLabel && stepArrow && focus && progress > 0.5 && (
+            <text className="gl-short-label" x={stepArrow.x1 + 10} y={stepArrow.y1 + 20}>長さ {fmt(focus.stepLength, 4)}</text>
+          )}
           {landed && rejectedFocus && stepArrow && (
             <text className="gl-verdict" textAnchor="middle" x={stepArrow.x1} y={stepArrow.y1 - 12}>捨てる</text>
           )}
@@ -365,7 +403,7 @@ function ParamPanel({ run, start, done, head, focus, progress, ghost }: ParamPro
         </svg>
       </div>
       <p className="ex-hint">
-        太い橙の矢印がこの試行の一手、細い破線の矢印が最急降下の向き（長さは同じ）です。赤い ✕ は捨てた試行の行き先です。{ghost ? "灰色の細い線は、同じ始点から Gauss–Newton法 が進む道です。" : ""}
+        太い橙の矢印がこの試行の一手、細い破線の矢印が最急降下の向き（長さは同じ）です。一手が極端に短いときは、向きが読めるよう矢印を伸ばして描き、長さを文字で添えます。赤い ✕ は捨てた試行の行き先です。{ghost ? "灰色の細い線は、同じ始点から Gauss–Newton法 が進む道です。" : ""}
       </p>
     </figure>
   );
@@ -398,6 +436,8 @@ function AlongPanel({ focus, progress, trialNumber }: { focus: Trial | undefined
             <text className="ex-axis-name" x={8} y={viewport.height - 26}>一手の割合 s</text>
             <text className="ex-axis-name" x={6} y={16}>費用</text>
           </g>
+          <line className="gl-start-line" x1={0} x2={viewport.width} y1={scale.py(focus.costBefore)} y2={scale.py(focus.costBefore)} />
+          <text className="gl-start-label" x={viewport.width - 8} textAnchor="end" y={scale.py(focus.costBefore) - 6}>出発点の費用 {fmt(focus.costBefore, 3)}（これより上は悪化）</text>
           <path className="gl-model" d={polylinePath(modelPoints, scale)} fill="none" />
           <path className="gl-actual" d={polylinePath(actualPoints, scale)} fill="none" />
           <line className="gl-end" x1={scale.px(1)} x2={scale.px(1)} y1={0} y2={viewport.height - 30} />
@@ -414,7 +454,7 @@ function AlongPanel({ focus, progress, trialNumber }: { focus: Trial | undefined
         </svg>
       </div>
       <p className="ex-hint">
-        青緑の放物線が、現在点で残差を直線にした線形モデルの予測です。橙が本当の費用です。s=1 が一手の先で、ここで二つが離れるほど、線形モデルは信じられません。
+        青緑の放物線が、現在点で残差を直線にした線形モデルの予測です。橙が本当の費用です。s=1 が一手の先で、ここで二つが離れるほど、線形モデルは信じられません。横の破線は出発点の費用で、橙の曲線がこの線を超えた先は、出発点より悪化しています。
       </p>
     </figure>
   );
@@ -593,7 +633,7 @@ function Readout({ mode, run, shown, step }: { mode: FitMode; run: Run; shown: T
     verdict = "「1つ進む」を押すと、いまの点で線形化した一手を1回試します。";
   } else {
     const gain = last.predicted > 1e-9 ? `ρ=${fmt(last.rho, 2)}` : "予測の減少がほぼ0";
-    const move = `一手の長さは ${fmt(last.stepLength, 3)}、最急降下の向きから ${fmt(last.descentAngleDeg, 0)}° ずれています。`;
+    const move = `一手の長さは ${fmt(last.stepLength, last.stepLength < 0.1 ? 4 : 3)}、最急降下の向きから ${fmt(last.descentAngleDeg, last.descentAngleDeg < 10 ? 1 : 0)}° ずれています。`;
     if (mode === "gn") {
       tone = last.actual < 0 ? "ex-tone-bad" : "ex-tone-good";
       verdict = last.actual < 0
@@ -629,7 +669,7 @@ function Readout({ mode, run, shown, step }: { mode: FitMode; run: Run; shown: T
                 <tr className={index === shown.length - 1 ? "ex-row-best" : undefined} key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>{lambdaText(trial.lambda)}</td>
-                  <td>{fmt(trial.stepLength, 3)}</td>
+                  <td>{fmt(trial.stepLength, trial.stepLength < 0.1 ? 4 : 3)}</td>
                   <td>{fmt(trial.predicted, 3)}</td>
                   <td>{fmt(trial.actual, 3)}</td>
                   <td>{Number.isFinite(trial.rho) ? fmt(trial.rho, 2) : "—"}</td>

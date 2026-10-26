@@ -44,4 +44,24 @@ describe("GaussNewtonLm", () => {
     await waitFor(() => expect(figure.querySelectorAll(".gl-reject").length).toBe(3), { timeout: 8000 });
     expect(container.querySelectorAll(".gl-hist-dot").length).toBeGreaterThan(0);
   }, 10000);
+
+  it("marks the starting cost on the along-step panel and the per-observation prediction at a trial's end", async () => {
+    const { container } = render(<GaussNewtonLm />);
+    expect(container.querySelectorAll(".gl-mark").length).toBe(0);
+    fireEvent.click(screen.getByRole("button", { name: "1つ進む" }));
+    await waitFor(() => expect(container.querySelectorAll(".gl-mark").length).toBe(5), { timeout: 8000 });
+    expect(container.querySelectorAll(".gl-mark-lin").length).toBe(5);
+    expect(container.querySelectorAll(".gl-mark-act").length).toBe(5);
+    expect(screen.getByText(/出発点の費用 11\.249（これより上は悪化）/)).toBeTruthy();
+  }, 10000);
+
+  it("stretches a tiny step arrow and labels its real length", async () => {
+    const { container } = render(<GaussNewtonLm />);
+    fireEvent.click(screen.getByRole("radio", { name: "Levenberg–Marquardt法" }));
+    fireEvent.change(screen.getByRole("slider", { name: /減衰 λ/ }), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("button", { name: "1つ進む" }));
+    await waitFor(() => expect(screen.getByText("長さ 0.0084")).toBeTruthy(), { timeout: 8000 });
+    expect(container.querySelector(".gl-step line")).toBeTruthy();
+    expect(screen.getAllByText(/最急降下の向きから 0\.4° ずれています/).length).toBeGreaterThan(0);
+  }, 10000);
 });

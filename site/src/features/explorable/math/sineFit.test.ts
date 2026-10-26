@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { ALIAS_SHIFT, bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, SPRING_T, sse, stepReading } from "./sineFit";
+import { ALIAS_SHIFT, bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, profileSse, profileValleys, SPRING_T, sse, stepReading } from "./sineFit";
 
 describe("spring sine fit", () => {
   it("matches the article's best fit and the aliased copy 4π away", () => {
@@ -124,5 +124,16 @@ describe("spring sine fit", () => {
     SPRING_T.forEach((t) => expect(shifted.a * Math.sin(shifted.w * t)).toBeCloseTo(p.a * Math.sin(p.w * t), 9));
     expect(shifted.a * Math.sin(shifted.w * 0.25)).not.toBeCloseTo(p.a * Math.sin(p.w * 0.25), 1);
     expect(shifted.w).toBeCloseTo(14.5683, 3);
+  });
+
+  it("profiles the sum of squares over ω into five valleys, the deepest at ω = 2.00", () => {
+    // Values from numpy (scratchpad fix2_numbers.py).
+    expect(profileSse(1.8)).toBeCloseTo(3.3973, 3);
+    expect(profileSse(3)).toBeCloseTo(14.003, 3);
+    const valleys = profileValleys();
+    expect(valleys.map((v) => Number(v.w.toFixed(2)))).toEqual([0.76, 2, 3.25, 4.13, 4.96]);
+    expect(valleys[1].sse).toBeCloseTo(0.19, 2);
+    expect(Math.min(...valleys.filter((_, i) => i !== 1).map((v) => v.sse))).toBeGreaterThan(13.4);
+    expect(Math.max(...valleys.map((v) => v.sse))).toBeLessThan(14.1);
   });
 });
