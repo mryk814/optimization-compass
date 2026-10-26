@@ -531,6 +531,25 @@
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。FISTAの説明をO(1/k²)と非単調に修正、要約に刻み幅の条件を追加、式の後の読み方を補足。図の円が枠からはみ出し下の説明が切れていたのを修正（軸範囲と高さ）。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
+    "concept.pde-constrained-program": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "633423827ab9",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
     "concept.robust-regression": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -550,6 +569,25 @@
       },
       "notes": "操作図robust-loss-pullを追加。m=10/50, δ=1でHuber 1/3、二乗 m/4を手で確認。1280/375/320pxで確認。"
     },
+    "concept.root-finding": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "279a03e9e1a4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
     "concept.second-order-cone-program": {
       "reviewed_on": "2026-10-13",
       "reviewer": "claude",
@@ -568,6 +606,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算し、半径3.6kmの重なり領域の縦の上端を1.98から1.99に修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.semidefinite-program": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "371550f28d2a",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
     },
     "concept.shape-dependent-domain": {
       "reviewed_on": "2026-10-13",
@@ -606,6 +663,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。造語「余裕」に定義を付けPA028の被約費用と対応づけ、完全単模の性質に負閉路なしの条件、Bellman–Fordの1巡目の記述を走査順に限定。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.simplex-optimization": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "2b332e5040d4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
     },
     "concept.smooth-low-dimensional-unconstrained": {
       "reviewed_on": "2026-10-12",
