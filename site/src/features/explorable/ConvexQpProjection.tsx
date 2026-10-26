@@ -231,7 +231,7 @@ export default function ConvexQpProjection() {
               {s.radius > 1e-9 && (
                 <g className="qp-forces">
                   <path className="qp-arrow qp-arrow-grad" d={arrow(scale, s.x, forceEnd(s.x, arrows.gradient, forceK))} />
-                  <text className="ex-label qp-arrow-label qp-arrow-label-grad" x={scale.px(s.x[0] + arrows.gradient[0] * forceK) + 8} y={scale.py(s.x[1] + arrows.gradient[1] * forceK) + 18}>
+                  <text className="ex-label qp-arrow-label qp-arrow-label-grad" textAnchor="end" x={scale.px(s.x[0] + arrows.gradient[0] * forceK) - 8} y={scale.py(s.x[1] + arrows.gradient[1] * forceK) + 4}>
                     ∇f
                   </text>
                   {arrows.pushes.map((push) => (
@@ -241,8 +241,9 @@ export default function ConvexQpProjection() {
                       key={`push${NAMES[push.index]}`}
                     />
                   ))}
-                  {arrows.pushes.length > 0 && (
-                    <text className="ex-label qp-arrow-label qp-arrow-label-push" x={scale.px(s.x[0] + pushSum[0] * forceK) + 8} y={scale.py(s.x[1] + pushSum[1] * forceK) - 6}>
+                  {/* On a phone the push arrow is short; its name would sit on 「最適」, so the caption names it instead. */}
+                  {arrows.pushes.length > 0 && viewport.width >= 480 && (
+                    <text className="ex-label qp-arrow-label qp-arrow-label-push" x={scale.px(s.x[0] + pushSum[0] * forceK) + 10} y={scale.py(s.x[1] + pushSum[1] * forceK) + 20}>
                       λ·法線
                     </text>
                   )}

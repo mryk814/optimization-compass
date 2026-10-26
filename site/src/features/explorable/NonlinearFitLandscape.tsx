@@ -351,7 +351,7 @@ function ProfilePanel({ start, head, descending }: { start: Params; head: Params
                 <text textAnchor="middle" x={scale.px(w)} y={viewport.height - 6}>{w}</text>
               </g>
             ))}
-            {[0, 5, 10, 15].map((v) => (
+            {[0, 5, 10].map((v) => (
               <g key={`v${v}`}>
                 <line x1={0} x2={viewport.width} y1={scale.py(v)} y2={scale.py(v)} />
                 <text x={6} y={scale.py(v) - 4}>{v}</text>
@@ -363,7 +363,7 @@ function ProfilePanel({ start, head, descending }: { start: Params; head: Params
           {PROFILE_VALLEYS.map((valley) => (
             <circle className="nls-profile-valley" cx={scale.px(valley.w)} cy={scale.py(valley.sse)} key={valley.w} r={4} />
           ))}
-          <text className="nls-profile-label" x={scale.px(GLOBAL_MINIMUM.w) + 10} y={scale.py(GLOBAL_MINIMUM.sse) - 4}>最良 {fmt(GLOBAL_MINIMUM.sse, 2)}</text>
+          <text className="nls-profile-label" x={scale.px(GLOBAL_MINIMUM.w) + 10} y={Math.min(scale.py(GLOBAL_MINIMUM.sse) - 14, viewport.height - 30)}>最良 {fmt(GLOBAL_MINIMUM.sse, 2)}</text>
           <line className="nls-profile-start" x1={scale.px(start.w)} x2={scale.px(start.w)} y1={0} y2={viewport.height - 24} />
           <circle className="ex-observation" cx={scale.px(start.w)} cy={scale.py(startY)} r={6} />
           {headInView && <circle className="ex-head" cx={scale.px(head.w)} cy={scale.py(profileSse(head.w))} r={7} />}
