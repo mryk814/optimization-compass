@@ -161,7 +161,19 @@ export function relaxSumLimit(target: Vec2, limit: number, amount: number): Rela
   return { amount, predicted: now.multipliers[0] * amount, actual: now.value - relaxed.value };
 }
 
-/** Radii of the faint circles drawn inside the level circle, so the eye sees the circle growing until it touches. */
-export function levelRingRadii(radius: number): number[] {
-  return [0.25, 0.5, 0.75].map((fraction) => radius * fraction);
+export interface BalanceArrows {
+  /** ∇f(x) = 2(x - p): points from the target toward the feasible region. */
+  gradient: Vec2;
+  /** λ_i · a_i for each constraint with a positive multiplier: the push back toward the target. */
+  pushes: Array<{ index: number; vector: Vec2 }>;
+}
+
+/** The two forces that balance at the optimum: ∇f + Σ λ_i a_i = 0. Arrow length shows the size of λ. */
+export function balanceArrows(s: QpSolution): BalanceArrows {
+  const cons = qpConstraints();
+  const gradient: Vec2 = [2 * (s.x[0] - s.target[0]), 2 * (s.x[1] - s.target[1])];
+  const pushes = s.multipliers.flatMap((lambda, index) => (
+    lambda > 1e-9 ? [{ index, vector: [lambda * cons[index].a[0], lambda * cons[index].a[1]] as Vec2 }] : []
+  ));
+  return { gradient, pushes };
 }

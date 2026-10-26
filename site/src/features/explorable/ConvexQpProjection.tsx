@@ -4,8 +4,8 @@ import { PlayerBar, Slider } from "./controls";
 import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt, fmtPair } from "./format";
 import type { Bounds } from "./math/contours";
-import {
-  QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, QP_RANGE, levelRingRadii, qpConstraints, relaxSumLimit, solveConvexQp, type QpSolution,
+import type { Vec2 } from "./math/lp2d";import {
+  QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, QP_RANGE, balanceArrows, qpConstraints, relaxSumLimit, solveConvexQp, type QpSolution,
 } from "./math/convexQp";
 import { makeScale, polylinePath, useStageViewport } from "./svg";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
@@ -44,6 +44,14 @@ export default function ConvexQpProjection() {
   const verdict = verdictText(s);
   const summary = `目標 ${fmtPair(p1, p2, 1)}、合計の上限 ${fmt(limit, 1)}。${verdictText(settled)}`;
   const cons = qpConstraints();
+  const arrows = balanceArrows(s);
+  const pushSum: [number, number] = [
+    arrows.pushes.reduce((sum, push) => sum + push.vector[0], 0),
+    arrows.pushes.reduce((sum, push) => sum + push.vector[1], 0),
+  ];
+  // One shared scale so arrow lengths compare directly, capped so a far target does not fill the plane.
+  const longest = Math.max(Math.hypot(arrows.gradient[0], arrows.gradient[1]), ...arrows.pushes.map((p) => Math.hypot(p.vector[0], p.vector[1])), 1e-9);
+  const forceK = Math.min(0.35, 2.4 / longest);
 
   return (
     <ExplorableFrame
@@ -185,15 +193,6 @@ export default function ConvexQpProjection() {
                 );
               })}
               <path className="qp-trail" d={polylinePath(trail, scale)} />
-              {s.radius > 1e-9 && levelRingRadii(s.radius).map((radius) => (
-                <circle
-                  className="qp-ring"
-                  cx={scale.px(q[0])}
-                  cy={scale.py(q[1])}
-                  key={radius}
-                  r={radius * unit}
-                />
-              ))}
               {s.radius > 1e-9 && (
                 <circle
                   className="qp-level"
@@ -229,6 +228,26 @@ export default function ConvexQpProjection() {
                   {fmt(s.vertexValues[i], 1)}
                 </text>
               ))}
+              {s.radius > 1e-9 && (
+                <g className="qp-forces">
+                  <path className="qp-arrow qp-arrow-grad" d={arrow(scale, s.x, forceEnd(s.x, arrows.gradient, forceK))} />
+                  <text className="ex-label qp-arrow-label qp-arrow-label-grad" x={scale.px(s.x[0] + arrows.gradient[0] * forceK) + 8} y={scale.py(s.x[1] + arrows.gradient[1] * forceK) + 18}>
+                    ∇f
+                  </text>
+                  {arrows.pushes.map((push) => (
+                    <path
+                      className="qp-arrow qp-arrow-push"
+                      d={arrow(scale, s.x, forceEnd(s.x, push.vector, forceK))}
+                      key={`push${NAMES[push.index]}`}
+                    />
+                  ))}
+                  {arrows.pushes.length > 0 && (
+                    <text className="ex-label qp-arrow-label qp-arrow-label-push" x={scale.px(s.x[0] + pushSum[0] * forceK) + 8} y={scale.py(s.x[1] + pushSum[1] * forceK) - 6}>
+                      λ·法線
+                    </text>
+                  )}
+                </g>
+              )}
               <path className="qp-target" d={cross(scale.px(q[0]), scale.py(q[1]), 9)} />
               <path className="qp-best" d={star(scale.px(s.x[0]), scale.py(s.x[1]), 10)} />
               <text className="ex-label ex-label-strong" x={scale.px(s.x[0]) + 14} y={scale.py(s.x[1]) - 12}>
@@ -241,6 +260,26 @@ export default function ConvexQpProjection() {
       summary={summary}
     />
   );
+}
+
+function forceEnd(from: Vec2, force: Vec2, k: number): Vec2 {
+  return [from[0] + force[0] * k, from[1] + force[1] * k];
+}
+
+/** A line from `from` to `to` with a filled head at `to`. */
+function arrow(scale: { px(x: number): number; py(y: number): number }, from: Vec2, to: Vec2): string {
+  const x1 = scale.px(from[0]);
+  const y1 = scale.py(from[1]);
+  const x2 = scale.px(to[0]);
+  const y2 = scale.py(to[1]);
+  const length = Math.hypot(x2 - x1, y2 - y1);
+  if (length < 1) return "";
+  const ux = (x2 - x1) / length;
+  const uy = (y2 - y1) / length;
+  const head = Math.min(11, length * 0.6);
+  const bx = x2 - ux * head;
+  const by = y2 - uy * head;
+  return `M${x1} ${y1}L${bx} ${by}M${x2} ${y2}L${bx - uy * head * 0.45} ${by + ux * head * 0.45}L${bx + uy * head * 0.45} ${by - ux * head * 0.45}Z`;
 }
 
 function edges(limit: number): Array<[[number, number], [number, number]]> {

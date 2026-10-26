@@ -47,7 +47,6 @@ export default function VariableDomain() {
   const [rounding, setRounding] = useState(false);
   const rounded = useMemo(() => roundRelaxation(d1, d2), [d1, d2]);
   const baselineLevel = levelLine(VD_PROFIT, reference.bestValue, viewport.bounds);
-  const bothContinuous = d1 === "continuous" && d2 === "continuous";
 
   const relaxedPath = polylinePath(s.relaxedVertices, scale) + "Z";
   const level = levelLine(VD_PROFIT, mix(from.bestValue, s.bestValue), viewport.bounds);
@@ -202,7 +201,7 @@ export default function VariableDomain() {
                   <text className="ex-label" textAnchor="end" x={scale.px(BOUNDS.xMax) - 6} y={scale.py(1) - 6}>x₂ ≤ 1</text>
                 </g>
               )}
-              {!bothContinuous && baselineLevel && (
+              {baselineLevel && (
                 <g>
                   <line
                     className="vd-baseline"
@@ -281,6 +280,16 @@ export default function VariableDomain() {
                   >
                     丸め{rounded.nearest.feasible ? "" : "（不可）"}
                   </text>
+                  {!rounded.nearest.feasible && (
+                    <text
+                      className="ex-label"
+                      textAnchor="end"
+                      x={scale.px(rounded.nearest.point[0]) - 12}
+                      y={scale.py(rounded.nearest.point[1]) + 20}
+                    >
+                      {excessText(rounded.nearest.excess)}
+                    </text>
+                  )}
                   {(rounded.floor.point[0] !== rounded.nearest.point[0] || rounded.floor.point[1] !== rounded.nearest.point[1]) && (
                     <text
                       className="ex-label"
@@ -293,7 +302,9 @@ export default function VariableDomain() {
                   )}
                 </g>
               )}
-              {showGap && <path className="milp-lp" d={diamond(scale.px(relaxedNow[0]), scale.py(relaxedNow[1]), 9)} />}
+              {showGap
+                ? <path className="milp-lp" d={diamond(scale.px(relaxedNow[0]), scale.py(relaxedNow[1]), 9)} />
+                : <path className="vd-diamond-ghost" d={diamond(scale.px(relaxedNow[0]), scale.py(relaxedNow[1]), 14)} />}
               <path className="milp-best" d={star(scale.px(bestNow[0]), scale.py(bestNow[1]), 10)} />
             </svg>
           </div>
@@ -367,6 +378,13 @@ function roundingText(r: ReturnType<typeof roundRelaxation>): string {
     return `${name}の ${pair} は${over}して実行できません（式の上の利益は ${fmt(plan.profit, 0)}）`;
   };
   return `緩和の最適解 ${fmtPair(r.from[0], r.from[1])} を丸めると（0.5 は切り上げ）、${describe("丸め", r.nearest)}。${describe("切り下げ", r.floor)}。`;
+}
+
+function excessText(excess: [number, number]): string {
+  return excess
+    .map((value, index) => (value > 1e-9 ? `資源${index + 1}を${fmt(value, 0)}超過` : ""))
+    .filter(Boolean)
+    .join("・");
 }
 
 function diamond(x: number, y: number, r: number): string {

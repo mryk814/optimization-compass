@@ -155,6 +155,23 @@ export default function ConvexityChord() {
   };
 
   const mixOutside = feasible && !inBands(reading.mix);
+  // The region between chord and graph, cut into thin strips so each strip is coloured by which side is higher.
+  const gapStrips = useMemo(() => {
+    const lo = Math.min(a, b);
+    const hi = Math.max(a, b);
+    if (hi - lo < 1e-9) return [];
+    const cuts = 48;
+    return Array.from({ length: cuts }, (_, index) => {
+      const x0 = lo + ((hi - lo) * index) / cuts;
+      const x1 = lo + ((hi - lo) * (index + 1)) / cuts;
+      const corners: Array<readonly [number, number]> = [
+        [x0, fn.f(x0)], [x1, fn.f(x1)], [x1, thetaChord(fn, a, b, x1)], [x0, thetaChord(fn, a, b, x0)],
+      ];
+      const middle = (x0 + x1) / 2;
+      return { bad: thetaChord(fn, a, b, middle) < fn.f(middle) - 1e-9, d: polylinePath(corners, scale) + "Z" };
+    });
+  }, [fn, a, b, scale]);
+  const toBand = mixOutside ? nearestInBands(reading.mix) : reading.mix;
   const verdictText = violated
     ? `点a・bの間で、線分がグラフより下に入る区間があります（θ が ${plainDecimal(violations[0][0])} から ${plainDecimal(violations[violations.length - 1][1])} のあたり）。定義の不等式が破れるので、この関数は凸ではありません。`
     : fn.convex
@@ -269,6 +286,8 @@ export default function ConvexityChord() {
       }
       stage={
         <>
+        <figure className="ex-panel">
+        <figcaption className="ex-panel-title">曲線と弦</figcaption>
         <div className={sweeping && reading.slack < 0 ? "ex-canvas cvx-flash" : "ex-canvas"} ref={stageRef}>
         <svg className="ex-svg" ref={svgRef} viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
           <rect className="ex-ground" height={viewport.height} width={viewport.width} />
@@ -290,6 +309,14 @@ export default function ConvexityChord() {
                   <text textAnchor="middle" x={(scale.px(lo) + scale.px(hi)) / 2} y={scale.py(0) - 10}>C</text>
                 </g>
               ))}
+              {mixOutside && (
+                <g>
+                  <line className="cvx-to-band" x1={scale.px(reading.mix)} x2={scale.px(toBand)} y1={scale.py(0)} y2={scale.py(0)} />
+                  <text className="ex-label" textAnchor="middle" x={(scale.px(reading.mix) + scale.px(toBand)) / 2} y={scale.py(0) + 34}>
+                    Cまで {fmt(Math.abs(toBand - reading.mix), 1)}
+                  </text>
+                </g>
+              )}
               <circle
                 className={mixOutside ? "cvx-mix cvx-mix-out" : "cvx-mix"}
                 cx={scale.px(reading.mix)}
@@ -298,6 +325,9 @@ export default function ConvexityChord() {
               />
             </g>
           )}
+          {gapStrips.map((strip, index) => (
+            <path className={strip.bad ? "cvx-gap-fill cvx-gap-fill-bad" : "cvx-gap-fill"} d={strip.d} key={index} />
+          ))}
           <path className="ex-curve" d={polylinePath(graph, scale)} />
           <path className="ex-chord" d={polylinePath(chordPoints(a, b), scale)} />
           {violations.map(([from, to]) => (
@@ -349,6 +379,7 @@ export default function ConvexityChord() {
           />
         </svg>
         </div>
+        </figure>
         <section aria-label="差の記録" className="ex-panel cvx-trace">
           <p className="ex-panel-title">差の記録（弦の高さ − 曲線の高さ）を θ ごとに描く</p>
           <div className="ex-canvas" ref={traceRef}>

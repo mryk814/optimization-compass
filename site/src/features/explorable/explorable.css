@@ -359,6 +359,7 @@
 /* MILP lattice: LP optimum = orange diamond, rounded point = ring (red only when infeasible), integer optimum = teal star */
 .milp-dot-in { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
 .milp-dot-out { fill: var(--ex-ink-soft); fill-opacity: 0.35; }
+.vd-diamond-ghost { fill: none; stroke: var(--ex-orange); stroke-width: 3; }
 .milp-lp { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
 .milp-round-ok { fill: var(--ex-ground); fill-opacity: 0.6; stroke: var(--ex-teal-ink); stroke-width: 3; }
 .milp-round-bad { fill: var(--ex-red); fill-opacity: 0.25; stroke: var(--ex-red); stroke-width: 3; }
@@ -947,7 +948,11 @@
 .ex-table.qp-table td { white-space: nowrap; }
 .qp-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
 .qp-edge-tight { stroke: var(--ex-orange-ink); stroke-width: 5; stroke-dasharray: 10 7; }
-.qp-ring { fill: none; stroke: var(--ex-orange); stroke-opacity: 0.35; stroke-width: 1.5; }
+.qp-arrow { stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.qp-arrow-grad { stroke: var(--ex-teal-ink); fill: var(--ex-teal-ink); }
+.qp-arrow-push { stroke: var(--ex-orange-ink); fill: var(--ex-orange-ink); }
+.qp-arrow-label-grad { fill: var(--ex-teal-ink); font-weight: 700; }
+.qp-arrow-label-push { fill: var(--ex-orange-ink); font-weight: 700; }
 .qp-edge-active { stroke: var(--ex-orange); stroke-width: 7; stroke-linecap: round; }
 .qp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 4; }
 .qp-bars { display: grid; gap: 0.35rem; margin-bottom: 0.6rem; }
@@ -1057,3 +1062,7 @@
 .psd-sum-ok { fill: var(--ex-ink); }
 .psd-sum-zero { fill: var(--ex-orange-ink); }
 .psd-sum-bad { fill: var(--ex-red-ink); }
+
+.cvx-gap-fill { fill: var(--ex-teal); fill-opacity: 0.18; stroke: none; }
+.cvx-gap-fill-bad { fill: var(--ex-red); fill-opacity: 0.3; }
+.cvx-to-band { stroke: var(--ex-orange-ink); stroke-width: 3; stroke-dasharray: 5 4; }

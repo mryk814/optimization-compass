@@ -50,4 +50,12 @@ describe("ConvexQpProjection", () => {
 
     expect(screen.getAllByText("境界上だが λ = 0").length).toBeGreaterThan(0);
   });
+
+  it("draws one level circle and the two balancing arrows, no fixed inner rings", () => {
+    const { container } = render(<ConvexQpProjection />);
+    expect(container.querySelectorAll(".qp-level")).toHaveLength(1);
+    expect(container.querySelectorAll(".qp-ring")).toHaveLength(0);
+    expect(container.querySelectorAll(".qp-arrow-grad")).toHaveLength(1);
+    expect(container.querySelectorAll(".qp-arrow-push")).toHaveLength(1);
+  });
 });

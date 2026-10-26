@@ -56,4 +56,22 @@ describe("VariableDomain", () => {
     expect(cell.getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByText("候補は 13 点。全部調べた")).toBeTruthy();
   });
+
+  it("keeps the grey baseline and an outline diamond when the gap is 0, so the star sits inside the diamond", () => {
+    const { container } = render(<VariableDomain />);
+    expect(container.querySelectorAll(".vd-baseline")).toHaveLength(1);
+    expect(container.querySelectorAll(".vd-diamond-ghost")).toHaveLength(1);
+    pick(/x₁ の定義域/u, "整数");
+    pick(/x₂ の定義域/u, "整数");
+    expect(container.querySelectorAll(".vd-diamond-ghost")).toHaveLength(0);
+    expect(container.querySelectorAll(".milp-lp")).toHaveLength(1);
+  });
+
+  it("names the excess resource on the figure when the rounded plan is not feasible", () => {
+    const { container } = render(<VariableDomain />);
+    pick(/x₁ の定義域/u, "整数");
+    pick(/x₂ の定義域/u, "整数");
+    fireEvent.click(screen.getByRole("checkbox", { name: "丸めてみる" }));
+    expect(container.textContent).toContain("資源1を2超過・資源2を1超過");
+  });
 });

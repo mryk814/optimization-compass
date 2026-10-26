@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, levelRingRadii, relaxSumLimit, solveConvexQp } from "./convexQp";
+import { QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, balanceArrows, relaxSumLimit, solveConvexQp } from "./convexQp";
 
 // Reference values come from scipy.optimize.minimize (SLSQP, ftol 1e-14) on
 // min ||x - p||^2 s.t. x1 + x2 <= b, x >= 0.
@@ -104,9 +104,26 @@ describe("relaxSumLimit", () => {
   });
 });
 
-describe("levelRingRadii", () => {
-  it("draws three inner rings at a quarter, a half and three quarters of the touching radius", () => {
-    const radius = Math.sqrt(2);
-    expect(levelRingRadii(radius)).toEqual([radius * 0.25, radius * 0.5, radius * 0.75]);
+describe("balanceArrows", () => {
+  it("at the article example the gradient (-2, -2) points toward the origin side and λ·a = (2, 2) pushes back", () => {
+    const { gradient, pushes } = balanceArrows(solveConvexQp([3, 2], 3));
+    expect(gradient[0]).toBeCloseTo(-2, 9);
+    expect(gradient[1]).toBeCloseTo(-2, 9);
+    expect(pushes).toHaveLength(1);
+    expect(pushes[0].index).toBe(0);
+    expect(pushes[0].vector[0]).toBeCloseTo(2, 9);
+    expect(pushes[0].vector[1]).toBeCloseTo(2, 9);
+  });
+
+  it("the arrows cancel at a vertex too, and there are none when the target is inside", () => {
+    const vertex = balanceArrows(solveConvexQp([5, 0], 3));
+    expect(vertex.pushes).toHaveLength(2);
+    const sx = vertex.gradient[0] + vertex.pushes.reduce((sum, p) => sum + p.vector[0], 0);
+    const sy = vertex.gradient[1] + vertex.pushes.reduce((sum, p) => sum + p.vector[1], 0);
+    expect(Math.abs(sx)).toBeLessThan(1e-9);
+    expect(Math.abs(sy)).toBeLessThan(1e-9);
+    const inside = balanceArrows(solveConvexQp([1, 1], 3));
+    expect(inside.pushes).toHaveLength(0);
+    expect(inside.gradient).toEqual([0, 0]);
   });
 });
