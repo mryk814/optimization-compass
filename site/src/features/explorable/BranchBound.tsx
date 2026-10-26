@@ -254,7 +254,6 @@ export default function BranchBound() {
           {last?.reason === "bound" && <span> 上限 {upperText(relaxation(last.choice, scenario).bound)} ≤ 記録 {bounds.lower}。</span>}
           {last?.reason === "infeasible" && <span> 重量 {totals(last.choice, scenario).weight} &gt; 容量 {CAPACITY}。</span>}
           {previous && (previous.lower !== bounds.lower || previous.upper !== bounds.upper) && <span> 記録 {previous.lower} → {bounds.lower}、上限 {upperText(previous.upper)} → {upperText(bounds.upper)}。</span>}</p>
-        {last?.reason === "split" && <SplitResult choice={last.choice} scenario={scenario} />}
         <BranchFocus state={state} onSelect={selectCandidate} />
         {last?.reason === "leaf" && <div className="bnb-recorded"><p>記録した完成形：{selectedNames(state.best, scenario)}、{bounds.lower}点</p><Packing choice={state.best} scenario={scenario} /></div>}
       </div>
@@ -265,6 +264,7 @@ export default function BranchBound() {
         </button>;
       })}</div>}
       </div>
+      {last?.reason === "split" && <SplitResult choice={last.choice} scenario={scenario} />}
       {selected && renderCandidate(selected)}
       {!state.frontier.length && <p>残っていた候補をすべて調べ終えました。</p>}
       <details className="bnb-log"><summary>操作記録を見る（{state.closed.length} 手）</summary><ol>{state.closed.map((node) => <li key={nodeId(node.choice)}>{candidateTitle(node.choice, scenario)}：{({ split: "次の品の有無で二つに分けた", leaf: "袋に入る組合せを記録した", bound: "最高点が記録以下なので調べ終えた", infeasible: "容量超過なので調べ終えた" })[node.reason]}</li>)}</ol></details>
