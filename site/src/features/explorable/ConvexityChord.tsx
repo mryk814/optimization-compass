@@ -9,7 +9,12 @@ import {
   CURVE_FUNCTIONS,
   chordReading,
   descendFrom,
+  FEASIBLE_BANDS,
   globalMinimum,
+  inBands,
+  nearestInBands,
+  POINT_STEP,
+  snapPoint,
   slackTrace,
   SWEEP_STEPS,
   sweepReach,
@@ -34,6 +39,7 @@ export default function ConvexityChord() {
   const [sliderTheta, setSliderTheta] = useState(0.5);
   const [sweeping, setSweeping] = useState(false);
   const [descending, setDescending] = useState(false);
+  const [feasible, setFeasible] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
   const { ref: stageRef, viewport } = useStageViewport(BOUNDS, ASPECT);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
@@ -42,13 +48,27 @@ export default function ConvexityChord() {
   const theta = sweeping ? sweepTheta(sweep.position) : sliderTheta;
   const reach = sweeping ? sweepReach(sweep.position) : 1;
 
+  // Points sit on a 0.1 grid; with the feasible set on they also stay inside its bands.
+  const place = (x: number, onlyFeasible = feasible) => {
+    const snapped = snapPoint(Math.min(CURVE_DOMAIN[1], Math.max(CURVE_DOMAIN[0], x)));
+    return onlyFeasible ? nearestInBands(snapped) : snapped;
+  };
   const switchFunction = (id: CurveFunction["id"]) => {
     const next = CURVE_FUNCTIONS.find((item) => item.id === id) ?? CURVE_FUNCTIONS[0];
     setFunctionId(id);
-    setA(next.defaultA);
-    setB(next.defaultB);
+    setA(place(next.defaultA));
+    setB(place(next.defaultB));
     setDescending(false);
     if (sweeping) sweep.restart();
+  };
+  const chooseFeasible = (on: boolean) => {
+    setFeasible(on);
+    setDescending(false);
+    // The article's pair: a at the right edge of the left band, b at the left edge of the right band.
+    if (on) {
+      setA(FEASIBLE_BANDS[0][1]);
+      setB(FEASIBLE_BANDS[1][0]);
+    }
   };
   const startSweep = () => {
     setDescending(false);
@@ -71,8 +91,12 @@ export default function ConvexityChord() {
   const reading = chordReading(fn.f, a, b, theta);
   const violations = useMemo(() => violationIntervals(fn.f, a, b), [fn, a, b]);
   const violated = violations.length > 0;
-  const downhill = useMemo(() => (descending ? descendFrom(fn, a) : [a]), [descending, fn, a]);
-  const minimum = useMemo(() => globalMinimum(fn), [fn]);
+  const bands = feasible ? FEASIBLE_BANDS : undefined;
+  const downhill = useMemo(
+    () => (descending ? descendFrom(fn, a, 0.12, 60, bands) : [a]),
+    [descending, fn, a, bands],
+  );
+  const minimum = useMemo(() => globalMinimum(fn, 2600, bands), [fn, bands]);
   const timeline = useTimeline(downhill.length - 1, 8);
 
   // The gap between chord and graph for every theta: the curve the sweep draws.
@@ -96,20 +120,20 @@ export default function ConvexityChord() {
   const dragA = useDomainDrag({
     svgRef,
     viewport,
-    onDrag: (x) => { setA(clamp(x, CURVE_DOMAIN[0], CURVE_DOMAIN[1])); setDescending(false); },
+    onDrag: (x) => { setA(place(x)); setDescending(false); },
   });
   const dragB = useDomainDrag({
     svgRef,
     viewport,
-    onDrag: (x) => setB(clamp(x, CURVE_DOMAIN[0], CURVE_DOMAIN[1])),
+    onDrag: (x) => setB(place(x)),
   });
   const nudge = (set: (value: number) => void, value: number, resetDescent: boolean) => (
     (event: KeyboardEvent<SVGGElement>) => {
-      const amount = event.shiftKey ? 0.5 : 0.1;
+      const amount = event.shiftKey ? 5 * POINT_STEP : POINT_STEP;
       const delta = event.key === "ArrowLeft" ? -amount : event.key === "ArrowRight" ? amount : 0;
       if (delta === 0) return;
       event.preventDefault();
-      set(clamp(value + delta, CURVE_DOMAIN[0], CURVE_DOMAIN[1]));
+      set(place(value + delta));
       if (resetDescent) setDescending(false);
     }
   );
@@ -130,17 +154,23 @@ export default function ConvexityChord() {
     return [[lo, thetaChord(fn, a, b, lo)], [hi, thetaChord(fn, a, b, hi)]];
   };
 
+  const mixOutside = feasible && !inBands(reading.mix);
   const verdictText = violated
     ? `点a・bの間で、線分がグラフより下に入る区間があります（θ が ${plainDecimal(violations[0][0])} から ${plainDecimal(violations[violations.length - 1][1])} のあたり）。定義の不等式が破れるので、この関数は凸ではありません。`
     : fn.convex
       ? "どの混合比θでも、線分はグラフの上か同じ高さにあります。この関数は凸なので、どの2点を選んでもこうなります。"
       : "この2点の間では違反は見つかりません。ただし、一組の点で破れなかったことは凸性の証明になりません。aとbを谷の両側へ動かしてください。";
   const descentText = descending
-    ? reachedGlobal
+    ? feasible
+      ? `aから下ると、可行集合の中で x=${fmt(stopped)}（f=${fmt(fn.f(stopped))}）まで進んで止まります。${reachedGlobal ? "C の中ではここが最小です。" : `C の中の最小は x=${fmt(minimum.x)}（f=${fmt(minimum.value)}）です。そこへ向かう途中は C の外なので、aからは着けません。`}`
+    : reachedGlobal
       ? `aから下ると x=${fmt(stopped)} で止まり、これが全体の最小点です。`
       : `aから下ると x=${fmt(stopped)}（f=${fmt(fn.f(stopped))}）で止まりますが、全体の最小値は f=${fmt(minimum.value)}（x=${fmt(minimum.x)}）です。局所的に下れなくなっても、全体の最小とは限りません。`
     : "";
-  const summary = `${fn.label}。a=${fmt(a)}、b=${fmt(b)}、混合比θ=${fmt(sliderTheta)}。${verdictText}${descentText}`;
+  const outsideText = mixOutside
+    ? `混ぜた入力 x=${fmt(reading.mix)} は可行集合 C の外です。a と b が C の中でも、その間の点は選べません。`
+    : "";
+  const summary = `${fn.label}。a=${fmt(a)}、b=${fmt(b)}、混合比θ=${fmt(sliderTheta)}。${verdictText}${outsideText}${descentText}`;
 
   return (
     <ExplorableFrame
@@ -151,6 +181,15 @@ export default function ConvexityChord() {
             onChange={switchFunction}
             options={CURVE_FUNCTIONS.map((item) => ({ value: item.id, label: item.label }))}
             value={functionId}
+          />
+          <Choice<"off" | "on">
+            legend="可行集合"
+            onChange={(value) => chooseFeasible(value === "on")}
+            options={[
+              { value: "off", label: "使わない" },
+              { value: "on", label: "C=[−2,−1]∪[2,3]" },
+            ]}
+            value={feasible ? "on" : "off"}
           />
           <Slider
             display={fmt(theta)}
@@ -220,6 +259,7 @@ export default function ConvexityChord() {
             </p>
           )}
           <p className={`ex-verdict ${violated ? "ex-tone-bad" : "ex-tone-good"}`}>{verdictText}</p>
+          {outsideText && <p className="ex-verdict ex-tone-bad">{outsideText}</p>}
           {descentText && <p className="ex-verdict ex-tone-slow">{descentText}</p>}
         </>
       }
@@ -237,6 +277,23 @@ export default function ConvexityChord() {
             <text textAnchor="end" x={viewport.width - 8} y={scale.py(0) - 6}>x</text>
             <text x={scale.px(0) + 6} y={16}>f(x)</text>
           </g>
+          {feasible && (
+            <g className="cvx-feasible">
+              {FEASIBLE_BANDS.map(([lo, hi]) => (
+                <g key={lo}>
+                  <rect height={viewport.height} width={scale.px(hi) - scale.px(lo)} x={scale.px(lo)} y={0} />
+                  <line x1={scale.px(lo)} x2={scale.px(hi)} y1={scale.py(0)} y2={scale.py(0)} />
+                  <text textAnchor="middle" x={(scale.px(lo) + scale.px(hi)) / 2} y={scale.py(0) - 10}>C</text>
+                </g>
+              ))}
+              <circle
+                className={mixOutside ? "cvx-mix cvx-mix-out" : "cvx-mix"}
+                cx={scale.px(reading.mix)}
+                cy={scale.py(0)}
+                r={6}
+              />
+            </g>
+          )}
           <path className="ex-curve" d={polylinePath(graph, scale)} />
           <path className="ex-chord" d={polylinePath(chordPoints(a, b), scale)} />
           {violations.map(([from, to]) => (
@@ -247,15 +304,15 @@ export default function ConvexityChord() {
             />
           ))}
           <line
-            className={reading.slack < 0 ? "ex-gap ex-gap-bad" : "ex-gap"}
+            className={`${reading.slack < 0 ? "ex-gap ex-gap-bad" : "ex-gap"}${mixOutside ? " cvx-greyed" : ""}`}
             x1={scale.px(reading.mix)}
             x2={scale.px(reading.mix)}
             y1={scale.py(reading.atMix)}
             y2={scale.py(reading.chord)}
           />
-          <circle className="ex-on-graph" cx={scale.px(reading.mix)} cy={scale.py(reading.atMix)} r={7} />
+          <circle className={mixOutside ? "ex-on-graph cvx-greyed" : "ex-on-graph"} cx={scale.px(reading.mix)} cy={scale.py(reading.atMix)} r={7} />
           <circle
-            className={reading.slack < 0 ? "ex-on-chord ex-on-chord-bad" : "ex-on-chord"}
+            className={`${reading.slack < 0 ? "ex-on-chord ex-on-chord-bad" : "ex-on-chord"}${mixOutside ? " cvx-greyed" : ""}`}
             cx={scale.px(reading.mix)}
             cy={scale.py(reading.chord)}
             r={7}
@@ -266,7 +323,7 @@ export default function ConvexityChord() {
               <circle className="ex-ball" cx={scale.px(ballX)} cy={scale.py(fn.f(ballX))} r={8} />
               <circle className="ex-minimum-mark" cx={scale.px(minimum.x)} cy={scale.py(minimum.value)} r={5} />
               <text className="ex-label" textAnchor="middle" x={scale.px(minimum.x)} y={scale.py(minimum.value) + 26}>
-                全体の最小
+                {feasible ? "C の中の最小" : "全体の最小"}
               </text>
             </g>
           )}

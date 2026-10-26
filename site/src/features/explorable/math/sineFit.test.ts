@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, sse, stepReading } from "./sineFit";
+import { ALIAS_SHIFT, bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, SPRING_T, sse, stepReading } from "./sineFit";
 
 describe("spring sine fit", () => {
   it("matches the article's best fit and the aliased copy 4π away", () => {
@@ -109,5 +109,20 @@ describe("spring sine fit", () => {
   it("reports budget exhaustion before the fit has settled", () => {
     expect(gaussNewton({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
     expect(levenbergMarquardt({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
+  });
+
+  it("records the λ of each accepted Levenberg–Marquardt trial, starting from 1", () => {
+    const path = levenbergMarquardt({ a: 1, w: 3 }).path;
+    expect(path[0].lambda).toBeUndefined();
+    expect(path[1].lambda).toBeGreaterThanOrEqual(1);
+    path.slice(1).forEach((p) => expect(p.lambda).toBeGreaterThan(0));
+  });
+
+  it("gives the same eight predictions for ω and ω + 4π, and different curves between them", () => {
+    const p = { a: 1.98586, w: 2.00189 };
+    const shifted = { a: p.a, w: p.w + ALIAS_SHIFT };
+    SPRING_T.forEach((t) => expect(shifted.a * Math.sin(shifted.w * t)).toBeCloseTo(p.a * Math.sin(p.w * t), 9));
+    expect(shifted.a * Math.sin(shifted.w * 0.25)).not.toBeCloseTo(p.a * Math.sin(p.w * 0.25), 1);
+    expect(shifted.w).toBeCloseTo(14.5683, 3);
   });
 });

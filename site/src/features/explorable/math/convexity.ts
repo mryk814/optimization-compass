@@ -9,7 +9,38 @@ export interface CurveFunction {
   defaultB: number;
 }
 
-export const CURVE_DOMAIN: readonly [number, number] = [-2.6, 2.6];
+export const CURVE_DOMAIN: readonly [number, number] = [-2.6, 3];
+
+/** The points a and b are placed on a 0.1 grid, so the numbers in the article appear exactly. */
+export const POINT_STEP = 0.1;
+
+export function snapPoint(x: number, step = POINT_STEP): number {
+  return Math.round(x / step) * step;
+}
+
+export type Band = readonly [number, number];
+
+/** The feasible set C = [-2, -1] ∪ [2, 3] the article uses to show a non-convex set. */
+export const FEASIBLE_BANDS: readonly Band[] = [[-2, -1], [2, 3]];
+
+export function inBands(x: number, bands: readonly Band[] = FEASIBLE_BANDS, tolerance = 1e-9): boolean {
+  return bands.some(([lo, hi]) => x >= lo - tolerance && x <= hi + tolerance);
+}
+
+/** The point of the bands closest to x (the projection onto the set). */
+export function nearestInBands(x: number, bands: readonly Band[] = FEASIBLE_BANDS): number {
+  let best = bands[0][0];
+  let bestDistance = Infinity;
+  for (const [lo, hi] of bands) {
+    const candidate = Math.min(hi, Math.max(lo, x));
+    const distance = Math.abs(candidate - x);
+    if (distance < bestDistance) {
+      best = candidate;
+      bestDistance = distance;
+    }
+  }
+  return best;
+}
 
 export const CURVE_FUNCTIONS: readonly CurveFunction[] = [
   {
@@ -18,8 +49,8 @@ export const CURVE_FUNCTIONS: readonly CurveFunction[] = [
     convex: true,
     f: (x) => 0.35 * x * x + 0.2,
     df: (x) => 0.7 * x,
-    defaultA: -1.8,
-    defaultB: 1.6,
+    defaultA: -2,
+    defaultB: 2,
   },
   {
     id: "double-well",
@@ -83,14 +114,26 @@ export function violationIntervals(
   return intervals;
 }
 
-/** Plain gradient descent on one variable, clamped to the plotted domain. */
-export function descendFrom(fn: CurveFunction, start: number, eta = 0.12, steps = 60): number[] {
+/**
+ * Plain gradient descent on one variable, clamped to the plotted domain. With `bands`, every
+ * update is projected back onto the feasible set, so the walk stops at a band's edge.
+ */
+export function descendFrom(
+  fn: CurveFunction,
+  start: number,
+  eta = 0.12,
+  steps = 60,
+  bands?: readonly Band[],
+): number[] {
   const path = [start];
   let x = start;
   for (let step = 0; step < steps; step += 1) {
     const slope = fn.df(x);
     if (Math.abs(slope) < 1e-4) break;
-    x = Math.min(CURVE_DOMAIN[1], Math.max(CURVE_DOMAIN[0], x - eta * slope));
+    let next = Math.min(CURVE_DOMAIN[1], Math.max(CURVE_DOMAIN[0], x - eta * slope));
+    if (bands) next = nearestInBands(next, bands);
+    if (Math.abs(next - x) < 1e-9) break;
+    x = next;
     path.push(x);
   }
   return path;
@@ -140,12 +183,23 @@ export function quadraticHump(curvature: number, a: number, b: number, theta: nu
   return curvature * theta * (1 - theta) * (a - b) ** 2;
 }
 
-export function globalMinimum(fn: CurveFunction, samples = 2600): { x: number; value: number } {
+export function globalMinimum(
+  fn: CurveFunction,
+  samples = 2600,
+  bands?: readonly Band[],
+): { x: number; value: number } {
   let best = { x: CURVE_DOMAIN[0], value: Infinity };
   for (let index = 0; index <= samples; index += 1) {
     const x = CURVE_DOMAIN[0] + ((CURVE_DOMAIN[1] - CURVE_DOMAIN[0]) * index) / samples;
+    if (bands && !inBands(x, bands, 1e-6)) continue;
     const value = fn.f(x);
     if (value < best.value) best = { x, value };
+  }
+  // The edges of a band can fall between two samples, so check them directly.
+  for (const [lo, hi] of bands ?? []) {
+    for (const x of [lo, hi]) {
+      if (x >= CURVE_DOMAIN[0] && x <= CURVE_DOMAIN[1] && fn.f(x) < best.value) best = { x, value: fn.f(x) };
+    }
   }
   return best;
 }

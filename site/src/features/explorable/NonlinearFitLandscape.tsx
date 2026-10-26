@@ -5,6 +5,7 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import { contourSegments, type Bounds } from "./math/contours";
 import {
+  ALIAS_SHIFT,
   bowlBottom,
   descend,
   GLOBAL_MINIMUM,
@@ -81,6 +82,7 @@ function iterateAt(run: Descent, position: number): Params {
 
 export default function NonlinearFitLandscape() {
   const [chosen, setChosen] = useState<Settings>(INITIAL);
+  const [alias, setAlias] = useState<"off" | "on">("off");
   const tour = useSceneTour(
     ID,
     EXPLORABLE_META[ID].beats,
@@ -185,6 +187,15 @@ export default function NonlinearFitLandscape() {
               value={shown.azimuth}
             />
           )}
+          <Choice<"off" | "on">
+            legend="同じ8点を通る別の曲線"
+            onChange={setAlias}
+            options={[
+              { value: "off", label: "出さない" },
+              { value: "on", label: "ω+4π の曲線を出す" },
+            ]}
+            value={alias}
+          />
           <div className="ex-button-row">
             <button className="ex-action" onClick={stepOnce} type="button">
               1手進める
@@ -202,7 +213,7 @@ export default function NonlinearFitLandscape() {
       stage={
         <>
           <div className="ex-twin">
-            <DataPanel head={head} />
+            <DataPanel alias={alias === "on"} ghost={reading?.overshoot ? reading.to : undefined} head={head} />
             {shown.view === "contour"
               ? (
                 <ContourPanel
@@ -234,16 +245,31 @@ function outcomeText(run: Descent, last: Iterate): string {
   return `一歩が地図の外（ω=${fmt(last.w, 1)}）へ飛びました。`;
 }
 
-function DataPanel({ head }: { head: Params }) {
+function sampleCurve(p: Params, count: number): Array<readonly [number, number]> {
+  const curve: Array<readonly [number, number]> = [];
+  for (let i = 0; i <= count; i += 1) {
+    const t = DATA_BOUNDS.xMin + ((DATA_BOUNDS.xMax - DATA_BOUNDS.xMin) * i) / count;
+    curve.push([t, p.a * Math.sin(p.w * t)]);
+  }
+  return curve;
+}
+
+interface DataPanelProps {
+  head: Params;
+  /** Where the step in progress ends, drawn faintly when that step makes the fit worse. */
+  ghost?: Params;
+  /** Draw the curve with ω + 4π, which passes through the same eight observations' predictions. */
+  alias: boolean;
+}
+
+function DataPanel({ head, ghost, alias }: DataPanelProps) {
   const { ref, viewport } = useStageViewport(DATA_BOUNDS, 0.8);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const r = residuals(head);
   const unit = scale.py(0) - scale.py(1);
-  const curve: Array<readonly [number, number]> = [];
-  for (let i = 0; i <= 160; i += 1) {
-    const t = DATA_BOUNDS.xMin + ((DATA_BOUNDS.xMax - DATA_BOUNDS.xMin) * i) / 160;
-    curve.push([t, head.a * Math.sin(head.w * t)]);
-  }
+  const curve = sampleCurve(head, 160);
+  const aliasCurve = alias ? sampleCurve({ a: head.a, w: head.w + ALIAS_SHIFT }, 900) : [];
+  const ghostCurve = ghost ? sampleCurve(ghost, 1600) : [];
   return (
     <figure className="ex-panel">
       <figcaption className="ex-panel-title">観測点と曲線</figcaption>
@@ -271,6 +297,8 @@ function DataPanel({ head }: { head: Params }) {
             const left = index === SPRING_T.length - 1 ? scale.px(t) - side : scale.px(t);
             return <rect className="ex-square" height={side} key={`sq${index}`} width={side} x={left} y={Math.min(scale.py(SPRING_Y[index]), scale.py(fitted))} />;
           })}
+          {ghost && <path className="nls-ghost-curve" d={polylinePath(ghostCurve, scale)} />}
+          {alias && <path className="nls-alias-curve" d={polylinePath(aliasCurve, scale)} />}
           <path className="ex-fit-line" d={polylinePath(curve, scale)} fill="none" />
           {SPRING_T.map((t, index) => (
             <line className="ex-residual" key={`r${index}`} x1={scale.px(t)} x2={scale.px(t)} y1={scale.py(SPRING_Y[index])} y2={scale.py(head.a * Math.sin(head.w * t))} />
@@ -280,6 +308,16 @@ function DataPanel({ head }: { head: Params }) {
           ))}
         </svg>
       </div>
+      {ghost && (
+        <p className="ex-hint">
+          薄い破線は、この手の到達点（ω={fmt(ghost.w, 1)}、a={fmt(ghost.a, 1)}）の曲線です。点の間でも激しく振れ、観測点から遠く離れます。
+        </p>
+      )}
+      {alias && (
+        <p className="ex-hint">
+          紫の破線は ω+4π={fmt(head.w + ALIAS_SHIFT)} の曲線です。0.5秒おきの8つの観測の時刻では、実線（ω={fmt(head.w)}）と同じ値を通り、時刻の間では別の曲線になります。
+        </p>
+      )}
     </figure>
   );
 }
@@ -311,6 +349,7 @@ function StepPanel({ reading }: { reading: StepReading }) {
               <span className="nls-bar-label">{row.label}</span>
               <span aria-hidden="true" className="nls-bar-track">
                 <span className={`nls-bar ${row.className}${clipped ? " nls-bar-clipped" : ""}`} style={{ width: `${barPercent(row.value, reading.startSse)}%` }} />
+                {clipped && <span className="nls-bar-overflow">▶ {fmt(row.value, 1)}</span>}
                 <span className="nls-bar-mark" style={{ left: `${marker}%` }} />
               </span>
               <span className="nls-bar-value">{fmt(row.value, 3)}</span>
@@ -517,6 +556,7 @@ function Readout({ run, start, head, last, step, descending, finished }: Readout
             <tr>
               <th scope="col">k</th><th scope="col">ω</th><th scope="col">a</th>
               <th scope="col">二乗和</th><th scope="col">お椀の予測</th>
+              {run.path.some((p) => p.lambda !== undefined) && <th scope="col">λ</th>}
             </tr>
           </thead>
           <tbody>
@@ -527,6 +567,7 @@ function Readout({ run, start, head, last, step, descending, finished }: Readout
                 <td>{fmt(p.a, 3)}</td>
                 <td>{fmt(p.sse, 3)}</td>
                 <td>{p.predicted === undefined ? "—" : fmt(p.predicted, 3)}</td>
+                {run.path.some((q) => q.lambda !== undefined) && <td>{p.lambda === undefined ? "—" : fmt(p.lambda, 3)}</td>}
               </tr>
             ))}
           </tbody>

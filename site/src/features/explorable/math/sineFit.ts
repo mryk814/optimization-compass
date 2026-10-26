@@ -85,7 +85,7 @@ export interface Iterate extends Params {
   sse: number;
   /** Sum of squares the local bowl predicted for this point; undefined for the start. */
   predicted?: number;
-  /** Levenberg–Marquardt damping used to reach this point. */
+  /** Levenberg–Marquardt damping λ of the accepted trial that reached this point. */
   lambda?: number;
 }
 
@@ -95,6 +95,12 @@ export interface Descent {
   path: Iterate[];
   outcome: Outcome;
 }
+
+/**
+ * Observations are 0.5 s apart, so ω and ω + 4π give the same eight predictions:
+ * 4π · (k / 2) = 2πk for every observation time.
+ */
+export const ALIAS_SHIFT = 4 * Math.PI;
 
 /** Best fit found by both methods from good starts (see the article's small example). */
 export const GLOBAL_MINIMUM: Iterate = { a: 1.98586, w: 2.00189, sse: 0.19012 };
@@ -146,19 +152,21 @@ export function levenbergMarquardt(start: Params, maxSteps = 30, initialLambda =
     const current = sse(p);
     let accepted: Params | undefined;
     let step: Params | undefined;
+    let used = lambda;
     while (lambda <= 1e8) {
       step = solve2(n, lambda * (n.aa + 1e-12), lambda * (n.ww + 1e-12));
       if (!step) break;
       const trial = { a: p.a + step.a, w: p.w + step.w };
       if (sse(trial) < current) {
         accepted = trial;
+        used = lambda;
         lambda = Math.max(lambda / 3, 1e-7);
         break;
       }
       lambda *= 2;
     }
     if (!accepted || !step) { stop = "stalled"; break; }
-    path.push({ ...accepted, sse: sse(accepted), predicted: linearizedSse(p, accepted), lambda });
+    path.push({ ...accepted, sse: sse(accepted), predicted: linearizedSse(p, accepted), lambda: used });
     p = accepted;
     if (settled(path)) { stop = "settled"; break; }
   }
