@@ -983,7 +983,7 @@
 
 /* PDE heat source: teal = temperature misfit, orange = heat-source penalty. */
 .pde-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
-.pde-gap { stroke: var(--ex-orange); stroke-width: 3; }
+.pde-gap { stroke: var(--ex-teal); stroke-width: 4; }
 .pde-wall { fill: var(--ex-ink); }
 .pde-heater { stroke: var(--ex-orange-ink); stroke-width: 4; }
 .pde-heater-head { fill: var(--ex-orange-ink); }
@@ -995,3 +995,20 @@
 .pde-label-misfit { fill: var(--ex-teal-ink); font-weight: 700; }
 .pde-label-penalty { fill: var(--ex-orange-ink); font-weight: 700; }
 .pde-marker { transition: transform 0.15s ease-out; }
+.pde-link { stroke: var(--ex-ink); stroke-width: 2.5; stroke-dasharray: 3 4; }
+.pde-need { stroke: var(--ex-ink); stroke-width: 3; stroke-dasharray: 5 4; }
+.pde-need-head { fill: var(--ex-ink); }
+.pde-curve-free { stroke-dasharray: 7 5; }
+.pde-bar-residual { fill: var(--ex-red); stroke: var(--ex-red-ink); stroke-width: 1.5; transition: width 0.18s ease-out; }
+.pde-residual-zero { stroke: var(--ex-ink); stroke-width: 2; }
+.pde-marker-free .ex-head { stroke-dasharray: 4 3; }
+
+/* SDP: the objective ruler (-r falls to the right), its contour line, and the eigenvalue sum / product rows. */
+.psd-objective-arrow { stroke: var(--ex-ink); stroke-width: 3; }
+.psd-objective-head { fill: var(--ex-ink); }
+.psd-contour { stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 3 4; }
+.psd-contour-boundary { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.psd-contour-outside { stroke: var(--ex-red-ink); }
+.psd-sum-ok { fill: var(--ex-ink); }
+.psd-sum-zero { fill: var(--ex-orange-ink); }
+.psd-sum-bad { fill: var(--ex-red-ink); }

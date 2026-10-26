@@ -32,3 +32,29 @@ export const boundaryS = (r: number) => r * r;
 
 /** The article's objective −r, to be minimized. */
 export const objective = (r: number) => -r;
+
+/** Playback: r climbs 0 → 2 at 0.05 per step, rests on the boundary for HOLD steps, then goes on to 3. */
+export const SWEEP_RATE = 0.05;
+export const SWEEP_HOLD_STEPS = 10;
+const SWEEP_REACH_STEPS = Math.round(R_LIMIT / SWEEP_RATE);
+export const SWEEP_LENGTH = SWEEP_REACH_STEPS + SWEEP_HOLD_STEPS + Math.round((3 - R_LIMIT) / SWEEP_RATE);
+
+export function sweepR(position: number): number {
+  if (position <= SWEEP_REACH_STEPS) return position * SWEEP_RATE;
+  if (position <= SWEEP_REACH_STEPS + SWEEP_HOLD_STEPS) return R_LIMIT;
+  return R_LIMIT + (position - SWEEP_REACH_STEPS - SWEEP_HOLD_STEPS) * SWEEP_RATE;
+}
+
+/** λ₁·λ₂ equals the determinant 4 − r², and λ₁ + λ₂ equals the trace 5. */
+export const eigenProduct = (r: number) => {
+  const [low, high] = eigenvalues(r);
+  return low * high;
+};
+export const eigenSum = (r: number) => {
+  const [low, high] = eigenvalues(r);
+  return low + high;
+};
+
+/** A weighted difference a − c·b has variance 1 − 2cr + 4c²; c = r/4 makes it smallest: 1 − r²/4. */
+export const weightedDifferenceVariance = (r: number, c: number) => X11 - 2 * c * r + X22 * c * c;
+export const smallestWeightedVariance = (r: number) => weightedDifferenceVariance(r, r / X22);

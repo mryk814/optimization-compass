@@ -70,6 +70,19 @@ describe("PsdSliceBoundary", () => {
     expect(screen.getAllByText(/半正定値ではない/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/−0\.854/).length).toBeGreaterThan(0);
   });
+
+  it("draws the objective −r and the eigenvalue sum and product 4 − r²", () => {
+    render(<PsdSliceBoundary />);
+    fireEvent.change(slider(/共分散 r/), { target: { value: "2.5" } });
+    expect(screen.getAllByText(/−r = −2\.50/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/和 λ₁ \+ λ₂ = 5\.00/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/積 λ₁λ₂ = 4 − r² = −2\.25/).length).toBeGreaterThan(0);
+  });
+
+  it("names the icon buttons next to their icons", () => {
+    render(<PsdSliceBoundary />);
+    expect(screen.getByRole("button", { name: "1つ進む" })).toHaveTextContent("▶ 1つ進む");
+  });
 });
 
 describe("PdeHeatSourceBalance", () => {
@@ -84,5 +97,19 @@ describe("PdeHeatSourceBalance", () => {
     expect(screen.getAllByText(/温度のずれ 1\.000 が罰則 0\.000 より大きく/).length).toBeGreaterThan(0);
     fireEvent.change(slider(/熱源の強さ q/), { target: { value: "9" } });
     expect(screen.getAllByText(/熱源の罰則 1\.000 がずれ 0\.000 より大きく/).length).toBeGreaterThan(0);
+  });
+
+  it("keeps the state residual at 0 when u is computed from q", () => {
+    render(<PdeHeatSourceBalance />);
+    expect(screen.getAllByText(/状態残差はいつも 0/).length).toBeGreaterThan(0);
+  });
+
+  it("in the free-u mode u = 1 with q = 0 looks perfect but breaks the state equation; only q = 9 fixes it", () => {
+    render(<PdeHeatSourceBalance />);
+    fireEvent.click(screen.getByRole("radio", { name: /u を自由に決める/ }));
+    expect(screen.getAllByText(/状態残差 ‖Ku − q‖ が 12\.73/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/この u は実現できません/).length).toBeGreaterThan(0);
+    fireEvent.change(slider(/熱源の強さ q/), { target: { value: "9" } });
+    expect(screen.getAllByText(/状態残差は 0 です。合計は 1\.000/).length).toBeGreaterThan(0);
   });
 });

@@ -81,9 +81,11 @@ interface PlayerBarProps {
   stepLabel: string;
   /** Text for the current position, e.g. "k = 12 / 60". */
   positionText: string;
+  /** Write each icon button's name beside its icon, so the article can refer to it by name. */
+  showButtonNames?: boolean;
 }
 
-export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps) {
+export function PlayerBar({ timeline, stepLabel, positionText, showButtonNames = false }: PlayerBarProps) {
   const id = useId();
   const { playing, reducedMotion } = timeline;
   return (
@@ -95,7 +97,7 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
           title="最初から"
           type="button"
         >
-          ⏮
+          {showButtonNames ? "⏮ 最初から" : "⏮"}
         </button>
         <button
           aria-label="1つ戻る"
@@ -104,7 +106,7 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
           title="1つ戻る"
           type="button"
         >
-          ◀
+          {showButtonNames ? "◀ 1つ戻る" : "◀"}
         </button>
         <button
           aria-pressed={playing}
@@ -122,7 +124,7 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
           title="1つ進む"
           type="button"
         >
-          ▶
+          {showButtonNames ? "▶ 1つ進む" : "▶"}
         </button>
         <button
           aria-label="最後まで進める"
@@ -131,7 +133,7 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
           title="最後まで進める"
           type="button"
         >
-          ⏭
+          {showButtonNames ? "⏭ 最後まで" : "⏭"}
         </button>
         <label className="ex-speed">
           <span>速さ</span>

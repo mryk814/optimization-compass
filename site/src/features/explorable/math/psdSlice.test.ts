@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { boundaryS, determinant, eigenvalues, objective, psdState, R_LIMIT } from "./psdSlice";
+import {
+  boundaryS, determinant, eigenProduct, eigenSum, eigenvalues, objective, psdState, R_LIMIT,
+  smallestWeightedVariance, SWEEP_HOLD_STEPS, SWEEP_LENGTH, sweepR, weightedDifferenceVariance,
+} from "./psdSlice";
 
 // Expected numbers come from scratchpad/motion_numbers.py (numpy eigvalsh / det).
 describe("2×2 slice [[1, r], [r, 4]]", () => {
@@ -46,5 +49,30 @@ describe("2×2 slice [[1, r], [r, 4]]", () => {
     expect(boundaryS(2)).toBe(4);
     expect(boundaryS(-2)).toBe(4);
     expect(objective(2)).toBe(-2);
+  });
+});
+
+describe("sweep, product and weighted variance used by the figure", () => {
+  it("rests on r = 2 for the hold steps and ends at 3", () => {
+    expect(sweepR(0)).toBe(0);
+    expect(sweepR(40)).toBeCloseTo(2, 12);
+    expect(sweepR(40 + SWEEP_HOLD_STEPS / 2)).toBeCloseTo(2, 12);
+    expect(sweepR(40 + SWEEP_HOLD_STEPS)).toBeCloseTo(2, 12);
+    expect(sweepR(SWEEP_LENGTH)).toBeCloseTo(3, 12);
+  });
+
+  it("product of the eigenvalues is 4 − r² and the sum is 5", () => {
+    for (const r of [-3, -1, 0, 1, 2, 2.5, 3]) {
+      expect(eigenProduct(r)).toBeCloseTo(4 - r * r, 10);
+      expect(eigenSum(r)).toBeCloseTo(5, 12);
+    }
+  });
+
+  it("a plain difference stays positive past r = 2 but a weighted one does not", () => {
+    expect(weightedDifferenceVariance(2.1, 1)).toBeCloseTo(0.8, 12);
+    expect(weightedDifferenceVariance(2.5, 1)).toBeCloseTo(0, 12);
+    expect(smallestWeightedVariance(2.5)).toBeCloseTo(-0.5625, 12);
+    expect(smallestWeightedVariance(3)).toBeCloseTo(-1.25, 12);
+    expect(smallestWeightedVariance(2)).toBeCloseTo(0, 12);
   });
 });
