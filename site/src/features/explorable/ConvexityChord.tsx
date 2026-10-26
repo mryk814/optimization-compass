@@ -170,6 +170,8 @@ export default function ConvexityChord() {
   const outsideText = mixOutside
     ? `混ぜた入力 x=${fmt(reading.mix)} は可行集合 C の外です。a と b が C の中でも、その間の点は選べません。`
     : "";
+  const definition = definitionMarkup();
+  const numeric = numericMarkup(fn, a, b, theta, reading.atMix, reading.chord, reading.slack < 0);
   const summary = `${fn.label}。a=${fmt(a)}、b=${fmt(b)}、混合比θ=${fmt(sliderTheta)}。${verdictText}${outsideText}${descentText}`;
 
   return (
@@ -244,13 +246,15 @@ export default function ConvexityChord() {
             <p className="ex-eyebrow">定義の不等式（θ = {fmt(theta)}）</p>
             <LiveMath
               block
-              label="凸性の定義。θaと(1-θ)bを混ぜた入力での関数値は、関数値をθと(1-θ)で混ぜた値以下"
-              markup={definitionMarkup()}
+              label="凸性の定義。θaと(1-θ)bを混ぜた入力での関数値は"
+              markup={definition[0]}
             />
+            <LiveMath block label="関数値をθと(1-θ)で混ぜた値以下" markup={definition[1]} />
+            <LiveMath block label={`左辺 ${fmt(reading.atMix)}`} markup={numeric[0]} />
             <LiveMath
               block
-              label={`左辺 ${fmt(reading.atMix)}、右辺 ${fmt(reading.chord)}。${reading.slack < 0 ? "左辺が大きく、定義に反します" : "左辺は右辺以下です"}`}
-              markup={numericMarkup(fn, a, b, theta, reading.atMix, reading.chord, reading.slack < 0)}
+              label={`右辺 ${fmt(reading.chord)}。${reading.slack < 0 ? "左辺が大きく、定義に反します" : "左辺は右辺以下です"}`}
+              markup={numeric[1]}
             />
           </section>
           {fn.id === "quadratic" && (
@@ -272,7 +276,7 @@ export default function ConvexityChord() {
             <line x1={scale.px(0)} x2={scale.px(0)} y1={0} y2={viewport.height} />
             <line x1={0} x2={viewport.width} y1={scale.py(0)} y2={scale.py(0)} />
             {[-2, -1, 1, 2].map((x) => (
-              <text key={x} textAnchor="middle" x={scale.px(x)} y={scale.py(0) + 18}>{x}</text>
+              <text key={x} textAnchor="middle" x={scale.px(x)} y={Math.min(scale.py(0) + 18, viewport.height - 4)}>{x}</text>
             ))}
             <text textAnchor="end" x={viewport.width - 8} y={scale.py(0) - 6}>x</text>
             <text x={scale.px(0) + 6} y={16}>f(x)</text>
@@ -434,12 +438,13 @@ function thetaChord(fn: CurveFunction, a: number, b: number, x: number): number 
   return theta * fn.f(a) + (1 - theta) * fn.f(b);
 }
 
-function definitionMarkup(): string {
+function definitionMarkup(): [string, string] {
   const point = row(mi("θ"), mi("a"), mo("+"), paren(mn("1"), mo("−"), mi("θ")), mi("b"));
   const rhs = row(
     mi("θ"), mi("f"), paren(mi("a")), mo("+"), paren(mn("1"), mo("−"), mi("θ")), mi("f"), paren(mi("b")),
   );
-  return row(mi("f"), paren(point), mo("≤"), rhs);
+  // Two lines (left side, then "≤ right side") so the inequality fits a phone without scrolling.
+  return [row(mi("f"), paren(point)), row(mo("≤"), rhs)];
 }
 
 function numericMarkup(
@@ -450,7 +455,7 @@ function numericMarkup(
   atMix: number,
   chord: number,
   violated: boolean,
-): string {
+): [string, string] {
   const operand = (value: number, digits = 2) => (
     fmt(value, digits).startsWith("−") ? paren(signed(fmt(value, digits))) : mn(fmt(value, digits))
   );
@@ -461,7 +466,7 @@ function numericMarkup(
     operand(theta), mo("·"), operand(fn.f(a)), mo("+"), operand(1 - theta), mo("·"), operand(fn.f(b)),
     mo("="), signed(fmt(chord)),
   );
-  return row(left, relation, right);
+  return [left, row(relation, right)];
 }
 
 interface HandleProps {

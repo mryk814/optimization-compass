@@ -289,7 +289,7 @@ function DataPanel({ head, ghost, alias }: DataPanelProps) {
                 <text x={6} y={scale.py(y) - 4}>{y}</text>
               </g>
             ))}
-            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>時刻 t（秒）</text>
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>時刻 t（秒）</text>
           </g>
           {SPRING_T.map((t, index) => {
             const side = Math.abs(r[index]) * unit;
@@ -493,7 +493,7 @@ function ParamAxes({ scale, viewport }: { scale: Scale; viewport: Viewport }) {
           <text x={6} y={scale.py(a) - 4}>{a}</text>
         </g>
       ))}
-      <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>周波数 ω</text>
+      <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>周波数 ω</text>
       <text className="ex-axis-name" x={30} y={16}>振幅 a</text>
     </g>
   );
