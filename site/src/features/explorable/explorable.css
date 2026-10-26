@@ -965,6 +965,18 @@
 .nr-bracket-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
 .nr-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1; }
 .nr-bar-now { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+/* Two-variable plane: dashed grey curve = where the Jacobian has no inverse, green rings = roots. */
+.nr-sing-curve { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.8; stroke-dasharray: 6 5; }
+.nr-plane-root { fill: none; stroke: var(--ex-teal); stroke-width: 3; }
+.nr-plane-whole { fill: none; stroke: var(--ex-line); stroke-width: 2; stroke-dasharray: 2 4; }
+.nr-plane-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.nr-plane-a { stroke: var(--ex-orange-ink); }
+.nr-plane-b { stroke: var(--ex-teal-ink); }
+.nr-plane-c { stroke: var(--ex-ink); }
+.nr-plane-dot { stroke: var(--ex-ground); stroke-width: 2; }
+.nr-plane-dot.nr-plane-b { fill: var(--ex-teal); }
+.nr-plane-dot.nr-plane-c { fill: var(--ex-ink); }
+.nr-sing-mark line { stroke: var(--ex-ink); stroke-width: 3.5; stroke-linecap: round; }
 
 /* Simplex projection: orange = what is subtracted, teal = what remains, grey = clipped to zero. */
 .sp-zero { stroke: var(--ex-ink); stroke-width: 1.5; }
@@ -982,6 +994,17 @@
 .sp-bracket { fill: var(--ex-orange); fill-opacity: 0.16; }
 .sp-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
 .sp-marker-ok { fill: var(--ex-teal); }
+/* Triangle panel: pale green = the simplex, white ring = y's shadow, green square = projection, black diamond = divided. */
+.sp-tri { fill: var(--ex-teal-wash); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-tri-floor { stroke: var(--ex-teal-ink); stroke-width: 4; stroke-linecap: round; }
+.sp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 5; }
+.sp-perp { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.sp-right-angle { fill: none; stroke: var(--ex-orange-ink); stroke-width: 2; }
+.sp-divide-line { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.sp-shadow-y { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 3; }
+.sp-proj { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.sp-divided { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.sp-map-dot { fill: var(--ex-ink); }
 
 /* SDP slice: teal = feasible, orange = on the boundary, red = infeasible (the only red). */
 .psd-region { fill: var(--ex-teal); fill-opacity: 0.12; stroke: none; }

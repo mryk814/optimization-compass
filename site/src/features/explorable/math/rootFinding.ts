@@ -102,3 +102,41 @@ export function blendWindow(a: Window, b: Window, u: number): Window {
 }
 
 export const smooth = (u: number) => u * u * (3 - 2 * u);
+
+/** The article's two-variable system: F₁ = x₁² + x₂ − 1, F₂ = x₁ + x₂² − 1. */
+export const residual2 = (x1: number, x2: number): [number, number] => [x1 * x1 + x2 - 1, x1 + x2 * x2 - 1];
+/** Jacobian determinant 4·x₁·x₂ − 1: zero on the curve where the pure Newton step is undefined. */
+export const jacobianDet2 = (x1: number, x2: number) => 4 * x1 * x2 - 1;
+
+/** The point on the diagonal where the Jacobian is [[1, 1], [1, 1]] and has no inverse. */
+export const SINGULAR_POINT = { x1: 0.5, x2: 0.5 } as const;
+
+/** The four roots of the system (the diagonal ones are (−1 ± √5)/2). */
+export const PLANE_ROOTS: ReadonlyArray<readonly [number, number]> = [
+  [ROOT, ROOT], [1, 0], [0, 1], [-(1 + Math.sqrt(5)) / 2, -(1 + Math.sqrt(5)) / 2],
+];
+
+export interface PlanePath {
+  points: Array<readonly [number, number]>;
+  /** True when a step could not be taken because the Jacobian is singular there. */
+  stuck: boolean;
+}
+
+/** Pure Newton steps J p = −F on the two-variable system, stopping where det J = 0. */
+export function planeNewtonPath(x1: number, x2: number, count = 3): PlanePath {
+  const points: Array<readonly [number, number]> = [[x1, x2]];
+  let a = x1;
+  let b = x2;
+  for (let k = 0; k < count; k += 1) {
+    const det = jacobianDet2(a, b);
+    if (Math.abs(det) < 1e-9) return { points, stuck: true };
+    const [f1, f2] = residual2(a, b);
+    // J = [[2a, 1], [1, 2b]], so J⁻¹ = [[2b, −1], [−1, 2a]] / det.
+    const p1 = -(2 * b * f1 - f2) / det;
+    const p2 = -(-f1 + 2 * a * f2) / det;
+    a += p1;
+    b += p2;
+    points.push([a, b]);
+  }
+  return { points, stuck: false };
+}

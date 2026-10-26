@@ -5,8 +5,8 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import { LiveMath, mi, mn, mo, row, signed, sub } from "./mathml";
 import {
-  bisectionSteps, bracketWindow, blendWindow, digits, dF, fStable, newtonSteps, newtonWindow, ROOT,
-  smooth, WIDE_WINDOW, type BisectionStep, type NewtonStep, type Window,
+  bisectionSteps, bracketWindow, blendWindow, digits, dF, fStable, newtonSteps, newtonWindow, planeNewtonPath,
+  PLANE_ROOTS, ROOT, SINGULAR_POINT, smooth, WIDE_WINDOW, type BisectionStep, type NewtonStep, type PlanePath, type Window,
 } from "./math/rootFinding";
 import { useStageViewport } from "./svg";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
@@ -109,8 +109,9 @@ export default function NewtonRootResidual() {
     stage={<>
       <CurvePanel method={method} frame={frame} newton={shown} bisection={bisection} wide={zoom === "wide"} />
       <DigitsPanel method={method} frame={frame} newton={newton} bisection={bisection} />
+      {method === "newton" && <PlanePanel t0={t0} position={timeline.position} />}
     </>}
-    player={<PlayerBar timeline={timeline} stepLabel="手" positionText={`${Math.min(count, timeline.step)} / ${count} 手`} />}
+    player={<PlayerBar showButtonNames timeline={timeline} stepLabel="手" positionText={`${Math.min(count, timeline.step)} / ${count} 手`} />}
     readout={method === "newton"
       ? <NewtonReadout steps={newton} frame={frame} finished={finished} />
       : <BisectionReadout steps={bisection} frame={frame} finished={finished} />}
@@ -286,6 +287,92 @@ function DigitsPanel({ method, frame, newton, bisection }: {
         })}
       </svg>
     </div>
+  </figure>;
+}
+
+const PLANE_MIN = -2.5, PLANE_MAX = 1.5;
+const PLANE_STARTS: ReadonlyArray<readonly [number, number]> = [[0.9, 0.1], [-1, -1]];
+const fixed1 = (v: number) => (Math.abs(v) < 5e-4 ? "0" : v.toFixed(Math.abs(v - Math.round(v)) < 5e-4 ? 0 : 1).replace("-", "−"));
+
+/** Pure Newton paths on the two-variable system from three starts, so the slice's blind spots are visible. */
+function PlanePanel({ t0, position }: { t0: number; position: number }) {
+  const { ref, viewport } = useStageViewport(BOUNDS, 0.5);
+  const width = viewport.width, height = 330;
+  const left = 40, right = width - 14, top = 14, bottom = height - 36;
+  const span = PLANE_MAX - PLANE_MIN;
+  const unit = Math.min((right - left) / span, (bottom - top) / span);
+  const ox = left + ((right - left) - unit * span) / 2;
+  const px = (v: number) => ox + (v - PLANE_MIN) * unit;
+  const py = (v: number) => bottom - (v - PLANE_MIN) * unit;
+  const paths = useMemo<PlanePath[]>(() => [
+    planeNewtonPath(t0, t0, NEWTON_STEPS),
+    ...PLANE_STARTS.map(([a, b]) => planeNewtonPath(a, b, NEWTON_STEPS)),
+  ], [t0]);
+  const k = Math.min(Math.floor(position + 1e-9), NEWTON_STEPS - 1);
+  const f = smooth(Math.min(1, position - k));
+  const current = (path: PlanePath): readonly [number, number] => {
+    const a = path.points[k] ?? path.points[path.points.length - 1];
+    const b = path.points[k + 1] ?? a;
+    return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+  };
+  const reached = (path: PlanePath) => {
+    const pts = path.points.slice(0, k + 1).map(([a, b]) => `${px(a).toFixed(1)} ${py(b).toFixed(1)}`);
+    const [cx, cy] = current(path);
+    pts.push(`${px(cx).toFixed(1)} ${py(cy).toFixed(1)}`);
+    return `M${pts.join("L")}`;
+  };
+  const whole = (path: PlanePath) => `M${path.points.map(([a, b]) => `${px(a).toFixed(1)} ${py(b).toFixed(1)}`).join("L")}`;
+  const hyperbola = (from: number, to: number) => Array.from({ length: 41 }, (_, i) => {
+    const a = from + ((to - from) * i) / 40;
+    return `${i ? "L" : "M"}${px(a).toFixed(1)} ${py(1 / (4 * a)).toFixed(1)}`;
+  }).join("");
+  const classes = ["nr-plane-a", "nr-plane-b", "nr-plane-c"];
+  const labels = ["A", "B", "C"];
+  const stuck = paths[0].stuck;
+  const ticks = [-2, -1, 0, 1];
+  return <figure className="ex-panel nr-panel">
+    <figcaption className="ex-panel-title">二変数の平面 (x₁, x₂)：三つの始点から純粋な Newton 法</figcaption>
+    <div className="ex-canvas" ref={ref}>
+      <svg className="ex-svg" role="img" viewBox={`0 0 ${width} ${height}`}
+        aria-label="二変数の平面に、三つの始点から根へ向かう Newton 法の道筋と、一手が決まらない点 (0.5, 0.5) を描いた図">
+        <rect className="ex-ground" width={width} height={height} />
+        <g className="ex-axes">
+          {ticks.map((v) => <g key={v}>
+            <line x1={px(v)} x2={px(v)} y1={top} y2={bottom} className={v === 0 ? undefined : "nr-grid"} />
+            <line x1={ox} x2={ox + unit * span} y1={py(v)} y2={py(v)} className={v === 0 ? undefined : "nr-grid"} />
+            <text x={px(v)} y={bottom + 18} textAnchor="middle">{fixed1(v)}</text>
+            <text x={ox - 6} y={py(v) + 5} textAnchor="end">{fixed1(v)}</text>
+          </g>)}
+        </g>
+        <text className="ex-axis-name" x={ox + unit * span - 2} y={bottom + 18} textAnchor="end">x₁</text>
+        <text className="ex-axis-name" x={ox + 4} y={top + 12}>x₂</text>
+        <path className="nr-sing-curve" d={hyperbola(0.13, PLANE_MAX)} />
+        <path className="nr-sing-curve" d={hyperbola(PLANE_MIN, -0.13)} />
+        {PLANE_ROOTS.map(([a, b]) => <circle key={`${a}`} className="nr-plane-root" cx={px(a)} cy={py(b)} r={8} />)}
+        {paths.map((path, i) => <path key={`w${i}`} className="nr-plane-whole" d={whole(path)} />)}
+        {paths.map((path, i) => <path key={`r${i}`} className={`nr-plane-path ${classes[i]}`} d={reached(path)} />)}
+        {paths.map((path, i) => {
+          const [sx, sy] = path.points[0];
+          return <g key={`s${i}`}>
+            <circle className="nr-from" cx={px(sx)} cy={py(sy)} r={4.5} />
+            <text className="ex-label ex-label-strong" x={px(sx) + 9} y={py(sy) + (i === 1 ? 20 : -9)}>{labels[i]}</text>
+          </g>;
+        })}
+        {paths.map((path, i) => {
+          const [cx, cy] = current(path);
+          return <circle key={`m${i}`} className={i === 0 ? "nr-marker" : `nr-plane-dot ${classes[i]}`} cx={px(cx)} cy={py(cy)} r={i === 0 ? 7 : 6} />;
+        })}
+        <g className="nr-sing-mark">
+          <line x1={px(SINGULAR_POINT.x1) - 7} x2={px(SINGULAR_POINT.x1) + 7} y1={py(SINGULAR_POINT.x2) - 7} y2={py(SINGULAR_POINT.x2) + 7} />
+          <line x1={px(SINGULAR_POINT.x1) - 7} x2={px(SINGULAR_POINT.x1) + 7} y1={py(SINGULAR_POINT.x2) + 7} y2={py(SINGULAR_POINT.x2) - 7} />
+          <text className="ex-label ex-label-strong" x={px(SINGULAR_POINT.x1) - 10} y={py(SINGULAR_POINT.x2) + 26} textAnchor="end">特異点 (0.5, 0.5)</text>
+        </g>
+      </svg>
+    </div>
+    <p className="ex-hint">
+      緑の輪が四つの根です。始点は A（{fmt(t0, 2)}, {fmt(t0, 2)}）、B（0.9, 0.1）、C（−1, −1）で、A は曲線パネルと同じ始点です。灰色の破線の曲線 4x₁x₂=1 の上では、ヤコビ行列に逆行列がなく、一手が決まりません。
+      {stuck ? ` いま始点 (${fmt(t0, 2)}, ${fmt(t0, 2)}) がその点なので、橙の印は動きません。曲線パネルは断面だけを見ているので、同じ始点でも滑らかに進みます。` : ""}
+    </p>
   </figure>;
 }
 

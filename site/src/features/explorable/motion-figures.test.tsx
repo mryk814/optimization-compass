@@ -40,6 +40,54 @@ describe("NewtonRootResidual", () => {
   });
 });
 
+describe("NewtonRootResidual plane panel", () => {
+  it("draws the plane with three starts and names the point where the step is undefined", () => {
+    render(<NewtonRootResidual />);
+    expect(screen.getByText(/二変数の平面 \(x₁, x₂\)/)).toBeInTheDocument();
+    expect(screen.getByText(/特異点 \(0\.5, 0\.5\)/)).toBeInTheDocument();
+  });
+
+  it("stops the diagonal start at the singular point when t₀ = 0.5", () => {
+    render(<NewtonRootResidual />);
+    fireEvent.change(slider(/始点/), { target: { value: "0.5" } });
+    expect(screen.getByText(/その点なので、橙の印は動きません/)).toBeInTheDocument();
+  });
+
+  it("names the icon buttons next to their icons", () => {
+    render(<NewtonRootResidual />);
+    expect(screen.getByRole("button", { name: "1つ進む" })).toHaveTextContent("▶ 1つ進む");
+    expect(screen.getByRole("button", { name: "▶ 再生" })).toBeInTheDocument();
+  });
+
+  it("hides the plane in bisection mode", () => {
+    render(<NewtonRootResidual />);
+    fireEvent.click(screen.getByRole("radio", { name: /二分法/ }));
+    expect(screen.queryByText(/二変数の平面 \(x₁, x₂\)/)).not.toBeInTheDocument();
+  });
+});
+
+describe("SimplexProjectionTheta triangle panel", () => {
+  it("draws the triangle with y's shadow and the distance to the projection", () => {
+    render(<SimplexProjectionTheta />);
+    expect(screen.getByText(/三角形（合計 1 の領域）の上の動き/)).toBeInTheDocument();
+    expect(screen.getByText(/影から射影までの距離は 0\.041/)).toBeInTheDocument();
+  });
+
+  it("adds the divided point and a longer distance when the comparison is on", () => {
+    render(<SimplexProjectionTheta />);
+    fireEvent.click(screen.getByRole("radio", { name: /合計で割った配分/ }));
+    expect(screen.getByText(/^割った配分$/)).toBeInTheDocument();
+    expect(screen.getByText(/辺に直角ではありません/)).toBeInTheDocument();
+  });
+
+  it("switches between the zoomed edge and the whole triangle", () => {
+    render(<SimplexProjectionTheta />);
+    expect(screen.getByText(/確認 = 0 の辺/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: /三角形全体/ }));
+    expect(screen.queryByText(/確認 = 0 の辺$/)).not.toBeInTheDocument();
+  });
+});
+
 describe("SimplexProjectionTheta", () => {
   it("opens with the total back at 1 and the article's allocation", () => {
     render(<SimplexProjectionTheta />);

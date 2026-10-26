@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  bisectTheta, clippedSum, clippedValues, divideBySum, halfSquaredDistance, projectionTheta, thetaPath, WISH,
+  bisectTheta, clippedSum, clippedValues, distance3, divideBySum, halfSquaredDistance, planeShadow, projectionTheta,
+  PROJECTED, shadowXY, thetaPath, triangleXY, WISH,
 } from "./simplexProjection";
 
 // Expected numbers come from scratchpad/motion_numbers.py.
@@ -42,6 +43,40 @@ describe("simplex projection by subtract-and-clip", () => {
     expect(Math.abs(probes[13].mid - projectionTheta(WISH))).toBeLessThan(0.9 / 2 ** 14);
     expect(thetaPath(WISH, 14)).toHaveLength(15);
     expect(thetaPath(WISH, 14)[0]).toBe(0);
+  });
+
+  it("draws y's shadow on the plane Σ = 1, directly across the edge from the projected point", () => {
+    const shadow = planeShadow(WISH);
+    expect(shadow[0]).toBeCloseTo(0.8166666666666667, 12);
+    expect(shadow[1]).toBeCloseTo(0.2166666666666667, 12);
+    expect(shadow[2]).toBeCloseTo(-0.03333333333333333, 12);
+    const [yx, yy] = shadowXY(WISH);
+    const [px, py] = triangleXY(PROJECTED);
+    expect(px).toBeCloseTo(0.2, 12);
+    expect(py).toBeCloseTo(0, 12);
+    // Same horizontal position: the edge x₃ = 0 is the x axis, so the segment is perpendicular to it.
+    expect(yx).toBeCloseTo(px, 12);
+    expect(yy).toBeLessThan(0);
+    // The shadow stays put while only the third coordinate is being used up, then walks along that same perpendicular.
+    expect(shadowXY(clippedValues(WISH, 0.05))[0]).toBeCloseTo(0.2, 12);
+    expect(shadowXY(clippedValues(WISH, 0.2))[0]).toBeCloseTo(0.2, 12);
+    expect(shadowXY(clippedValues(WISH, 0.1))[1]).toBeCloseTo(0, 12);
+    expect(shadowXY(clippedValues(WISH, 0.3))[0]).toBeCloseTo(0.2, 12);
+    expect(shadowXY(clippedValues(WISH, 0.3))[1]).toBeCloseTo((0.4 / 3) * (Math.sqrt(3) / 2), 12);
+  });
+
+  it("the divided point is not the one nearest y's shadow", () => {
+    const shadow = planeShadow(WISH);
+    const divided = divideBySum(WISH);
+    const toProjected = distance3(shadow, PROJECTED);
+    const toDivided = distance3(shadow, divided);
+    expect(toProjected).toBeCloseTo(0.04082482904638631, 12);
+    expect(toDivided).toBeLessThan(1);
+    expect(toDivided).toBeGreaterThan(toProjected * 2);
+    // Moving from the shadow to the divided point is not perpendicular to the edge: its horizontal position differs.
+    expect(Math.abs(triangleXY(divided)[0] - shadowXY(WISH)[0])).toBeGreaterThan(0.05);
+    // Normal part of y − x is the same for both, so the objective gap equals the in-plane gap.
+    expect(distance3(WISH, PROJECTED) ** 2).toBeCloseTo(toProjected ** 2 + 0.25 ** 2 / 3, 12);
   });
 
   it("projects other wishes onto the simplex too (never negative, total 1)", () => {

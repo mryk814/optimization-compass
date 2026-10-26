@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { bisectionSteps, bracketWindow, blendWindow, digits, F, fStable, newtonSteps, newtonWindow, ROOT, WIDE_WINDOW } from "./rootFinding";
+import {
+  bisectionSteps, bracketWindow, blendWindow, digits, F, fStable, jacobianDet2, newtonSteps, newtonWindow, planeNewtonPath,
+  PLANE_ROOTS, residual2, ROOT, SINGULAR_POINT, WIDE_WINDOW,
+} from "./rootFinding";
 
 // Expected numbers come from scratchpad/motion_numbers.py (double precision).
 describe("root-finding slice F(t) = t² + t − 1", () => {
@@ -63,5 +66,39 @@ describe("root-finding slice F(t) = t² + t − 1", () => {
     const mid = blendWindow(newtonWindow(a), newtonWindow(b), 0.5);
     expect(mid.half).toBeCloseTo(Math.sqrt(newtonWindow(a).half * newtonWindow(b).half), 12);
     expect(bracketWindow(0.5, 0.75).half).toBeCloseTo(0.1875, 12);
+  });
+
+  it("the two-variable first step from (0.7, 0.7) is (−0.0791667, −0.0791667)", () => {
+    expect(residual2(0.7, 0.7)[0]).toBeCloseTo(0.19, 12);
+    const path = planeNewtonPath(0.7, 0.7, 3);
+    expect(path.stuck).toBe(false);
+    expect(path.points[1][0]).toBeCloseTo(0.7 - 0.0791666666667, 10);
+    expect(path.points[1][1]).toBeCloseTo(0.7 - 0.0791666666667, 10);
+    expect(path.points[3][0]).toBeCloseTo(0.6180339887553599, 12);
+  });
+
+  it("three starts reach three different roots", () => {
+    const a = planeNewtonPath(0.7, 0.7, 30).points.at(-1)!;
+    const b = planeNewtonPath(0.9, 0.1, 30).points.at(-1)!;
+    const c = planeNewtonPath(-1, -1, 30).points.at(-1)!;
+    expect(a[0]).toBeCloseTo(0.618033988749895, 12);
+    expect(b[0]).toBeCloseTo(1, 12);
+    expect(b[1]).toBeCloseTo(0, 12);
+    expect(c[0]).toBeCloseTo(-1.618033988749895, 12);
+    expect(c[1]).toBeCloseTo(-1.618033988749895, 12);
+    expect(planeNewtonPath(0.9, 0.1, 1).points[1][0]).toBeCloseTo(1.0125, 12);
+    expect(planeNewtonPath(-1, -1, 1).points[1][0]).toBeCloseTo(-2, 12);
+    for (const [x1, x2] of PLANE_ROOTS) {
+      expect(Math.abs(residual2(x1, x2)[0])).toBeLessThan(1e-12);
+      expect(Math.abs(residual2(x1, x2)[1])).toBeLessThan(1e-12);
+    }
+  });
+
+  it("has no step at (0.5, 0.5), where the Jacobian is [[1, 1], [1, 1]]", () => {
+    expect(jacobianDet2(SINGULAR_POINT.x1, SINGULAR_POINT.x2)).toBe(0);
+    expect(residual2(0.5, 0.5)[0]).toBeCloseTo(-0.25, 15);
+    const path = planeNewtonPath(0.5, 0.5, 3);
+    expect(path.stuck).toBe(true);
+    expect(path.points).toHaveLength(1);
   });
 });

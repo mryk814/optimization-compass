@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { Choice, PlayerBar, Slider } from "./controls";
 import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import {
-  bisectTheta, clippedSum, clippedValues, divideBySum, halfSquaredDistance, projectionTheta, thetaPath, WISH,
+  bisectTheta, clippedSum, clippedValues, distance3, divideBySum, halfSquaredDistance, planeShadow, projectionTheta,
+  PROJECTED, shadowXY, thetaPath, triangleXY, TRIANGLE_VERTICES, WISH,
 } from "./math/simplexProjection";
 import { smooth } from "./math/rootFinding";
 import { useStageViewport } from "./svg";
@@ -19,9 +20,11 @@ const SUM_MAX = 1.3;
 const ON_SIMPLEX = 5e-4;
 
 type Compare = "none" | "divide";
+type View = "zoom" | "whole";
 
 export default function SimplexProjectionTheta() {
   const [compare, setCompare] = useState<Compare>("none");
+  const [view, setView] = useState<View>("zoom");
   const probes = useMemo(() => bisectTheta(WISH, SEARCH_STEPS), []);
   const path = useMemo(() => thetaPath(WISH, SEARCH_STEPS), []);
   const timeline = useTimeline(SEARCH_STEPS, 2);
@@ -55,12 +58,17 @@ export default function SimplexProjectionTheta() {
         { value: "none", label: "なし" },
         { value: "divide", label: "合計で割った配分" },
       ]} />
+      <Choice<View> legend="三角形の見え方" value={view} onChange={setView} options={[
+        { value: "zoom", label: "辺のそばを拡大" },
+        { value: "whole", label: "三角形全体" },
+      ]} />
     </>}
     stage={<>
       <BarsPanel theta={theta} onSimplex={onSimplex} ghost={compare === "divide" ? ghost : undefined} />
       <SumPanel theta={theta} total={total} exact={exact} bracket={bracket ? [bracket.lo, bracket.hi] : undefined} />
+      <TrianglePanel theta={theta} onSimplex={onSimplex} showDivide={compare === "divide"} zoom={view === "zoom"} />
     </>}
-    player={<PlayerBar timeline={timeline} stepLabel="二分" positionText={`${timeline.step} / ${SEARCH_STEPS} 回`} />}
+    player={<PlayerBar showButtonNames timeline={timeline} stepLabel="二分" positionText={`${timeline.step} / ${SEARCH_STEPS} 回`} />}
     readout={<>
       <p className="ex-verdict">{verdict}</p>
       <div className="rb-scroll"><table className="ex-table">
@@ -131,6 +139,82 @@ function BarsPanel({ theta, onSimplex, ghost }: { theta: number; onSimplex: bool
       薄い橙が引いた量、緑が残った配分です。負になった棒は灰色の枠で下へはみ出し、0 に切ります。
       {ghost ? "黒い短い線が、合計で割った配分です。" : ""}
       {onSimplex ? "いま合計は 1 です。" : ""}
+    </p>
+  </figure>;
+}
+
+/** The three-activity simplex as a triangle: y's shadow, the θ path, the projected point and the divided point. */
+function TrianglePanel({ theta, onSimplex, showDivide, zoom }: { theta: number; onSimplex: boolean; showDivide: boolean; zoom: boolean }) {
+  const { ref, viewport } = useStageViewport(BOUNDS, 0.5);
+  const clipId = useId();
+  const width = viewport.width, height = 330;
+  const whole = Math.min(width - 48, (height - 64) / (Math.sqrt(3) / 2));
+  const scale = zoom ? 2000 : whole;
+  const px = (x: number) => (zoom ? width / 2 + (x - 0.23) * scale : (width - scale) / 2 + x * scale);
+  const py = (y: number) => (zoom ? 235 - y * scale : height - 32 - y * scale);
+  const pt = (xy: readonly [number, number]) => [px(xy[0]), py(xy[1])] as const;
+  const verts = TRIANGLE_VERTICES.map(pt);
+  const outline = `M${verts.map(([a, b]) => `${a.toFixed(1)} ${b.toFixed(1)}`).join("L")}Z`;
+  const knots = [0, 0.05, 0.3, THETA_MAX].map((t) => pt(shadowXY(clippedValues(WISH, t))));
+  const trail = `M${knots.map(([a, b]) => `${a.toFixed(1)} ${b.toFixed(1)}`).join("L")}`;
+  const shadowY = pt(shadowXY(WISH));
+  const proj = pt(triangleXY(PROJECTED));
+  const divided = divideBySum(WISH);
+  const div = pt(triangleXY(divided));
+  const now = pt(shadowXY(clippedValues(WISH, theta)));
+  const toProjected = distance3(planeShadow(WISH), PROJECTED);
+  const toDivided = distance3(planeShadow(WISH), divided);
+  const place = (x: number, text: string, gap = 12) => (x + gap + text.length * 14 > width - 4
+    ? { x: x - gap, anchor: "end" as const }
+    : { x: x + gap, anchor: "start" as const });
+  const mapW = 96, mapX = width - mapW - 26, mapY = 28;
+  const mapH = mapW * (Math.sqrt(3) / 2);
+  const mp = (xy: readonly [number, number]) => [mapX + xy[0] * mapW, mapY + mapH - xy[1] * mapW] as const;
+  const mapOutline = `M${TRIANGLE_VERTICES.map((v) => mp(v).map((n) => n.toFixed(1)).join(" ")).join("L")}Z`;
+  const labelProj = place(proj[0], "射影 x");
+  const labelShadow = place(shadowY[0], "y の影");
+  const labelDiv = place(div[0], "割った配分");
+  return <figure className="ex-panel sp-panel">
+    <figcaption className="ex-panel-title">三角形（合計 1 の領域）の上の動き</figcaption>
+    <div className="ex-canvas" ref={ref}>
+      <svg className="ex-svg" role="img" viewBox={`0 0 ${width} ${height}`}
+        aria-label={`三つの活動の配分を表す三角形。希望量の影、θを${fmt(theta, 3)}にしたときの印、辺の上の射影、合計で割った配分の位置を示す`}>
+        <defs><clipPath id={clipId}><rect width={width} height={height} /></clipPath></defs>
+        <rect className="ex-ground" width={width} height={height} />
+        <g clipPath={`url(#${clipId})`}>
+          <path className="sp-tri" d={outline} />
+          <line className="sp-tri-floor" x1={verts[0][0]} y1={verts[0][1]} x2={verts[1][0]} y2={verts[1][1]} />
+          <path className="sp-trail" d={trail} />
+          <line className="sp-perp" x1={shadowY[0]} y1={shadowY[1]} x2={proj[0]} y2={proj[1]} />
+          <path className="sp-right-angle" d={`M${proj[0] + 10} ${proj[1]}L${proj[0] + 10} ${proj[1] + 10}L${proj[0]} ${proj[1] + 10}`} />
+          {showDivide && <line className="sp-divide-line" x1={shadowY[0]} y1={shadowY[1]} x2={div[0]} y2={div[1]} />}
+          <circle className="sp-shadow-y" cx={shadowY[0]} cy={shadowY[1]} r={7} />
+          <rect className="sp-proj" x={proj[0] - 7} y={proj[1] - 7} width={14} height={14} />
+          {showDivide && <path className="sp-divided" d={`M${div[0]} ${div[1] - 9}L${div[0] + 9} ${div[1]}L${div[0]} ${div[1] + 9}L${div[0] - 9} ${div[1]}Z`} />}
+          <circle className={onSimplex ? "sp-marker sp-marker-ok" : "sp-marker"} cx={now[0]} cy={now[1]} r={6} />
+          <text className="ex-label ex-label-strong" x={labelProj.x} y={proj[1] - 12} textAnchor={labelProj.anchor}>射影 x</text>
+          <text className="ex-label ex-label-strong" x={labelShadow.x} y={shadowY[1] + 5} textAnchor={labelShadow.anchor}>y の影</text>
+          {showDivide && <text className="ex-label ex-label-strong" x={labelDiv.x} y={div[1] - 12} textAnchor={labelDiv.anchor}>割った配分</text>}
+          {zoom && <text className="ex-label" x={width - 8} y={py(0) + 22} textAnchor="end">確認 = 0 の辺</text>}
+          {!zoom && ["調査", "制作", "確認"].map((name, i) => <text key={name} className="ex-label ex-label-strong"
+            x={verts[i][0]} y={i === 2 ? verts[i][1] - 10 : verts[i][1] + 24} textAnchor={i === 0 ? "start" : i === 1 ? "end" : "middle"}>{name}</text>)}
+          {zoom && <g>
+            <path className="sp-tri" d={mapOutline} />
+            {["調", "制", "確"].map((name, i) => {
+              const [mx, my] = mp(TRIANGLE_VERTICES[i]);
+              return <text key={name} className="ex-label" x={mx + (i === 0 ? -4 : i === 1 ? 4 : 0)} y={my + (i === 2 ? -4 : 15)}
+                textAnchor={i === 0 ? "end" : i === 1 ? "start" : "middle"}>{name}</text>;
+            })}
+            <circle className="sp-map-dot" cx={mp([0.2, 0])[0]} cy={mp([0.2, 0])[1]} r={5} />
+          </g>}
+        </g>
+      </svg>
+    </div>
+    <p className="ex-hint">
+      三角形は、合計が 1 の配分の集まりです。y は合計が 1.25 で三角形の面の外にあるため、面へ垂直に落とした「影」を白い丸で描きます。
+      影から辺{zoom ? "（確認 = 0）" : ""}へ直角におりた先の緑の四角が射影 x で、橙の印は、いまの θ で引いて切った配分の影です。
+      影から射影までの距離は {fmt(toProjected, 3)}{showDivide ? `、合計で割った配分までは ${fmt(toDivided, 3)} で、その道は辺に直角ではありません。` : "です。"}
+      {zoom ? " 小さな三角形の黒い点が、拡大している場所です。" : ""}
     </p>
   </figure>;
 }
