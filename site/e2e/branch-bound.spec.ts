@@ -30,6 +30,9 @@ for (const width of [1280, 375, 390]) {
       await expect(card).toHaveCount(1);
       await expect(region.locator(".bnb-candidate-summary")).toHaveCount(2);
       await expect(graph.locator(".bnb-bag")).toHaveCount(0);
+      // The whole search tree sits outside .bnb-overview and starts with the root and its two children.
+      await expect(region.locator(".bnb-tree .bnb-tree-node")).toHaveCount(3);
+      await expect(region.locator(".bnb-overview .bnb-tree")).toHaveCount(0);
       // The root splits on its fractional item: B in the four-item example, E in the eight-item one.
       const first = advanced ? "3:0" : "2:1";
       await graph.locator(`[data-branch-id="${first}"]`).focus();

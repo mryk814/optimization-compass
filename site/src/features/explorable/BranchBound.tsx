@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { ExplorableFrame } from "./ExplorableFrame";
-import { act, INTRO, SCENARIOS, certificate, decisionAt, decisionOrder, fractionalItem, nodeId, pathTo, relaxation, splitEffect, startSearch, totals, withDecision, type Choice, type SearchState, type Scenario } from "./math/branchBound";
+import { act, INTRO, SCENARIOS, certificate, decisionAt, decisionOrder, fractionalItem, nodeId, pathTo, relaxation, searchTree, splitEffect, startSearch, totals, withDecision, type Choice, type SearchState, type Scenario } from "./math/branchBound";
 import "./branch-bound.css";
 
 // Round displayed upper bounds outwards, so the label never understates the bound.
@@ -75,6 +75,7 @@ function BranchFocus({ state, onSelect }: { state: SearchState; onSelect: (id: s
   const fork = <svg className="bnb-branch-lines" width="100%" height="18" viewBox="0 0 100 18" preserveAspectRatio="none" aria-hidden="true"><path d="M50 0V8H25V18M50 8H75V18" /></svg>;
   const row = (choices: Choice[], itemIndex: number) => <div className="bnb-branch-row">{choices.map((choice) => <div key={nodeId(choice)} className="bnb-branch-arm"><span className="bnb-edge-label">{state.scenario.items[itemIndex].name}{choice[itemIndex] ? "入れる" : "入れない"}</span>{node(choice)}</div>)}</div>;
   return <div className="bnb-branch-focus" role="group" aria-label="直近の枝のつながり">
+    <p className="bnb-subheading">枝の図</p>
     <p className="bnb-branch-heading">{decided(parent, scenario).length ? "親から引き継ぐ条件" : "ここから条件を決める"}</p>
     <div className="bnb-branch-parent">{node(parent, true)}</div>
     {!isRoot && <>{fork}{row(pair, lastItem)}</>}
@@ -83,12 +84,38 @@ function BranchFocus({ state, onSelect }: { state: SearchState; onSelect: (id: s
   </div>;
 }
 
+const treeStatus = { open: "未調査", split: "分けた", bound: "終了：記録以下", infeasible: "終了：容量超過", leaf: "終了：記録更新" } as const;
+// The whole search so far: every node reached, its bound, and which ones are closed (greyed) or still open.
+function SearchTree({ state }: { state: SearchState }) {
+  const scenario = state.scenario;
+  const rows = searchTree(state);
+  const total = relaxation([], scenario).bound;
+  const record = certificate(state).lower;
+  return <section className="bnb-tree" aria-label="探索木">
+    <p className="bnb-subheading">探索木</p>
+    <p className="bnb-tree-note">分けた節点から、入れる枝・入れない枝が下に伸びます。灰色の節点は調べ終えた枝、点線は未調査、青緑の枠が直近の節点です。棒は上限（橙）と記録（青緑の線）を根の上限に対する長さで並べます。</p>
+    <ul className="bnb-tree-rows">{rows.map((row) => {
+      const kind = row.status === "open" ? "open" : row.status === "split" ? "split" : "closed";
+      const label = `${candidateTitle(row.choice, scenario)}：${row.feasible ? `上限${upperText(row.bound)}点` : "容量超過"}、${treeStatus[row.status]}`;
+      return <li key={row.id} className={`bnb-tree-node ${kind}${row.current ? " current" : ""}`} data-tree-id={row.id} data-tree-state={row.status} style={{ ["--depth" as string]: row.depth }} aria-label={label}>
+        {row.id === "root" ? <span className="bnb-condition-chips"><span>根</span></span> : <ConditionChips choice={row.choice} scenario={scenario} />}
+        <span className="bnb-tree-bound">{row.feasible ? `上限 ${upperText(row.bound)}` : "容量超過"}</span>
+        <span className="bnb-tree-bar" aria-hidden="true"><i style={{ width: row.feasible ? `${(row.bound / total) * 100}%` : "0%" }} /><b style={{ left: `${(record / total) * 100}%` }} /></span>
+        <span className="bnb-tree-state">{treeStatus[row.status]}{row.current && "・直近"}</span>
+      </li>;
+    })}</ul>
+  </section>;
+}
+
 // What the last split did: which item was decided, which item was the fraction, and each child's bound.
 function SplitResult({ choice, scenario }: { choice: Choice; scenario: Scenario }) {
   const effect = splitEffect(choice, scenario);
   const names = scenario.items.map((item) => item.name);
   const fall = (drop: number) => (drop > 1e-9 ? `${upperText(drop)} 点下がる` : "変わらない");
+  const total = relaxation([], scenario).bound;
+  const bar = (value: number) => ({ width: `${(Math.max(value, 0) / total) * 100}%` });
   return <div className="bnb-split-result" role="group" aria-label="分けた品と上限の変化">
+    <p className="bnb-subheading">分けた品と上限の変化</p>
     <p>
       <span className="bnb-tag bnb-tag-split">分けた品 {names[effect.splitItem]}</span>
       <span className="bnb-tag bnb-tag-frac">端数だった品 {names[effect.fractional]}</span>
@@ -96,6 +123,10 @@ function SplitResult({ choice, scenario }: { choice: Choice; scenario: Scenario 
     <ul>{effect.children.map((child) => <li key={child.take}>
       {names[effect.splitItem]}{child.take ? "を入れる" : "を入れない"}：{child.feasible ? `上限 ${upperText(child.bound)} 点（${fall(child.drop)}）` : "容量超過"}
     </li>)}</ul>
+    <div className="bnb-bound-bars" aria-hidden="true">
+      <div><span>親 {upperText(effect.parentBound)}</span><i><b style={bar(effect.parentBound)} /></i></div>
+      {effect.children.map((child) => <div key={child.take}><span>{names[effect.splitItem]}{child.take ? "✓" : "×"} {child.feasible ? upperText(child.bound) : "容量超過"}</span><i className="bnb-bar-child"><b style={bar(child.feasible ? child.bound : 0)} /></i></div>)}
+    </div>
     <p>{effect.lowersBound
       ? `端数だった ${names[effect.fractional]} が入るか入らないかに決まり、親の上限 ${upperText(effect.parentBound)} 点は ${upperText(effect.remaining)} 点まで下がりました。`
       : `${names[effect.fractional]} を決めても、大きいほうの子は別の品が端数になり、親と同じ ${upperText(effect.remaining)} 点のままです。この枝をさらに分けると下がります。`}</p>
@@ -213,6 +244,7 @@ export default function BranchBound() {
       <p className="bnb-mode-note">切り替えると、品選びと調査記録をやり直します。絵の大きさは重さを表しません。</p>
       {!state ? <>
         <p>重さ{CAPACITY}以内で、高い得点の組合せを作ってみましょう。各品は一つまでです。</p>
+        <p className="bnb-subheading">品の一覧</p>
         <div className={`bnb-items${ITEMS.length === 8 ? " bnb-items-eight" : ""}`}>{ITEMS.map((item, i) => <label key={item.name}>
           <input type="checkbox" aria-label={`${item.name} 重さ${item.weight} 得点${item.value}`} checked={Boolean(choice[i])} onChange={() => setChoice(choice.map((take, j) => i === j ? (take ? 0 : 1) : take))} />
           <ItemIcon name={item.name}/><span className="bnb-choice-metrics"><strong>{item.name}</strong><span>重さ{item.weight}</span><span className="bnb-catalog-value">得点{item.value}</span></span>
@@ -257,15 +289,16 @@ export default function BranchBound() {
         <BranchFocus state={state} onSelect={selectCandidate} />
         {last?.reason === "leaf" && <div className="bnb-recorded"><p>記録した完成形：{selectedNames(state.best, scenario)}、{bounds.lower}点</p><Packing choice={state.best} scenario={scenario} /></div>}
       </div>
-      {state.frontier.length > 0 && <div className="bnb-comparison-list" role="group" aria-label="残る候補の比較">{state.frontier.map((node) => {
+      {state.frontier.length > 0 && <div className="bnb-comparison"><p className="bnb-subheading">残る候補の比較</p><div className="bnb-comparison-list" role="group" aria-label="残る候補の比較">{state.frontier.map((node) => {
         const id = nodeId(node); const r = relaxation(node, scenario); const weight = totals(node, scenario).weight;
         return <button className={`bnb-candidate-summary${!r.feasible ? " bnb-infeasible" : ""}`} type="button" key={id} data-summary-id={id} aria-pressed={nodeId(selected!) === id} aria-controls="bnb-selected-candidate" aria-label={`${candidateTitle(node, scenario)}、この枝の上限${r.feasible ? `${upperText(r.bound)}点` : "容量超過"}を選ぶ`} onClick={() => selectCandidate(id)}>
           <ConditionChips choice={node} scenario={scenario}/><span className="bnb-summary-bound">この枝の上限 <strong>{r.feasible ? `${upperText(r.bound)}点` : "⚠ 容量超過"}</strong></span><span className="bnb-summary-capacity"><span>容量 {weight}/{CAPACITY}</span><span>未決定{ITEMS.length - node.length}品</span></span>
         </button>;
-      })}</div>}
+      })}</div></div>}
       </div>
       {last?.reason === "split" && <SplitResult choice={last.choice} scenario={scenario} />}
       {selected && renderCandidate(selected)}
+      <SearchTree state={state} />
       {!state.frontier.length && <p>残っていた候補をすべて調べ終えました。</p>}
       <details className="bnb-log"><summary>操作記録を見る（{state.closed.length} 手）</summary><ol>{state.closed.map((node) => <li key={nodeId(node.choice)}>{candidateTitle(node.choice, scenario)}：{({ split: "次の品の有無で二つに分けた", leaf: "袋に入る組合せを記録した", bound: "最高点が記録以下なので調べ終えた", infeasible: "容量超過なので調べ終えた" })[node.reason]}</li>)}</ol></details>
     </div> : <p>たとえばAとDなら12点です。もっと高くできそうなら、品を入れ替えてみてください。</p>}

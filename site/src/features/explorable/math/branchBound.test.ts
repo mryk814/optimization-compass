@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { act, ADVANCED, branchLabel, CAPACITY, certificate, decisionOrder, fractionalItem, pathTo, ITEMS, nodeId, relaxation, SCENARIOS, splitEffect, startSearch, totals, type Choice } from "./branchBound";
+import { act, ADVANCED, branchLabel, CAPACITY, certificate, decisionOrder, fractionalItem, pathTo, ITEMS, nodeId, relaxation, SCENARIOS, searchTree, splitEffect, startSearch, totals, type Choice } from "./branchBound";
 
 const choices: Choice[] = Array.from({ length: 2 ** ITEMS.length }, (_, mask) => ITEMS.map((_, i) => (mask >> i & 1) as 0 | 1));
 const feasible = choices.filter((choice) => totals(choice).weight <= CAPACITY);
@@ -131,6 +131,21 @@ it("names a node by its decisions and recovers the order they were made in", () 
   expect(decisionOrder([0, 1, 1])).toEqual([2, 1, 0]);
   expect(pathTo([0, 1, 1]).map(nodeId)).toEqual(["root", "2:1", "1:1,2:1", "0:0,1:1,2:1"]);
   expect(branchLabel([null, 1, 1])).toBe("Bを入れる → Dを入れる");
+});
+it("lists every reached node as a tree that grows by two rows per split", () => {
+  let state = startSearch([1, 0, 1, 0]);
+  expect(searchTree(state).map((row) => row.id)).toEqual(["root"]);
+  state = act(state, "root", "open");
+  expect(searchTree(state).map((row) => [row.id, row.depth, row.status])).toEqual([["root", 0, "split"], ["2:1", 1, "open"], ["2:0", 1, "open"]]);
+  expect(searchTree(state)[0].current).toBe(true);
+  for (const id of ["2:1", "1:1,2:1", "2:0", "1:0,2:1"]) state = act(state, id, "open");
+  const rows = searchTree(state);
+  expect(rows.map((row) => row.id)).toEqual(["root", "2:1", "1:1,2:1", "0:1,1:1,2:1", "0:0,1:1,2:1", "1:0,2:1", "1:0,2:1,3:1", "1:0,2:1,3:0", "2:0", "2:0,3:1", "2:0,3:0"]);
+  expect(rows.filter((row) => row.status === "open")).toHaveLength(6);
+  expect(rows.filter((row) => row.status === "split")).toHaveLength(5);
+  expect(rows.find((row) => row.id === "0:1,1:1,2:1")?.feasible).toBe(false);
+  expect(rows.find((row) => row.id === "2:0")?.bound).toBeCloseTo(14.4);
+  expect(certificate(state).upper).toBe(13);
 });
 it("has a genuine eight-item greedy trap and a density-order-independent relaxation", () => {
   let room = ADVANCED.capacity;

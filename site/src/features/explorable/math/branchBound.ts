@@ -159,3 +159,34 @@ export function act(state: SearchState, id: string, action: "open" | "prune"): S
     closed: [...state.closed, { choice, reason: "split" }],
     message: `${branchLabel(choice, state.scenario)}を、端数だった${state.scenario.items[item].name}を入れる枝と外す枝に分けました。どちらの上界も親の上界を超えません。` };
 }
+export interface TreeRow {
+  id: string;
+  choice: Choice;
+  depth: number;
+  /** "open" is a node not yet looked at; the rest are the reasons a node was closed. */
+  status: "open" | SearchState["closed"][number]["reason"];
+  feasible: boolean;
+  bound: number;
+  /** The node closed or split by the latest action. */
+  current: boolean;
+}
+/** Every node reached so far, parents before children, the "take it" branch before the "leave it" branch. */
+export function searchTree(state: SearchState): TreeRow[] {
+  const scenario = state.scenario;
+  const rows: TreeRow[] = [];
+  const latest = state.closed.at(-1);
+  const walk = (choice: Choice, depth: number) => {
+    const id = nodeId(choice);
+    const closed = state.closed.find((entry) => nodeId(entry.choice) === id);
+    if (!closed && !state.frontier.some((entry) => nodeId(entry) === id)) return;
+    const r = relaxation(choice, scenario);
+    rows.push({ id, choice, depth, status: closed ? closed.reason : "open", feasible: r.feasible, bound: r.bound, current: Boolean(latest && closed === latest) });
+    if (closed?.reason === "split") {
+      const item = fractionalItem(choice, scenario);
+      walk(withDecision(choice, item, 1, scenario), depth + 1);
+      walk(withDecision(choice, item, 0, scenario), depth + 1);
+    }
+  };
+  walk(scenario.items.map(() => null), 0);
+  return rows;
+}

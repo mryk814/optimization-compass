@@ -176,3 +176,24 @@ it("shows the fractional item inline, then lowers the upper bound step by step",
   expect(container.querySelector(".bnb-range-ghost")).not.toBeNull();
   expect(container.querySelector(".bnb-dropped")).toHaveTextContent("14.4");
 });
+it("draws the whole search tree and grows it by two nodes per split", () => {
+  const { container } = render(<BranchBound />); seed(["A", "B"]);
+  const tree = () => container.querySelector(".bnb-tree")!;
+  expect(within(tree() as HTMLElement).getByText("探索木", { selector: "p" })).toBeVisible();
+  expect(tree().querySelectorAll(".bnb-tree-node")).toHaveLength(3);
+  expect(tree().querySelector('[data-tree-id="root"]')).toHaveAttribute("data-tree-state", "split");
+  expect(tree().querySelector('[data-tree-id="2:1"]')).toHaveTextContent("上限 15");
+  expect(tree().querySelector('[data-tree-id="2:0"]')).toHaveTextContent("上限 14.4");
+  select("Bあり"); click("D 入れる／入れない");
+  expect(tree().querySelectorAll(".bnb-tree-node")).toHaveLength(5);
+  expect(tree().querySelector('[data-tree-id="2:1"]')).toHaveAttribute("data-tree-state", "split");
+  expect(tree().querySelector(".bnb-tree-node.current")).toHaveAttribute("data-tree-id", "2:1");
+  select("Bあり・Dあり"); click("A 入れる／入れない");
+  select("Bなし"); click("C 入れる／入れない");
+  select("Bあり・Dなし"); click("C 入れる／入れない");
+  expect(tree().querySelectorAll(".bnb-tree-node")).toHaveLength(11);
+  expect(tree().querySelector('[data-tree-id="0:1,1:1,2:1"]')).toHaveTextContent("容量超過");
+  for (const heading of ["枝の図", "残る候補の比較", "分けた品と上限の変化"]) expect(screen.getAllByText(heading, { selector: "p" }).length).toBeGreaterThan(0);
+  click("品選びからやり直す");
+  expect(screen.getByText("品の一覧", { selector: "p" })).toBeVisible();
+});
