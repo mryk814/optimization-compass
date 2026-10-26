@@ -160,3 +160,8 @@ export function relaxSumLimit(target: Vec2, limit: number, amount: number): Rela
   const relaxed = solveConvexQp(target, limit + amount);
   return { amount, predicted: now.multipliers[0] * amount, actual: now.value - relaxed.value };
 }
+
+/** Radii of the faint circles drawn inside the level circle, so the eye sees the circle growing until it touches. */
+export function levelRingRadii(radius: number): number[] {
+  return [0.25, 0.5, 0.75].map((fraction) => radius * fraction);
+}

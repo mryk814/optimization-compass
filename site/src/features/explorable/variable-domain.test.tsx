@@ -39,4 +39,21 @@ describe("VariableDomain", () => {
     pick(/x₁ の定義域/u, "整数");
     expect(screen.getAllByText(/最適解は \(3\.00, 1\.50\)、利益 21\.00。連続に戻した緩和の最適値 21\.00 と同じ/u).length).toBeGreaterThan(0);
   });
+
+  it("丸めてみる: integer x integer shows (3, 2) over by 2 and 1, and the floor (3, 1) at profit 19", () => {
+    render(<VariableDomain />);
+    pick(/x₁ の定義域/u, "整数");
+    pick(/x₂ の定義域/u, "整数");
+    fireEvent.click(screen.getByRole("checkbox", { name: "丸めてみる" }));
+    expect(screen.getByText(/丸めの \(3, 2\) は資源1を 2 超過、資源2を 1 超過して実行できません（式の上の利益は 23）/u)).toBeTruthy();
+    expect(screen.getByText(/切り下げの \(3, 1\) は資源の上限を守り、利益は 19/u)).toBeTruthy();
+  });
+
+  it("the nine-cell grid switches both domains and marks the current cell", () => {
+    render(<VariableDomain />);
+    const cell = screen.getByRole("button", { name: /製品Aを整数、製品Bを整数にする。利益 20\.00、ギャップ 1\.00/u });
+    fireEvent.click(cell);
+    expect(cell.getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByText("候補は 13 点。全部調べた")).toBeTruthy();
+  });
 });

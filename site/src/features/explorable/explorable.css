@@ -371,6 +371,22 @@
 .vd-gap { stroke: var(--ex-orange); stroke-width: 3; stroke-dasharray: 2 5; stroke-linecap: round; }
 .vd-gap-label { fill: var(--ex-ink); font-size: 14px; font-weight: 600; }
 .vd-segment { stroke: var(--ex-teal); stroke-width: 5; stroke-linecap: round; }
+.vd-baseline { stroke: var(--ex-ink-soft); stroke-opacity: 0.55; stroke-width: 2; }
+.vd-baseline-dot { fill: var(--ex-ink-soft); fill-opacity: 0.55; stroke: none; }
+.vd-bound { stroke: var(--ex-teal-ink); stroke-width: 3; }
+.vd-round-link { stroke: var(--ex-red); stroke-width: 2; stroke-dasharray: 4 4; }
+.vd-round-bad { fill: none; stroke: var(--ex-red); stroke-width: 4; stroke-linecap: round; }
+.vd-round-ok { fill: var(--ex-ground); fill-opacity: 0.7; stroke: var(--ex-teal-ink); stroke-width: 3; }
+.vd-round-floor.vd-round-ok, .vd-round-floor.vd-round-bad { fill: var(--ex-ground); fill-opacity: 0.8; stroke-linejoin: round; }
+.vd-toggle { display: flex; align-items: center; gap: 0.5rem; font-size: var(--type-label); min-height: 44px; }
+.vd-toggle input { width: 1.25rem; height: 1.25rem; }
+.vd-grid { table-layout: fixed; width: 100%; }
+.vd-grid th, .vd-grid td { text-align: center; padding: 0.25rem; white-space: normal; }
+.vd-cell { width: 100%; min-height: 44px; display: grid; gap: 0.1rem; padding: 0.3rem 0.4rem; border: 1px solid var(--ex-line); border-radius: 4px; color: var(--ex-ink); cursor: pointer; font: inherit; background: color-mix(in srgb, var(--ex-orange) calc(var(--gap, 0) * 55%), var(--ex-ground)); }
+.vd-cell.is-current { border: 3px solid var(--ex-ink); }
+.vd-cell:focus-visible { outline: 3px solid var(--ex-orange-ink); outline-offset: 1px; }
+.vd-cell-profit { font-weight: 700; font-variant-numeric: tabular-nums; }
+.vd-cell-gap { font-size: var(--type-label); color: var(--ex-ink); font-variant-numeric: tabular-nums; }
 .ex-table.vd-table th[scope="row"] { white-space: normal; }
 .ex-table.vd-table td { white-space: nowrap; }
 .vd-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
@@ -925,7 +941,8 @@
 .ex-table.qp-table th[scope="row"] { white-space: normal; }
 .ex-table.qp-table td { white-space: nowrap; }
 .qp-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
-.qp-edge-tight { stroke: var(--ex-orange-ink); stroke-width: 5; }
+.qp-edge-tight { stroke: var(--ex-orange-ink); stroke-width: 5; stroke-dasharray: 10 7; }
+.qp-ring { fill: none; stroke: var(--ex-orange); stroke-opacity: 0.35; stroke-width: 1.5; }
 .qp-edge-active { stroke: var(--ex-orange); stroke-width: 7; stroke-linecap: round; }
 .qp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 4; }
 .qp-bars { display: grid; gap: 0.35rem; margin-bottom: 0.6rem; }

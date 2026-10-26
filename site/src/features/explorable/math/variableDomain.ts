@@ -142,3 +142,56 @@ export function solveDomains(d1: Domain, d2: Domain): DomainSolution {
     bestHasFraction: best.some((value) => Math.abs(value - Math.round(value)) > 1e-7),
   };
 }
+
+export const DOMAINS: readonly Domain[] = ["continuous", "integer", "binary"];
+
+export interface RoundedPlan {
+  point: Vec2;
+  /** Both resource constraints hold. */
+  feasible: boolean;
+  /** Resource use minus the limit, per resource: positive means over the limit. */
+  excess: [number, number];
+  profit: number;
+}
+
+export interface RoundingResult {
+  /** The relaxation's optimum, the point that gets rounded. */
+  from: Vec2;
+  /** True when the relaxation's optimum already has an allowed value in every coordinate. */
+  nothingToRound: boolean;
+  /** Nearest allowed value for each restricted coordinate (0.5 rounds up). */
+  nearest: RoundedPlan;
+  /** Next allowed value down for each restricted coordinate. */
+  floor: RoundedPlan;
+}
+
+function plan(point: Vec2): RoundedPlan {
+  const excess: [number, number] = [
+    VD_USE[0][0] * point[0] + VD_USE[0][1] * point[1] - VD_LIMITS[0],
+    VD_USE[1][0] * point[0] + VD_USE[1][1] * point[1] - VD_LIMITS[1],
+  ];
+  return {
+    point,
+    feasible: excess.every((value) => value <= EPS),
+    excess,
+    profit: objectiveValue(VD_PROFIT, point),
+  };
+}
+
+/**
+ * Rounds the relaxation's optimum coordinate by coordinate into the chosen domains: a continuous
+ * coordinate is kept, an integer one is rounded (or floored), a 0/1 one is rounded and clamped to 0..1.
+ * The result is then re-evaluated against the original constraints, which is the whole point.
+ */
+export function roundRelaxation(d1: Domain, d2: Domain): RoundingResult {
+  const from = solveDomains(d1, d2).relaxedPoint;
+  const apply = (domain: Domain, value: number, mode: "nearest" | "floor"): number => {
+    if (domain === "continuous") return value;
+    const snapped = mode === "nearest" ? Math.floor(value + 0.5 + EPS) : Math.floor(value + EPS);
+    return domain === "binary" ? Math.min(1, Math.max(0, snapped)) : Math.max(0, snapped);
+  };
+  const nearest: Vec2 = [apply(d1, from[0], "nearest"), apply(d2, from[1], "nearest")];
+  const floor: Vec2 = [apply(d1, from[0], "floor"), apply(d2, from[1], "floor")];
+  const nothingToRound = Math.abs(nearest[0] - from[0]) < EPS && Math.abs(nearest[1] - from[1]) < EPS;
+  return { from, nothingToRound, nearest: plan(nearest), floor: plan(floor) };
+}

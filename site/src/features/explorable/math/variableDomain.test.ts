@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { solveDomains, type Domain } from "./variableDomain";
+import { roundRelaxation, solveDomains, type Domain } from "./variableDomain";
 
 // Reference values come from an exact-rational script (fractions.Fraction vertex enumeration,
 // a full lattice listing, and closed-form slices), not from this module.
@@ -57,5 +57,41 @@ describe("solveDomains", () => {
     expect(solveDomains("integer", "integer").bestHasFraction).toBe(false);
     expect(solveDomains("binary", "binary").bestHasFraction).toBe(false);
     expect(solveDomains("integer", "continuous").bestHasFraction).toBe(true);
+  });
+});
+
+describe("roundRelaxation", () => {
+  it("integer x integer: rounding (3, 1.5) up gives (3, 2), over by (2, 1); flooring gives (3, 1) at profit 19", () => {
+    const r = roundRelaxation("integer", "integer");
+    expect(r.from).toEqual([3, 1.5]);
+    expect(r.nearest.point).toEqual([3, 2]);
+    expect(r.nearest.feasible).toBe(false);
+    expect(r.nearest.excess).toEqual([2, 1]);
+    expect(r.nearest.profit).toBe(23);
+    expect(r.floor.point).toEqual([3, 1]);
+    expect(r.floor.feasible).toBe(true);
+    expect(r.floor.excess).toEqual([-2, -1]);
+    expect(r.floor.profit).toBe(19);
+    expect(r.floor.profit).toBeLessThan(solveDomains("integer", "integer").bestValue);
+  });
+
+  it("x1 integer, x2 continuous: (3, 1.5) needs no rounding", () => {
+    expect(roundRelaxation("integer", "continuous").nothingToRound).toBe(true);
+  });
+
+  it("x1 integer, x2 0/1: the relaxation's (10/3, 1) rounds to (3, 1), feasible at 19, below the best 20", () => {
+    const r = roundRelaxation("integer", "binary");
+    expect(r.nearest.point).toEqual([3, 1]);
+    expect(r.nearest.feasible).toBe(true);
+    expect(r.nearest.profit).toBe(19);
+    expect(solveDomains("integer", "binary").bestValue).toBe(20);
+  });
+
+  it("x1 0/1, x2 integer: (1, 2.5) rounds up to (1, 3), which breaks the second resource", () => {
+    const r = roundRelaxation("binary", "integer");
+    expect(r.nearest.point).toEqual([1, 3]);
+    expect(r.nearest.feasible).toBe(false);
+    expect(r.floor.point).toEqual([1, 2]);
+    expect(r.floor.feasible).toBe(true);
   });
 });

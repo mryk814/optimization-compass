@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 
 import { Choice, PlayerBar } from "./controls";
 import { ExplorableFrame } from "./ExplorableFrame";
@@ -6,7 +6,8 @@ import { fmt, fmtPair } from "./format";
 import type { Bounds } from "./math/contours";
 import { levelLine, type Vec2 } from "./math/lp2d";
 import {
-  DOMAIN_LABEL, VD_PROFIT, solveDomains, type Domain, type DomainSolution,
+  DOMAIN_LABEL, DOMAINS, VD_PROFIT, roundRelaxation, solveDomains, type Domain, type DomainSolution,
+  type RoundedPlan,
 } from "./math/variableDomain";
 import { makeScale, polylinePath, useStageViewport } from "./svg";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
@@ -39,10 +40,19 @@ export default function VariableDomain() {
     else setD2(value);
   };
   const reference = useMemo(() => solveDomains("continuous", "continuous"), []);
+  const grid = useMemo(
+    () => DOMAINS.map((row) => DOMAINS.map((column) => solveDomains(row, column))),
+    [],
+  );
+  const [rounding, setRounding] = useState(false);
+  const rounded = useMemo(() => roundRelaxation(d1, d2), [d1, d2]);
+  const baselineLevel = levelLine(VD_PROFIT, reference.bestValue, viewport.bounds);
+  const bothContinuous = d1 === "continuous" && d2 === "continuous";
 
   const relaxedPath = polylinePath(s.relaxedVertices, scale) + "Z";
   const level = levelLine(VD_PROFIT, mix(from.bestValue, s.bestValue), viewport.bounds);
   const relaxedLevel = levelLine(VD_PROFIT, mix(from.relaxedValue, s.relaxedValue), viewport.bounds);
+  const relaxedOnBaseline = Math.abs(s.relaxedValue - reference.bestValue) < 1e-9 && Math.abs(from.relaxedValue - reference.bestValue) < 1e-9;
   const bestNow: Vec2 = [mix(from.best[0], s.best[0]), mix(from.best[1], s.best[1])];
   const relaxedNow: Vec2 = [mix(from.relaxedPoint[0], s.relaxedPoint[0]), mix(from.relaxedPoint[1], s.relaxedPoint[1])];
   const showGap = s.gap > 1e-9;
@@ -65,6 +75,10 @@ export default function VariableDomain() {
             options={OPTIONS}
             value={d2}
           />
+          <label className="vd-toggle">
+            <input checked={rounding} onChange={(event) => setRounding(event.target.checked)} type="checkbox" />
+            <span>丸めてみる</span>
+          </label>
           <p className="ex-hint">
             目的 5x₁+4x₂ と二つの資源制約 6x₁+4x₂≤24、x₁+2x₂≤6 は固定です。変わるのは、各変数が取れる値だけです。
           </p>
@@ -74,6 +88,47 @@ export default function VariableDomain() {
       player={<PlayerBar positionText={`${DOMAIN_LABEL[d1]} × ${DOMAIN_LABEL[d2]}`} stepLabel="定義域の切り替え" timeline={timeline} />}
       readout={
         <>
+          <section aria-label="九通りの一覧">
+            <p className="ex-eyebrow">九通りの一覧。押すと切り替わる（上段が利益、下段がギャップ）</p>
+            <table className="ex-table vd-grid">
+              <thead>
+                <tr>
+                  <th scope="col">A↓ B→</th>
+                  {DOMAINS.map((column) => <th key={column} scope="col">B {DOMAIN_LABEL[column]}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {DOMAINS.map((row, i) => (
+                  <tr key={row}>
+                    <th scope="row">A {DOMAIN_LABEL[row]}</th>
+                    {DOMAINS.map((column, j) => {
+                      const cell = grid[i][j];
+                      const here = row === d1 && column === d2;
+                      return (
+                        <td key={column}>
+                          <button
+                            aria-label={`製品Aを${DOMAIN_LABEL[row]}、製品Bを${DOMAIN_LABEL[column]}にする。利益 ${fmt(cell.bestValue)}、ギャップ ${fmt(cell.gap)}`}
+                            aria-pressed={here}
+                            className={here ? "vd-cell is-current" : "vd-cell"}
+                            onClick={() => {
+                              setFrom(s);
+                              setD1(row);
+                              setD2(column);
+                            }}
+                            style={{ "--gap": cell.gap / 2 } as CSSProperties}
+                            type="button"
+                          >
+                            <span className="vd-cell-profit">{fmt(cell.bestValue)}</span>
+                            <span className="vd-cell-gap">{cell.gap > 1e-9 ? fmt(cell.gap) : "0"}</span>
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
           <section aria-label="最適値の比較">
             <p className="ex-eyebrow">利益 z = 5x₁ + 4x₂ を、三つの問題で比べる</p>
             <table className="ex-table vd-table">
@@ -112,6 +167,7 @@ export default function VariableDomain() {
               緩和との差（ギャップ）は {fmt(s.gap)}。両方連続の利益 {fmt(reference.bestValue)} との差は {fmt(reference.bestValue - s.bestValue)} です。
             </p>
           </section>
+          {rounding && <p className="ex-hint vd-round-note">{roundingText(rounded)}</p>}
           <p className={`ex-verdict ${s.gap === 0 ? "ex-tone-good" : "ex-tone-slow"}`}>{verdict}</p>
         </>
       }
@@ -134,7 +190,34 @@ export default function VariableDomain() {
                 <text x={scale.px(0) + 8} y={16}>x₂ B</text>
               </g>
               <path className="vd-relaxed" d={relaxedPath} />
-              {relaxedLevel && showGap && (
+              {d1 === "binary" && (
+                <g>
+                  <line className="vd-bound" x1={scale.px(1)} x2={scale.px(1)} y1={scale.py(0)} y2={scale.py(BOUNDS.yMax)} />
+                  <text className="ex-label" x={scale.px(1) + 6} y={scale.py(3.55)}>x₁ ≤ 1</text>
+                </g>
+              )}
+              {d2 === "binary" && (
+                <g>
+                  <line className="vd-bound" x1={scale.px(0)} x2={scale.px(BOUNDS.xMax)} y1={scale.py(1)} y2={scale.py(1)} />
+                  <text className="ex-label" textAnchor="end" x={scale.px(BOUNDS.xMax) - 6} y={scale.py(1) - 6}>x₂ ≤ 1</text>
+                </g>
+              )}
+              {!bothContinuous && baselineLevel && (
+                <g>
+                  <line
+                    className="vd-baseline"
+                    x1={scale.px(baselineLevel[0][0])}
+                    x2={scale.px(baselineLevel[1][0])}
+                    y1={scale.py(baselineLevel[0][1])}
+                    y2={scale.py(baselineLevel[1][1])}
+                  />
+                  <circle className="vd-baseline-dot" cx={scale.px(reference.best[0])} cy={scale.py(reference.best[1])} r={5} />
+                  <text className="ex-label" x={scale.px((reference.bestValue - 4 * 3.5) / 5) + 10} y={scale.py(3.5)}>
+                    連続の最適 利益{fmt(reference.bestValue, 0)}
+                  </text>
+                </g>
+              )}
+              {relaxedLevel && showGap && !relaxedOnBaseline && (
                 <line
                   className="vd-level-relaxed"
                   x1={scale.px(relaxedLevel[0][0])}
@@ -171,11 +254,43 @@ export default function VariableDomain() {
                   />
                   <text
                     className="vd-gap-label"
-                    x={scale.px((s.relaxedPoint[0] + s.best[0]) / 2) + 8}
-                    y={scale.py((s.relaxedPoint[1] + s.best[1]) / 2) - 8}
+                    textAnchor="end"
+                    x={scale.px((s.relaxedPoint[0] + s.best[0]) / 2) - 8}
+                    y={scale.py((s.relaxedPoint[1] + s.best[1]) / 2) + 22}
                   >
                     ギャップ {fmt(s.gap)}
                   </text>
+                </g>
+              )}
+              {rounding && !rounded.nothingToRound && (
+                <g>
+                  <line
+                    className="vd-round-link"
+                    x1={scale.px(rounded.from[0])}
+                    x2={scale.px(rounded.nearest.point[0])}
+                    y1={scale.py(rounded.from[1])}
+                    y2={scale.py(rounded.nearest.point[1])}
+                  />
+                  <RoundMark plan={rounded.nearest} scale={scale} shape="nearest" />
+                  <RoundMark plan={rounded.floor} scale={scale} shape="floor" />
+                  <text
+                    className="ex-label"
+                    textAnchor="end"
+                    x={scale.px(rounded.nearest.point[0]) - 12}
+                    y={scale.py(rounded.nearest.point[1]) + 4}
+                  >
+                    丸め{rounded.nearest.feasible ? "" : "（不可）"}
+                  </text>
+                  {(rounded.floor.point[0] !== rounded.nearest.point[0] || rounded.floor.point[1] !== rounded.nearest.point[1]) && (
+                    <text
+                      className="ex-label"
+                      textAnchor="end"
+                      x={scale.px(rounded.floor.point[0]) - 12}
+                      y={scale.py(rounded.floor.point[1]) + 16}
+                    >
+                      切り下げ
+                    </text>
+                  )}
                 </g>
               )}
               {showGap && <path className="milp-lp" d={diamond(scale.px(relaxedNow[0]), scale.py(relaxedNow[1]), 9)} />}
@@ -224,6 +339,34 @@ function FeasibleLayer({
       ))}
     </g>
   );
+}
+
+function RoundMark({
+  plan, scale, shape,
+}: { plan: RoundedPlan; scale: ReturnType<typeof makeScale>; shape: "nearest" | "floor" }) {
+  const x = scale.px(plan.point[0]);
+  const y = scale.py(plan.point[1]);
+  const tone = plan.feasible ? "vd-round-ok" : "vd-round-bad";
+  if (shape === "floor") return <path className={`${tone} vd-round-floor`} d={`M${x} ${y - 8}L${x + 8} ${y + 7}L${x - 8} ${y + 7}Z`} />;
+  return plan.feasible
+    ? <circle className={tone} cx={x} cy={y} r={8} />
+    : <path className={tone} d={`M${x - 8} ${y - 8}L${x + 8} ${y + 8}M${x - 8} ${y + 8}L${x + 8} ${y - 8}`} />;
+}
+
+function roundingText(r: ReturnType<typeof roundRelaxation>): string {
+  if (r.nothingToRound) {
+    return `緩和の最適解 ${fmtPair(r.from[0], r.from[1])} は、選んだ定義域でもそのまま選べる値なので、丸める必要がありません。`;
+  }
+  const describe = (name: string, plan: RoundedPlan) => {
+    const pair = fmtPair(plan.point[0], plan.point[1], 0);
+    if (plan.feasible) return `${name}の ${pair} は資源の上限を守り、利益は ${fmt(plan.profit, 0)}`;
+    const over = plan.excess
+      .map((value, index) => (value > 1e-9 ? `資源${index + 1}を ${fmt(value, 0)} 超過` : ""))
+      .filter(Boolean)
+      .join("、");
+    return `${name}の ${pair} は${over}して実行できません（式の上の利益は ${fmt(plan.profit, 0)}）`;
+  };
+  return `緩和の最適解 ${fmtPair(r.from[0], r.from[1])} を丸めると（0.5 は切り上げ）、${describe("丸め", r.nearest)}。${describe("切り下げ", r.floor)}。`;
 }
 
 function diamond(x: number, y: number, r: number): string {

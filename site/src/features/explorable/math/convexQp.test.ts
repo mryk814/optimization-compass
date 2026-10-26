@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, relaxSumLimit, solveConvexQp } from "./convexQp";
+import { QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, levelRingRadii, relaxSumLimit, solveConvexQp } from "./convexQp";
 
 // Reference values come from scipy.optimize.minimize (SLSQP, ftol 1e-14) on
 // min ||x - p||^2 s.t. x1 + x2 <= b, x >= 0.
@@ -87,5 +87,26 @@ describe("relaxSumLimit", () => {
     const r = relaxSumLimit(QP_ARTICLE_TARGET, QP_ARTICLE_LIMIT, 0.1);
     expect(r.predicted).toBeCloseTo(0.2, 9);
     expect(r.actual).toBeCloseTo(0.195, 9);
+  });
+
+  it("at b = 3.5 the multiplier is 1.5: prediction 0.150, exact 0.145 (1.125 - 0.98)", () => {
+    const r = relaxSumLimit(QP_ARTICLE_TARGET, 3.5, 0.1);
+    expect(solveConvexQp(QP_ARTICLE_TARGET, 3.5).multipliers[0]).toBeCloseTo(1.5, 9);
+    expect(r.predicted).toBeCloseTo(0.15, 9);
+    expect(r.actual).toBeCloseTo(0.145, 9);
+  });
+
+  it("with the target at (5, 0) the answer is the vertex (3, 0) with lambda 4, and v(eps) = (2 - eps)^2", () => {
+    const s = solveConvexQp([5, 0], 3);
+    expect(s.multipliers[0]).toBeCloseTo(4, 9);
+    expect(s.multipliers[2]).toBeCloseTo(4, 9);
+    expect(relaxSumLimit([5, 0], 3, 0.1).actual).toBeCloseTo(4 - 1.9 ** 2, 9);
+  });
+});
+
+describe("levelRingRadii", () => {
+  it("draws three inner rings at a quarter, a half and three quarters of the touching radius", () => {
+    const radius = Math.sqrt(2);
+    expect(levelRingRadii(radius)).toEqual([radius * 0.25, radius * 0.5, radius * 0.75]);
   });
 });

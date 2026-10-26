@@ -5,7 +5,7 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt, fmtPair } from "./format";
 import type { Bounds } from "./math/contours";
 import {
-  QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, QP_RANGE, qpConstraints, relaxSumLimit, solveConvexQp, type QpSolution,
+  QP_ARTICLE_LIMIT, QP_ARTICLE_TARGET, QP_RANGE, levelRingRadii, qpConstraints, relaxSumLimit, solveConvexQp, type QpSolution,
 } from "./math/convexQp";
 import { makeScale, polylinePath, useStageViewport } from "./svg";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
@@ -166,7 +166,34 @@ export default function ConvexQpProjection() {
                   y2={scale.py(edge[1][1])}
                 />
               ))}
+              {edges(limit).map((edge, index) => {
+                const label = edgeLabel(s, index);
+                if (!label) return null;
+                const mx = (edge[0][0] + edge[1][0]) / 2;
+                const my = (edge[0][1] + edge[1][1]) / 2;
+                const outward = index === 0 ? [10, -10] : index === 1 ? [-10, 0] : [0, -10];
+                return (
+                  <text
+                    className="ex-label qp-edge-label"
+                    key={`label${NAMES[index]}`}
+                    textAnchor={index === 1 ? "end" : "start"}
+                    x={scale.px(mx) + outward[0]}
+                    y={scale.py(my) + outward[1]}
+                  >
+                    {label}
+                  </text>
+                );
+              })}
               <path className="qp-trail" d={polylinePath(trail, scale)} />
+              {s.radius > 1e-9 && levelRingRadii(s.radius).map((radius) => (
+                <circle
+                  className="qp-ring"
+                  cx={scale.px(q[0])}
+                  cy={scale.py(q[1])}
+                  key={radius}
+                  r={radius * unit}
+                />
+              ))}
               {s.radius > 1e-9 && (
                 <circle
                   className="qp-level"
@@ -191,8 +218,22 @@ export default function ConvexQpProjection() {
                   r={5}
                 />
               ))}
+              {s.vertices.map((v, i) => (
+                <text
+                  className={v === s.bestVertex ? "ex-label ex-label-strong qp-vlabel" : "ex-label qp-vlabel"}
+                  key={`vl${v[0]},${v[1]}`}
+                  textAnchor={i === 2 ? "start" : "end"}
+                  x={scale.px(v[0]) + (i === 2 ? 10 : i === 1 ? 6 : -10)}
+                  y={scale.py(v[1]) + (i === 2 ? -10 : i === 1 ? 38 : 20)}
+                >
+                  {fmt(s.vertexValues[i], 1)}
+                </text>
+              ))}
               <path className="qp-target" d={cross(scale.px(q[0]), scale.py(q[1]), 9)} />
               <path className="qp-best" d={star(scale.px(s.x[0]), scale.py(s.x[1]), 10)} />
+              <text className="ex-label ex-label-strong" x={scale.px(s.x[0]) + 14} y={scale.py(s.x[1]) - 12}>
+                最適 {fmt(s.value, 1)}
+              </text>
             </svg>
           </div>
         </figure>
@@ -204,6 +245,12 @@ export default function ConvexQpProjection() {
 
 function edges(limit: number): Array<[[number, number], [number, number]]> {
   return [[[limit, 0], [0, limit]], [[0, 0], [0, limit]], [[0, 0], [limit, 0]]];
+}
+
+function edgeLabel(s: QpSolution, index: number): string {
+  if (s.multipliers[index] > 1e-9) return `λ = ${fmt(s.multipliers[index], 1)}`;
+  if (s.tight.includes(index)) return "境界上・λ = 0";
+  return "";
 }
 
 function stateText(s: QpSolution, index: number): string {
