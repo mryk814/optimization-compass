@@ -148,3 +148,30 @@ export function alongStep(trial: Trial, s: number): { actual: number; model: num
   ) / 2;
   return { actual: cost(point), model };
 }
+
+/** The parameter points a run has visited: the start, then every accepted candidate among the first `count` trials. */
+export function acceptedPath(run: Run, start: FitPoint, count = run.trials.length): FitPoint[] {
+  const path = [start];
+  for (const trial of run.trials.slice(0, count)) if (trial.accepted) path.push(trial.candidate);
+  return path;
+}
+
+export interface CostHistory {
+  /** Cost of the current point after 0..count trials; it stays flat across a rejected trial. */
+  current: Array<{ n: number; cost: number }>;
+  /** Cost a rejected trial reached at its candidate, which never became the current point. */
+  rejected: Array<{ n: number; cost: number }>;
+}
+
+/** Splits the cost record into the accepted line and the rejected candidates, which must not be mixed. */
+export function costHistory(run: Run, start: FitPoint, count: number): CostHistory {
+  const current = [{ n: 0, cost: cost(start) }];
+  const rejected: Array<{ n: number; cost: number }> = [];
+  let p = start;
+  run.trials.slice(0, count).forEach((trial, index) => {
+    if (trial.accepted) p = trial.candidate;
+    else rejected.push({ n: index + 1, cost: trial.costAfter });
+    current.push({ n: index + 1, cost: cost(p) });
+  });
+  return { current, rejected };
+}

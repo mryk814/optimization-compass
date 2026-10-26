@@ -5,8 +5,10 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import { contourSegments, type Bounds } from "./math/contours";
 import {
+  acceptedPath,
   alongStep,
   cost,
+  costHistory,
   EXP_T,
   EXP_Y,
   MAX_TRIALS,
@@ -80,9 +82,12 @@ export default function GaussNewtonLm() {
   const [mode, setMode] = useState<FitMode>("gn");
   const [startKey, setStartKey] = useState<StartKey>("far");
   const [logLambda, setLogLambda] = useState(-2);
+  const [keepGn, setKeepGn] = useState(false);
   const start = STARTS[startKey];
   const lambda0 = lambdaOf(logLambda);
   const run = useMemo(() => runTrials(mode, start, lambda0), [mode, start, lambda0]);
+  const gnRun = useMemo(() => runTrials("gn", start, 0), [start]);
+  const ghost: Run | undefined = mode === "lm" && keepGn ? gnRun : undefined;
   const timeline = useTimeline(run.trials.length, 1.2);
   const position = useChase(timeline.position, timeline.reducedMotion);
   const step = timeline.step;
@@ -109,7 +114,7 @@ export default function GaussNewtonLm() {
 
   const summary = last === undefined
     ? `${modeName(mode)}、始点は ${startText(startKey)}、費用 ${fmt(cost(start), 3)}。まだ試していません。`
-    : `${modeName(mode)}の試行${step}。λ=${lambdaText(last.lambda)}、予測した減少 ${fmt(last.predicted, 3)} に対して実際の減少は ${fmt(last.actual, 3)}、ρ=${fmt(last.rho, 2)}。${last.accepted ? "受け入れました" : "捨てました"}。現在点の費用は ${fmt(cost(point), 4)}。`;
+    : `${modeName(mode)}の試行${step}。λ=${lambdaText(last.lambda)}、予測した減少 ${fmt(last.predicted, 3)} に対して実際の減少は ${fmt(last.actual, 3)}、ρ=${fmt(last.rho, 2)}。${last.accepted ? "受け入れました" : "捨てました"}。現在点の費用は ${fmt(cost(point), 4)}。${ghost ? "Gauss–Newton法の軌跡を薄く重ねています。" : ""}`;
 
   return (
     <ExplorableFrame
@@ -145,6 +150,17 @@ export default function GaussNewtonLm() {
             value={logLambda}
             valueText={`λ は ${lambdaText(lambda0)}`}
           />
+          <div className="gl-ghost-control">
+            <label className="gl-ghost-toggle">
+              <input checked={keepGn} disabled={mode === "gn"} onChange={(event) => setKeepGn(event.target.checked)} type="checkbox" />
+              GNの軌跡を残す
+            </label>
+            <p className="ex-hint">
+              {mode === "gn"
+                ? "Levenberg–Marquardt法のときに使えます。"
+                : "同じ始点から Gauss–Newton法 が進む道を、薄い線で重ねます。"}
+            </p>
+          </div>
         </>
       }
       id={ID}
@@ -154,13 +170,14 @@ export default function GaussNewtonLm() {
         <>
           <div className="ex-twin">
             <DataPanel flying={flying} frac={frac} head={head} settled={settled} />
-            <ParamPanel done={done} focus={focus} head={head} progress={progress} run={run} start={start} />
+            <ParamPanel done={done} focus={focus} ghost={ghost} head={head} progress={progress} run={run} start={start} />
           </div>
           <div className="ex-twin">
             <AlongPanel focus={focus} progress={progress} trialNumber={flying ? done + 1 : done > 0 ? done : 1} />
             <GainPanel done={done} run={run} />
           </div>
           <div className="ex-twin">
+            <HistoryPanel done={done} ghost={ghost} run={run} start={start} />
             <LambdaPanel done={done} mode={mode} run={run} />
           </div>
         </>
@@ -249,9 +266,11 @@ interface ParamProps {
   head: FitPoint;
   focus: Trial | undefined;
   progress: number;
+  /** Gauss–Newton run from the same start, drawn faintly behind the live one. */
+  ghost: Run | undefined;
 }
 
-function ParamPanel({ run, start, done, head, focus, progress }: ParamProps) {
+function ParamPanel({ run, start, done, head, focus, progress, ghost }: ParamProps) {
   const { ref, viewport } = useStageViewport(PARAM_BOUNDS, 0.75);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const at = (p: FitPoint): readonly [number, number] => [
@@ -272,6 +291,7 @@ function ParamPanel({ run, start, done, head, focus, progress }: ParamProps) {
     const gradTip = at({ a: focus.from.a + focus.gradDir.a * focus.stepLength, k: focus.from.k + focus.gradDir.k * focus.stepLength });
     gradArrow = { x0: scale.px(fx), y0: scale.py(fy), x1: scale.px(gradTip[0]), y1: scale.py(gradTip[1]) };
   }
+  const ghostPoints: Array<readonly [number, number]> = ghost ? acceptedPath(ghost, start).map(at) : [];
   const rejectedFocus = focus !== undefined && !focus.accepted;
   const landed = progress >= 1 && focus !== undefined && done > 0;
   return (
@@ -301,6 +321,15 @@ function ParamPanel({ run, start, done, head, focus, progress }: ParamProps) {
             <circle cx={scale.px(OPTIMUM.k)} cy={scale.py(OPTIMUM.a)} r={6} />
             <text x={scale.px(OPTIMUM.k) + 10} y={scale.py(OPTIMUM.a) - 10}>最良</text>
           </g>
+          {ghostPoints.length > 1 && (
+            <g className="gl-ghost">
+              <path d={polylinePath(ghostPoints, scale)} fill="none" />
+              {ghostPoints.slice(1).map(([x, y], index) => (
+                <circle cx={scale.px(x)} cy={scale.py(y)} key={index} r={3.5} />
+              ))}
+              <text x={scale.px(ghostPoints[2]?.[0] ?? ghostPoints[1][0]) + 10} y={scale.py(ghostPoints[2]?.[1] ?? ghostPoints[1][1]) + 30}>GNの軌跡</text>
+            </g>
+          )}
           {finished.map((trial, index) => {
             if (trial.accepted) return null;
             const [x0, y0] = at(trial.from);
@@ -336,7 +365,7 @@ function ParamPanel({ run, start, done, head, focus, progress }: ParamProps) {
         </svg>
       </div>
       <p className="ex-hint">
-        太い橙の矢印がこの試行の一手、細い破線の矢印が最急降下の向き（長さは同じ）です。赤い ✕ は捨てた試行の行き先です。
+        太い橙の矢印がこの試行の一手、細い破線の矢印が最急降下の向き（長さは同じ）です。赤い ✕ は捨てた試行の行き先です。{ghost ? "灰色の細い線は、同じ始点から Gauss–Newton法 が進む道です。" : ""}
       </p>
     </figure>
   );
@@ -492,6 +521,64 @@ function LambdaPanel({ run, done, mode }: { run: Run; done: number; mode: FitMod
       </div>
       <p className="ex-hint">
         {mode === "lm" ? "橙の丸が λ（中が白い丸は捨てた試行）、" : "Gauss–Newton法は λ=0 なので丸はありません。"}紺の四角が一手の長さです。{mode === "lm" ? "捨てるたびに λ が10倍になり、λ が大きいほど一手は短くなります。" : ""}
+      </p>
+    </figure>
+  );
+}
+
+const HIST_LOW = -2.6;
+const HIST_HIGH = 1.7;
+
+function HistoryPanel({ run, start, done, ghost }: { run: Run; start: FitPoint; done: number; ghost: Run | undefined }) {
+  const total = Math.max(run.trials.length, ghost?.trials.length ?? 0, 4);
+  const bounds: Bounds = { xMin: -0.5, xMax: total + 0.6, yMin: HIST_LOW, yMax: HIST_HIGH };
+  const { ref, viewport } = useStageViewport(bounds, 0.5);
+  const scale = useMemo(() => makeScale(viewport), [viewport]);
+  const level = (value: number) => clamp(Math.log10(Math.max(value, 1e-12)), HIST_LOW + 0.05, HIST_HIGH - 0.05);
+  const history = costHistory(run, start, done);
+  const linePoints = history.current.map((point) => [point.n, level(point.cost)] as const);
+  const ghostPoints = ghost ? costHistory(ghost, start, ghost.trials.length).current.map((point) => [point.n, level(point.cost)] as const) : [];
+  const peak = ghostPoints.reduce<readonly [number, number] | undefined>((best, point) => (best === undefined || point[1] > best[1] ? point : best), undefined);
+  const ticks: Array<[number, string]> = [[-2, "0.01"], [-1, "0.1"], [0, "1"], [1, "10"]];
+  const cross = (x: number, y: number) => `M${scale.px(x) - 6} ${scale.py(y) - 6}L${scale.px(x) + 6} ${scale.py(y) + 6}M${scale.px(x) - 6} ${scale.py(y) + 6}L${scale.px(x) + 6} ${scale.py(y) - 6}`;
+  return (
+    <figure className="ex-panel">
+      <figcaption className="ex-panel-title">費用の履歴（対数目盛り）</figcaption>
+      <div className="ex-canvas" ref={ref}>
+        <svg className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+          <rect className="ex-ground" height={viewport.height} width={viewport.width} />
+          <g className="ex-axes">
+            {ticks.map(([v, label]) => (
+              <g key={v}>
+                <line x1={0} x2={viewport.width} y1={scale.py(v)} y2={scale.py(v)} />
+                <text x={6} y={scale.py(v) - 4}>{label}</text>
+              </g>
+            ))}
+            {Array.from({ length: total + 1 }, (_, n) => n).map((n) => (
+              <text key={n} textAnchor="middle" x={scale.px(n)} y={viewport.height - 6}>{n}</text>
+            ))}
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>試行 n</text>
+          </g>
+          {ghostPoints.length > 1 && (
+            <g className="gl-ghost">
+              <path d={polylinePath(ghostPoints, scale)} fill="none" />
+              {peak && <text x={scale.px(peak[0]) + 10} y={scale.py(peak[1]) + 4}>GN</text>}
+            </g>
+          )}
+          {linePoints.length > 1 && <path className="gl-hist-line" d={polylinePath(linePoints, scale)} fill="none" />}
+          {history.rejected.map((point) => (
+            <g className="gl-reject" key={`x${point.n}`}>
+              <line x1={scale.px(point.n)} x2={scale.px(point.n)} y1={scale.py(level(history.current[point.n].cost))} y2={scale.py(level(point.cost))} />
+              <path d={cross(point.n, level(point.cost))} />
+            </g>
+          ))}
+          {linePoints.map(([n, y]) => (
+            <circle className="gl-hist-dot" cx={scale.px(n)} cy={scale.py(y)} key={`c${n}`} r={4.5} />
+          ))}
+        </svg>
+      </div>
+      <p className="ex-hint">
+        橙の線は、受け入れた点の費用です。捨てた試行の間は水平のままで、赤い ✕ がその試行の行き先の費用です。{ghost ? "灰色の線が Gauss–Newton法 の費用です。" : ""}
       </p>
     </figure>
   );

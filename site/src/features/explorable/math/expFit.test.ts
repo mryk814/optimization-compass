@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { alongStep, cost, pointAfter, runTrials, trialAt } from "./expFit";
+import { acceptedPath, alongStep, cost, costHistory, pointAfter, runTrials, trialAt } from "./expFit";
 
 // Expected values come from numpy / scipy (scratchpad gnlm_ref.py), the same arithmetic as the articles.
 const FAR = { a: 1, k: 0.1 };
@@ -92,5 +92,62 @@ describe("exponential fit running example", () => {
     const one = trialAt(FAR, 1000, "lm")!;
     expect(one.gradDir.a).toBeCloseTo(0.84455, 4);
     expect(one.gradDir.k).toBeCloseTo(-0.53548, 4);
+  });
+
+  it("LM trial 2 along its step: the linear model ends at 0.2707 while the true cost dips to 0.0227 near s=0.57 and ends at 27.19", () => {
+    const two = runTrials("lm", FAR, 0.01).trials[1];
+    expect(alongStep(two, 1).model).toBeCloseTo(0.2707, 4);
+    expect(alongStep(two, 1).actual).toBeCloseTo(27.1935, 4);
+    expect(alongStep(two, 0.568).actual).toBeCloseTo(0.0227, 3);
+    // the true cost comes back up to the starting cost at s≈0.78: only about three quarters of the step is safe
+    expect(alongStep(two, 0.784).actual).toBeCloseTo(two.costBefore, 1);
+  });
+
+  it("the first trial's angle to steepest descent is 48.06° at λ=0.001 and 48.03° at the default λ=0.01", () => {
+    expect(trialAt(FAR, 0.001, "lm")!.descentAngleDeg).toBeCloseTo(48.06, 2);
+    expect(trialAt(FAR, 0.01, "lm")!.descentAngleDeg).toBeCloseTo(48.03, 2);
+  });
+
+  it("the damping-free steps scale by μ/(μ+λ) along the eigen-directions of JᵀJ (0.970 and 3.590 at the trial 2–4 point)", () => {
+    const point = runTrials("lm", FAR, 0.01).trials[1].from;
+    const step = (lambda: number) => trialAt(point, lambda, "lm")!.stepLength;
+    expect(step(0)).toBeCloseTo(1.2002, 3);
+    expect(step(0.0033333) / step(0)).toBeCloseTo(0.9993, 3);
+    expect(step(0.33333) / step(0)).toBeCloseTo(0.9148, 3);
+    expect(step(3.3333)).toBeCloseTo(0.6221, 3);
+  });
+
+  it("LM from the near start never rejects and ends in 5 trials with ρ between 0.975 and 1.010", () => {
+    const run = runTrials("lm", NEAR, 0.01);
+    expect(run.trials).toHaveLength(5);
+    expect(run.trials.every((t) => t.accepted)).toBe(true);
+    const rho = run.trials.map((t) => t.rho);
+    expect(Math.min(...rho)).toBeCloseTo(0.975, 3);
+    expect(Math.max(...rho)).toBeCloseTo(1.01, 2);
+  });
+
+  it("acceptedPath lists the start and each accepted candidate; the Gauss–Newton path overshoots to k=−0.025", () => {
+    const gn = runTrials("gn", FAR, 0);
+    const path = acceptedPath(gn, FAR);
+    expect(path).toHaveLength(gn.trials.length + 1);
+    expect(path[2].k).toBeCloseTo(-0.0253, 4);
+    expect(path[2].a).toBeCloseTo(5.0331, 4);
+    const lm = runTrials("lm", FAR, 0.01);
+    expect(acceptedPath(lm, FAR, 5)).toHaveLength(3);
+  });
+
+  it("costHistory keeps the accepted line flat across rejections and lists the rejected costs apart", () => {
+    const lm = runTrials("lm", FAR, 0.01);
+    const history = costHistory(lm, FAR, 5);
+    expect(history.current.map((p) => p.n)).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(history.current[1].cost).toBeCloseTo(2.854553, 6);
+    expect(history.current[2].cost).toBeCloseTo(2.854553, 6);
+    expect(history.current[4].cost).toBeCloseTo(2.854553, 6);
+    expect(history.current[5].cost).toBeCloseTo(0.085499, 6);
+    expect(history.rejected.map((p) => p.n)).toEqual([2, 3, 4]);
+    expect(history.rejected.map((p) => Number(p.cost.toFixed(4)))).toEqual([27.1935, 25.2307, 12.3648]);
+    const gn = costHistory(runTrials("gn", FAR, 0), FAR, 3);
+    expect(gn.rejected).toHaveLength(0);
+    expect(gn.current[2].cost).toBeCloseTo(29.3211, 4);
   });
 });
