@@ -4283,7 +4283,7 @@ def _assignment_grid(
             )
             parts.append(_text(x + cell_w / 2, y + 29, str(values[i][j]), "", "middle"))
             if mark:
-                parts.append(_text(x + 10, y + 21, mark, "tick"))
+                parts.append(_text(x + 9, y + 21, mark, "tick"))
     return parts
 
 
@@ -4306,7 +4306,7 @@ def _assignment_greedy_svg() -> str:
     columns = [f"通報{name}" for name in ASSIGN_COLS]
     parts.append(_text(20, 66, "① 近い組から決める"))
     parts.append(_text(420, 66, f"合計 {sum(greedy_times)} 分", "note", "end"))
-    order = {cell: "①②③"[k] for k, cell in enumerate(greedy)}
+    order = {cell: str(k + 1) for k, cell in enumerate(greedy)}
     parts += _assignment_grid(76, ASSIGN_TIMES, order, columns, ASSIGN_ROWS)
     parts.append(_text(20, 296, "② 合計が最小の割当"))
     parts.append(_text(420, 296, f"合計 {best_total} 分", "note", "end"))
@@ -4405,7 +4405,7 @@ def _eig_fence_svg() -> str:
         "塀の向きを変えると、距離の二乗和が波打つ",
         (
             f"5本の杭と、重心 ({cx:g}, {cy:g}) を通る直線。"
-            f"傾き2の直線（向き {best:.1f}°）で、"
+            f"傾き{math.tan(math.radians(best)):g}の直線（向き {best:.1f}°）で、"
             f"杭から直線への垂直な距離の二乗和が最小の {lower:g} になる。"
             f"二乗和は向きとともに {lower:g} と {upper:g} の間を波打ち、"
             f"縦のずれで当てはめた傾き1の直線（45°）では {vertical_sum:g}。"
@@ -4530,7 +4530,7 @@ def _eig_condition_svg() -> str:
         parts.append(_text(ox, 300, n_label, "", "middle"))
         parts.append(_text(ox, 324, mn_label, "note", "middle"))
     parts.append(_text(20, 64, "紺：長さ1の向き n（円の上）　橙：M n", "tick"))
-    parts.append(_text(20, 350, "同じ向きのとき、円に沿って回しても二乗和が減らない", "tick"))
+    parts.append(_text(20, 350, "同じ向きのとき、円に沿って回す向きの傾きが0", "tick"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
 

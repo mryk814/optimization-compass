@@ -8375,11 +8375,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S055",
           "target_type": "source"
         },
