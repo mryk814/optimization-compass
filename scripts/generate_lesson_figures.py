@@ -4214,6 +4214,447 @@ def _pa002_circuit_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Assignment (content/concepts/assignment-matching.md): three ambulances, three calls, minutes.
+ASSIGN_TIMES = ((3, 2, 5), (10, 3, 8), (14, 5, 9))
+ASSIGN_ROWS = ("救急車1", "救急車2", "救急車3")
+ASSIGN_COLS = ("A", "B", "C")
+# A row value u and a column value v with u_i + v_j <= time everywhere (the dual certificate).
+ASSIGN_U = (1, 3, 5)
+ASSIGN_V = (2, 0, 4)
+
+
+def assignment_total(columns: Sequence[int]) -> int:
+    return sum(ASSIGN_TIMES[i][j] for i, j in enumerate(columns))
+
+
+def assignment_all() -> list[tuple[int, int, tuple[int, ...]]]:
+    """Every one-to-one assignment as (total, longest single trip, columns), cheapest first."""
+    rows = []
+    for columns in itertools.permutations(range(len(ASSIGN_TIMES))):
+        longest = max(ASSIGN_TIMES[i][j] for i, j in enumerate(columns))
+        rows.append((assignment_total(columns), longest, columns))
+    return sorted(rows)
+
+
+def assignment_greedy() -> list[tuple[int, int]]:
+    """Take the shortest remaining (ambulance, call) pair until every ambulance is sent."""
+    free_rows, free_cols = set(range(3)), set(range(3))
+    picks = []
+    while free_rows:
+        i, j = min(
+            ((i, j) for i in free_rows for j in free_cols),
+            key=lambda cell: (ASSIGN_TIMES[cell[0]][cell[1]], cell),
+        )
+        picks.append((i, j))
+        free_rows.remove(i)
+        free_cols.remove(j)
+    return picks
+
+
+def assignment_reduced() -> list[list[int]]:
+    """time - u_i - v_j: never negative, and 0 on the cells of the cheapest assignment."""
+    return [[ASSIGN_TIMES[i][j] - ASSIGN_U[i] - ASSIGN_V[j] for j in range(3)] for i in range(3)]
+
+
+def _assignment_grid(
+    top: float,
+    values: Sequence[Sequence[int]],
+    chosen: dict[tuple[int, int], str],
+    column_labels: Sequence[str],
+    row_labels: Sequence[str],
+) -> list[str]:
+    """A 3x3 table: column headers at `top`, rows below. Chosen cells are filled orange."""
+    left, cell_w, cell_h = 168, 84, 46
+    parts = []
+    for j, label in enumerate(column_labels):
+        parts.append(_text(left + cell_w * (j + 0.5), top + 18, label, "", "middle"))
+    for i, label in enumerate(row_labels):
+        y = top + 28 + cell_h * i
+        parts.append(_text(left - 12, y + 29, label, "", "end"))
+        for j in range(3):
+            x = left + cell_w * j
+            mark = chosen.get((i, j))
+            fill = "#f3d2b5" if mark is not None else "#ffffff"
+            stroke = UPDATE if mark is not None else GRID
+            width = 2.5 if mark is not None else 1
+            parts.append(
+                f'<rect x="{x + 3}" y="{y + 3:.1f}" width="{cell_w - 6}" height="{cell_h - 6}" '
+                f'rx="6" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>'
+            )
+            parts.append(_text(x + cell_w / 2, y + 29, str(values[i][j]), "", "middle"))
+            if mark:
+                parts.append(_text(x + 10, y + 21, mark, "tick"))
+    return parts
+
+
+def _assignment_greedy_svg() -> str:
+    greedy = assignment_greedy()
+    greedy_times = [ASSIGN_TIMES[i][j] for i, j in greedy]
+    best_total, best_longest, best = assignment_all()[0]
+    best_times = [ASSIGN_TIMES[i][j] for i, j in enumerate(best)]
+    parts = _open(
+        "近い組から決めると、合計が延びる",
+        (
+            "救急車3台と通報A・B・Cの到着時間（分）の表を2枚並べたもの。"
+            f"① 近い組から決めると {'、'.join(map(str, greedy_times))} 分を選び、"
+            f"合計は {sum(greedy_times)} 分。"
+            f"② 合計が最小の割当は {'、'.join(map(str, best_times))} 分を選び、"
+            f"合計は {best_total} 分。どちらも各行・各列から一つずつ選んでいる。"
+        ),
+        520,
+    )
+    columns = [f"通報{name}" for name in ASSIGN_COLS]
+    parts.append(_text(20, 66, "① 近い組から決める"))
+    parts.append(_text(420, 66, f"合計 {sum(greedy_times)} 分", "note", "end"))
+    order = {cell: "①②③"[k] for k, cell in enumerate(greedy)}
+    parts += _assignment_grid(76, ASSIGN_TIMES, order, columns, ASSIGN_ROWS)
+    parts.append(_text(20, 296, "② 合計が最小の割当"))
+    parts.append(_text(420, 296, f"合計 {best_total} 分", "note", "end"))
+    parts += _assignment_grid(
+        306, ASSIGN_TIMES, {(i, j): "" for i, j in enumerate(best)}, columns, ASSIGN_ROWS
+    )
+    parts.append(_text(20, 496, f"① {' + '.join(map(str, greedy_times))} = {sum(greedy_times)}"))
+    parts.append(
+        _text(
+            420,
+            496,
+            f"② {' + '.join(map(str, best_times))} = {best_total}",
+            "note",
+            "end",
+        )
+    )
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _assignment_dual_svg() -> str:
+    reduced = assignment_reduced()
+    best_total, _, best = assignment_all()[0]
+    bound = sum(ASSIGN_U) + sum(ASSIGN_V)
+    parts = _open(
+        "どの割当も15分を下回らない理由",
+        (
+            f"救急車ごとの値 u=({', '.join(map(str, ASSIGN_U))}) と、"
+            f"通報ごとの値 v=({', '.join(map(str, ASSIGN_V))}) を到着時間から引いた表。"
+            "すべてのマスが0以上で、合計が最小の割当の3マスは0。"
+            f"そのため、どの割当の合計も u と v の合計 {bound} 分以上になる。"
+        ),
+        360,
+    )
+    columns = [f"{name} v={value}" for name, value in zip(ASSIGN_COLS, ASSIGN_V, strict=True)]
+    rows = [f"{name} u={value}" for name, value in zip(ASSIGN_ROWS, ASSIGN_U, strict=True)]
+    parts.append(_text(20, 64, "時間 − u − v"))
+    parts += _assignment_grid(74, reduced, {(i, j): "" for i, j in enumerate(best)}, columns, rows)
+    parts.append(_text(20, 266, f"u の合計 {sum(ASSIGN_U)} ＋ v の合計 {sum(ASSIGN_V)} = {bound}"))
+    parts.append(_text(20, 292, "どの割当も各行・各列を一度ずつ使うので、"))
+    parts.append(_text(20, 316, f"合計 ＝ {bound} ＋ 選んだマスの値 ≧ {bound}"))
+    parts.append(_text(20, 344, f"橙の3マスは0なので、合計 {best_total} 分が最小", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Eigenvalue problem (content/concepts/eigenvalue-problem.md): five stakes along a straight
+# fence, read off a map with errors in both coordinates. The fence's unit normal n minimises
+# the sum of squared perpendicular distances n^T M n, M = sum of (p - mean)(p - mean)^T.
+EIG_POINTS = ((3.0, 2.0), (3.0, 3.0), (4.0, 1.0), (5.0, 4.0), (5.0, 5.0))
+
+
+def eig_centre() -> tuple[float, float]:
+    count = len(EIG_POINTS)
+    return (sum(p[0] for p in EIG_POINTS) / count, sum(p[1] for p in EIG_POINTS) / count)
+
+
+def eig_scatter() -> tuple[float, float, float]:
+    """(a, b, c) of the centred scatter matrix [[a, b], [b, c]]."""
+    cx, cy = eig_centre()
+    a = sum((x - cx) ** 2 for x, _ in EIG_POINTS)
+    b = sum((x - cx) * (y - cy) for x, y in EIG_POINTS)
+    c = sum((y - cy) ** 2 for _, y in EIG_POINTS)
+    return a, b, c
+
+
+def eig_values() -> tuple[float, float]:
+    a, b, c = eig_scatter()
+    mean, radius = (a + c) / 2, math.hypot((a - c) / 2, b)
+    return mean - radius, mean + radius
+
+
+def eig_perpendicular_sum(angle_deg: float) -> float:
+    """Sum of squared perpendicular distances to the line through the centre at this angle."""
+    a, b, c = eig_scatter()
+    theta = math.radians(angle_deg)
+    nx, ny = -math.sin(theta), math.cos(theta)  # unit normal of the line
+    return a * nx * nx + 2 * b * nx * ny + c * ny * ny
+
+
+def eig_best_angle() -> float:
+    """Direction of the fitted line in degrees in [0, 180): the eigenvector of the larger value."""
+    a, b, _ = eig_scatter()
+    _, upper = eig_values()
+    return math.degrees(math.atan2(upper - a, b)) % 180
+
+
+def _eig_fence_svg() -> str:
+    lower, upper = eig_values()
+    best = eig_best_angle()
+    cx, cy = eig_centre()
+    a, b, _ = eig_scatter()
+    vertical_angle = math.degrees(math.atan(b / a))  # the y-on-x least-squares line
+    vertical_sum = eig_perpendicular_sum(vertical_angle)
+    parts = _open(
+        "塀の向きを変えると、距離の二乗和が波打つ",
+        (
+            f"5本の杭と、重心 ({cx:g}, {cy:g}) を通る直線。"
+            f"傾き2の直線（向き {best:.1f}°）で、"
+            f"杭から直線への垂直な距離の二乗和が最小の {lower:g} になる。"
+            f"二乗和は向きとともに {lower:g} と {upper:g} の間を波打ち、"
+            f"縦のずれで当てはめた傾き1の直線（45°）では {vertical_sum:g}。"
+        ),
+        652,
+    )
+    unit = 34
+    px = _scale(1.0, 7.0, 220 - 3 * unit, 220 + 3 * unit)
+    py = _scale(0.0, 6.0, 288, 288 - 6 * unit)
+    parts.append(_text(20, 64, "① 杭の位置と塀の線"))
+    parts.append(
+        f'<rect x="{px(1):.1f}" y="{py(6):.1f}" width="{6 * unit}" height="{6 * unit}" '
+        f'fill="#ffffff" stroke="{GRID}"/>'
+    )
+    for tick in range(1, 8):
+        parts.append(_text(px(tick), py(0) + 20, str(tick), "tick", "middle"))
+    for tick in range(0, 7, 2):
+        parts.append(_text(px(1) - 8, py(tick) + 5, str(tick), "tick", "end"))
+    dx, dy = math.cos(math.radians(best)), math.sin(math.radians(best))
+    span = 3.0 / dy
+    parts.append(
+        _polyline(
+            [(px(cx - span * dx), py(cy - span * dy)), (px(cx + span * dx), py(cy + span * dy))],
+            LINE,
+            3,
+        )
+    )
+    for x, y in EIG_POINTS:
+        along = (x - cx) * dx + (y - cy) * dy
+        fx, fy = cx + along * dx, cy + along * dy
+        parts.append(
+            f'<path d="M{px(x):.1f} {py(y):.1f}L{px(fx):.1f} {py(fy):.1f}" '
+            f'stroke="{UPDATE}" stroke-width="3"/>'
+        )
+        parts.append(f'<circle cx="{px(x):.1f}" cy="{py(y):.1f}" r="6" fill="{POINT}"/>')
+    parts.append(
+        f'<circle cx="{px(cx):.1f}" cy="{py(cy):.1f}" r="5" fill="#ffffff" stroke="{INK}" '
+        'stroke-width="2"/>'
+    )
+    parts.append(_text(330, 120, f"傾き {math.tan(math.radians(best)):g}", "note"))
+    parts.append(_text(330, 144, f"二乗和 {lower:g}", "note"))
+    parts.append(_text(330, 190, "○ 重心", "tick"))
+    parts.append(_text(330, 212, f"({cx:g}, {cy:g})", "tick"))
+
+    parts.append(_text(20, 350, "② 線の向きと距離の二乗和"))
+    gx = _scale(0.0, 180.0, 60, 410)
+    gy = _scale(0.0, 14.0, 560, 380)
+    parts.append(f'<path d="M60 380V560H410" fill="none" stroke="{GRID}"/>')
+    for angle in (0, 45, 90, 135, 180):
+        parts.append(_text(gx(angle), 580, f"{angle}°", "tick", "middle"))
+    for value in (0, 4, 8, 12):
+        parts.append(_text(52, gy(value) + 5, str(value), "tick", "end"))
+    parts.append(
+        _polyline(
+            [(gx(angle), gy(eig_perpendicular_sum(angle))) for angle in range(0, 181, 2)],
+            LINE,
+            3,
+        )
+    )
+    worst = (best + 90) % 180
+    marks = (
+        (best, lower, UPDATE, f"{best:.1f}° で最小 {lower:g}", "start", 10, 26),
+        (worst, upper, MUTED, f"{worst:.1f}° で最大 {upper:g}", "end", -10, 2),
+        (vertical_angle, vertical_sum, POINT, "", "end", 0, 0),
+    )
+    for angle, value, color, label, anchor, shift, lift in marks:
+        parts.append(f'<circle cx="{gx(angle):.1f}" cy="{gy(value):.1f}" r="6" fill="{color}"/>')
+        parts.append(_text(gx(angle) + shift, gy(value) + lift, label, "tick", anchor))
+    parts.append(_text(20, 612, f"紺の点：45°（縦のずれで当てはめた直線）で {vertical_sum:g}"))
+    parts.append(_text(20, 636, f"二乗和は {lower:g} と {upper:g} の間を行き来する", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _eig_condition_svg() -> str:
+    """Two unit normals n and the arrows M n: parallel only at the eigenvector."""
+    a, b, c = eig_scatter()
+    lower, _ = eig_values()
+    best = eig_best_angle()
+    normal_best = best - 90
+    parts = _open(
+        "最小の向きでは、M n が n と同じ向きになる",
+        (
+            f"長さ1の向き n と、行列 M=[[{a:g},{b:g}],[{b:g},{c:g}]] を掛けた M n の矢印。"
+            f"n=(1,0) では M n=({a:g},{b:g}) で、n と向きが違う。"
+            f"二乗和が最小の向き n=(2,−1)/√5 では M n={lower:g}n で、同じ向きを指す。"
+        ),
+        360,
+    )
+    centres = ((120.0, 190.0), (320.0, 190.0))
+    scale = 14.0
+    cases = (
+        (0.0, "n=(1, 0)", f"M n=({a:g}, {b:g})"),
+        (normal_best, "n=(2, −1)/√5", f"M n={lower:g} n"),
+    )
+    parts.append(
+        "<defs>"
+        f'<marker id="eig-head-n" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" '
+        f'markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{POINT}"/></marker>'
+        f'<marker id="eig-head-m" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" '
+        f'markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{UPDATE}"/></marker>'
+        "</defs>"
+    )
+    for (ox, oy), (angle, n_label, mn_label) in zip(centres, cases, strict=True):
+        theta = math.radians(angle)
+        nx, ny = math.cos(theta), math.sin(theta)
+        mx, my = a * nx + b * ny, b * nx + c * ny
+        radius = 4 * scale
+        parts.append(
+            f'<circle cx="{ox}" cy="{oy}" r="{radius}" fill="none" stroke="{GRID}" '
+            'stroke-width="1.5"/>'
+        )
+        for (vx, vy), color, factor, head in (
+            ((nx, ny), POINT, radius, "n"),
+            ((mx, my), UPDATE, scale, "m"),
+        ):
+            ex, ey = ox + vx * factor, oy - vy * factor
+            parts.append(
+                f'<path d="M{ox} {oy}L{ex:.1f} {ey:.1f}" stroke="{color}" stroke-width="3" '
+                f'marker-end="url(#eig-head-{head})"/>'
+            )
+        parts.append(_text(ox, 300, n_label, "", "middle"))
+        parts.append(_text(ox, 324, mn_label, "note", "middle"))
+    parts.append(_text(20, 64, "紺：長さ1の向き n（円の上）　橙：M n", "tick"))
+    parts.append(_text(20, 350, "同じ向きのとき、円に沿って回しても二乗和が減らない", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Stochastic programming (content/concepts/stochastic-programming.md): lunch boxes made in the
+# morning at 100 yen; any shortage is brought in from a nearby shop at 250 yen each.
+SP_MAKE, SP_BUY = 100, 250
+SP_SCENARIOS = (("雨", 20, 0.3), ("曇り", 40, 0.4), ("晴れ", 80, 0.3))
+
+
+def sp_cost(made: float, demand: float) -> float:
+    return SP_MAKE * made + SP_BUY * max(demand - made, 0.0)
+
+
+def sp_expected(made: float) -> float:
+    return sum(p * sp_cost(made, d) for _, d, p in SP_SCENARIOS)
+
+
+def sp_mean_demand() -> float:
+    return sum(p * d for _, d, p in SP_SCENARIOS)
+
+
+def sp_best() -> tuple[int, float]:
+    """The minimiser over whole boxes (the expected cost is piecewise linear in made)."""
+    return min(((made, sp_expected(made)) for made in range(0, 101)), key=lambda r: r[1])
+
+
+def _sp_cost_svg() -> str:
+    best, best_cost = sp_best()
+    mean = sp_mean_demand()
+    worst = max(d for _, d, _ in SP_SCENARIOS)
+    parts = _open(
+        "天気ごとの費用と、その期待値",
+        (
+            f"朝に作る弁当の数 x（0〜100個）と費用。1個{SP_MAKE}円で作り、"
+            f"足りない分は1個{SP_BUY}円で取り寄せる。"
+            "① 需要が雨20個・曇り40個・晴れ80個の三つの場合の費用の折れ線。"
+            "② 確率0.3・0.4・0.3で重みを付けた期待費用。"
+            f"期待費用は x={best} で最小の {best_cost:g} 円、平均の需要 {mean:g} 個では "
+            f"{sp_expected(mean):g} 円、最大の需要 {worst} 個では {sp_expected(worst):g} 円。"
+        ),
+        622,
+    )
+    px = _scale(0.0, 100.0, 76, 410)
+    for tick in (0, 20, 40, 60, 80, 100):
+        parts.append(_text(px(tick), 300, str(tick), "tick", "middle"))
+        parts.append(_text(px(tick), 584, str(tick), "tick", "middle"))
+    parts.append(_text(20, 64, "① 天気ごとの費用（円）"))
+    py = _scale(0.0, 25000.0, 280, 80)
+    parts.append(f'<path d="M76 80V280H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 10000, 20000):
+        parts.append(
+            _text(68, py(value) + 5, f"{value // 1000}千" if value else "0", "tick", "end")
+        )
+    colors = {"雨": POINT, "曇り": MUTED, "晴れ": UPDATE}
+    for index, (name, demand, _) in enumerate(reversed(SP_SCENARIOS)):
+        points = [(px(x), py(sp_cost(x, demand))) for x in (0, demand, 100)]
+        parts.append(_polyline(points, colors[name], 2.5))
+        y = 104 + 24 * index
+        parts.append(_polyline([(300, y - 5), (322, y - 5)], colors[name], 2.5))
+        parts.append(_text(330, y, f"{name} {demand}個", "tick"))
+    parts.append(_text(20, 340, "② 期待費用（円）"))
+    gy = _scale(6000.0, 12000.0, 564, 364)
+    parts.append(f'<path d="M76 364V564H410" fill="none" stroke="{GRID}"/>')
+    for value in (6000, 8000, 10000, 12000):
+        parts.append(_text(68, gy(value) + 5, f"{value // 1000}千", "tick", "end"))
+    kinks = [0, *sorted(d for _, d, _ in SP_SCENARIOS), 100]
+    parts.append(_polyline([(px(x), gy(sp_expected(x))) for x in kinks], LINE, 3))
+    marks = (
+        (best, UPDATE, f"x={best}：{sp_expected(best):g}", -12, 26),
+        (mean, POINT, f"x={mean:g}：{sp_expected(mean):g}", 14, 26),
+        (worst, MUTED, f"x={worst}：{sp_expected(worst):g}", -12, -12),
+    )
+    for x, color, label, shift, lift in marks:
+        parts.append(
+            f'<circle cx="{px(x):.1f}" cy="{gy(sp_expected(x)):.1f}" r="6" fill="{color}"/>'
+        )
+        anchor = "start" if shift > 0 else "end"
+        parts.append(_text(px(x) + shift, gy(sp_expected(x)) + lift, label, "tick", anchor))
+    parts.append(_text(410, 604, "朝に作る数 x（個）", "tick", "end"))
+    parts.append(_text(20, 604, f"最小は x={best}", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _sp_tree_svg() -> str:
+    """One morning decision shared by every branch; the afternoon decision differs by branch."""
+    best, _ = sp_best()
+    parts = _open(
+        "朝の決定は一つ、午後の対応は天気ごと",
+        (
+            f"朝に作る数 x は天気を知る前に一つだけ決める（例では x={best}）。"
+            "天気が分かった後の取り寄せ数 y は、雨・曇り・晴れの枝ごとに別々に決める。"
+            f"x={best} なら y は雨0・曇り0・晴れ{80 - best}。"
+        ),
+        370,
+    )
+    root = (70.0, 210.0)
+    parts.append(
+        f'<rect x="{root[0] - 50}" y="{root[1] - 34}" width="100" height="68" rx="10" '
+        f'fill="#f3d2b5" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(root[0], root[1] - 6, "朝", "", "middle"))
+    parts.append(_text(root[0], root[1] + 18, f"x={best}", "", "middle"))
+    for index, (name, demand, prob) in enumerate(SP_SCENARIOS):
+        y = 120.0 + 90.0 * index
+        bring = max(demand - best, 0)
+        parts.append(
+            f'<path d="M{root[0] + 50} {root[1]}L250 {y}" stroke="{GRID}" stroke-width="2"/>'
+        )
+        parts.append(_text(185, (root[1] + y) / 2 - 10, f"{prob:g}", "tick", "middle"))
+        parts.append(
+            f'<rect x="250" y="{y - 30}" width="170" height="60" rx="10" fill="#ffffff" '
+            f'stroke="{LINE}" stroke-width="2"/>'
+        )
+        parts.append(_text(262, y - 6, f"{name}：需要 {demand}"))
+        parts.append(_text(262, y + 18, f"取り寄せ y={bring}", "note"))
+    parts.append(_text(20, 64, "天気が分かる前", "tick"))
+    parts.append(_text(420, 64, "天気が分かった後", "tick", "end"))
+    parts.append(_text(20, 358, "線の数字は天気の確率", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -4250,6 +4691,12 @@ def generate_lesson_figures() -> dict[str, str]:
         "high-dimensional-black-box-budget.svg": _pa015_budget_svg(),
         "general-nonsmooth-kink-valley.svg": _pa011_kink_valley_svg(),
         "linear-system-circuit.svg": _pa002_circuit_svg(),
+        "assignment-greedy-optimal.svg": _assignment_greedy_svg(),
+        "assignment-dual-bound.svg": _assignment_dual_svg(),
+        "eigenvalue-fence-direction.svg": _eig_fence_svg(),
+        "eigenvalue-parallel-condition.svg": _eig_condition_svg(),
+        "stochastic-programming-expected-cost.svg": _sp_cost_svg(),
+        "stochastic-programming-two-stage.svg": _sp_tree_svg(),
     }
 
 

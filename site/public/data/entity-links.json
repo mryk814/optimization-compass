@@ -7524,6 +7524,92 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.assignment-matching",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "割当問題・マッチング",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S177",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA030",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.network-flow",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hungarian-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "network-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "割当問題は、人と仕事のような二つの集合を一対一に組み合わせ、組み合わせの費用の合計を最小にする定式化です。変数は0か1ですが、整数条件を外した線形計画でも0と1の答えが返り、行と列に付けた値の合計が、答えが最小であることの証拠になります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.bilevel-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -8273,6 +8359,82 @@
         }
       ],
       "summary": "動力学残差は、離散化した軌道がモデルの時間発展とどれだけずれているかを表す残差で、費用とは別に可行性として追う指標です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.eigenvalue-problem",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "固有値・特異値問題",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S173",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA003",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonconvex-qp-qcqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.so3-se3-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "固有値問題は、長さ1のベクトルの中で二次形式を最小（または最大）にする定式化です。制約の集合が球面なので凸ではありませんが、最小値は対称行列の最小固有値に、答えはその固有ベクトルに一致し、固有値分解や特異値分解で大域的な答えが得られます。"
     },
     {
       "aliases": [],
@@ -11417,6 +11579,97 @@
         }
       ],
       "summary": "大規模確率的ERMは、非常に多くの記録の損失の平均を最小にする定式化です。全件の勾配を毎回計算する代わりに、少数の記録（ミニバッチ）の勾配で係数を更新します。ミニバッチの勾配は全件の勾配を平均として正しく見積もりますが、ばらつきを持つため、最小点の近くでも0になりません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.stochastic-programming",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "確率計画（2段階の確率計画）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S134",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S160",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S163",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S164",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA049",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.chance-risk-contract",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.uncertainty-models",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "確率計画は、不確かな値が分かる前に決めることと、分かった後で対応することを分け、いまの費用と、後の対応にかかる費用の期待値の合計を最小にする定式化です。不確かさを有限個のシナリオで表すと、全シナリオを並べた一つの線形計画として解けます。"
     },
     {
       "aliases": [],
@@ -33974,13 +34227,21 @@
       "summary": "線形方程式に還元。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.eigenvalue-problem"
+      ],
       "canonical_url": "/formulations/PA003",
       "entity_id": "PA003",
       "entity_type": "problem",
       "external_url": null,
       "label": "固有値・特異値問題",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.eigenvalue-problem",
+          "target_type": "content"
+        }
+      ],
       "summary": "固有値・特異値問題。変数=matrix、目的=quadratic、制約=manifold。"
     },
     {
@@ -34556,13 +34817,21 @@
       "summary": "最短路。変数=graph、目的=linear、制約=combinatorial。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.assignment-matching"
+      ],
       "canonical_url": "/formulations/PA030",
       "entity_id": "PA030",
       "entity_type": "problem",
       "external_url": null,
       "label": "割当・matching",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.assignment-matching",
+          "target_type": "content"
+        }
+      ],
       "summary": "割当・matching。変数=binary、目的=linear、制約=combinatorial。"
     },
     {
@@ -35104,13 +35373,21 @@
       "summary": "相補性問題。変数=continuous、目的=general_nonlinear、制約=nonlinear。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.stochastic-programming"
+      ],
       "canonical_url": "/formulations/PA049",
       "entity_id": "PA049",
       "entity_type": "problem",
       "external_url": null,
       "label": "確率計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        }
+      ],
       "summary": "確率計画。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
