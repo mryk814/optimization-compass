@@ -1,14 +1,15 @@
 # Content quality report
 
-- Published concept guides: `66`
-- Meeting the concept floor: `66`
+- Published concept guides: `69`
+- Meeting the concept floor: `69`
 - Below the concept floor: `0`
-- Prose review warnings: `673`
+- Prose review warnings: `707`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
+| `concept.assignment-matching` | 119 | 10293 | 14 | 7 | 0 | pass |
 | `concept.bilevel-optimization` | 129 | 9623 | 15 | 8 | 0 | pass |
 | `concept.bound-constrained-smooth` | 127 | 10653 | 15 | 12 | 0 | pass |
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
@@ -22,6 +23,7 @@
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
 | `concept.discontinuous-simulation` | 141 | 8913 | 12 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
+| `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
@@ -66,6 +68,7 @@
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
+| `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
@@ -82,8 +85,8 @@
 - `prose.choppy`: 6
 - `prose.meta`: 4
 - `prose.work-report`: 15
-- `sentence.commas`: 373
-- `sentence.long`: 66
+- `sentence.commas`: 397
+- `sentence.long`: 76
 
 | Content | Warnings |
 |---|---:|
@@ -106,6 +109,7 @@
 | `cma-es` | 0 |
 | `cobyla` | 8 |
 | `cobyqa` | 3 |
+| `concept.assignment-matching` | 7 |
 | `concept.bilevel-optimization` | 0 |
 | `concept.bound-constrained-smooth` | 0 |
 | `concept.chance-risk-contract` | 0 |
@@ -119,6 +123,7 @@
 | `concept.derivative-free` | 0 |
 | `concept.discontinuous-simulation` | 0 |
 | `concept.dynamics-defect` | 1 |
+| `concept.eigenvalue-problem` | 13 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.failed-simulation` | 0 |
@@ -163,6 +168,7 @@
 | `concept.so3-se3-optimization` | 0 |
 | `concept.spd-matrix-geometry` | 0 |
 | `concept.stochastic-erm` | 0 |
+| `concept.stochastic-programming` | 14 |
 | `concept.time-discretization` | 1 |
 | `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
