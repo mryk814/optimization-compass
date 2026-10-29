@@ -568,11 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 15,
+            "complete": 16,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 98,
+              "in_progress": 97,
               "no_article": 46,
               "stale": 1
             }
@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 43,
+            "complete": 46,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 19,
+              "in_progress": 16,
               "no_article": 16,
               "stale": 2
             }
