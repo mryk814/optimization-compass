@@ -11635,17 +11635,17 @@
         },
         {
           "relation_type": "related_content",
-          "target_id": "admm",
-          "target_type": "content"
-        },
-        {
-          "relation_type": "related_content",
           "target_id": "concept.chance-risk-contract",
           "target_type": "content"
         },
         {
           "relation_type": "related_content",
           "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
           "target_type": "content"
         },
         {
