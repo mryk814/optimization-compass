@@ -95,7 +95,7 @@ def test_portfolio_compare_changes_only_training_risk_treatment() -> None:
     assert comparison.problem_instance_id == PROBLEM_INSTANCE_ID
     assert comparison.benchmark_context_id == "BENCH_PORTFOLIO_CVAR_FIXED_8_4"
     assert len(comparison.changed_factors) == 1
-    assert "risk treatmentだけ" in comparison.changed_factors[0]
+    assert "リスクの扱いだけ" in comparison.changed_factors[0]
     nominal, cvar = comparison.members
     shared_parameter_keys = {
         "uncertainty_model",

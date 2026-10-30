@@ -190,8 +190,8 @@ def test_ec020_comparison_is_an_explicit_non_ranking_pendulum_bridge() -> None:
     assert comparison.benchmark_context_id == "BENCH_PENDULUM_COLLOCATION_MESH_8"
     assert comparison.comparability == "contrast_only"
     assert comparison.ranking_eligible is False
-    assert "bridge" in comparison.formulation_summary
-    assert "同じtrajectoryや実データではなく" in comparison.limitations[0]
+    assert "橋渡し" in comparison.formulation_summary
+    assert "同じ軌道や実データではなく" in comparison.limitations[0]
     assert {member.scenario_id for member in comparison.members} == {
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
