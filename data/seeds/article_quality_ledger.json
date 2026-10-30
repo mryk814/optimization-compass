@@ -352,7 +352,7 @@
     "concept.inner-tolerance-noise": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "fed24074cd8e",
+      "body_sha256": "4a59de612882",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
