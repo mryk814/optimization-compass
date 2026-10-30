@@ -33,4 +33,5 @@ export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<
   "simplex-projection-theta": lazy(() => import("./SimplexProjectionTheta")),
   "sdp-psd-boundary": lazy(() => import("./PsdSliceBoundary")),
   "pde-heat-source-balance": lazy(() => import("./PdeHeatSourceBalance")),
+  "phase-fraction-target": lazy(() => import("./PhaseFractionTarget")),
 };
