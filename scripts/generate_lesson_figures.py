@@ -2194,6 +2194,100 @@ def _so3_paths_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# SO(3) and its Lie algebra (content/concepts/so3-rotation-representation.md): a plane rotation
+# [[a, -b], [b, a]] is the point (a, b). Rotations fill the unit circle, the Lie algebra is the
+# tangent line at I, and exp wraps the line onto the circle by arc length.
+SO2_TICKS = (0.5, 1.0, 1.5, 2.0)
+SO2_SHOWN = 1.0
+
+
+def so2_points(theta: float) -> dict[str, float]:
+    """The tangent point I + theta J and the rotation exp(theta J), with the tangent point's det."""
+    return {
+        "line_a": 1.0,
+        "line_b": theta,
+        "line_det": 1.0 + theta * theta,
+        "exp_a": math.cos(theta),
+        "exp_b": math.sin(theta),
+        "exp_det": math.cos(theta) ** 2 + math.sin(theta) ** 2,
+    }
+
+
+def _so2_circle_svg() -> str:
+    shown = so2_points(SO2_SHOWN)
+    cx, cy, radius = 150.0, 290.0, 100.0
+
+    def at(a: float, b: float) -> tuple[float, float]:
+        return cx + radius * a, cy - radius * b
+
+    parts = _open(
+        "平面の回転は円、リー代数は接線",
+        (
+            "平面の回転行列 [[a, −b], [b, a]] を点 (a, b) で表した図。回転は半径1の円の上に並び、"
+            "単位行列 I は (1, 0)。I での接線の点 I+θJ は円の外にあり、"
+            f"θ={SO2_SHOWN:g} の I+J は ({shown['line_a']:g}, {shown['line_b']:g})、"
+            f"行列式 {shown['line_det']:g}。exp(θJ) は接線を円に巻き付けた点で、"
+            f"θ={SO2_SHOWN:g} の exp(J) は ({shown['exp_a']:.3f}, {shown['exp_b']:.3f})、"
+            f"I からの弧の長さは {SO2_SHOWN:g}。"
+            "目盛り 0.5, 1, 1.5, 2 は接線と円で同じ長さに対応する。"
+        ),
+        520,
+    )
+    parts.append(f'<path d="M30 {cy}H430M{cx} 52V408" stroke="{GRID}"/>')
+    parts.append(_text(430, cy - 8, "a", "tick", "end"))
+    parts.append(_text(cx + 8, 64, "b", "tick"))
+    parts.append(
+        f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{LINE}" stroke-width="2"/>'
+    )
+    top, bottom = at(1.0, 2.25), at(1.0, -0.6)
+    parts.append(
+        f'<path d="M{top[0]:.1f} {top[1]:.1f}V{bottom[1]:.1f}" stroke="{UPDATE}" '
+        'stroke-width="2.5"/>'
+    )
+    parts.append(_text(top[0] + 10, top[1] + 6, "接線 θJ", "", "start"))
+    arc_end = at(shown["exp_a"], shown["exp_b"])
+    parts.append(
+        f'<path d="M{at(1.0, 0.0)[0]:.1f} {cy:.1f}A{radius} {radius} 0 0 0 '
+        f'{arc_end[0]:.2f} {arc_end[1]:.2f}" fill="none" stroke="{POINT}" stroke-width="5"/>'
+    )
+    for theta in SO2_TICKS:
+        point = so2_points(theta)
+        lx, ly = at(point["line_a"], point["line_b"])
+        ex, ey = at(point["exp_a"], point["exp_b"])
+        parts.append(f'<path d="M{lx - 6:.1f} {ly:.1f}H{lx + 6:.1f}" stroke="{UPDATE}"/>')
+        parts.append(_text(lx + 12, ly + 5, f"{theta:g}", "tick"))
+        parts.append(f'<circle cx="{ex:.2f}" cy="{ey:.2f}" r="3.5" fill="{POINT}"/>')
+        ox, oy = at(0.8 * point["exp_a"], 0.8 * point["exp_b"])
+        parts.append(_text(ox, oy + 5, f"{theta:g}", "tick", "middle"))
+    ix, iy = at(1.0, 0.0)
+    parts.append(f'<circle cx="{ix}" cy="{iy}" r="6" fill="{INK}"/>')
+    parts.append(_text(ix + 12, iy + 22, "I", ""))
+    lx, ly = at(shown["line_a"], shown["line_b"])
+    parts.append(
+        f'<circle cx="{lx}" cy="{ly}" r="7" fill="#f3d2b5" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(lx + 32, ly + 5, "I+J"))
+    parts.append(
+        f'<circle cx="{arc_end[0]:.2f}" cy="{arc_end[1]:.2f}" r="7" fill="{POINT}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    label = at(1.27 * shown["exp_a"], 1.27 * shown["exp_b"])
+    parts.append(_text(label[0], label[1], "exp(J)", "", "middle"))
+    parts.append(_text(20, 438, "点 (a, b) は回転行列 [a −b; b a] を表す"))
+    parts.append(_text(20, 464, "接線の上は自由に動けるが、円の外（回転でない）"))
+    parts.append(_text(20, 490, "exp は接線を円に巻き付ける：長さ θ → θ rad 回す"))
+    parts.append(
+        _text(
+            20,
+            514,
+            f"θ={SO2_SHOWN:g}：I+J は行列式 {shown['line_det']:g}、exp(J) は弧の長さ {SO2_SHOWN:g}",
+            "note",
+        )
+    )
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 # Neural network training (content/concepts/neural-network-training.md): the smallest network
 # h(x) = v tanh(u x), four steering readings, mean squared error, full-batch gradient descent.
 NN_X = (-2.0, -1.0, 1.0, 2.0)
@@ -4654,6 +4748,487 @@ def _sp_tree_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Robust optimization (content/concepts/robust-optimization.md): ten kilograms of nitrogen
+# from bags of chemical fertilizer (A) and compost (B), whose nitrogen per bag is only known
+# to lie in a range. At most eight bags fit on the truck.
+RO_COST = (3.0, 1.2)  # thousand yen per bag
+RO_MEAN = (2.0, 1.0)  # kg of nitrogen per bag, the middle of the recorded range
+RO_HALF = (0.2, 0.5)  # half-width of the recorded range
+RO_NEED, RO_CAP = 10.0, 8.0
+
+
+def ro_coefficients(k: float) -> tuple[float, float]:
+    """The low corner of the range shrunk to k times its recorded half-width."""
+    return (RO_MEAN[0] - k * RO_HALF[0], RO_MEAN[1] - k * RO_HALF[1])
+
+
+def ro_solve(k: float) -> tuple[tuple[float, float], float]:
+    """min c'x s.t. a(k)'x >= need, x1 + x2 <= cap, x >= 0, by enumerating the vertices."""
+    a = ro_coefficients(k)
+    lines = (  # (p, q, r) for p x1 + q x2 = r
+        (a[0], a[1], RO_NEED),
+        (1.0, 1.0, RO_CAP),
+        (1.0, 0.0, 0.0),
+        (0.0, 1.0, 0.0),
+    )
+    best: tuple[tuple[float, float], float] | None = None
+    for (p1, q1, r1), (p2, q2, r2) in itertools.combinations(lines, 2):
+        det = p1 * q2 - p2 * q1
+        if abs(det) < 1e-12:
+            continue
+        x = ((r1 * q2 - r2 * q1) / det, (p1 * r2 - p2 * r1) / det)
+        feasible = (
+            min(x) >= -1e-9
+            and x[0] + x[1] <= RO_CAP + 1e-9
+            and a[0] * x[0] + a[1] * x[1] >= RO_NEED - 1e-9
+        )
+        cost = RO_COST[0] * x[0] + RO_COST[1] * x[1]
+        if feasible and (best is None or cost < best[1] - 1e-12):
+            best = (x, cost)
+    assert best is not None
+    return best
+
+
+def ro_content(x: Sequence[float], a: Sequence[float]) -> float:
+    return a[0] * x[0] + a[1] * x[1]
+
+
+def ro_shortfall_probability(x: Sequence[float]) -> float:
+    """P(a'x < need) when a is uniform on the recorded box: area of the clipped box / box area."""
+    low = ro_coefficients(1.0)
+    high = (RO_MEAN[0] + RO_HALF[0], RO_MEAN[1] + RO_HALF[1])
+    box = [(low[0], low[1]), (high[0], low[1]), (high[0], high[1]), (low[0], high[1])]
+
+    def gap(point: tuple[float, float]) -> float:
+        return RO_NEED - ro_content(x, point)
+
+    kept: list[tuple[float, float]] = []
+    for p, q in zip(box, box[1:] + box[:1], strict=True):
+        if gap(p) > 0:
+            kept.append(p)
+        if (gap(p) > 0) != (gap(q) > 0):
+            s = gap(p) / (gap(p) - gap(q))
+            kept.append((p[0] + s * (q[0] - p[0]), p[1] + s * (q[1] - p[1])))
+    if len(kept) < 3:
+        return 0.0
+    area = 0.5 * abs(
+        sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(kept, kept[1:] + kept[:1], strict=True))
+    )
+    return area / (4 * RO_HALF[0] * RO_HALF[1])
+
+
+def ro_switch() -> float:
+    """The range factor k at which the cheapest plan stops using compost (bisection)."""
+    low, high = 0.0, 1.0
+    for _ in range(200):
+        mid = (low + high) / 2
+        low, high = (mid, high) if ro_solve(mid)[0][1] > 1e-9 else (low, mid)
+    return (low + high) / 2
+
+
+def _ro_number(value: float, digits: int = 2) -> str:
+    return f"{round(value, digits):g}"
+
+
+def _ro_box_svg() -> str:
+    nominal, nominal_cost = ro_solve(0.0)
+    robust, robust_cost = ro_solve(1.0)
+    worst = ro_coefficients(1.0)
+    parts = _open(
+        "含有量の範囲と、袋数の選び方",
+        (
+            "① 1袋あたりの窒素の範囲：化成肥料1.8〜2.2kg、堆肥0.5〜1.5kg。中央は (2, 1)、"
+            "どちらも少ない角は (1.8, 0.5)。"
+            "② 袋数の平面：化成肥料 x₁ と堆肥 x₂。中央の含有量で窒素10kgの線、"
+            "少ない角の含有量で窒素10kgの線、8袋の線。"
+            f"中央の含有量で最も安い (2, 6) は{_ro_number(nominal_cost)}千円だが、"
+            f"少ない角では窒素{_ro_number(ro_content(nominal, worst))}kg。"
+            f"範囲のどこでも10kgを守る最も安い組み合わせは"
+            f"({_ro_number(robust[0])}, 0)で{_ro_number(robust_cost)}千円。"
+        ),
+        660,
+    )
+    parts.append(_text(20, 64, "① 1袋あたりの窒素（kg）の範囲"))
+    ax = _scale(1.7, 2.3, 96, 400)
+    ay = _scale(0.3, 1.7, 236, 84)
+    parts.append(f'<path d="M96 84V236H400" fill="none" stroke="{GRID}"/>')
+    for value in (1.8, 2.0, 2.2):
+        parts.append(_text(ax(value), 256, f"{value:g}", "tick", "middle"))
+    for value in (0.5, 1.0, 1.5):
+        parts.append(_text(88, ay(value) + 5, f"{value:g}", "tick", "end"))
+    parts.append(_text(400, 280, "化成肥料 a₁", "tick", "end"))
+    parts.append(_text(104, 100, "堆肥 a₂", "tick"))
+    lo, hi = ro_coefficients(1.0), ro_coefficients(-1.0)
+    parts.append(
+        f'<rect x="{ax(lo[0]):.1f}" y="{ay(hi[1]):.1f}" width="{ax(hi[0]) - ax(lo[0]):.1f}" '
+        f'height="{ay(lo[1]) - ay(hi[1]):.1f}" fill="#e3ece6" stroke="{LINE}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<circle cx="{ax(RO_MEAN[0]):.1f}" cy="{ay(RO_MEAN[1]):.1f}" r="7" fill="{POINT}"/>'
+    )
+    parts.append(_text(ax(RO_MEAN[0]) + 12, ay(RO_MEAN[1]) + 5, "中央 (2, 1)"))
+    parts.append(f'<circle cx="{ax(worst[0]):.1f}" cy="{ay(worst[1]):.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(
+        _text(ax(worst[0]) + 12, ay(worst[1]) - 8, "少ない角 (1.8, 0.5)").replace(
+            "<text ", f'<text style="fill:{UPDATE}" '
+        )
+    )
+
+    parts.append(_text(20, 318, "② 袋数の平面"))
+    parts.append(_text(410, 318, "縦：堆肥 x₂（袋）", "tick", "end"))
+    px = _scale(0.0, 8.0, 76, 410)
+    py = _scale(0.0, 8.0, 584, 348)
+    parts.append(f'<path d="M76 348V584H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 2, 4, 6, 8):
+        parts.append(_text(px(value), 604, str(value), "tick", "middle"))
+        parts.append(_text(68, py(value) + 5, str(value), "tick", "end"))
+    parts.append(_text(410, 628, "化成肥料 x₁（袋）", "tick", "end"))
+    corner = (
+        (RO_NEED - worst[1] * RO_CAP) / (worst[0] - worst[1]),
+        RO_CAP - (RO_NEED - worst[1] * RO_CAP) / (worst[0] - worst[1]),
+    )
+    region = [(RO_NEED / worst[0], 0.0), (RO_CAP, 0.0), corner]
+    joined = " ".join(f"{px(x):.1f},{py(y):.1f}" for x, y in region)
+    parts.append(f'<polygon points="{joined}" fill="#f3d2b5" stroke="none"/>')
+    parts.append(_polyline([(px(0), py(RO_CAP)), (px(RO_CAP), py(0))], MUTED, 2))
+    top = (RO_NEED - RO_MEAN[1] * RO_CAP) / RO_MEAN[0]  # where the mean line meets x2 = 8
+    mean_line = [(px(RO_NEED / RO_MEAN[0]), py(0)), (px(top), py(RO_CAP))]
+    parts.append(_polyline(mean_line, POINT, 2.5))
+    worst_top = (RO_NEED - worst[1] * RO_CAP) / worst[0]  # where it meets x2 = 8
+    worst_line = [(px(RO_NEED / worst[0]), py(0)), (px(worst_top), py(RO_CAP))]
+    parts.append(_polyline(worst_line, UPDATE, 2.5))
+    parts.append(
+        f'<circle cx="{px(nominal[0]):.1f}" cy="{py(nominal[1]):.1f}" r="7" fill="{POINT}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(
+        _text(px(nominal[0]) + 12, py(nominal[1]) - 8, f"(2, 6)：{_ro_number(nominal_cost)}千円")
+    )
+    parts.append(
+        f'<circle cx="{px(robust[0]):.1f}" cy="{py(robust[1]):.1f}" r="7" fill="{UPDATE}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(_text(410, py(7.4), f"橙の点 ({_ro_number(robust[0])}, 0)", anchor="end"))
+    parts.append(_text(410, py(7.4) + 22, f"{_ro_number(robust_cost)}千円", anchor="end"))
+    parts.append(_polyline([(20, 646 - 5), (42, 646 - 5)], POINT, 2.5))
+    parts.append(_text(48, 646, "中央で10kg", "tick"))
+    parts.append(_polyline([(152, 646 - 5), (174, 646 - 5)], UPDATE, 2.5))
+    parts.append(_text(180, 646, "少ない角で10kg", "tick"))
+    parts.append(_polyline([(312, 646 - 5), (334, 646 - 5)], MUTED, 2))
+    parts.append(_text(340, 646, "8袋", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _ro_set_size_svg() -> str:
+    switch = ro_switch()
+    ks = [i / 200 for i in range(201)]
+    parts = _open(
+        "備える範囲の広さと、費用・不足の確率",
+        (
+            "備える範囲を、記録された範囲の k 倍（k=0 は中央の値だけ、k=1 は記録された範囲全体）"
+            "にしたときの最も安い組み合わせ。"
+            f"① 費用は k=0 の{_ro_number(ro_solve(0.0)[1])}千円から k=1 の"
+            f"{_ro_number(ro_solve(1.0)[1])}千円まで増える。"
+            f"k={_ro_number(switch, 3)} で堆肥を使わない組み合わせに切り替わる。"
+            "② 含有量が記録された範囲の中で一様にばらつくと仮定したときの、"
+            "窒素が10kgに届かない確率。"
+            f"k=0 で{_ro_number(100 * ro_shortfall_probability(ro_solve(0.0)[0]), 1)}%、"
+            f"k=1 で0%。切り替わりの直後に確率が上がる。"
+        ),
+        610,
+    )
+    px = _scale(0.0, 1.0, 76, 410)
+    for tick in (0.0, 0.25, 0.5, 0.75, 1.0):
+        parts.append(_text(px(tick), 300, f"{tick:g}", "tick", "middle"))
+        parts.append(_text(px(tick), 564, f"{tick:g}", "tick", "middle"))
+    parts.append(_text(20, 64, "① 最も安い組み合わせの費用（千円）"))
+    cy = _scale(12.0, 17.0, 280, 84)
+    parts.append(f'<path d="M76 84V280H410" fill="none" stroke="{GRID}"/>')
+    for value in (12, 14, 16):
+        parts.append(_text(68, cy(value) + 5, str(value), "tick", "end"))
+    parts.append(_polyline([(px(k), cy(ro_solve(k)[1])) for k in ks], LINE, 3))
+    parts.append(_text(20, 344, "② 窒素が10kgに届かない確率（%）"))
+    qy = _scale(0.0, 60.0, 544, 364)
+    parts.append(f'<path d="M76 364V544H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 25, 50):
+        parts.append(_text(68, qy(value) + 5, str(value), "tick", "end"))
+    before = [k for k in ks if k < switch]
+    after = [k for k in ks if k > switch]
+    for segment in (before, after):
+        points = [(px(k), qy(100 * ro_shortfall_probability(ro_solve(k)[0]))) for k in segment]
+        parts.append(_polyline(points, UPDATE, 3))
+    for top, bottom in ((84, 280), (364, 544)):
+        parts.append(
+            f'<path d="M{px(switch):.1f} {top}V{bottom}" stroke="{MUTED}" stroke-width="1.5" '
+            'stroke-dasharray="5 4"/>'
+        )
+    parts.append(_text(px(switch) + 8, 392, f"k={_ro_number(switch, 3)}", "tick"))
+    parts.append(_text(px(switch) + 8, 412, "ここから堆肥0袋", "tick"))
+    for k, shift, lift, anchor in (
+        (0.0, 10, -10, "start"),
+        (0.45, -10, 22, "end"),
+        (0.5, 10, -10, "start"),
+    ):
+        x, cost = ro_solve(k)
+        probability = 100 * ro_shortfall_probability(x)
+        parts.append(f'<circle cx="{px(k):.1f}" cy="{qy(probability):.1f}" r="5" fill="{INK}"/>')
+        label = f"{_ro_number(probability, 1)}%"
+        parts.append(_text(px(k) + shift, qy(probability) + lift, label, "tick", anchor))
+        parts.append(f'<circle cx="{px(k):.1f}" cy="{cy(cost):.1f}" r="5" fill="{INK}"/>')
+        if k == 0.0:
+            parts.append(_text(px(k) + shift, cy(cost) + 22, _ro_number(cost), "tick"))
+    switch_cost = ro_solve(switch)[1]
+    parts.append(
+        _text(px(switch) - 10, cy(switch_cost) - 12, f"{_ro_number(switch_cost)}", "tick", "end")
+    )
+    full = ro_solve(1.0)[1]
+    parts.append(f'<circle cx="{px(1.0):.1f}" cy="{cy(full):.1f}" r="5" fill="{INK}"/>')
+    parts.append(_text(px(1.0), cy(full) + 24, _ro_number(full), "tick", "end"))
+    parts.append(_text(410, 588, "備える範囲の広さ k", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Robust parameter estimation (content/concepts/robust-parameter-estimation.md): the spring's
+# eight readings from the nonlinear least-squares lesson, with the reading at t=2.5 s recorded
+# without its minus sign (1.7 instead of -1.7). Huber loss with scale 0.3.
+RPE_Y = tuple(1.7 if index == 5 else y for index, y in enumerate(SPRING_Y))
+RPE_BAD = 5
+RPE_DELTA = 0.3
+
+
+def rpe_huber(residual: float, delta: float = RPE_DELTA) -> float:
+    size = abs(residual)
+    return 0.5 * size * size if size <= delta else delta * (size - 0.5 * delta)
+
+
+def rpe_huber_slope(residual: float, delta: float = RPE_DELTA) -> float:
+    return max(-delta, min(delta, residual))
+
+
+def rpe_squares_profile(w: float, ys: Sequence[float] = RPE_Y) -> tuple[float, float]:
+    """(smallest sum of squares over the amplitude, that amplitude) at a fixed ω."""
+    s = [math.sin(w * t) for t in SPRING_T]
+    a = sum(si * yi for si, yi in zip(s, ys, strict=True)) / sum(si * si for si in s)
+    return sum((a * si - yi) ** 2 for si, yi in zip(s, ys, strict=True)), a
+
+
+def rpe_huber_profile(w: float) -> tuple[float, float]:
+    """(smallest Huber loss over the amplitude, that amplitude): bisection on the monotone slope."""
+    s = [math.sin(w * t) for t in SPRING_T]
+    low, high = -20.0, 20.0
+    for _ in range(100):
+        mid = (low + high) / 2
+        slope = sum(rpe_huber_slope(mid * si - yi) * si for si, yi in zip(s, RPE_Y, strict=True))
+        low, high = (low, mid) if slope > 0 else (mid, high)
+    a = (low + high) / 2
+    return sum(rpe_huber(a * si - yi) for si, yi in zip(s, RPE_Y, strict=True)), a
+
+
+def rpe_clean_profile(w: float) -> tuple[float, float]:
+    """The same profile for the eight readings with the correct sign."""
+    return rpe_squares_profile(w, SPRING_Y)
+
+
+@functools.cache
+def rpe_valleys(profile: Callable[[float], tuple[float, float]]) -> list[tuple[float, float]]:
+    """Local minima of a profile on (0.2, 2π], each refined by golden-section search."""
+    grid = [0.2 + (2 * math.pi - 0.2) * i / 1200 for i in range(1201)]
+    values = [profile(w)[0] for w in grid]
+    found = []
+    for i in range(1, len(grid) - 1):
+        if values[i] < values[i - 1] and values[i] <= values[i + 1]:
+            low, high = grid[i - 1], grid[i + 1]
+            ratio = (math.sqrt(5) - 1) / 2
+            for _ in range(80):
+                left, right = high - ratio * (high - low), low + ratio * (high - low)
+                low, high = (low, right) if profile(left)[0] < profile(right)[0] else (left, high)
+            w = (low + high) / 2
+            found.append((w, profile(w)[0]))
+    return found
+
+
+def rpe_residuals(a: float, w: float) -> list[float]:
+    return [a * math.sin(w * t) - y for t, y in zip(SPRING_T, RPE_Y, strict=True)]
+
+
+def rpe_weights(a: float, w: float) -> list[float]:
+    return [min(1.0, RPE_DELTA / max(abs(r), 1e-15)) for r in rpe_residuals(a, w)]
+
+
+def rpe_irls(start: tuple[float, float] = (1.0, 1.8), steps: int = 8) -> list[tuple[float, ...]]:
+    """Weighted Gauss–Newton: (J'WJ) d = -J'W r with Huber weights; rows (a, ω, Huber, SS, r, w)."""
+    a, w = start
+    rows = []
+    for _ in range(steps + 1):
+        r = rpe_residuals(a, w)
+        weights = rpe_weights(a, w)
+        rows.append(
+            (
+                a,
+                w,
+                sum(rpe_huber(ri) for ri in r),
+                sum(ri * ri for ri in r),
+                r[RPE_BAD],
+                weights[RPE_BAD],
+            )
+        )
+        j = [(math.sin(w * t), a * t * math.cos(w * t)) for t in SPRING_T]
+        m11 = sum(wi * ji[0] * ji[0] for wi, ji in zip(weights, j, strict=True))
+        m12 = sum(wi * ji[0] * ji[1] for wi, ji in zip(weights, j, strict=True))
+        m22 = sum(wi * ji[1] * ji[1] for wi, ji in zip(weights, j, strict=True))
+        g1 = sum(wi * ji[0] * ri for wi, ji, ri in zip(weights, j, r, strict=True))
+        g2 = sum(wi * ji[1] * ri for wi, ji, ri in zip(weights, j, r, strict=True))
+        det = m11 * m22 - m12 * m12
+        a += (-m22 * g1 + m12 * g2) / det
+        w += (m12 * g1 - m11 * g2) / det
+    return rows
+
+
+def _rpe_profile_svg() -> str:
+    squares = rpe_valleys(rpe_squares_profile)
+    huber = rpe_valleys(rpe_huber_profile)
+    clean = rpe_valleys(rpe_clean_profile)
+    sq_best = min(squares, key=lambda v: v[1])
+    hu_best = min(huber, key=lambda v: v[1])
+    near = min(squares, key=lambda v: abs(v[0] - 2.0))
+    parts = _open(
+        "外れた1点で、最も深い谷が入れ替わる",
+        (
+            "角周波数ωを固定し、振幅aを最もよく選んだときの損失。2.5秒の読みを1.7と記録した8点。"
+            f"① 二乗和：最も深い谷はω={sq_best[0]:.2f}（{sq_best[1]:.2f}）、"
+            f"ω=2付近の谷はω={near[0]:.2f}（{near[1]:.2f}）。"
+            f"破線は符号が正しい8点の二乗和で、最も深い谷はω={clean[0][0]:.2f}。"
+            f"② Huber損失（尺度0.3）：最も深い谷はω={hu_best[0]:.2f}（{hu_best[1]:.3f}）。"
+        ),
+        612,
+    )
+    px = _scale(0.0, 2 * math.pi, 64, 416)
+    # sin(2π t) is 0 at every reading, so the amplitude is undefined at ω = 2π itself.
+    ws = [0.2 + (2 * math.pi - 0.25) * i / 400 for i in range(401)]
+    for tick in range(7):
+        parts.append(_text(px(tick), 292, str(tick), "tick", "middle"))
+        parts.append(_text(px(tick), 572, str(tick), "tick", "middle"))
+    parts.append(_text(20, 64, "① 二乗和"))
+    sy = _scale(0.0, 16.0, 272, 84)
+    parts.append(f'<path d="M64 84V272H416" fill="none" stroke="{GRID}"/>')
+    for value in (0, 5, 10, 15):
+        parts.append(_text(56, sy(value) + 5, str(value), "tick", "end"))
+    clean_curve = [(px(w), sy(rpe_clean_profile(w)[0])) for w in ws]
+    parts.append(_polyline(clean_curve, MUTED, 1.5).replace("/>", ' stroke-dasharray="5 4"/>'))
+    parts.append(_polyline([(px(w), sy(rpe_squares_profile(w)[0])) for w in ws], POINT, 3))
+    for w, value in squares:
+        color = POINT if (w, value) == sq_best else RING
+        parts.append(f'<circle cx="{px(w):.1f}" cy="{sy(value):.1f}" r="6" fill="{color}"/>')
+    parts.append(
+        _text(
+            px(sq_best[0]) - 10,
+            sy(sq_best[1]) + 26,
+            f"ω={sq_best[0]:.2f}：{sq_best[1]:.2f}",
+            anchor="end",
+        )
+    )
+    parts.append(_text(px(near[0]) + 10, sy(near[1]) + 24, f"ω={near[0]:.2f}：{near[1]:.2f}"))
+    parts.append(_text(20, 318, "実線：記録どおりの8点　破線：符号が正しい8点", "tick"))
+
+    parts.append(_text(20, 344, f"② Huber損失（尺度 {RPE_DELTA:g}）"))
+    hy = _scale(0.0, 3.2, 552, 364)
+    parts.append(f'<path d="M64 364V552H416" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1, 2, 3):
+        parts.append(_text(56, hy(value) + 5, str(value), "tick", "end"))
+    parts.append(_polyline([(px(w), hy(rpe_huber_profile(w)[0])) for w in ws], UPDATE, 3))
+    for w, value in huber:
+        color = UPDATE if (w, value) == hu_best else RING
+        parts.append(f'<circle cx="{px(w):.1f}" cy="{hy(value):.1f}" r="6" fill="{color}"/>')
+    parts.append(
+        _text(px(hu_best[0]) + 10, hy(hu_best[1]) + 24, f"ω={hu_best[0]:.2f}：{hu_best[1]:.2f}")
+    )
+    parts.append(_text(416, 596, "角周波数 ω", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _rpe_weights_svg() -> str:
+    a_h, w_h = rpe_irls()[-1][:2]
+    sq_best = min(rpe_valleys(rpe_squares_profile), key=lambda v: v[1])
+    a_s = rpe_squares_profile(sq_best[0])[1]
+    weights = rpe_weights(a_h, w_h)
+    parts = _open(
+        "Huberの当てはめと、各観測の重み",
+        (
+            "① 8つの観測と2本の曲線。2.5秒の読みは −1.7 を 1.7 と記録したもの。"
+            f"Huber損失の当てはめは a={a_h:.2f}、ω={w_h:.2f}、"
+            f"二乗和で最も深い谷は a={a_s:.2f}、ω={sq_best[0]:.2f}。"
+            "② Huberの当てはめでの各観測の重み min(1, 0.3/|r|)。"
+            f"2.5秒の観測だけが {weights[RPE_BAD]:.3f}、ほかの7つは1。"
+        ),
+        604,
+    )
+    parts.append(_text(20, 64, "① 観測点と曲線"))
+    px = _scale(0.0, 3.5, 64, 410)
+    py = _scale(-2.6, 2.6, 290, 84)
+    parts.append(f'<path d="M64 84V290H410" fill="none" stroke="{GRID}"/>')
+    parts.append(f'<path d="M64 {py(0):.1f}H410" stroke="{GRID}" stroke-width="1"/>')
+    for value in (-2, 0, 2):
+        parts.append(_text(56, py(value) + 5, f"{value}".replace("-", "−"), "tick", "end"))
+    for value in (0, 1, 2, 3):
+        parts.append(_text(px(value), 310, str(value), "tick", "middle"))
+    parts.append(_text(410, 332, "時刻 t（秒）", "tick", "end"))
+    ts = [3.5 * i / 280 for i in range(281)]
+    parts.append(
+        _polyline([(px(t), py(a_s * math.sin(sq_best[0] * t))) for t in ts], POINT, 2).replace(
+            "/>", ' stroke-dasharray="6 4"/>'
+        )
+    )
+    parts.append(_polyline([(px(t), py(a_h * math.sin(w_h * t))) for t in ts], UPDATE, 3))
+    for index, (t, y) in enumerate(zip(SPRING_T, RPE_Y, strict=True)):
+        if index == RPE_BAD:
+            parts.append(
+                f'<circle cx="{px(t):.1f}" cy="{py(y):.1f}" r="9" fill="none" '
+                f'stroke="{VIOLATION}" stroke-width="2.5"/>'
+            )
+        parts.append(f'<circle cx="{px(t):.1f}" cy="{py(y):.1f}" r="5" fill="{INK}"/>')
+    parts.append(_polyline([(20, 360 - 5), (42, 360 - 5)], UPDATE, 3))
+    parts.append(_text(48, 360, f"Huber：ω={w_h:.2f}", "tick"))
+    parts.append(
+        _polyline([(210, 360 - 5), (232, 360 - 5)], POINT, 2).replace(
+            "/>", ' stroke-dasharray="6 4"/>'
+        )
+    )
+    parts.append(_text(238, 360, f"二乗和：ω={sq_best[0]:.2f}", "tick"))
+    parts.append(
+        f'<circle cx="31" cy="379" r="8" fill="none" stroke="{VIOLATION}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(48, 384, "2.5秒の読み：記録は1.7（本来は −1.7）", "tick"))
+
+    parts.append(_text(20, 422, "② Huberの当てはめでの重み"))
+    by = _scale(0.0, 1.0, 536, 446)
+    bx = _scale(-0.25, 3.75, 64, 410)
+    parts.append(f'<path d="M64 446V536H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1):
+        parts.append(_text(56, by(value) + 5, str(value), "tick", "end"))
+    for index, (t, weight) in enumerate(zip(SPRING_T, weights, strict=True)):
+        color = VIOLATION if index == RPE_BAD else LINE
+        top = by(weight)
+        parts.append(
+            f'<rect x="{bx(t) - 10:.1f}" y="{top:.1f}" width="20" height="{536 - top:.1f}" '
+            f'fill="{color}"/>'
+        )
+        parts.append(_text(bx(t), 556, f"{t:g}", "tick", "middle"))
+    parts.append(
+        _text(
+            bx(SPRING_T[RPE_BAD]),
+            by(weights[RPE_BAD]) - 8,
+            f"{weights[RPE_BAD]:.3f}",
+            anchor="middle",
+        )
+    )
+    parts.append(_text(410, 584, "観測の時刻 t（秒）", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -4675,6 +5250,7 @@ def generate_lesson_figures() -> dict[str, str]:
         "socp-relay-station.svg": _socp_relay_svg(),
         "network-flow-paths.svg": _network_flow_svg(),
         "so3-rotation-paths.svg": _so3_paths_svg(),
+        "so3-lie-algebra-circle.svg": _so2_circle_svg(),
         "nn-training-two-valleys.svg": _nn_two_valleys_svg(),
         "shape-fin-length.svg": _fin_length_svg(),
         "composite-group-shrink.svg": _composite_group_svg(),
@@ -4696,6 +5272,10 @@ def generate_lesson_figures() -> dict[str, str]:
         "eigenvalue-parallel-condition.svg": _eig_condition_svg(),
         "stochastic-programming-expected-cost.svg": _sp_cost_svg(),
         "stochastic-programming-two-stage.svg": _sp_tree_svg(),
+        "robust-optimization-box.svg": _ro_box_svg(),
+        "robust-optimization-set-size.svg": _ro_set_size_svg(),
+        "robust-estimation-profile.svg": _rpe_profile_svg(),
+        "robust-estimation-weights.svg": _rpe_weights_svg(),
     }
 
 

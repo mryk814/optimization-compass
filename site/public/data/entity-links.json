@@ -10705,6 +10705,168 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.robust-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ロバスト最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S162",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S174",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S180",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA050",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.chance-risk-contract",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.second-order-cone-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.uncertainty-models",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-dual-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ロバスト最適化は、不確かな値が決めた範囲（不確実性集合）のどこに来ても制約を守るように決め、その中で目的を最もよくする定式化です。制約が不確かな値について線形で、範囲が箱や楕円なら、無数にある制約を最悪の値での1本に書き換えられます。その結果、線形計画や二次錐計画として解けます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.robust-parameter-estimation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "外れ値を含むパラメータ推定",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S185",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S186",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA056",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.robust-regression",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-start",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "外れ値を含むパラメータ推定は、パラメータについて非線形なモデルを、大きなずれの影響を抑える損失で観測に当てはめる定式化です。二乗和では1点の外れ値が曲線を引っ張るだけでなく、どの谷が最も深いかまで入れ替えることがあります。損失と尺度を選び、複数の始点から解いて答えを比べます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.robust-regression",
       "entity_type": "content",
       "external_url": null,
@@ -11297,7 +11459,7 @@
       "entity_id": "concept.so3-rotation-representation",
       "entity_type": "content",
       "external_url": null,
-      "label": "SO(3)の行列・接空間表現",
+      "label": "リー代数で回転を動かす：SO(3)の接空間",
       "relations": [
         {
           "relation_type": "comparison",
@@ -11331,6 +11493,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.so3-se3-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.variable-domain",
           "target_type": "content"
         },
@@ -11360,7 +11527,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のステップを分けて扱います。射影、レトラクション、指数写像は同じ更新ではありません。"
+      "summary": "回転を最適化するときは、行列の9つの成分を直接動かさず、今の向きから「どの軸のまわりに何rad回すか」を3つの数で決めます。3つの数が自由に動ける平らな空間がリー代数で、それを回転に変えるのが指数写像です。"
     },
     {
       "aliases": [],
@@ -35386,13 +35553,21 @@
       "summary": "確率計画。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.robust-optimization"
+      ],
       "canonical_url": "/formulations/PA050",
       "entity_id": "PA050",
       "entity_type": "problem",
       "external_url": null,
       "label": "robust optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.robust-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "robust optimization。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
@@ -35454,13 +35629,21 @@
       "summary": "逆問題。変数=continuous、目的=sum_of_squares、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.robust-parameter-estimation"
+      ],
       "canonical_url": "/formulations/PA056",
       "entity_id": "PA056",
       "entity_type": "problem",
       "external_url": null,
       "label": "外れ値を含むparameter estimation",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.robust-parameter-estimation",
+          "target_type": "content"
+        }
+      ],
       "summary": "外れ値を含むparameter estimation。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
