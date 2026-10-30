@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 47,
+            "complete": 49,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 15,
-              "no_article": 16,
+              "in_progress": 14,
+              "no_article": 15,
               "stale": 2
             }
           },
@@ -16873,12 +16873,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.sat-maxsat"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16905,11 +16905,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA027"
+            "/formulations/PA027",
+            "concept.sat-maxsat"
           ]
         },
         "recommendation": {
@@ -18301,12 +18302,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.trajectory-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18333,11 +18334,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA044"
+            "/formulations/PA044",
+            "concept.trajectory-optimization"
           ]
         },
         "recommendation": {

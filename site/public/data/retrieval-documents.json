@@ -21034,6 +21034,285 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "週末の勉強会に、A〜Eの5人のうち誰を呼ぶかを決めます。呼び方には、次の4つの決まりがあります。 決まり 理由 AかBの少なくとも一人を呼ぶ 会場の鍵を持つのはAとBだけ AとCを両方は呼ばない AとCは同じ店の店番で、二人とも抜けると店を開けられない（店番A・C） Bを呼ぶならDも呼ぶ BはDの車に乗って来る DとEを両方は呼ばない DとEも別の店で一緒に店番をしている（店番D・E） さらに、希望が3つあります。Cに講師をしてほしい（重み3）、Eを呼びたい（重み2）、Aを呼びたい（重み2）です。ところが、どう呼んでも、すべての希望はかないません。決まりを守る呼び方を全部調べ、かなった希望の重みの合計が最も大きいものを選びます。 決めるもの : 5人それぞれを呼ぶか呼ばないか（真か偽か） 良くしたいもの : かなった希望の重みの合計 守ること : 4つの決まり 次の図は、5人の呼び方32通りを並べたものです。まず「×」のない枠がいくつあるかを数えてください。続いて、橙の枠（最も重い組）と紺の枠（重い希望から順にかなえた組）の数字を比べてください。 勉強会の例：5人・決まり4つ・希望3つ。重みは教材用の値で、実際の人の希望の測り方は示さない 「×」のない枠は6つです。32通りのうち26通りは、4つの決まりのどれかを破ります。 最も重いのは、AとEを呼ぶ組で4です。Eの希望（2）とAの希望（2）がかないます。講師役のCは呼びません。 最も重いCの希望から順にかなえると、B・C・Dを呼ぶ組になります。Cを呼ぶとEもAも呼べなくなるので、重みは3です。 Cを呼ぶと決めただけで、なぜEもAも呼べなくなるのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "SATは、真か偽かを決める変数に対し、「AかBの少なくとも一方」のような論理の節をすべて満たす割り当てがあるかを問う定式化です。すべては満たせないとき、節に重みを付け、満たした節の重みの合計を最大にするのがMaxSATです。答えが「ない」ときは、ソルバーによっては、ないことの証明も出力できます。",
+      "title": "SAT・MaxSAT"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "重い希望から順にかなえる : 最も重いCの希望（3）を先にかなえると、単位伝播でAとEが外れ、重みの合計は3です。最も重い組A・Eの4より小さくなります。比べるのは一つの希望の重さではなく、一緒にかなう希望の重みの合計です。この例では、Cの3と、E・Aの合計4を比べます。 「ならば」の向きを逆に書く : 「Bを呼ぶならDも呼ぶ」を、逆向きの ¬ D ∨ B （Dを呼ぶならBも呼ぶ）と書いたとします。決まりを守る組は、6通りから11通りに増えます。最も重い組はB・C・Eの5になり、Dの車がないのにBが来ることになります。節を書いたら、その節を偽にする割り当て（ここではBを呼んでDを呼ばない）を一つ書き出し、それが本当に禁止したい場合かを確かめます。 重みを、希望の順位だけで付ける : 希望の順位どおりにC・E・Aを3・2・1とすると、B・C・DとA・Eがどちらも3で並びます。どちらが返るかはソルバーしだいです。答えを決めるのは、Cの重みとEとAの重みの和の大小です。Cの重みがEとAの和より小さければA・E、大きければB・C・Dになります。この例の重み（3・2・2）でCを5にすると、答えはB・C・Dに変わります。重みは、あきらめるときの損の大きさとして付けます。 「CもEも呼べない」を、探し方が足りないと読む : 32通りのどれも、決まりとCとEを同時には満たしません。単位伝播の矛盾は、そのことの証明です。探し直す前に、どの決まりが矛盾に関わっているか（ここでは鍵・車・店番A・C・店番D・E）を読み、決まりそのものを変えられるかを考えます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "SATと節・連言標準形・単位伝播は、『Handbook of Satisfiability』第2版（S176）に基づきます。節の学習による探索（CDCL）・矛盾の導出の証明としての出力・コアを使うMaxSATも、同じ本（S176）にあります。CP-SATがSATの技法を使うソルバーであることは、OR-Toolsの公式文書（S022）にあります。論理の制約をモデルとして書き、節を学習するソルバー（ChuffedやOR-Tools CP-SATなど）に渡す方法は、MiniZincの公式文書（S053）にあります。 milp と HiGHS の使い方は、SciPyの公式文書（S005）と HiGHSの公式文書（S016）に基づきます。 コードの出力は、SciPy 1.18.1 と NumPy 2.5.3 で上のコードを実行して得た値です。5人・4つの決まり・3つの希望は教材用の値で、実際の人の希望や重みの決め方は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "実際の課題で次の条件が必要になったら、次の記事が役に立ちます。 費用や人数の合計のような数の条件が多い → 混合整数線形計画 。節は0-1変数の線形不等式として書けます 時刻や順番、「同時に1つまで」のような条件が中心 → 制約プログラミングによるスケジューリング 決まりと希望を、どのソルバーでどう書けばよいかを知りたい → CP-SATと制約プログラミング 節が非常に多く、よい呼び方を早く一つ見つけたい（最良かどうかの証明はいらない） → 組合せ局所探索 SAT・MaxSATと関連する問題の関係 混合整数線形計画 : 各節は0-1変数の線形不等式に書き直せます。 A ∨ B は x A + x B ≥ 1 、 ¬ A ∨ ¬ C は ( 1 − x A ) + ( 1 − x C ) ≥ 1 です。希望ごとに、かなわないときは0に限られる変数（たとえば y C ≤ x C ）を足し、重み付きの和を最大にします。下のコードはこの書き方で解き、A・Eの4を返します。 制約プログラミングによるスケジューリング : 整数の変数と、「同時に1つまで」のような大域制約（NoOverlapなど）をそのまま書けます。CP-SATのようなソルバーは、内部で節を学習するSATの技法を使っています。 組合せ局所探索 : 割り当てを少しずつ変えて重みを上げます。よい割り当てを早く見つけることはありますが、「これより重い組はない」「満たす割り当てはない」という証明は返しません。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "「30秒でつかむ」で示した決まり4つと希望3つを使います。乱数は使いません。 勉強会の例・決まりを守る6通り 呼ぶ人 Cの希望（3） Eの希望（2） Aの希望（2） 重みの合計 B・D 0 B・C・D ○ 3 A ○ 2 A・E ○ ○ 4 A・D ○ 2 A・B・D ○ 2 Cを呼ぶ組はB・C・Dの1通りしかありません。単位伝播で、Cを呼べばB・Dが決まり、A・Eが外れるからです。Aを呼ぶ組は4通りあり、その中でEも呼べるのは、DとBを呼ばないA・Eだけです。 勉強会の例・同時にはかなわない希望の組 希望を2つずつ組にして、決まりと一緒に満たせるかを調べると、次の2組は同時にかないません。 CとE：上の単位伝播で矛盾に着きます CとA：店番A・Cの決まり ¬ A ∨ ¬ C そのものです このように、決まりと一緒には満たせない希望の組をコア（core）と呼びます。ここで挙げたのは、1つでも外せば満たせるようになる、極小のコアです。どちらのコアからも、少なくとも一つの希望をあきらめる必要があります。Cをあきらめれば両方のコアが解消し、失う重みは3です。CをあきらめずにEとAをあきらめると、失う重みは 2 + 2 = 4 です。EとAは同時にかなう（A・Eの組がある）ので、Cだけをあきらめれば足ります。だから最も重い組は、残る重みが 7 − 3 = 4 のA・Eです。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "最良の答えを保証する方法（全部調べる・コアを使うMaxSAT・整数計画・CP-SAT）は、どれもA・Eの4を返します。違いは、何を証明として返すかと、問題の大きさにどう対応するかです。 系統 進み方 例での様子 全部の割り当てを調べる 2 n 通りを一つずつ確かめる 32通り。30人なら約10億通り、60人なら約 10 18 通り CDCL SAT 決める・単位伝播する・衝突から新しい節を学ぶ、を繰り返す。それだけでは重みを最大にしない 「CもEも」は、伝播だけで矛盾に着く コアを使うMaxSAT SATソルバーに解かせ、同時にかなわない希望の組（コア）を集めて、あきらめる希望を決める コアはC・EとC・Aの2組で、Cをあきらめる 0-1の整数計画 節を線形不等式にし、分枝限定法で解く 下のコード。 milp が4を返す CP-SAT SATの技法（節の学習）を使う制約プログラミングのソルバー 重み付きの目的をそのまま書ける 組合せ局所探索 一人ずつ呼ぶ・呼ばないを入れ替えて、重みを上げる B・C・Dから始めると、決まりを守る一人の入れ替えはB・Dしかなく、重みが下がるので3で止まる 表は速さの順位ではなく、何を手がかりに進み、何を返すかの違いです。 次のコードは、例を全部の割り当て・単位伝播・コアの列挙・0-1の整数計画の順に調べます。 python import itertools import numpy as np from scipy.optimize import Bounds , LinearConstraint , milp names = \"ABCDE\" # 変数1〜5。真なら呼ぶ。-3 は「Cを呼ばない」 hard = [[ 1 , 2 ], [ - 1 , - 3 ], [ - 2 , 4 ], [ - 4 , - 5 ]] # 鍵、店番A・C、車、店番D・E soft = [([ 3 ], 3 ), ([ 5 ], 2 ), ([ 1 ], 2 )] # Cを呼びたい3、Eを呼びたい2、Aを呼びたい2 def holds ( clause , x ): return any (( lit > 0 ) == x [ abs ( lit ) - 1 ] for lit in clause ) def label ( x ): return \"\" . join ( n for n , b in zip ( names , x ) if b ) plans = [ x for x in itertools . product ([ False , True ], repeat = 5 ) if all ( holds ( c , x ) for c in hard )] weight = { label ( x ): sum ( w for c , w in soft if holds ( c , x )) for x in plans } print ( len ( plans ), weight ) # 6 {'BD': 0, 'BCD': 3, 'A': 2, 'AE': 4, 'AD': 2, 'ABD': 2} def propagate ( clauses ): \"\"\"単位伝播：まだ真の値がなく、残りが1つだけの節があれば、その値に決める\"\"\" value , steps , changed = {}, [], True while changed : changed = False for clause in clauses : if any ( value . get ( abs ( lit )) == ( lit > 0 ) for lit in clause ): continue free = [ lit for lit in clause if abs ( lit ) not in value ] if not free : return None , steps + [ \"矛盾\" ] if len ( free ) == 1 : value [ abs ( free [ 0 ])] = free [ 0 ] > 0 steps . append (( \"\" if free [ 0 ] > 0 else \"¬\" ) + names [ abs ( free [ 0 ]) - 1 ]) changed = True return value , steps print ( propagate ( hard + [[ 3 ]])[ 1 ]) # ['C', '¬A', 'B', 'D', '¬E'] print ( propagate ( hard + [[ 3 ], [ 5 ]])[ 1 ]) # ['C', 'E', '¬A', '¬D', 'B', '矛盾'] # 同時にはかなわない希望の組（コア） for a , b in itertools . combinations ( range ( len ( soft )), 2 ): together = hard + [ soft [ a ][ 0 ], soft [ b ][ 0 ]] if not any ( all ( holds ( c , x ) for c in together ) for x in itertools . product ([ False , True ], repeat = 5 )): print ( \"コア\" , names [ soft [ a ][ 0 ][ 0 ] - 1 ], names [ soft [ b ][ 0 ][ 0 ] - 1 ]) # コア C E # コア C A # MaxSAT を0-1の整数計画で解く：x_A..x_E と、希望ごとの y_k（かなうなら1） n , m = 5 , len ( soft ) rows , lower = [], [] for clause in hard : # 正のリテラルは x、否定は 1 - x として、節の値の和が1以上 row = np . zeros ( n + m ) for lit in clause : row [ abs ( lit ) - 1 ] += 1 if lit > 0 else - 1 rows . append ( row ) lower . append ( 1 - sum ( lit < 0 for lit in clause )) for k , ( clause , _ ) in enumerate ( soft ): # y_k <= x（その人を呼ぶときだけ希望がかなう） row = np . zeros ( n + m ) row [ abs ( clause [ 0 ]) - 1 ], row [ n + k ] = 1 , - 1 rows . append ( row ) lower . append ( 0 ) c = - np . r_ [ np . zeros ( n ), [ w for _ , w in soft ]] res = milp ( c , constraints = LinearConstraint ( np . array ( rows ), lower , np . inf ), integrality = np . ones ( n + m ), bounds = Bounds ( 0 , 1 )) print ( round ( - res . fun ), label ( res . x [: n ] > 0.5 )) # 4 AE 最初の出力は、決まりを守る6通りと、それぞれの重みです。小さな例の表と同じです。 次の2行は単位伝播です。Cだけを足すと、¬A・B・D・¬E と決まります。CとEを足すと、5つを決めた後で車の決まりが満たせなくなり、「矛盾」で止まります。これが「CもEも呼べない」ことの証明です。 「コア」の2行は、同時にはかなわない希望の組です。最後の行は、0-1の整数計画の答えで、重み4のA・Eです。 milp は最小化なので、重みに負の符号を付けて渡し、結果の符号を戻しています。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "次の式は「決まりの節 C h をすべて満たすように各変数を真か偽かに決め、満たした希望の節 C k の重みの合計を最大にする」を表します。 max x ∈ { 0 , 1 } n ∑ k ∈ S w k 1 [ C k ( x ) ] s.t. C h ( x ) = 1 ( h ∈ H ) 1 [ C k ( x ) ] は、節 C k が満たされれば1、満たされなければ0です。この記事では、必ず満たす節を「決まり」、重み付きの節を「希望」と呼びます。決まりは、重みを無限大と考えても、上の式のように制約として別に書いても同じです。決まりの節だけを並べて「すべてを満たす割り当てはあるか」と問うのがSATで、希望の節を重み付きで加えて合計を最大にするのがMaxSATです。 記号 意味 勉強会の例では n 変数の数 5（A〜E） x 真偽の変数（1が真） $x_A,\\dots,x_E$。1なら呼ぶ。最も重い組は x A = x E = 1 、ほかは0 C h , C k 節。リテラルの「または」 決まりの節 H が4つ（鍵・店番A・C・車・店番D・E）、希望の節 S が3つ（C・E・A） リテラル 変数か、その否定 A （Aを呼ぶ）、 ¬ A （Aを呼ばない） w k 希望の節の重み Cが3、Eが2、Aが2 決まりを節に書く 節は、リテラルを「または（ ∨ ）」でつないだものです。4つの決まりは、次の4つの節になります。 ( A ∨ B ) ∧ ( ¬ A ∨ ¬ C ) ∧ ( ¬ B ∨ D ) ∧ ( ¬ D ∨ ¬ E ) この式は「AかBを呼ぶ。かつ、AかCの少なくとも一方は呼ばない。かつ、Bを呼ばないかDを呼ぶ。かつ、DかEの少なくとも一方は呼ばない」と読みます。節を「かつ（ ∧ ）」でつないだこの形を、連言標準形（CNF）と呼びます。 3つ目の節は「Bを呼ぶならDも呼ぶ」です。「PならばQ」は「Pでない、またはQ」と同じ意味なので、 ¬ B ∨ D と書きます。Bを呼んでDを呼ばないときだけ、この節は偽になります。 1つ決めると、残りが決まっていく 節のほかのリテラルがすべて偽と決まり、未定のリテラルが1つだけ残れば、そのリテラルは真にするしかありません。これを単位伝播（単位節伝播）と呼びます。逆に、節のリテラルがすべて偽と決まった状態を衝突と呼びます。 次の図は、Cを呼ぶと決めたときと、Eを呼ぶと決めたときの単位伝播です。「① Cを呼ぶと」と「② Eを呼ぶと」の箱を、最初の箱から順に読んでください。箱の間の文字は、使った決まりです。太い黒の枠が最初に決めた人、紺の枠が呼ぶと決まった人、灰色の枠が呼ばないと決まった人です。 勉強会の例：決まりの4つの節だけで単位伝播した結果。¬A は「Aを呼ばない」 Cを呼ぶと、店番A・Cの決まりからAは呼べません。Aがいないので、鍵のためにBを呼びます。BはDの車で来るのでDも呼び、店番D・Eの決まりからEは呼べません。だから、Cを呼ぶと決めただけで、EもAも呼べなくなります。 「ない」と答えるときも、証明がある 「CもEも呼べるか」は、決まりの節に C と E の2つの節を足して、すべてを満たせるかを問うSATです。単位伝播すると、 C ・ E ・ ¬ A ・ ¬ D ・ B と決まります。すると、車の決まり ¬ B ∨ D のリテラルがどちらも偽になります。この衝突（矛盾）に着いたので、CとEを両方呼ぶ方法はありません。 この例では、CとEを1つの変数だけの節として足したので、単位伝播だけで矛盾に着きました。この道筋は、32通りを一つずつ調べなくても確かめられる証明です。一般には、単位伝播だけでは矛盾に着かず、分岐と学習した節を重ねて矛盾を導きます。その導出を証明として出力できるソルバーもあります。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.sat-maxsat:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.sat-maxsat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:concept.cp-scheduling",
+        "content:concept.mixed-integer-linear-program",
+        "content:concept.variable-domain",
+        "content:cp-sat",
+        "content:local-search-combinatorial",
+        "problem:PA027",
+        "source:S005",
+        "source:S016",
+        "source:S022",
+        "source:S053",
+        "source:S176"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S022",
+        "S053",
+        "S176"
+      ],
+      "text": "「決まりを守りながら、なるべく希望がかなう呼び方を決めたい」という課題を、次の4段で式にします。 何を真偽で決めるか ：5人それぞれを呼ぶかどうかです。数や順番を決める課題も、「Aを1番目にするか」のような真偽の変数に分けて書けます。 決まりをどう節にするか ：「少なくとも一人」は「または」、「両方は呼ばない」は否定の「または」、「ならば」は ¬ P ∨ Q と書きます。 必ず守るものと、できれば守るものを分ける ：鍵・店番・車は必ず守る決まり、講師やEとAを呼ぶことは希望です。 希望の重みを決める ：あきらめるときの損の大きさとして、希望ごとに重みを付けます。 決める量が真偽の組み合わせで、条件が論理の節で書けるとします。すべてを満たせるかを問うならSAT、満たした節の重みの合計を最大にするならMaxSATとして定式化できます。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.second-order-cone-program:30秒でつかむ",
       "dataset_version": "0.18.25",
       "document_id": "content:concept.second-order-cone-program",
@@ -24853,6 +25132,303 @@
       ],
       "text": "もっとも小さな検証は、同じ予測区間・初期軌道・モデルでメッシュを細かくして、判断が変わるかを見ることです。たとえば次を追います。 目的と終端誤差が大きく変わらないか 動力学残差 と経路制約違反が許容範囲に収まるか 操作量の形や有効制約の時刻が大きく動かないか 高精度シミュレーションに通した結果が離散化解と整合するか 解が大きく変わるなら、粗いメッシュの結果を「最適な連続時間軌道」と呼びません。どこを細かくすべきか、初期推定が変わっただけではないか、積分器の誤差かを切り分けます。",
       "title": "細分化は「解が安定するか」を見る実験"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "倉庫の搬送ロボットが、止まった状態から4m先の棚へ4秒で移り、そこで止まります。出発と到着を結ぶ線の途中に柱があり、まっすぐには進めません。床を真上から見て、到着の方向に x 軸をとります。 y が大きい側を「上」、小さい側を「下」と呼びます。柱の中心は線から0.3m下にあり、ロボットの大きさを足すと、半径0.8mの円に入ってはいけません。 荷物を揺らさないように、加速度の二乗を時間で積分した量をなるべく小さくします。柱の上を回るか下を回るか、どの時刻にどれだけ加速するかを、まとめて決めます。 決めるもの : 時刻ごとの位置・速度と、加速度（ロボットの軌道） 良くしたいもの : 加速度の二乗の積分 守ること : 運動の式、出発と到着で止まっていること、柱の円に入らないこと 次の図は、時間を20区間に分けて解いた二つの軌道です。まず「① 床の上の経路」で、橙の経路と紺の破線の経路が柱のどちら側を通るかと、点（区間の境目の位置。以下、格子点）の間隔を見てください。続いて「② 加速度の大きさ」で、二つの経路の加速度を比べてください。 搬送ロボットの例：4秒を20区間に分け、区間ごとに一定の加速度を決める。ロボットは点として扱い、大きさは柱の半径に足している。モーターの限界や床の滑りは含まない 「① 床の上の経路」の橙の経路は柱の上を回り、柱の上端 (2, 0.5) にちょうど触れます。費用は3.77です。紺の破線の経路は下を回り、費用は6.67です。 格子点の間隔は、出発と到着の近くで狭く、中央で広くなっています。止まった状態から少しずつ速くなり、中央で最も速く進み、また減速して止まるからです。 「② 加速度の大きさ」では、橙の経路の加速度は出発と到着の近くで約1.6、中央で0.5〜0.7です。紺の破線の経路は、出発と到着の近くで約2、柱の下を大きく曲がる中央でも約1.5です。 どちらの経路も、運動の式と、格子点で柱の外にいるという制約を守っています。それでも費用は2倍近く違います。ソルバーは、二つのうちどちらに着くのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "軌道最適化は、始点から目標までの状態と操作の時間変化（軌道）を決める定式化です。運動の式と経路上の制約を守る軌道の中から、費用が最も小さいものを選びます。時間を区切って有限個の変数にすると、制約付きの非線形計画として解けます。ただし、障害物をよける制約は凸でなく、格子点の間で守れているかも別に確かめる必要があります。",
+      "title": "軌道最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "柱の制約を格子点だけで確かめる : 5区間の答えは、格子点ではすべて柱の外ですが、格子点の間で柱に26cm入ります。費用3.34が10区間の3.81より小さいのは、柱を通り抜けているからです。20区間の下を回る経路も、格子点の間で柱に7mm入ります。解いた後で、区間の中の経路も含めて制約を確かめます。足りなければ区間を細かくするか、柱の半径に余裕を足します。 到着の時間も変数にして、加速度の二乗だけを小さくする : 同じ経路の形でも、時間を2倍の8秒にすると費用は 1 / 2 3 の0.47になります。時間を延ばすほど費用は下がるので、到着の時間を変数にすると、ロボットはいつまでも着きません。時間を変数にするなら、時間そのものの費用を目的に足すか、上限を付けます。 ソルバーの「成功」を、最もよい経路だと読む : 下を回る経路も、ソルバーは成功として返します。費用は6.67で、上を回る3.77より77%大きくなります。初期の経路を柱の両側に置いて解き、費用を比べます。障害物が多いときは、先に通路の候補を 最短路 などで選んでから、その近くで軌道を解く方法もあります。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "軌道最適化の定式化と、直接法（転写・選点法・Shooting）と間接法の区別は、Bettsの解説論文（S178）に基づきます。経路上の制約と離散化の扱いも、同じ論文（S178）にあります。CasADiで転写した問題をIpoptで解く使い方は、CasADi（S042）とIpopt（S017）の公式文書にあります。SQPは、NocedalとWrightの『Numerical Optimization』（S056）に基づきます。 minimize の SLSQP と制約の渡し方は、SciPyの公式文書（S002）に基づきます。 コードの出力は、SciPy 1.18.1 と NumPy 2.5.3 で上のコードを実行して得た値です。図は、同じ問題を図の生成スクリプトが標準ライブラリだけで解いた値から描いています。下を回る経路には、近くに局所解が二つあります。柱の真下の格子点1つで柱に触れる左右対称な解（費用6.674）と、2つの格子点で触れる左右非対称な解（費用6.668）です。コードは出発の側を高くした初期の経路から、図は標準ライブラリだけの解法で、どちらも後者に着きます。柱の位置と大きさ、4秒という時間は教材用の値で、実際のロボットの性能や安全基準は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "実際の課題で次の困りごとがあれば、リンク先の定式化を読んでください。 到着の位置をぴったり合わせる代わりに、目標からのずれに罰則を付けたい → 最適制御 動かしている途中でずれるので、いまの位置から計画を何度も解き直したい → モデル予測制御 柱や棚が多く、どの通路を通るかを先に決めたい → 最短路 区間の数や幅が答えにどう効くかを知りたい → 時間の離散化 軌道最適化と関連する問題の関係 最適制御 : 軌道最適化は、出発の状態を一つに決めて一本の軌道を求める最適制御の問題（開ループ）に、経路上の制約を加えたものです。最適制御の記事の台車の例に、平面の位置と柱の制約を足したものが、この記事の例です。 モデル予測制御 : 短い先までの軌道最適化を、時刻ごとに解き直し、最初の操作だけを実行します。前もって一本の軌道を決めるだけでは、床の滑りなどのずれを直せないので、この形が使われます。 制約付きの非線形計画 : 時間を区切った後の問題です。この例では変数124個、等式88本、不等式21本です。運動の式の等式は、隣どうしの格子点だけを結ぶので、制約の行列はほとんど0（疎）になります。 最短路 : 床を格子や通路のグラフにすると、そのグラフの上では、どちら側を回るかのような組合せの選択を大域的に決められます。ただし、速度や加速度の滑らかさは扱いにくくなります。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "設定は「30秒でつかむ」と同じで、4秒を20区間に分けます。初期の経路は、出発と到着を結ぶ弧 y = ± 1.2 sin ( π x / 4 ) ( 2 − x / 4 ) か、まっすぐな線です。弧は出発の側を少し高くしてあります。乱数は使いません。 搬送ロボットの例・柱がないとき 柱がなければ、ロボットはまっすぐ進みます。連続時間で、止まった状態から止まった状態へ、距離 d を時間 T で動くとします。最適な加速度は 6 d / T 2 ( 1 − 2 t / T ) で、費用は次のとおりです。 ∫ 0 T u ( t ) 2 d t = 12 d 2 T 3 = 12 × 4 2 4 3 = 3 20区間に分けた問題の答えは3.01です。区間の中で加速度を一定にしたので、連続時間の3よりわずかに大きくなります。柱をよけると3.77なので、柱をよけるために増えた費用は約0.76です。 搬送ロボットの例・初期の経路で決まる側 初期の経路 着いた経路 費用 柱にちょうど触れる格子点 柱の上を通る弧 上を回る 3.77 上端 (2, 0.5) 柱の下を通る弧 下を回る 6.67 柱の下側 まっすぐな線（柱を通り抜ける） 上を回る 3.77 上端 (2, 0.5) まっすぐな初期の経路は、柱の中を通ります。ソルバーは格子点を柱の外へ押し出します。柱の中心は線より0.3m下にあるので、上へ押す距離（0.5m）のほうが下へ押す距離（1.1m）より短くなります。上を回る経路に着いたのは、このためだと考えられます。柱の中心が線の真上にあれば上下が対称になり、まっすぐな初期の経路からどちらに着くかは決まりません。 搬送ロボットの例・区間の数を変える 区間の数 N を変えて解きます。「格子点の最短距離」は格子点の位置と柱の中心の距離の最小、「経路の最短距離」は区間の中の放物線も含めた距離の最小です。どちらも0.8以上なら、柱に入っていません。 区間の数 N 費用 格子点の最短距離（m） 経路の最短距離（m） 5 3.34 0.800 0.536 10 3.81 0.800 0.800 20 3.77 0.800 0.800 40 3.75 0.800 0.800 次の図の「① 5区間で解いた経路」で、白い丸（格子点）と赤い部分の位置を比べてください。「② 区間の数と、加速度の二乗の積分」では、5区間の費用だけが小さいことを確かめてください。 搬送ロボットの例：柱の制約は格子点だけに課している。区間の中の経路は、一定の加速度で進む放物線から計算した 5区間では、柱の制約を課した6つの格子点はどれも柱の外です。ところが、柱の上の2つの格子点の間で、経路は柱に26cm入ります。柱を少し通り抜けた分だけ曲がり方がゆるくなり、必要な加速度が減ります。そのため費用は3.34と、10区間以上の答えより小さくなります。10区間以上では、格子点の間も柱の外に収まります。区間を細かくするほど加速度を変えられる回数が増えるので、費用は3.81・3.77・3.75と下がっていきます。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "どの方法も局所解までしか保証せず、どの局所解に着くかは初期の経路で決まることが多いです。違いは、何を変数として持つかと、運動の式をどう扱うかです。 系統 進み方 例での様子 直接転写・ Direct Collocation 状態と操作をすべて変数にし、運動の式を等式制約にする 下のコード。変数124個、柱の制約は格子点ごと Direct Shooting 操作だけを変数にし、出発から運動の式で状態を計算する この例は運動の式が線形なので、加速度40個から位置が直接決まる Direct Multiple Shooting 区間ごとに状態を計算し、境目のつながりを等式制約にする この例では区間の中を正確に計算しているので、下のコードと同じ問題になる 間接法 最適性の必要条件（Pontryaginの最小原理）を、境界値問題として解く 柱に触れる区間の並び（制約の構造）を前もって仮定する必要があり、この例では扱いにくい 転写した非線形計画は、 SQP （下のコードの SLSQP ）や 非線形内点法 （CasADiから呼ぶIpoptなど）で解きます。表は速さの順位ではなく、変数の持ち方の違いです。 次のコードは、例を状態と操作をすべて変数にした転写で解きます。 python import numpy as np from scipy.optimize import minimize start , goal = np . array ([ 0.0 , 0.0 ]), np . array ([ 4.0 , 0.0 ]) pillar , radius = np . array ([ 2.0 , - 0.3 ]), 0.8 # 柱の中心と、ロボットの大きさを足した半径 def plan ( N , T = 4.0 , side = 1.0 , avoid = True ): \"\"\"状態 p, v と区間ごとの加速度 u をすべて変数にし、運動の式を等式制約にする\"\"\" h , n = T / N , N + 1 def split ( z ): return z [: 2 * n ] . reshape ( n , 2 ), z [ 2 * n : 4 * n ] . reshape ( n , 2 ), z [ 4 * n :] . reshape ( N , 2 ) def cost ( z ): return h * np . sum ( split ( z )[ 2 ] ** 2 ) def motion ( z ): # 区間の中で加速度が一定のときの、位置と速度の変化 p , v , u = split ( z ) dp = p [ 1 :] - p [: - 1 ] - h * v [: - 1 ] - 0.5 * h ** 2 * u dv = v [ 1 :] - v [: - 1 ] - h * u return np . r_ [ dp . ravel (), dv . ravel (), p [ 0 ] - start , v [ 0 ], p [ - 1 ] - goal , v [ - 1 ]] def outside ( z ): # 格子点ごとに、柱の外にいること return np . sum (( split ( z )[ 0 ] - pillar ) ** 2 , axis = 1 ) - radius ** 2 s = np . linspace ( 0 , 1 , n ) guess = np . column_stack ([ 4 * s , side * 1.2 * np . sin ( np . pi * s ) * ( 2 - s )]) # 初期の経路 z0 = np . r_ [ guess . ravel (), np . zeros ( 2 * n ), np . zeros ( 2 * N )] cons = [{ \"type\" : \"eq\" , \"fun\" : motion }] + ([{ \"type\" : \"ineq\" , \"fun\" : outside }] if avoid else []) res = minimize ( cost , z0 , constraints = cons , method = \"SLSQP\" , options = { \"maxiter\" : 1000 , \"ftol\" : 1e-12 }) return ( res . fun , * split ( res . x )) def closest ( p , v , u , h ): \"\"\"格子点の間も含めた、経路と柱の中心の最短距離（区間の中は放物線）\"\"\" tau = np . linspace ( 0 , h , 401 )[:, None ] return min ( np . linalg . norm ( p [ k ] + v [ k ] * tau + 0.5 * u [ k ] * tau ** 2 - pillar , axis = 1 ) . min () for k in range ( len ( u ))) for side in ( 1.0 , - 1.0 , 0.0 ): cost , p , v , u = plan ( 20 , side = side ) print ( side , round ( cost , 2 ), round ( p [:, 1 ] . max (), 2 ), round ( closest ( p , v , u , 0.2 ), 3 )) # 1.0 3.77 0.5 0.8 # -1.0 6.67 0.0 0.793 # 0.0 3.77 0.5 0.8 for N in ( 5 , 10 , 20 , 40 ): cost , p , v , u = plan ( N ) print ( N , round ( cost , 2 ), round ( np . linalg . norm ( p - pillar , axis = 1 ) . min (), 3 ), round ( closest ( p , v , u , 4.0 / N ), 3 )) # 5 3.34 0.8 0.536 # 10 3.81 0.8 0.8 # 20 3.77 0.8 0.8 # 40 3.75 0.8 0.8 print ( round ( plan ( 20 , avoid = False )[ 0 ], 2 ), round ( plan ( 20 , T = 8.0 )[ 0 ], 2 )) # 3.01 0.47 最初の3行は、初期の経路を上・下・まっすぐにしたときの費用・経路の最も高い位置・経路の最短距離です。上とまっすぐからは、柱の上端の高さ0.5を通る同じ経路に着きます。下からは、出発と到着の高さ0より上へ出ない、下を回る経路に着きます。下を回る経路の最短距離は0.793で、格子点の間で柱に7mm入っています。 次の4行は、上を回る経路の、区間の数ごとの費用・格子点の最短距離・経路の最短距離です。5区間だけ、経路の最短距離が半径0.8を大きく下回り、0.536になります。柱に 0.8 − 0.536 ≈ 0.26 m入っている、と読めます。 最後の行は、柱がないときの費用3.01と、時間を8秒にしたときの費用0.47です。0.47は4秒の3.77の約8分の1で、時間を2倍にすると費用が 1 / 2 3 になることを示しています。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "次の式は「運動の式・経路上の制約・出発と到着の条件を守る状態の軌道 x ( · ) と操作の軌道 u ( · ) の中で、費用 J を最小にする」を表します。 min x ( · ) , u ( · ) , T J s.t. x ˙ = f ( x , u ) , c ( x , u ) ≤ 0 , x ( 0 ) = x 0 , x ( T ) ∈ 𝒳 T 記号 意味 搬送ロボットの例では x ( t ) 状態 位置 p ( t ) と速度 v ( t ) （それぞれ平面の2成分） u ( t ) 操作 加速度（2成分） f ( x , u ) 運動の式 p ˙ = v 、 v ˙ = u J 費用 $\\int_0^T\\lVert u(t)\\rVert^2,dt$。上を回る経路で3.77 c ( x , u ) ≤ 0 経路上の制約（すべての時刻で守る） 0.8 2 − ‖ p ( t ) − ( 2 , − 0.3 ) ‖ 2 ≤ 0 （柱の外） x 0 出発の状態 位置 ( 0 , 0 ) 、速度0 X T 到着で満たす状態の集合 位置 ( 4 , 0 ) 、速度0 T 到着までの時間 4秒に固定 最適制御との違いは、何を答えにするか 式は、 最適制御 の式に経路上の制約と出発・到着の条件を加えた形です。軌道最適化は、出発の状態から到着までの一本の軌道を前もって計算し、それを答えにします。いまの状態を見て操作を決め直す仕組み（フィードバック）は答えに含みません。 時間を区切って、有限個の変数にする x ( · ) と u ( · ) は時間の関数なので、そのままでは計算機で扱えません。4秒を N 区間（幅 h = 4 / N 秒）に分け、各区間の中では加速度を一定とします。このとき、区間の境目（格子点）の位置と速度は、次の式で正確に進みます。 p k + 1 = p k + h v k + 1 2 h 2 u k , v k + 1 = v k + h u k この式は「区間の始めの位置と速度に、一定の加速度で h 秒進んだ分を足す」と読みます。費用は h ∑ k ‖ u k ‖ 2 になります。 N = 20 なら、位置と速度が21組と加速度が20組で、変数は124個です。運動の式が80本、出発と到着の条件が8本の等式で、柱の外にいることは格子点ごとの21本の不等式です。 このように軌道の問題を有限個の変数と制約に書き直すことを、転写（transcription）と呼びます。書き直した問題は 制約付きの非線形計画 です。 柱の外という制約は、凸でない 柱の外にいる点の集合は、円の外側です。円の外側では、2点を結ぶ線分が円を通ることがあり、凸な集合ではありません。そのため、局所解が一つとは限りません。 この例では、柱の上を回る経路と下を回る経路が、どちらも局所解です。ソルバーは初期の経路から近くの局所解へ進むことが多いので、どちらに着くかは多くの場合、初期の経路で決まります。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-optimization:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.trajectory-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.model-predictive-control",
+        "content:concept.optimal-control",
+        "content:concept.time-discretization",
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:interior-point-nlp",
+        "content:multiple-shooting",
+        "content:sqp",
+        "problem:PA044",
+        "source:S002",
+        "source:S017",
+        "source:S042",
+        "source:S056",
+        "source:S178"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S042",
+        "S056",
+        "S178"
+      ],
+      "text": "「柱をよけて、荷物を揺らさずに4秒で棚へ運びたい」という課題を、次の4段で式にします。 状態と操作は何か ：状態は平面の位置と速度、操作は加速度です。モーターの指令が加速度に比例するとみなします。 運動の式は何か ：位置の変化が速度、速度の変化が加速度です。床の滑りや荷物の重さによる遅れは、この式に入れていません。 何を守るか ：出発と到着で止まっていること、すべての時刻で柱の円に入らないことです。ロボットの大きさは、柱の半径に足して点として扱います。 何を減らし、時間をどう扱うか ：荷物の揺れの目安として、加速度の二乗の積分を減らします。到着の時間は4秒に固定します。 始点から目標までの軌道を、運動の式と経路上の制約を守りながら前もって一本決めたいとき、軌道最適化として定式化できます。",
+      "title": "課題から定式化する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60048,7 +60624,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA027",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.sat-maxsat"
+      ],
       "source_ids": [
         "S022",
         "S053"
@@ -60383,7 +60961,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA044",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.trajectory-optimization"
+      ],
       "source_ids": [
         "S042",
         "S043",
