@@ -1070,3 +1070,18 @@
 .nls-profile-valley { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2; }
 .nls-profile-start { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 5 4; }
 .nls-profile-label { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+
+/* Phase fraction (external solver): α curve solid, β curve dotted, the common tangent dashed orange. */
+.pf-g-alpha { fill: none; stroke: var(--ex-ink); stroke-width: 3; }
+.pf-g-beta { fill: none; stroke: var(--ex-ink); stroke-width: 3; stroke-dasharray: 2 5; stroke-linecap: round; }
+.pf-tangent { stroke: var(--ex-orange); stroke-width: 2.5; stroke-dasharray: 7 5; }
+.pf-tangent-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.pf-tangent-point { fill: var(--ex-ink); }
+.pf-guide { stroke: var(--ex-ink-soft); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.pf-candidate { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
+.pf-lever-base { stroke: var(--ex-line); stroke-width: 8; stroke-linecap: round; }
+.pf-lever-beta { stroke: var(--ex-orange); stroke-width: 8; stroke-linecap: round; }
+.pf-target { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 6 4; }
+.pf-two-phase { fill: var(--ex-teal); fill-opacity: 0.1; }
+.pf-flat { stroke: var(--ex-ink-soft); stroke-width: 9; stroke-opacity: 0.25; stroke-linecap: round; }
+.pf-flat-label { fill: var(--ex-ink); font-weight: 700; }

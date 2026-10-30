@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `72`
-- Meeting the concept floor: `72`
+- Published concept guides: `73`
+- Meeting the concept floor: `73`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -26,6 +26,7 @@
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
+| `concept.external-solver-objective` | 162 | 11507 | 15 | 15 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
@@ -129,6 +130,7 @@
 | `concept.eigenvalue-problem` | 13 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
+| `concept.external-solver-objective` | 0 |
 | `concept.failed-simulation` | 0 |
 | `concept.general-nonsmooth-local` | 0 |
 | `concept.high-dimensional-black-box` | 0 |
