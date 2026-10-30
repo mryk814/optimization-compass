@@ -956,6 +956,13 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     assert len(clipped) == 16 and clipped[-1][1] == 0.0
     bfgs = record(lambda f: optimize.minimize(f, start))
     assert [round(p[1], 9) for p in bfgs] == [round(c, 9) for c in EVAL_BFGS_C]
+    # Rescaling to T/100 and 1e4 c balances the first trial but still passes c < 0.
+    scaled = record(
+        lambda f: optimize.minimize(lambda z: f([z[0] * 100, z[1] * 1e-4]), [12.0, 5.0])
+    )
+    assert (round(scaled[3][0]), round(scaled[3][1], 5)) == (1248, 0.00045)
+    assert len(scaled) == 13 and round(scaled[-1][1], 5) == -0.00056
+    assert all(p[1] > 0 for p in scaled[:-1])
     iterates = [np.array(start)]
     lbfgsb = record(
         lambda f: optimize.minimize(
@@ -970,7 +977,7 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     for index, point in enumerate(lbfgsb):
         if index % 3:
             shift = point - lbfgsb[index - index % 3]
-            assert np.count_nonzero(shift) <= 2 and np.max(np.abs(shift)) <= 1.0001e-8
+            assert np.count_nonzero(shift) == 1 and np.max(np.abs(shift)) <= 1.0001e-8
             roles.append("d")
         elif index == 0:
             roles.append("s")
