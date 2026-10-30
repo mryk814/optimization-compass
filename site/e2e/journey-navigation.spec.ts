@@ -45,7 +45,7 @@ test("browser backと画面内Backがそれぞれ予測可能に動く", async (
   await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page.getByRole("complementary", { name: "ケースの学習経路" })).toContainText("Step 2/4");
   await page.getByRole("link", { name: /次はCompare/u }).click();
-  await expect(page.getByRole("heading", { name: "Pareto front上でpreferenceを変える" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "パレートフロント上で選好を変える" })).toBeVisible();
 
   await page.goBack();
   await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_BIOBJECTIVE_QUADRATIC\?state=/u);

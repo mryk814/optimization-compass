@@ -1483,8 +1483,8 @@
         "S056",
         "S064"
       ],
-      "text": "同じdata、outer budget、inner policy、tolerance、implicit derivative routeを使い、exact KKTか有限relaxationかだけを変える。",
-      "title": "exact KKTと有限relaxationを残差で読み分ける"
+      "text": "同じデータ、外側の予算、内側の方針、許容誤差、陰関数微分の経路を使い、厳密なKKTか有限の緩和かだけを変える。",
+      "title": "厳密なKKTと有限の緩和を残差で読み分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1517,8 +1517,8 @@
         "S059",
         "S075"
       ],
-      "text": "各memberをoracle evaluationsで同期する。3つのBO memberはreferenceから1要因だけを変え、random baselineも同じ初期設計・domain・base seed・budgetを使う。",
-      "title": "acquisition・noise・random baselineを同じbudgetで読む"
+      "text": "各比較対象を評価回数で同期する。3つのBOの比較対象は参照条件から1要因だけを変え、ランダム探索の基準も同じ初期設計・定義域・基本の乱数の種・評価予算を使う。",
+      "title": "獲得関数・ノイズ・ランダム探索の基準を同じ評価予算で読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1548,8 +1548,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じinitial design、simulator、noise、fidelity cost、総cost、parallelism、tuning、failure/no-retry policyを固定し、high-fidelity-equivalent cost以下の最後のledger callで同期する。",
-      "title": "同じhigh-fidelity-equivalent costでfidelity配分を比べる"
+      "text": "同じ初期点の配置、シミュレータ、ノイズ、精度ごとの費用、総費用、並列数、チューニング、失敗時は再試行しない方針を固定し、高精度モデル換算の費用を超えない評価記録上の最後の呼び出しで同期する。",
+      "title": "同じ高精度モデル換算の費用で精度の配分を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1574,8 +1574,8 @@
         "S055",
         "S064"
       ],
-      "text": "同じ問題・初期点で、目的値とfeasibilityを別々に読みます。",
-      "title": "制約を守るrunと無視するrunを比べる"
+      "text": "同じ問題・初期点で、目的値と実行可能性を別々に読みます。",
+      "title": "制約を守る実行と無視する実行を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1601,8 +1601,8 @@
         "S055",
         "S103"
       ],
-      "text": "両memberはuncertainty model、8/4 sample、alpha、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
-      "title": "同じscenarioで平均costとCVaR costを読み分ける"
+      "text": "両方の比較対象は不確実性のモデル、8/4件の標本、α、決定変数の格子、12回の損失評価を共有し、最適化に使う目的関数でのリスクの扱いだけを変える。",
+      "title": "同じシナリオで平均費用とCVaR費用を読み分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1638,8 +1638,8 @@
         "S065",
         "S096"
       ],
-      "text": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
-      "title": "非線形fitでsolver条件を比べる"
+      "text": "3つの比較対象のフレーム履歴は完全に同一です。比較対象の名前は、同じ診断状態に対する適用条件の見方だけを表します。",
+      "title": "非線形の当てはめでソルバーの適用条件を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1673,8 +1673,8 @@
         "S060",
         "S063"
       ],
-      "text": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。",
-      "title": "失敗simulationでstatusとfeasible objectiveを分けて読む"
+      "text": "両比較対象は候補列・定義域・評価予算・失敗の分類・状態を罰則へ置換しない方針を共有し、第5候補の状態だけを変える。",
+      "title": "失敗するシミュレーションで、状態と実行可能な目的関数値を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1702,7 +1702,7 @@
         "S001",
         "S002"
       ],
-      "text": "同じ目的・初期点・budgetの下で、意図的に攻めた固定parameterによる感度を読みます。",
+      "text": "同じ目的・初期点・予算の下で、意図的に攻めた固定パラメータによる感度を読みます。",
       "title": "学習率を変えたときの発散を観察する"
     },
     {
@@ -1731,7 +1731,7 @@
         "S001",
         "S002"
       ],
-      "text": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
+      "text": "同じ初期点・目的関数・評価予算で、GD / Momentum / Adamを同期します。",
       "title": "細長い谷で一次法を比べる"
     },
     {
@@ -1758,8 +1758,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "灌漑更新Caseから探索完了と予算停止を読む"
+      "text": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
+      "title": "灌漑更新の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1787,8 +1787,8 @@
         "S022",
         "S079"
       ],
-      "text": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。",
-      "title": "探索完了とnode予算停止を同じ上限で比べる"
+      "text": "同じ問題例・乱数の種・分枝の順序・初期の暫定解・上界・評価9回の上限を使い、node_stop_limitだけを変えます。",
+      "title": "探索完了とノード予算停止を同じ上限で比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1815,8 +1815,8 @@
         "S059",
         "S075"
       ],
-      "text": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。",
-      "title": "small noise下で探索係数だけを変える"
+      "text": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。",
+      "title": "小さいノイズの下で探索係数だけを変える"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1842,8 +1842,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "巡回健診Caseから探索完了と予算停止を読む"
+      "text": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
+      "title": "巡回健診の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1868,8 +1868,8 @@
         "S001",
         "S002"
       ],
-      "text": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
-      "title": "初期simplexでNelder–Meadの経路を読む"
+      "text": "同じ目的関数、係数、スケール、停止条件、評価予算で同期し、初期単体の位置だけを変えます。",
+      "title": "初期単体でNelder–Meadの経路を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1895,8 +1895,8 @@
         "S050",
         "S102"
       ],
-      "text": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。",
-      "title": "抽象的な軌道最適化からpendulumのmesh感度を読む"
+      "text": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。",
+      "title": "抽象的な軌道最適化から振り子のメッシュ感度を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1922,8 +1922,8 @@
         "S055",
         "S068"
       ],
-      "text": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。",
-      "title": "Pareto front上でpreferenceを変える"
+      "text": "同じ結果の集合とパレートフロントを固定し、選好による選択だけを比較します。",
+      "title": "パレートフロント上で選好を変える"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1951,8 +1951,8 @@
         "S101",
         "S110"
       ],
-      "text": "problem、mesh、design更新、call budget、solver/preconditioner policy、failure mappingを固定し、state/adjoint toleranceだけを変える。",
-      "title": "同じdesign更新でstate/adjoint toleranceとsolve costを読む"
+      "text": "問題、メッシュ、設計更新、呼び出し予算、ソルバー／前処理の方針、失敗評価の扱いを固定し、状態／随伴の許容誤差だけを変える。",
+      "title": "同じ設計更新で、状態／随伴計算の許容誤差と計算費用を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1978,8 +1978,8 @@
         "S050",
         "S102"
       ],
-      "text": "同じdynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変えます。",
-      "title": "pendulum collocationのcoarse meshとrefined meshを比べる"
+      "text": "同じ運動方程式、2秒の計画区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変えます。",
+      "title": "振り子の選点法で粗いメッシュと細かいメッシュを比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2003,8 +2003,8 @@
         "S010",
         "S055"
       ],
-      "text": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。",
-      "title": "risk aversionで平均・分散配分を読み比べる"
+      "text": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。",
+      "title": "リスク回避係数で平均・分散配分を読み比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2030,8 +2030,8 @@
         "S055",
         "S103"
       ],
-      "text": "両memberはuncertainty model、8/4 sample policy、alpha、confidence claim、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
-      "title": "同じscenarioでnominal目的とCVaR目的を読む"
+      "text": "両比較対象は不確実性モデル、8/4件の標本の分け方、α、信頼度についての主張、決定変数の格子、12回の損失評価を共有し、学習時の目的関数におけるリスクの扱いだけを変える。",
+      "title": "同じシナリオで名目の目的とCVaR目的を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2057,8 +2057,8 @@
         "S043",
         "S076"
       ],
-      "text": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。",
-      "title": "反復MPC QPでwarm startとdeadline余裕を読む"
+      "text": "両方の比較対象は問題、動力学、上下限、参照値、残差、締め切りの方針、周期数、反復数から遅延への換算モデルを共有し、ウォームスタートによる解の再利用だけを変える。",
+      "title": "反復MPC QPでウォームスタートと締め切りまでの余裕を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2084,8 +2084,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "再生プロジェクト選定Caseから探索完了と予算停止を読む"
+      "text": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。",
+      "title": "再生プロジェクト選定の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2115,8 +2115,8 @@
         "S056",
         "S080"
       ],
-      "text": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。",
-      "title": "求根で残差vectorと二乗残差を分けて読む"
+      "text": "両比較対象は方程式、初期点、定義域、残差のスケール、Jacobianの利用可能性を共有し、停止規則だけを変える。",
+      "title": "求根で残差ベクトルと二乗残差を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2147,8 +2147,8 @@
         "S105",
         "S106"
       ],
-      "text": "同じ物理briefと診断contractを使いますが、design spaceが異なるためobjective値や到達shapeを性能順位として比較しません。",
-      "title": "fixed-topology shapeとtopology-changing fieldを比べる"
+      "text": "同じ物理条件の概要と診断の契約を使いますが、設計空間が異なるため、目的関数値や到達した形状を性能順位として比較しません。",
+      "title": "トポロジー固定の形状と、トポロジーを変えられる密度場を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2173,7 +2173,7 @@
         "S022",
         "S053"
       ],
-      "text": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。",
+      "text": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。",
       "title": "希望が同率の勤務表を負荷の偏りで読み比べる"
     },
     {
@@ -2203,8 +2203,8 @@
         "S071",
         "S107"
       ],
-      "text": "同じproblem、target、initialization、objective、step、budget、diagnosticを共有し、SO(3)へ戻すstrategyだけを変える。",
-      "title": "SO(3)へのprojectionとLie algebra updateを分けて読む"
+      "text": "同じ問題、目標、初期化、目的関数、刻み幅、予算、診断を共有し、SO(3)へ戻す方策だけを変える。",
+      "title": "SO(3)への射影とリー代数での更新を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2231,8 +2231,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "支援拠点Caseから探索完了と予算停止を読む"
+      "text": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。",
+      "title": "支援拠点の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2260,8 +2260,8 @@
         "S024",
         "S079"
       ],
-      "text": "両memberは固定route・時間行列・車両・出発時刻・service time・他の時間窓・帰着deadlineを共有し、stop 4の終了時刻だけを変える。",
-      "title": "時間窓付き配送で可行routeと違反を分けて読む"
+      "text": "両方の比較対象は固定ルート・時間行列・車両・出発時刻・現地作業時間・他の時間窓・帰着の締め切りを共有し、訪問先4の終了時刻だけを変える。",
+      "title": "時間窓付き配送で可行なルートと違反を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2288,8 +2288,8 @@
         "S100",
         "S101"
       ],
-      "text": "同じ問題instance、初期density、volume target、filter・projection preset、generator、12回の評価予算で更新則だけを変えます。",
-      "title": "同じ密度fieldでOCとMMAを比べる"
+      "text": "同じ問題例、初期密度、目標体積率、事前に固定したフィルタ・射影の設定、生成器、12回の評価予算で更新則だけを変えます。",
+      "title": "同じ密度場でOCとMMAを比べる"
     },
     {
       "attribution": "Optimization Compass contributors",

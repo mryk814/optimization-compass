@@ -42,7 +42,7 @@ test("bilevel Compareはcomplementarity treatmentだけを変え、順位づけ�
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "exact KKTと有限relaxationを残差で読み分ける",
+      name: "厳密なKKTと有限の緩和を残差で読み分ける",
     }),
   ).toBeVisible();
   const conditions = page.getByRole("region", { name: "比較条件" });

@@ -5061,7 +5061,7 @@
       "entity_id": "COMPARE_IRRIGATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "灌漑更新Caseから探索完了と予算停止を読む",
+      "label": "灌漑更新の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5114,7 +5114,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -5193,7 +5193,7 @@
       "entity_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "small noise下で探索係数だけを変える",
+      "label": "小さいノイズの下で探索係数だけを変える",
       "relations": [
         {
           "relation_type": "case",
@@ -5251,7 +5251,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。"
+      "summary": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。"
     },
     {
       "aliases": [],
@@ -5259,7 +5259,7 @@
       "entity_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "巡回健診Caseから探索完了と予算停止を読む",
+      "label": "巡回健診の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5312,7 +5312,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [
@@ -5383,7 +5383,7 @@
       "entity_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "抽象的な軌道最適化からpendulumのmesh感度を読む",
+      "label": "抽象的な軌道最適化から振り子のメッシュ感度を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5436,7 +5436,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。"
+      "summary": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。"
     },
     {
       "aliases": [],
@@ -5632,7 +5632,7 @@
       "entity_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "risk aversionで平均・分散配分を読み比べる",
+      "label": "リスク回避係数で平均・分散配分を読み比べる",
       "relations": [
         {
           "relation_type": "case",
@@ -5680,7 +5680,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。"
+      "summary": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。"
     },
     {
       "aliases": [],
@@ -5810,7 +5810,7 @@
       "entity_id": "COMPARE_RESTORATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "再生プロジェクト選定Caseから探索完了と予算停止を読む",
+      "label": "再生プロジェクト選定の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5863,7 +5863,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -6071,7 +6071,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。"
+      "summary": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。"
     },
     {
       "aliases": [],
@@ -6150,7 +6150,7 @@
       "entity_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "支援拠点Caseから探索完了と予算停止を読む",
+      "label": "支援拠点の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -6208,7 +6208,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],

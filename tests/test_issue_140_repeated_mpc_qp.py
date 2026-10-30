@@ -62,7 +62,9 @@ def test_ec025_connects_its_own_instance_scenarios_and_comparison() -> None:
     assert case["comparison_ids"] == ["COMPARE_REPEATED_MPC_QP_WARM_START"]
     assert comparison.problem_instance_id == PROBLEM_INSTANCE_ID
     assert comparison.benchmark_context_id == "BENCH_REPEATED_MPC_QP_EC025_4"
-    assert comparison.changed_factors == ["第2周期以降に前周期解をwarm startとして渡すかどうかだけ"]
+    assert comparison.changed_factors == [
+        "第2周期以降に前周期解をウォームスタートとして渡すかどうかだけ"
+    ]
     assert comparison.comparability == "contrast_only"
     assert comparison.ranking_eligible is False
 
