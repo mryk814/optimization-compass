@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `69`
-- Meeting the concept floor: `69`
+- Published concept guides: `71`
+- Meeting the concept floor: `71`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -55,6 +55,8 @@
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
 | `concept.pde-constrained-program` | 102 | 7078 | 8 | 4 | 0 | pass |
 | `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
+| `concept.robust-optimization` | 140 | 12070 | 14 | 9 | 0 | pass |
+| `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
 | `concept.root-finding` | 93 | 7097 | 8 | 4 | 0 | pass |
 | `concept.second-order-cone-program` | 135 | 9718 | 13 | 6 | 0 | pass |
@@ -155,6 +157,8 @@
 | `concept.pde-constrained-optimization` | 0 |
 | `concept.pde-constrained-program` | 0 |
 | `concept.receding-horizon` | 5 |
+| `concept.robust-optimization` | 0 |
+| `concept.robust-parameter-estimation` | 0 |
 | `concept.robust-regression` | 5 |
 | `concept.root-finding` | 9 |
 | `concept.second-order-cone-program` | 0 |

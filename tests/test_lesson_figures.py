@@ -796,3 +796,86 @@ def test_stochastic_programming_figures_use_the_article_numbers() -> None:
     tree = generate_lesson_figures()["stochastic-programming-two-stage.svg"]
     for text in ("x=40", "取り寄せ y=0", "取り寄せ y=40"):
         assert text in tree
+
+
+def test_robust_optimization_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        ro_coefficients,
+        ro_content,
+        ro_shortfall_probability,
+        ro_solve,
+        ro_switch,
+    )
+
+    nominal, nominal_cost = ro_solve(0.0)
+    robust, robust_cost = ro_solve(1.0)
+    assert [round(v, 9) for v in nominal] == [2.0, 6.0]
+    assert math.isclose(nominal_cost, 13.2)
+    assert math.isclose(robust[0], 50 / 9) and robust[1] == 0.0
+    assert math.isclose(robust_cost, 50 / 3)
+    assert math.isclose(ro_content(nominal, ro_coefficients(1.0)), 6.6)
+    assert math.isclose(ro_shortfall_probability(nominal), 0.5)
+    assert ro_shortfall_probability(robust) == 0.0
+    # The table: k, cost, smallest nitrogen over the recorded box, shortfall percentage
+    rows = {0.25: (14.62, 7.63, 34.8), 0.45: (15.63, 8.35, 21.0), 0.5: (15.79, 9.47, 25.0)}
+    for k, (cost, nitrogen, percent) in rows.items():
+        x, value = ro_solve(k)
+        assert round(value, 2) == cost
+        assert round(ro_content(x, ro_coefficients(1.0)), 2) == nitrogen
+        assert round(100 * ro_shortfall_probability(x), 1) == percent
+    assert math.isclose(ro_switch(), 10 / 21, rel_tol=1e-9)
+    box = generate_lesson_figures()["robust-optimization-box.svg"]
+    for text in ("(2, 6)：13.2千円", "橙の点 (5.56, 0)", "16.67千円", "少ない角 (1.8, 0.5)"):
+        assert text in box
+    size = generate_lesson_figures()["robust-optimization-set-size.svg"]
+    for text in ("k=0.476", "50%", "21%", "25%", "15.75", "16.67"):
+        assert text in size
+
+
+def test_robust_estimation_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        RPE_BAD,
+        rpe_huber_profile,
+        rpe_irls,
+        rpe_residuals,
+        rpe_squares_profile,
+        rpe_valleys,
+        rpe_weights,
+    )
+
+    squares = rpe_valleys(rpe_squares_profile)
+    assert [(round(w, 2), round(v, 2)) for w, v in squares] == [
+        (0.29, 12.83),
+        (2.31, 9.2),
+        (4.57, 11.83),
+        (6.05, 8.3),
+    ]
+    huber = rpe_valleys(rpe_huber_profile)
+    assert [(round(w, 2), round(v, 3)) for w, v in huber] == [
+        (2.01, 1.108),
+        (3.67, 2.418),
+        (4.37, 1.834),
+        (5.73, 1.489),
+    ]
+    rows = rpe_irls()
+    table = [
+        (1.0, 1.8, 1.866),
+        (1.53, 2.087, 1.302),
+        (1.821, 2.016, 1.127),
+        (1.927, 2.006, 1.109),
+        (1.945, 2.006, 1.108),
+    ]
+    for row, (a, w, loss) in zip(rows, table, strict=False):
+        assert (round(row[0], 3), round(row[1], 3), round(row[2], 3)) == (a, w, loss)
+    a, w = rows[-1][:2]
+    assert (round(a, 3), round(w, 3)) == (1.946, 2.005)
+    assert round(rpe_residuals(a, w)[RPE_BAD], 2) == -3.56
+    weights = rpe_weights(a, w)
+    assert round(weights[RPE_BAD], 3) == 0.084
+    assert all(value == 1.0 for i, value in enumerate(weights) if i != RPE_BAD)
+    profile = generate_lesson_figures()["robust-estimation-profile.svg"]
+    for text in ("ω=6.05：8.30", "ω=2.31：9.20", "ω=2.01：1.11"):
+        assert text in profile
+    weight_figure = generate_lesson_figures()["robust-estimation-weights.svg"]
+    for text in ("Huber：ω=2.01", "二乗和：ω=6.05", "0.084"):
+        assert text in weight_figure
