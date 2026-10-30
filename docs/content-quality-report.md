@@ -3,7 +3,7 @@
 - Published concept guides: `71`
 - Meeting the concept floor: `71`
 - Below the concept floor: `0`
-- Prose review warnings: `707`
+- Prose review warnings: `706`
 
 ## Concept publication floor
 
@@ -66,7 +66,7 @@
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 6442 | 8 | 4 | 0 | pass |
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
-| `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
+| `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
@@ -84,7 +84,7 @@
 ## Prose warning summary
 
 - `number.overprecise`: 209
-- `prose.choppy`: 6
+- `prose.choppy`: 5
 - `prose.meta`: 4
 - `prose.work-report`: 15
 - `sentence.commas`: 397
@@ -168,7 +168,7 @@
 | `concept.simplex` | 4 |
 | `concept.simplex-optimization` | 3 |
 | `concept.smooth-low-dimensional-unconstrained` | 13 |
-| `concept.so3-rotation-representation` | 1 |
+| `concept.so3-rotation-representation` | 0 |
 | `concept.so3-se3-optimization` | 0 |
 | `concept.spd-matrix-geometry` | 0 |
 | `concept.stochastic-erm` | 0 |
