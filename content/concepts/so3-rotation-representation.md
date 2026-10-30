@@ -407,7 +407,7 @@ for X in (R_qr, R_polar):
 
 [SO(3)姿勢合わせ事例](#/gallery/so3-attitude-alignment)は、2つの更新経路を同じ教材問題で並べます。一方は9つの成分を動かしてから回転へ戻す射影更新、もう一方は接空間で一歩を作るリーマン更新です。
 
-[射影可視化](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)では、射影を含む更新経路と、回転からのはずれを追えます。[リーマン可視化](#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT)では、接空間の一歩と、回転からのはずれを追えます。[射影／リーマン比較](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、2つの実行を同じ評価予算にそろえて並べます。目的関数の値と回転からのはずれ、射影距離と勾配の大きさは、それぞれ別の診断値として読みます。
+[射影可視化](#/traces/so3-projected-alignment)では、射影を含む更新経路と、回転からのはずれを追えます。[リーマン可視化](#/traces/so3-riemannian-alignment)では、接空間の一歩と、回転からのはずれを追えます。[射影／リーマン比較](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、2つの実行を同じ評価予算にそろえて並べます。目的関数の値と回転からのはずれ、射影距離と勾配の大きさは、それぞれ別の診断値として読みます。
 
 ## 次に読む
 

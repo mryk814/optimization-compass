@@ -64,7 +64,7 @@
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 6442 | 8 | 4 | 0 | pass |
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
-| `concept.so3-rotation-representation` | 103 | 16862 | 21 | 5 | 0 | pass |
+| `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |

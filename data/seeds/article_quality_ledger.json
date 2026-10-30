@@ -812,7 +812,7 @@
     "concept.so3-rotation-representation": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "64eb4b29ebf4",
+      "body_sha256": "3c4aa703527f",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
