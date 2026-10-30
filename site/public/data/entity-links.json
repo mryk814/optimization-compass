@@ -11731,6 +11731,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.external-solver-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.failed-simulation",
           "target_type": "content"
         },
