@@ -7,7 +7,7 @@ title_ja: 外部の計算ソフトを目的関数の中で呼ぶ最適化
 title_en: Optimization with an External Solver Inside the Objective
 summary: 外部の計算ソフトを目的関数の中で呼ぶ最適化は、決めた値をThermo-Calcのような計算ソフトに渡し、返ってきた結果から目的の値を作る問題です。ソフトの中でも平衡を求める最小化が走るので、外側で何を最小にするかを分けて考えます。相が消える範囲では結果が平らになり、勾配を使う方法は動かないまま成功と報告することがあります。
 prerequisites: [concept.evaluation-cost]
-related_ids: [concept.failed-simulation, concept.expensive-black-box, concept.root-finding, concept.simplex-optimization, concept.bilevel-optimization, method.nelder-mead, lbfgsb]
+related_ids: [concept.solver-evaluation-points, concept.failed-simulation, concept.expensive-black-box, concept.root-finding, concept.simplex-optimization, concept.bilevel-optimization, method.nelder-mead, lbfgsb]
 source_ids: [S001, S002, S056, S063, S065]
 status: published
 last_reviewed: 2026-10-30
@@ -184,6 +184,7 @@ $$
 
 - 1回の計算が数分以上かかり、数十回しか呼べない → [非常に高価な低次元評価](#/formulations/PA014)と[評価費と予算](#/learn/concept.evaluation-cost)
 - 計算が収束しない、エラーで値が返らない組成がある → [失敗・NaNを伴うシミュレーション](#/formulations/PA016)
+- 範囲の内側から始めたのに、範囲の外の組成でツールがエラーになる → [ソルバーが目的関数を呼ぶ点と回数](#/learn/concept.solver-evaluation-points)
 - 相が出るか出ないかそのものを目的にしていて、値が段差で飛ぶ → [決定論的だが不連続なsimulation](#/formulations/PA012)
 - 同じ組成でも、呼ぶたびに値が少し違う → [noiseを含むblack-box](#/formulations/PA013)
 - 3成分以上で、分率の合計が1になる → [単体上の最適化](#/formulations/PA036)

@@ -8349,6 +8349,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.solver-evaluation-points",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.spd-matrix-geometry",
       "asset_type": "content",
       "policy": "warning",
