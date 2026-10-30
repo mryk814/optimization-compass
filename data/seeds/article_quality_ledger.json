@@ -242,6 +242,18 @@
       },
       "notes": "Sonnetが執筆（既存の操作図bayes-opt-acquisitionを主図に、1次元の油田の例・予算8回で一本化。確かめ項目はページを操作して照合）。Sonnetの一次レビュー（数値19件中18件一致、0.3325は再現不能。example.computed・reading.formula-sentence・pitfalls・compare.no-rankingがfail）をClaudeが照合して修正：再現できない0.3325を削除、F(x)とa=μ−2σの読みを追加、出典のない一般論をこの例の数字（1世代8点なら予算8回で1世代）に置換、directの評価回数超過をSciPyに限定、事例の予算の数え方を統一。320pxで長いインライン式がページを359pxに広げていたので式を分割し、ページ幅320を確認"
     },
+    "concept.external-solver-objective": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "35cbb724ced8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "concept.failed-simulation": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",

@@ -225,8 +225,8 @@
         "S049",
         "S070"
       ],
-      "text": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
-      "title": "mini-batchで画像分類モデルを学習する"
+      "text": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。",
+      "title": "ミニバッチで画像分類モデルを学習する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -351,7 +351,7 @@
         "S060",
         "S063"
       ],
-      "text": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "text": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
       "title": "途中で失敗するシミュレーションから設計を探す"
     },
     {
@@ -431,8 +431,8 @@
         "S050",
         "S102"
       ],
-      "text": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
-      "title": "pendulumを制約内で振り上げる"
+      "text": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
+      "title": "振り子を制約内で振り上げる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -469,7 +469,7 @@
         "S055",
         "S068"
       ],
-      "text": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。",
+      "text": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。",
       "title": "蓄電池運用のコストと充放電量を両方見る"
     },
     {
@@ -672,7 +672,7 @@
         "S054",
         "S079"
       ],
-      "text": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。",
+      "text": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。",
       "title": "予算内で生態系再生プロジェクトを選ぶ"
     },
     {
@@ -746,8 +746,8 @@
         "S055",
         "S103"
       ],
-      "text": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
-      "title": "価格scenarioのtail costを抑えて電力を調達する"
+      "text": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。",
+      "title": "価格シナリオの裾の費用を抑えて電力を調達する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -784,7 +784,7 @@
         "S059",
         "S075"
       ],
-      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。",
       "title": "少ない実験で配合条件を絞る"
     },
     {
@@ -867,7 +867,7 @@
         "S054",
         "S079"
       ],
-      "text": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。",
+      "text": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。",
       "title": "予算内で圃場の灌漑設備を更新する"
     },
     {
@@ -906,7 +906,7 @@
         "S059",
         "S075"
       ],
-      "text": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。",
+      "text": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。",
       "title": "少ない試作でレーザー加工条件を絞る"
     },
     {
@@ -985,7 +985,7 @@
         "S054",
         "S079"
       ],
-      "text": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。",
+      "text": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。",
       "title": "予算内で巡回健診の開催候補を選ぶ"
     },
     {
@@ -1031,8 +1031,8 @@
         "S069",
         "S075"
       ],
-      "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
-      "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+      "text": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。",
+      "title": "低精度／高精度のシミュレータを予算内で使い分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1070,8 +1070,8 @@
         "S056",
         "S063"
       ],
-      "text": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
-      "title": "初期simplexで局所探索の感度を見抜く"
+      "text": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。",
+      "title": "初期単体で局所探索の感度を見抜く"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1108,7 +1108,7 @@
         "S054",
         "S079"
       ],
-      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。",
       "title": "予算内で通信設備の更新候補を選ぶ"
     },
     {
@@ -1146,7 +1146,7 @@
         "S010",
         "S055"
       ],
-      "text": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
+      "text": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。",
       "title": "平均・共分散でポートフォリオを配分する"
     },
     {
@@ -1177,8 +1177,8 @@
         "S055",
         "S103"
       ],
-      "text": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
-      "title": "scenarioのtail riskを抑えて配分する"
+      "text": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。",
+      "title": "シナリオの裾リスクを抑えて配分する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1213,7 +1213,7 @@
         "S016",
         "S021"
       ],
-      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。",
       "title": "段取り費を含む週間生産計画を組む"
     },
     {
@@ -1292,8 +1292,8 @@
         "S105",
         "S106"
       ],
-      "text": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。",
-      "title": "2D diffuserの壁面shapeを更新する"
+      "text": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。",
+      "title": "2Dディフューザの壁面形状を更新する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1376,8 +1376,8 @@
         "S071",
         "S107"
       ],
-      "text": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
-      "title": "SO(3)上でnear-piのattitudeを合わせる"
+      "text": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。",
+      "title": "SO(3)上で回転角がπに近い姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1456,7 +1456,7 @@
         "S039",
         "S068"
       ],
-      "text": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "text": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
       "title": "信号制御の遅れと停止回数を両方見る"
     },
     {
@@ -1483,8 +1483,8 @@
         "S056",
         "S064"
       ],
-      "text": "同じdata、outer budget、inner policy、tolerance、implicit derivative routeを使い、exact KKTか有限relaxationかだけを変える。",
-      "title": "exact KKTと有限relaxationを残差で読み分ける"
+      "text": "同じデータ、外側の予算、内側の方針、許容誤差、陰関数微分の経路を使い、厳密なKKTか有限の緩和かだけを変える。",
+      "title": "厳密なKKTと有限の緩和を残差で読み分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1517,8 +1517,8 @@
         "S059",
         "S075"
       ],
-      "text": "各memberをoracle evaluationsで同期する。3つのBO memberはreferenceから1要因だけを変え、random baselineも同じ初期設計・domain・base seed・budgetを使う。",
-      "title": "acquisition・noise・random baselineを同じbudgetで読む"
+      "text": "各比較対象を評価回数で同期する。3つのBOの比較対象は参照条件から1要因だけを変え、ランダム探索の基準も同じ初期設計・定義域・基本の乱数の種・評価予算を使う。",
+      "title": "獲得関数・ノイズ・ランダム探索の基準を同じ評価予算で読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1548,8 +1548,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じinitial design、simulator、noise、fidelity cost、総cost、parallelism、tuning、failure/no-retry policyを固定し、high-fidelity-equivalent cost以下の最後のledger callで同期する。",
-      "title": "同じhigh-fidelity-equivalent costでfidelity配分を比べる"
+      "text": "同じ初期点の配置、シミュレータ、ノイズ、精度ごとの費用、総費用、並列数、チューニング、失敗時は再試行しない方針を固定し、高精度モデル換算の費用を超えない評価記録上の最後の呼び出しで同期する。",
+      "title": "同じ高精度モデル換算の費用で精度の配分を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1574,8 +1574,8 @@
         "S055",
         "S064"
       ],
-      "text": "同じ問題・初期点で、目的値とfeasibilityを別々に読みます。",
-      "title": "制約を守るrunと無視するrunを比べる"
+      "text": "同じ問題・初期点で、目的値と実行可能性を別々に読みます。",
+      "title": "制約を守る実行と無視する実行を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1601,8 +1601,8 @@
         "S055",
         "S103"
       ],
-      "text": "両memberはuncertainty model、8/4 sample、alpha、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
-      "title": "同じscenarioで平均costとCVaR costを読み分ける"
+      "text": "両方の比較対象は不確実性のモデル、8/4件の標本、α、決定変数の格子、12回の損失評価を共有し、最適化に使う目的関数でのリスクの扱いだけを変える。",
+      "title": "同じシナリオで平均費用とCVaR費用を読み分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1638,8 +1638,8 @@
         "S065",
         "S096"
       ],
-      "text": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
-      "title": "非線形fitでsolver条件を比べる"
+      "text": "3つの比較対象のフレーム履歴は完全に同一です。比較対象の名前は、同じ診断状態に対する適用条件の見方だけを表します。",
+      "title": "非線形の当てはめでソルバーの適用条件を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1673,8 +1673,8 @@
         "S060",
         "S063"
       ],
-      "text": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。",
-      "title": "失敗simulationでstatusとfeasible objectiveを分けて読む"
+      "text": "両比較対象は候補列・定義域・評価予算・失敗の分類・状態を罰則へ置換しない方針を共有し、第5候補の状態だけを変える。",
+      "title": "失敗するシミュレーションで、状態と実行可能な目的関数値を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1702,7 +1702,7 @@
         "S001",
         "S002"
       ],
-      "text": "同じ目的・初期点・budgetの下で、意図的に攻めた固定parameterによる感度を読みます。",
+      "text": "同じ目的・初期点・予算の下で、意図的に攻めた固定パラメータによる感度を読みます。",
       "title": "学習率を変えたときの発散を観察する"
     },
     {
@@ -1731,7 +1731,7 @@
         "S001",
         "S002"
       ],
-      "text": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
+      "text": "同じ初期点・目的関数・評価予算で、GD / Momentum / Adamを同期します。",
       "title": "細長い谷で一次法を比べる"
     },
     {
@@ -1758,8 +1758,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "灌漑更新Caseから探索完了と予算停止を読む"
+      "text": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
+      "title": "灌漑更新の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1787,8 +1787,8 @@
         "S022",
         "S079"
       ],
-      "text": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。",
-      "title": "探索完了とnode予算停止を同じ上限で比べる"
+      "text": "同じ問題例・乱数の種・分枝の順序・初期の暫定解・上界・評価9回の上限を使い、node_stop_limitだけを変えます。",
+      "title": "探索完了とノード予算停止を同じ上限で比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1815,8 +1815,8 @@
         "S059",
         "S075"
       ],
-      "text": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。",
-      "title": "small noise下で探索係数だけを変える"
+      "text": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。",
+      "title": "小さいノイズの下で探索係数だけを変える"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1842,8 +1842,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "巡回健診Caseから探索完了と予算停止を読む"
+      "text": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
+      "title": "巡回健診の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1868,8 +1868,8 @@
         "S001",
         "S002"
       ],
-      "text": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
-      "title": "初期simplexでNelder–Meadの経路を読む"
+      "text": "同じ目的関数、係数、スケール、停止条件、評価予算で同期し、初期単体の位置だけを変えます。",
+      "title": "初期単体でNelder–Meadの経路を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1895,8 +1895,8 @@
         "S050",
         "S102"
       ],
-      "text": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。",
-      "title": "抽象的な軌道最適化からpendulumのmesh感度を読む"
+      "text": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。",
+      "title": "抽象的な軌道最適化から振り子のメッシュ感度を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1922,8 +1922,8 @@
         "S055",
         "S068"
       ],
-      "text": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。",
-      "title": "Pareto front上でpreferenceを変える"
+      "text": "同じ結果の集合とパレートフロントを固定し、選好による選択だけを比較します。",
+      "title": "パレートフロント上で選好を変える"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1951,8 +1951,8 @@
         "S101",
         "S110"
       ],
-      "text": "problem、mesh、design更新、call budget、solver/preconditioner policy、failure mappingを固定し、state/adjoint toleranceだけを変える。",
-      "title": "同じdesign更新でstate/adjoint toleranceとsolve costを読む"
+      "text": "問題、メッシュ、設計更新、呼び出し予算、ソルバー／前処理の方針、失敗評価の扱いを固定し、状態／随伴の許容誤差だけを変える。",
+      "title": "同じ設計更新で、状態／随伴計算の許容誤差と計算費用を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1978,8 +1978,8 @@
         "S050",
         "S102"
       ],
-      "text": "同じdynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変えます。",
-      "title": "pendulum collocationのcoarse meshとrefined meshを比べる"
+      "text": "同じ運動方程式、2秒の計画区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変えます。",
+      "title": "振り子の選点法で粗いメッシュと細かいメッシュを比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2003,8 +2003,8 @@
         "S010",
         "S055"
       ],
-      "text": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。",
-      "title": "risk aversionで平均・分散配分を読み比べる"
+      "text": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。",
+      "title": "リスク回避係数で平均・分散配分を読み比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2030,8 +2030,8 @@
         "S055",
         "S103"
       ],
-      "text": "両memberはuncertainty model、8/4 sample policy、alpha、confidence claim、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
-      "title": "同じscenarioでnominal目的とCVaR目的を読む"
+      "text": "両比較対象は不確実性モデル、8/4件の標本の分け方、α、信頼度についての主張、決定変数の格子、12回の損失評価を共有し、学習時の目的関数におけるリスクの扱いだけを変える。",
+      "title": "同じシナリオで名目の目的とCVaR目的を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2057,8 +2057,8 @@
         "S043",
         "S076"
       ],
-      "text": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。",
-      "title": "反復MPC QPでwarm startとdeadline余裕を読む"
+      "text": "両方の比較対象は問題、動力学、上下限、参照値、残差、締め切りの方針、周期数、反復数から遅延への換算モデルを共有し、ウォームスタートによる解の再利用だけを変える。",
+      "title": "反復MPC QPでウォームスタートと締め切りまでの余裕を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2084,8 +2084,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "再生プロジェクト選定Caseから探索完了と予算停止を読む"
+      "text": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。",
+      "title": "再生プロジェクト選定の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2115,8 +2115,8 @@
         "S056",
         "S080"
       ],
-      "text": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。",
-      "title": "求根で残差vectorと二乗残差を分けて読む"
+      "text": "両比較対象は方程式、初期点、定義域、残差のスケール、Jacobianの利用可能性を共有し、停止規則だけを変える。",
+      "title": "求根で残差ベクトルと二乗残差を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2147,8 +2147,8 @@
         "S105",
         "S106"
       ],
-      "text": "同じ物理briefと診断contractを使いますが、design spaceが異なるためobjective値や到達shapeを性能順位として比較しません。",
-      "title": "fixed-topology shapeとtopology-changing fieldを比べる"
+      "text": "同じ物理条件の概要と診断の契約を使いますが、設計空間が異なるため、目的関数値や到達した形状を性能順位として比較しません。",
+      "title": "トポロジー固定の形状と、トポロジーを変えられる密度場を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2173,7 +2173,7 @@
         "S022",
         "S053"
       ],
-      "text": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。",
+      "text": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。",
       "title": "希望が同率の勤務表を負荷の偏りで読み比べる"
     },
     {
@@ -2203,8 +2203,8 @@
         "S071",
         "S107"
       ],
-      "text": "同じproblem、target、initialization、objective、step、budget、diagnosticを共有し、SO(3)へ戻すstrategyだけを変える。",
-      "title": "SO(3)へのprojectionとLie algebra updateを分けて読む"
+      "text": "同じ問題、目標、初期化、目的関数、刻み幅、予算、診断を共有し、SO(3)へ戻す方策だけを変える。",
+      "title": "SO(3)への射影とリー代数での更新を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2231,8 +2231,8 @@
         "S022",
         "S079"
       ],
-      "text": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
-      "title": "支援拠点Caseから探索完了と予算停止を読む"
+      "text": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。",
+      "title": "支援拠点の事例から探索完了と予算停止を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2260,8 +2260,8 @@
         "S024",
         "S079"
       ],
-      "text": "両memberは固定route・時間行列・車両・出発時刻・service time・他の時間窓・帰着deadlineを共有し、stop 4の終了時刻だけを変える。",
-      "title": "時間窓付き配送で可行routeと違反を分けて読む"
+      "text": "両方の比較対象は固定ルート・時間行列・車両・出発時刻・現地作業時間・他の時間窓・帰着の締め切りを共有し、訪問先4の終了時刻だけを変える。",
+      "title": "時間窓付き配送で可行なルートと違反を分けて読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2288,8 +2288,8 @@
         "S100",
         "S101"
       ],
-      "text": "同じ問題instance、初期density、volume target、filter・projection preset、generator、12回の評価予算で更新則だけを変えます。",
-      "title": "同じ密度fieldでOCとMMAを比べる"
+      "text": "同じ問題例、初期密度、目標体積率、事前に固定したフィルタ・射影の設定、生成器、12回の評価予算で更新則だけを変えます。",
+      "title": "同じ密度場でOCとMMAを比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -11585,6 +11585,336 @@
       ],
       "text": "高次元ブラックボックス（PA015） : 評価が高価なうえに、設定の数が数十以上ある型です。同じ評価回数でも、空間を埋める密度は設定の数とともに下がります。 ハイパーパラメータ最適化（PA039） : 検証損失を高価なブラックボックスとして扱えば、この型で書けます。条件が付きます。探索空間が連続で低次元であること、1回の学習が高価なことです。カテゴリや条件付きの設定が中心なら、別の手法が候補になります。 失敗・NaNを伴うシミュレーション（PA016）とノイズを含む評価（PA013） : 高価な評価に、失敗やばらつきが加わった型です。値がないことと、悪い値が返ることを区別します。",
       "title": "近い定式化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "合金の組成を決める場面を考えます。金属AにBを混ぜ、決めた温度で熱処理したとき、硬いβ相が全体の30%になる組成がほしいとします。決めるのはBの分率 x です。 βの量を、 x の式として手元で書くことはできません。 x をThermo-Calcのような熱力学計算ソフトに渡すと、ソフトの中で平衡の計算が走り、どの相がどれだけあるかが返ってきます。この記事では、ソフトの代わりに小さな計算を「ツール」と呼んで使います。 迷うのは、最小化が二つあることです。ツールの中では、ギブスエネルギーが最も低い相の組み合わせが選ばれます。外側では、返ってきたβの量を0.30に近づけるように x を選びます。自分で書くのは外側だけで、内側はツールに任せます。 決めるもの : Bの分率 x （0から1） 良くしたいもの : ツールが返すβの量 f β ( x ) と、目標0.30との差 守ること : 0 ≤ x ≤ 1 。ツールに渡せる組成の範囲 最初は「Bの分率 x」が0.50です。つまみを0.35まで動かし、「ツールの中：3つの候補のギブスエネルギー」のパネルで、どの候補が一番低くなるかを見てください。返ってきたβの量は「ツールが返すβの量」のパネルに、外側の目的は「外側の目的 J」のパネルに出ます。 動かして確かめる図です。JavaScriptが有効なブラウザで表示されます。読み込めない場合は、下の説明で内容を確認してください。 x を動かすたびに、ツールの代わりの計算が3つの候補のギブスエネルギーを比べ、最も低い相の組み合わせとβの量を返します。曲線は教材用の放物線で、実在の合金や特定の計算ソフトの結果は表しません。 x = 0.50 では、ギブスエネルギーはαだけが0.1600、βだけが0.1100です。2相に分かれたα+βは0.0700で、これが一番低くなります。ツールはα+βを返し、βの量は0.60、J は0.090です。 x を0.35にすると、α+βの0.0400がαだけの0.0625より低くなります。βの量は0.30で、J は0です。 x を0.10や0.15にすると、αだけが最も低く、βの量は0です。 x を少し動かしても J は0.090のままです。0.80ではβだけになり、J は0.490のままです。 2相の範囲ではβの量が直線で増え、その外では平らです。なぜ直線なのでしょうか。平らな範囲から始めた最適化は、どちらへ動けばよいかを知ることができるでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "外部の計算ソフトを目的関数の中で呼ぶ最適化は、決めた値をThermo-Calcのような計算ソフトに渡し、返ってきた結果から目的の値を作る問題です。ソフトの中でも平衡を求める最小化が走るので、外側で何を最小にするかを分けて考えます。相が消える範囲では結果が平らになり、勾配を使う方法は動かないまま成功と報告することがあります。",
+      "title": "外部の計算ソフトを目的関数の中で呼ぶ最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "勾配法の「成功」をそのまま信じる : SciPyの minimize で、差分の勾配を使うL-BFGS-B（範囲 [ 0 , 1 ] ）を x = 0.60 から始めます。最初の一歩で x = 0.00 へ進み、そこはαだけの範囲です。 J = 0.09 のまま傾きが0なので、ツールを4回呼んだところで「成功」と報告して止まります。範囲を渡さないBFGSは、範囲を確かめない目的関数のまま同じ始点から x = − 0.41 へ進み、同じく「成功」です。負の分率は組成としてありえません。 x = 0.10 から始めると、どちらも一歩も動きません。止まった点でツールが返した相（βがない）と J （0.09）を見れば、目標に届いていないと分かります。走査で2相の範囲に始点を置くか、値を比べて進む方法を使います。 始点 x=0.60 からの3つの計算（SciPy 1.18.1）：平らな範囲に入った2つは、傾き0を理由に止まる。教材用の1変数の例で、各手法の速さや順位は示しません 値を比べて進むNelder–Meadでも、平らな範囲から出ることはできません。 x = 0.10 から始めると、周りの値がすべて0.09なので、ツールを20回呼んでも0.10のままです。 ギブスエネルギーを外側でも最小にする : 平衡の G ( x ) を [ 0 , 1 ] で最小にすると、答えは x = 0.10 （αだけ、 G = 0 ）です。βの量は0で、目標の0.30とは関係がありません。主図の「外側の目的」を「G：ギブスエネルギーをそのまま最小にする」に切り替えると、最小の印が0.10へ移ります。ギブスエネルギーの最小化はツールの中で済んでいます。外側には、βの量のようなほしい性質を書きます。 全成分の分率を別々の変数にする : AとBの量 n A , n B を両方とも変数にし、ツールに渡す前に x = n B / ( n A + n B ) と割り直したとします。Nelder–Meadを ( 0.5 , 0.5 ) から始めると ( 0.644 , 0.347 ) で止まります。 ( 0.7 , 0.3 ) から始めると ( 0.623 , 0.335 ) で止まり、どちらも J = 0 です。 n B の0.347や0.335をBの分率と読むと誤りで、割り直した分率はどちらも0.35です。同じ方向に並ぶ点がすべて同じ目的の値になるので、答えが一つに決まりません。独立な分率だけを変数にします。2成分なら x の一つです。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "brentq は SciPyの最適化と求根の資料 に基づきます。 minimize の方法と範囲の指定は scipy.optimize.minimize に基づきます。L-BFGS-Bは原論文の A Limited Memory Algorithm for Bound Constrained Optimization に基づきます。Nelder–Meadは原論文の A Simplex Method for Function Minimization に基づきます。勾配がほぼ0で止まる判定と、値の誤差に合わせた差分の幅は Numerical Optimization に基づきます。コードの出力は、SciPy 1.18.1での値です。 ギブスエネルギーの曲線は、手で計算できるように作った教材用の放物線です。実在の合金の相の量や、特定の計算ソフトの計算方法・収束・誤差は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "実際の課題で次の症状が出たら、対応する記事へ進めます。 1回の計算が数分以上かかり、数十回しか呼べない → 非常に高価な低次元評価 と 評価費と予算 計算が収束しない、エラーで値が返らない組成がある → 失敗・NaNを伴うシミュレーション 範囲の内側から始めたのに、範囲の外の組成でツールがエラーになる → ソルバーが目的関数を呼ぶ点と回数 相が出るか出ないかそのものを目的にしていて、値が段差で飛ぶ → 決定論的だが不連続なsimulation 同じ組成でも、呼ぶたびに値が少し違う → noiseを含むblack-box 3成分以上で、分率の合計が1になる → 単体上の最適化 1つの値を1つの目標に合わせるだけ → 方程式の求根 内側の式を自分で書けて、外側と一緒に解きたい → 二階層最適化 と 入れ子・均衡・相補性・ハイブリッド構造 いくつかの相の量や性質を同時に良くしたい → 多目的連続最適化 外部の計算ソフトを呼ぶ問題と関連する問題の関係 方程式の求根 : 変数が1つで、返った値を1つの目標に合わせるだけなら、最小化ではなく f β ( x ) − 0.30 = 0 を解けば足ります。例では、符号が変わる区間 [ 0.3 , 0.4 ] を走査で見つければ、求根は新しい計算1回で0.35に着きます。2相の範囲で f β が直線だからです。 二階層最適化 : この記事の内側はツールの中で解かれ、外側からは結果しか見えません。 g α , g β のような内側の式を自分で書けるなら、内側の最適性の条件を外側の制約に入れ、一緒に解く道があります。 単体上の最適化 : 分率は非負で合計が1です。 n − 1 個を変数にすると、可行な範囲は合計が1以下の三角形や四面体になります。 非常に高価な低次元評価 : 1回の計算が重く、呼べる回数が少ないなら、走査も最適化も同じ予算から払います。評価の台帳と予算の単位を先に決めます。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "設定は、主図と同じ2元系A–Bです。温度は固定し、ギブスエネルギーは手で計算できる放物線にしています。実際のデータの曲線は対数の項を含み、相も多くあります。値の単位も教材用です。 g α ( x ) = ( x − 0.1 ) 2 g β ( x ) = ( x − 0.6 ) 2 + 0.1 合金の例・共通接線の2点を求める 2相に分かれたときのギブスエネルギーは、二つの曲線に同時に接する直線（共通接線）の上にあります。接する2点 x α , x β では、傾きと、直線を x = 0 まで延ばした高さ（切片）がそろいます。 傾きがそろう条件 2 ( x α − 0.1 ) = 2 ( x β − 0.6 ) から、 x β = x α + 0.5 です。 切片は、α相で g α ( x α ) − x α g α ′ ( x α ) = 0.01 − x α 2 です。β相では 0.46 − x β 2 です。二つが等しい条件は次のとおりです。 0.01 − x α 2 = 0.46 − ( x α + 0.5 ) 2 ⟹ x α = 0.2 , x β = 0.7 共通接線は G = 0.2 x − 0.03 です。両方の曲線に触れていることは、次の二つの等式で確かめられます。 g α ( 0.2 ) = 0.01 = 0.2 · 0.2 − 0.03 g β ( 0.7 ) = 0.11 = 0.2 · 0.7 − 0.03 合金の例・x=0.35 でツールが比べる3つの候補 x = 0.35 を渡すと、ツールは次の3つを比べます。 候補 計算 ギブスエネルギー αだけ ( 0.35 − 0.1 ) 2 0.0625 βだけ ( 0.35 − 0.6 ) 2 + 0.1 0.1625 α+β 0.2 · 0.35 − 0.03 0.0400 最も低いのはα+βです。βの割合は、Bの量の収支 ( 1 − f ) · 0.2 + f · 0.7 = 0.35 から決まります。 f β = 0.35 − 0.2 0.7 − 0.2 = 0.30 この式は「 x が0.2から0.7まで進んだ割合が、βの割合になる」と読みます。てこの規則と呼ばれる関係で、2相の範囲で f β が直線になる理由です。主図の「ツールの中」のパネルの下にある棒が、この割合を長さで示しています。 合金の例・外側の目的の形 まとめると、ツールが返すβの量と、外側の目的 J = ( f β − 0.30 ) 2 は次の形になります。 f β ( x ) = { 0 x ≤ 0.2 [ 2pt ] x − 0.2 0.5 0.2 ≤ x ≤ 0.7 [ 4pt ] 1 x ≥ 0.7 J ( x ) = { 0.09 x ≤ 0.2 [ 2pt ] 4 ( x − 0.35 ) 2 0.2 ≤ x ≤ 0.7 [ 2pt ] 0.49 x ≥ 0.7 x 返る相 βの量 G J 0.10 αだけ 0 0 0.09 0.20 αだけ 0 0.01 0.09 0.35 α+β 0.30 0.04 0 0.50 α+β 0.60 0.07 0.09 0.70 βだけ 1 0.11 0.49 0.80 βだけ 1 0.14 0.49 答えは x = 0.35 で、 J = 0 です。表の x = 0.10 と x = 0.50 は同じ J = 0.09 ですが、意味が違います。0.50では傾きが 8 ( 0.50 − 0.35 ) = 1.2 あり、下る向きが分かります。0.10ではβがなく、傾きは0です。 2相の範囲の傾きは 8 ( x − 0.35 ) です。0.2の右側では − 1.2 、0.7の左側では 2.8 で、外側の0から飛びます。主図の「外側の目的 J」のパネルで x を0.20の前後で動かすと、平らな線が傾いた放物線へ折れることを確かめられます。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ツールを呼ぶ最適化で方法を選ぶときは、変数の数と1回の計算の重さを見ます。平らな範囲や折れ目があるかも見ます。次の表は順位ではなく、条件ごとの入口です。 状況 入口 理由と注意 変数が1〜2個で、1回が数秒以内 まず格子で走査する 相の組み合わせが変わる場所と、平らな範囲が見えます。最適化の始点と範囲をここで決めます 1変数で、目標の値に合わせるだけ 求根（SciPyの brentq など） 符号の変わる区間を走査で見つければ、少ない回数で着きます 数個の変数で、値だけを比べて進みたい 範囲つきの Nelder–Mead単体法 、 Pattern Search 、 COBYQA 差分の勾配を作らないので、折れ目で勾配が飛ぶことに左右されにくい方法です。平らな範囲から始めると動けない点は同じです 1回が重く、数十回しか呼べない ベイズ最適化 これまでの結果から次に呼ぶ組成を選びます 勾配を使いたい L-BFGS-B法 に差分の勾配 2相の範囲の内側から始め、差分の幅をツールの値の誤差に合わせます ツールが返す値には、内側の計算を許容誤差で打ち切った分の誤差が乗ります。差分の幅を小さくしすぎると、この誤差を幅で割った量が勾配に混ざります。値の誤差がおよそ ε なら、前進差分の幅は ε 程度が目安です。 次のコードは、小さな例のツールを関数で書き、走査・求根・二つの最適化を同じ台帳の上で実行します。 python from scipy.optimize import brentq , minimize XA , XB = 0.2 , 0.7 # 共通接線が曲線に触れる2点（小さな例で計算した値） TARGET = 0.30 # ほしいβの量 def tool ( x ): \"\"\"外部ツールの代わり：ギブスエネルギーが最も低い相の組み合わせを返す\"\"\" candidates = [( \"α\" , 0.0 , ( x - 0.1 ) ** 2 ), ( \"β\" , 1.0 , ( x - 0.6 ) ** 2 + 0.1 )] if XA < x < XB : # 2点のあいだでは、2相に分かれる候補も比べる f = ( x - XA ) / ( XB - XA ) candidates . append (( \"α+β\" , f , ( 1 - f ) * 0.01 + f * 0.11 )) phases , f_beta , g = min ( candidates , key = lambda c : c [ 2 ]) return { \"phases\" : phases , \"f_beta\" : f_beta , \"G\" : g } ledger = {} # 組成 → ツールの結果。同じ組成は二度計算しない def evaluate ( x ): x = round ( float ( x ), 12 ) if not 0.0 <= x <= 1.0 : raise ValueError ( f \"組成の範囲の外です: x= { x } \" ) if x not in ledger : ledger [ x ] = tool ( x ) return ledger [ x ] def J ( v ): return ( evaluate ( v [ 0 ])[ \"f_beta\" ] - TARGET ) ** 2 # 1. 粗く走査して、相の組み合わせが変わる場所をつかむ for i in range ( 11 ): r = evaluate ( i / 10 ) print ( f \" { i / 10 : .1f } { r [ 'phases' ] } { r [ 'f_beta' ] : .1f } \" ) # 0.0〜0.2 は α 0.0、0.3〜0.6 は α+β 0.2〜0.8、0.7〜1.0 は β 1.0 # 2. 目標の値に合わせるだけなら、求根で解ける root = brentq ( lambda x : evaluate ( x )[ \"f_beta\" ] - TARGET , 0.3 , 0.4 ) print ( round ( root , 4 ), evaluate ( root )[ \"phases\" ], len ( ledger )) # 0.35 α+β 12 # 3. 差分の勾配を使う方法は、βが0の平らな範囲で止まる r = minimize ( J , [ 0.6 ], method = \"L-BFGS-B\" , bounds = [( 0 , 1 )]) print ( r . x , round ( r . fun , 4 ), r . success , len ( ledger )) # [0.] 0.09 True 14 # 4. 範囲つきのNelder–Meadは、同じ始点から目標に届く r = minimize ( J , [ 0.6 ], method = \"Nelder-Mead\" , bounds = [( 0 , 1 )]) print ( round ( r . x [ 0 ], 4 ), r . nfev , evaluate ( r . x [ 0 ])[ \"phases\" ], len ( ledger )) # 0.35 30 α+β 32 走査の出力から、βの量が0.30をまたぐのは0.3と0.4のあいだだと分かります。求根の行の 12 は、台帳にある組成の数です。走査の11個に1個しか増えていません。区間の両端は走査で計算済みで、求根の最初の推定がちょうど0.35に当たったからです。 L-BFGS-Bの行は、 x = 0 、 J = 0.09 で success が True です。「成功」は停止の条件を満たしたという意味で、目標に届いたという意味ではありません。Nelder–Meadの行の 30 は目的関数を呼んだ回数で、台帳は18個だけ増えています。同じ組成を再び頼まれたときは、ツールを呼ばずに台帳の値を返しているからです。台帳の evaluate は範囲の外を頼まれると止まるので、範囲を渡さないBFGSの誤りにも気づけます。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "次の式は「 x を選んでツールに渡し、返ってきた値 y を目的の式 ϕ で点数にして小さくする」を表します。 min x ∈ X J ( x ) = ϕ ( y ( x ) ) , y ( x ) = ツールが内側の問題を解いて返す値 内側の問題は、ツールが x を受け取るたびに解きます。合金の例では、βの割合 f と各相の組成 x α , x β を選びます。全体のBの量が x に合うという条件のもとで、全体のギブスエネルギーを最も低くします。 min f , x α , x β ( 1 − f ) g α ( x α ) + f g β ( x β ) s.t. ( 1 − f ) x α + f x β = x , 0 ≤ f ≤ 1 記号 意味 合金の例では x 外側で決めて、ツールに渡す値 Bの分率 X 外側の値の範囲 [ 0 , 1 ] y ( x ) ツールが返す値 選ばれた相、βの量 f β 、全体のギブスエネルギー G ϕ 返った値を点数にする式。自分で書く ( f β − 0.30 ) 2 f , x α , x β 内側の変数。ツールが毎回決め直す βの割合と、α相・β相それぞれのBの分率 g α , g β 相ごとのギブスエネルギーの曲線。ツールのデータが持つ 教材用の放物線 ( x − 0.1 ) 2 と ( x − 0.6 ) 2 + 0.1 外側の変数と内側の変数を分ける 外側の変数は、自分が決めてツールに渡す値です。内側の変数（相の量や相ごとの組成）は、ツールが毎回決め直します。βの量 f を外側から直接決めることはできません。 x を変えた結果として f が決まります。 そのため、外側の目的には「ほしい性質」を書きます。ギブスエネルギーは、ツールの中ですでに最小にされた量です。外側でもう一度最小にすると、「ギブスエネルギーが最も低い組成はどこか」という別の問いに答えてしまいます。 なぜ値が平らになったり、折れたりするのか 相の組み合わせごとに、 y ( x ) は別の式になります。αだけの範囲では f β = 0 、2相の範囲では直線、βだけの範囲では f β = 1 です。 x が相の組み合わせの変わる点（相境界）をまたぐと、使われる式が入れ替わります。値はつながっていても、傾きはそこで飛びます。 βが出ない範囲では、 x を動かしてもβの量は0のままです。そのため目的の傾きも0になります。勾配を使う方法は「傾きがほぼ0なら止まる」という判定を使うので、この平らな範囲を谷底と区別できません。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "計算1回の重さと予算の数え方: 評価費と予算 計算が収束しない組成がある: 失敗・NaNを伴うシミュレーション 値だけで進む方法の中身: Nelder–Mead単体法 1つの目標に合わせる: 方程式の求根",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.external-solver-objective:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.external-solver-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.evaluation-cost",
+        "content:concept.expensive-black-box",
+        "content:concept.failed-simulation",
+        "content:concept.root-finding",
+        "content:concept.simplex-optimization",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "「熱力学計算ソフトでβ相を30%にしたい」という課題を、次の4つで式にします。 何を決めるか : 外側の変数です。成分が n 個なら、独立な分率は n − 1 個です。残りの一つ（多くは基になる元素）は、1から他の合計を引いて決めます。例では x だけです。3成分A–B–Cなら x B , x C の二つを変数にし、 x B + x C ≤ 1 を制約にします。温度も決めるなら、温度を変数に加えます。 ツールは何を返すか : 相の名前と量、相ごとの組成、ギブスエネルギーなどです。どの値を使うかと、相が出ないときに何が返るかを先に確かめます。例では、βが出ないとき f β = 0 が返ります。 何を良くするか : 返った値から、自分で目的の式を書きます。目標の値に合わせるなら差の二乗、1変数で1つの目標に合わせるだけなら求根で足ります。ギブスエネルギーそのものは目的にしません。「液相が出ない」のような条件は、目的に混ぜずに制約にします。 何を守り、何を予算とするか : ツールに渡せる組成の範囲と1回の計算の時間を決めます。計算が収束しないときの扱いも決めます。呼んだ組成と結果は台帳に残し、同じ組成を二度計算しません。 決めた値をツールに渡し、ツールの中の最小化の結果から目的を作る。この形が揃えば、この記事の型です。",
+      "title": "課題から定式化する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -47742,8 +48072,8 @@
         "S049",
         "S070"
       ],
-      "text": "非常に高次元のparameterとmini-batchごとに変わるgradientに対し、full-batchの決定的gradientとline searchを前提にすると1 stepの計算・memory負荷が大きいため",
-      "title": "mini-batchで画像分類モデルを学習するではBFGS法を選ばない"
+      "text": "非常に高次元のパラメータとミニバッチごとに変わる勾配に対し、全データを使う決定的な勾配と直線探索を前提にすると、1反復あたりの計算・メモリ負荷が大きいため",
+      "title": "ミニバッチで画像分類モデルを学習するではBFGS法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -47832,7 +48162,7 @@
         "S060",
         "S063"
       ],
-      "text": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため",
+      "text": "NaN、時間切れ、不連続な失敗境界を含む評価から、信頼できる局所的な勾配と直線探索を構成できないため",
       "title": "途中で失敗するシミュレーションから設計を探すではBFGS法を選ばない"
     },
     {
@@ -47860,7 +48190,7 @@
         "S056",
         "S080"
       ],
-      "text": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
+      "text": "平方残差へスカラー化した大域的な発見的手法を先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
       "title": "方程式を最適化に変える前に求根として解くでは差分進化を選ばない"
     },
     {
@@ -47888,8 +48218,8 @@
         "S050",
         "S102"
       ],
-      "text": "dynamics defectとpath／terminal制約を平坦な無制約目的へ隠してしまう",
-      "title": "pendulumを制約内で振り上げるではBFGS法を選ばない"
+      "text": "動力学残差と経路／終端制約を、平坦な無制約目的へ隠してしまう",
+      "title": "振り子を制約内で振り上げるではBFGS法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -47915,7 +48245,7 @@
         "S055",
         "S068"
       ],
-      "text": "二つの目的と状態制約をscalar化せずに通常のBFGSへ渡しても、選べるtrade-off集合や実行可能な時系列運用を得られないため",
+      "text": "二つの目的と状態制約をスカラー化せずに通常のBFGSへ渡しても、選べるトレードオフの集合や実行可能な時系列運用を得られないため",
       "title": "蓄電池運用のコストと充放電量を両方見るではBFGS法を選ばない"
     },
     {
@@ -47948,7 +48278,7 @@
         "S056",
         "S064"
       ],
-      "text": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない",
+      "text": "制約なしの更新では非負制約とKKTの相補性を保てず、外側の目的関数値が下がっても内側の実行可能な停留点とは確認できない",
       "title": "正則化を選びながら非負回帰を解くではBFGS法を選ばない"
     },
     {
@@ -48006,7 +48336,7 @@
         "S055",
         "S064"
       ],
-      "text": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す",
+      "text": "非線形制約を無視すると目的値が低くても実行不可能な設計を返す",
       "title": "強度制約を守りながら軽量設計を探すではBFGS法を選ばない"
     },
     {
@@ -48034,7 +48364,7 @@
         "S055",
         "S079"
       ],
-      "text": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
+      "text": "0-1の割当と同時刻の重複禁止を連続的な勾配の更新だけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
       "title": "教室・担当・時間帯を守って時間割を組むでは最急降下法を選ばない"
     },
     {
@@ -48060,7 +48390,7 @@
         "S054",
         "S079"
       ],
-      "text": "プロジェクトの採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "text": "プロジェクトの採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "title": "予算内で生態系再生プロジェクトを選ぶでは最急降下法を選ばない"
     },
     {
@@ -48086,7 +48416,7 @@
         "S054",
         "S079"
       ],
-      "text": "拠点を開く／開かない二値判断と地域配置の論理制約を連続gradient updateだけでは保持できないため",
+      "text": "拠点を開く／開かない二値判断と地域配置の論理制約を連続的な勾配による更新だけでは保持できないため",
       "title": "予算内で臨時支援拠点を選ぶでは最急降下法を選ばない"
     },
     {
@@ -48111,8 +48441,8 @@
         "S055",
         "S103"
       ],
-      "text": "simplex・供給上限とscenarioごとのtail costを明示せず探索すると、低い平均costでも調達制約やtailの根拠を確認できないため",
-      "title": "価格scenarioのtail costを抑えて電力を調達するではNelder–Mead単体法を選ばない"
+      "text": "単体・供給上限とシナリオごとの裾の費用を明示せずに探索すると、平均費用が低くても調達制約や裾の費用の根拠を確認できないため",
+      "title": "価格シナリオの裾の費用を抑えて電力を調達するではNelder–Mead単体法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48140,7 +48470,7 @@
         "S059",
         "S075"
       ],
-      "text": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため",
+      "text": "品質指標が実験後にだけ得られ、再現性のある勾配を直接観測できないため",
       "title": "少ない実験で配合条件を絞るではBFGS法を選ばない"
     },
     {
@@ -48175,7 +48505,7 @@
         "S059",
         "S075"
       ],
-      "text": "観測値しか得られないblack-boxで、信頼できるgradientを前提にすると更新根拠を確認できない",
+      "text": "観測値しか得られないブラックボックスで、信頼できる勾配を前提にすると更新根拠を確認できない",
       "title": "高価な実験の設定を探すではBFGS法を選ばない"
     },
     {
@@ -48201,7 +48531,7 @@
         "S054",
         "S079"
       ],
-      "text": "設備更新の採否と系統ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "text": "設備更新の採否と系統ごとの最低配置を連続的な勾配による更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "title": "予算内で圃場の灌漑設備を更新するでは最急降下法を選ばない"
     },
     {
@@ -48230,7 +48560,7 @@
         "S059",
         "S075"
       ],
-      "text": "実験観測だけから信頼できるgradientを得られず、noiseを含む差分を勾配として使うと更新根拠を確認できないため",
+      "text": "実験観測だけから信頼できる勾配を得られず、ノイズを含む差分を勾配として使うと更新根拠を確認できないため",
       "title": "少ない試作でレーザー加工条件を絞るではBFGS法を選ばない"
     },
     {
@@ -48261,7 +48591,7 @@
         "S056",
         "S059"
       ],
-      "text": "試作結果だけを観測する高価なblack-boxに対し、信頼できるgradientとline searchを前提にすると追加試作の根拠を説明できないため",
+      "text": "試作結果だけを観測する高価なブラックボックスに対し、信頼できる勾配と直線探索を前提にすると、追加試作の根拠を説明できないため",
       "title": "高価な製造実験から工程条件を探すではBFGS法を選ばない"
     },
     {
@@ -48287,7 +48617,7 @@
         "S054",
         "S079"
       ],
-      "text": "開催候補の採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "text": "開催候補の採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "title": "予算内で巡回健診の開催候補を選ぶでは最急降下法を選ばない"
     },
     {
@@ -48321,8 +48651,8 @@
         "S069",
         "S075"
       ],
-      "text": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
-      "title": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+      "text": "精度ごとの評価費用、失敗・打ち切りの状態、ノイズを評価の方針として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
+      "title": "低精度／高精度のシミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48349,8 +48679,8 @@
         "S056",
         "S063"
       ],
-      "text": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため",
-      "title": "初期simplexで局所探索の感度を見抜くでは最急降下法を選ばない"
+      "text": "この評価契約は目的値だけを返し、信頼できる勾配や刻み幅選択の根拠を提供しないため",
+      "title": "初期単体で局所探索の感度を見抜くでは最急降下法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48375,7 +48705,7 @@
         "S054",
         "S079"
       ],
-      "text": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため",
+      "text": "設備を更新する／しないという二値判断と依存関係を連続的な勾配による更新だけでは保持できないため",
       "title": "予算内で通信設備の更新候補を選ぶでは最急降下法を選ばない"
     },
     {
@@ -48398,7 +48728,7 @@
         "S010",
         "S055"
       ],
-      "text": "共分散の二次構造とsimplex・集中上限をnativeに使わず、可行性や凸大域解の根拠を確認しにくいため",
+      "text": "共分散の二次構造と単体制約・集中上限をそのまま活用せず、可行性や凸大域解の根拠を確認しにくいため",
       "title": "平均・共分散でポートフォリオを配分するではNelder–Mead単体法を選ばない"
     },
     {
@@ -48423,8 +48753,8 @@
         "S055",
         "S103"
       ],
-      "text": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため",
-      "title": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
+      "text": "シナリオごとの損失とCVaRの裾、単体制約を更新・診断の契約として明示しにくいため",
+      "title": "シナリオの裾リスクを抑えて配分するではNelder–Mead単体法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48447,7 +48777,7 @@
         "S016",
         "S021"
       ],
-      "text": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため",
+      "text": "段取りの0-1変数と生産量を結ぶ必ず守る制約を連続の勾配更新だけでは保持できず、丸め後の計画が能力や最小ロットを破り得るため",
       "title": "段取り費を含む週間生産計画を組むでは最急降下法を選ばない"
     },
     {
@@ -48474,7 +48804,7 @@
         "S054",
         "S079"
       ],
-      "text": "事業の採否はbinaryで、予算・依存関係と最適性gapを連続simplexの更新として扱えないため",
+      "text": "事業の採否は二値で、予算・依存関係と最適性ギャップを連続空間での単体の更新として扱えないため",
       "title": "限られた予算で防災事業を選ぶではNelder–Mead単体法を選ばない"
     },
     {
@@ -48501,8 +48831,8 @@
         "S105",
         "S106"
       ],
-      "text": "このCaseは接続を変えないfixed-topology shape problemであり、density fieldによるtopology changeは別の設計空間だから",
-      "title": "2D diffuserの壁面shapeを更新するではSIMP密度法を選ばない"
+      "text": "この事例は接続を変えないトポロジー固定の形状問題であり、密度場によるトポロジー変化は別の設計空間だから",
+      "title": "2Dディフューザの壁面形状を更新するではSIMP密度法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48529,7 +48859,7 @@
         "S055",
         "S079"
       ],
-      "text": "0-1の割当と論理制約を連続gradient updateだけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため",
+      "text": "0-1の割当と論理制約を連続の勾配更新だけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため",
       "title": "必要人数と希望を両立してシフトを組むでは最急降下法を選ばない"
     },
     {
@@ -48558,8 +48888,8 @@
         "S071",
         "S107"
       ],
-      "text": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため",
-      "title": "SO(3)上でnear-piのattitudeを合わせるではBFGS法を選ばない"
+      "text": "9個の行列成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のパラメータ化または制約処理なしには回転を表さないため",
+      "title": "SO(3)上で回転角がπに近い姿勢を合わせるではBFGS法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -48590,7 +48920,7 @@
         "S100",
         "S101"
       ],
-      "text": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため",
+      "text": "密度場、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため",
       "title": "片持ちはりの材料配置を軽くするではBFGS法を選ばない"
     },
     {
@@ -48615,7 +48945,7 @@
         "S039",
         "S068"
       ],
-      "text": "二つのsimulation目的をscalar化せず、信頼できるgradientもないまま通常のBFGSへ渡しても、選べるtrade-off集合を得られないため",
+      "text": "二つのシミュレーション目的をスカラー化せず、信頼できる勾配もないまま通常のBFGSへ渡しても、選べるトレードオフの集合を得られないため",
       "title": "信号制御の遅れと停止回数を両方見るではBFGS法を選ばない"
     },
     {
@@ -54823,8 +55153,8 @@
         "S056",
         "S070"
       ],
-      "text": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
-      "title": "mini-batchで画像分類モデルを学習する"
+      "text": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。",
+      "title": "ミニバッチで画像分類モデルを学習する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -54954,7 +55284,7 @@
         "S069",
         "S094"
       ],
-      "text": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "text": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
       "title": "途中で失敗するシミュレーションから設計を探す"
     },
     {
@@ -55028,8 +55358,8 @@
         "S076",
         "S102"
       ],
-      "text": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
-      "title": "pendulumを制約内で振り上げる"
+      "text": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
+      "title": "振り子を制約内で振り上げる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -55060,7 +55390,7 @@
         "S055",
         "S068"
       ],
-      "text": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。",
+      "text": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。",
       "title": "蓄電池運用のコストと充放電量を両方見る"
     },
     {
@@ -55271,7 +55601,7 @@
         "S054",
         "S079"
       ],
-      "text": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。",
+      "text": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。",
       "title": "予算内で生態系再生プロジェクトを選ぶ"
     },
     {
@@ -55353,8 +55683,8 @@
         "S066",
         "S103"
       ],
-      "text": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
-      "title": "価格scenarioのtail costを抑えて電力を調達する"
+      "text": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。",
+      "title": "価格シナリオの裾の費用を抑えて電力を調達する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -55392,7 +55722,7 @@
         "S059",
         "S075"
       ],
-      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。",
       "title": "少ない実験で配合条件を絞る"
     },
     {
@@ -55476,7 +55806,7 @@
         "S054",
         "S079"
       ],
-      "text": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。",
+      "text": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。",
       "title": "予算内で圃場の灌漑設備を更新する"
     },
     {
@@ -55516,7 +55846,7 @@
         "S059",
         "S075"
       ],
-      "text": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。",
+      "text": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。",
       "title": "少ない試作でレーザー加工条件を絞る"
     },
     {
@@ -55599,7 +55929,7 @@
         "S054",
         "S079"
       ],
-      "text": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。",
+      "text": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。",
       "title": "予算内で巡回健診の開催候補を選ぶ"
     },
     {
@@ -55643,8 +55973,8 @@
         "S069",
         "S075"
       ],
-      "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
-      "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+      "text": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。",
+      "title": "低精度／高精度のシミュレータを予算内で使い分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -55684,8 +56014,8 @@
         "S063",
         "S094"
       ],
-      "text": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
-      "title": "初期simplexで局所探索の感度を見抜く"
+      "text": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。",
+      "title": "初期単体で局所探索の感度を見抜く"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -55725,7 +56055,7 @@
         "S054",
         "S079"
       ],
-      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。",
       "title": "予算内で通信設備の更新候補を選ぶ"
     },
     {
@@ -55768,7 +56098,7 @@
         "S064",
         "S103"
       ],
-      "text": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
+      "text": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。",
       "title": "平均・共分散でポートフォリオを配分する"
     },
     {
@@ -55809,8 +56139,8 @@
         "S066",
         "S103"
       ],
-      "text": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
-      "title": "scenarioのtail riskを抑えて配分する"
+      "text": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。",
+      "title": "シナリオの裾リスクを抑えて配分する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -55852,7 +56182,7 @@
         "S053",
         "S079"
       ],
-      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。",
       "title": "段取り費を含む週間生産計画を組む"
     },
     {
@@ -55946,8 +56276,8 @@
         "S105",
         "S106"
       ],
-      "text": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。",
-      "title": "2D diffuserの壁面shapeを更新する"
+      "text": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。",
+      "title": "2Dディフューザの壁面形状を更新する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -56032,8 +56362,8 @@
         "S071",
         "S107"
       ],
-      "text": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
-      "title": "SO(3)上でnear-piのattitudeを合わせる"
+      "text": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。",
+      "title": "SO(3)上で回転角がπに近い姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -56105,7 +56435,7 @@
         "S055",
         "S068"
       ],
-      "text": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "text": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
       "title": "信号制御の遅れと停止回数を両方見る"
     },
     {

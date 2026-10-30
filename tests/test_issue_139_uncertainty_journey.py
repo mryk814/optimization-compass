@@ -95,7 +95,7 @@ def test_portfolio_compare_changes_only_training_risk_treatment() -> None:
     assert comparison.problem_instance_id == PROBLEM_INSTANCE_ID
     assert comparison.benchmark_context_id == "BENCH_PORTFOLIO_CVAR_FIXED_8_4"
     assert len(comparison.changed_factors) == 1
-    assert "risk treatmentだけ" in comparison.changed_factors[0]
+    assert "リスクの扱いだけ" in comparison.changed_factors[0]
     nominal, cvar = comparison.members
     shared_parameter_keys = {
         "uncertainty_model",
@@ -122,8 +122,8 @@ def test_portfolio_case_connects_theater_compare_and_simplex_guidance() -> None:
     ]
     assert case["comparison_ids"] == ["COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"]
     assert "concept.simplex" in case["practical_notes"]
-    assert "sample size" in case["limitations"][2]
-    assert "held-out" in case["limitations"][2]
+    assert "サンプルサイズ" in case["limitations"][2]
+    assert "検証用に取り分けた期間" in case["limitations"][2]
 
 
 def test_uncertainty_method_source_audit_records_release_boundary_and_primary_backlog() -> None:

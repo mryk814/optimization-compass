@@ -55,11 +55,11 @@ def test_shape_gallery_separates_parameter_geometry_mesh_and_state() -> None:
         "M_ADJOINT_SENSITIVITY",
     }
     assert [item["method_id"] for item in case["excluded_methods"]] == ["M_SIMP_TOPOLOGY"]
-    for layer in ("parameter", "geometry", "mesh", "physical state"):
+    for layer in ("パラメータ", "形状", "メッシュ", "物理状態"):
         assert layer in case["decision_variables"] or layer in case["practical_notes"]
-    assert "topologyを固定" in case["decision_variables"]
+    assert "トポロジーを固定" in case["decision_variables"]
     assert "CFD" in case["limitations"][0]
-    for domain in ("構造", "CFD", "thermal", "acoustic", "photonic"):
+    for domain in ("構造", "CFD", "熱では", "音響では", "フォトニクスでは"):
         assert domain in case["practical_notes"]
 
 

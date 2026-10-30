@@ -32,6 +32,15 @@
 - stable ID、URL identifier、schema key、API fieldは翻訳しない。
 - 未レビューの機械翻訳を、執筆済みの翻訳や欠落localeのfallbackとして追加しない。
 
+#### 記事以外の画面の文（事例・比較・可視化シナリオ）
+
+事例（`data/seeds/site_gallery.json`）、比較（`data/seeds/site_comparisons.json`）、可視化シナリオの解説文（`src/optimization_compass/*.py` の lesson、書き出し先は `site/public/data/visualization-scenarios.json`）も、記事と同じく読者がそのまま読む文である。日本語の文の中に、小文字の普通の英単語（state、cost、near-pi、feasible など）を混ぜない。§2.1 のとおり、ソルバー・ブラックボックス・信頼領域のような定着した語も日本語で書く。
+
+- 残してよいもの：大文字で始まる固有名と略語（Newton、BFGS、QR、Pymanopt）、コードと識別子（`` `np.linalg.svd` ``）、数式（`$...$`）、日本語の語の直後に括弧で添えた英語（「目的関数（objective function）」）、数学の関数名と単位（exp、log、det、rad など）。
+- 判定は `src/optimization_compass/language_mixing.py` で、`validate content` が実行する。この判定より前に書かれた項目は `data/seeds/language_mixing_pending.json` に載っていて、このリストは減らす方向にしか変えない。リストにない項目に混在があると、検証が失敗する。
+- 直すときは `uv run python scripts/language_mixing_report.py --ids gallery:<case_id>` で、混ざっている語を欄ごとに確かめる。直し終えたら `--prune` でリストから外す。
+- 言い換えは推敲であり、事実・数値・主張の強さは変えない（§0）。
+
 ## 1. 文体
 
 - **です・ます調**で統一する。体言止めの本文段落は使わない（リスト・表内は除く）。

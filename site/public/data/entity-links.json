@@ -522,7 +522,7 @@
       "entity_id": "EC021",
       "entity_type": "case",
       "external_url": null,
-      "label": "mini-batchで画像分類モデルを学習する",
+      "label": "ミニバッチで画像分類モデルを学習する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -690,7 +690,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
+      "summary": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -1063,7 +1063,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+      "summary": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
     },
     {
       "aliases": [],
@@ -1192,7 +1192,7 @@
       "entity_id": "EC029",
       "entity_type": "case",
       "external_url": null,
-      "label": "pendulumを制約内で振り上げる",
+      "label": "振り子を制約内で振り上げる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -1305,7 +1305,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+      "summary": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -1421,7 +1421,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -2021,7 +2021,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2140,7 +2140,7 @@
       "entity_id": "energy-cvar-procurement",
       "entity_type": "case",
       "external_url": null,
-      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "label": "価格シナリオの裾の費用を抑えて電力を調達する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -2238,7 +2238,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+      "summary": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。"
     },
     {
       "aliases": [],
@@ -2354,7 +2354,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -2601,7 +2601,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2722,7 +2722,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -2959,7 +2959,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2967,7 +2967,7 @@
       "entity_id": "multi-fidelity-simulator",
       "entity_type": "case",
       "external_url": null,
-      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "label": "低精度／高精度のシミュレータを予算内で使い分ける",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3105,7 +3105,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+      "summary": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。"
     },
     {
       "aliases": [],
@@ -3113,7 +3113,7 @@
       "entity_id": "nelder-mead-initial-simplex",
       "entity_type": "case",
       "external_url": null,
-      "label": "初期simplexで局所探索の感度を見抜く",
+      "label": "初期単体で局所探索の感度を見抜く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3221,7 +3221,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+      "summary": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。"
     },
     {
       "aliases": [],
@@ -3332,7 +3332,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。"
     },
     {
       "aliases": [],
@@ -3453,7 +3453,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -3461,7 +3461,7 @@
       "entity_id": "portfolio-cvar-allocation",
       "entity_type": "case",
       "external_url": null,
-      "label": "scenarioのtail riskを抑えて配分する",
+      "label": "シナリオの裾リスクを抑えて配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3534,7 +3534,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+      "summary": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。"
     },
     {
       "aliases": [],
@@ -3640,7 +3640,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。"
     },
     {
       "aliases": [],
@@ -3759,7 +3759,7 @@
       "entity_id": "shape-diffuser",
       "entity_type": "case",
       "external_url": null,
-      "label": "2D diffuserの壁面shapeを更新する",
+      "label": "2Dディフューザの壁面形状を更新する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3877,7 +3877,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+      "summary": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。"
     },
     {
       "aliases": [],
@@ -4021,7 +4021,7 @@
       "entity_id": "so3-attitude-alignment",
       "entity_type": "case",
       "external_url": null,
-      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "label": "SO(3)上で回転角がπに近い姿勢を合わせる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -4134,7 +4134,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+      "summary": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -4381,7 +4381,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+      "summary": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -5061,7 +5061,7 @@
       "entity_id": "COMPARE_IRRIGATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "灌漑更新Caseから探索完了と予算停止を読む",
+      "label": "灌漑更新の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5114,7 +5114,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -5193,7 +5193,7 @@
       "entity_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "small noise下で探索係数だけを変える",
+      "label": "小さいノイズの下で探索係数だけを変える",
       "relations": [
         {
           "relation_type": "case",
@@ -5251,7 +5251,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。"
+      "summary": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。"
     },
     {
       "aliases": [],
@@ -5259,7 +5259,7 @@
       "entity_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "巡回健診Caseから探索完了と予算停止を読む",
+      "label": "巡回健診の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5312,7 +5312,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [
@@ -5383,7 +5383,7 @@
       "entity_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "抽象的な軌道最適化からpendulumのmesh感度を読む",
+      "label": "抽象的な軌道最適化から振り子のメッシュ感度を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5436,7 +5436,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。"
+      "summary": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。"
     },
     {
       "aliases": [],
@@ -5632,7 +5632,7 @@
       "entity_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "risk aversionで平均・分散配分を読み比べる",
+      "label": "リスク回避係数で平均・分散配分を読み比べる",
       "relations": [
         {
           "relation_type": "case",
@@ -5680,7 +5680,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。"
+      "summary": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。"
     },
     {
       "aliases": [],
@@ -5810,7 +5810,7 @@
       "entity_id": "COMPARE_RESTORATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "再生プロジェクト選定Caseから探索完了と予算停止を読む",
+      "label": "再生プロジェクト選定の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5863,7 +5863,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -6071,7 +6071,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。"
+      "summary": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。"
     },
     {
       "aliases": [],
@@ -6150,7 +6150,7 @@
       "entity_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "支援拠点Caseから探索完了と予算停止を読む",
+      "label": "支援拠点の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -6208,7 +6208,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -8567,6 +8567,87 @@
         }
       ],
       "summary": "非常に高価な低次元評価は、1回の評価に時間や費用がかかり、試せる回数が数回から数十回ほどしかない最小化の定式化です。式も勾配も見えないため、これまでの観測から次に試す点を選ぶ手順そのものが主題になります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.external-solver-objective",
+      "entity_id": "concept.external-solver-objective",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "外部の計算ソフトを目的関数の中で呼ぶ最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bilevel-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "外部の計算ソフトを目的関数の中で呼ぶ最適化は、決めた値をThermo-Calcのような計算ソフトに渡し、返ってきた結果から目的の値を作る問題です。ソフトの中でも平衡を求める最小化が走るので、外側で何を最小にするかを分けて考えます。相が消える範囲では結果が平らになり、勾配を使う方法は動かないまま成功と報告することがあります。"
     },
     {
       "aliases": [],
@@ -23624,7 +23705,7 @@
       "entity_id": "EC021",
       "entity_type": "journey",
       "external_url": null,
-      "label": "mini-batchで画像分類モデルを学習する",
+      "label": "ミニバッチで画像分類モデルを学習する",
       "relations": [
         {
           "relation_type": "alternate",
@@ -23752,7 +23833,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
+      "summary": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -24100,7 +24181,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+      "summary": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
     },
     {
       "aliases": [],
@@ -24204,7 +24285,7 @@
       "entity_id": "EC029",
       "entity_type": "journey",
       "external_url": null,
-      "label": "pendulumを制約内で振り上げる",
+      "label": "振り子を制約内で振り上げる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -24302,7 +24383,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+      "summary": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -24388,7 +24469,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -24938,7 +25019,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -25052,7 +25133,7 @@
       "entity_id": "energy-cvar-procurement",
       "entity_type": "journey",
       "external_url": null,
-      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "label": "価格シナリオの裾の費用を抑えて電力を調達する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -25150,7 +25231,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+      "summary": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。"
     },
     {
       "aliases": [],
@@ -25256,7 +25337,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -25483,7 +25564,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -25594,7 +25675,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -25816,7 +25897,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -25824,7 +25905,7 @@
       "entity_id": "multi-fidelity-simulator",
       "entity_type": "journey",
       "external_url": null,
-      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "label": "低精度／高精度のシミュレータを予算内で使い分ける",
       "relations": [
         {
           "relation_type": "alternate",
@@ -25947,7 +26028,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+      "summary": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。"
     },
     {
       "aliases": [],
@@ -25955,7 +26036,7 @@
       "entity_id": "nelder-mead-initial-simplex",
       "entity_type": "journey",
       "external_url": null,
-      "label": "初期simplexで局所探索の感度を見抜く",
+      "label": "初期単体で局所探索の感度を見抜く",
       "relations": [
         {
           "relation_type": "alternate",
@@ -26058,7 +26139,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+      "summary": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。"
     },
     {
       "aliases": [],
@@ -26164,7 +26245,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。"
     },
     {
       "aliases": [],
@@ -26275,7 +26356,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -26283,7 +26364,7 @@
       "entity_id": "portfolio-cvar-allocation",
       "entity_type": "journey",
       "external_url": null,
-      "label": "scenarioのtail riskを抑えて配分する",
+      "label": "シナリオの裾リスクを抑えて配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -26381,7 +26462,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+      "summary": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。"
     },
     {
       "aliases": [],
@@ -26492,7 +26573,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。"
     },
     {
       "aliases": [],
@@ -26606,7 +26687,7 @@
       "entity_id": "shape-diffuser",
       "entity_type": "journey",
       "external_url": null,
-      "label": "2D diffuserの壁面shapeを更新する",
+      "label": "2Dディフューザの壁面形状を更新する",
       "relations": [
         {
           "relation_type": "alternate",
@@ -26744,7 +26825,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+      "summary": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。"
     },
     {
       "aliases": [],
@@ -26863,7 +26944,7 @@
       "entity_id": "so3-attitude-alignment",
       "entity_type": "journey",
       "external_url": null,
-      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "label": "SO(3)上で回転角がπに近い姿勢を合わせる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -26976,7 +27057,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+      "summary": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -27183,7 +27264,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+      "summary": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
     },
     {
       "aliases": [
