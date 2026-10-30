@@ -5140,9 +5140,9 @@ def _rpe_weights_svg() -> str:
 SAT_NAMES = "ABCDE"
 SAT_HARD = (
     ((1, 2), "鍵"),  # only A and B hold the key
-    ((-1, -3), "店番"),  # A and C keep the same shop
+    ((-1, -3), "店番A・C"),  # A and C keep the same shop
     ((-2, 4), "車"),  # B comes in D's car
-    ((-4, -5), "店番"),  # D and E keep the same shop
+    ((-4, -5), "店番D・E"),  # D and E keep the same shop
 )
 SAT_SOFT = (((3,), 3), ((5,), 2), ((1,), 2))  # wishes: C 3, E 2, A 2
 
@@ -5268,8 +5268,8 @@ def _sat_chain_svg() -> str:
         "1人を決めると、残りが芋づる式に決まる",
         (
             "決まりの節だけで単位伝播した結果。"
-            "① Cを呼ぶと、店番で¬A、鍵でB、車でD、店番で¬E。"
-            "② Eを呼ぶと、店番で¬D、車で¬B、鍵でA、店番で¬C。"
+            "① Cを呼ぶと、店番A・Cで¬A、鍵でB、車でD、店番D・Eで¬E。"
+            "② Eを呼ぶと、店番D・Eで¬D、車で¬B、鍵でA、店番A・Cで¬C。"
             "CとEは両方は呼べない。"
         ),
         330,
@@ -5281,20 +5281,26 @@ def _sat_chain_svg() -> str:
         step = (420 - 20) / len(chain)
         for index, (lit, reason) in enumerate(chain):
             cx = 20 + step * (index + 0.5)
-            color = UPDATE if index == 0 else (POINT if lit > 0 else MUTED)
+            color = INK if index == 0 else (POINT if lit > 0 else MUTED)
+            width = 3.5 if index == 0 else 2.5
             parts.append(
                 f'<rect x="{cx - 30:.1f}" y="{base + 22}" width="60" height="44" rx="10" '
-                f'fill="#ffffff" stroke="{color}" stroke-width="2.5"/>'
+                f'fill="#ffffff" stroke="{color}" stroke-width="{width}"/>'
             )
             parts.append(_text(cx, base + 51, _sat_literal(lit), "", "middle"))
             if index:
                 arrow = cx - step + 30
+                tip = cx - 32
                 parts.append(
-                    f'<path d="M{arrow:.1f} {base + 44}H{cx - 34:.1f}" stroke="{GRID}" '
+                    f'<path d="M{arrow:.1f} {base + 44}H{tip - 6:.1f}" stroke="{MUTED}" '
                     'stroke-width="2"/>'
                 )
+                parts.append(
+                    f'<path d="M{tip - 8:.1f} {base + 39}L{tip:.1f} {base + 44}'
+                    f'L{tip - 8:.1f} {base + 49}Z" fill="{MUTED}"/>'
+                )
                 parts.append(_text(cx - step / 2, base + 92, reason, "tick", "middle"))
-    parts.append(_text(20, 316, "¬A は「Aを呼ばない」。下の文字は使った決まり", "tick"))
+    parts.append(_text(20, 316, "¬A は「Aを呼ばない」。箱の間の文字は使った決まり", "tick"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
 
@@ -5541,7 +5547,11 @@ def _traj_grid_svg() -> str:
         if math.hypot(p[0] - TRAJ_PILLAR[0], p[1] - TRAJ_PILLAR[1]) < TRAJ_RADIUS
     ]
     parts.append(_polyline([at(x, y) for x, y in coarse_points], UPDATE, 3))
-    parts.append(_polyline([at(x, y) for x, y in inside], VIOLATION, 5))
+    parts.append(
+        _polyline([at(x, y) for x, y in inside], VIOLATION, 8).replace(
+            "/>", ' stroke-linecap="round"/>'
+        )
+    )
     for x, y, _, _ in nodes:
         sx, sy = at(x, y)
         parts.append(
