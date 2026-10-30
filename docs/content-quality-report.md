@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `71`
-- Meeting the concept floor: `71`
+- Published concept guides: `73`
+- Meeting the concept floor: `73`
 - Below the concept floor: `0`
 - Prose review warnings: `707`
 
@@ -59,6 +59,7 @@
 | `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
 | `concept.root-finding` | 93 | 7097 | 8 | 4 | 0 | pass |
+| `concept.sat-maxsat` | 136 | 9234 | 14 | 7 | 0 | pass |
 | `concept.second-order-cone-program` | 135 | 9718 | 13 | 6 | 0 | pass |
 | `concept.semidefinite-program` | 96 | 6589 | 8 | 4 | 0 | pass |
 | `concept.shape-dependent-domain` | 119 | 12804 | 13 | 4 | 0 | pass |
@@ -72,6 +73,7 @@
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
+| `concept.trajectory-optimization` | 159 | 9545 | 15 | 9 | 0 | pass |
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 51 | 6429 | 9 | 3 | 0 | pass |
@@ -161,6 +163,7 @@
 | `concept.robust-parameter-estimation` | 0 |
 | `concept.robust-regression` | 5 |
 | `concept.root-finding` | 9 |
+| `concept.sat-maxsat` | 0 |
 | `concept.second-order-cone-program` | 0 |
 | `concept.semidefinite-program` | 0 |
 | `concept.shape-dependent-domain` | 0 |
@@ -174,6 +177,7 @@
 | `concept.stochastic-erm` | 0 |
 | `concept.stochastic-programming` | 14 |
 | `concept.time-discretization` | 1 |
+| `concept.trajectory-optimization` | 0 |
 | `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
 | `concept.variable-domain` | 0 |
