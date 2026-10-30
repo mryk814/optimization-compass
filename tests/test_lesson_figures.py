@@ -1126,7 +1126,7 @@ def test_distributed_consensus_figures_use_the_article_numbers() -> None:
     assert [round(first[0][s], 3) for s in DC_SITES] == [0.267, 0.549, 0.489]
     assert round(first[1], 3) == 0.435
     losses = generate_lesson_figures()["distributed-consensus-losses.svg"]
-    for text in ("病院A：0.44", "合計の最小 0.74", "平均 0.80", "人数の重み 0.82"):
+    for text in ("病院A：0.44", "合計の底 0.74", "平均 0.80", "患者の数の重み 0.82"):
         assert text in losses
     admm = generate_lesson_figures()["distributed-consensus-admm.svg"]
     for text in ("ρ=2で11回", "116", "270"):

@@ -6032,7 +6032,8 @@ def dc_global() -> float:
 
 
 def dc_admm(rho: float, rounds: int = 2000) -> list[tuple[dict[str, float], float]]:
-    """Consensus ADMM; stops when every hospital and the shared value are within 1e-3 of it."""
+    """Consensus ADMM; stops when every hospital is within 1e-3 of z and z is within 1e-3
+    of the pooled answer."""
     x = dict.fromkeys(DC_SITES, 0.0)
     u = dict.fromkeys(DC_SITES, 0.0)
     z = 0.0
@@ -6066,11 +6067,11 @@ def _dc_losses_svg() -> str:
     parts = _open(
         "病院ごとの損失と、3病院の合計",
         (
-            "効く確率 σ(θt) の係数 θ ごとの損失。① 病院ごとの損失（最小値を0にそろえた）。"
-            + "、".join(f"病院{s}の最小は θ={local[s]:.2f}" for s in DC_SITES)
-            + "。② 3病院の損失の合計。最小は "
-            f"θ={best:.3f}。病院ごとの答えの平均 {mean:.3f}、人数で重み付けした平均 "
-            f"{weighted:.3f} はどちらも合計の最小からずれる。"
+            "効く確率 σ(θt) の係数 θ ごとの損失。① 病院ごとの損失（底の値を0にそろえた）。"
+            + "、".join(f"病院{s}の底は θ={local[s]:.2f}" for s in DC_SITES)
+            + "。② 3病院の損失の合計。底は "
+            f"θ={best:.3f}。病院ごとの答えの平均 {mean:.3f}、患者の数で重み付けした平均 "
+            f"{weighted:.3f} はどちらも合計の底からずれる。"
         ),
         610,
     )
@@ -6078,14 +6079,16 @@ def _dc_losses_svg() -> str:
     for tick in (0, 0.5, 1, 1.5, 2):
         parts.append(_text(px(tick), 292, f"{tick:g}", "tick", "middle"))
     thetas = [2.0 * i / 200 for i in range(201)]
-    parts.append(_text(20, 64, "① 病院ごとの損失（最小を0にそろえる）"))
+    parts.append(_text(20, 64, "① 病院ごとの損失（底を0にそろえる）"))
     ly = _scale(0.0, 1.2, 272, 84)
     parts.append(f'<path d="M64 84V272H410" fill="none" stroke="{GRID}"/>')
     for value in (0, 0.5, 1):
         parts.append(_text(56, ly(value) + 5, f"{value:g}", "tick", "end"))
     for index, s in enumerate(DC_SITES):
         floor = dc_loss(s, local[s])
-        points = [(px(t), ly(min(dc_loss(s, t) - floor, 1.2))) for t in thetas]
+        points = [
+            (px(t), ly(dc_loss(s, t) - floor)) for t in thetas if dc_loss(s, t) - floor <= 1.2
+        ]
         parts.append(_polyline(points, DC_COLORS[s], 3))
         parts.append(
             f'<circle cx="{px(local[s]):.1f}" cy="{ly(0):.1f}" r="6" fill="{DC_COLORS[s]}"/>'
@@ -6107,16 +6110,23 @@ def _dc_losses_svg() -> str:
     curve = [(qx(t), sy(min(v - low, 0.3))) for t, v in zip(zoom, total, strict=True)]
     parts.append(_polyline(curve, LINE, 3))
     marks = (
-        (best, LINE, f"合計の最小 {best:.2f}", -12, "end"),
-        (mean, MUTED, f"平均 {mean:.2f}", -36, "end"),
-        (weighted, MUTED, f"人数の重み {weighted:.2f}", -14, "start"),
+        (best, f"合計の底 {best:.2f}", 120, 470, True),
+        (mean, f"平均 {mean:.2f}", 250, 440, False),
+        (weighted, f"患者の数の重み {weighted:.2f}", 280, 470, False),
     )
-    for theta, color, label, lift, anchor in marks:
+    for theta, label, tx, ty, solid in marks:
         value = sum(dc_loss(s, theta) for s in DC_SITES) - low
         cx, cy = qx(theta), sy(value)
-        parts.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="5" fill="{color}"/>')
-        shift = -10 if anchor == "end" else 10
-        parts.append(_text(cx + shift, cy + lift, label, "tick", anchor))
+        parts.append(
+            f'<path d="M{cx:.1f} {cy - 6:.1f}L{tx:.1f} {ty + 6:.1f}" stroke="{MUTED}" '
+            'stroke-width="1"/>'
+        )
+        fill = LINE if solid else "#ffffff"
+        parts.append(
+            f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="5.5" fill="{fill}" stroke="{INK}" '
+            'stroke-width="1.5"/>'
+        )
+        parts.append(_text(tx, ty, label, "tick", "middle"))
     parts.append(_text(410, 596, "係数 θ", "tick", "end"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
@@ -6129,11 +6139,12 @@ def _dc_admm_svg() -> str:
     history = dc_admm(2.0)
     best = dc_global()
     parts = _open(
-        "合意へ近づく様子と、罰則の重み",
+        "合意へ近づく様子と、罰則係数",
         (
-            f"① 罰則の重み ρ=2 のADMMで、3病院の係数と共通の値 z が {best:.3f} へ近づく。"
-            f"{len(history) - 1}回のやり取りで、どれも {best:.3f} から0.001以内。"
-            "② ρ ごとの、0.001以内にそろうまでのやり取りの回数。"
+            f"① 罰則係数 ρ=2 のADMMで、3病院の係数と共通の値 z が {best:.3f} へ近づく。"
+            f"{len(history) - 1}回のやり取りで、各病院の値と z の差が0.001未満、"
+            f"z が {best:.3f} から0.001以内になる。"
+            "② ρ ごとの、そろうまでのやり取りの回数。"
             + "、".join(f"ρ={rho:g}で{len(dc_admm(rho)) - 1}回" for rho in DC_RHOS)
             + "。"
         ),
@@ -6177,14 +6188,14 @@ def _dc_admm_svg() -> str:
         count = len(dc_admm(rho)) - 1
         left = 64 + width * index + 8
         top = by(math.log10(count))
-        color = UPDATE if rho == 2.0 else LINE
+        color = INK if rho == 2.0 else LINE
         parts.append(
             f'<rect x="{left:.1f}" y="{top:.1f}" width="{width - 16:.1f}" height="{560 - top:.1f}" '
             f'fill="{color}"/>'
         )
         parts.append(_text(left + (width - 16) / 2, top - 6, str(count), "tick", "middle"))
         parts.append(_text(left + (width - 16) / 2, 580, f"{rho:g}", "tick", "middle"))
-    parts.append(_text(410, 602, "罰則の重み ρ（縦は対数目盛）", "tick", "end"))
+    parts.append(_text(410, 602, "罰則係数 ρ（縦は対数目盛）", "tick", "end"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
 
@@ -6233,13 +6244,13 @@ OL_RULES = (
 def _ol_days_svg() -> str:
     days = ol_alternating(10)
     parts = _open(
-        "交互に入れ替わる10日間と、毎朝の配分",
+        "交互に入れ替わる10日間と、毎朝の割合",
         (
-            "① 媒体A・Bの1日の成果（配分1あたり）。1日目はA1.5・B1.0、"
+            "① 媒体A・Bの1日の成果（広告費1あたり）。1日目はA1.5・B1.0、"
             "その後は偶数日にB、奇数日にAが2倍。"
             "② 毎朝Aに回す割合 x。前日までの合計が多い側に全額を回すと、"
             "2日目から毎日負ける側を選ぶ。"
-            "勾配で少しずつ動かす決め方（η=1/√10）は0.34と0.66の間を行き来する。"
+            "勾配で少しずつ動かす決め方（学習率 η=1/√10）は0.34と0.66の間を行き来する。"
         ),
         560,
     )
@@ -6252,16 +6263,19 @@ def _ol_days_svg() -> str:
     parts.append(f'<path d="M64 84V252H410" fill="none" stroke="{GRID}"/>')
     for value in (1, 2):
         parts.append(_text(56, ay(value) + 5, str(value), "tick", "end"))
-    for index, (name, color) in enumerate((("A", UPDATE), ("B", POINT))):
+    for index, (name, color, dash) in enumerate((("A", LINE, ""), ("B", MUTED, "5 4"))):
         points = [(px(t + 1), ay(r[index])) for t, r in enumerate(days)]
-        parts.append(_polyline(points, color, 2.5))
+        line = _polyline(points, color, 2.5)
+        if dash:
+            line = line.replace("/>", f' stroke-dasharray="{dash}"/>')
+        parts.append(line)
         for x, y in points:
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{color}"/>')
-        parts.append(
-            _text(100 + 70 * index, 300, f"媒体{name}", "tick").replace(
-                "<text ", f'<text style="fill:{color}" '
+            parts.append(
+                f'<rect x="{x - 4:.1f}" y="{y - 4:.1f}" width="8" height="8" fill="{color}"/>'
             )
-        )
+        x0 = 100 + 110 * index
+        parts.append(_polyline([(x0, 300 - 5), (x0 + 22, 300 - 5)], color, 2.5))
+        parts.append(_text(x0 + 28, 300, f"媒体{name}", "tick"))
     parts.append(_text(20, 344, "② 毎朝Aに回す割合 x"))
     xy = _scale(0.0, 1.0, 500, 364)
     parts.append(f'<path d="M64 364V500H410" fill="none" stroke="{GRID}"/>')
@@ -6289,7 +6303,7 @@ def _ol_days_svg() -> str:
 
 
 def _ol_regret_svg() -> str:
-    sequences = (("① 交互に入れ替わる日", ol_alternating), ("② A・A・Bのくり返し", ol_pattern))
+    sequences = (("① 交互に入れ替わる日", ol_alternating), ("② A・A・Bの繰り返し", ol_pattern))
     regrets = {
         (name, rule): [ol_play(seq(days), rule)[1] for days in OL_STEP_HORIZONS]
         for name, seq in sequences
@@ -6298,7 +6312,7 @@ def _ol_regret_svg() -> str:
     parts = _open(
         "日数が増えると、後悔はどう増えるか",
         (
-            "後悔＝後から見て良かった方の媒体に毎日全額を回した場合との差。"
+            "後悔＝後から見てよかった方の媒体に毎日全額を回した場合との差。"
             "横は日数 T、縦は後悔（どちらも対数目盛）。"
             "破線は √T。"
             + "。".join(
@@ -6325,7 +6339,9 @@ def _ol_regret_svg() -> str:
         for exponent in (1, 2, 3, 4):
             parts.append(_text(px(exponent), bottom + 20, f"{10**exponent:g}", "tick", "middle"))
         root = [(px(e), y(e / 2)) for e in (1, 2, 3, 4)]
-        parts.append(_polyline(root, GRID, 2).replace("/>", ' stroke-dasharray="5 4"/>'))
+        parts.append(_polyline(root, MUTED, 1.5).replace("/>", ' stroke-dasharray="5 4"/>'))
+        parts.append(_text(px(4) - 4, y(2) - 10, "√T", "tick", "end"))
+        parts.append(_text(92, top + 4, "後悔", "tick"))
         for rule, _, color in OL_RULES:
             points = [
                 (px(math.log10(days)), y(math.log10(max(value, 0.1))))

@@ -22,7 +22,7 @@
 | `concept.cp-scheduling` | 93 | 5114 | 10 | 4 | 0 | pass |
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
 | `concept.discontinuous-simulation` | 141 | 8913 | 12 | 4 | 0 | pass |
-| `concept.distributed-consensus` | 129 | 8909 | 12 | 7 | 0 | pass |
+| `concept.distributed-consensus` | 129 | 9246 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
@@ -52,7 +52,7 @@
 | `concept.nonconvex-qp-qcqp` | 117 | 14296 | 13 | 4 | 0 | pass |
 | `concept.nonlinear-least-squares` | 119 | 9987 | 12 | 8 | 0 | pass |
 | `concept.nonsmooth-convex-composite` | 155 | 14826 | 16 | 10 | 0 | pass |
-| `concept.online-optimization` | 130 | 8308 | 13 | 7 | 0 | pass |
+| `concept.online-optimization` | 130 | 8743 | 13 | 7 | 0 | pass |
 | `concept.optimal-control` | 102 | 6804 | 11 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |

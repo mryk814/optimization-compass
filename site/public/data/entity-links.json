@@ -8354,17 +8354,17 @@
         },
         {
           "relation_type": "related_content",
-          "target_id": "mirror-descent",
-          "target_type": "content"
-        },
-        {
-          "relation_type": "related_content",
           "target_id": "newton-method",
           "target_type": "content"
         },
         {
           "relation_type": "related_content",
           "target_id": "sgd",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
           "target_type": "content"
         }
       ],
