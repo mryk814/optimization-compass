@@ -11673,6 +11673,72 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.solver-evaluation-points",
+      "entity_id": "concept.solver-evaluation-points",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ソルバーが目的関数を呼ぶ点と回数",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bound-constrained-smooth",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点は範囲の内側にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、範囲の外の入力と評価の内訳を確かめられます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.spd-matrix-geometry",
       "entity_id": "concept.spd-matrix-geometry",
       "entity_type": "content",
