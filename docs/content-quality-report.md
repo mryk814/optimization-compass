@@ -26,7 +26,7 @@
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
-| `concept.external-solver-objective` | 162 | 11507 | 15 | 15 | 0 | pass |
+| `concept.external-solver-objective` | 162 | 11590 | 15 | 15 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
@@ -69,7 +69,7 @@
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
-| `concept.solver-evaluation-points` | 149 | 9613 | 14 | 3 | 0 | pass |
+| `concept.solver-evaluation-points` | 149 | 9765 | 14 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |

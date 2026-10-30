@@ -7,7 +7,7 @@ title_ja: ソルバーが目的関数を呼ぶ点と回数
 title_en: Where and How Often a Solver Evaluates
 summary: ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点は範囲の内側にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、範囲の外の入力と評価の内訳を確かめられます。
 prerequisites: [concept.evaluation-cost]
-related_ids: [bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
+related_ids: [concept.external-solver-objective, bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
 source_ids: [S002, S056, S063, S065]
 status: published
 last_reviewed: 2026-10-30
@@ -231,6 +231,8 @@ for method in ["L-BFGS-B", "Nelder-Mead"]:
 ## 次に読む
 
 ツールが値を返さない点の記録の仕方は、[失敗・NaNを伴うシミュレーション](#/formulations/PA016)で扱います。評価の回数を予算として扱う方法は、[評価費と予算](#/learn/concept.evaluation-cost)へ進みます。勾配を差分で作る手法の一つの反復は、[L-BFGS-B法](#/learn/lbfgsb)で確かめられます。
+
+ツールの中でも平衡を求める最小化が走るとき、外側で何を最小にするかは、[外部の計算ソフトを目的関数の中で呼ぶ最適化](#/learn/concept.external-solver-objective)で扱います。相が消える範囲で目的が平らになり、勾配法が動かないまま終了する例も同じ記事にあります。
 
 ## 出典と再現条件
 

@@ -245,7 +245,7 @@
     "concept.external-solver-objective": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "35cbb724ced8",
+      "body_sha256": "834e337cf4f1",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "pass",
@@ -893,7 +893,7 @@
     "concept.solver-evaluation-points": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "49659cd753cf",
+      "body_sha256": "1d89f8d532a1",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",

@@ -64,9 +64,16 @@ in `concept.evaluation-cost`.
 
 | Order | Article | What the running example shows |
 |---|---|---|
+| 0 | `concept.external-solver-objective`: calling an external solver inside the objective (published; own A–B alloy example) | the tool minimizes the Gibbs energy inside, so the outer objective is a property it returns, not G; where β is absent the returned fraction is flat, and L-BFGS-B from x = 0.60 stops at x = 0 reporting success; all component fractions as variables leave the answer non-unique |
 | 1 | `concept.solver-evaluation-points`: where and how often a solver evaluates (published) | `minimize(f, x0)` passes `c = -1.01` on its 4th call; `fmin` crosses 0 on its 16th; bounds clip to `c = 0` exactly; L-BFGS-B makes 39 calls in 3 iterations |
 | 2 | Written constraints versus real constraints (planned) | the domain `c > 0` exists only as an exception; closed bounds; validity range of the internal equation |
 | 3 | Is the objective really smooth? (planned) | loosening the internal bisection tolerance to 1e-3 makes L-BFGS-B report convergence after 7 iterations and 304 evaluations at F about 28 times the optimum, with T barely moved from 1200 K |
+
+Article 0 predates the shared example and keeps its own two-phase A–B model, because its lesson (the outer and
+inner minimizations, and the flat range where a phase is absent) needs phase fractions rather than a cost. It is the
+entry point of the series: the reader first separates what the tool minimizes from what the optimizer minimizes, then
+follows articles 1 to 3 on the steel example. It also covers part of the "rounding or `if` branches inside the model"
+row above: a phase that disappears gives a zero gradient and an immediate stop.
 
 The third row was observed with SciPy 1.18.1 on an earlier three-variable version of the example
 and must be recomputed on the two-variable model before it is written up.
