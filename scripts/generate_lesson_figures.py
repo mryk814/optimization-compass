@@ -5229,6 +5229,206 @@ def _rpe_weights_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Where a solver evaluates (content/concepts/solver-evaluation-points.md): an alloy cost tool
+# that takes the temperature T [K] and the carbon fraction c, and rejects c <= 0.
+EVAL_START = (1200.0, 0.0005)
+# Points SciPy 1.18.1 passed to the tool, as recorded by the article's Python block. The test
+# tests/test_lesson_figures.py reruns SciPy and checks that these sequences still hold.
+EVAL_NM_C = (
+    0.0005,
+    0.0005,
+    0.000525,
+    0.000475,
+    0.00045,
+    0.00045,
+    0.0004875,
+    0.0004375,
+    0.00040625,
+    0.00036875,
+    0.000325,
+    0.0002625,
+    0.0003,
+    0.000265625,
+    0.000121875,
+    -2.03125e-05,
+)
+EVAL_NM_LAST_T = 1268.4375
+EVAL_BFGS_C = (0.0005, 0.0005, 0.000500015, -1.0095)
+# L-BFGS-B with 1e-5 <= c: s start, a accepted iterate, t line-search point, d difference point.
+EVAL_LBFGSB_ROLES = "sddaddtddtddtddtddtddtddtddtddtddaddadd"
+
+
+def eval_hardness(temperature: float, carbon: float) -> float:
+    """Solve y**3 + (T/1000) y = 1 + 200 c by bisection, as the article's tool does."""
+    lower, upper = 0.0, 2.0
+    while upper - lower > 1e-13:
+        middle = 0.5 * (lower + upper)
+        if middle**3 + temperature / 1000 * middle - 1 - 200 * carbon > 0:
+            upper = middle
+        else:
+            lower = middle
+    return 0.5 * (lower + upper)
+
+
+def eval_cost(temperature: float, carbon: float) -> float:
+    if carbon <= 0:
+        raise ValueError("carbon fraction out of range")
+    y = eval_hardness(temperature, carbon)
+    return (y - 1.05) ** 2 + 0.5 * ((temperature - 1250) / 100) ** 2 + 5000 * carbon
+
+
+def eval_gradient(temperature: float, carbon: float) -> tuple[float, float]:
+    """Exact gradient through the implicit function y(T, c)."""
+    y = eval_hardness(temperature, carbon)
+    slope = 3 * y * y + temperature / 1000
+    dy_dt, dy_dc = -y / 1000 / slope, 200 / slope
+    return (
+        2 * (y - 1.05) * dy_dt + (temperature - 1250) / 100**2,
+        2 * (y - 1.05) * dy_dc + 5000,
+    )
+
+
+def eval_first_trial() -> tuple[float, float]:
+    """SciPy's BFGS starts with H = I and a first line-search step of length 1.01."""
+    gradient = eval_gradient(*EVAL_START)
+    norm = math.hypot(*gradient)
+    return (
+        EVAL_START[0] - 1.01 * gradient[0] / norm,
+        EVAL_START[1] - 1.01 * gradient[1] / norm,
+    )
+
+
+def _signed(value: float, digits: int) -> str:
+    return f"{value:.{digits}f}".replace("-", "−")
+
+
+def _eval_carbon_svg() -> str:
+    count = len(EVAL_NM_C)
+    trial = eval_first_trial()
+    parts = _open(
+        "評価の番号と、渡された炭素量 c",
+        (
+            "初期点 T=1200 K、c=0.0005 から、SciPy の三通りの使い方で"
+            "費用の計算ツールを最小化したときに、"
+            "ツールへ渡された炭素量 c を評価の番号ごとに描く。c が 0 以下だとツールはエラーを返す。"
+            f"fmin（Nelder–Mead）は {count} 回目に c={_signed(EVAL_NM_C[-1], 5)} を渡した。"
+            "c の下限 0 を与えた Nelder–Mead は 15 回目まで同じ点を通り、"
+            f"{count} 回目に境界の c=0 そのものを渡した。"
+            f"minimize の既定（BFGS）は 4 回目に c={_signed(trial[1], 2)} を渡した。"
+            "BFGS の◆は、重ならないように少し上にずらして描く。"
+        ),
+        386,
+    )
+    px = _scale(1.0, float(count), 76, 410)
+    py = _scale(-1.5, 6.0, 300, 128)
+    parts.append(f'<path d="M76 128V300H410" fill="none" stroke="{GRID}"/>')
+    for tick in (0, 2, 4, 6):
+        parts.append(_text(68, py(tick) + 5, str(tick), "tick", "end"))
+    for tick in (1, 4, 8, 12, 16):
+        parts.append(_text(px(tick), 322, str(tick), "tick", "middle"))
+    parts.append(
+        f'<path d="M76 {py(0):.1f}H410" stroke="{VIOLATION}" stroke-width="1.5" '
+        'stroke-dasharray="6 4"/>'
+    )
+    parts.append(_text(84, py(0) - 8, "c=0 以下はエラー", "tick"))
+    nelder = [(px(i + 1), py(c * 1e4)) for i, c in enumerate(EVAL_NM_C)]
+    parts.append(_polyline(nelder, RING, 2))
+    for x, y in nelder[:-1]:
+        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{POINT}"/>')
+    last_x, last_y = nelder[-1]
+    parts.append(
+        f'<circle cx="{last_x:.1f}" cy="{last_y:.1f}" r="6" fill="{VIOLATION}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(
+        f'<rect x="{last_x - 6:.1f}" y="{py(0) - 6:.1f}" width="12" height="12" '
+        f'fill="#ffffff" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    for index, c in enumerate(EVAL_BFGS_C[:3]):
+        x, y = px(index + 1), py(c * 1e4) - 14
+        parts.append(
+            f'<path d="M{x:.1f} {y - 6:.1f}L{x + 6:.1f} {y:.1f}L{x:.1f} {y + 6:.1f}'
+            f'L{x - 6:.1f} {y:.1f}Z" fill="{UPDATE}"/>'
+        )
+    arrow_x = px(4)
+    parts.append(
+        f'<path d="M{arrow_x:.1f} {py(0) + 8:.1f}V298" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(
+        f'<path d="M{arrow_x - 6:.1f} 290L{arrow_x:.1f} 300L{arrow_x + 6:.1f} 290" '
+        f'fill="none" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(arrow_x + 10, 290, f"4回目 c={_signed(trial[1], 2)}（図の外）", "tick"))
+    legend = (
+        (60, "circle", POINT, f"fmin：{count}回目に c={_signed(EVAL_NM_C[-1], 5)}"),
+        (82, "square", UPDATE, f"下限0つき Nelder–Mead：{count}回目に c=0"),
+    )
+    for y, shape, color, label in legend:
+        if shape == "circle":
+            parts.append(f'<circle cx="28" cy="{y - 5}" r="5" fill="{color}"/>')
+        else:
+            parts.append(
+                f'<rect x="22" y="{y - 11}" width="12" height="12" fill="#ffffff" '
+                f'stroke="{color}" stroke-width="2.5"/>'
+            )
+        parts.append(_text(42, y, label, "tick"))
+    parts.append(f'<path d="M28 93L34 99L28 105L22 99Z" fill="{UPDATE}"/>')
+    parts.append(_text(42, 104, "minimize の既定（BFGS）", "tick"))
+    parts.append(_text(20, 344, "縦軸 c（×10⁻⁴）、横軸 評価の番号。◆は上にずらす", "tick"))
+    parts.append(_text(20, 368, "初期点 T=1200 K、c=0.0005。SciPy 1.18.1", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def eval_role_counts() -> dict[str, int]:
+    return {role: EVAL_LBFGSB_ROLES.count(role) for role in "satd"}
+
+
+def _eval_breakdown_svg() -> str:
+    counts = eval_role_counts()
+    columns = [EVAL_LBFGSB_ROLES[i : i + 3] for i in range(0, len(EVAL_LBFGSB_ROLES), 3)]
+    iterations = counts["a"]
+    parts = _open(
+        f"反復{iterations}回の裏の評価{len(EVAL_LBFGSB_ROLES)}回",
+        (
+            "c の下限を 0.00001 にした L-BFGS-B が、費用の計算ツールを呼んだ順に四角を並べる。"
+            f"列は勾配を求めた点 {len(columns)} 個で、評価の順に左から並ぶ。"
+            f"一段目は初期点 1 個、受け入れた反復点 {counts['a']} 個、"
+            f"直線探索の途中の点 {counts['t']} 個。"
+            f"二段目と三段目は、勾配を差分で作るために T と c を 1e-8 ずらした点 {counts['d']} 個。"
+        ),
+        334,
+    )
+    fills = {"s": MUTED, "a": LINE, "t": RING, "d": "#ffffff"}
+    size, gap, left, top = 22, 6, 40, 92
+    for column, roles in enumerate(columns):
+        for row, role in enumerate(roles):
+            x, y = left + column * (size + gap), top + row * (size + gap)
+            parts.append(
+                f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="3" '
+                f'fill="{fills[role]}" stroke="{INK if role != "d" else GRID}" '
+                f'stroke-width="1.5"/>'
+            )
+    parts.append(_text(20, 64, "1列が勾配を求めた1点。左から評価の順", "tick"))
+    rows_bottom = top + 3 * (size + gap)
+    legend = (
+        ("s", f"初期点 {counts['s']}"),
+        ("a", f"受け入れた反復点 {counts['a']}"),
+        ("t", f"直線探索の途中の点 {counts['t']}"),
+        ("d", f"差分のための点 {counts['d']}（各列の2段目と3段目）"),
+    )
+    for index, (role, label) in enumerate(legend):
+        y = rows_bottom + 24 + index * 26
+        parts.append(
+            f'<rect x="20" y="{y - 14}" width="16" height="16" rx="3" fill="{fills[role]}" '
+            f'stroke="{INK if role != "d" else GRID}" stroke-width="1.5"/>'
+        )
+        parts.append(_text(44, y, label, "tick"))
+    parts.append(_text(20, 318, "SciPy 1.18.1、初期点 T=1200 K、c=0.0005", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -5276,6 +5476,8 @@ def generate_lesson_figures() -> dict[str, str]:
         "robust-optimization-set-size.svg": _ro_set_size_svg(),
         "robust-estimation-profile.svg": _rpe_profile_svg(),
         "robust-estimation-weights.svg": _rpe_weights_svg(),
+        "solver-evaluation-carbon.svg": _eval_carbon_svg(),
+        "solver-evaluation-breakdown.svg": _eval_breakdown_svg(),
     }
 
 
