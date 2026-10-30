@@ -1114,3 +1114,44 @@ def test_solver_evaluation_article_python_prints_its_comments() -> None:
     with contextlib.redirect_stdout(output):
         exec(compile(code, "solver-evaluation-points.md", "exec"), {})
     assert output.getvalue().splitlines() == expected
+
+
+def test_distributed_consensus_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import DC_RHOS, DC_SITES, dc_admm, dc_global, dc_local
+
+    assert [round(dc_local(s), 2) for s in DC_SITES] == [0.44, 1.22, 0.73]
+    assert round(dc_global(), 3) == 0.74
+    assert [len(dc_admm(rho)) - 1 for rho in DC_RHOS] == [116, 26, 15, 11, 17, 57, 270]
+    first = dc_admm(2.0)[1]
+    assert [round(first[0][s], 3) for s in DC_SITES] == [0.267, 0.549, 0.489]
+    assert round(first[1], 3) == 0.435
+    losses = generate_lesson_figures()["distributed-consensus-losses.svg"]
+    for text in ("病院A：0.44", "合計の最小 0.74", "平均 0.80", "人数の重み 0.82"):
+        assert text in losses
+    admm = generate_lesson_figures()["distributed-consensus-admm.svg"]
+    for text in ("ρ=2で11回", "116", "270"):
+        assert text in admm
+
+
+def test_online_optimization_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import ol_alternating, ol_pattern, ol_play
+
+    regrets = {
+        days: [
+            round(ol_play(seq(days), rule)[1], 2)
+            for seq in (ol_alternating, ol_pattern)
+            for rule in ("leader", "half", "ogd")
+        ]
+        for days in (10, 100, 1000, 10000)
+    }
+    assert regrets[10] == [4.75, 0.25, 1.67, 0.5, 2.0, 1.63]
+    assert regrets[100] == [49.75, 0.25, 5.2, 0.5, 17.0, 4.8]
+    assert regrets[10000] == [4999.75, 0.25, 50.24, 0.5, 1667.0, 46.08]
+    shares, _ = ol_play(ol_alternating(10), "leader")
+    assert shares == [0.5, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]
+    days = generate_lesson_figures()["online-budget-days.svg"]
+    for text in ("媒体A", "勾配で少しずつ"):
+        assert text in days
+    growth = generate_lesson_figures()["online-regret-growth.svg"]
+    for text in ("49.75", "17", "5.2", "4.8"):
+        assert text in growth
