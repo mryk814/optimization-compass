@@ -8271,6 +8271,18 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.robust-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.robust-parameter-estimation",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.robust-regression",
       "asset_type": "content",
       "policy": "warning",

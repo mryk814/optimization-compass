@@ -568,11 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 16,
+            "complete": 17,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 97,
+              "in_progress": 96,
               "no_article": 46,
               "stale": 1
             }
@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 46,
+            "complete": 47,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 16,
+              "in_progress": 15,
               "no_article": 16,
               "stale": 2
             }
@@ -18798,12 +18798,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.robust-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18830,11 +18830,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA050"
+            "/formulations/PA050",
+            "concept.robust-optimization"
           ]
         },
         "recommendation": {
@@ -19285,12 +19286,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.robust-parameter-estimation"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -19317,11 +19318,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA056"
+            "/formulations/PA056",
+            "concept.robust-parameter-estimation"
           ]
         },
         "recommendation": {
