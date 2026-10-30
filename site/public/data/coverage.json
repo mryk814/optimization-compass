@@ -568,11 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 15,
+            "complete": 16,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 98,
+              "in_progress": 97,
               "no_article": 46,
               "stale": 1
             }
@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 43,
+            "complete": 46,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 17,
-              "no_article": 18,
+              "in_progress": 16,
+              "no_article": 16,
               "stale": 2
             }
           },
@@ -14879,12 +14879,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.eigenvalue-problem"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -14911,11 +14911,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA003"
+            "/formulations/PA003",
+            "concept.eigenvalue-problem"
           ]
         },
         "recommendation": {
@@ -17113,12 +17114,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.assignment-matching"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -17145,11 +17146,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA030"
+            "/formulations/PA030",
+            "concept.assignment-matching"
           ]
         },
         "recommendation": {
@@ -18715,12 +18717,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.stochastic-programming"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18747,11 +18749,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA049"
+            "/formulations/PA049",
+            "concept.stochastic-programming"
           ]
         },
         "recommendation": {

@@ -699,3 +699,83 @@ def test_linear_system_figure_uses_the_article_numbers() -> None:
     ):
         assert text in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_assignment_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        ASSIGN_TIMES,
+        ASSIGN_U,
+        ASSIGN_V,
+        assignment_all,
+        assignment_greedy,
+        assignment_reduced,
+    )
+
+    rows = assignment_all()
+    assert [(total, longest) for total, longest, _ in rows] == [
+        (15, 9),
+        (16, 8),
+        (20, 10),
+        (21, 10),
+        (22, 14),
+        (24, 14),
+    ]
+    assert rows[0][2] == (0, 1, 2)
+    assert assignment_greedy() == [(0, 1), (1, 2), (2, 0)]
+    # The row and column values certify the minimum: never above a time, and summing to 15.
+    reduced = assignment_reduced()
+    assert all(value >= 0 for row in reduced for value in row)
+    assert [reduced[i][i] for i in range(3)] == [0, 0, 0]
+    assert sum(ASSIGN_U) + sum(ASSIGN_V) == 15
+    assert sum(reduced[i][j] for i, j in assignment_greedy()) == 24 - 15
+    assert ASSIGN_TIMES[2][2] == 9
+    greedy = generate_lesson_figures()["assignment-greedy-optimal.svg"]
+    for text in ("合計 24 分", "合計 15 分", "2 + 8 + 14 = 24", "3 + 3 + 9 = 15"):
+        assert text in greedy
+    dual = generate_lesson_figures()["assignment-dual-bound.svg"]
+    for text in ("u の合計 9 ＋ v の合計 6 = 15", "救急車3 u=5", "C v=4"):
+        assert text in dual
+
+
+def test_eigenvalue_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        eig_best_angle,
+        eig_centre,
+        eig_perpendicular_sum,
+        eig_scatter,
+        eig_values,
+    )
+
+    assert eig_centre() == (4.0, 3.0)
+    assert eig_scatter() == (4.0, 4.0, 10.0)
+    assert eig_values() == (2.0, 12.0)
+    assert math.isclose(math.tan(math.radians(eig_best_angle())), 2.0)
+    assert math.isclose(eig_perpendicular_sum(eig_best_angle()), 2.0)
+    assert math.isclose(eig_perpendicular_sum(45.0), 3.0)
+    assert math.isclose(eig_perpendicular_sum(0.0), 10.0)
+    # 7 + 3 cos 2φ − 4 sin 2φ, the article's closed form
+    for angle in range(0, 180, 15):
+        phi = math.radians(angle)
+        closed = 7 + 3 * math.cos(2 * phi) - 4 * math.sin(2 * phi)
+        assert math.isclose(eig_perpendicular_sum(angle), closed)
+    fence = generate_lesson_figures()["eigenvalue-fence-direction.svg"]
+    for text in ("63.4° で最小 2", "153.4° で最大 12", "45°（縦のずれで当てはめた直線）で 3"):
+        assert text in fence
+    parallel = generate_lesson_figures()["eigenvalue-parallel-condition.svg"]
+    for text in ("M n=(4, 4)", "M n=2 n", "n=(2, −1)/√5"):
+        assert text in parallel
+
+
+def test_stochastic_programming_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import sp_best, sp_cost, sp_expected, sp_mean_demand
+
+    assert sp_best() == (40, 7000.0)
+    assert sp_mean_demand() == 46.0
+    assert [sp_expected(x) for x in (0, 20, 40, 46, 80)] == [11500, 8500, 7000, 7150, 8000]
+    assert [sp_cost(40, d) for d in (20, 40, 80)] == [4000, 4000, 14000]
+    cost = generate_lesson_figures()["stochastic-programming-expected-cost.svg"]
+    for text in ("x=40：7000", "x=46：7150", "x=80：8000", "晴れ 80個"):
+        assert text in cost
+    tree = generate_lesson_figures()["stochastic-programming-two-stage.svg"]
+    for text in ("x=40", "取り寄せ y=0", "取り寄せ y=40"):
+        assert text in tree

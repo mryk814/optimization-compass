@@ -58,6 +58,25 @@
       },
       "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
     },
+    "concept.assignment-matching": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "88f774cd25ef",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値・双対・完全単模を再計算し一致。0.5の個数、完全単模の説明、出典のない主張（SciPyの内部法、blossom）、図の①②③の重複を修正。1280/375/320pxでページの横はみ出しなし、数式は枠内スクロール。"
+    },
     "concept.bilevel-optimization": {
       "reviewed_on": "2026-10-14",
       "reviewer": "claude",
@@ -184,6 +203,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。MADSの保証を条件つきの局所的な停留点に限定、図鑑名「不連続決定論black-box」を明記、BOの行を条件つきに。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.eigenvalue-problem": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "56bc1686b555",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 閉じた式・固定成分の傾き1/2.5・べき乗法の比を再計算し一致。n=(1,0)の直線の向き、最小と停留の区別、大きな行列の行き先（Lanczos）、Wahbaの書き方、S054の帰属を修正。1280/375/320pxで横はみ出しなし。"
     },
     "concept.expensive-black-box": {
       "reviewed_on": "2026-10-12",
@@ -808,6 +846,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。凸性の理由、重複なしの一様抽出、σ(w)の定義を追加。図の「全データ」を本文の「全件」に統一。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.stochastic-programming": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "7e6fdba5ccb2",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 期待費用・双対・Benders・SAAを再計算し一致。SAAの同点の扱い（Nを6/21/101に変更）、曇りの双対25の説明、0.4の比較の誤り、図の色の重複と千円表記、出典のない用語を修正。1280/375/320pxで横はみ出しなし。"
     },
     "concept.variable-domain": {
       "reviewed_on": "2026-10-26",

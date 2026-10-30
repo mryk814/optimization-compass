@@ -347,7 +347,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.eigenvalue-problem",
       "cues_ja": [
         "主成分・振動モード・低ランク近似を求めたい",
         "向きだけが問題で、大きさは正規化されている"
@@ -386,7 +386,7 @@
       ],
       "family_id": "reduce_first",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "利用可能",
@@ -429,8 +429,11 @@
       "problem_id": "PA003",
       "reading_ja": "長さ1のベクトルの中で二次形式を最小にします。答えは最小固有値に対応する固有ベクトルです。",
       "source_ids": [
+        "S044",
         "S054",
-        "S071"
+        "S055",
+        "S071",
+        "S173"
       ],
       "standard_form": "\\min_{\\|x\\|_2=1}\\; x^\\top A x,\\quad A=A^\\top",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><msub><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></msub><mspace width=\"0.278em\" /><msup><mi>x</mi><mo>&#x022A4;</mo></msup><mi>A</mi><mi>x</mi><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>A</mi><mo>&#x0003D;</mo><msup><mi>A</mi><mo>&#x022A4;</mo></msup></mrow></math></div>"
@@ -3129,7 +3132,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.assignment-matching",
       "cues_ja": [
         "担当者と案件、機械と作業を一対一で割り当てる"
       ],
@@ -3167,7 +3170,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3210,7 +3213,13 @@
       "problem_id": "PA030",
       "reading_ja": "人と仕事のような二つの集合を一対一に組み合わせ、組み合わせの費用の合計を最小にします。",
       "source_ids": [
-        "S054"
+        "S001",
+        "S004",
+        "S005",
+        "S016",
+        "S054",
+        "S144",
+        "S177"
       ],
       "standard_form": "\\min_{x}\\; \\sum_{i,j} c_{ij}x_{ij} \\;\\text{ s.t. }\\; \\sum_j x_{ij}=1,\\; \\sum_i x_{ij}=1,\\; x_{ij}\\in\\{0,1\\}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>j</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>i</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math></div>"
@@ -5134,7 +5143,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.stochastic-programming",
       "cues_ja": [
         "需要が分からないまま発注量を決め、後で不足や余りに対応する"
       ],
@@ -5172,7 +5181,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5215,8 +5224,16 @@
       "problem_id": "PA049",
       "reading_ja": "いま決める x と、不確かさ ξ が明らかになった後の対応（recourse）の費用の期待値を合わせて最小にします。",
       "source_ids": [
+        "S004",
+        "S016",
         "S054",
-        "S061"
+        "S061",
+        "S103",
+        "S134",
+        "S160",
+        "S161",
+        "S163",
+        "S164"
       ],
       "standard_form": "\\min_{x}\\; c^\\top x+\\mathbb{E}_{\\xi}\\big[Q(x,\\xi)\\big]",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><msup><mi>c</mi><mo>&#x022A4;</mo></msup><mi>x</mi><mo>&#x0002B;</mo><msub><mi>&#x1D53C;</mi><mrow><mi>&#x003BE;</mi></mrow></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">[</mo><mi>Q</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>&#x003BE;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">]</mo></mrow></math></div>"
@@ -6334,6 +6351,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 44
+    "with_article": 47
   }
 }

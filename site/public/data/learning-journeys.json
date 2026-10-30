@@ -7989,6 +7989,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.assignment-matching",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.bilevel-optimization",
       "asset_type": "content",
       "policy": "warning",
@@ -8062,6 +8068,12 @@
     },
     {
       "asset_id": "concept.dynamics-defect",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.eigenvalue-problem",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8326,6 +8338,12 @@
     },
     {
       "asset_id": "concept.stochastic-erm",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.stochastic-programming",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
