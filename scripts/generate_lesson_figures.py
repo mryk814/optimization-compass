@@ -5135,6 +5135,445 @@ def _rpe_weights_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# SAT and MaxSAT (content/concepts/sat-maxsat.md): whom to invite to a weekend study group.
+# Variables 1..5 are A..E (true = invite). Clauses list signed variable numbers.
+SAT_NAMES = "ABCDE"
+SAT_HARD = (
+    ((1, 2), "鍵"),  # only A and B hold the key
+    ((-1, -3), "店番"),  # A and C keep the same shop
+    ((-2, 4), "車"),  # B comes in D's car
+    ((-4, -5), "店番"),  # D and E keep the same shop
+)
+SAT_SOFT = (((3,), 3), ((5,), 2), ((1,), 2))  # wishes: C 3, E 2, A 2
+
+
+def sat_holds(clause: Sequence[int], x: Sequence[bool]) -> bool:
+    return any((lit > 0) == x[abs(lit) - 1] for lit in clause)
+
+
+def sat_weight(x: Sequence[bool]) -> int:
+    return sum(w for clause, w in SAT_SOFT if sat_holds(clause, x))
+
+
+def sat_label(x: Sequence[bool]) -> str:
+    return "".join(n for n, b in zip(SAT_NAMES, x, strict=True) if b) or "なし"
+
+
+def sat_feasible() -> list[tuple[bool, ...]]:
+    return [
+        x
+        for x in itertools.product((False, True), repeat=5)
+        if all(sat_holds(clause, x) for clause, _ in SAT_HARD)
+    ]
+
+
+def sat_implications(first: int) -> list[tuple[int, str]]:
+    """Unit propagation from one decided literal over the hard clauses: (literal, reason)."""
+    value = {abs(first): first > 0}
+    chain = [(first, "")]
+    changed = True
+    while changed:
+        changed = False
+        for clause, reason in SAT_HARD:
+            if any(value.get(abs(lit)) == (lit > 0) for lit in clause):
+                continue
+            free = [lit for lit in clause if abs(lit) not in value]
+            if len(free) == 1:
+                value[abs(free[0])] = free[0] > 0
+                chain.append((free[0], reason))
+                changed = True
+    return chain
+
+
+def sat_greedy() -> tuple[bool, ...]:
+    """Grant the wishes heaviest first, keeping each one only if some feasible plan remains."""
+    plans = sat_feasible()
+    for clause, _ in sorted(SAT_SOFT, key=lambda item: -item[1]):
+        kept = [x for x in plans if sat_holds(clause, x)]
+        plans = kept or plans
+    return max(plans, key=sat_weight)
+
+
+def _sat_literal(lit: int) -> str:
+    return ("" if lit > 0 else "¬") + SAT_NAMES[abs(lit) - 1]
+
+
+def _sat_grid_svg() -> str:
+    feasible = set(sat_feasible())
+    best = max(feasible, key=sat_weight)
+    greedy = sat_greedy()
+    parts = _open(
+        "32通りの呼び方と、希望の重み",
+        (
+            "5人A〜Eを呼ぶかどうかの32通り。行はAとBの呼び方、列はC・D・Eの呼び方。"
+            f"決まり（鍵・店番・車・店番）を守るのは{len(feasible)}通りで、"
+            "守る組には、かなった希望の重み（Cが3、Eが2、Aが2）の合計を書く。"
+            f"最も重いのは{sat_label(best)}の{sat_weight(best)}、"
+            f"重い希望から順に決めると{sat_label(greedy)}の{sat_weight(greedy)}。"
+        ),
+        380,
+    )
+    left, top, cell_w, cell_h = 92, 96, 41, 50
+    columns = list(itertools.product((False, True), repeat=3))
+    rows = list(itertools.product((False, True), repeat=2))
+    parts.append(_text(20, 64, "列：C・D・Eのうち呼ぶ人　行：A・Bのうち呼ぶ人", "tick"))
+    for j, cde in enumerate(columns):
+        name = "".join(n for n, b in zip("CDE", cde, strict=True) if b) or "−"
+        parts.append(_text(left + cell_w * (j + 0.5), top - 8, name, "tick", "middle"))
+    for i, ab in enumerate(rows):
+        name = "".join(n for n, b in zip("AB", ab, strict=True) if b) or "−"
+        parts.append(_text(left - 10, top + cell_h * (i + 0.5) + 5, name, "tick", "end"))
+        for j, cde in enumerate(columns):
+            x = (*ab, *cde)
+            cx, cy = left + cell_w * j, top + cell_h * i
+            if x in feasible:
+                fill = "#ffffff"
+                parts.append(
+                    f'<rect x="{cx + 2}" y="{cy + 2}" width="{cell_w - 4}" height="{cell_h - 4}" '
+                    f'rx="6" fill="{fill}" stroke="{LINE}" stroke-width="1.5"/>'
+                )
+                parts.append(
+                    _text(cx + cell_w / 2, cy + cell_h / 2 + 6, str(sat_weight(x)), "", "middle")
+                )
+            else:
+                parts.append(
+                    f'<rect x="{cx + 2}" y="{cy + 2}" width="{cell_w - 4}" height="{cell_h - 4}" '
+                    f'rx="6" fill="#e4e7e1"/>'
+                )
+                parts.append(_text(cx + cell_w / 2, cy + cell_h / 2 + 5, "×", "tick", "middle"))
+            for plan, color in ((best, UPDATE), (greedy, POINT)):
+                if x == plan:
+                    parts.append(
+                        f'<rect x="{cx}" y="{cy}" width="{cell_w}" height="{cell_h}" rx="8" '
+                        f'fill="none" stroke="{color}" stroke-width="3.5"/>'
+                    )
+    bottom = top + cell_h * 4
+    parts.append(
+        f'<rect x="20" y="{bottom + 20}" width="18" height="18" rx="4" fill="none" '
+        f'stroke="{UPDATE}" stroke-width="3"/>'
+    )
+    parts.append(_text(46, bottom + 35, f"最も重い：{sat_label(best)}（{sat_weight(best)}）"))
+    parts.append(
+        f'<rect x="230" y="{bottom + 20}" width="18" height="18" rx="4" fill="none" '
+        f'stroke="{POINT}" stroke-width="3"/>'
+    )
+    parts.append(_text(256, bottom + 35, f"重い順：{sat_label(greedy)}（{sat_weight(greedy)}）"))
+    parts.append(_text(20, bottom + 64, "×：決まりを一つ以上破る組", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _sat_chain_svg() -> str:
+    parts = _open(
+        "1人を決めると、残りが芋づる式に決まる",
+        (
+            "決まりの節だけで単位伝播した結果。"
+            "① Cを呼ぶと、店番で¬A、鍵でB、車でD、店番で¬E。"
+            "② Eを呼ぶと、店番で¬D、車で¬B、鍵でA、店番で¬C。"
+            "CとEは両方は呼べない。"
+        ),
+        330,
+    )
+    for row, (first, title) in enumerate(((3, "① Cを呼ぶと"), (5, "② Eを呼ぶと"))):
+        base = 64 + 130 * row
+        parts.append(_text(20, base, title))
+        chain = sat_implications(first)
+        step = (420 - 20) / len(chain)
+        for index, (lit, reason) in enumerate(chain):
+            cx = 20 + step * (index + 0.5)
+            color = UPDATE if index == 0 else (POINT if lit > 0 else MUTED)
+            parts.append(
+                f'<rect x="{cx - 30:.1f}" y="{base + 22}" width="60" height="44" rx="10" '
+                f'fill="#ffffff" stroke="{color}" stroke-width="2.5"/>'
+            )
+            parts.append(_text(cx, base + 51, _sat_literal(lit), "", "middle"))
+            if index:
+                arrow = cx - step + 30
+                parts.append(
+                    f'<path d="M{arrow:.1f} {base + 44}H{cx - 34:.1f}" stroke="{GRID}" '
+                    'stroke-width="2"/>'
+                )
+                parts.append(_text(cx - step / 2, base + 92, reason, "tick", "middle"))
+    parts.append(_text(20, 316, "¬A は「Aを呼ばない」。下の文字は使った決まり", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Trajectory optimization (content/concepts/trajectory-optimization.md): a warehouse robot
+# moves 4 m in 4 s from rest to rest around a pillar. The acceleration u is held constant
+# on each of N intervals (zero-order hold), so p and v are linear in u and the path between
+# grid points is a known parabola. Cost: h * sum |u_k|^2. Pillar: centre (2, -0.3), radius 0.8.
+TRAJ_START, TRAJ_GOAL = (0.0, 0.0), (4.0, 0.0)
+TRAJ_PILLAR, TRAJ_RADIUS = (2.0, -0.3), 0.8
+TRAJ_T = 4.0
+
+
+@functools.cache
+def traj_solve(n: int, side: float = 1.0) -> tuple[float, tuple[tuple[float, float], ...]]:
+    """Augmented Lagrangian with Gauss–Newton steps; returns (cost, u_0..u_{n-1})."""
+    h = TRAJ_T / n
+    coef = [[h * h * (k - j - 0.5) if j < k else 0.0 for j in range(n)] for k in range(n + 1)]
+    size = 2 * n
+
+    def position(u: list[float], k: int) -> tuple[float, float]:
+        return (
+            TRAJ_START[0] + sum(coef[k][j] * u[j] for j in range(n)),
+            TRAJ_START[1] + sum(coef[k][j] * u[n + j] for j in range(n)),
+        )
+
+    ends = [
+        [*coef[n], *[0.0] * n],
+        [*[0.0] * n, *coef[n]],
+        [*[h] * n, *[0.0] * n],
+        [*[0.0] * n, *[h] * n],
+    ]
+    target = [TRAJ_GOAL[0] - TRAJ_START[0], TRAJ_GOAL[1] - TRAJ_START[1], 0.0, 0.0]
+    # Start from the controls that best follow an arc on the chosen side of the pillar.
+    hess = [[2 * h if i == j else 0.0 for j in range(size)] for i in range(size)]
+    rhs = [0.0] * size
+    for k in range(n + 1):
+        arc = (4 * k / n, side * 1.2 * math.sin(math.pi * k / n))
+        for d in range(2):
+            for i in range(n):
+                rhs[d * n + i] += 2 * coef[k][i] * (arc[d] - TRAJ_START[d])
+                for j in range(n):
+                    hess[d * n + i][d * n + j] += 2 * coef[k][i] * coef[k][j]
+    u = _solve_linear(hess, rhs)
+    lam_end, lam, mu, last = [0.0] * 4, [0.0] * (n + 1), 10.0, math.inf
+
+    def gaps(u: list[float]) -> list[float]:
+        return [
+            (px - TRAJ_PILLAR[0]) ** 2 + (py - TRAJ_PILLAR[1]) ** 2 - TRAJ_RADIUS**2
+            for px, py in (position(u, k) for k in range(n + 1))
+        ]
+
+    def misses(u: list[float]) -> list[float]:
+        return [
+            sum(r[j] * u[j] for j in range(size)) - t for r, t in zip(ends, target, strict=True)
+        ]
+
+    def merit(u: list[float]) -> float:
+        value = h * sum(x * x for x in u)
+        value += sum(m * e + 0.5 * mu * e * e for m, e in zip(lam_end, misses(u), strict=True))
+        for m, g in zip(lam, gaps(u), strict=True):
+            value += (max(0.0, m - mu * g) ** 2 - m * m) / (2 * mu)
+        return value
+
+    for _ in range(80):
+        for _ in range(50):
+            grad = [2 * h * x for x in u]
+            hess = [[2 * h if i == j else 0.0 for j in range(size)] for i in range(size)]
+            rows = [(lam_end[i] + mu * e, ends[i]) for i, e in enumerate(misses(u))]
+            for k, g in enumerate(gaps(u)):
+                weight = max(0.0, lam[k] - mu * g)
+                if weight > 0:
+                    px, py = position(u, k)
+                    dx, dy = 2 * (px - TRAJ_PILLAR[0]), 2 * (py - TRAJ_PILLAR[1])
+                    rows.append(
+                        (-weight, [dx * c for c in coef[k][:n]] + [dy * c for c in coef[k][:n]])
+                    )
+            for scale, row in rows:
+                nonzero = [i for i in range(size) if row[i]]
+                for i in nonzero:
+                    grad[i] += scale * row[i]
+                    for j in nonzero:
+                        hess[i][j] += mu * row[i] * row[j]
+            step = _solve_linear(hess, [-g for g in grad])
+            slope = sum(g * s for g, s in zip(grad, step, strict=True))
+            base, t = merit(u), 1.0
+            while (
+                merit([x + t * s for x, s in zip(u, step, strict=True)]) > base + 1e-4 * t * slope
+            ):
+                t *= 0.5
+                if t < 1e-10:
+                    break
+            u = [x + t * s for x, s in zip(u, step, strict=True)]
+            if max(abs(t * s) for s in step) < 1e-12:
+                break
+        lam_end = [m + mu * e for m, e in zip(lam_end, misses(u), strict=True)]
+        lam = [max(0.0, m - mu * g) for m, g in zip(lam, gaps(u), strict=True)]
+        violation = max([abs(e) for e in misses(u)] + [max(0.0, -g) for g in gaps(u)])
+        if violation < 1e-11:
+            break
+        if violation > 0.25 * last:
+            mu = min(4 * mu, 1e6)
+        last = violation
+    cost = h * sum(x * x for x in u)
+    return cost, tuple((u[j], u[n + j]) for j in range(n))
+
+
+def traj_states(n: int, side: float = 1.0) -> list[tuple[float, float, float, float]]:
+    """(px, py, vx, vy) at the n+1 grid points."""
+    h = TRAJ_T / n
+    px, py, vx, vy = *TRAJ_START, 0.0, 0.0
+    states = [(px, py, vx, vy)]
+    for ux, uy in traj_solve(n, side)[1]:
+        px, py = px + h * vx + 0.5 * h * h * ux, py + h * vy + 0.5 * h * h * uy
+        vx, vy = vx + h * ux, vy + h * uy
+        states.append((px, py, vx, vy))
+    return states
+
+
+def traj_path(n: int, side: float = 1.0, samples: int = 40) -> list[tuple[float, float]]:
+    """The continuous path: a parabola on each interval, sampled `samples` times."""
+    h = TRAJ_T / n
+    points = []
+    controls = traj_solve(n, side)[1]
+    for (px, py, vx, vy), (ux, uy) in zip(traj_states(n, side), controls, strict=False):
+        for s in range(samples):
+            tau = h * s / samples
+            points.append(
+                (px + vx * tau + 0.5 * ux * tau * tau, py + vy * tau + 0.5 * uy * tau * tau)
+            )
+    points.append(TRAJ_GOAL)
+    return points
+
+
+def traj_clearance(points: Sequence[tuple[float, float]]) -> float:
+    return min(math.hypot(x - TRAJ_PILLAR[0], y - TRAJ_PILLAR[1]) for x, y in points)
+
+
+def _traj_floor(
+    parts: list[str], top: float, bottom: float
+) -> Callable[[float, float], tuple[float, float]]:
+    px = _scale(-0.8, 4.8, 50, 410)
+    unit = (410 - 50) / 5.6
+    mid = (top + bottom) / 2
+
+    def at(x: float, y: float) -> tuple[float, float]:
+        return px(x), mid - unit * (y + 0.3)
+
+    cx, cy = at(*TRAJ_PILLAR)
+    parts.append(
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{unit * TRAJ_RADIUS:.1f}" fill="#e4e7e1" '
+        f'stroke="{MUTED}" stroke-width="1.5"/>'
+    )
+    parts.append(_text(cx, cy + 5, "柱", "tick", "middle"))
+    for (x, y), name in ((TRAJ_START, "出発"), (TRAJ_GOAL, "到着")):
+        sx, sy = at(x, y)
+        parts.append(
+            f'<rect x="{sx - 6:.1f}" y="{sy - 6:.1f}" width="12" height="12" fill="{INK}"/>'
+        )
+        left = x < TRAJ_PILLAR[0]
+        parts.append(
+            _text(sx + (-12 if left else 12), sy + 5, name, "tick", "end" if left else "start")
+        )
+    return at
+
+
+def _traj_paths_svg() -> str:
+    above, below = traj_solve(20, 1.0), traj_solve(20, -1.0)
+    parts = _open(
+        "柱の上を回る経路と、下を回る経路",
+        (
+            "搬送ロボットが4秒で4m先へ、止まった状態から止まった状態へ動く。時間を20区間に分け、"
+            "区間ごとに一定の加速度を決める。"
+            f"① 床の上の経路。柱の上を回る経路は加速度の二乗の積分が{above[0]:.2f}、"
+            f"下を回る経路は{below[0]:.2f}。"
+            "② 時刻ごとの加速度の大きさ。"
+        ),
+        612,
+    )
+    parts.append(_text(20, 64, "① 床の上の経路（m）"))
+    at = _traj_floor(parts, 80, 330)
+    for side, color, dash in ((-1.0, POINT, ' stroke-dasharray="6 4"'), (1.0, UPDATE, "")):
+        parts.append(
+            _polyline([at(x, y) for x, y in traj_path(20, side)], color, 3).replace(
+                "/>", f"{dash}/>"
+            )
+        )
+        for x, y, _, _ in traj_states(20, side):
+            sx, sy = at(x, y)
+            parts.append(f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="3.5" fill="{color}"/>')
+    parts.append(
+        _text(410, 96, f"上を回る：{above[0]:.2f}", anchor="end").replace(
+            "<text ", f'<text style="fill:{UPDATE}" '
+        )
+    )
+    parts.append(
+        _text(410, 324, f"下を回る：{below[0]:.2f}", anchor="end").replace(
+            "<text ", f'<text style="fill:{POINT}" '
+        )
+    )
+
+    parts.append(_text(20, 380, "② 加速度の大きさ（m/s²）"))
+    tx = _scale(0.0, TRAJ_T, 64, 410)
+    ay = _scale(0.0, 3.0, 560, 400)
+    parts.append(f'<path d="M64 400V560H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1, 2, 3):
+        parts.append(_text(56, ay(value) + 5, str(value), "tick", "end"))
+    for value in (0, 1, 2, 3, 4):
+        parts.append(_text(tx(value), 580, str(value), "tick", "middle"))
+    parts.append(_text(410, 600, "時刻（秒）", "tick", "end"))
+    h = TRAJ_T / 20
+    for side, color, dash in ((-1.0, POINT, ' stroke-dasharray="6 4"'), (1.0, UPDATE, "")):
+        steps = []
+        for k, (ux, uy) in enumerate(traj_solve(20, side)[1]):
+            size = math.hypot(ux, uy)
+            steps += [(tx(k * h), ay(size)), (tx((k + 1) * h), ay(size))]
+        parts.append(_polyline(steps, color, 2.5).replace("/>", f"{dash}/>"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _traj_grid_svg() -> str:
+    coarse_points = traj_path(5)
+    depth = TRAJ_RADIUS - traj_clearance(coarse_points)
+    nodes = traj_states(5)
+    node_gap = min(math.hypot(x - TRAJ_PILLAR[0], y - TRAJ_PILLAR[1]) for x, y, _, _ in nodes)
+    counts = (5, 10, 20, 40)
+    parts = _open(
+        "格子点の外でも、間で柱に入る",
+        (
+            "① 5区間で解いた経路。6つの格子点はどれも柱の外（柱の中心から"
+            f"{node_gap:.2f}m以上）だが、格子点の間の経路は柱に{100 * depth:.0f}cm入る。"
+            "② 区間の数ごとの、加速度の二乗の積分。"
+            + "、".join(f"{n}区間 {traj_solve(n)[0]:.2f}" for n in counts)
+            + "。5区間だけが柱を通り抜けて安くなっている。"
+        ),
+        600,
+    )
+    parts.append(_text(20, 64, "① 5区間で解いた経路"))
+    at = _traj_floor(parts, 80, 330)
+    inside = [
+        p
+        for p in coarse_points
+        if math.hypot(p[0] - TRAJ_PILLAR[0], p[1] - TRAJ_PILLAR[1]) < TRAJ_RADIUS
+    ]
+    parts.append(_polyline([at(x, y) for x, y in coarse_points], UPDATE, 3))
+    parts.append(_polyline([at(x, y) for x, y in inside], VIOLATION, 5))
+    for x, y, _, _ in nodes:
+        sx, sy = at(x, y)
+        parts.append(
+            f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="6" fill="#ffffff" '
+            f'stroke="{UPDATE}" stroke-width="3"/>'
+        )
+    parts.append(
+        _text(410, 324, f"赤：柱の中（最大{100 * depth:.0f}cm）", anchor="end").replace(
+            "<text ", f'<text style="fill:{VIOLATION}" '
+        )
+    )
+    parts.append(_text(20, 380, "② 区間の数と、加速度の二乗の積分"))
+    by = _scale(0.0, 4.0, 540, 400)
+    parts.append(f'<path d="M100 400V540H410" fill="none" stroke="{GRID}"/>')
+    width = (410 - 100) / len(counts)
+    for i, n in enumerate(counts):
+        cost = traj_solve(n)[0]
+        left = 100 + width * i + 14
+        color = VIOLATION if n == 5 else LINE
+        parts.append(
+            f'<rect x="{left:.1f}" y="{by(cost):.1f}" width="{width - 28:.1f}" '
+            f'height="{540 - by(cost):.1f}" fill="{color}"/>'
+        )
+        parts.append(_text(left + (width - 28) / 2, by(cost) - 8, f"{cost:.2f}", "tick", "middle"))
+        parts.append(_text(left + (width - 28) / 2, 560, f"{n}区間", "tick", "middle"))
+    for value in (0, 2, 4):
+        parts.append(_text(92, by(value) + 5, str(value), "tick", "end"))
+    parts.append(_text(20, 590, "赤：格子点の間で柱を通り抜ける解", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -5181,6 +5620,10 @@ def generate_lesson_figures() -> dict[str, str]:
         "robust-optimization-set-size.svg": _ro_set_size_svg(),
         "robust-estimation-profile.svg": _rpe_profile_svg(),
         "robust-estimation-weights.svg": _rpe_weights_svg(),
+        "sat-invite-grid.svg": _sat_grid_svg(),
+        "sat-invite-chain.svg": _sat_chain_svg(),
+        "trajectory-pillar-paths.svg": _traj_paths_svg(),
+        "trajectory-grid-check.svg": _traj_grid_svg(),
     }
 
 
