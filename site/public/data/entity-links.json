@@ -9081,6 +9081,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.inner-tolerance-noise",
+      "entity_id": "concept.inner-tolerance-noise",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "内側の計算の許容誤差が作る目的関数の段差",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.external-solver-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.noisy-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ツールが中で方程式を反復で解いていると、目的関数は式の上では滑らかでも、返る値は細かな階段になります。差分の幅がその段より細かいと、勾配から内側の量の変化が消え、ソルバーは本当の最小からずれた点で収束したと報告します。差分の幅を変えて傾きを見比べれば、この段差を見つけられます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "concept.inverse-problem",
       "entity_type": "content",

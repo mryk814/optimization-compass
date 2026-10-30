@@ -8127,6 +8127,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.inner-tolerance-noise",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.inverse-problem",
       "asset_type": "content",
       "policy": "warning",
