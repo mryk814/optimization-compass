@@ -12510,6 +12510,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.written-bound-answer",
+      "entity_id": "concept.written-bound-answer",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "書いた制約と本当の制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bound-constrained-smooth",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.external-solver-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.inner-tolerance-noise",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ソルバーの答えが自分で書いた下限や上限に着いたら、その答えを決めたのはツールではなく、その境界の値です。境界での傾きは、境界を1だけ動かしたときに費用がどれだけ変わるかを表します。本当の制約が開いた範囲なら最小は存在せず、どこに境界を書くかが答えになります。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "constrained-continuous",
       "entity_type": "content",
