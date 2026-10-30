@@ -26,19 +26,19 @@ test("all current renderer families consume the shared educational metadata", as
 
   await gotoAtlasRoute(page, base, "/theater/search-tree/binary-knapsack-bnb-budget");
   const searchTreeContext = page.getByRole("region", { name: "ケースとシナリオの関連情報" });
-  await expect(searchTreeContext.getByText("上界とincumbentが探索範囲を狭める過程を読む")).toBeVisible();
-  await expect(searchTreeContext.getByText(/探索node \/ 大域上界 \/ 暫定解/u)).toBeVisible();
+  await expect(searchTreeContext.getByText("上界と暫定解が探索範囲を狭める過程を読む")).toBeVisible();
+  await expect(searchTreeContext.getByText(/探索ノード \/ 大域上界 \/ 暫定解/u)).toBeVisible();
 
   await gotoAtlasRoute(page, base, "/theater/bayesian-optimization");
   const boContext = page.getByRole("region", { name: "ケースとシナリオの関連情報" });
-  await expect(boContext.getByText("観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む")).toBeVisible();
-  await expect(boContext.getByText(/観測点 \/ surrogate平均 \/ 予測不確実性 \/ Expected Improvement \/ 次候補/u)).toBeVisible();
+  await expect(boContext.getByText("観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む")).toBeVisible();
+  await expect(boContext.getByText(/観測点 \/ 代理モデルの平均 \/ 予測不確実性 \/ Expected Improvement \/ 次候補/u)).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("bo-lesson-panel.png"), fullPage: true });
 });
 
 test("optimal control historyはstate/controlと制約診断を同じ履歴で読める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/traces/optimal-control-ec020-history");
-  await expect(page.getByRole("heading", { level: 1, name: "Direct collocation · state/control診断" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Direct Collocation · 状態と制御入力の診断" })).toBeVisible();
   await expect(page.getByText("state norm", { exact: false }).first()).toBeVisible();
   await expect(page.getByText("dynamics defect", { exact: false }).first()).toBeVisible();
   await expect(page.getByText("path violation", { exact: false }).first()).toBeVisible();
@@ -54,7 +54,7 @@ test("Nelder-Mead guided story applies the authored frame, speed, and focus cue"
   await page.getByRole("button", { name: /最初の候補と受理判断/u }).click();
 
   await expect(page).toHaveURL(/frame=2&speed=0\.5/u);
-  await expect(page.getByText(/worstを重心の反対側へ動かし/u)).toBeVisible();
+  await expect(page.getByText(/最悪点を重心の反対側へ動かし/u)).toBeVisible();
   await expect(page.getByLabel("再生速度")).toHaveValue("0.5");
   await expect(page.getByLabel("フレーム位置")).toHaveValue("2");
   await expect(page.getByTestId("nelder-mead-explanatory-plot")).toHaveAttribute(
@@ -67,17 +67,17 @@ test("guided stories drive four renderer families from one contract", async ({ p
   const base = requiredBaseURL(baseURL);
 
   await gotoAtlasRoute(page, base, "/traces/gradient_descent-quadratic");
-  await page.getByRole("button", { name: /最初のupdateを追う/u }).click();
+  await page.getByRole("button", { name: /最初の更新を追う/u }).click();
   await expect(page).toHaveURL(/frame=1&speed=0\.5/u);
   await expect(page.locator(".trace-snapshot")).toHaveAttribute("data-guided-focus", "update_vector");
 
   await gotoAtlasRoute(page, base, "/theater/search-tree/binary-knapsack-bnb-complete");
-  await page.getByRole("button", { name: /最初のbranchとbound更新/u }).click();
+  await page.getByRole("button", { name: /最初の分枝と上界の更新/u }).click();
   await expect(page).toHaveURL(/frame=1&speed=0\.5/u);
   await expect(page.locator(".search-tree-renderer")).toHaveAttribute("data-guided-focus", "search_nodes");
 
   await gotoAtlasRoute(page, base, "/theater/bayesian-optimization");
-  await page.getByRole("button", { name: /最初のsurrogate更新と次点選択/u }).click();
+  await page.getByRole("button", { name: /最初の代理モデル更新と次点の選択/u }).click();
   await expect(page.getByLabel("評価位置")).toHaveValue("1");
   await expect(page.locator(".bo-layout")).toHaveAttribute("data-guided-focus", "selected_candidate");
   await expect(page.getByText(/フレーム 2\/8 · 0\.5倍/u)).toBeVisible();
@@ -89,7 +89,7 @@ test("derived thumbnail and static formats are discoverable from the scenario", 
 }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/traces/nelder-mead-quadratic");
 
-  const video = page.getByLabel(/各frameの頂点順位/u);
+  const video = page.getByLabel(/各フレームの頂点順位/u);
   await expect(video).toBeVisible();
   await expect(video).toHaveAttribute("poster", /media\/scenario-nm-quadratic\/thumbnail\.png/u);
   await expect(video.locator("source")).toHaveAttribute("src", /media\/scenario-nm-quadratic\/animation\.webm/u);
