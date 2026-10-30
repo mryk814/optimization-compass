@@ -215,7 +215,7 @@ test("制約付きCaseをprimary Theater、failure、CompareからCaseへ完走�
   await expect(page.getByRole("heading", { level: 1, name: "実行可能領域と制約を無視した失敗を比べる" })).toBeVisible();
 
   await page.getByRole("link", { name: "Compareへ: COMPARE_CONSTRAINED_FAILURE" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "制約を守る実行と無視する実行を比べる" })).toBeVisible();
   await page.getByRole("link", { name: /ケース: 強度制約/u }).click();
   await expect(page).toHaveURL(/#\/gallery\/constrained-design\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
@@ -268,20 +268,20 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "探索完了とnode予算停止を同じ上限で比べる",
+      name: "探索完了とノード予算停止を同じ上限で比べる",
     }),
   ).toBeVisible();
 
   await page.getByLabel("評価回数位置").fill("9");
 
-  const proof = page.getByLabel("9 node以内で証明完了の同期指標");
+  const proof = page.getByLabel("9ノード以内で証明完了の同期指標");
   await expect(metricValue(proof, "Terminal status")).toHaveText("最適性証明済み");
   await expect(metricValue(proof, "最良値")).toHaveText("15");
   await expect(metricValue(proof, "Global bound")).toHaveText("15.00");
   await expect(metricValue(proof, "Absolute gap")).toHaveText("0.00");
   await expect(page.getByText("最適性を証明 · evaluation 9")).toBeVisible();
 
-  const stopped = page.getByLabel("4 nodeで予算停止の同期指標");
+  const stopped = page.getByLabel("4ノードで予算停止の同期指標");
   await expect(metricValue(stopped, "Terminal status")).toHaveText("予算停止・未証明");
   await expect(metricValue(stopped, "最良値")).toHaveText("13");
   await expect(metricValue(stopped, "Global bound")).toHaveText("15.00");
@@ -315,7 +315,7 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
   await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · 悪い初期値" })).toBeVisible();
   await page.getByRole("link", { name: "Compareへ: COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS" }).click();
 
-  await expect(page.getByRole("heading", { level: 1, name: "非線形fitでsolver条件を比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "非線形の当てはめでソルバーの適用条件を比べる" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: /指標の履歴/u })).toBeVisible();
   await expect(page.getByLabel("指標の履歴").getByRole("img", { name: /評価回数ごとに比較/u })).toHaveCount(3);
   await expect(page.getByText(/3本とも1つのsolver非依存診断probe/u)).toBeVisible();
@@ -339,7 +339,7 @@ test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ�
   await expect(page.getByLabel("観測ノイズ")).toHaveValue("small_noise");
   await page.getByRole("link", { name: "Compareへ: COMPARE_BO_ACQUISITION_NOISE_BASELINE" }).click();
 
-  await expect(page.getByRole("heading", { level: 1, name: "acquisition・noise・random baselineを同じbudgetで読む" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "獲得関数・ノイズ・ランダム探索の基準を同じ評価予算で読む" })).toBeVisible();
   const evaluation = page.getByRole("slider", { name: "BO比較のevaluation" });
   await evaluation.press("End");
   await expect(page.getByText("Oracle evaluations: 10/10")).toBeVisible();

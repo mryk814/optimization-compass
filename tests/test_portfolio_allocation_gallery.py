@@ -18,5 +18,5 @@ def test_portfolio_allocation_is_a_complete_convex_qp_teaching_case() -> None:
     assert "np.array" in case["python_example"]
     assert "cp.quad_form" in case["python_example"]
     assert "$\\gamma=2$" in case["objective"]
-    assert "held-out期間" in case["practical_notes"]
+    assert "検証用に取り分けた期間" in case["practical_notes"]
     assert "将来収益" in case["limitations"][1]

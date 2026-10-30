@@ -659,7 +659,7 @@
       "cases": [
         {
           "case_id": "nelder-mead-initial-simplex",
-          "title_ja": "初期simplexで局所探索の感度を見抜く"
+          "title_ja": "初期単体で局所探索の感度を見抜く"
         }
       ],
       "content_id": "concept.smooth-low-dimensional-unconstrained",
@@ -1486,7 +1486,7 @@
         },
         {
           "case_id": "multi-fidelity-simulator",
-          "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
+          "title_ja": "低精度／高精度のシミュレータを予算内で使い分ける"
         }
       ],
       "content_id": "concept.expensive-black-box",
@@ -3775,11 +3775,11 @@
       "cases": [
         {
           "case_id": "energy-cvar-procurement",
-          "title_ja": "価格scenarioのtail costを抑えて電力を調達する"
+          "title_ja": "価格シナリオの裾の費用を抑えて電力を調達する"
         },
         {
           "case_id": "portfolio-cvar-allocation",
-          "title_ja": "scenarioのtail riskを抑えて配分する"
+          "title_ja": "シナリオの裾リスクを抑えて配分する"
         }
       ],
       "content_id": "concept.simplex-optimization",
@@ -3884,7 +3884,7 @@
       "cases": [
         {
           "case_id": "so3-attitude-alignment",
-          "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
+          "title_ja": "SO(3)上で回転角がπに近い姿勢を合わせる"
         }
       ],
       "content_id": "concept.so3-se3-optimization",
@@ -4213,7 +4213,7 @@
       "cases": [
         {
           "case_id": "EC021",
-          "title_ja": "mini-batchで画像分類モデルを学習する"
+          "title_ja": "ミニバッチで画像分類モデルを学習する"
         }
       ],
       "content_id": "concept.neural-network-training",
@@ -4423,7 +4423,7 @@
         },
         {
           "case_id": "EC029",
-          "title_ja": "pendulumを制約内で振り上げる"
+          "title_ja": "振り子を制約内で振り上げる"
         }
       ],
       "content_id": "concept.optimal-control",
@@ -5946,7 +5946,7 @@
       "cases": [
         {
           "case_id": "shape-diffuser",
-          "title_ja": "2D diffuserの壁面shapeを更新する"
+          "title_ja": "2Dディフューザの壁面形状を更新する"
         }
       ],
       "content_id": "concept.shape-dependent-domain",

@@ -20,18 +20,18 @@ def test_ec029_declares_the_pendulum_direct_collocation_flagship() -> None:
     case = next(item for item in payload["cases"] if item["case_id"] == "EC029")
 
     assert [item["method_id"] for item in case["candidate_methods"]] == ["M_DIRECT_COLLOCATION"]
-    assert "dynamics defect" in case["candidate_methods"][0]["reason"]
-    assert "mesh（knot）数 $N=20$" in case["variable_domain"]
-    assert "decision object" in case["decision_variables"]
-    assert "defect" in case["constraints"]
+    assert "動力学残差" in case["candidate_methods"][0]["reason"]
+    assert "メッシュの節点数 $N=20$" in case["variable_domain"]
+    assert "メッシュ上の決定変数" in case["decision_variables"]
+    assert "Hermite–Simpson残差" in case["constraints"]
     assert "x_0=(0,0)" in case["constraints"]
     assert "x_N=(\\pi,0)" in case["constraints"]
-    assert "path／bound制約" in case["constraints"]
-    assert "max dynamics defect" in case["practical_notes"]
-    assert "node path tolerance $10^{-4}$" in case["practical_notes"]
+    assert "経路制約と上下限" in case["constraints"]
+    assert "動力学残差の最大値" in case["practical_notes"]
+    assert "ノード上の経路制約の許容誤差 $10^{-4}$" in case["practical_notes"]
     assert "再構成" in case["practical_notes"]
-    assert "連続時間の可行性" in case["limitations"][0]
-    assert "pendulum" in case["question"]
+    assert "連続時間での実行可能性" in case["limitations"][0]
+    assert "振り子" in case["question"]
     assert case["comparison_ids"] == ["COMPARE_PENDULUM_COLLOCATION_MESH"]
     assert {
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
@@ -83,13 +83,13 @@ def test_existing_ec020_case_instance_scenario_and_trace_identity_are_unchanged(
     } <= set(case["visualization_ids"])
     assert "SCENARIO_PENDULUM_SWING_UP_MESH_20" not in case["visualization_ids"]
     assert case["comparison_ids"] == ["COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"]
-    assert "固定pendulum教材" in case["practical_notes"]
-    assert "同じtrajectoryや実データではない" in case["practical_notes"]
-    assert "EC020のtrajectoryへmode変数を追加したsolver実行ではない" in case["practical_notes"]
-    assert "mode switch数" in case["practical_notes"]
-    assert "switching interval" in case["practical_notes"]
-    assert any("mode discoveryの一般性能" in item for item in case["limitations"])
-    assert any("trajectoryの可行性" in item for item in case["limitations"])
+    assert "固定した振り子教材" in case["practical_notes"]
+    assert "同じ軌道や実データではない" in case["practical_notes"]
+    assert "EC020の軌道へモード変数を追加したソルバー実行ではない" in case["practical_notes"]
+    assert "モード切替数" in case["practical_notes"]
+    assert "切替間隔" in case["practical_notes"]
+    assert any("モード発見の一般性能" in item for item in case["limitations"])
+    assert any("軌道の可行性" in item for item in case["limitations"])
     assert instances["INSTANCE_OPTIMAL_CONTROL_EC020"].registry_key == (
         "problem.optimal_control.ec020.v1"
     )
@@ -190,8 +190,8 @@ def test_ec020_comparison_is_an_explicit_non_ranking_pendulum_bridge() -> None:
     assert comparison.benchmark_context_id == "BENCH_PENDULUM_COLLOCATION_MESH_8"
     assert comparison.comparability == "contrast_only"
     assert comparison.ranking_eligible is False
-    assert "bridge" in comparison.formulation_summary
-    assert "同じtrajectoryや実データではなく" in comparison.limitations[0]
+    assert "橋渡し" in comparison.formulation_summary
+    assert "同じ軌道や実データではなく" in comparison.limitations[0]
     assert {member.scenario_id for member in comparison.members} == {
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",

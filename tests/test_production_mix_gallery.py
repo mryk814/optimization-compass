@@ -15,8 +15,8 @@ def test_production_mix_case_exposes_a_bounded_milp_journey() -> None:
         {
             "method_id": "M_BRANCH_CUT",
             "reason": (
-                "連続の生産量と0-1の段取り判断を同じ線形modelで保ち、実行可能な計画、"
-                "relaxation bound、optimality gapを分けて確認できるため"
+                "連続の生産量と0-1の段取り判断を同じ線形モデルで保ち、実行可能な計画、"
+                "緩和で得る上界、最適性ギャップを分けて確認できるため"
             ),
         }
     ]
@@ -30,5 +30,5 @@ def test_production_mix_case_exposes_a_bounded_milp_journey() -> None:
     ast.parse(case["python_example"])
     assert "integrality = np.array([0, 0, 1, 1])" in case["python_example"]
     assert "LinearConstraint" in case["python_example"]
-    assert "この生産計画のsolver実行や利益比較ではない" in case["practical_notes"]
+    assert "この生産計画のソルバー実行や利益比較ではない" in case["practical_notes"]
     assert "一般性能を順位付けしない" in case["limitations"][-1]

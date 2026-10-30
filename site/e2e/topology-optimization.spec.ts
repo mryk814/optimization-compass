@@ -21,7 +21,7 @@ test("topology Caseからfield Theater、Compare、教材を辿れる", async ({
 
   await page.getByRole("link", { name: /Compareへ: COMPARE_TOPOLOGY_OC_MMA/u }).click();
   await expect(page).toHaveURL(/#\/compare\/COMPARE_TOPOLOGY_OC_MMA\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "同じ密度fieldでOCとMMAを比べる" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { level: 1, name: "同じ密度場でOCとMMAを比べる" })).toBeVisible({ timeout: 15_000 });
 
   await page.getByRole("link", { name: /ケース: 片持ちはりの材料配置を軽くする/u }).click();
   await expect(page).toHaveURL(/#\/gallery\/topology-cantilever\?state=/u);
