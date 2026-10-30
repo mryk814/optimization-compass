@@ -11530,7 +11530,7 @@
       "entity_id": "concept.so3-rotation-representation",
       "entity_type": "content",
       "external_url": null,
-      "label": "SO(3)の行列・接空間表現",
+      "label": "リー代数で回転を動かす：SO(3)の接空間",
       "relations": [
         {
           "relation_type": "comparison",
@@ -11564,6 +11564,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.so3-se3-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.variable-domain",
           "target_type": "content"
         },
@@ -11593,7 +11598,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のステップを分けて扱います。射影、レトラクション、指数写像は同じ更新ではありません。"
+      "summary": "回転を最適化するときは、行列の9つの成分を直接動かさず、今の向きから「どの軸のまわりに何rad回すか」を3つの数で決めます。3つの数が自由に動ける平らな空間がリー代数で、それを回転に変えるのが指数写像です。"
     },
     {
       "aliases": [],
