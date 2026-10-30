@@ -906,6 +906,17 @@ def test_solver_evaluation_figures_use_the_article_numbers() -> None:
     assert round(centroid_c, 6) == 0.000264
     assert round(centroid_c - EVAL_NM_C[14], 6) == 0.000142
     assert eval_role_counts() == {"s": 1, "a": 3, "t": 9, "d": 26}
+    # L-BFGS-B's first pair (s, y): y'y/s'y is about 2e4, the updated curvature along T about
+    # 220 (the true value is about 1e-4), so the first T trial of iteration 2 is about 0.00002.
+    first = (EVAL_START[0] + 0.00480046, 1e-5)
+    s_t, s_c = first[0] - EVAL_START[0], first[1] - EVAL_START[1]
+    g_first = eval_gradient(*first)
+    y_t, y_c = g_first[0] - gradient[0], g_first[1] - gradient[1]
+    theta = (y_t * y_t + y_c * y_c) / (s_t * y_t + s_c * y_c)
+    s_bs = theta * (s_t * s_t + s_c * s_c)
+    curvature_t = theta - (theta * s_t) ** 2 / s_bs + y_t * y_t / (s_t * y_t + s_c * y_c)
+    assert round(theta, -2) == 21600 and round(curvature_t) == 223
+    assert round(-g_first[0] / curvature_t, 5) == 0.00002
     carbon = generate_lesson_figures()["solver-evaluation-carbon.svg"]
     for text in ("fmin：16回目に c=−0.00002", "16回目に c=0", "4回目 c=−1.01（図の外）"):
         assert text in carbon
