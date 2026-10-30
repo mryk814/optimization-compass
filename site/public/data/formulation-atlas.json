@@ -5250,7 +5250,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.robust-optimization",
       "cues_ja": [
         "最悪の場合でも制約を守る設計が必要で、分布は分からない"
       ],
@@ -5288,7 +5288,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5331,7 +5331,15 @@
       "problem_id": "PA050",
       "reading_ja": "不確かな値 u が集合 U のどこに来ても制約を破らないように x を決めます。",
       "source_ids": [
-        "S055"
+        "S004",
+        "S010",
+        "S014",
+        "S016",
+        "S028",
+        "S055",
+        "S162",
+        "S174",
+        "S180"
       ],
       "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x,u)\\le 0 \\;\\;\\forall u\\in\\mathcal{U}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mspace width=\"0.278em\" /><mspace width=\"0.278em\" /><mo>&#x02200;</mo><mi>u</mi><mo>&#x02208;</mo><mi>&#x1D4B0;</mi></mrow></math></div>"
@@ -5834,7 +5842,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.robust-parameter-estimation",
       "cues_ja": [
         "非線形モデルの当てはめで、一部の観測が壊れている"
       ],
@@ -5872,7 +5880,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5916,7 +5924,10 @@
       "reading_ja": "非線形モデルのparameterを、外れ値に強い損失で推定します。",
       "source_ids": [
         "S003",
-        "S041"
+        "S041",
+        "S056",
+        "S185",
+        "S186"
       ],
       "standard_form": "\\min_{\\theta}\\; \\sum_{i=1}^m \\rho\\big(y_i-h(x_i;\\theta)\\big)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>&#x003B8;</mi></mrow></msub><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>m</mi></munderover><mi>&#x003C1;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>&#x02212;</mo><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mi>;</mi><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo></mrow></math></div>"
@@ -6351,6 +6362,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 47
+    "with_article": 49
   }
 }

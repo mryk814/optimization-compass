@@ -657,6 +657,44 @@
       },
       "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
     },
+    "concept.robust-optimization": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "d18cb305e8c3",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 中央・箱・楕円の解、角の表、kの表、切り替え点10/21と15.75、19.1%/26.2%、整数解17.4、10〜12kgの不成立を再計算し一致。楕円の厳密解（堆肥1.26袋）と切除平面の停止点の区別、9.44の計算式、±50%の表現、要約の線形の条件、確率の独立性の仮定、楕円の半径と破る確率の上限 e^(-ρ²/2)、標準形の X、図の橙の線の延長とラベルの重なりを修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.robust-parameter-estimation": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "7e7033fe82ba",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 損失の谷、各点の寄与、重みを付けたGauss–Newtonの表、比較表と周期、残差の順位と消した後の解き直し、尺度ごとの答えを再計算し一致。始点の重みの説明の誤り、残差の符号の向き、ω=2π付近の図の端の跳ね上がり、収束の主張の範囲、dogbox、Ceresの残差ブロック、凸の場合の表現、データから作る始点の危うさ、RANSACのしきい値の用語を修正。1280/375/320pxで横はみ出しなし。"
+    },
     "concept.robust-regression": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -808,6 +846,18 @@
         "screen.three-widths": "pass"
       },
       "notes": "Sonnetの一次レビュー（数値19件を再計算で一致。figure.one-questionとprose.readableがfail）をClaudeが本文と照合して修正。静止図のcaptionに読み取れない範囲を足し、Newton法が二次の近似の『最小点』ではなく停留点へ跳ぶと直した（始点AのHessianは不定）。二次収束の明記など文6件も直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.so3-rotation-representation": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "3c4aa703527f",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "na",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
     },
     "concept.so3-se3-optimization": {
       "reviewed_on": "2026-10-13",

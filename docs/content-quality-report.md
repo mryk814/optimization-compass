@@ -1,9 +1,9 @@
 # Content quality report
 
-- Published concept guides: `69`
-- Meeting the concept floor: `69`
+- Published concept guides: `71`
+- Meeting the concept floor: `71`
 - Below the concept floor: `0`
-- Prose review warnings: `707`
+- Prose review warnings: `706`
 
 ## Concept publication floor
 
@@ -55,6 +55,8 @@
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
 | `concept.pde-constrained-program` | 102 | 7078 | 8 | 4 | 0 | pass |
 | `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
+| `concept.robust-optimization` | 140 | 12070 | 14 | 9 | 0 | pass |
+| `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
 | `concept.root-finding` | 93 | 7097 | 8 | 4 | 0 | pass |
 | `concept.second-order-cone-program` | 135 | 9718 | 13 | 6 | 0 | pass |
@@ -64,7 +66,7 @@
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
 | `concept.simplex-optimization` | 88 | 6442 | 8 | 4 | 0 | pass |
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
-| `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
+| `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
@@ -82,7 +84,7 @@
 ## Prose warning summary
 
 - `number.overprecise`: 209
-- `prose.choppy`: 6
+- `prose.choppy`: 5
 - `prose.meta`: 4
 - `prose.work-report`: 15
 - `sentence.commas`: 397
@@ -155,6 +157,8 @@
 | `concept.pde-constrained-optimization` | 0 |
 | `concept.pde-constrained-program` | 0 |
 | `concept.receding-horizon` | 5 |
+| `concept.robust-optimization` | 0 |
+| `concept.robust-parameter-estimation` | 0 |
 | `concept.robust-regression` | 5 |
 | `concept.root-finding` | 9 |
 | `concept.second-order-cone-program` | 0 |
@@ -164,7 +168,7 @@
 | `concept.simplex` | 4 |
 | `concept.simplex-optimization` | 3 |
 | `concept.smooth-low-dimensional-unconstrained` | 13 |
-| `concept.so3-rotation-representation` | 1 |
+| `concept.so3-rotation-representation` | 0 |
 | `concept.so3-se3-optimization` | 0 |
 | `concept.spd-matrix-geometry` | 0 |
 | `concept.stochastic-erm` | 0 |
