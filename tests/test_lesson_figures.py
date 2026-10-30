@@ -1157,3 +1157,33 @@ def test_inner_tolerance_article_python_prints_its_comments() -> None:
     with contextlib.redirect_stdout(output):
         exec(compile(code, "inner-tolerance-noise.md", "exec"), {})
     assert output.getvalue().splitlines() == expected
+
+
+def test_written_bound_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import BOUND_PRICE, bound_best, bound_price_parts
+
+    assert [round(bound_best(c)[1], 4) for c in (1e-6, 1e-5, 1e-4)] == [0.1944, 0.2387, 0.6823]
+    assert round(bound_best(1e-12)[1], 4) == 0.1895
+    hardness_part, carbon_part = bound_price_parts()
+    assert round(hardness_part, 1) == -72.8
+    assert round(hardness_part + carbon_part) == BOUND_PRICE == 4927
+    assert round(0.2387 + BOUND_PRICE * (1e-4 - 1e-5), 4) == 0.6821
+    figure = generate_lesson_figures()["written-bound-price.svg"]
+    for text in ("下限 1e−5：0.2387", "下限 1e−4：0.6823", "F は 0.1895 に届かない", "傾き 4927"):
+        assert text in figure
+
+
+def test_written_bound_article_python_prints_its_comments() -> None:
+    import contextlib
+    import io
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    article = (ROOT / "content/concepts/written-bound-answer.md").read_text(encoding="utf-8")
+    code = article.split("```python\n", 1)[1].split("```", 1)[0]
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        exec(compile(code, "written-bound-answer.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected

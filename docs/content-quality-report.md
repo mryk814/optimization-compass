@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `76`
-- Meeting the concept floor: `76`
+- Published concept guides: `77`
+- Meeting the concept floor: `77`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -32,7 +32,7 @@
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
-| `concept.inner-tolerance-noise` | 139 | 7916 | 12 | 3 | 0 | pass |
+| `concept.inner-tolerance-noise` | 139 | 7999 | 12 | 3 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9857 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
@@ -71,7 +71,7 @@
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
-| `concept.solver-evaluation-points` | 149 | 9857 | 14 | 4 | 0 | pass |
+| `concept.solver-evaluation-points` | 149 | 9940 | 14 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
@@ -81,6 +81,7 @@
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 51 | 6429 | 9 | 3 | 0 | pass |
 | `concept.vehicle-routing` | 172 | 16559 | 16 | 9 | 0 | pass |
+| `concept.written-bound-answer` | 129 | 6149 | 12 | 2 | 0 | pass |
 | `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 80 | 2156 | 7 | 3 | 0 | pass |
@@ -188,6 +189,7 @@
 | `concept.uncertainty-models` | 0 |
 | `concept.variable-domain` | 0 |
 | `concept.vehicle-routing` | 33 |
+| `concept.written-bound-answer` | 0 |
 | `constrained-continuous` | 0 |
 | `coordinate-descent` | 0 |
 | `cp-sat` | 2 |

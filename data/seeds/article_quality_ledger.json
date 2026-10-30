@@ -352,7 +352,7 @@
     "concept.inner-tolerance-noise": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "906b3cf75808",
+      "body_sha256": "fed24074cd8e",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
@@ -924,7 +924,7 @@
     "concept.solver-evaluation-points": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "f5d4797778cd",
+      "body_sha256": "1c102f9cd607",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
@@ -1021,6 +1021,18 @@
         "screen.three-widths": "pass"
       },
       "notes": "22通りの分け方・最適35.527・1台31.805を全探索で独立に再計算して一致。1280/375/320pxで確認。輪の図でdepot往復(4)(6)は短く記号に隠れるが本文で明記。"
+    },
+    "concept.written-bound-answer": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "02512b3383b6",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "na",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
     },
     "gauss-newton": {
       "reviewed_on": "2026-10-26",

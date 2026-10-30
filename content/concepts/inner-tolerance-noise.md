@@ -188,6 +188,7 @@ print(f"eps=0.01: 評価 {res.nfev} 回, T={res.x[0]:.2f}, 本当の F={exact(re
 - 入力を少し変えると、値が段差より大きく飛ぶ → [決定論的だが不連続なsimulation](#/formulations/PA012)
 - 範囲の外の点がツールに渡る、評価の回数が多い → [ソルバーが目的関数を呼ぶ点と回数](#/learn/concept.solver-evaluation-points)
 - 相が消える範囲で、値が広く平らになる → [外部の計算ソフトを目的関数の中で呼ぶ最適化](#/learn/concept.external-solver-objective)
+- 答えの変数が、自分で書いた下限や上限にちょうど着いた → [書いた制約と本当の制約](#/learn/concept.written-bound-answer)
 
 この記事の段差は、同じ入力なら同じ値が返る点で、noiseを含むblack-boxと違います。そのため、同じ点を何度も評価して平均しても消えません。また、段の高さは許容誤差の程度で小さく、値が大きく飛ぶ不連続とも違います。勾配を差分で作るときにだけ、段差は大きな誤りとして現れます。
 

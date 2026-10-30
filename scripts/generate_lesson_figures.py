@@ -6134,6 +6134,89 @@ def _noise_stair_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# A written bound decides the answer (content/concepts/written-bound-answer.md): the same alloy
+# cost tool, solved with different lower bounds on the carbon fraction.
+BOUND_PRICE = 4927.0  # dF/dc at the answer for c >= 1e-5, as res.jac reports it (SciPy 1.18.1)
+
+
+def bound_best(carbon: float) -> tuple[float, float]:
+    """(T, F) minimizing the cost over T for a fixed carbon fraction, by golden-section search."""
+    lower, upper = 1240.0, 1260.0
+    ratio = (math.sqrt(5) - 1) / 2
+    for _ in range(80):
+        left = upper - ratio * (upper - lower)
+        right = lower + ratio * (upper - lower)
+        if eval_cost(left, carbon) < eval_cost(right, carbon):
+            upper = right
+        else:
+            lower = left
+    temperature = 0.5 * (lower + upper)
+    return temperature, eval_cost(temperature, carbon)
+
+
+def bound_price_parts(carbon: float = 1e-5) -> tuple[float, float]:
+    """(hardness part, carbon part) of dF/dc at the answer: 2 (y - 1.05) dy/dc and 5000."""
+    temperature, _ = bound_best(carbon)
+    y = eval_hardness(temperature, carbon)
+    dy_dc = 200 / (3 * y * y + temperature / 1000)
+    return 2 * (y - 1.05) * dy_dc, 5000.0
+
+
+def _bound_price_svg() -> str:
+    limit = bound_best(1e-12)[1]
+    marks = [(c, bound_best(c)[1]) for c in (1e-6, 1e-5, 1e-4)]
+    shown = marks[1:]  # 1e-6 sits on top of the c=0 circle at this scale; the text gives it
+    parts = _open(
+        "答えは書いた下限に沿って動く",
+        (
+            "炭素の量 c（0〜0.00011）を横軸に、その c で温度を最適にしたときの費用 F を描いた図。"
+            "F はほぼ直線で、傾きは約4927。下限を 1e−6、1e−5、1e−4 にした答えは、"
+            f"それぞれ F={marks[0][1]:.4f}、{marks[1][1]:.4f}、{marks[2][1]:.4f}。"
+            f"c=0 ではツールがエラーになるので、F は {limit:.4f} に近づくが届かない。"
+        ),
+        428,
+    )
+    px = _scale(0.0, 1.1e-4, 64, 416)
+    py = _scale(0.15, 0.75, 300, 64)
+    parts.append(f'<path d="M64 64V300H416" fill="none" stroke="{GRID}" stroke-width="1.5"/>')
+    for value in (0.2, 0.4, 0.6):
+        parts.append(
+            f'<path d="M64 {py(value):.1f}H416" stroke="{GRID}" stroke-width="0.6" opacity="0.6"/>'
+        )
+        parts.append(_text(56, py(value) + 5, f"{value:g}", "tick", "end"))
+    for value in (0, 2, 4, 6, 8, 10):
+        parts.append(_text(px(value * 1e-5), 320, str(value), "tick", "middle"))
+    parts.append(_text(416, 342, "炭素の量 c（×10⁻⁵）", "tick", "end"))
+    parts.append(_text(20, 52, "費用 F", "tick"))
+    carbons = [1.1e-4 * i / 60 for i in range(1, 61)]
+    parts.append(_polyline([(px(c), py(bound_best(c)[1])) for c in carbons], LINE, 3))
+    base_c, base_f = marks[1]
+    ends = (0.0, 1.1e-4)
+    parts.append(
+        f'<path d="M{px(ends[0]):.1f} {py(base_f + BOUND_PRICE * (ends[0] - base_c)):.1f}'
+        f'L{px(ends[1]):.1f} {py(base_f + BOUND_PRICE * (ends[1] - base_c)):.1f}" '
+        f'stroke="{UPDATE}" stroke-width="1.6" stroke-dasharray="6 4"/>'
+    )
+    parts.append(
+        f'<circle cx="{px(0):.1f}" cy="{py(limit):.1f}" r="6.5" fill="#f7f8f3" '
+        f'stroke="{VIOLATION}" stroke-width="2.5"/>'
+    )
+    for c, value in shown:
+        parts.append(f'<circle cx="{px(c):.1f}" cy="{py(value):.1f}" r="6.5" fill="{POINT}"/>')
+    labels = (
+        (marks[1], f"下限 1e−5：{marks[1][1]:.4f}", 14, 24),
+        (marks[2], f"下限 1e−4：{marks[2][1]:.4f}", -14, -10),
+    )
+    for (c, value), label, dx, dy in labels:
+        anchor = "end" if dx < 0 else "start"
+        parts.append(_text(px(c) + dx, py(value) + dy, label, "tick", anchor))
+    parts.append(_text(20, 372, f"白い丸：c=0 はツールが拒む。F は {limit:.4f} に届かない"))
+    parts.append(_text(20, 396, f"橙の破線：下限 1e−5 での傾き {BOUND_PRICE:.0f}"))
+    parts.append(_text(20, 420, "紺の丸：下限ごとの答え（どれも c が下限に着く）"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -6190,6 +6273,7 @@ def generate_lesson_figures() -> dict[str, str]:
         "solver-evaluation-breakdown.svg": _eval_breakdown_svg(),
         "inner-tolerance-slope.svg": _noise_slope_svg(),
         "inner-tolerance-stair.svg": _noise_stair_svg(),
+        "written-bound-price.svg": _bound_price_svg(),
     }
 
 
