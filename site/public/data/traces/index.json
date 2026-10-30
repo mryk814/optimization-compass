@@ -120,7 +120,7 @@
       "profile_id": "PROFILE_TRF_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
       "title_en": "Shared diagnostic probe · TRF applicability",
-      "title_ja": "共通診断probe · TRF適用条件",
+      "title_ja": "共通の診断例 · TRFの適用条件",
       "trace_id": "exponential-fit-trf"
     },
     {
@@ -130,7 +130,7 @@
       "profile_id": "PROFILE_TRF_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
       "title_en": "Shared diagnostic probe · poor initialization",
-      "title_ja": "共通診断probe · 悪い初期値",
+      "title_ja": "共通の診断例 · 悪い初期値",
       "trace_id": "exponential-fit-trf-poor-init"
     },
     {
@@ -140,7 +140,7 @@
       "profile_id": "PROFILE_LM_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LM",
       "title_en": "Shared diagnostic probe · LM applicability",
-      "title_ja": "共通診断probe · LM適用条件",
+      "title_ja": "共通の診断例 · LMの適用条件",
       "trace_id": "exponential-fit-lm"
     },
     {
@@ -150,7 +150,7 @@
       "profile_id": "PROFILE_LBFGSB_SCALAR_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
       "title_en": "Shared diagnostic probe · scalar fallback applicability",
-      "title_ja": "共通診断probe · scalar fallback条件",
+      "title_ja": "共通の診断例 · スカラー目的関数による代替の条件",
       "trace_id": "exponential-fit-lbfgsb"
     },
     {
@@ -180,7 +180,7 @@
       "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
       "scenario_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
       "title_en": "Direct collocation · state/control diagnostics",
-      "title_ja": "Direct collocation · state/control診断",
+      "title_ja": "Direct Collocation · 状態と制御入力の診断",
       "trace_id": "optimal-control-ec020-history"
     },
     {
@@ -190,7 +190,7 @@
       "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
       "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "title_en": "Pendulum swing-up · N=20 mesh diagnostics",
-      "title_ja": "Pendulum swing-up · N=20 mesh診断",
+      "title_ja": "振り子の振り上げ · N=20のメッシュ診断",
       "trace_id": "pendulum-collocation-coarse"
     },
     {
@@ -200,7 +200,7 @@
       "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
       "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
       "title_en": "Pendulum swing-up · N=40 mesh sensitivity",
-      "title_ja": "Pendulum swing-up · N=40 mesh感度",
+      "title_ja": "振り子の振り上げ · N=40のメッシュ感度",
       "trace_id": "pendulum-collocation-refined"
     },
     {
@@ -210,7 +210,7 @@
       "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
       "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
       "title_en": "Pendulum swing-up · model-mismatch rollout",
-      "title_ja": "Pendulum swing-up · modelずれrollout",
+      "title_ja": "振り子の振り上げ · モデルずれの前進シミュレーション",
       "trace_id": "pendulum-model-rollout-failure"
     },
     {
@@ -340,7 +340,7 @@
       "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
       "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "title_en": "PDE state solve · tight tolerance",
-      "title_ja": "PDE state solve · tight tolerance",
+      "title_ja": "PDEの状態方程式の求解 · 厳しい許容誤差",
       "trace_id": "pde-state-tolerance-tight"
     },
     {
@@ -350,7 +350,7 @@
       "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
       "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
       "title_en": "PDE state solve · loose tolerance",
-      "title_ja": "PDE state solve · loose tolerance",
+      "title_ja": "PDEの状態方程式の求解 · 緩い許容誤差",
       "trace_id": "pde-state-tolerance-loose"
     },
     {
@@ -360,7 +360,7 @@
       "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
       "scenario_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
       "title_en": "PDE state solve · failure ledger",
-      "title_ja": "PDE state solve · failure ledger",
+      "title_ja": "PDEの状態方程式の求解 · 失敗の記録",
       "trace_id": "pde-state-solve-failure"
     },
     {
@@ -430,7 +430,7 @@
       "profile_id": "PROFILE_SEARCH_TREE_01",
       "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
       "title_en": "0-1 knapsack: optimality proof",
-      "title_ja": "0-1 knapsack: 最適性証明",
+      "title_ja": "0-1ナップサック: 最適性の証明",
       "trace_id": "binary-knapsack-bnb-complete"
     },
     {
@@ -440,7 +440,7 @@
       "profile_id": "PROFILE_SEARCH_TREE_01",
       "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
       "title_en": "0-1 knapsack: node budget",
-      "title_ja": "0-1 knapsack: node予算で停止",
+      "title_ja": "0-1ナップサック: ノード数の予算で停止",
       "trace_id": "binary-knapsack-bnb-budget"
     }
   ]

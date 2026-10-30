@@ -36023,7 +36023,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36059,7 +36059,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36067,7 +36067,7 @@
       "entity_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Bilevel回帰 · exact inner診断",
+      "label": "二階層回帰 · 内側問題を厳密に扱う診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36100,7 +36100,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
+      "summary": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む"
     },
     {
       "aliases": [],
@@ -36108,7 +36108,7 @@
       "entity_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Bilevel回帰 · finite relaxationの残差",
+      "label": "二階層回帰 · 有限の緩和で残る残差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36141,7 +36141,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
+      "summary": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む"
     },
     {
       "aliases": [],
@@ -36149,7 +36149,7 @@
       "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "0-1 knapsack: node予算で停止",
+      "label": "0-1ナップサック: ノード数の予算で停止",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36237,7 +36237,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+      "summary": "上界と暫定解が探索範囲を狭める過程を読む"
     },
     {
       "aliases": [],
@@ -36245,7 +36245,7 @@
       "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "0-1 knapsack: 最適性証明",
+      "label": "0-1ナップサック: 最適性の証明",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36333,7 +36333,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+      "summary": "上界と暫定解が探索範囲を狭める過程を読む"
     },
     {
       "aliases": [],
@@ -36341,7 +36341,7 @@
       "entity_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "preference weightで選択点がどう動くか比べる",
+      "label": "選好の重みで選択点がどう動くか比べる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36384,7 +36384,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じPareto frontから、weightによって選択点が変わることを読む"
+      "summary": "同じパレート前線から、重みによって選択点が変わることを読む"
     },
     {
       "aliases": [],
@@ -36392,7 +36392,7 @@
       "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "単一bestではなくPareto frontを読む",
+      "label": "最良の1点ではなくパレート前線を読む",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36430,7 +36430,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "支配関係とpreferenceを分けて意思決定する"
+      "summary": "支配関係と選好を分けて意思決定する"
     },
     {
       "aliases": [],
@@ -36438,7 +36438,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36496,7 +36496,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -36504,7 +36504,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36562,7 +36562,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -36570,7 +36570,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36628,7 +36628,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -36636,7 +36636,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36699,7 +36699,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -36707,7 +36707,7 @@
       "entity_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "high fidelityだけで使う同一cost budget",
+      "label": "同じ費用予算を高精度モデルだけに使う",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36750,7 +36750,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+      "summary": "同じ初期計画と費用予算で、高精度モデルだけを選ぶ場合の評価記録を読む"
     },
     {
       "aliases": [],
@@ -36758,7 +36758,7 @@
       "entity_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "low-fidelity biasで候補順位が反転する",
+      "label": "低精度モデルの偏りで候補の順位が反転する",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36796,7 +36796,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+      "summary": "同じ2点の低精度・高精度の観測を照合し、精度間の食い違いによる順位の反転を検出する"
     },
     {
       "aliases": [],
@@ -36804,7 +36804,7 @@
       "entity_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "低／高 fidelity simulator の評価ledger",
+      "label": "低精度・高精度シミュレータの評価記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36847,7 +36847,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む"
+      "summary": "シミュレータ呼び出しごとの精度・費用・状態を追い、高精度モデルでのそれまでの最良値を読む"
     },
     {
       "aliases": [],
@@ -36962,7 +36962,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · scalar fallback条件",
+      "label": "共通の診断例 · スカラー目的関数による代替の条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36995,7 +36995,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37003,7 +37003,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LM",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · LM適用条件",
+      "label": "共通の診断例 · LMの適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37036,7 +37036,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37044,7 +37044,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · TRF適用条件",
+      "label": "共通の診断例 · TRFの適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37077,7 +37077,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37085,7 +37085,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · 悪い初期値",
+      "label": "共通の診断例 · 悪い初期値",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37113,7 +37113,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37121,7 +37121,7 @@
       "entity_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "失敗simulation: statusを残すfailure ledger",
+      "label": "失敗を含むシミュレーション: 状態を残す失敗の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37174,7 +37174,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+      "summary": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。"
     },
     {
       "aliases": [],
@@ -37182,7 +37182,7 @@
       "entity_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "失敗simulation: feasible evaluation ledger",
+      "label": "失敗を含むシミュレーション: 実行可能な評価の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37235,7 +37235,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+      "summary": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。"
     },
     {
       "aliases": [],
@@ -37271,7 +37271,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -37307,7 +37307,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -37315,7 +37315,7 @@
       "entity_id": "SCENARIO_HYBRID_MODE_CHATTERING",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Hybrid mode discovery · chattering診断",
+      "label": "ハイブリッド系のモード発見 · チャタリング診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37348,7 +37348,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める"
+      "summary": "目的関数と動力学残差が改善しても、モードのチャタリングはそれとは独立に止める"
     },
     {
       "aliases": [],
@@ -37384,7 +37384,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -37420,7 +37420,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -37562,7 +37562,7 @@
       "entity_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Direct collocation · state/control診断",
+      "label": "Direct Collocation · 状態と制御入力の診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37585,7 +37585,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37593,7 +37593,7 @@
       "entity_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · failure ledger",
+      "label": "PDEの状態方程式の求解 · 失敗の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37626,7 +37626,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -37634,7 +37634,7 @@
       "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · loose tolerance",
+      "label": "PDEの状態方程式の求解 · 緩い許容誤差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37672,7 +37672,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -37680,7 +37680,7 @@
       "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · tight tolerance",
+      "label": "PDEの状態方程式の求解 · 厳しい許容誤差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37718,7 +37718,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -37726,7 +37726,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · N=20 mesh診断",
+      "label": "振り子の振り上げ · N=20のメッシュ診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37764,7 +37764,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37772,7 +37772,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · N=40 mesh感度",
+      "label": "振り子の振り上げ · N=40のメッシュ感度",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37815,7 +37815,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37823,7 +37823,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · modelずれrollout",
+      "label": "振り子の振り上げ · モデルずれの前進シミュレーション",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37856,7 +37856,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37864,7 +37864,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "CVaR配分のtraining / held-out診断",
+      "label": "CVaR配分を学習用データと評価用データで診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37907,7 +37907,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+      "summary": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。"
     },
     {
       "aliases": [],
@@ -37915,7 +37915,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "平均・分散配分: high gamma",
+      "label": "平均・分散配分: リスク回避係数γが大きい場合",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37943,7 +37943,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+      "summary": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。"
     },
     {
       "aliases": [],
@@ -37951,7 +37951,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "平均・分散配分: low gamma",
+      "label": "平均・分散配分: リスク回避係数γが小さい場合",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37979,7 +37979,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+      "summary": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。"
     },
     {
       "aliases": [],
@@ -37987,7 +37987,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "nominal配分のtraining / held-out診断",
+      "label": "公称配分を学習用データと評価用データで診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38030,7 +38030,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+      "summary": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。"
     },
     {
       "aliases": [],
@@ -38038,7 +38038,7 @@
       "entity_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "反復MPC QP: cold startのdeadline ledger",
+      "label": "反復MPC QP: コールドスタートでの締め切りの記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38071,7 +38071,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+      "summary": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。"
     },
     {
       "aliases": [],
@@ -38079,7 +38079,7 @@
       "entity_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "反復MPC QP: warm startのdeadline ledger",
+      "label": "反復MPC QP: ウォームスタートでの締め切りの記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38112,7 +38112,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+      "summary": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。"
     },
     {
       "aliases": [],
@@ -38163,7 +38163,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+      "summary": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。"
     },
     {
       "aliases": [],
@@ -38214,7 +38214,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+      "summary": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。"
     },
     {
       "aliases": [],
@@ -38222,7 +38222,7 @@
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "2D diffuser · geometry／mesh failure",
+      "label": "2Dディフューザ · 形状／メッシュの失敗",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38260,7 +38260,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -38268,7 +38268,7 @@
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "2D diffuser · 有効なshape更新",
+      "label": "2Dディフューザ · 有効な形状更新",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38311,7 +38311,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -38319,7 +38319,7 @@
       "entity_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "shape／topology表現contrast",
+      "label": "形状／トポロジーの表現の対比",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38362,7 +38362,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -38403,7 +38403,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+      "summary": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
     },
     {
       "aliases": [],
@@ -38444,7 +38444,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+      "summary": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
     },
     {
       "aliases": [],
@@ -38452,7 +38452,7 @@
       "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "ambient stepとQR projectionによるattitude alignment",
+      "label": "周囲の空間での一歩とQRによる射影で姿勢を合わせる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38490,7 +38490,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+      "summary": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。"
     },
     {
       "aliases": [],
@@ -38498,7 +38498,7 @@
       "entity_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Lie algebra stepによるattitude alignment",
+      "label": "リー代数での一歩で姿勢を合わせる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38536,7 +38536,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+      "summary": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。"
     },
     {
       "aliases": [],
@@ -38544,7 +38544,7 @@
       "entity_id": "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "時間窓付き配送: 固定routeの可行性",
+      "label": "時間窓付き配送: 固定経路の実行可能性",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38582,7 +38582,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。"
+      "summary": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。"
     },
     {
       "aliases": [],
@@ -38590,7 +38590,7 @@
       "entity_id": "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "時間窓付き配送: stop 4で違反を検出",
+      "label": "時間窓付き配送: 訪問先4で違反を検出",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38628,7 +38628,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。"
+      "summary": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。"
     },
     {
       "aliases": [],
@@ -38636,7 +38636,7 @@
       "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "filterなしのcheckerboard failureを見つける",
+      "label": "フィルタなしで生じるチェッカーボード模様の失敗を見つける",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38674,7 +38674,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "complianceだけでは判定できないcheckerboard failureを見つける"
+      "summary": "コンプライアンスだけでは判定できないチェッカーボード模様の失敗を見つける"
     },
     {
       "aliases": [],
@@ -38728,7 +38728,7 @@
       "entity_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "片持ちはりの設計fieldを更新過程で読む",
+      "label": "片持ちはりの設計場を更新過程で読む",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38771,7 +38771,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "設計密度、状態field、感度、更新則を一つの反復で対応づける"
+      "summary": "設計密度、状態場、感度、更新則を一つの反復で対応づける"
     },
     {
       "aliases": [],
@@ -40559,7 +40559,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40585,7 +40585,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40606,7 +40606,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40632,7 +40632,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40653,7 +40653,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40679,7 +40679,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40705,7 +40705,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40736,7 +40736,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40757,7 +40757,7 @@
       "entity_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "high fidelityだけで使う同一cost budget",
+      "label": "同じ費用予算を高精度モデルだけに使う",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40783,7 +40783,7 @@
       "entity_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "low-fidelity biasで候補順位が反転する",
+      "label": "低精度モデルの偏りで候補の順位が反転する",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40804,7 +40804,7 @@
       "entity_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
       "entity_type": "trace",
       "external_url": null,
-      "label": "低／高 fidelity simulator の評価ledger",
+      "label": "低精度・高精度シミュレータの評価記録",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40934,7 +40934,7 @@
       "entity_id": "binary-knapsack-bnb-budget",
       "entity_type": "trace",
       "external_url": null,
-      "label": "0-1 knapsack: node予算で停止",
+      "label": "0-1ナップサック: ノード数の予算で停止",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41005,7 +41005,7 @@
       "entity_id": "binary-knapsack-bnb-complete",
       "entity_type": "trace",
       "external_url": null,
-      "label": "0-1 knapsack: 最適性証明",
+      "label": "0-1ナップサック: 最適性の証明",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41233,7 +41233,7 @@
       "entity_id": "exponential-fit-lbfgsb",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · scalar fallback条件",
+      "label": "共通の診断例 · スカラー目的関数による代替の条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41259,7 +41259,7 @@
       "entity_id": "exponential-fit-lm",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · LM適用条件",
+      "label": "共通の診断例 · LMの適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41285,7 +41285,7 @@
       "entity_id": "exponential-fit-trf",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · TRF適用条件",
+      "label": "共通の診断例 · TRFの適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41311,7 +41311,7 @@
       "entity_id": "exponential-fit-trf-poor-init",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · 悪い初期値",
+      "label": "共通の診断例 · 悪い初期値",
       "relations": [
         {
           "relation_type": "scenario",
@@ -41605,7 +41605,7 @@
       "entity_id": "optimal-control-ec020-history",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Direct collocation · state/control診断",
+      "label": "Direct Collocation · 状態と制御入力の診断",
       "relations": [
         {
           "relation_type": "scenario",
@@ -41626,7 +41626,7 @@
       "entity_id": "pde-state-solve-failure",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · failure ledger",
+      "label": "PDEの状態方程式の求解 · 失敗の記録",
       "relations": [
         {
           "relation_type": "scenario",
@@ -41647,7 +41647,7 @@
       "entity_id": "pde-state-tolerance-loose",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · loose tolerance",
+      "label": "PDEの状態方程式の求解 · 緩い許容誤差",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41673,7 +41673,7 @@
       "entity_id": "pde-state-tolerance-tight",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · tight tolerance",
+      "label": "PDEの状態方程式の求解 · 厳しい許容誤差",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41699,7 +41699,7 @@
       "entity_id": "pendulum-collocation-coarse",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · N=20 mesh診断",
+      "label": "振り子の振り上げ · N=20のメッシュ診断",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41730,7 +41730,7 @@
       "entity_id": "pendulum-collocation-refined",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · N=40 mesh感度",
+      "label": "振り子の振り上げ · N=40のメッシュ感度",
       "relations": [
         {
           "relation_type": "comparison",
@@ -41761,7 +41761,7 @@
       "entity_id": "pendulum-model-rollout-failure",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · modelずれrollout",
+      "label": "振り子の振り上げ · モデルずれの前進シミュレーション",
       "relations": [
         {
           "relation_type": "scenario",

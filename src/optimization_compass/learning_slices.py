@@ -1067,7 +1067,7 @@ def _shift_schedule_scenario(
         ),
         VisualizationObservable(
             observable_id="hard_violations",
-            label_ja="hard制約違反",
+            label_ja="必ず守る制約の違反",
             label_en="hard-constraint violations",
         ),
         VisualizationObservable(
@@ -1098,7 +1098,7 @@ def _shift_schedule_scenario(
         problem_instance_id="INSTANCE_SHIFT_SCHEDULING_4X3X2",
         lesson=VisualizationLesson(
             learning_objective=LocalizedText(
-                ja="hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+                ja="必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
                 en=(
                     "Read hard constraints, fulfilled requests, and workload imbalance "
                     "from one roster"
@@ -1109,7 +1109,7 @@ def _shift_schedule_scenario(
                 en="Maximizing preferences automatically balances every tied schedule",
             ),
             expected_phenomenon_ja=(
-                "希望充足は同じ6件でも、負荷のタイブレークで勤務数の最大差が小さくなります。"
+                "希望充足は同じ6件でも、同点のときに負荷で決めると勤務数の最大差が小さくなります。"
             ),
             expected_phenomenon_en=(
                 "Both schedules fulfill six requests, while the workload tie-break "
@@ -1118,7 +1118,7 @@ def _shift_schedule_scenario(
             success_signals=[
                 VisualizationSignal(
                     signal_id="feasible_roster",
-                    label_ja="6枠をhard違反なしで埋める",
+                    label_ja="必ず守る制約を破らずに6枠を埋める",
                     label_en="fill all six slots without hard violations",
                     observable_ids=["assignments", "hard_violations"],
                 ),
@@ -1160,7 +1160,7 @@ def _shift_schedule_scenario(
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="hard違反と目的値を照合",
+                    title_ja="必ず守る制約の違反と目的値を照合",
                     title_en="Check hard violations and the objective",
                     observable_ids=["hard_violations", "canonical_objective"],
                 ),
@@ -1170,7 +1170,7 @@ def _shift_schedule_scenario(
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="4096通りを完全列挙した、この固定教材だけのexact referenceです。",
+                note_ja="4096通りを完全列挙して求めた、この固定教材だけの厳密な参照解です。",
                 note_en=(
                     "An exact reference for this fixed lesson from complete enumeration "
                     "of 4096 assignments."
@@ -1245,17 +1245,17 @@ def _topology_scenario(
     observables = [
         VisualizationObservable(
             observable_id="density_field",
-            label_ja="設計密度field",
+            label_ja="設計密度の場",
             label_en="design density field",
         ),
         VisualizationObservable(
             observable_id="displacement_field",
-            label_ja="変位field",
+            label_ja="変位場",
             label_en="displacement field",
         ),
         VisualizationObservable(
             observable_id="strain_energy_field",
-            label_ja="ひずみエネルギーfield",
+            label_ja="ひずみエネルギー場",
             label_en="strain-energy field",
         ),
         VisualizationObservable(
@@ -1265,7 +1265,7 @@ def _topology_scenario(
         ),
         VisualizationObservable(
             observable_id="sensitivity_filtered",
-            label_ja="filter後の感度",
+            label_ja="フィルタ後の感度",
             label_en="filtered sensitivity",
         ),
         VisualizationObservable(
@@ -1280,12 +1280,12 @@ def _topology_scenario(
         ),
         VisualizationObservable(
             observable_id="gray_fraction",
-            label_ja="gray fraction",
+            label_ja="中間密度の割合",
             label_en="gray fraction",
         ),
         VisualizationObservable(
             observable_id="checkerboard_score",
-            label_ja="checkerboard score",
+            label_ja="チェッカーボード指標",
             label_en="checkerboard score",
         ),
     ]
@@ -1295,14 +1295,14 @@ def _topology_scenario(
         scenario_id=TOPOLOGY_SCENARIO_ID,
         identity_status="canonical",
         canonical_scenario_id=TOPOLOGY_SCENARIO_ID,
-        title_ja="片持ちはりの設計fieldを更新過程で読む",
+        title_ja="片持ちはりの設計場を更新過程で読む",
         title_en="Read a cantilever design field as it evolves",
         purpose="mechanism",
         problem_definition_id="PROBLEM_TOPOLOGY_OPTIMIZATION",
         problem_instance_id="INSTANCE_TOPOLOGY_CANTILEVER_2D",
         lesson=VisualizationLesson(
             learning_objective=LocalizedText(
-                ja="設計密度、状態field、感度、更新則を一つの反復で対応づける",
+                ja="設計密度、状態場、感度、更新則を一つの反復で対応づける",
                 en="Relate design density, state fields, sensitivity, and updates in one iteration",
             ),
             misconception=LocalizedText(
@@ -1310,8 +1310,8 @@ def _topology_scenario(
                 en="A falling compliance means discretization artifacts have disappeared",
             ),
             expected_phenomenon_ja=(
-                "体積率を保ちながら荷重経路が残り、filterとprojectionの強さに応じて"
-                "密度fieldの境界とgray fractionが変わります。"
+                "体積率を保ちながら荷重経路が残り、フィルタと射影の強さに応じて"
+                "密度場の境界と中間密度の割合が変わります。"
             ),
             expected_phenomenon_en=(
                 "The load path remains under a volume constraint while filtering and "
@@ -1326,7 +1326,7 @@ def _topology_scenario(
                 ),
                 VisualizationSignal(
                     signal_id="filtered_sensitivity",
-                    label_ja="filter後の感度が更新に反映される",
+                    label_ja="フィルタ後の感度が更新に反映される",
                     label_en="filtered sensitivity drives the update",
                     observable_ids=["sensitivity_raw", "sensitivity_filtered", "density_field"],
                 ),
@@ -1334,13 +1334,13 @@ def _topology_scenario(
             failure_signals=[
                 VisualizationSignal(
                     signal_id="checkerboard_artifact",
-                    label_ja="低いcomplianceとcheckerboardの併存",
+                    label_ja="低いコンプライアンスとチェッカーボード模様の併存",
                     label_en="low compliance with a checkerboard artifact",
                     observable_ids=["compliance", "checkerboard_score", "density_field"],
                 ),
                 VisualizationSignal(
                     signal_id="gray_field",
-                    label_ja="gray fractionが残る",
+                    label_ja="中間密度が残る",
                     label_en="persistent gray density",
                     observable_ids=["gray_fraction", "density_field"],
                 ),
@@ -1378,21 +1378,21 @@ def _topology_scenario(
             recommended_next_scenario_ids=[TOPOLOGY_FAILURE_SCENARIO_ID],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="解析解や製造可能な最終形状ではなく、教育用のfield traceを表示します。",
+                note_ja="解析解や製造可能な最終形状ではなく、教育用に記録した場の変化を表示します。",
                 note_en=(
                     "Show an educational field trace rather than an analytic or "
                     "manufacturable reference."
                 ),
             ),
             static_summary=LocalizedText(
-                ja="片持ちはりの密度field、状態field、感度、更新指標を反復ごとに並べます。",
+                ja="片持ちはりの密度場、状態場、感度、更新指標を反復ごとに並べます。",
                 en="Inspect density, state, sensitivity, and update metrics for a cantilever.",
             ),
             text_alternative=LocalizedText(
                 ja=(
-                    "初期の一様密度から、filter後の感度で密度を更新します。"
+                    "初期の一様密度から、フィルタ後の感度で密度を更新します。"
                     "OCとMMAは同じ問題と予算で動き、"
-                    "filterなしの経路はcheckerboard scoreが高くなります。"
+                    "フィルタなしの経路はチェッカーボード指標が高くなります。"
                 ),
                 en=(
                     "Starting from uniform density, the field is updated from filtered "
@@ -1401,12 +1401,12 @@ def _topology_scenario(
                 ),
             ),
             derived_media_caption=LocalizedText(
-                ja="片持ちはりのdensity、state、sensitivityのfield evolution",
+                ja="片持ちはりの密度場・状態場・感度場の変化",
                 en="Density, state, and sensitivity field evolution for a cantilever",
             ),
             limitations_ja=(
-                "これは32要素の決定的な教育用traceです。実際の有限要素法の収束、"
-                "製造制約、mesh refinement後の同一topology、局所解や大域解を保証しません。"
+                "これは32要素の決定的な教育用の記録です。実際の有限要素法の収束、製造制約、"
+                "メッシュを細かくした後も同じトポロジーになること、局所解や大域解を保証しません。"
             ),
             limitations_en=(
                 "This is a deterministic educational trace on 32 elements. It does not guarantee "
@@ -1476,16 +1476,16 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
     lesson.update(
         {
             "learning_objective": {
-                "ja": "complianceだけでは判定できないcheckerboard failureを見つける",
+                "ja": "コンプライアンスだけでは判定できないチェッカーボード模様の失敗を見つける",
                 "en": "Find a checkerboard failure that compliance alone cannot diagnose",
             },
             "misconception": {
-                "ja": "密度fieldが細かく変化するほど構造を表現できている",
+                "ja": "密度場が細かく変化するほど構造を表現できている",
                 "en": "Finer density alternation always represents a better structure",
             },
             "expected_phenomenon_ja": (
-                "filterを外した経路ではcomplianceが改善しても、隣接要素の交互模様が残り、"
-                "checkerboard scoreが上がります。"
+                "フィルタを外した経路ではコンプライアンスが改善しても、隣接要素の交互模様が残り、"
+                "チェッカーボード指標が上がります。"
             ),
             "expected_phenomenon_en": (
                 "Without filtering, compliance may improve while alternating adjacent cells "
@@ -1494,7 +1494,7 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "success_signals": [
                 {
                     "signal_id": "artifact_is_visible",
-                    "label_ja": "checkerboard scoreが可視化される",
+                    "label_ja": "チェッカーボード指標が可視化される",
                     "label_en": "the checkerboard score is visible",
                     "observable_ids": ["density_field", "checkerboard_score"],
                 }
@@ -1502,7 +1502,7 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "failure_signals": [
                 {
                     "signal_id": "compliance_hides_artifact",
-                    "label_ja": "complianceだけではartifactを見落とす",
+                    "label_ja": "コンプライアンスだけでは離散化の癖を見落とす",
                     "label_en": "compliance hides the artifact",
                     "observable_ids": ["compliance", "checkerboard_score"],
                 }
@@ -1533,13 +1533,13 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
                 },
                 {
                     "milestone_id": "pattern_visible",
-                    "title_ja": "complianceとartifactを分けて読む",
+                    "title_ja": "コンプライアンスと離散化の癖を分けて読む",
                     "title_en": "Separate compliance from the artifact",
                     "observable_ids": ["compliance", "checkerboard_score"],
                 },
                 {
                     "milestone_id": "termination",
-                    "title_ja": "filterの必要性を判断",
+                    "title_ja": "フィルタの必要性を判断",
                     "title_en": "Judge whether filtering is needed",
                     "observable_ids": ["checkerboard_score", "gray_fraction"],
                 },
@@ -1548,7 +1548,7 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "recommended_next_scenario_ids": [TOPOLOGY_SCENARIO_ID],
             "static_summary": {
                 "ja": (
-                    "filterなしの密度更新で、低いcomplianceとcheckerboard artifactが"
+                    "フィルタなしの密度更新で、低いコンプライアンスとチェッカーボード模様が"
                     "同時に現れます。"
                 ),
                 "en": (
@@ -1558,8 +1558,8 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             },
             "text_alternative": {
                 "ja": (
-                    "filterなしの経路は体積率を保つ一方、交互模様が増え、"
-                    "complianceだけでは良し悪しを決められません。"
+                    "フィルタなしの経路は体積率を保つ一方、交互模様が増え、"
+                    "コンプライアンスだけでは良し悪しを決められません。"
                 ),
                 "en": (
                     "The unfiltered path preserves volume but develops alternation, "
@@ -1567,7 +1567,7 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
                 ),
             },
             "derived_media_caption": {
-                "ja": "checkerboard artifactを含む失敗contrast",
+                "ja": "チェッカーボード模様が現れる失敗例との対比",
                 "en": "Failure contrast with a checkerboard artifact",
             },
         }
@@ -1577,7 +1577,7 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "scenario_id": TOPOLOGY_FAILURE_SCENARIO_ID,
             "identity_status": "derived",
             "canonical_scenario_id": TOPOLOGY_SCENARIO_ID,
-            "title_ja": "filterなしのcheckerboard failureを見つける",
+            "title_ja": "フィルタなしで生じるチェッカーボード模様の失敗を見つける",
             "title_en": "Find the checkerboard failure without filtering",
             "purpose": "failure_contrast",
             "lesson": lesson,
@@ -1602,7 +1602,7 @@ def _topology_comparison_scenario(
             },
             "expected_phenomenon_ja": (
                 "OCとMMAは同じ片持ちはり問題と予算から出発しますが、"
-                "感度の扱いと更新則の違いによって密度fieldの変化が異なります。"
+                "感度の扱いと更新則の違いによって密度場の変化が異なります。"
             ),
             "expected_phenomenon_en": (
                 "OC and MMA share the cantilever problem and budget, but their density fields "
@@ -1611,21 +1611,21 @@ def _topology_comparison_scenario(
             "comparison_role": "sensitivity_variant",
             "recommended_next_scenario_ids": [TOPOLOGY_FAILURE_SCENARIO_ID],
             "static_summary": {
-                "ja": "同じ問題・初期密度・評価予算で、OCとMMAのfield更新を並べて読みます。",
+                "ja": "同じ問題・初期密度・評価予算で、OCとMMAによる密度場の更新を並べて読みます。",
                 "en": (
                     "Read OC and MMA field updates side by side under the same problem, "
                     "start, and budget."
                 ),
             },
             "text_alternative": {
-                "ja": "OCとMMAの密度field、compliance、volume fractionを反復ごとに列挙します。",
+                "ja": "OCとMMAの密度場、コンプライアンス、体積率を反復ごとに列挙します。",
                 "en": (
                     "List density fields, compliance, and volume fraction for OC and MMA "
                     "at each iteration."
                 ),
             },
             "derived_media_caption": {
-                "ja": "同一条件で比較するOCとMMAのtopology field更新",
+                "ja": "同一条件で比較するOCとMMAの密度場の更新",
                 "en": "OC and MMA topology field updates under matched conditions",
             },
         }
@@ -1668,7 +1668,7 @@ def _constrained_scenario(
         ),
         VisualizationObservable(
             observable_id="active_constraint",
-            label_ja="active constraint",
+            label_ja="有効な制約",
             label_en="active constraint",
         ),
         VisualizationObservable(
@@ -1696,8 +1696,8 @@ def _constrained_scenario(
                 en="A lower objective makes an infeasible point a good solution",
             ),
             expected_phenomenon_ja=(
-                "制約対応経路はactive boundaryで止まり、制約無視経路は"
-                "低い目的値でもinfeasibleになります。"
+                "制約対応経路は有効な制約の境界で止まり、制約無視経路は"
+                "低い目的値でも実行不可能になります。"
             ),
             expected_phenomenon_en=(
                 "The constraint-aware path stops on the active boundary while the "
@@ -1706,7 +1706,7 @@ def _constrained_scenario(
             success_signals=[
                 VisualizationSignal(
                     signal_id="feasible_reference",
-                    label_ja="violation 0で既知最適点へ到達",
+                    label_ja="違反0で既知最適点へ到達",
                     label_en="reaches reference with zero violation",
                     observable_ids=["feasible_region", "active_constraint", "constraint_violation"],
                 )
@@ -1714,7 +1714,7 @@ def _constrained_scenario(
             failure_signals=[
                 VisualizationSignal(
                     signal_id="lower_but_invalid",
-                    label_ja="目的値は低いがconstraint violationあり",
+                    label_ja="目的値は低いが制約違反あり",
                     label_en="lower objective with a constraint violation",
                     observable_ids=["objective_contours", "constraint_violation"],
                 )
@@ -1724,7 +1724,7 @@ def _constrained_scenario(
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="infeasibleな初期点",
+                    title_ja="実行不可能な初期点",
                     title_en="Infeasible start",
                     observable_ids=["feasible_region", "constraint_violation"],
                 ),
@@ -1742,7 +1742,7 @@ def _constrained_scenario(
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="active constraintで終了",
+                    title_ja="有効な制約の上で終了",
                     title_en="Terminate at active constraint",
                     observable_ids=["active_constraint", "termination_reason"],
                 ),
@@ -1752,11 +1752,11 @@ def _constrained_scenario(
             recommended_next_scenario_ids=[PARETO_SCENARIO_ID],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="解析的な既知最適点とactive constraintを表示します。",
+                note_ja="解析的な既知最適点と有効な制約を表示します。",
                 note_en="Show the analytic optimum and active constraint.",
             ),
             static_summary=LocalizedText(
-                ja="円内のfeasible regionと2本の経路を比較します。",
+                ja="円内の実行可能領域と2本の経路を比較します。",
                 en="Compare two paths over a disk-shaped feasible region.",
             ),
             text_alternative=LocalizedText(
@@ -1767,12 +1767,11 @@ def _constrained_scenario(
                 ),
             ),
             derived_media_caption=LocalizedText(
-                ja="feasible region上の制約対応経路とfailure contrast",
+                ja="実行可能領域上の制約対応経路と、制約を無視した失敗例との対比",
                 en="Constraint-aware path and failure contrast on a feasible region",
             ),
             limitations_ja=(
-                "SLSQPそのものの内部反復を再現せず、canonical problemを使った"
-                "決定的な教育用Traceです。"
+                "SLSQPそのものの内部反復を再現せず、基準の問題を使った決定的な教育用Traceです。"
             ),
             limitations_en=(
                 "A deterministic teaching trace on the canonical problem, "
@@ -1846,8 +1845,8 @@ def _constrained_feasible_path_scenario(
                 "en": "A constrained method only needs to follow objective descent",
             },
             "expected_phenomenon_ja": (
-                "制約対応経路はinfeasibleな初期点から実行可能性を回復し、"
-                "active boundaryに沿って既知最適点へ進みます。"
+                "制約対応経路は実行不可能な初期点から実行可能性を回復し、"
+                "有効な制約の境界に沿って既知最適点へ進みます。"
             ),
             "expected_phenomenon_en": (
                 "The constraint-aware path restores feasibility from the infeasible start "
@@ -1857,7 +1856,7 @@ def _constrained_feasible_path_scenario(
             "comparison_role": "primary_example",
             "recommended_next_scenario_ids": [CONSTRAINED_SCENARIO_ID],
             "static_summary": {
-                "ja": "円内のfeasible regionで制約対応経路が境界へ進む様子を追います。",
+                "ja": "円内の実行可能領域で制約対応経路が境界へ進む様子を追います。",
                 "en": (
                     "Follow the constraint-aware path to the boundary of a "
                     "disk-shaped feasible region."
@@ -1871,11 +1870,11 @@ def _constrained_feasible_path_scenario(
                 ),
             },
             "derived_media_caption": {
-                "ja": "feasible region上で実行可能性を回復する制約対応経路",
+                "ja": "実行可能領域の内側へ戻り、実行可能性を回復する制約対応経路",
                 "en": "Constraint-aware path restoring feasibility on a feasible region",
             },
             "limitations_ja": (
-                "同じFeasibleRegion artifactに比較用の制約無視経路も併記します。"
+                "同じFeasibleRegionのデータに、比較用の制約無視経路も併記します。"
                 "SLSQPそのものの内部反復を再現するものではありません。"
             ),
             "limitations_en": (
@@ -1909,16 +1908,16 @@ def _pareto_scenario(
             observable_id="dominated_points", label_ja="支配される点", label_en="dominated points"
         ),
         VisualizationObservable(
-            observable_id="pareto_front", label_ja="Pareto front", label_en="Pareto front"
+            observable_id="pareto_front", label_ja="パレート前線", label_en="Pareto front"
         ),
         VisualizationObservable(
             observable_id="preference_selection",
-            label_ja="preferenceで選ぶ点",
+            label_ja="選好で選ぶ点",
             label_en="preference-selected point",
         ),
         VisualizationObservable(
             observable_id="ideal_nadir",
-            label_ja="ideal / nadir reference",
+            label_ja="理想点・ナディア点",
             label_en="ideal / nadir reference",
         ),
     ]
@@ -1928,21 +1927,21 @@ def _pareto_scenario(
         scenario_id=PARETO_SCENARIO_ID,
         identity_status="canonical",
         canonical_scenario_id=PARETO_SCENARIO_ID,
-        title_ja="単一bestではなくPareto frontを読む",
+        title_ja="最良の1点ではなくパレート前線を読む",
         title_en="Read a Pareto front instead of one best value",
         purpose="application_result",
         problem_definition_id="PROBLEM_BIOBJECTIVE_CONTINUOUS",
         problem_instance_id="INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         lesson=VisualizationLesson(
             learning_objective=LocalizedText(
-                ja="支配関係とpreferenceを分けて意思決定する",
+                ja="支配関係と選好を分けて意思決定する",
                 en="Separate dominance from preference",
             ),
             misconception=LocalizedText(
-                ja="多目的問題にも全目的で一意なbestがある",
+                ja="多目的問題にも、すべての目的で最良となる一意な解がある",
                 en="A multi-objective problem has one point best for every objective",
             ),
-            expected_phenomenon_ja="非劣点はtrade-off曲線を作り、weightを変えると選択点がfront上を移動します。",
+            expected_phenomenon_ja="非劣点はトレードオフの曲線を作り、重みを変えると選択点が前線上を移動します。",
             expected_phenomenon_en=(
                 "Non-dominated points form a trade-off curve and preference moves "
                 "the selected point."
@@ -1950,7 +1949,7 @@ def _pareto_scenario(
             success_signals=[
                 VisualizationSignal(
                     signal_id="front_and_selection",
-                    label_ja="非劣frontと選択点を区別できる",
+                    label_ja="非劣な前線と選択点を区別できる",
                     label_en="distinguishes the front from the selected point",
                     observable_ids=["pareto_front", "preference_selection"],
                 )
@@ -1973,13 +1972,13 @@ def _pareto_scenario(
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="trade-off frontを読む",
+                    title_ja="トレードオフの前線を読む",
                     title_en="Read the trade-off front",
                     observable_ids=["pareto_front", "ideal_nadir"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="preferenceで1点を選ぶ",
+                    title_ja="選好で1点を選ぶ",
                     title_en="Choose with preference",
                     observable_ids=["preference_selection", "ideal_nadir"],
                 ),
@@ -1989,26 +1988,26 @@ def _pareto_scenario(
             recommended_next_scenario_ids=[CONSTRAINED_SCENARIO_ID],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="解析的frontとideal / nadirを表示します。",
+                note_ja="解析的に求めた前線と、理想点・ナディア点を表示します。",
                 note_en="Show the analytic front and ideal / nadir references.",
             ),
             static_summary=LocalizedText(
-                ja="支配点、非劣front、preference選択を同じ目的空間に表示します。",
+                ja="支配点、非劣な前線、選好による選択を同じ目的空間に表示します。",
                 en="Plot dominated results, the non-dominated front, and preference selection.",
             ),
             text_alternative=LocalizedText(
-                ja="左下方向へ改善する2目的で、緑のfront上に複数のtrade-off候補があります。",
+                ja="左下方向へ改善する2目的で、緑の前線上に複数のトレードオフ候補があります。",
                 en=(
                     "For two minimized objectives, multiple trade-off candidates "
                     "lie on the green front."
                 ),
             ),
             derived_media_caption=LocalizedText(
-                ja="2目的の実行結果と既知Pareto front",
+                ja="2目的の実行結果と既知のパレート前線",
                 en="Bi-objective results and the known Pareto front",
             ),
             limitations_ja=(
-                "凸で解析的な教材です。weighted sumが非凸frontを欠落させる注意は"
+                "凸で解析的な教材です。重み付き和では非凸な前線の一部を取りこぼすという注意は、"
                 "一般化上の限界として示します。"
             ),
             limitations_en=(
@@ -2060,16 +2059,16 @@ def _pareto_preference_scenario(
     lesson.update(
         {
             "learning_objective": {
-                "ja": "同じPareto frontから、weightによって選択点が変わることを読む",
+                "ja": "同じパレート前線から、重みによって選択点が変わることを読む",
                 "en": "Read how weights select different points from the same Pareto front",
             },
             "misconception": {
-                "ja": "weightを変えて得た1点が、多目的問題の唯一のbestである",
+                "ja": "重みを変えて得た1点が、多目的問題の唯一の最良解である",
                 "en": "A point selected by one weight is the unique best solution",
             },
             "expected_phenomenon_ja": (
-                "非劣候補と解析的frontは固定したまま、f1のweightを0.2、0.5、0.8へ"
-                "変えると選択点だけがfront上を移動します。"
+                "非劣候補と解析的な前線は固定したまま、f1の重みを0.2、0.5、0.8へ"
+                "変えると選択点だけが前線上を移動します。"
             ),
             "expected_phenomenon_en": (
                 "The non-dominated candidates and analytic front stay fixed while weights "
@@ -2078,7 +2077,7 @@ def _pareto_preference_scenario(
             "success_signals": [
                 {
                     "signal_id": "preference_moves_selection",
-                    "label_ja": "weightごとの選択点をfrontと区別できる",
+                    "label_ja": "重みごとの選択点を前線と区別できる",
                     "label_en": "distinguishes each weighted selection from the front",
                     "observable_ids": ["pareto_front", "preference_selection"],
                 }
@@ -2086,7 +2085,7 @@ def _pareto_preference_scenario(
             "failure_signals": [
                 {
                     "signal_id": "single_best_misread",
-                    "label_ja": "1つのweightによる選択を唯一のbestと誤読する",
+                    "label_ja": "1つの重みによる選択を唯一の最良解と誤読する",
                     "label_en": "misreads one weighted selection as the unique best",
                     "observable_ids": ["preference_selection", "ideal_nadir"],
                 }
@@ -2094,20 +2093,20 @@ def _pareto_preference_scenario(
             "comparison_role": "sensitivity_variant",
             "recommended_next_scenario_ids": [PARETO_SCENARIO_ID],
             "static_summary": {
-                "ja": "同じPareto front上で3つのpreference weightによる選択点を比べます。",
+                "ja": "同じパレート前線上で、選好を表す3つの重みによる選択点を比べます。",
                 "en": "Compare selections from three preference weights on one Pareto front.",
             },
             "text_alternative": {
-                "ja": "weight 0.2、0.5、0.8で、同じ非劣front上の異なる3点を選びます。",
+                "ja": "重み0.2、0.5、0.8で、同じ非劣な前線上の異なる3点を選びます。",
                 "en": "Weights 0.2, 0.5, and 0.8 select three different points on one front.",
             },
             "derived_media_caption": {
-                "ja": "固定したPareto frontに対するpreference weight感度",
+                "ja": "固定したパレート前線に対する、選好の重みの感度",
                 "en": "Preference-weight sensitivity on a fixed Pareto front",
             },
             "limitations_ja": (
-                "解析的な凸front上のweighted-sum選択教材です。一般の非凸frontでは、"
-                "weightを走査しても取得できない非劣点があります。"
+                "解析的な凸の前線上で、重み付き和により1点を選ぶ教材です。一般の非凸な前線では、"
+                "重みを走査しても取得できない非劣点があります。"
             ),
             "limitations_en": (
                 "A weighted-sum selection lesson on an analytic convex front; scanning "
@@ -2120,7 +2119,7 @@ def _pareto_preference_scenario(
             "scenario_id": PARETO_PREFERENCE_SCENARIO_ID,
             "identity_status": "derived",
             "canonical_scenario_id": PARETO_SCENARIO_ID,
-            "title_ja": "preference weightで選択点がどう動くか比べる",
+            "title_ja": "選好の重みで選択点がどう動くか比べる",
             "title_en": "Compare how preference weights move the selected point",
             "purpose": "sensitivity",
             "lesson": lesson,
