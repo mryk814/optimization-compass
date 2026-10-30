@@ -221,7 +221,7 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
         ),
         VisualizationObservable(
             observable_id="route_feasibility",
-            label_ja="route可行性",
+            label_ja="経路の実行可能性",
             label_en="route feasibility",
         ),
     ]
@@ -231,9 +231,9 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
         scenario_id=trace.scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="時間窓付き配送: stop 4で違反を検出"
+        title_ja="時間窓付き配送: 訪問先4で違反を検出"
         if is_violation
-        else "時間窓付き配送: 固定routeの可行性",
+        else "時間窓付き配送: 固定経路の実行可能性",
         title_en="Time-window routing: detect a violation at stop 4"
         if is_violation
         else "Time-window routing: feasibility of a fixed route",
@@ -242,16 +242,16 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_localized(
-                "到着時刻、時間窓、累積移動時間、可行性を別々に読む。",
+                "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。",
                 "Read arrival time, time windows, cumulative travel time, and feasibility separately.",
             ),
             misconception=_localized(
-                "時間窓違反を目的値の小さな差やpenaltyだけで扱えば、routeは実行可能といえる。",
+                "時間窓違反を目的関数値の小さな差や罰則だけで扱えば、経路は実行可能といえる。",
                 "A small objective change or penalty is enough to call a route time-window feasible.",
             )
             if is_violation
             else None,
-            expected_phenomenon_ja="同じrouteでもstop 4の終了時刻だけを狭めると、到着14分は不変のまま時間窓違反が2分になる。",
+            expected_phenomenon_ja="同じ経路でも訪問先4の終了時刻だけを狭めると、到着14分は不変のまま時間窓違反が2分になる。",
             expected_phenomenon_en="With the same route, narrowing only stop 4's latest arrival leaves the 14-minute arrival unchanged and creates a two-minute violation.",
             success_signals=[
                 VisualizationSignal(
@@ -269,7 +269,7 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
             failure_signals=[
                 VisualizationSignal(
                     signal_id="hard_window_violation",
-                    label_ja="stop 4の時間窓違反を見落とさない",
+                    label_ja="訪問先4の時間窓違反を見落とさない",
                     label_en="do not overlook the stop-4 time-window violation",
                     observable_ids=["arrival_time", "window_end", "window_violation"],
                 )
@@ -281,25 +281,25 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="固定routeと時間行列を確認",
+                    title_ja="固定経路と時間行列を確認",
                     title_en="Inspect the fixed route and travel-time matrix",
                     observable_ids=["arrival_time", "cumulative_travel_time"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="stopごとの到着を追う",
+                    title_ja="訪問先ごとの到着を追う",
                     title_en="Follow arrivals by stop",
                     observable_ids=["arrival_time", "window_end"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="stop 4の2分違反を読む",
+                    title_ja="訪問先4の2分の違反を読む",
                     title_en="Read the two-minute stop-4 violation",
                     observable_ids=["arrival_time", "window_end", "window_violation"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="可行性と総移動時間を混同しない",
+                    title_ja="実行可能性と総移動時間を混同しない",
                     title_en="Do not conflate feasibility and total travel time",
                     observable_ids=["route_feasibility", "cumulative_travel_time"],
                 ),
@@ -309,22 +309,22 @@ def build_time_window_routing_scenario(trace: AlgorithmTrace) -> VisualizationSc
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="この教材では最適routeを表示しない。固定routeの時間窓診断だけを表示する。",
+                note_ja="この教材では最適な経路を表示しない。固定経路の時間窓の診断だけを表示する。",
                 note_en="No optimal route is shown; the lesson only diagnoses time windows for a fixed route.",
             ),
             static_summary=_localized(
-                "4 stop・1車両の固定routeで、到着時刻と時間窓を順に照合する。",
+                "訪問先4か所・車両1台の固定経路で、到着時刻と時間窓を順に照合する。",
                 "Check arrivals against time windows along one fixed four-stop route.",
             ),
             text_alternative=_localized(
-                "depotからstop 1、2、3、4を経てdepotへ戻るrouteについて、各stopの到着と終了時刻、違反、累積移動時間を列挙する。",
+                "拠点から訪問先1、2、3、4を経て拠点へ戻る経路について、各訪問先の到着と終了時刻、違反、累積移動時間を列挙する。",
                 "For the depot–1–2–3–4–depot route, list each arrival, window end, violation, and cumulative travel time.",
             ),
             derived_media_caption=_localized(
-                "時間窓付き配送routeの到着・違反ledger",
+                "時間窓付き配送経路の到着・違反の記録",
                 "Arrival and violation ledger for a time-window route",
             ),
-            limitations_ja="固定行列・4 stop・1車両・service timeなしの決定的教材であり、OR-Tools実行、local searchの性能、交通予測、複数車両割当、容量、休憩、実道路の到着保証を示さない。",
+            limitations_ja="固定行列・訪問先4か所・車両1台・サービス時間なしの決定的教材であり、OR-Toolsの実行、局所探索の性能、交通予測、複数車両割当、容量、休憩、実道路の到着保証を示さない。",
             limitations_en="A deterministic four-stop, one-vehicle lesson without service time; it does not measure OR-Tools or local-search performance, traffic forecasts, multi-vehicle assignment, capacity, breaks, or real-road arrival guarantees.",
         ),
         guided_story=None,

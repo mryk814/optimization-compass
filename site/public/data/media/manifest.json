@@ -4,7 +4,7 @@
   "entries": [
     {
       "alt_en": "Report vertex ranks, candidate, operation, decision, and best value for each frame.",
-      "alt_ja": "各frameの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
+      "alt_ja": "各フレームの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
       "animation_frame_indices": [
         0,
         2,
@@ -24,7 +24,7 @@
       "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
       "camera_preset": null,
       "caption_en": "Nelder–Mead: simplex geometry and acceptance decisions",
-      "caption_ja": "Nelder–Mead: simplexの幾何操作と受理判断",
+      "caption_ja": "Nelder–Mead: 単体の幾何操作と受理判断",
       "captions": {
         "bytes": 729,
         "media_type": "text/vtt",
@@ -34,14 +34,14 @@
       "dataset_version": "0.18.25",
       "files": [
         {
-          "bytes": 3611,
+          "bytes": 3620,
           "duration_seconds": null,
           "frame_index": 81,
           "height": 675,
           "media_kind": "static_svg",
           "media_type": "image/svg+xml",
           "path": "media/scenario-nm-quadratic/static.svg",
-          "sha256": "26c1f5a4d706d4f5e0c321eb127ec95214bf91528e7452d3765c8dc48819b975",
+          "sha256": "64c73618a68bc6e570e42134d56bf7e22cf5d09b8b91f19b38fafe7f97666e08",
           "width": 1200
         },
         {

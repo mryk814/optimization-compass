@@ -180,7 +180,7 @@ test("制約付きsliceで可行性とunconstrained failureを比較できる", 
 test("Pareto sliceでpreferenceに応じた点をkeyboardで選べる", { tag: "@critical" }, async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC");
 
-  await expect(page.getByRole("heading", { level: 1, name: "単一bestではなくPareto frontを読む" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "最良の1点ではなくパレート前線を読む" })).toBeVisible();
   await expect(page.getByText("パレート前線 (pareto_front) · 1.1.0")).toBeVisible();
   await expect(page.getByText(/単一の最良解ではありません/u)).toBeVisible();
   await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
@@ -238,11 +238,11 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
     /#\/theater\/search-tree\/binary-knapsack-bnb-complete\?state=/u,
   );
   await expect(
-    page.getByRole("heading", { level: 1, name: "0-1 knapsack: 最適性証明" }),
+    page.getByRole("heading", { level: 1, name: "0-1ナップサック: 最適性の証明" }),
   ).toBeVisible();
 
   const alternate = page.getByRole("link", {
-    name: "別のシナリオ: 0-1 knapsack: node予算で停止",
+    name: "別のシナリオ: 0-1ナップサック: ノード数の予算で停止",
   });
   await expect(alternate).toBeVisible();
   await page.waitForLoadState("networkidle");
@@ -252,7 +252,7 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
     /#\/theater\/search-tree\/binary-knapsack-bnb-budget\?state=/u,
   );
   await expect(
-    page.getByRole("heading", { level: 1, name: "0-1 knapsack: node予算で停止" }),
+    page.getByRole("heading", { level: 1, name: "0-1ナップサック: ノード数の予算で停止" }),
   ).toBeVisible();
 
   const compare = page.getByRole("link", {
@@ -306,13 +306,13 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
 
   await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · TRF適用条件" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通の診断例 · TRFの適用条件" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: /指標の履歴/u })).toBeVisible();
   await expect(page.getByRole("img", { name: /残差.*評価回数ごとに比較/u })).toBeVisible();
 
-  await page.getByRole("link", { name: /別のシナリオ: 共通診断probe · 悪い初期値/u }).click();
+  await page.getByRole("link", { name: /別のシナリオ: 共通の診断例 · 悪い初期値/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf-poor-init\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · 悪い初期値" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通の診断例 · 悪い初期値" })).toBeVisible();
   await page.getByRole("link", { name: "Compareへ: COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS" }).click();
 
   await expect(page.getByRole("heading", { level: 1, name: "非線形の当てはめでソルバーの適用条件を比べる" })).toBeVisible();
@@ -334,7 +334,7 @@ test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ�
   await expect(page.getByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Case journey breadcrumb" }).getByRole("link", { name: "Case", exact: true })).toHaveAttribute("href", /#\/gallery\/hyperparameter-search\?state=/u);
 
-  await page.getByRole("link", { name: /別のシナリオ: 高価な1次元black-box: explore \/ small_noise/u }).click();
+  await page.getByRole("link", { name: /別のシナリオ: 高価な1次元ブラックボックス: 探索寄り \/ 小さいノイズ/u }).click();
   await expect(page).toHaveURL(/#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE\?state=/u);
   await expect(page.getByLabel("観測ノイズ")).toHaveValue("small_noise");
   await page.getByRole("link", { name: "Compareへ: COMPARE_BO_ACQUISITION_NOISE_BASELINE" }).click();
@@ -344,7 +344,7 @@ test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ�
   await evaluation.press("End");
   await expect(page.getByText("Oracle evaluations: 10/10")).toBeVisible();
   await expect(page.getByText(/一般的な優劣や因果効果は推論できません/u)).toBeVisible();
-  const primaryTheater = page.getByRole("link", { name: "Theater: 高価な1次元black-box: explore / noiseless" });
+  const primaryTheater = page.getByRole("link", { name: "Theater: 高価な1次元ブラックボックス: 探索寄り / ノイズなし" });
   await expect(primaryTheater).toHaveAttribute(
     "href",
     /#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_NOISELESS\?state=/u,

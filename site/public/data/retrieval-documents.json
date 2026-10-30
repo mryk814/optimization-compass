@@ -60629,7 +60629,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "Adam"
     },
     {
@@ -60650,7 +60650,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "Adam"
     },
     {
@@ -60673,8 +60673,8 @@
         "S056",
         "S064"
       ],
-      "text": "outer progress、inner solve、complementarityを別々の履歴として読む",
-      "title": "Bilevel回帰 · exact inner診断"
+      "text": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む",
+      "title": "二階層回帰 · 内側問題を厳密に扱う診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60696,8 +60696,8 @@
         "S056",
         "S064"
       ],
-      "text": "outer progress、inner solve、complementarityを別々の履歴として読む",
-      "title": "Bilevel回帰 · finite relaxationの残差"
+      "text": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む",
+      "title": "二階層回帰 · 有限の緩和で残る残差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60730,8 +60730,8 @@
         "S022",
         "S079"
       ],
-      "text": "上界とincumbentが探索範囲を狭める過程を読む",
-      "title": "0-1 knapsack: node予算で停止"
+      "text": "上界と暫定解が探索範囲を狭める過程を読む",
+      "title": "0-1ナップサック: ノード数の予算で停止"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60764,8 +60764,8 @@
         "S022",
         "S079"
       ],
-      "text": "上界とincumbentが探索範囲を狭める過程を読む",
-      "title": "0-1 knapsack: 最適性証明"
+      "text": "上界と暫定解が探索範囲を狭める過程を読む",
+      "title": "0-1ナップサック: 最適性の証明"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60789,8 +60789,8 @@
         "S055",
         "S068"
       ],
-      "text": "同じPareto frontから、weightによって選択点が変わることを読む",
-      "title": "preference weightで選択点がどう動くか比べる"
+      "text": "同じパレート前線から、重みによって選択点が変わることを読む",
+      "title": "選好の重みで選択点がどう動くか比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60813,8 +60813,8 @@
         "S055",
         "S068"
       ],
-      "text": "支配関係とpreferenceを分けて意思決定する",
-      "title": "単一bestではなくPareto frontを読む"
+      "text": "支配関係と選好を分けて意思決定する",
+      "title": "最良の1点ではなくパレート前線を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60841,8 +60841,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60869,8 +60869,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60897,8 +60897,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60926,8 +60926,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60953,8 +60953,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む",
-      "title": "high fidelityだけで使う同一cost budget"
+      "text": "同じ初期計画と費用予算で、高精度モデルだけを選ぶ場合の評価記録を読む",
+      "title": "同じ費用予算を高精度モデルだけに使う"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -60979,8 +60979,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する",
-      "title": "low-fidelity biasで候補順位が反転する"
+      "text": "同じ2点の低精度・高精度の観測を照合し、精度間の食い違いによる順位の反転を検出する",
+      "title": "低精度モデルの偏りで候補の順位が反転する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61006,8 +61006,8 @@
         "S069",
         "S075"
       ],
-      "text": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む",
-      "title": "低／高 fidelity simulator の評価ledger"
+      "text": "シミュレータ呼び出しごとの精度・費用・状態を追い、高精度モデルでのそれまでの最良値を読む",
+      "title": "低精度・高精度シミュレータの評価記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61086,8 +61086,8 @@
         "S056",
         "S065"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · scalar fallback条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · スカラー目的関数による代替の条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61109,8 +61109,8 @@
         "S041",
         "S056"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · LM適用条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · LMの適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61132,8 +61132,8 @@
         "S056",
         "S096"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · TRF適用条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · TRFの適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61154,8 +61154,8 @@
         "S056",
         "S096"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · 悪い初期値"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · 悪い初期値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61185,8 +61185,8 @@
         "S060",
         "S063"
       ],
-      "text": "成功率、失敗status、最良feasible objectiveを混同せずに読む。",
-      "title": "失敗simulation: statusを残すfailure ledger"
+      "text": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。",
+      "title": "失敗を含むシミュレーション: 状態を残す失敗の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61216,8 +61216,8 @@
         "S060",
         "S063"
       ],
-      "text": "成功率、失敗status、最良feasible objectiveを混同せずに読む。",
-      "title": "失敗simulation: feasible evaluation ledger"
+      "text": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。",
+      "title": "失敗を含むシミュレーション: 実行可能な評価の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61237,7 +61237,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "勾配降下法"
     },
     {
@@ -61258,7 +61258,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "勾配降下法"
     },
     {
@@ -61282,8 +61282,8 @@
         "S056",
         "S076"
       ],
-      "text": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める",
-      "title": "Hybrid mode discovery · chattering診断"
+      "text": "目的関数と動力学残差が改善しても、モードのチャタリングはそれとは独立に止める",
+      "title": "ハイブリッド系のモード発見 · チャタリング診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61303,7 +61303,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "モメンタム法"
     },
     {
@@ -61324,7 +61324,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "モメンタム法"
     },
     {
@@ -61426,8 +61426,8 @@
         "S042",
         "S043"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Direct collocation · state/control診断"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "Direct Collocation · 状態と制御入力の診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61450,8 +61450,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · failure ledger"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 失敗の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61475,8 +61475,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · loose tolerance"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 緩い許容誤差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61500,8 +61500,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · tight tolerance"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 厳しい許容誤差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61524,8 +61524,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · N=20 mesh診断"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · N=20のメッシュ診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61549,8 +61549,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · N=40 mesh感度"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · N=40のメッシュ感度"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61572,8 +61572,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · modelずれrollout"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · モデルずれの前進シミュレーション"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61597,8 +61597,8 @@
         "S055",
         "S103"
       ],
-      "text": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。",
-      "title": "CVaR配分のtraining / held-out診断"
+      "text": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。",
+      "title": "CVaR配分を学習用データと評価用データで診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61618,8 +61618,8 @@
         "S010",
         "S055"
       ],
-      "text": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。",
-      "title": "平均・分散配分: high gamma"
+      "text": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。",
+      "title": "平均・分散配分: リスク回避係数γが大きい場合"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61639,8 +61639,8 @@
         "S010",
         "S055"
       ],
-      "text": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。",
-      "title": "平均・分散配分: low gamma"
+      "text": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。",
+      "title": "平均・分散配分: リスク回避係数γが小さい場合"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61664,8 +61664,8 @@
         "S055",
         "S103"
       ],
-      "text": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。",
-      "title": "nominal配分のtraining / held-out診断"
+      "text": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。",
+      "title": "公称配分を学習用データと評価用データで診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61687,8 +61687,8 @@
         "S043",
         "S076"
       ],
-      "text": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。",
-      "title": "反復MPC QP: cold startのdeadline ledger"
+      "text": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。",
+      "title": "反復MPC QP: コールドスタートでの締め切りの記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61710,8 +61710,8 @@
         "S043",
         "S076"
       ],
-      "text": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。",
-      "title": "反復MPC QP: warm startのdeadline ledger"
+      "text": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。",
+      "title": "反復MPC QP: ウォームスタートでの締め切りの記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61737,7 +61737,7 @@
         "S056",
         "S080"
       ],
-      "text": "残差vector、最大絶対残差、二乗残差を別々に読む。",
+      "text": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。",
       "title": "求根: 各残差をゼロへ近づける"
     },
     {
@@ -61764,7 +61764,7 @@
         "S056",
         "S080"
       ],
-      "text": "残差vector、最大絶対残差、二乗残差を別々に読む。",
+      "text": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。",
       "title": "求根: 二乗残差だけでは止めない"
     },
     {
@@ -61790,8 +61790,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "2D diffuser · geometry／mesh failure"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "2Dディフューザ · 形状／メッシュの失敗"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61817,8 +61817,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "2D diffuser · 有効なshape更新"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "2Dディフューザ · 有効な形状更新"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61844,8 +61844,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "shape／topology表現contrast"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "形状／トポロジーの表現の対比"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61866,7 +61866,7 @@
         "S022",
         "S053"
       ],
-      "text": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+      "text": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
       "title": "同じ希望充足数から負荷の偏りが小さい勤務表を選ぶ"
     },
     {
@@ -61888,7 +61888,7 @@
         "S022",
         "S053"
       ],
-      "text": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+      "text": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
       "title": "希望だけを目的にすると同率の勤務表が残る"
     },
     {
@@ -61913,8 +61913,8 @@
         "S071",
         "S107"
       ],
-      "text": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。",
-      "title": "ambient stepとQR projectionによるattitude alignment"
+      "text": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。",
+      "title": "周囲の空間での一歩とQRによる射影で姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61938,8 +61938,8 @@
         "S071",
         "S107"
       ],
-      "text": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。",
-      "title": "Lie algebra stepによるattitude alignment"
+      "text": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。",
+      "title": "リー代数での一歩で姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61963,8 +61963,8 @@
         "S024",
         "S079"
       ],
-      "text": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。",
-      "title": "時間窓付き配送: 固定routeの可行性"
+      "text": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。",
+      "title": "時間窓付き配送: 固定経路の実行可能性"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -61988,8 +61988,8 @@
         "S024",
         "S079"
       ],
-      "text": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。",
-      "title": "時間窓付き配送: stop 4で違反を検出"
+      "text": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。",
+      "title": "時間窓付き配送: 訪問先4で違反を検出"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -62014,8 +62014,8 @@
         "S100",
         "S101"
       ],
-      "text": "complianceだけでは判定できないcheckerboard failureを見つける",
-      "title": "filterなしのcheckerboard failureを見つける"
+      "text": "コンプライアンスだけでは判定できないチェッカーボード模様の失敗を見つける",
+      "title": "フィルタなしで生じるチェッカーボード模様の失敗を見つける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -62067,8 +62067,8 @@
         "S100",
         "S101"
       ],
-      "text": "設計密度、状態field、感度、更新則を一つの反復で対応づける",
-      "title": "片持ちはりの設計fieldを更新過程で読む"
+      "text": "設計密度、状態場、感度、更新則を一つの反復で対応づける",
+      "title": "片持ちはりの設計場を更新過程で読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64579,8 +64579,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64598,8 +64598,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64618,8 +64618,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64637,8 +64637,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: exploit / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64657,8 +64657,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64677,8 +64677,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / noiseless"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / ノイズなし"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64698,8 +64698,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64717,8 +64717,8 @@
         "S059",
         "S075"
       ],
-      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
-      "title": "高価な1次元black-box: explore / small_noise"
+      "text": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64739,8 +64739,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む",
-      "title": "high fidelityだけで使う同一cost budget"
+      "text": "同じ初期計画と費用予算で、高精度モデルだけを選ぶ場合の評価記録を読む",
+      "title": "同じ費用予算を高精度モデルだけに使う"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64760,8 +64760,8 @@
         "S069",
         "S075"
       ],
-      "text": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する",
-      "title": "low-fidelity biasで候補順位が反転する"
+      "text": "同じ2点の低精度・高精度の観測を照合し、精度間の食い違いによる順位の反転を検出する",
+      "title": "低精度モデルの偏りで候補の順位が反転する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64782,8 +64782,8 @@
         "S069",
         "S075"
       ],
-      "text": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む",
-      "title": "低／高 fidelity simulator の評価ledger"
+      "text": "シミュレータ呼び出しごとの精度・費用・状態を追い、高精度モデルでのそれまでの最良値を読む",
+      "title": "低精度・高精度シミュレータの評価記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64801,7 +64801,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "Adam"
     },
     {
@@ -64820,7 +64820,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "Adam"
     },
     {
@@ -64840,8 +64840,8 @@
         "S056",
         "S064"
       ],
-      "text": "outer progress、inner solve、complementarityを別々の履歴として読む",
-      "title": "Bilevel回帰 · exact inner診断"
+      "text": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む",
+      "title": "二階層回帰 · 内側問題を厳密に扱う診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64860,8 +64860,8 @@
         "S056",
         "S064"
       ],
-      "text": "outer progress、inner solve、complementarityを別々の履歴として読む",
-      "title": "Bilevel回帰 · finite relaxationの残差"
+      "text": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む",
+      "title": "二階層回帰 · 有限の緩和で残る残差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64889,8 +64889,8 @@
         "S022",
         "S079"
       ],
-      "text": "上界とincumbentが探索範囲を狭める過程を読む",
-      "title": "0-1 knapsack: node予算で停止"
+      "text": "上界と暫定解が探索範囲を狭める過程を読む",
+      "title": "0-1ナップサック: ノード数の予算で停止"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64918,8 +64918,8 @@
         "S022",
         "S079"
       ],
-      "text": "上界とincumbentが探索範囲を狭める過程を読む",
-      "title": "0-1 knapsack: 最適性証明"
+      "text": "上界と暫定解が探索範囲を狭める過程を読む",
+      "title": "0-1ナップサック: 最適性の証明"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64945,8 +64945,8 @@
         "S055",
         "S068"
       ],
-      "text": "同じPareto frontから、weightによって選択点が変わることを読む",
-      "title": "preference weightで選択点がどう動くか比べる"
+      "text": "同じパレート前線から、重みによって選択点が変わることを読む",
+      "title": "選好の重みで選択点がどう動くか比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -64998,8 +64998,8 @@
         "S056",
         "S065"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · scalar fallback条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · スカラー目的関数による代替の条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65018,8 +65018,8 @@
         "S041",
         "S056"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · LM適用条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · LMの適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65037,8 +65037,8 @@
         "S056",
         "S096"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · 悪い初期値"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · 悪い初期値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65057,8 +65057,8 @@
         "S056",
         "S096"
       ],
-      "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "共通診断probe · TRF適用条件"
+      "text": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
+      "title": "共通の診断例 · TRFの適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65081,8 +65081,8 @@
         "S060",
         "S063"
       ],
-      "text": "成功率、失敗status、最良feasible objectiveを混同せずに読む。",
-      "title": "失敗simulation: statusを残すfailure ledger"
+      "text": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。",
+      "title": "失敗を含むシミュレーション: 状態を残す失敗の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65105,8 +65105,8 @@
         "S060",
         "S063"
       ],
-      "text": "成功率、失敗status、最良feasible objectiveを混同せずに読む。",
-      "title": "失敗simulation: feasible evaluation ledger"
+      "text": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。",
+      "title": "失敗を含むシミュレーション: 実行可能な評価の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65124,7 +65124,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "勾配降下法"
     },
     {
@@ -65143,7 +65143,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "勾配降下法"
     },
     {
@@ -65163,8 +65163,8 @@
         "S056",
         "S076"
       ],
-      "text": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める",
-      "title": "Hybrid mode discovery · chattering診断"
+      "text": "目的関数と動力学残差が改善しても、モードのチャタリングはそれとは独立に止める",
+      "title": "ハイブリッド系のモード発見 · チャタリング診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65182,7 +65182,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "モメンタム法"
     },
     {
@@ -65201,7 +65201,7 @@
         "S001",
         "S002"
       ],
-      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "text": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
       "title": "モメンタム法"
     },
     {
@@ -65293,8 +65293,8 @@
         "S042",
         "S043"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Direct collocation · state/control診断"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "Direct Collocation · 状態と制御入力の診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65313,8 +65313,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · failure ledger"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 失敗の記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65334,8 +65334,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · loose tolerance"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 緩い許容誤差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65355,8 +65355,8 @@
         "S101",
         "S110"
       ],
-      "text": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
-      "title": "PDE state solve · tight tolerance"
+      "text": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む",
+      "title": "PDEの状態方程式の求解 · 厳しい許容誤差"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65376,8 +65376,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · N=20 mesh診断"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · N=20のメッシュ診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65397,8 +65397,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · N=40 mesh感度"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · N=40のメッシュ感度"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65416,8 +65416,8 @@
         "S050",
         "S102"
       ],
-      "text": "state・control・dynamics defect・path violationを同じ評価軸で読む",
-      "title": "Pendulum swing-up · modelずれrollout"
+      "text": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
+      "title": "振り子の振り上げ · モデルずれの前進シミュレーション"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65437,8 +65437,8 @@
         "S055",
         "S103"
       ],
-      "text": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。",
-      "title": "CVaR配分のtraining / held-out診断"
+      "text": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。",
+      "title": "CVaR配分を学習用データと評価用データで診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65456,8 +65456,8 @@
         "S010",
         "S055"
       ],
-      "text": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。",
-      "title": "平均・分散配分: high gamma"
+      "text": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。",
+      "title": "平均・分散配分: リスク回避係数γが大きい場合"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65475,8 +65475,8 @@
         "S010",
         "S055"
       ],
-      "text": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。",
-      "title": "平均・分散配分: low gamma"
+      "text": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。",
+      "title": "平均・分散配分: リスク回避係数γが小さい場合"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65496,8 +65496,8 @@
         "S055",
         "S103"
       ],
-      "text": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。",
-      "title": "nominal配分のtraining / held-out診断"
+      "text": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。",
+      "title": "公称配分を学習用データと評価用データで診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65516,8 +65516,8 @@
         "S043",
         "S076"
       ],
-      "text": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。",
-      "title": "反復MPC QP: cold startのdeadline ledger"
+      "text": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。",
+      "title": "反復MPC QP: コールドスタートでの締め切りの記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65536,8 +65536,8 @@
         "S043",
         "S076"
       ],
-      "text": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。",
-      "title": "反復MPC QP: warm startのdeadline ledger"
+      "text": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。",
+      "title": "反復MPC QP: ウォームスタートでの締め切りの記録"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65558,7 +65558,7 @@
         "S056",
         "S080"
       ],
-      "text": "残差vector、最大絶対残差、二乗残差を別々に読む。",
+      "text": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。",
       "title": "求根: 各残差をゼロへ近づける"
     },
     {
@@ -65580,7 +65580,7 @@
         "S056",
         "S080"
       ],
-      "text": "残差vector、最大絶対残差、二乗残差を別々に読む。",
+      "text": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。",
       "title": "求根: 二乗残差だけでは止めない"
     },
     {
@@ -65601,8 +65601,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "2D diffuser · geometry／mesh failure"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "2Dディフューザ · 形状／メッシュの失敗"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65623,8 +65623,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "2D diffuser · 有効なshape更新"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "2Dディフューザ · 有効な形状更新"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65645,8 +65645,8 @@
         "S105",
         "S106"
       ],
-      "text": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
-      "title": "shape／topology表現contrast"
+      "text": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
+      "title": "形状／トポロジーの表現の対比"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65668,7 +65668,7 @@
         "S022",
         "S053"
       ],
-      "text": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+      "text": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
       "title": "同じ希望充足数から負荷の偏りが小さい勤務表を選ぶ"
     },
     {
@@ -65687,7 +65687,7 @@
         "S022",
         "S053"
       ],
-      "text": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+      "text": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
       "title": "希望だけを目的にすると同率の勤務表が残る"
     },
     {
@@ -65708,8 +65708,8 @@
         "S071",
         "S107"
       ],
-      "text": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。",
-      "title": "ambient stepとQR projectionによるattitude alignment"
+      "text": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。",
+      "title": "周囲の空間での一歩とQRによる射影で姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65729,8 +65729,8 @@
         "S071",
         "S107"
       ],
-      "text": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。",
-      "title": "Lie algebra stepによるattitude alignment"
+      "text": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。",
+      "title": "リー代数での一歩で姿勢を合わせる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65750,8 +65750,8 @@
         "S024",
         "S079"
       ],
-      "text": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。",
-      "title": "時間窓付き配送: 固定routeの可行性"
+      "text": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。",
+      "title": "時間窓付き配送: 固定経路の実行可能性"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -65771,8 +65771,8 @@
         "S024",
         "S079"
       ],
-      "text": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。",
-      "title": "時間窓付き配送: stop 4で違反を検出"
+      "text": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。",
+      "title": "時間窓付き配送: 訪問先4で違反を検出"
     },
     {
       "attribution": "Optimization Compass contributors",

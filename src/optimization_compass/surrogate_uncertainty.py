@@ -33,6 +33,11 @@ Strategy = Literal["exploit", "explore"]
 NoisePreset = Literal["noiseless", "small_noise"]
 Fidelity = Literal["low", "high"]
 EvaluationStatus = Literal["ok", "failed", "censored", "timeout"]
+_STRATEGY_LABEL_JA: dict[Strategy, str] = {"exploit": "活用寄り", "explore": "探索寄り"}
+_NOISE_PRESET_LABEL_JA: dict[NoisePreset, str] = {
+    "noiseless": "ノイズなし",
+    "small_noise": "小さいノイズ",
+}
 SURROGATE_GENERATOR_ID = "educational.surrogate_uncertainty.v1"
 SURROGATE_GENERATOR_VERSION = "1.0.0"
 CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
@@ -401,13 +406,15 @@ def generate_surrogate_scenario(
     budget = payload.frames[-1].oracle_evaluations
     initial_design = [item.x for item in payload.frames[0].observations]
     variant = strategy != "explore" or noise_preset != "noiseless"
+    strategy_ja = _STRATEGY_LABEL_JA[strategy]
+    noise_ja = _NOISE_PRESET_LABEL_JA[noise_preset]
     guided_story = (
         None
         if variant
         else GuidedStory(
             story_version="1.0.0",
             introduction=LocalizedText(
-                ja="初期観測から次点選択、予算到達までを4つのcueで追います。",
+                ja="初期観測から次点の選択、評価予算への到達までを4つの区切りで追います。",
                 en="Follow four cues from initial observations to the evaluation budget.",
             ),
             steps=[
@@ -462,7 +469,7 @@ def generate_surrogate_scenario(
                 GuidedStoryStep(
                     milestone_id="termination",
                     annotation=LocalizedText(
-                        ja="固定評価予算で得たincumbentを確認し、一般的優越性とは分けます。",
+                        ja="固定した評価予算で得た暫定解を確認し、一般的な優越性とは区別します。",
                         en="Inspect the incumbent under the fixed budget without claiming "
                         "general superiority.",
                     ),
@@ -476,7 +483,7 @@ def generate_surrogate_scenario(
                 ),
             ],
             summary=LocalizedText(
-                ja="BOは観測でsurrogateを更新し、acquisitionで次の高価な評価を選びます。",
+                ja="BOは観測から代理モデルを更新し、獲得関数で次の高価な評価を選びます。",
                 en="BO updates a surrogate from observations and uses acquisition to choose "
                 "the next expensive evaluation.",
             ),
@@ -488,20 +495,20 @@ def generate_surrogate_scenario(
         scenario_id=scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja=f"高価な1次元black-box: {strategy} / {noise_preset}",
+        title_ja=f"高価な1次元ブラックボックス: {strategy_ja} / {noise_ja}",
         title_en=f"Expensive 1D black box: {strategy} / {noise_preset}",
         purpose="sensitivity" if variant else "mechanism",
         problem_definition_id="PROBLEM_EXPENSIVE_BLACK_BOX_1D",
         problem_instance_id="OBJECTIVE_EDUCATIONAL_WAVY_1D",
         lesson=VisualizationLesson(
             learning_objective=LocalizedText(
-                ja="観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+                ja="観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む",
                 en="Read how observations update the surrogate and acquisition to select "
                 "the next point",
             ),
             misconception=(
                 LocalizedText(
-                    ja="探索係数や観測noiseを変えても次の評価点と不確実性は同じになる",
+                    ja="探索係数や観測ノイズを変えても次の評価点と不確実性は同じになる",
                     en="Changing exploration weight or observation noise leaves the next "
                     "point and uncertainty unchanged",
                 )
@@ -509,9 +516,9 @@ def generate_surrogate_scenario(
                 else None
             ),
             expected_phenomenon_ja=(
-                "観測からsurrogateとExpected Improvementを更新し、次の評価点を選ぶ"
+                "観測から代理モデルとExpected Improvementを更新し、次の評価点を選ぶ"
                 if not variant
-                else "探索係数または観測noiseの違いで次点と不確実性表示が変わる"
+                else "探索係数または観測ノイズの違いで次点と不確実性の表示が変わる"
             ),
             expected_phenomenon_en=(
                 "Update the surrogate and Expected Improvement from observations "
@@ -523,7 +530,7 @@ def generate_surrogate_scenario(
             success_signals=[
                 VisualizationSignal(
                     signal_id="candidate_selected_from_acquisition",
-                    label_ja="acquisitionの山から次の評価点が選ばれる",
+                    label_ja="獲得関数の山から次の評価点が選ばれる",
                     label_en="The next evaluation is selected from an acquisition peak",
                     observable_ids=[
                         "expected_improvement",
@@ -536,7 +543,7 @@ def generate_surrogate_scenario(
                 [
                     VisualizationSignal(
                         signal_id="variant_changes_decision",
-                        label_ja="baselineと異なる候補点または不確実性になる",
+                        label_ja="基準の実行と異なる候補点または不確実性になる",
                         label_en="Candidate or uncertainty differs from the baseline",
                         observable_ids=[
                             "posterior_uncertainty",
@@ -554,7 +561,7 @@ def generate_surrogate_scenario(
                 ),
                 VisualizationObservable(
                     observable_id="posterior_mean",
-                    label_ja="surrogate平均",
+                    label_ja="代理モデルの平均",
                     label_en="posterior mean",
                 ),
                 VisualizationObservable(
@@ -576,7 +583,7 @@ def generate_surrogate_scenario(
             secondary_observables=[
                 VisualizationObservable(
                     observable_id="incumbent_history",
-                    label_ja="best-so-far履歴",
+                    label_ja="それまでの最良値の履歴",
                     label_en="incumbent history",
                 )
             ],
@@ -589,7 +596,7 @@ def generate_surrogate_scenario(
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="最初のsurrogate更新と次点選択",
+                    title_ja="最初の代理モデル更新と次点の選択",
                     title_en="First surrogate update and candidate selection",
                     observable_ids=[
                         "posterior_mean",
@@ -606,7 +613,7 @@ def generate_surrogate_scenario(
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="評価予算到達時のincumbentを確認",
+                    title_ja="評価予算に達した時点の暫定解を確認",
                     title_en="Inspect the incumbent at the evaluation budget",
                     observable_ids=["incumbent_history"],
                 ),
@@ -623,26 +630,26 @@ def generate_surrogate_scenario(
             ],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="optimizerが参照しない真の目的関数は教材用overlayとしてのみ表示する",
+                note_ja="最適化手法が参照しない真の目的関数は、教材用の重ね描きとしてのみ表示する",
                 note_en="Show the optimizer-hidden true objective only as an educational overlay",
             ),
             static_summary=LocalizedText(
-                ja="観測、surrogate平均、不確実性、Expected Improvement、次候補を同じframeで示す。",
+                ja="観測、代理モデルの平均、不確実性、Expected Improvement、次候補を同じ図に示す。",
                 en="Show observations, surrogate mean, uncertainty, Expected Improvement, "
                 "and next candidate in one frame.",
             ),
             text_alternative=LocalizedText(
-                ja="各評価で観測点、incumbent、次候補、acquisition、不確実性を読み上げる。",
+                ja="各評価で観測点、暫定解、次候補、獲得関数、不確実性を読み上げる。",
                 en="At each evaluation, report observations, incumbent, next candidate, "
                 "acquisition, and uncertainty.",
             ),
             derived_media_caption=LocalizedText(
-                ja=f"Bayesian Optimization: {strategy} / {noise_preset}でのsurrogate更新",
+                ja=f"Bayesian Optimization: {strategy_ja} / {noise_ja}での代理モデル更新",
                 en=f"Bayesian Optimization: surrogate updates for {strategy} / {noise_preset}",
             ),
             limitations_ja=(
-                "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、"
-                "有限予算では挙動が変わり、大域最適性を証明しない"
+                "乱数の種を固定した1次元・RBFカーネルの教育用の実行。カーネルやノイズの仮定、"
+                "高次元化、有限の予算では挙動が変わり、大域最適性を証明しない"
             ),
             limitations_en=(
                 "A fixed-seed one-dimensional educational run with an RBF kernel; "
@@ -869,7 +876,7 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
         scenario_id=scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="低／高 fidelity simulator の評価ledger",
+        title_ja="低精度・高精度シミュレータの評価記録",
         title_en="Evaluation ledger for a low/high-fidelity simulator",
         purpose="mechanism",
         problem_definition_id="PROBLEM_EXPENSIVE_BLACK_BOX_1D",
@@ -877,8 +884,8 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
         lesson=VisualizationLesson(
             learning_objective=LocalizedText(
                 ja=(
-                    "simulator callごとのfidelity・cost・statusを追い、"
-                    "high fidelityのbest-so-farを読む"
+                    "シミュレータ呼び出しごとの精度・費用・状態を追い、"
+                    "高精度モデルでのそれまでの最良値を読む"
                 ),
                 en=(
                     "Track fidelity, cost, and status for each simulator call and read "
@@ -886,14 +893,18 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
                 ),
             ),
             misconception=LocalizedText(
-                ja="low fidelityの回数や失敗をhigh fidelityの成功評価と同じものとして数える",
+                ja=(
+                    "低精度モデルの呼び出し回数や失敗を、"
+                    "高精度モデルの成功した評価と同じものとして数える"
+                ),
                 en=(
                     "Treat low-fidelity calls and failed calls as equivalent to "
                     "successful high-fidelity evaluations"
                 ),
             ),
             expected_phenomenon_ja=(
-                "安いlow fidelityを重ねても、累積costとhigh fidelityのbest-so-farは別の軸で進む"
+                "安い低精度モデルの呼び出しを重ねても、"
+                "累積費用と高精度モデルでのそれまでの最良値は別の軸で進む"
             ),
             expected_phenomenon_en=(
                 "Cheap low-fidelity calls advance separately from accumulated cost and "
@@ -902,7 +913,7 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             success_signals=[
                 VisualizationSignal(
                     signal_id="ledger_preserves_fidelity_cost_status",
-                    label_ja="callごとのfidelity・cost・statusが残る",
+                    label_ja="呼び出しごとの精度・費用・状態が残る",
                     label_en="Each call preserves fidelity, cost, and status",
                     observable_ids=[
                         "evaluation_ledger",
@@ -913,7 +924,7 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
                 ),
                 VisualizationSignal(
                     signal_id="ledger_separates_high_fidelity_best",
-                    label_ja="high fidelity成功だけでbest-so-farを更新する",
+                    label_ja="高精度モデルの成功した評価だけで、それまでの最良値を更新する",
                     label_en="Only successful high-fidelity calls update best-so-far",
                     observable_ids=["accumulated_budget", "best_so_far"],
                 ),
@@ -921,7 +932,7 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             failure_signals=[
                 VisualizationSignal(
                     signal_id="ledger_does_not_replace_failure_with_objective",
-                    label_ja="failed・censored・timeoutを目的値に置換しない",
+                    label_ja="失敗・打ち切り・時間切れを目的関数値に置き換えない",
                     label_en=(
                         "Failed, censored, and timeout calls are not replaced by objective values"
                     ),
@@ -931,60 +942,60 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             primary_observables=[
                 VisualizationObservable(
                     observable_id="evaluation_ledger",
-                    label_ja="評価ledger",
+                    label_ja="評価記録",
                     label_en="evaluation ledger",
                 ),
                 VisualizationObservable(
-                    observable_id="fidelity", label_ja="fidelity", label_en="fidelity"
+                    observable_id="fidelity", label_ja="精度", label_en="fidelity"
                 ),
                 VisualizationObservable(
-                    observable_id="call_cost", label_ja="call cost", label_en="call cost"
+                    observable_id="call_cost", label_ja="呼び出し費用", label_en="call cost"
                 ),
                 VisualizationObservable(
                     observable_id="evaluation_status",
-                    label_ja="評価status",
+                    label_ja="評価の状態",
                     label_en="evaluation status",
                 ),
                 VisualizationObservable(
                     observable_id="accumulated_budget",
-                    label_ja="累積budget",
+                    label_ja="累積予算",
                     label_en="accumulated budget",
                 ),
                 VisualizationObservable(
                     observable_id="best_so_far",
-                    label_ja="high fidelity best-so-far",
+                    label_ja="高精度モデルでのそれまでの最良値",
                     label_en="high-fidelity best-so-far",
                 ),
             ],
             secondary_observables=[
                 VisualizationObservable(
                     observable_id="posterior_uncertainty",
-                    label_ja="surrogate不確実性",
+                    label_ja="代理モデルの不確実性",
                     label_en="surrogate uncertainty",
                 )
             ],
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="最初のcallとfidelityを見る",
+                    title_ja="最初の呼び出しと精度を見る",
                     title_en="Inspect the first calls and fidelity",
                     observable_ids=["evaluation_ledger", "fidelity"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="low fidelityのcostを累積する",
+                    title_ja="低精度モデルの費用を累積する",
                     title_en="Accumulate low-fidelity cost",
                     observable_ids=["call_cost", "accumulated_budget"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="失敗statusを値と分ける",
+                    title_ja="失敗の状態を値と分ける",
                     title_en="Separate failure status from values",
                     observable_ids=["evaluation_status", "best_so_far"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="予算内のhigh fidelity結果を確認する",
+                    title_ja="予算内の高精度モデルの結果を確認する",
                     title_en="Inspect high-fidelity results within budget",
                     observable_ids=["accumulated_budget", "best_so_far"],
                 ),
@@ -994,7 +1005,7 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             recommended_next_scenario_ids=["SCENARIO_BO_1D_EXPLORE_NOISELESS"],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="連続問題の最適性やfidelity補正の妥当性はこの固定runから判定しない",
+                note_ja="連続問題の最適性や精度間の補正の妥当性は、この固定した実行から判定しない",
                 note_en=(
                     "This fixed run does not establish continuous optimality or validate "
                     "a fidelity correction model"
@@ -1002,8 +1013,8 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             ),
             static_summary=LocalizedText(
                 ja=(
-                    "低／高 fidelity、call cost、累積budget、failed・censored・timeout、"
-                    "high fidelity best-so-farを同じledgerで示す。"
+                    "低精度・高精度の区別、呼び出し費用、累積予算、失敗・打ち切り・時間切れ、"
+                    "高精度モデルでのそれまでの最良値を同じ評価記録に示す。"
                 ),
                 en=(
                     "Show low/high fidelity, call cost, accumulated budget, "
@@ -1012,8 +1023,8 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             ),
             text_alternative=LocalizedText(
                 ja=(
-                    "callを順に読み、fidelity、cost、status、累積budget、"
-                    "high fidelity best-so-farを表で確認する。Compareの勝敗は表示しない。"
+                    "呼び出しを順に読み、精度、費用、状態、累積予算、"
+                    "高精度モデルでのそれまでの最良値を表で確認する。比較のページの勝敗は表示しない。"
                 ),
                 en=(
                     "Read calls in order and inspect fidelity, cost, status, accumulated "
@@ -1022,13 +1033,13 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
                 ),
             ),
             derived_media_caption=LocalizedText(
-                ja="低／高 fidelity simulatorのevaluation ledger",
+                ja="低精度・高精度シミュレータの評価記録",
                 en="Evaluation ledger for a low/high-fidelity simulator",
             ),
             limitations_ja=(
-                "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、"
-                "parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、"
-                "この固定run単独からfidelity policyやmethodの優劣を主張しない。"
+                "乱数の種を固定した1次元・決定論的な教育用の方針。精度間の代理モデル補正、"
+                "並列・非同期の実行、実際の実行時間、再試行、物理シミュレータの失敗原因は扱わず、"
+                "この固定した実行だけから精度の配分方針や手法の優劣を主張しない。"
             ),
             limitations_en=(
                 "A fixed-seed one-dimensional educational policy. It does not model "
@@ -1174,41 +1185,40 @@ def generate_high_fidelity_baseline_scenario(*, dataset_version: str) -> Generat
         scenario_id="SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
         artifact_id="ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
         payload_path="visualizations/bo-high-fidelity-baseline.json",
-        title_ja="high fidelityだけで使う同一cost budget",
+        title_ja="同じ費用予算を高精度モデルだけに使う",
         title_en="Same cost budget spent on high fidelity only",
         purpose="mechanism",
         comparison_role="baseline",
         learning_objective_ja=(
-            "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+            "同じ初期計画と費用予算で、高精度モデルだけを選ぶ場合の評価記録を読む"
         ),
         learning_objective_en=(
             "Read a high-fidelity-only ledger under the same initial design and cost budget"
         ),
         misconception_ja=(
-            "3回のhigh fidelity callと14回のmixed-fidelity callをiteration数だけで比較する"
+            "高精度モデルの3回の呼び出しと、精度を混ぜた14回の呼び出しを反復回数だけで比較する"
         ),
         misconception_en=(
             "Compare three high-fidelity calls with fourteen mixed-fidelity calls by "
             "iteration count alone"
         ),
         expected_phenomenon_ja=(
-            "同じ36 costでもfidelity配分によりcall数と成功・censoredの内訳が変わる"
+            "同じ費用36でも、精度の配分によって呼び出し回数と成功・打ち切りの内訳が変わる"
         ),
         expected_phenomenon_en=(
             "The same cost of 36 yields different call and status counts when fidelity "
             "allocation changes"
         ),
         summary_ja=(
-            "固定した3点をhigh fidelityだけで評価し、"
-            "36 costと3 high-fidelity-equivalentを使い切る。"
+            "固定した3点を高精度モデルだけで評価し、費用36と高精度モデル換算の3回分を使い切る。"
         ),
         summary_en=(
             "Evaluate the same three fixed points only at high fidelity, consuming cost 36 "
             "and three high-fidelity equivalents."
         ),
         limitations_ja=(
-            "固定3点の教育用baselineであり、"
-            "high-fidelity-only policyやmethodの一般的性能を示さない。"
+            "固定3点の教育用の基準であり、"
+            "高精度モデルだけを使う方針や手法の一般的な性能を示さない。"
         ),
         limitations_en=(
             "A fixed three-point teaching baseline; it does not establish general "
@@ -1225,35 +1235,35 @@ def generate_low_fidelity_bias_scenario(*, dataset_version: str) -> GeneratedSur
         scenario_id="SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
         artifact_id="ARTIFACT_BO_LOW_FIDELITY_BIAS",
         payload_path="visualizations/bo-low-fidelity-bias.json",
-        title_ja="low-fidelity biasで候補順位が反転する",
+        title_ja="低精度モデルの偏りで候補の順位が反転する",
         title_en="Low-fidelity bias reverses candidate ordering",
         purpose="failure_contrast",
         comparison_role="failure_contrast",
         learning_objective_ja=(
-            "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+            "同じ2点の低精度・高精度の観測を照合し、精度間の食い違いによる順位の反転を検出する"
         ),
         learning_objective_en=(
             "Match low/high observations at two points and detect an ordering reversal "
             "caused by fidelity discrepancy"
         ),
-        misconception_ja="low fidelityで良い候補はhigh fidelityでも必ず良いとみなす",
+        misconception_ja="低精度モデルで良い候補は高精度モデルでも必ず良いとみなす",
         misconception_en=(
             "Assume a candidate ranked well at low fidelity must also rank well at high fidelity"
         ),
         expected_phenomenon_ja=(
-            "low fidelityではx=-1.1が良く見えるが、high fidelityではx=0.5の方が良い"
+            "低精度モデルではx=-1.1が良く見えるが、高精度モデルではx=0.5の方が良い"
         ),
         expected_phenomenon_en="Low fidelity favors x=-1.1, while high fidelity favors x=0.5",
         summary_ja=(
-            "2候補を両fidelityで再評価すると順位が反転する。low fidelityだけで推薦を確定しない。"
+            "2候補を両方の精度で再評価すると順位が反転する。低精度モデルだけで推薦を確定しない。"
         ),
         summary_en=(
             "Re-evaluating two candidates at both fidelities reverses their ordering; "
             "do not finalize a recommendation from low fidelity alone."
         ),
         limitations_ja=(
-            "意図的な1次元biasの最小教材であり、"
-            "実simulatorのdiscrepancy modelや発生頻度を表さない。"
+            "意図的に偏りを入れた1次元の最小教材であり、"
+            "実際のシミュレータの食い違いのモデルや発生頻度を表さない。"
         ),
         limitations_en=(
             "A minimal one-dimensional example with intentional bias; it does not "
@@ -1262,7 +1272,7 @@ def generate_low_fidelity_bias_scenario(*, dataset_version: str) -> GeneratedSur
     )
     observed_value = VisualizationObservable(
         observable_id="observed_value",
-        label_ja="fidelity別の観測値",
+        label_ja="精度別の観測値",
         label_en="observed value by fidelity",
     )
     lesson = generated.scenario.lesson.model_copy(
@@ -1270,7 +1280,7 @@ def generate_low_fidelity_bias_scenario(*, dataset_version: str) -> GeneratedSur
             "failure_signals": [
                 VisualizationSignal(
                     signal_id="low_high_candidate_order_reverses",
-                    label_ja="同じ2候補の順位がlow/high fidelityで反転する",
+                    label_ja="同じ2候補の順位が低精度・高精度で反転する",
                     label_en="The same two candidates reverse order across fidelities",
                     observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
                 )
@@ -1282,25 +1292,25 @@ def generate_low_fidelity_bias_scenario(*, dataset_version: str) -> GeneratedSur
             "narration_steps": [
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="2候補のlow fidelity観測を比べる",
+                    title_ja="2候補の低精度モデルでの観測を比べる",
                     title_en="Compare low-fidelity observations at two candidates",
                     observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="同じ候補をhigh fidelityで確認する",
+                    title_ja="同じ候補を高精度モデルで確認する",
                     title_en="Check the same candidates at high fidelity",
                     observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="low/highの候補順位が反転する箇所を読む",
+                    title_ja="低精度・高精度で候補の順位が反転する箇所を読む",
                     title_en="Read where candidate ordering reverses across fidelities",
                     observable_ids=["fidelity", "observed_value"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="high fidelity確認前に推薦を確定しない",
+                    title_ja="高精度モデルで確かめる前に推薦を確定しない",
                     title_en="Do not finalize the recommendation before high-fidelity checks",
                     observable_ids=["evaluation_ledger", "best_so_far"],
                 ),
