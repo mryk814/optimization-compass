@@ -72,7 +72,7 @@
       "intents": [],
       "query": "配送順を決めたい",
       "query_id": "routing-natural-language",
-      "result_count": 9,
+      "result_count": 12,
       "top_document_ids": [
         "case:EC019",
         "problem:PA031",
@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 80,
+      "result_count": 83,
       "top_document_ids": [
         "case:hyperparameter-search",
         "method:M_NATURAL_GRADIENT",

@@ -22,5 +22,5 @@ def test_ec021_connects_neural_training_without_overclaiming_the_quadratic_lesso
     assert {item["method_id"] for item in case["excluded_methods"]} == {"M_BFGS"}
     ast.parse(case["python_example"])
     assert "2次元の細長い二次関数" in case["practical_notes"]
-    assert "画像dataやneural networkを学習していない" in case["practical_notes"]
+    assert "画像データやニューラルネットワークを学習していない" in case["practical_notes"]
     assert "順位を保証しない" in case["limitations"][1]
