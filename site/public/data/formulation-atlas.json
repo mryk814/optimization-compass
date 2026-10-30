@@ -5359,7 +5359,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.distributed-consensus",
       "cues_ja": [
         "データが複数の拠点に分かれ、一か所に集められない"
       ],
@@ -5397,7 +5397,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5440,7 +5440,10 @@
       "problem_id": "PA051",
       "reading_ja": "目的を各計算機の持つ部分に分け、各部分の解が共通の値 z に一致するよう調整しながら解きます。",
       "source_ids": [
-        "S061"
+        "S055",
+        "S056",
+        "S061",
+        "S181"
       ],
       "standard_form": "\\min_{x_1,\\dots,x_N,z}\\; \\sum_{i=1}^N f_i(x_i) \\;\\text{ s.t. }\\; x_i=z\\;(i=1,\\dots,N)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x02026;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub><mo>&#x0002C;</mo><mi>z</mi></mrow></msub><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>f</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>z</mi><mspace width=\"0.278em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mo>&#x02026;</mo><mo>&#x0002C;</mo><mi>N</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -5453,7 +5456,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.online-optimization",
       "cues_ja": [
         "広告配信や価格設定のように、決めてから結果が分かることを繰り返す"
       ],
@@ -5491,7 +5494,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5534,7 +5537,8 @@
       "problem_id": "PA052",
       "reading_ja": "目的が毎回変わり、選んだ後に初めて分かる状況で、後から振り返った最良の固定解との差（regret）を小さくします。",
       "source_ids": [
-        "S054"
+        "S054",
+        "S182"
       ],
       "standard_form": "\\text{各回 } t:\\; x_t \\text{ を選び } f_t \\text{ を観測};\\quad \\min\\; \\sum_{t=1}^T f_t(x_t)-\\min_{x}\\sum_{t=1}^T f_t(x)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>各回&#x000A0;</mtext><mi>t</mi><mi>:</mi><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>t</mi></msub><mtext>&#x000A0;を選び&#x000A0;</mtext><msub><mi>f</mi><mi>t</mi></msub><mtext>&#x000A0;を観測</mtext><mi>;</mi><mspace width=\"1em\" /><mo>min</mo><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>t</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>f</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><munderover><mo>&#x02211;</mo><mrow><mi>t</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>f</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -6369,6 +6373,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 51
+    "with_article": 53
   }
 }

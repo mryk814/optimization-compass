@@ -8311,6 +8311,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.distributed-consensus",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "分散・合意最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S181",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA051",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "分散・合意最適化は、目的関数が拠点ごとの部分の和に分かれ、記録を1か所に集められないときの定式化です。拠点ごとの答えが共通の値に一致するという制約を付けて解きます。拠点は自分の部分だけを解き、共通の値などの少ない数をやり取りしながら、全体の答えに近づきます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.dynamics-defect",
       "entity_id": "concept.dynamics-defect",
       "entity_type": "content",
@@ -10442,6 +10503,52 @@
         }
       ],
       "summary": "非滑らか凸複合は、微分できる凸関数と、角のある凸関数の和を最小にする定式化です。角のある部分には勾配がないので、近接作用素という操作で一歩ごとに処理します。この操作が式で書けるなら、一歩の大きさを勾配の変わりやすさの逆数以下に取ると、滑らかな部分の勾配の一歩と近接作用素の繰り返しだけで全体の最小点に着きます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.online-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "オンライン最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S182",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA052",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "オンライン最適化は、決めた後に初めて結果が分かることを何度も繰り返す場面の定式化です。後から振り返って最もよかった固定の決め方との差（後悔・regret）を小さくします。結果の並びに分布を仮定しないので、どんな並びでも後悔が日数より遅く増える決め方を選びます。"
     },
     {
       "aliases": [],
@@ -35886,23 +35993,39 @@
       "summary": "robust optimization。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.distributed-consensus"
+      ],
       "canonical_url": "/formulations/PA051",
       "entity_id": "PA051",
       "entity_type": "problem",
       "external_url": null,
       "label": "分散・合意最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.distributed-consensus",
+          "target_type": "content"
+        }
+      ],
       "summary": "分散・合意最適化。変数=continuous、目的=composite、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.online-optimization"
+      ],
       "canonical_url": "/formulations/PA052",
       "entity_id": "PA052",
       "entity_type": "problem",
       "external_url": null,
       "label": "online optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.online-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "online optimization。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {

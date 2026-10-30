@@ -626,8 +626,8 @@
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 14,
-              "no_article": 15,
+              "in_progress": 15,
+              "no_article": 14,
               "stale": 2
             }
           },
@@ -18882,12 +18882,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.distributed-consensus"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18914,11 +18914,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA051"
+            "/formulations/PA051",
+            "concept.distributed-consensus"
           ]
         },
         "recommendation": {
@@ -18962,12 +18963,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.online-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18994,11 +18995,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA052"
+            "/formulations/PA052",
+            "concept.online-optimization"
           ]
         },
         "recommendation": {
