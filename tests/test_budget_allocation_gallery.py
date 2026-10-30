@@ -18,6 +18,6 @@ def test_budget_allocation_connects_solution_to_search_tree_proof() -> None:
     ast.parse(case["python_example"])
     assert '"selected": selected' in case["python_example"]
     assert "best_objective_bound" in case["python_example"]
-    assert "①nodeの部分assignment" in case["practical_notes"]
-    assert "value 15" in case["practical_notes"]
+    assert "①ノードの部分割当" in case["practical_notes"]
+    assert "値15の施策A+B" in case["practical_notes"]
     assert "一般性能を順位付けしない" in case["limitations"][1]
