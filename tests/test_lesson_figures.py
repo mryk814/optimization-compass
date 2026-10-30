@@ -798,6 +798,44 @@ def test_stochastic_programming_figures_use_the_article_numbers() -> None:
         assert text in tree
 
 
+def test_external_solver_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import EXT_RUNS, ext_equilibrium, ext_objective
+
+    rows = [
+        (0.1, "α", 0.0, 0.0),
+        (0.35, "α+β", 0.3, 0.04),
+        (0.5, "α+β", 0.6, 0.07),
+        (0.8, "β", 1.0, 0.14),
+    ]
+    for x, phases, fraction, gibbs in rows:
+        got = ext_equilibrium(x)
+        assert got[0] == phases
+        assert math.isclose(got[1], fraction, abs_tol=1e-12)
+        assert math.isclose(got[2], gibbs, abs_tol=1e-12)
+    assert [round(ext_objective(x), 6) for x in (-0.41, 0.0, 0.2, 0.35, 0.6, 0.8)] == [
+        0.09,
+        0.09,
+        0.09,
+        0.0,
+        0.25,
+        0.49,
+    ]
+    assert [(name, end, calls) for name, _, end, calls in EXT_RUNS] == [
+        ("BFGS", -0.41, 4),
+        ("L-BFGS-B", 0.0, 4),
+        ("Nelder–Mead", 0.35, 30),
+    ]
+    figure = generate_lesson_figures()["external-solver-flat-stop.svg"]
+    for text in ("x=−0.41、J=0.09", "x=0.00、J=0.09", "x=0.35、J=0、30回", "始点 x=0.60（J=0.25）"):
+        assert text in figure
+
+
+def test_external_solver_article_python_is_executable() -> None:
+    article = (ROOT / "content/concepts/external-solver-objective.md").read_text(encoding="utf-8")
+    code = article.split("```python\n", 1)[1].split("```", 1)[0]
+    compile(code, "external-solver-objective.md", "exec")
+
+
 def test_robust_optimization_figures_use_the_article_numbers() -> None:
     from scripts.generate_lesson_figures import (
         ro_coefficients,
@@ -879,3 +917,152 @@ def test_robust_estimation_figures_use_the_article_numbers() -> None:
     weight_figure = generate_lesson_figures()["robust-estimation-weights.svg"]
     for text in ("Huber：ω=2.01", "二乗和：ω=6.05", "0.084"):
         assert text in weight_figure
+
+
+def _solver_evaluation_article_code() -> str:
+    article = (ROOT / "content/concepts/solver-evaluation-points.md").read_text(encoding="utf-8")
+    return article.split("```python\n", 1)[1].split("```", 1)[0]
+
+
+def test_solver_evaluation_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_NM_C,
+        EVAL_START,
+        eval_cost,
+        eval_first_trial,
+        eval_gradient,
+        eval_hardness,
+        eval_role_counts,
+    )
+
+    assert round(eval_hardness(*EVAL_START), 3) == 0.668
+    assert round(eval_cost(*EVAL_START), 2) == 2.77
+    gradient = eval_gradient(*EVAL_START)
+    assert (round(gradient[0], 4), round(gradient[1])) == (-0.0048, 4940)
+    # The exact gradient agrees with a central difference through the bisection.
+    step_t, step_c = 1e-3, 1e-8
+    central_t = (
+        eval_cost(EVAL_START[0] + step_t, EVAL_START[1])
+        - eval_cost(EVAL_START[0] - step_t, EVAL_START[1])
+    ) / (2 * step_t)
+    central_c = (
+        eval_cost(EVAL_START[0], EVAL_START[1] + step_c)
+        - eval_cost(EVAL_START[0], EVAL_START[1] - step_c)
+    ) / (2 * step_c)
+    assert math.isclose(central_t, gradient[0], rel_tol=1e-4)
+    assert math.isclose(central_c, gradient[1], rel_tol=1e-6)
+    trial = eval_first_trial()
+    assert round(trial[1], 4) == EVAL_BFGS_C[-1] == -1.0095
+    assert abs(trial[0] - EVAL_START[0]) < 2e-6
+    assert len(EVAL_NM_C) == 16 and EVAL_NM_C[-1] < 0 < min(EVAL_NM_C[:-1])
+    # The 16th point expands the 15th reflection away from the centroid c = 0.000264.
+    centroid_c = 2 * EVAL_NM_C[14] - EVAL_NM_C[15]
+    assert round(centroid_c, 6) == 0.000264
+    assert round(centroid_c - EVAL_NM_C[14], 6) == 0.000142
+    assert eval_role_counts() == {"s": 1, "a": 3, "t": 9, "d": 26}
+    # L-BFGS-B's first pair (s, y): y'y/s'y is about 2e4, the updated curvature along T about
+    # 220 (the true value is about 1e-4), so the first T trial of iteration 2 is about 0.00002.
+    first = (EVAL_START[0] + 0.00480046, 1e-5)
+    s_t, s_c = first[0] - EVAL_START[0], first[1] - EVAL_START[1]
+    g_first = eval_gradient(*first)
+    y_t, y_c = g_first[0] - gradient[0], g_first[1] - gradient[1]
+    theta = (y_t * y_t + y_c * y_c) / (s_t * y_t + s_c * y_c)
+    s_bs = theta * (s_t * s_t + s_c * s_c)
+    curvature_t = theta - (theta * s_t) ** 2 / s_bs + y_t * y_t / (s_t * y_t + s_c * y_c)
+    assert round(theta, -2) == 21600 and round(curvature_t) == 223
+    assert round(-g_first[0] / curvature_t, 5) == 0.00002
+    carbon = generate_lesson_figures()["solver-evaluation-carbon.svg"]
+    for text in ("fmin：16回目に c=−0.00002", "16回目に c=0", "4回目 c=−1.01（図の外）"):
+        assert text in carbon
+    breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
+    for text in ("反復3回の裏の評価39回", "直線探索の途中の点 9", "差分のための点 26"):
+        assert text in breakdown
+
+
+def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
+    import contextlib
+
+    import pytest
+
+    np = pytest.importorskip("numpy")
+    optimize = pytest.importorskip("scipy.optimize")
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_LBFGSB_ROLES,
+        EVAL_NM_C,
+        EVAL_NM_LAST_T,
+        EVAL_START,
+        eval_cost,
+    )
+
+    def record(solve):
+        points = []
+
+        def wrapped(x):
+            points.append(np.array(x, dtype=float))
+            return eval_cost(*points[-1])
+
+        with contextlib.suppress(ValueError):
+            solve(wrapped)
+        return points
+
+    start = list(EVAL_START)
+    nelder = record(lambda f: optimize.fmin(f, start, disp=False))
+    assert [round(p[1], 10) for p in nelder] == [round(c, 10) for c in EVAL_NM_C]
+    assert nelder[-1][0] == EVAL_NM_LAST_T
+    # Point 15 reflects point 9 through the midpoint of points 12 and 14; point 16 expands it.
+    middle = (nelder[11] + nelder[13]) / 2
+    assert np.allclose(nelder[14], 2 * middle - nelder[8])
+    assert np.allclose(nelder[15], 2 * nelder[14] - middle)
+    clipped = record(
+        lambda f: optimize.minimize(f, start, method="Nelder-Mead", bounds=[(900, 1600), (0, 0.01)])
+    )
+    assert all(np.array_equal(a, b) for a, b in zip(clipped[:15], nelder[:15], strict=True))
+    assert len(clipped) == 16 and clipped[-1][1] == 0.0
+    bfgs = record(lambda f: optimize.minimize(f, start))
+    assert [round(p[1], 9) for p in bfgs] == [round(c, 9) for c in EVAL_BFGS_C]
+    # Rescaling to T/100 and 1e4 c balances the first trial but still passes c < 0.
+    scaled = record(
+        lambda f: optimize.minimize(lambda z: f([z[0] * 100, z[1] * 1e-4]), [12.0, 5.0])
+    )
+    assert (round(scaled[3][0]), round(scaled[3][1], 5)) == (1248, 0.00045)
+    assert len(scaled) == 13 and round(scaled[-1][1], 5) == -0.00056
+    assert all(p[1] > 0 for p in scaled[:-1])
+    iterates = [np.array(start)]
+    lbfgsb = record(
+        lambda f: optimize.minimize(
+            f,
+            start,
+            method="L-BFGS-B",
+            bounds=[(900, 1600), (1e-5, 0.01)],
+            callback=lambda xk: iterates.append(np.array(xk)),
+        )
+    )
+    roles = []
+    for index, point in enumerate(lbfgsb):
+        if index % 3:
+            shift = point - lbfgsb[index - index % 3]
+            assert np.count_nonzero(shift) == 1 and np.max(np.abs(shift)) <= 1.0001e-8
+            roles.append("d")
+        elif index == 0:
+            roles.append("s")
+        else:
+            accepted = any(np.array_equal(point, x) for x in iterates)
+            roles.append("a" if accepted else "t")
+    assert "".join(roles) == EVAL_LBFGSB_ROLES
+
+
+def test_solver_evaluation_article_python_prints_its_comments() -> None:
+    import contextlib
+    import io
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    code = _solver_evaluation_article_code()
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        exec(compile(code, "solver-evaluation-points.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected
