@@ -4800,7 +4800,8 @@ def _ro_box_svg() -> str:
     top = (RO_NEED - RO_MEAN[1] * RO_CAP) / RO_MEAN[0]  # where the mean line meets x2 = 8
     mean_line = [(px(RO_NEED / RO_MEAN[0]), py(0)), (px(top), py(RO_CAP))]
     parts.append(_polyline(mean_line, POINT, 2.5))
-    worst_line = [(px(RO_NEED / worst[0]), py(0)), (px(corner[0]), py(corner[1]))]
+    worst_top = (RO_NEED - worst[1] * RO_CAP) / worst[0]  # where it meets x2 = 8
+    worst_line = [(px(RO_NEED / worst[0]), py(0)), (px(worst_top), py(RO_CAP))]
     parts.append(_polyline(worst_line, UPDATE, 2.5))
     parts.append(
         f'<circle cx="{px(nominal[0]):.1f}" cy="{py(nominal[1]):.1f}" r="7" fill="{POINT}" '
@@ -4813,14 +4814,8 @@ def _ro_box_svg() -> str:
         f'<circle cx="{px(robust[0]):.1f}" cy="{py(robust[1]):.1f}" r="7" fill="{UPDATE}" '
         f'stroke="{INK}" stroke-width="1.5"/>'
     )
-    parts.append(
-        _text(
-            px(robust[0]) - 10,
-            py(robust[1]) - 14,
-            f"({_ro_number(robust[0])}, 0)：{_ro_number(robust_cost)}千円",
-            anchor="end",
-        )
-    )
+    parts.append(_text(410, py(7.4), f"橙の点 ({_ro_number(robust[0])}, 0)", anchor="end"))
+    parts.append(_text(410, py(7.4) + 22, f"{_ro_number(robust_cost)}千円", anchor="end"))
     parts.append(_polyline([(20, 646 - 5), (42, 646 - 5)], POINT, 2.5))
     parts.append(_text(48, 646, "中央で10kg", "tick"))
     parts.append(_polyline([(152, 646 - 5), (174, 646 - 5)], UPDATE, 2.5))
@@ -4876,15 +4871,23 @@ def _ro_set_size_svg() -> str:
         )
     parts.append(_text(px(switch) + 8, 392, f"k={_ro_number(switch, 3)}", "tick"))
     parts.append(_text(px(switch) + 8, 412, "ここから堆肥0袋", "tick"))
-    for k, shift, anchor in ((0.0, 10, "start"), (0.45, -10, "end"), (0.5, 10, "start")):
+    for k, shift, lift, anchor in (
+        (0.0, 10, -10, "start"),
+        (0.45, -10, 22, "end"),
+        (0.5, 10, -10, "start"),
+    ):
         x, cost = ro_solve(k)
         probability = 100 * ro_shortfall_probability(x)
         parts.append(f'<circle cx="{px(k):.1f}" cy="{qy(probability):.1f}" r="5" fill="{INK}"/>')
         label = f"{_ro_number(probability, 1)}%"
-        parts.append(_text(px(k) + shift, qy(probability) - 10, label, "tick", anchor))
+        parts.append(_text(px(k) + shift, qy(probability) + lift, label, "tick", anchor))
         parts.append(f'<circle cx="{px(k):.1f}" cy="{cy(cost):.1f}" r="5" fill="{INK}"/>')
         if k == 0.0:
             parts.append(_text(px(k) + shift, cy(cost) + 22, _ro_number(cost), "tick"))
+    switch_cost = ro_solve(switch)[1]
+    parts.append(
+        _text(px(switch) - 10, cy(switch_cost) - 12, f"{_ro_number(switch_cost)}", "tick", "end")
+    )
     full = ro_solve(1.0)[1]
     parts.append(f'<circle cx="{px(1.0):.1f}" cy="{cy(full):.1f}" r="5" fill="{INK}"/>')
     parts.append(_text(px(1.0), cy(full) + 24, _ro_number(full), "tick", "end"))
@@ -5008,7 +5011,8 @@ def _rpe_profile_svg() -> str:
         612,
     )
     px = _scale(0.0, 2 * math.pi, 64, 416)
-    ws = [0.2 + (2 * math.pi - 0.2) * i / 400 for i in range(401)]
+    # sin(2π t) is 0 at every reading, so the amplitude is undefined at ω = 2π itself.
+    ws = [0.2 + (2 * math.pi - 0.25) * i / 400 for i in range(401)]
     for tick in range(7):
         parts.append(_text(px(tick), 292, str(tick), "tick", "middle"))
         parts.append(_text(px(tick), 572, str(tick), "tick", "middle"))

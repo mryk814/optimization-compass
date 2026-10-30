@@ -808,10 +808,10 @@ def test_robust_optimization_figures_use_the_article_numbers() -> None:
         assert round(100 * ro_shortfall_probability(x), 1) == percent
     assert math.isclose(ro_switch(), 10 / 21, rel_tol=1e-9)
     box = generate_lesson_figures()["robust-optimization-box.svg"]
-    for text in ("(2, 6)：13.2千円", "(5.56, 0)：16.67千円", "少ない角 (1.8, 0.5)"):
+    for text in ("(2, 6)：13.2千円", "橙の点 (5.56, 0)", "16.67千円", "少ない角 (1.8, 0.5)"):
         assert text in box
     size = generate_lesson_figures()["robust-optimization-set-size.svg"]
-    for text in ("k=0.476", "50%", "21%", "25%", "16.67"):
+    for text in ("k=0.476", "50%", "21%", "25%", "15.75", "16.67"):
         assert text in size
 
 
