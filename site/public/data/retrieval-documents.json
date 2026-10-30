@@ -10586,6 +10586,258 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "3つの病院が、同じ薬の効き方を調べています。患者ごとに、基準からの用量の差 t と、薬が効いたか y を記録しました。 y は効いたら1、効かなければ0です。患者の記録は、病院の外に出せません。 病院 患者の数 用量の差 t 効いたか y A 4 −1, 1, 2, 3 0, 1, 0, 1 B 5 −2, −1, 1, 1, 2 0, 1, 1, 1, 1 C 6 −3, −2, −1, 1, 2, 3 0, 0, 1, 0, 1, 1 効く確率を σ ( θ t ) = 1 / ( 1 + e − θ t ) と書き、係数 θ を記録に合わせます。 θ が大きいほど、用量を増やしたときに効く確率が急に上がる、と読みます。病院ごとに自分の記録だけで合わせると、 θ は病院Aが0.44・病院Bが1.22・病院Cが0.73になり、そろいません。そこで、病院ごとの係数が共通の値にそろうという制約を付けます。病院の中で解いた結果の数だけをやり取りして、損失の合計を最小にします。 決めるもの : 3病院で共通に使う係数 θ 小さくしたいもの : 3病院の記録全体の当てはまり（損失の合計） 守ること : 患者の記録を病院の外に出さないこと 次の図は、 θ ごとの損失です。まず「① 病院ごとの損失」で、3本の曲線の底がどこにあるかを見てください。続いて「② 3病院の損失の合計」で、合計の底と、白い2つの点の位置を比べてください。 3病院の例：効く確率を σ(θt) とした教材用の記録。実際の臨床の推定や、個人情報の保護の強さは示さない 「① 病院ごとの損失」の3本の曲線は、底の位置がそれぞれ違います。病院Bでは用量を増やした患者（ t > 0 ）が全員効いたので、底が1.22と大きくなります。 「② 3病院の損失の合計」の底は θ = 0.74 です。3病院の記録を1か所に集められたなら、この値が答えです。 病院ごとの答えの平均0.80と、患者の数で重み付けした平均0.82は、どちらも合計の底からずれます。 記録を集めずに、合計の底0.74に着くには、病院の間で何をやり取りすればよいのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "分散・合意最適化は、目的関数が拠点ごとの部分の和に分かれ、記録を1か所に集められないときの定式化です。拠点ごとの答えが共通の値に一致するという制約を付けて解きます。拠点は自分の部分だけを解き、共通の値などの少ない数をやり取りしながら、全体の答えに近づきます。",
+      "title": "分散・合意最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "病院ごとの答えを平均する : 病院ごとの答え0.44・1.22・0.73の平均は0.80、患者の数で重み付けすると0.82で、合計の底0.740とずれます。損失の曲がり具合（ θ = 0 での曲率）で重みを付けても0.752で、一致しません。損失が二乗の形なら曲率の重みでちょうど一致しますが、この損失は二乗の形ではありません。患者の数や曲率のように前もって決まる重みでは、一般に全体の答えになりません。代わりに、ADMMのようにやり取りを繰り返して係数を合意させます。 罰則係数 ρ を、損失の大きさと関係なく決める : この例では ρ = 2 なら11回でそろいます。 ρ = 0.1 では116回、 ρ = 100 では270回かかります。 θ = 0 での各病院の損失の曲率（2.75〜7）と同じ桁の ρ から試し、ずれの減り方を見て調整します。 ADMMがいつも最少のやり取りで済むと思う : 共通の値が1つだけのこの例で、各病院が傾きだけを送るとします。中央が傾きの合計に0.1を掛けた分だけ θ を動かせば、5回で0.740に着きます。傾きと曲率を送って中央でNewton法の一歩を進めれば3回です。ADMMが役に立つのは、拠点ごとに制約や正則化（絶対値の罰則など）がある場合と、各拠点の問題をその拠点のソルバーで解きたい場合です。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "合意の制約を持つ定式化と合意のADMMの3段の更新は、BoydらのADMMの解説（S061）に基づきます。罰則係数の役割も同じ解説（S061）にあります。中央の計算機を持たず、隣の拠点と平均しながら劣勾配で動く方法は、NedićとOzdaglarの論文（S181）に基づきます。ロジスティック回帰の損失が凸であることは、BoydとVandenbergheの『Convex Optimization』（S055）にあります。Newton法は、NocedalとWrightの『Numerical Optimization』（S056）にあります。 コードの出力は、NumPy 2.5.3 でこの記事のコードを実行して得た値です。図は、同じ式を図の生成スクリプトが標準ライブラリだけで計算した値から描いています。患者の記録は教材用の値で、実際の薬の効き方や、記録を外に出さないことによる個人情報の保護の強さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "実際の課題で次の困りごとがあれば、リンク先を読んでください。 記録を1か所に集められ、量が多いだけ → 大規模確率的ERM 記録が少しずつ届き、届くたびに係数を決め直したい → オンライン最適化 拠点ごとの問題に制約や、絶対値のような折れ目のある罰則がある → 交互方向乗数法（ADMM） 中央の計算機がなく、隣どうしの拠点しか通信できない → 隣の拠点と値を平均しながら、自分の傾きで少しずつ動かす、分散型の 劣勾配法 を使います 分散・合意最適化と関連する問題の関係 大規模確率的ERM : 記録全体の損失の平均を最小にする点は同じです。記録を拠点ごとの和に分け、拠点ごとの変数が一致するという制約を付けると、この記事の形に書き換えられます。予算が「1件分の勾配の計算回数」から「拠点の間のやり取りの回数」に変わります。 オンライン最適化 : 記録が最初からそろっているこの記事に対し、係数を決めた後に記録が順に届く形です。 確率的勾配降下法 : 拠点が傾きだけを送る方法は、中央で勾配降下法を進めることと同じです。拠点ごとに記録の一部だけで傾きを作れば、確率的勾配降下法になります。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "設定は「30秒でつかむ」の3病院の記録で、罰則係数は ρ = 2 、初期値は x i = z = u i = 0 です。乱数は使いません。 3病院の例・ADMMのやり取り 回 病院A 病院B 病院C 共通の値 z z からの最大のずれ 1 0.267 0.549 0.489 0.435 0.168 2 0.510 0.707 0.608 0.608 0.099 3 0.635 0.746 0.668 0.683 0.063 11 0.740 0.740 0.739 0.740 0.0007 1回目は、どの病院も z = 0 に引き寄せられながら自分の記録に合わせるので、0.27〜0.55の小さな値になります。回を重ねるごとに u i がずれを積み上げ、底の θ が大きい病院Bは引き下げられ、小さい病院Aは引き上げられます。11回目には、3病院の値も z も、合計の底0.740から0.001以内にそろいます。 次の図の「① ρ=2 のときの、病院ごとの係数と共通の値 z」で、3本の線と黒い破線が灰色の破線（0.740）へ集まる様子を見てください。「② ρ ごとの、そろうまでの回数」では、罰則係数を変えたときの回数を比べてください。 3病院の例：止める条件は、各病院の値と z の差が0.001未満で、z が0.740から0.001以内。回数はこの例でのもので、ADMMの速さ一般は示さない 罰則係数が小さいと、各病院は自分の底に近いまま動き、そろうまでに時間がかかります（ ρ = 0.1 で116回）。大きいと、各病院はすぐに z のそばに集まります。ところが z そのものがゆっくりしか動かないので、やはり時間がかかります（ ρ = 100 で270回）。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "答えは、どの方法でも合計の底0.740です。違いは、1回に何を送り、各拠点で何を解くかです。 系統 1回のやり取りで送るもの 例での様子 合意のADMM 拠点から x i 、中央から z ρ = 2 で11回。ほかの ρ では15〜270回 中央での勾配降下法 拠点から傾き、中央から θ 傾きに0.1を掛けた分だけ動かして5回。0.3では約0.54と1.02を往復して収束しない 中央での Newton法 拠点から傾きと曲率、中央から θ 3回。変数が d 個なら、曲率は d × d 個の数になる 分散型の劣勾配法 隣の拠点と値を交換 中央がいらない。この例では計算していない 表は速さの順位ではなく、何を送り、どこで何を解くかの違いです。 次のコードは、3病院の例をADMMと、中央で傾きを集める方法で解きます。 python import numpy as np # 病院ごとの記録：用量（基準からの差）t と、効いたか y（1か0）。記録は病院の外に出さない sites = { \"A\" : ( np . array ([ - 1 , 1 , 2 , 3 ]), np . array ([ 0 , 1 , 0 , 1 ])), \"B\" : ( np . array ([ - 2 , - 1 , 1 , 1 , 2 ]), np . array ([ 0 , 1 , 1 , 1 , 1 ])), \"C\" : ( np . array ([ - 3 , - 2 , - 1 , 1 , 2 , 3 ]), np . array ([ 0 , 0 , 1 , 0 , 1 , 1 ])), } def grad_curv ( t , y , theta ): \"\"\"効く確率 σ(θt) の負の対数尤度の、θ についての傾きと曲率\"\"\" p = 1 / ( 1 + np . exp ( - theta * t )) return np . sum ( t * ( p - y )), np . sum ( t * t * p * ( 1 - p )) def solve_local ( t , y , rho = 0.0 , target = 0.0 ): \"\"\"病院の中で解く：損失 + (ρ/2)(θ - target)^2 を Newton 法で最小にする\"\"\" theta = 0.0 for _ in range ( 50 ): g , h = grad_curv ( t , y , theta ) theta -= ( g + rho * ( theta - target )) / ( h + rho ) return theta local = { k : solve_local ( t , y ) for k , ( t , y ) in sites . items ()} print ({ k : round ( float ( v ), 3 ) for k , v in local . items ()}) # {'A': 0.441, 'B': 1.224, 'C': 0.732} # 比べるための全体の答え（実際には記録を1か所に集められない） t_all = np . concatenate ([ t for t , _ in sites . values ()]) y_all = np . concatenate ([ y for _ , y in sites . values ()]) best = solve_local ( t_all , y_all ) n = { k : len ( t ) for k , ( t , _ ) in sites . items ()} curv = { k : grad_curv ( t , y , 0.0 )[ 1 ] for k , ( t , y ) in sites . items ()} # θ=0 での曲率 print ( round ( best , 3 ), round ( np . mean ( list ( local . values ())), 3 )) # 0.74 0.799 print ( round ( sum ( n [ k ] * local [ k ] for k in sites ) / 15 , 3 ), round ( sum ( curv [ k ] * local [ k ] for k in sites ) / sum ( curv . values ()), 3 )) # 0.819 0.752 def admm ( rho , tol = 1e-3 ): \"\"\"合意のADMM：各病院が罰則つきで解き、共通の値 z と価格 u だけをやり取りする\"\"\" x = dict . fromkeys ( sites , 0.0 ) u = dict . fromkeys ( sites , 0.0 ) z = 0.0 for rounds in range ( 1 , 2001 ): x = { k : solve_local ( t , y , rho , z - u [ k ]) for k , ( t , y ) in sites . items ()} z = np . mean ([ x [ k ] + u [ k ] for k in sites ]) u = { k : u [ k ] + x [ k ] - z for k in sites } if max ( abs ( x [ k ] - z ) for k in sites ) < tol and abs ( z - best ) < tol : return rounds , z for rho in ( 0.1 , 0.5 , 1 , 2 , 5 , 20 , 100 ): print ( rho , admm ( rho )[ 0 ]) # 0.1 116 / 0.5 26 / 1 15 / 2 11 / 5 17 / 20 57 / 100 270 # 比べる相手：病院が傾き（と曲率）だけを送り、中央で θ を動かす def central ( use_curvature , step = 0.1 , tol = 1e-3 ): theta = 0.0 for rounds in range ( 1 , 2001 ): g , h = np . sum ([ grad_curv ( t , y , theta ) for t , y in sites . values ()], axis = 0 ) theta -= g / h if use_curvature else step * g if abs ( theta - best ) < tol : return rounds print ( central ( False ), central ( True )) # 5 3 最初の出力は、病院ごとに自分の記録だけで合わせた係数です。次の2行の1行目は、3病院の記録を集めたとした答え0.74と、病院ごとの答えの平均0.799です。2行目は、患者の数で重み付けした平均0.819と、曲率で重み付けした平均0.752です。どの平均も0.74になりません。 admm の出力は、罰則係数 ρ ごとの、そろうまでのやり取りの回数です。止める条件は、各病院の値と z の差が0.001未満で、 z が0.740から0.001以内になることです。小さな例の図の「② ρ ごとの、そろうまでの回数」と同じです。 最後の行の5は、中央で傾きだけを集めて合計に0.1を掛けた分だけ動かした回数です。3は、傾きと曲率を集めてNewton法で動かした回数です。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "次の式は「拠点 i ごとに自分の変数 x i を持ち、どれも共通の値 z に一致するという条件のもとで、拠点ごとの損失 f i の合計を最小にする」を表します。 min x 1 , … , x N , z ∑ i = 1 N f i ( x i ) s.t. x i = z ( i = 1 , … , N ) 記号 意味 3病院の例では N 拠点の数 3（病院A・B・C） f i 拠点 i の損失。その拠点の記録だけで計算できる 病院の記録の負の対数尤度（切片なしのロジスティック回帰） ∑ [ log ( 1 + e θ t ) − y θ t ] x i 拠点 i が持つ自分の変数 病院ごとの係数 θ A , θ B , θ C z 共通の値（合意の値） 3病院で共通に使う θ 。答えは0.740 x i = z 合意の制約 3病院の係数が同じになること 制約を外せば、 x i はそれぞれ自分の損失の底（0.44・1.22・0.73）に行きます。制約 x i = z があるので、全員が同じ値をとり、そのときの損失の合計 ∑ f i ( z ) が最小になる z が答えです。これは、記録を1か所に集めて解いた答えと同じです。 なぜ、変数を拠点ごとに分けるのか ∑ f i ( z ) を直接最小にするなら、変数は z 一つで足ります。それでもわざわざ x i を分けるのは、拠点ごとの部分 f i ( x i ) を、その拠点の中だけで解けるようにするためです。拠点どうしをつなぐのは、 x i = z という単純な等式だけになります。 ADMMの1回のやり取り 合意の制約を持つ問題は、交互方向乗数法（ ADMM ）で解くのが代表的です。1回のやり取りは次の3段です。 ρ > 0 は罰則係数です。 各病院は、自分の記録で f i ( x i ) + ρ 2 ( x i − z + u i ) 2 を最小にする x i を求め、中央へ送ります。これは病院の中で解く、1変数の問題です。 中央は、 z = 1 N ∑ i ( x i + u i ) を計算し、各病院へ返します。 u i の平均はいつも0のままなので、これは x i の平均と同じです。 各病院は、 u i ← u i + x i − z と更新します。 u i は、病院 i の値が共通の値からずれた分を積み上げたものです。 ρ u i は、ずれに付く価格と読めます。1回のやり取りで病院から中央へ送るのは x i の1つの数、中央から返すのは z の1つの数です。患者の記録そのものは送りません。 各 f i が凸なので、この例ではADMMが合計の底に収束します（S061、S055）。実際には答え0.740がわからないので、各病院の値と z の差と、 z の1回の動きがどちらも小さくなったら止めます。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.distributed-consensus:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.distributed-consensus",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.stochastic-erm",
+        "content:newton-method",
+        "content:sgd",
+        "content:subgradient",
+        "problem:PA051",
+        "source:S055",
+        "source:S056",
+        "source:S061",
+        "source:S181"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S061",
+        "S181"
+      ],
+      "text": "「患者の記録を外に出さずに、3病院で共通の係数を決めたい」という課題を、次の4段で式にします。 全体の目的は何か ：3病院の記録全体の当てはまり、つまり損失の合計 ∑ i f i ( θ ) です。 目的が拠点ごとに分かれるか ：各病院の損失 f i は、その病院の記録だけで計算できます。 何を共通にするか ：係数 θ を、病院ごとの変数 x i と共通の値 z に分け、 x i = z を制約にします。 何をやり取りしてよいか ：病院の外へ出してよいのは、係数の値などの少ない数だけで、記録そのものは出しません。 目的が拠点ごとの和に分かれ、記録を集められないとします。共通の変数で全員がそろう必要があるなら、分散・合意最適化として定式化できます。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.dynamics-defect:1個のノルムだけで安心しない",
       "dataset_version": "0.18.25",
       "document_id": "content:concept.dynamics-defect",
@@ -18682,6 +18934,204 @@
         "S067"
       ],
       "text": "「観測を説明するデータ源を、駅の単位で絞りたい」という課題から、次の4つを順に確かめます。 何を決めるか : 各データ列の係数です。連続の値で、駅ごとに2列がまとまります。 良くしたいものは何か : 観測とのずれの二乗和を表す、滑らかな凸関数 f です。勾配が式で書けることを確かめます。 角のある部分は何か : 駅ごとの長さの和 g です。凸で、近接作用素が閉じた式（長さを τ 縮める）で書けることを確かめます。書けなければ、一歩の中でそれ自体が最適化問題になります。 どこまで保証がほしいか : f が凸で η ≤ 1 / L なら、大域的な最小点に着きます。 λ は手元の誤差では選べません。 λ を上げるほど誤差は増えるからです。取り置いたデータでの誤差など、別の物差しで選びます。 滑らかな凸関数と、近接作用素が分かる凸関数の和なら、この型です。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "小さな店が、毎朝その日の広告費を、媒体AとBに分けます。夜になると、それぞれの媒体に回した広告費1あたりの成果（申込の数）が分かります。朝の時点では、その日どちらがよいかは分かりません。 ある10日間は、1日目がA 1.5・B 1.0で、その後はBのよい日とAのよい日が交互に来ました。よい方は2、悪い方は1です。 決めるもの : 毎朝、媒体Aに回す割合 x t （残りはB） 小さくしたいもの : 後悔。後から見てよかった方の媒体に毎日全額を回した場合と比べた、成果の不足分 守ること : 0 ≤ x t ≤ 1 次の図は、この10日間の成果と、2つの決め方の毎朝の配分です。まず「① 1日の成果」で、Aの緑の実線とBの灰色の破線が毎日入れ替わることを確かめてください。続いて「② 毎朝Aに回す割合 x」で、紺の点（前日までの合計で勝っている媒体に全額）と橙の点（勾配で少しずつ動かす）を比べてください。その日よかった媒体を選べているかを見ます。 広告費の例：成果は教材用の値で、実際の広告の効果は示さない。交互に入れ替わる並びは、決め方の弱点を見せるために選んだもの 「① 1日の成果」の2本の線は、2日目から毎日入れ替わります。10日間の合計は、Aが14.5、Bが15.0です。後から見ると、固定の決め方の中で最もよいのは毎日Bに全額を回すことで、成果は15.0です。 「② 毎朝Aに回す割合 x」の紺の点は、2日目から毎日、その日悪い方の媒体に全額を回しています。前日までの合計で勝っている媒体は、次の日に負けるからです。10日間の成果は10.25で、後悔は 15.0 − 10.25 = 4.75 です。 橙の点は、前日の結果の差 a t − b t に η を掛けた分だけ、割合を動かします。橙の点も、その日悪い方の媒体に約3分の2（0.658）を回します。全額ではないので、成果は13.33、後悔は1.67です。 それなら、毎日いつも半分ずつに分ければよいのでしょうか。この10日間なら成果は14.75で、後悔は0.25です。ところが、結果の並びが変わると、話が変わります。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "オンライン最適化は、決めた後に初めて結果が分かることを何度も繰り返す場面の定式化です。後から振り返って最もよかった固定の決め方との差（後悔・regret）を小さくします。結果の並びに分布を仮定しないので、どんな並びでも後悔が日数より遅く増える決め方を選びます。",
+      "title": "オンライン最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "前日までの合計で勝っている方に全額を回す : 交互の並びでは、2日目から毎日その日悪い方を選び、100日で後悔は49.75です。日数を10倍にすると後悔も10倍になります。前日までの合計だけで決めると、結果が入れ替わるたびに全額が逆側へ振れるからです。割合を少しずつ動かすか、決め方に変わりにくさ（正則化）を足します。 学習率を、日数と関係なく決める : 学習率を0.5に固定すると、100日の後悔は交互の並びで25.0です。A・A・Bの並びでは17.0です。1万日では2500と1667になり、日数に比例して増えます。学習率は 1 / T のように日数とともに小さくします。日数が前もって分からないときは、 t 日目の学習率を 1 / t にします。このときの上限は 3 2 D G T です。1万日の後悔は交互の並びで99.3、A・A・Bの並びで66.5で、どちらも上限150を下回ります。 いつも半分なら安全だと思う : 交互の並びでは後悔0.25ですが、A・A・Bの並びでは100日で17、1万日で1667です。並びによって、よい決め方と悪い決め方が入れ替わります。どの並びでも後悔が T 程度に収まる決め方を選びます。 後悔が小さければ、成果が最大だと思う : 後悔は、後から見た最良の固定の決め方との差です。交互の10日間で、毎日よい方を当てれば成果は19.5ですが、最良の固定（毎日B）は15.0です。後悔が0でも、毎日よい方を当てる場合より4.5少ないことがあります。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "オンライン最適化の定式化と後悔の定義は、Hazanの『Introduction to Online Convex Optimization』（S182）に基づきます。オンライン勾配降下法と、学習率の選び方による後悔の上限は、同じ本の該当章にあります。日数が前もって分からないときの 3 2 D G T の上限も同じです。損失が線形のとき、前日までの合計で最良の決定を選ぶ方法の後悔が交互の並びで日数に比例することも、同じ本の該当章にあります。正則化付きの方法・指数重み・バンディットの扱いも同じ本の該当章にあります。 コードの出力は、NumPy 2.5.3 でこの記事のコードを実行して得た値です。図は、同じ式を図の生成スクリプトが標準ライブラリだけで計算した値から描いています。成果の並びは教材用の値で、実際の広告の効果や、決め方の順位は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "実際の課題で次の困りごとがあれば、リンク先を読んでください。 記録が最初からそろっていて、何度でも読み直せる → 大規模確率的ERM 成果の分布が分かっていて、期待値で比べたい → 確率計画 記録が拠点ごとに分かれ、1か所に集められない → 分散・合意最適化 オンライン最適化と関連する問題の関係 大規模確率的ERM : 記録が最初からそろっている形です。1件ずつ順に読んで係数を動かす 確率的勾配降下法 は、オンライン勾配降下法と同じ更新式を使います。違うのは、比べる相手（後悔か全件の損失の最小値か）と、記録を読み直せるかです。 確率計画 : 不確かな値を確率で表し、期待値で比べます。分布の根拠があるならこちらです。オンライン最適化は分布を仮定しない代わりに、後から見た最良の固定の決め方を比べる相手にします。 分散・合意最適化 : 記録が場所で分かれる形です。オンライン最適化は、記録が時間で分かれる形です。 多腕バンディット: 選んだ媒体の成果しか分からず、選ばなかった方の成果は見えない形です。見えない側の成果を見積もる分だけ、後悔の上限が大きくなります。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "決め方は3つです。1つ目は、前日までの成果の合計が多い媒体に全額を回す決め方です（1日目は半分ずつ）。2つ目はいつも半分ずつ、3つ目は勾配で少しずつ動かす決め方です（学習率 η = 1 / T 、1日目は半分）。並びは2つです。交互の並びと、A・A・Bを繰り返す並び（3日のうち2日はAが2倍）です。乱数は使いません。 広告費の例・100日間の後悔 決め方 交互の並び A・A・Bの繰り返し 前日までの勝ち側に全額 49.75 0.5 いつも半分 0.25 17 勾配で少しずつ（ η = 0.1 ） 5.2 4.8 前日までの勝ち側に全額を回す決め方は、A・A・Bの並びでは2日目から毎日Aを選び、後悔は0.5にとどまります。ところが交互の並びでは毎日外れ、後悔はほぼ日数の半分（49.75）です。いつも半分は逆で、交互の並びでは0.25です。ところがA・A・Bの並びでは、Aに全額を回せば得られた成果との差が3日ごとに0.5ずつ積もり、17になります。 勾配で少しずつ動かす決め方は、どちらの並びでも5前後です。上限 100 = 10 を下回ります。 次の図は、日数 T を10日から1万日まで変えたときの後悔です。「① 交互に入れ替わる日」と「② A・A・Bの繰り返し」で、3本の線の傾きを、破線の T と比べてください。 広告費の例：学習率は η=1/√T。2つの並びは教材用に選んだもので、どの決め方がよいかの順位は示さない 傾きが1の線は、日数に比例して後悔が増える決め方です。1日あたりの後悔が減りません。勾配で少しずつ動かす決め方は、どちらのパネルでも破線と同じ傾き1/2で増え、1日あたりの後悔は1万日で0.005程度になります。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "どの方法も、毎回の決定を、それまでに分かった損失だけから作ります。違いは、過去の損失をどう使うかです。 系統 進み方 例での様子 オンライン勾配降下法（ 射影勾配法 の一歩） 前回の勾配の逆向きに少し動かし、範囲に戻す 100日で後悔5.2と4.8。上限は10 前日までの合計で最良の決定（Follow the Leader） 過去の損失の合計が最小の決定を選ぶ 交互の並びで後悔49.75 正則化付きの合計で最良の決定（Follow the Regularized Leader） 過去の損失の合計に、決定を急に変えにくくする項を足して最小にする Follow the Leaderの振れを抑える。この例では計算していない Mirror Descent （エントロピーを使う版が指数重み） 割合を、成果に応じて掛け算で更新する。選択肢が多いときの割合の配分に向く この例では計算していない 表は速さの順位ではなく、過去の損失の使い方の違いです。 次のコードは、広告費の例を3つの決め方で解き、日数ごとの後悔を数えます。 python import numpy as np def alternating ( T ): \"\"\"1日目は A 1.5・B 1.0、その後は偶数日に B、奇数日に A が2倍の成果\"\"\" days = [( 1.5 , 1.0 )] + [( 1.0 , 2.0 ) if t % 2 == 0 else ( 2.0 , 1.0 ) for t in range ( 2 , T + 1 )] return np . array ( days ) def pattern ( T ): \"\"\"A, A, B の繰り返し：3日のうち2日は A が2倍\"\"\" return np . array ([( 1.0 , 2.0 ) if t % 3 == 0 else ( 2.0 , 1.0 ) for t in range ( 1 , T + 1 )]) def play ( results , rule , eta = None ): \"\"\"毎朝 A に回す割合 x を決め、夜に結果を見る。返り値は配分と後悔\"\"\" x , lead , shares , gained = 0.5 , 0.0 , [], 0.0 for a , b in results : if rule == \"leader\" : # 前日までの合計が多い媒体に全額 x = 0.5 if lead == 0 else float ( lead > 0 ) elif rule == \"half\" : x = 0.5 shares . append ( x ) gained += x * a + ( 1 - x ) * b lead += a - b if rule == \"ogd\" : # 損失の勾配の逆向きに少しだけ動かし、0〜1に戻す x = min ( 1.0 , max ( 0.0 , x + eta * ( a - b ))) best = results . sum ( axis = 0 ) . max () # 後から見てよかった媒体に毎日全額 return np . round ( shares , 3 ), round ( float ( best - gained ), 2 ) days = alternating ( 10 ) print ( days . sum ( axis = 0 )) # [14.5 15. ] for rule , eta in (( \"leader\" , None ), ( \"half\" , None ), ( \"ogd\" , 1 / np . sqrt ( 10 ))): print ( rule , * play ( days , rule , eta )) # leader [0.5 1. 0. 1. 0. 1. 0. 1. 0. 1. ] 4.75 # half [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5] 0.25 # ogd [0.5 0.658 0.342 0.658 0.342 0.658 0.342 0.658 0.342 0.658] 1.67 for T in ( 10 , 100 , 1000 , 10000 ): regrets = [ play ( seq ( T ), rule , 1 / np . sqrt ( T ))[ 1 ] for seq in ( alternating , pattern ) for rule in ( \"leader\" , \"half\" , \"ogd\" )] print ( T , regrets ) # 10 [4.75, 0.25, 1.67, 0.5, 2.0, 1.63] # 100 [49.75, 0.25, 5.2, 0.5, 17.0, 4.8] # 1000 [499.75, 0.25, 16.05, 0.5, 167.0, 14.74] # 10000 [4999.75, 0.25, 50.24, 0.5, 1667.0, 46.08] print ( play ( pattern ( 100 ), \"ogd\" , 0.5 )[ 1 ], play ( alternating ( 100 ), \"ogd\" , 0.5 )[ 1 ]) # 17.0 25.0 最初の出力は、交互の10日間のA・Bの成果の合計14.5と15.0です。次の3行は、10日間の毎朝の割合と後悔です。前日までの勝ち側に全額は、2日目から1と0を交互に選んで後悔4.75、勾配で少しずつは0.342と0.658を行き来して後悔1.67です。 日数ごとの出力は、前の3つが交互の並び、後の3つがA・A・Bの並びの後悔です。順に、前日までの勝ち側に全額・いつも半分・勾配で少しずつです。小さな例の表と図の値と同じです。最後の行は、学習率を0.5に固定したときの100日の後悔です。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "次の式が、オンライン最適化の標準形です。 K は決定がとれる範囲です。 各回 t : x t ∈ K を選び、 f t を観測 ; R T = ∑ t = 1 T f t ( x t ) − min x ∈ K ∑ t = 1 T f t ( x ) この式は「毎回 x t を決めてから損失 f t を知る。選んだ x t の損失の合計と、後から見て最もよかった固定の x の損失の合計の差を小さくする」と読みます。 R T を後悔（regret）と呼びます。 記号 意味 広告費の例では t 回（日） 1日目〜 T 日目 x t t 回目の決定。 f t を知る前に決める その日の朝、Aに回す割合（0〜1） K 決定がとれる範囲 [ 0 , 1 ] f t t 回目の損失。決めた後に分かる − ( x a t + ( 1 − x ) b t ) 。 a t , b t はその日のA・Bの成果 min x ∈ K ∑ f t ( x ) 後から見た、最もよい固定の決定の損失 毎日Bに全額（交互の10日間で成果15.0） R T 後悔 前日までの勝ち側に全額なら4.75、いつも半分なら0.25 後悔は、「後から見た最良の固定」との差 比べる相手は、毎日その日のよい方を当てる決め方ではありません。後から見て最もよかった、毎日同じ x です。交互の10日間で毎日よい方を当てられれば成果は19.5ですが、それを毎回保証できる決め方はありません。その日の結果は、朝の時点では分からないからです。 T 日で後悔が T より遅く増えるなら、1日あたりの後悔 R T / T は0に近づきます。日数が長くなるほど1日あたりの成果が後から見た最良の固定の決め方に近づく、と読めます。 なぜ「どんな並びでも」を求めるのか 成果の並びに分布を仮定できるなら、期待値で比べる方法（ 確率計画 など）が使えます。オンライン最適化は分布を仮定せず、どんな並びに対しても後悔の上限を保証します。競合の店が出稿を変えるなど、並びが自分の決め方に合わせて変わることがある場面で、この保証が意味を持ちます。ただし比べる相手は、実際に起きた並びのもとでの固定の x です。並びが決め方に反応して変わるなら、別の x を選んでいた場合の並びは比べていません。 勾配で少しずつ動かす（オンライン勾配降下法） 橙の決め方は、前日の損失の勾配の逆向きに x を少しだけ動かし、0〜1の範囲に戻します。 x t + 1 = min ( 1 , max ( 0 , x t + η ( a t − b t ) ) ) この式は「Aの方がよかった日は、差 a t − b t に η を掛けた分だけAへの割合を増やし、Bの方がよかった日は減らす」と読みます。 η を学習率と呼びます。 損失 f t が凸で、決定の範囲 K が凸で有界とします。 K の範囲の大きさ（直径）を D 、勾配の大きさの上限を G とします。日数 T が前もって分かるなら、学習率を η = D / ( G T ) にすると、どんな並びでも後悔は D G T 以下です。この例では D = 1 、 G = max | a t − b t | = 1 なので、上限は T です。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.online-optimization:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.online-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.stochastic-erm",
+        "content:concept.stochastic-programming",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:sgd",
+        "problem:PA052",
+        "source:S182"
+      ],
+      "source_ids": [
+        "S182"
+      ],
+      "text": "「毎朝の広告費の分け方を、結果を見ながら決め直したい」という課題を、次の4段で式にします。 毎回何を決めるか ：その日の朝、Aに回す割合 x t です。範囲は0〜1です。 いつ何が分かるか ：夜に、その日のA・Bの成果 a t , b t が両方分かります。損失は f t ( x ) = − ( x a t + ( 1 − x ) b t ) です。 成果の並びに何を仮定するか ：分布を仮定しません。競合の動きなどで、並びが入れ替わることもあるとします。 何と比べるか ：後から見て最もよかった固定の割合と比べた後悔 R T を、小さくします。 決めてから結果が分かることを繰り返し、結果の並びに分布を仮定できないとき、オンライン最適化として定式化できます。",
       "title": "課題から定式化する"
     },
     {
@@ -61082,7 +61532,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA051",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.distributed-consensus"
+      ],
       "source_ids": [
         "S061"
       ],
@@ -61096,7 +61548,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA052",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.online-optimization"
+      ],
       "source_ids": [
         "S054"
       ],

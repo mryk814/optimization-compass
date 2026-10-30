@@ -8067,6 +8067,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.distributed-consensus",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.dynamics-defect",
       "asset_type": "content",
       "policy": "warning",
@@ -8236,6 +8242,12 @@
     },
     {
       "asset_id": "concept.nonsmooth-convex-composite",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.online-optimization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
