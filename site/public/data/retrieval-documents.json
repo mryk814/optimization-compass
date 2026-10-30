@@ -23129,6 +23129,296 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "鋼の熱処理の条件を決めるとします。決めるのは温度 T （K）と炭素の量 c （モル分率）です。二つを平衡計算のツールに渡すと、費用 F が返ります。炭素は少ないほど費用が下がりますが、ツールは c ≤ 0 を受け付けず、エラーで止まります。 初期点は T = 1200 、 c = 0.0005 で、ツールが受け付ける範囲の内側です。このツールを SciPy の minimize(f, x0) にそのまま渡すと、4回目の呼び出しでツールが止まります。そのとき渡された炭素の量は c = − 1.01 でした。初期点から c の向きに2000倍以上離れた点です。 決めるもの：温度 T と炭素の量 c 良くしたいもの：ツールが返す費用 F 守ること： c > 0 。ただし、この条件はツールの中のエラーとしてしか書かれていません 次の図は、三つの呼び方で同じツールを最小化したとき、ツールに渡された c を評価の番号の順に並べたものです。どの呼び方も、初期点は同じです。 初期点 T=1200 K、c=0.0005：ツールに渡された c。SciPy 1.18.1 での実行で、ほかの版や手法での評価の点は示さない 図から、次の三つを確かめてください。 minimize の既定は、3回目まで初期点のすぐ近くを呼び、4回目に図の外へ飛びます。 fmin は少しずつ c を下げ、16回目に0をまたぎます。 下限0を与えた Nelder–Mead は、16回目に0の下へは出ません。そのかわり、 c = 0 ちょうどを渡します。ツールは c = 0 も受け付けないので、ここでも止まります。 初期点はどれも範囲の内側でした。それでも、範囲の外や境界の点がツールに渡りました。ソルバーは、どの点で、何のために関数を呼んでいるのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点、直線探索の試し点、単体の頂点でも呼びます。これらの点は初期点や下限の内側にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、範囲の外の入力と評価の内訳を確かめられます。",
+      "title": "ソルバーが目的関数を呼ぶ点と回数"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:python",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "次のコードは、例のツールを Recorder で包み、渡された点を順に記録します。ツールが止まったときは、最後に渡された点を表示します。 # → の行は、SciPy 1.18.1 で実行したときの出力です。 python import numpy as np from scipy.optimize import fmin , minimize def hardness ( T , c ): # 平衡計算の代わり: y**3 + (T/1000)*y = 1 + 200*c を二分法で解く lo , hi = 0.0 , 2.0 while hi - lo > 1e-13 : mid = 0.5 * ( lo + hi ) if mid ** 3 + T / 1000 * mid - 1 - 200 * c > 0 : hi = mid else : lo = mid return 0.5 * ( lo + hi ) def tool ( x ): T , c = x if c <= 0 : raise ValueError ( \"炭素量が範囲外\" ) y = hardness ( T , c ) return ( y - 1.05 ) ** 2 + 0.5 * (( T - 1250 ) / 100 ) ** 2 + 5000 * c class Recorder : \"\"\"目的関数を包み、渡された点を順に記録する\"\"\" def __init__ ( self , f ): self . f = f self . points = [] def __call__ ( self , x ): self . points . append ( np . array ( x , dtype = float )) return self . f ( x ) def run ( label , solve ): rec = Recorder ( tool ) try : result = solve ( rec ) except ValueError : result = None T , c = rec . points [ - 1 ] print ( f \" { label } : { len ( rec . points ) } 回目 T= { T : .1f } , c= { c : .3g } \" ) return result x0 = [ 1200.0 , 0.0005 ] run ( \"minimize\" , lambda f : minimize ( f , x0 )) # → minimize: 4 回目 T=1200.0, c=-1.01 run ( \"fmin\" , lambda f : fmin ( f , x0 , disp = False )) # → fmin: 16 回目 T=1268.4, c=-2.03e-05 box0 = [( 900 , 1600 ), ( 0 , 0.01 )] run ( \"下限0\" , lambda f : minimize ( f , x0 , method = \"Nelder-Mead\" , bounds = box0 )) # → 下限0: 16 回目 T=1268.4, c=0 box = [( 900 , 1600 ), ( 1e-5 , 0.01 )] for method in [ \"L-BFGS-B\" , \"Nelder-Mead\" ]: res = run ( method , lambda f : minimize ( f , x0 , method = method , bounds = box )) print ( f \" 反復 { res . nit } 回, 評価 { res . nfev } 回, T= { res . x [ 0 ] : .1f } , F= { res . fun : .4f } \" ) # → L-BFGS-B: 39 回目 T=1247.7, c=1e-05 # → 反復 3 回, 評価 39 回, T=1247.7, F=0.2387 # → Nelder-Mead: 79 回目 T=1247.8, c=1e-05 # → 反復 44 回, 評価 79 回, T=1247.8, F=0.2387 出力の「何回目」は、 Recorder が数えた呼び出しの回数です。止まった3つの呼び方では、最後の点がツールに拒まれた点です。L-BFGS-B の行の「39 回目」は最後に呼ばれた点で、答えではなく差分の点です。答えは次の行の T と F で、 res.nfev の39は Recorder の数と一致します。 自分のツールを最適化するときも、最初は同じように包んで実行してください。 rec.points を見れば、範囲の外の点や境界の点がいつ渡されたかが分かります。評価の回数も、ツールの側の記録と突き合わせられます。範囲や評価の回数の上限は、 minimize の文書（S002）にある bounds と options で指定します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "初期点が範囲の内側なら、ソルバーも内側だけを呼ぶと考える : 例の minimize(f, x0) は、4回目で c = − 1.01 を渡しました。範囲を指定しない手法は、試し点が範囲の外へ出ることを防ぎません。範囲があるなら、範囲を受け取る手法に渡してください。範囲の外でツールが止まるなら、その条件は関数の中のエラーではなく、ソルバーに渡す制約として書きます。 下限を0にすれば、0以下は呼ばれないと考える : 下限0の Nelder–Mead は、16回目に c = 0 ちょうどを渡しました。範囲の指定は境界の値を含むからです。下限は、ツールが受け付ける値（例では c = 0.00001 ）にします。 反復の回数から計算時間を見積もる : L-BFGS-B は反復3回で、評価39回でした。評価1回に1分かかるなら、3分ではなく39分です。時間の見積もりと比較には、評価の回数（ nfev ）を使ってください。 差分の刻みが、どの変数にも同じ意味だと考える : 例の BFGS は、 T と c を同じ 1.5 × 10 − 8 だけずらしました。 T = 1200 にとっては相対で 10 − 11 、 c = 0.0005 にとっては相対で 3 × 10 − 5 です。変数の大きさを揃えておくと、刻みの意味が揃い、最初の一歩の偏りも小さくなります。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:ソルバーが関数を呼ぶ場面",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ソルバーは、反復の点のほかにも、次の場面で目的関数を呼びます。2変数の例では、勾配を差分で作るたびに n + 1 = 3 回呼びます。 呼ぶ場面 1回あたりの評価 範囲の内側か 反復の点：次の候補として受け入れた点 1回 手法による 差分の点：勾配を作るため、変数を一つずつ少しずらした点 変数の数だけ追加 実装による 直線探索の試し点：決めた向きに、どこまで進むかを決める点 1回。勾配も要るなら差分の分も追加 範囲を指定しなければ保証はない 単体の頂点：Nelder–Mead が反射・拡大・縮小で作る点 1回 範囲を指定しなければ保証はない 最後の列が「手法による」「実装による」になっていることが、この記事の要点です。初期点と答えが範囲の内側でも、途中の点まで内側だとは限りません。",
+      "title": "ソルバーが関数を呼ぶ場面"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "BFGS と直線探索は、Nocedal・Wright の教科書『Numerical Optimization』（S056）に基づきます。勾配の差分近似と変数の大きさの揃え方も、同じ教科書にあります。Nelder–Mead の反射・拡大・縮小は原論文（S063）に、L-BFGS-B の上下限の扱いは Byrd らの論文（S065）に基づきます。 minimize の bounds と nfev の使い方は、SciPy の公式文書（S002）に基づきます。 例の数値は、SciPy 1.18.1 と NumPy 2.5.3 で上のコードを実行して得た値です。次の4つは、SciPy 1.18.1 のソースと実行の記録で確かめた実装の性質です。BFGS の最初の試し点の長さ1.01と、Nelder–Mead の初期単体の5%です。範囲の外の点を境界へ戻す処理と、差分の刻みも同じです。版が変わると、評価の点と回数は変わることがあります。ツールの式は教材用で、実際の鋼の平衡計算や、手法ごとの速さは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:困りごとから関連する記事へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ツールが範囲の外ではなく、計算の途中で失敗して値を返さない → 失敗・NaNを伴うシミュレーション 評価1回が高く、回数を予算として数えて計画したい → 評価費と予算 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 勾配を作れない、または差分の値が当てにならない → 微分を使わない最適化 この記事の三つの手法は、どれも「範囲の内側の点だけを呼ぶ」ことを前提にしていません。 BFGS法 : 範囲を受け取らない手法です。範囲の外でツールが止まる問題には、そのままでは使えません。範囲を変数の変換で消せる場合は使えます。 L-BFGS-B法 : 上下限を受け取り、反復の点を範囲の中に保ちます。この例では、差分の点も範囲の内側でした。ただし、境界の値そのものは呼ぶので、下限はツールが受け付ける値にします。 Nelder–Mead単体法 : 勾配を使わないので、差分の点はありません。そのかわり、拡大の点は反射の点のさらに先まで飛びます。範囲を指定すると、外へ出た点は境界へ戻されます。",
+      "title": "困りごとから関連する記事へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:小さな例・合金の費用を三つの呼び方で最小化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "合金の例・ツールの中身 例のツールは、温度と炭素の量から硬さの指数 y を方程式で決めます。そして、目標の硬さからのずれと温度の費用に、炭素の費用を足して返します。式の値は教材用で、実際の鋼の性質は表しません。 F = ( y − 1.05 ) 2 + ( T − 1250 ) 2 20000 + 5000 c 硬さ y は、次の方程式の解です。 y 3 + T 1000 y = 1 + 200 c 費用の式は「硬さ y を1.05に近づけ、温度を1250 K付近に保ち、炭素はできるだけ減らす」と読みます。 y はツールの中で二分法によって解かれ、外からは見えません。 初期点 ( T , c ) = ( 1200 , 0.0005 ) では、 y = 0.668 と F = 2.77 になります。この点の勾配は次のとおりです。 ∂ F ∂ T = − 0.0048 , ∂ F ∂ c = 4940 二つの成分の大きさは、およそ 10 6 倍違います。温度は1 Kずつ、炭素は0.0001ずつ動かすのが自然な単位なので、同じ「1」の重みが変数によって全く違うからです。 合金の例・三つの呼び方の結果 呼び方と中の手法 止まった評価 渡された c minimize(f, x0) ：BFGS（勾配は差分） 4回目 − 1.01 fmin(f, x0) ：Nelder–Mead 16回目 − 0.00002 下限 c ≥ 0 を与えた Nelder–Mead 16回目 0 合金の例・BFGSの4回目は長さ1.01の一歩 minimize(f, x0) には範囲も勾配も渡されていないので、BFGS が選ばれ、勾配は差分で作られます。1回目が初期点、2回目と3回目が差分の点です。差分の点では T と c をそれぞれ 1.5 × 10 − 8 だけずらしています。 4回目は、直線探索の最初の試し点です。BFGS の最初の反復では曲率の情報がないので、向きは勾配の逆向き − g です。SciPy 1.18.1 の BFGS は、最初の試し点を、初期点から長さ約1.01の所に置きます。 x 4 = x 0 − 1.01 g ‖ g ‖ ここで g = ( − 0.0048 , 4940 ) は初期点の勾配です。この式は「勾配の逆向きに、長さ1.01だけ進む」と読みます。 g のほとんどは c の成分なので、一歩のほとんどが c に使われます。その結果、 T は 0.000001 しか動かず、 c は 0.0005 − 1.01 = − 1.0095 になりました。長さ1.01は、温度にとってはわずかな一歩ですが、炭素の量にとっては2000倍の一歩です。 合金の例・Nelder–Meadの16回目は単体が伸びた点 fmin の Nelder–Mead は、初期点と「変数を一つずつ5%ずらした2点」で三角形（単体）を作ります。1回目から3回目の点 ( T , c ) は次の3つです。 ( 1200 , 0.0005 ) ：初期点 ( 1260 , 0.0005 ) ： T を5%ずらした点 ( 1200 , 0.000525 ) ： c を5%ずらした点 そこから、最も費用の高い頂点を、残りの2頂点の中点の向こう側へ折り返す「反射」をくり返します。炭素を減らすと費用が下がるので、単体は c の小さい向きへ進みます。 15回目は反射の点で、 c = 0.000122 でした。単体のどの頂点よりも費用が低かったので、16回目には同じ向きに倍の距離まで伸ばす「拡大」の点を試します。中点の c = 0.000264 から見ると、反射では 0.000142 下がり、拡大ではその倍の 0.000284 下がります。そのため、16回目の点は c = − 0.00002 になりました。 合金の例・下限0を与えても止まる 範囲を指定した Nelder–Mead は、範囲の外に出た点を境界まで戻してから評価します。15回目までの点は、 fmin と同じです。16回目の拡大の点は c = − 0.00002 から c = 0 へ戻されました。ところが、ツールは c = 0 も受け付けません。 範囲の指定は「境界の値そのもの」を含みます。下限には、ツールが受け付ける値のうち、実際に意味のある最小の値を入れます。この例では、作れる最小の炭素量として c ≥ 0.00001 を下限にします。",
+      "title": "小さな例・合金の費用を三つの呼び方で最小化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ツールが値を返さない点の記録の仕方は、 失敗・NaNを伴うシミュレーション で扱います。評価の回数を予算として扱う方法は、 評価費と予算 へ進みます。勾配を差分で作る手法の一つの反復は、 L-BFGS-B法 で確かめられます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.solver-evaluation-points:評価の回数は反復の回数より多い",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.solver-evaluation-points",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.derivative-free",
+        "content:concept.evaluation-cost",
+        "content:concept.failed-simulation",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "下限を c ≥ 0.00001 にすると、L-BFGS-B も範囲を指定した Nelder–Mead も、エラーなしで止まります。どちらも T = 1247.7 ～ 1247.8 、 c = 0.00001 、 F = 0.2387 に着きます。 手法 反復の回数 評価の回数 1回の評価が1分なら L-BFGS-B（勾配は差分） 3 39 39分 範囲を指定した Nelder–Mead 44 79 79分 L-BFGS-B は反復3回で止まりましたが、ツールは39回呼ばれています。次の図は、その39回を呼ばれた順に並べたものです。 c の下限0.00001、初期点 T=1200 K、c=0.0005：L-BFGS-B の評価の内訳。SciPy 1.18.1 での実行で、手法の速さの比較ではない 勾配を求めた点は13個で、それぞれに差分の点が2個ずつ付くので、 13 × 3 = 39 回です。このうち26回は、差分のための点でした。 13個のうち9個は、2回目の反復の直線探索です。最初の反復で c が下限に張り付くと、残る向きは T だけになります。その向きの勾配は − 0.0048 と小さく、最初の試し点では T が 0.00002 しか動きません。この実行では、直線探索が歩幅をおよそ4倍ずつ広げ、10個目の点（ T = 1207.5 ）を受け入れました。 T と c の単位の違いが、ここでも評価の回数として現れています。 この比較は、どちらの手法が速いかを示すものではありません。初期点や範囲、変数の単位を変えれば、回数は変わります。言えるのは、反復の回数では計算時間を見積もれないということです。",
+      "title": "評価の回数は反復の回数より多い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.spd-matrix-geometry:overview",
       "dataset_version": "0.18.25",
       "document_id": "content:concept.spd-matrix-geometry",

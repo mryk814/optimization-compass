@@ -862,3 +862,134 @@ def test_robust_estimation_figures_use_the_article_numbers() -> None:
     weight_figure = generate_lesson_figures()["robust-estimation-weights.svg"]
     for text in ("Huber：ω=2.01", "二乗和：ω=6.05", "0.084"):
         assert text in weight_figure
+
+
+def _solver_evaluation_article_code() -> str:
+    article = (ROOT / "content/concepts/solver-evaluation-points.md").read_text(encoding="utf-8")
+    return article.split("```python\n", 1)[1].split("```", 1)[0]
+
+
+def test_solver_evaluation_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_NM_C,
+        EVAL_START,
+        eval_cost,
+        eval_first_trial,
+        eval_gradient,
+        eval_hardness,
+        eval_role_counts,
+    )
+
+    assert round(eval_hardness(*EVAL_START), 3) == 0.668
+    assert round(eval_cost(*EVAL_START), 2) == 2.77
+    gradient = eval_gradient(*EVAL_START)
+    assert (round(gradient[0], 4), round(gradient[1])) == (-0.0048, 4940)
+    # The exact gradient agrees with a central difference through the bisection.
+    step_t, step_c = 1e-3, 1e-8
+    central_t = (
+        eval_cost(EVAL_START[0] + step_t, EVAL_START[1])
+        - eval_cost(EVAL_START[0] - step_t, EVAL_START[1])
+    ) / (2 * step_t)
+    central_c = (
+        eval_cost(EVAL_START[0], EVAL_START[1] + step_c)
+        - eval_cost(EVAL_START[0], EVAL_START[1] - step_c)
+    ) / (2 * step_c)
+    assert math.isclose(central_t, gradient[0], rel_tol=1e-4)
+    assert math.isclose(central_c, gradient[1], rel_tol=1e-6)
+    trial = eval_first_trial()
+    assert round(trial[1], 4) == EVAL_BFGS_C[-1] == -1.0095
+    assert abs(trial[0] - EVAL_START[0]) < 2e-6
+    assert len(EVAL_NM_C) == 16 and EVAL_NM_C[-1] < 0 < min(EVAL_NM_C[:-1])
+    # The 16th point expands the 15th reflection away from the centroid c = 0.000264.
+    centroid_c = 2 * EVAL_NM_C[14] - EVAL_NM_C[15]
+    assert round(centroid_c, 6) == 0.000264
+    assert round(centroid_c - EVAL_NM_C[14], 6) == 0.000142
+    assert eval_role_counts() == {"s": 1, "a": 3, "t": 9, "d": 26}
+    carbon = generate_lesson_figures()["solver-evaluation-carbon.svg"]
+    for text in ("fmin：16回目に c=−0.00002", "16回目に c=0", "4回目 c=−1.01（図の外）"):
+        assert text in carbon
+    breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
+    for text in ("反復3回の裏の評価39回", "直線探索の途中の点 9", "差分のための点 26"):
+        assert text in breakdown
+
+
+def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
+    import contextlib
+
+    import pytest
+
+    np = pytest.importorskip("numpy")
+    optimize = pytest.importorskip("scipy.optimize")
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_LBFGSB_ROLES,
+        EVAL_NM_C,
+        EVAL_NM_LAST_T,
+        EVAL_START,
+        eval_cost,
+    )
+
+    def record(solve):
+        points = []
+
+        def wrapped(x):
+            points.append(np.array(x, dtype=float))
+            return eval_cost(*points[-1])
+
+        with contextlib.suppress(ValueError):
+            solve(wrapped)
+        return points
+
+    start = list(EVAL_START)
+    nelder = record(lambda f: optimize.fmin(f, start, disp=False))
+    assert [round(p[1], 10) for p in nelder] == [round(c, 10) for c in EVAL_NM_C]
+    assert nelder[-1][0] == EVAL_NM_LAST_T
+    # Point 15 reflects point 9 through the midpoint of points 12 and 14; point 16 expands it.
+    middle = (nelder[11] + nelder[13]) / 2
+    assert np.allclose(nelder[14], 2 * middle - nelder[8])
+    assert np.allclose(nelder[15], 2 * nelder[14] - middle)
+    clipped = record(
+        lambda f: optimize.minimize(f, start, method="Nelder-Mead", bounds=[(900, 1600), (0, 0.01)])
+    )
+    assert all(np.array_equal(a, b) for a, b in zip(clipped[:15], nelder[:15], strict=True))
+    assert len(clipped) == 16 and clipped[-1][1] == 0.0
+    bfgs = record(lambda f: optimize.minimize(f, start))
+    assert [round(p[1], 9) for p in bfgs] == [round(c, 9) for c in EVAL_BFGS_C]
+    iterates = [np.array(start)]
+    lbfgsb = record(
+        lambda f: optimize.minimize(
+            f,
+            start,
+            method="L-BFGS-B",
+            bounds=[(900, 1600), (1e-5, 0.01)],
+            callback=lambda xk: iterates.append(np.array(xk)),
+        )
+    )
+    roles = []
+    for index, point in enumerate(lbfgsb):
+        if index % 3:
+            shift = point - lbfgsb[index - index % 3]
+            assert np.count_nonzero(shift) <= 2 and np.max(np.abs(shift)) <= 1.0001e-8
+            roles.append("d")
+        elif index == 0:
+            roles.append("s")
+        else:
+            accepted = any(np.array_equal(point, x) for x in iterates)
+            roles.append("a" if accepted else "t")
+    assert "".join(roles) == EVAL_LBFGSB_ROLES
+
+
+def test_solver_evaluation_article_python_prints_its_comments() -> None:
+    import contextlib
+    import io
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    code = _solver_evaluation_article_code()
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        exec(compile(code, "solver-evaluation-points.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected
