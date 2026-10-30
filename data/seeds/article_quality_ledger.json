@@ -733,6 +733,25 @@
       },
       "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
     },
+    "concept.sat-maxsat": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "2fde577f4ee0",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 決まりを守る6通りと重み、重い順の結果、単位伝播の連鎖、CとEの矛盾、極小のコアと被覆の議論、逆向きの含意（11通り・BCE 5）、重みの変更、2^30・2^60、節の線形不等式への書き換えを再計算し一致。局所探索はBCDで止まること、コアの被覆にEとAが同時にかなう前提を足すこと、順位の重み（3・2・1）で同点になる例、y_kの説明、CP-SATとMiniZincの記述、証明の出力の条件、決まりを制約として標準形に書くこと、店番A・C／D・Eの区別、単位節伝播・衝突の用語、図の矢印と色を修正。1280/375/320pxで横はみ出しなし。"
+    },
     "concept.second-order-cone-program": {
       "reviewed_on": "2026-10-13",
       "reviewer": "claude",
@@ -903,6 +922,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 期待費用・双対・Benders・SAAを再計算し一致。SAAの同点の扱い（Nを6/21/101に変更）、曇りの双対25の説明、0.4の比較の誤り、図の色の重複と千円表記、出典のない用語を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.trajectory-optimization": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "29b7b5108108",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 費用3.77・6.67、触れる点(2, 0.5)、加速度の大きさ、区間の数の表と5区間の26cm、柱なしの3.01と12d²/T³、8秒の0.47と1/T³、変数と制約の数、押す距離0.5mと1.1mを独立の解法で再計算し一致。下を回る経路は近くに局所解が二つあり、図とコードを同じ解（6.668、格子点の間で7mm入る）にそろえた。最適制御との関係、局所解と初期の経路の表現、最短路とMPCの記述の強さ、PA037への誤った経路、上・下の定義、格子点の用語、手法名、間接法の記述、5区間の費用が下がる理由を修正。1280/375/320pxで横はみ出しなし。"
     },
     "concept.variable-domain": {
       "reviewed_on": "2026-10-26",

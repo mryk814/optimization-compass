@@ -59,7 +59,7 @@
 | `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
 | `concept.root-finding` | 93 | 7097 | 8 | 4 | 0 | pass |
-| `concept.sat-maxsat` | 136 | 9234 | 14 | 7 | 0 | pass |
+| `concept.sat-maxsat` | 148 | 9829 | 14 | 7 | 0 | pass |
 | `concept.second-order-cone-program` | 135 | 9718 | 13 | 6 | 0 | pass |
 | `concept.semidefinite-program` | 96 | 6589 | 8 | 4 | 0 | pass |
 | `concept.shape-dependent-domain` | 119 | 12804 | 13 | 4 | 0 | pass |
@@ -73,7 +73,7 @@
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
-| `concept.trajectory-optimization` | 159 | 9545 | 15 | 9 | 0 | pass |
+| `concept.trajectory-optimization` | 159 | 9969 | 15 | 8 | 0 | pass |
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 51 | 6429 | 9 | 3 | 0 | pass |
