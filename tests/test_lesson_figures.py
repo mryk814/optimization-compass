@@ -1066,3 +1066,46 @@ def test_solver_evaluation_article_python_prints_its_comments() -> None:
     with contextlib.redirect_stdout(output):
         exec(compile(code, "solver-evaluation-points.md", "exec"), {})
     assert output.getvalue().splitlines() == expected
+
+
+def test_inner_tolerance_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        noise_cost,
+        noise_hardness,
+        noise_slope,
+        noise_stair_width,
+    )
+
+    assert round(noise_stair_width(1e-6), 4) == 0.0037
+    assert round(noise_stair_width(1e-3), 1) == 3.8
+    # At T* the exact slope is about 0; with tolerance 1e-6 a step inside one stair sees only
+    # the temperature term (T* - 1250) / 10000.
+    assert abs(noise_slope(1e-4, 1e-13)) < 1e-6
+    assert round(noise_slope(1e-8, 1e-6) * 1e4, 2) == -2.24
+    assert round(noise_slope(1e-2, 1e-6) * 1e4, 2) == -0.58
+    assert round(noise_slope(1e-1, 1e-6) * 1e4, 2) == 0.04
+    assert round(noise_slope(1.0, 1e-3) * 1e4, 2) == -1.74
+    # The coarse tool reports a cost below the true minimum at T = 1250.
+    assert round(noise_cost(1250, 1e-5, 1e-3), 4) == 0.2386
+    assert round(noise_cost(1250, 1e-5, 1e-13), 4) == 0.2390
+    assert round(noise_hardness(1250, 1e-5, 1e-3), 5) == 0.61572
+    assert round(noise_hardness(1250, 1e-5, 1e-13), 5) == 0.61527
+    figures = generate_lesson_figures()
+    assert "段差の幅 0.0037 K" in figures["inner-tolerance-slope.svg"]
+    assert "段の幅 0.0037 K" in figures["inner-tolerance-stair.svg"]
+
+
+def test_inner_tolerance_article_python_prints_its_comments() -> None:
+    import contextlib
+    import io
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    article = (ROOT / "content/concepts/inner-tolerance-noise.md").read_text(encoding="utf-8")
+    code = article.split("```python\n", 1)[1].split("```", 1)[0]
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        exec(compile(code, "inner-tolerance-noise.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected

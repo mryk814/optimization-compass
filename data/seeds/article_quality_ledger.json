@@ -349,6 +349,18 @@
       },
       "notes": "数値は final.py を再実行して一致を確認。1280/375/320px で横のはみ出し0、図の色は共通トークン（更新=橙、観測=緑、構造=紺）。"
     },
+    "concept.inner-tolerance-noise": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "906b3cf75808",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "na",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
     "concept.inverse-problem": {
       "reviewed_on": "2026-10-10",
       "reviewer": "claude",
@@ -893,7 +905,7 @@
     "concept.solver-evaluation-points": {
       "reviewed_on": "2026-10-30",
       "reviewer": "claude",
-      "body_sha256": "1d89f8d532a1",
+      "body_sha256": "f5d4797778cd",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",

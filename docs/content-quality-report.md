@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `73`
-- Meeting the concept floor: `73`
+- Published concept guides: `74`
+- Meeting the concept floor: `74`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -32,6 +32,7 @@
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
+| `concept.inner-tolerance-noise` | 139 | 7916 | 12 | 3 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9857 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
@@ -69,7 +70,7 @@
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
-| `concept.solver-evaluation-points` | 149 | 9765 | 14 | 4 | 0 | pass |
+| `concept.solver-evaluation-points` | 149 | 9857 | 14 | 4 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
@@ -136,6 +137,7 @@
 | `concept.high-dimensional-black-box` | 0 |
 | `concept.high-dimensional-smooth-unconstrained` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
+| `concept.inner-tolerance-noise` | 0 |
 | `concept.inverse-problem` | 17 |
 | `concept.knapsack-set-cover` | 6 |
 | `concept.l1-sparse-regularization` | 33 |
