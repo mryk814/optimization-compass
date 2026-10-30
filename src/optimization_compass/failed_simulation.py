@@ -185,7 +185,7 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
     payload = canonical_trace_bytes(trace)
     observables = [
         VisualizationObservable(
-            observable_id="feasible_rate", label_ja="feasible rate", label_en="feasible rate"
+            observable_id="feasible_rate", label_ja="実行可能率", label_en="feasible rate"
         ),
         VisualizationObservable(
             observable_id="successful_evaluations",
@@ -197,7 +197,7 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
         ),
         VisualizationObservable(
             observable_id="best_feasible_objective",
-            label_ja="最良feasible objective",
+            label_ja="実行可能な点での最良目的関数値",
             label_en="best feasible objective",
         ),
     ]
@@ -207,9 +207,9 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
         scenario_id=trace.scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="失敗simulation: statusを残すfailure ledger"
+        title_ja="失敗を含むシミュレーション: 状態を残す失敗の記録"
         if failure
-        else "失敗simulation: feasible evaluation ledger",
+        else "失敗を含むシミュレーション: 実行可能な評価の記録",
         title_en="Failed simulation: retain failure status"
         if failure
         else "Failed simulation: feasible evaluation ledger",
@@ -218,7 +218,7 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_text(
-                "成功率、失敗status、最良feasible objectiveを混同せずに読む。",
+                "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。",
                 "Read feasible rate, failure status, and best feasible objective separately.",
             ),
             misconception=_text(
@@ -227,12 +227,15 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
             )
             if failure
             else None,
-            expected_phenomenon_ja="失敗はobjectiveを持たず、同じevaluation budgetでもfeasible rateと最良feasible値の意味が変わる。",
+            expected_phenomenon_ja=(
+                "失敗は目的関数値を持たず、同じ評価予算でも"
+                "実行可能率と実行可能な点での最良値の意味が変わる。"
+            ),
             expected_phenomenon_en="Failures have no objective, so feasible rate and best feasible value change meaning under the same evaluation budget.",
             success_signals=[
                 VisualizationSignal(
                     signal_id="status_separate",
-                    label_ja="failureをobjectiveから分離",
+                    label_ja="失敗を目的関数値から分離",
                     label_en="separate failure from objective",
                     observable_ids=[
                         "feasible_rate",
@@ -244,7 +247,7 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
             failure_signals=[
                 VisualizationSignal(
                     signal_id="synthetic_penalty",
-                    label_ja="penaltyへ偽装しない",
+                    label_ja="罰則に偽装しない",
                     label_en="do not synthesize a penalty",
                     observable_ids=["failed_evaluations", "best_feasible_objective"],
                 )
@@ -256,7 +259,7 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="評価statusを先に見る",
+                    title_ja="評価の状態を先に見る",
                     title_en="Read evaluation status first",
                     observable_ids=["feasible_rate", "failed_evaluations"],
                 ),
@@ -268,13 +271,13 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="failureを隠さない",
+                    title_ja="失敗を隠さない",
                     title_en="Keep failure visible",
                     observable_ids=["feasible_rate", "failed_evaluations"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="最良値のscopeを限定",
+                    title_ja="最良値の範囲を限定",
                     title_en="Bound the scope of the best value",
                     observable_ids=["best_feasible_objective"],
                 ),
@@ -286,17 +289,21 @@ def build_failed_simulation_scenario(trace: AlgorithmTrace) -> VisualizationScen
                 policy="not_shown", note_ja="最適解は表示しない。", note_en="No optimum is shown."
             ),
             static_summary=_text(
-                "6回の固定simulation callで、成功とfailureを別ledgerとして読む。",
+                "6回の固定したシミュレーション呼び出しで、成功と失敗を別々の記録として読む。",
                 "Read success and failure as separate ledgers across six fixed calls.",
             ),
             text_alternative=_text(
-                "各callのstatus、成功件数、失敗件数、feasible rate、最良feasible objectiveを列挙する。",
+                "各呼び出しの状態、成功件数、失敗件数、実行可能率、"
+                "実行可能な点での最良目的関数値を列挙する。",
                 "List status, successful and failed counts, feasible rate, and best feasible objective for each call.",
             ),
             derived_media_caption=_text(
-                "失敗simulationのevaluation ledger", "Evaluation ledger for failed simulations"
+                "失敗を含むシミュレーションの評価記録", "Evaluation ledger for failed simulations"
             ),
-            limitations_ja="決定的な教育用ledgerであり、MADS・Nevergrad・実simulationの性能比較ではない。",
+            limitations_ja=(
+                "決定的な教育用の記録であり、"
+                "MADS・Nevergrad・実際のシミュレーションの性能比較ではない。"
+            ),
             limitations_en="A deterministic teaching ledger, not a MADS, Nevergrad, or real-simulation benchmark.",
         ),
         guided_story=None,

@@ -242,19 +242,23 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
             observable_id="tracking_error", label_ja="追従誤差", label_en="tracking error"
         ),
         VisualizationObservable(
-            observable_id="primal_residual", label_ja="primal残差", label_en="primal residual"
+            observable_id="primal_residual", label_ja="主残差", label_en="primal residual"
         ),
         VisualizationObservable(
-            observable_id="dual_residual", label_ja="dual残差", label_en="dual residual"
+            observable_id="dual_residual", label_ja="双対残差", label_en="dual residual"
         ),
         VisualizationObservable(
-            observable_id="solver_iterations", label_ja="solver反復", label_en="solver iterations"
+            observable_id="solver_iterations",
+            label_ja="ソルバーの反復数",
+            label_en="solver iterations",
         ),
         VisualizationObservable(
-            observable_id="solve_time_ms", label_ja="解時間ledger", label_en="solve-time ledger"
+            observable_id="solve_time_ms", label_ja="解時間の記録", label_en="solve-time ledger"
         ),
         VisualizationObservable(
-            observable_id="deadline_margin_ms", label_ja="deadline余裕", label_en="deadline margin"
+            observable_id="deadline_margin_ms",
+            label_ja="締め切りまでの余裕",
+            label_en="deadline margin",
         ),
     ]
     return VisualizationScenario(
@@ -263,9 +267,9 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
         scenario_id=trace.scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="反復MPC QP: cold startのdeadline ledger"
+        title_ja="反復MPC QP: コールドスタートでの締め切りの記録"
         if is_cold
-        else "反復MPC QP: warm startのdeadline ledger",
+        else "反復MPC QP: ウォームスタートでの締め切りの記録",
         title_en="Repeated MPC QP: cold-start deadline ledger"
         if is_cold
         else "Repeated MPC QP: warm-start deadline ledger",
@@ -274,13 +278,13 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_localized(
-                "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。",
+                "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。",
                 "Read tracking error, QP residuals, iterations, and deadline margin "
                 "separately by control cycle.",
             ),
             misconception=(
                 _localized(
-                    "warm startを使えば初回から必ずdeadlineを満たし、残差確認も不要になる。",
+                    "ウォームスタートを使えば初回から必ず締め切りを満たし、残差確認も不要になる。",
                     "Warm starting always meets the deadline from the first cycle and "
                     "removes the need to inspect residuals.",
                 )
@@ -288,7 +292,8 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
                 else None
             ),
             expected_phenomenon_ja=(
-                "初回は共通でも、第2周期以降はwarm startの有無で反復数とdeadline余裕が変わる。"
+                "初回は共通でも、第2周期以降はウォームスタートの有無で"
+                "反復数と締め切りまでの余裕が変わる。"
             ),
             expected_phenomenon_en=(
                 "The initial solve is shared, while warm-start reuse changes iterations "
@@ -297,7 +302,7 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
             success_signals=[
                 VisualizationSignal(
                     signal_id="residual_and_deadline_separated",
-                    label_ja="残差とdeadline余裕を別々に確認できる",
+                    label_ja="残差と締め切りまでの余裕を別々に確認できる",
                     label_en="residuals and deadline margin remain separate",
                     observable_ids=["primal_residual", "dual_residual", "deadline_margin_ms"],
                 )
@@ -306,7 +311,7 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
                 [
                     VisualizationSignal(
                         signal_id="deadline_miss_under_cold_start",
-                        label_ja="cold start ledgerではdeadline余裕が負になる周期が残る",
+                        label_ja="コールドスタートの記録では締め切りまでの余裕が負になる周期が残る",
                         label_en="the cold-start ledger retains a negative deadline margin",
                         observable_ids=["solver_iterations", "solve_time_ms", "deadline_margin_ms"],
                     )
@@ -325,13 +330,13 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="第2周期のwarm start差を見る",
+                    title_ja="第2周期のウォームスタートによる差を見る",
                     title_en="Read the second-cycle warm-start difference",
                     observable_ids=["solver_iterations", "solve_time_ms"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="残差とdeadline余裕を分ける",
+                    title_ja="残差と締め切りまでの余裕を分ける",
                     title_en="Separate residuals from deadline margin",
                     observable_ids=["primal_residual", "dual_residual", "deadline_margin_ms"],
                 ),
@@ -347,28 +352,32 @@ def build_repeated_mpc_qp_scenario(trace: AlgorithmTrace) -> VisualizationScenar
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="実機のworst-case解時間や閉loop安定性の既知値は表示しない。",
+                note_ja="実機での最悪の場合の解時間や閉ループ安定性の既知値は表示しない。",
                 note_en=(
                     "No known worst-case hardware timing or closed-loop stability "
                     "reference is shown."
                 ),
             ),
             static_summary=_localized(
-                "4周期の固定QPで、追従誤差、残差、反復数、解時間ledger、deadline余裕を並べる。",
+                "4周期の固定QPで、追従誤差、残差、反復数、解時間の記録、"
+                "締め切りまでの余裕を並べる。",
                 "Align tracking error, residuals, iterations, a solve-time ledger, and "
                 "deadline margin across four fixed QPs.",
             ),
             text_alternative=_localized(
-                "各周期についてwarm-start有無、primal/dual残差、反復数、3ms deadlineに"
-                "対する余裕を列挙する。",
+                "各周期についてウォームスタートの有無、主・双対残差、反復数、"
+                "3msの締め切りに対する余裕を列挙する。",
                 "For each cycle, list warm-start status, primal/dual residuals, iterations, "
                 "and margin against the three-millisecond deadline.",
             ),
             derived_media_caption=_localized(
-                "反復MPC QPのresidualとdeadline ledger",
+                "反復MPC QPの残差と締め切りの記録",
                 "Repeated MPC QP residual and deadline ledger",
             ),
-            limitations_ja="決定的なiteration-to-latency教材であり、OSQPやADMMの実CPU時間、100Hz達成、閉loop安定性、安全性、一般的性能順位を示さない。",
+            limitations_ja=(
+                "反復数を遅延時間へ換算する決定的な教材であり、OSQPやADMMの実CPU時間、"
+                "100Hz達成、閉ループ安定性、安全性、一般的性能順位を示さない。"
+            ),
             limitations_en=(
                 "A deterministic iteration-to-latency lesson; it does not establish OSQP or "
                 "ADMM CPU time, 100-Hz operation, closed-loop stability, safety, or a general "
