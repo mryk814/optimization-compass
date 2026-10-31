@@ -313,10 +313,10 @@ describe("ComparisonPage high-fidelity-equivalent cost renderer", () => {
 
     expect(await screen.findByRole("heading", {
       level: 1,
-      name: "同じhigh-fidelity-equivalent costでfidelity配分を比べる",
+      name: "同じ高精度モデル換算の費用で精度の配分を比べる",
     })).toBeVisible();
-    const mixed = within(screen.getByLabelText("mixed low/high fidelityのcost同期指標"));
-    const highOnly = within(screen.getByLabelText("high fidelity onlyのcost同期指標"));
+    const mixed = within(screen.getByLabelText("低精度・高精度の混合のcost同期指標"));
+    const highOnly = within(screen.getByLabelText("高精度モデルのみのcost同期指標"));
     expect(mixed.getByText("14")).toBeVisible();
     expect(highOnly.getByText("3")).toBeVisible();
     expect(mixed.getByText("12 / 2")).toBeVisible();
@@ -325,8 +325,8 @@ describe("ComparisonPage high-fidelity-equivalent cost renderer", () => {
     fireEvent.change(screen.getByLabelText("BO比較のhigh-fidelity-equivalent cost"), {
       target: { value: "1" },
     });
-    expect(within(screen.getByLabelText("mixed low/high fidelityのcost同期指標")).getByText("12")).toBeVisible();
-    const alignedHighOnly = within(screen.getByLabelText("high fidelity onlyのcost同期指標"));
+    expect(within(screen.getByLabelText("低精度・高精度の混合のcost同期指標")).getByText("12")).toBeVisible();
+    const alignedHighOnly = within(screen.getByLabelText("高精度モデルのみのcost同期指標"));
     expect(alignedHighOnly.getByText("ledger calls").nextElementSibling).toHaveTextContent("1");
   });
 });

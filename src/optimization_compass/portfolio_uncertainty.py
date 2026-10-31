@@ -319,14 +319,14 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
     payload = canonical_trace_bytes(trace)
     observables = [
         VisualizationObservable(
-            observable_id="mean_loss", label_ja="平均loss", label_en="mean loss"
+            observable_id="mean_loss", label_ja="平均損失", label_en="mean loss"
         ),
         VisualizationObservable(observable_id="cvar_75", label_ja="CVaR 75%", label_en="CVaR 75%"),
         VisualizationObservable(
-            observable_id="worst_loss", label_ja="最大loss", label_en="worst loss"
+            observable_id="worst_loss", label_ja="最大損失", label_en="worst loss"
         ),
         VisualizationObservable(
-            observable_id="best_loss", label_ja="最小loss", label_en="best loss"
+            observable_id="best_loss", label_ja="最小損失", label_en="best loss"
         ),
     ]
     return VisualizationScenario(
@@ -335,9 +335,9 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
         scenario_id=trace.scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="CVaR配分のtraining / held-out診断"
+        title_ja="CVaR配分を学習用データと評価用データで診断"
         if is_cvar
-        else "nominal配分のtraining / held-out診断",
+        else "公称配分を学習用データと評価用データで診断",
         title_en="CVaR allocation: training / held-out diagnostics"
         if is_cvar
         else "Nominal allocation: training / held-out diagnostics",
@@ -346,18 +346,18 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_localized(
-                "同じ配分をtrainingとheld-outで評価し、"
-                "in-sampleのrisk低下を将来保証と読み替えない。",
+                "同じ配分を学習用データと、取り分けておいた評価用データで評価し、"
+                "標本内でのリスク低下を将来の保証と読み替えない。",
                 "Evaluate one allocation on training and held-out samples without turning "
                 "in-sample risk reduction into a future guarantee.",
             ),
             misconception=_localized(
-                "training CVaRが小さければout-of-sampleでも同じ順位になる。",
+                "学習用データでのCVaRが小さければ、標本外でも同じ順位になる。",
                 "Lower training CVaR guarantees the same out-of-sample ordering.",
             ),
             expected_phenomenon_ja=(
-                "training 8件とheld-out 4件でmean・tail・worst/best lossが変わり、"
-                "sample依存性が見える。"
+                "学習用データ8件と評価用データ4件で平均・裾・最大／最小損失が変わり、"
+                "標本への依存が見える。"
             ),
             expected_phenomenon_en=(
                 "Mean, tail, worst, and best loss change between eight training and four "
@@ -366,7 +366,7 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
             success_signals=[
                 VisualizationSignal(
                     signal_id="split_visible",
-                    label_ja="trainingとheld-outを別集計できる",
+                    label_ja="学習用データと評価用データを別々に集計できる",
                     label_en="training and held-out summaries remain separate",
                     observable_ids=["mean_loss", "cvar_75", "worst_loss", "best_loss"],
                 )
@@ -377,7 +377,7 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
                 else [
                     VisualizationSignal(
                         signal_id="training_only_inference",
-                        label_ja="training上の差を将来保証と読んでしまう",
+                        label_ja="学習用データ上の差を将来の保証と読んでしまう",
                         label_en="training-only contrast is mistaken for a future guarantee",
                         observable_ids=["mean_loss", "cvar_75", "worst_loss"],
                     )
@@ -388,25 +388,25 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="共通sample契約を確認",
+                    title_ja="共通の標本契約を確認",
                     title_en="Inspect the shared sample contract",
                     observable_ids=["mean_loss", "cvar_75"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="training集計を読む",
+                    title_ja="学習用データの集計を読む",
                     title_en="Read the training summary",
                     observable_ids=["mean_loss", "cvar_75", "worst_loss"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="held-outで差を読む",
+                    title_ja="評価用データで差を読む",
                     title_en="Read the held-out shift",
                     observable_ids=["mean_loss", "cvar_75", "worst_loss", "best_loss"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="claim scopeを限定",
+                    title_ja="主張の範囲を限定",
                     title_en="Bound the claim scope",
                     observable_ids=["mean_loss", "cvar_75"],
                 ),
@@ -420,31 +420,29 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="母集団riskの既知値はなく、固定sampleのempirical summaryだけを表示する。",
+                note_ja="母集団でのリスクの既知値はなく、固定標本の経験的な集計だけを表示する。",
                 note_en=(
                     "Population risk is unknown; only empirical summaries of the fixed "
                     "samples are shown."
                 ),
             ),
             static_summary=_localized(
-                "固定配分のtraining / held-out mean、CVaR、worst/best lossを"
-                "12回のloss評価軸で読む。",
+                "固定配分の学習用データと評価用データでの平均、CVaR、最大／最小損失を、"
+                "12回の損失評価の軸で読む。",
                 "Read training and held-out mean, CVaR, worst, and best loss for one fixed "
                 "allocation over twelve loss evaluations.",
             ),
             text_alternative=_localized(
-                "evaluation 8でtraining 8件、evaluation 12で"
-                "独立したheld-out 4件のsummaryを表示する。",
+                "評価8回目で学習用データ8件、評価12回目で独立した評価用データ4件の集計を表示する。",
                 "Evaluation 8 reports eight training scenarios; evaluation 12 reports four "
                 "disjoint held-out scenarios.",
             ),
             derived_media_caption=_localized(
-                "portfolio allocation: trainingとheld-outのempirical risk",
+                "ポートフォリオ配分: 学習用データと評価用データでの経験的リスク",
                 "Portfolio allocation: empirical training and held-out risk",
             ),
             limitations_ja=(
-                "固定8/4件の教材であり、confidence interval、母集団risk、"
-                "将来returnへの保証を与えない。"
+                "固定8/4件の教材であり、信頼区間、母集団でのリスク、将来の収益への保証を与えない。"
             ),
             limitations_en=(
                 "A fixed 8/4 teaching sample that provides no confidence interval, "

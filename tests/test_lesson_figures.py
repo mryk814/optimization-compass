@@ -44,6 +44,7 @@ from scripts.generate_lesson_figures import (
     ncqp_value,
     pa007_runs,
     ridge_solution,
+    so2_points,
     so3_paths,
     so3_rotation_minimum,
     socp_center,
@@ -292,6 +293,22 @@ def test_network_flow_figure_uses_the_article_numbers() -> None:
     for text in ("費用 9", "費用 17", "4−1+5=8", "3/3（満杯）"):
         assert text in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_so2_circle_figure_uses_the_article_numbers() -> None:
+    shown = so2_points(1.0)
+    # I + J sits on the tangent line with determinant 1 + θ²; exp(J) stays on the circle.
+    assert (shown["line_a"], shown["line_b"], shown["line_det"]) == (1.0, 1.0, 2.0)
+    assert (round(shown["exp_a"], 3), round(shown["exp_b"], 3)) == (0.54, 0.841)
+    assert math.isclose(shown["exp_det"], 1.0)
+    gaps = {
+        theta: math.hypot(p["line_a"] - p["exp_a"], p["line_b"] - p["exp_b"])
+        for theta, p in ((t, so2_points(t)) for t in (0.1, 0.5, 1.0))
+    }
+    assert [round(gaps[t], 3) for t in (0.1, 0.5, 1.0)] == [0.005, 0.124, 0.486]
+    figure = generate_lesson_figures()["so3-lie-algebra-circle.svg"]
+    for text in ("θ=1：I+J は行列式 2、exp(J) は弧の長さ 1", "接線 θJ", "exp(J)"):
+        assert text in figure
 
 
 def test_so3_figure_uses_the_article_numbers() -> None:
@@ -699,3 +716,442 @@ def test_linear_system_figure_uses_the_article_numbers() -> None:
     ):
         assert text in figure
     assert "stroke-dasharray" not in figure
+
+
+def test_assignment_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        ASSIGN_TIMES,
+        ASSIGN_U,
+        ASSIGN_V,
+        assignment_all,
+        assignment_greedy,
+        assignment_reduced,
+    )
+
+    rows = assignment_all()
+    assert [(total, longest) for total, longest, _ in rows] == [
+        (15, 9),
+        (16, 8),
+        (20, 10),
+        (21, 10),
+        (22, 14),
+        (24, 14),
+    ]
+    assert rows[0][2] == (0, 1, 2)
+    assert assignment_greedy() == [(0, 1), (1, 2), (2, 0)]
+    # The row and column values certify the minimum: never above a time, and summing to 15.
+    reduced = assignment_reduced()
+    assert all(value >= 0 for row in reduced for value in row)
+    assert [reduced[i][i] for i in range(3)] == [0, 0, 0]
+    assert sum(ASSIGN_U) + sum(ASSIGN_V) == 15
+    assert sum(reduced[i][j] for i, j in assignment_greedy()) == 24 - 15
+    assert ASSIGN_TIMES[2][2] == 9
+    greedy = generate_lesson_figures()["assignment-greedy-optimal.svg"]
+    for text in ("合計 24 分", "合計 15 分", "2 + 8 + 14 = 24", "3 + 3 + 9 = 15"):
+        assert text in greedy
+    dual = generate_lesson_figures()["assignment-dual-bound.svg"]
+    for text in ("u の合計 9 ＋ v の合計 6 = 15", "救急車3 u=5", "C v=4"):
+        assert text in dual
+
+
+def test_eigenvalue_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        eig_best_angle,
+        eig_centre,
+        eig_perpendicular_sum,
+        eig_scatter,
+        eig_values,
+    )
+
+    assert eig_centre() == (4.0, 3.0)
+    assert eig_scatter() == (4.0, 4.0, 10.0)
+    assert eig_values() == (2.0, 12.0)
+    assert math.isclose(math.tan(math.radians(eig_best_angle())), 2.0)
+    assert math.isclose(eig_perpendicular_sum(eig_best_angle()), 2.0)
+    assert math.isclose(eig_perpendicular_sum(45.0), 3.0)
+    assert math.isclose(eig_perpendicular_sum(0.0), 10.0)
+    # 7 + 3 cos 2φ − 4 sin 2φ, the article's closed form
+    for angle in range(0, 180, 15):
+        phi = math.radians(angle)
+        closed = 7 + 3 * math.cos(2 * phi) - 4 * math.sin(2 * phi)
+        assert math.isclose(eig_perpendicular_sum(angle), closed)
+    fence = generate_lesson_figures()["eigenvalue-fence-direction.svg"]
+    for text in ("63.4° で最小 2", "153.4° で最大 12", "45°（縦のずれで当てはめた直線）で 3"):
+        assert text in fence
+    parallel = generate_lesson_figures()["eigenvalue-parallel-condition.svg"]
+    for text in ("M n=(4, 4)", "M n=2 n", "n=(2, −1)/√5"):
+        assert text in parallel
+
+
+def test_stochastic_programming_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import sp_best, sp_cost, sp_expected, sp_mean_demand
+
+    assert sp_best() == (40, 7000.0)
+    assert sp_mean_demand() == 46.0
+    assert [sp_expected(x) for x in (0, 20, 40, 46, 80)] == [11500, 8500, 7000, 7150, 8000]
+    assert [sp_cost(40, d) for d in (20, 40, 80)] == [4000, 4000, 14000]
+    cost = generate_lesson_figures()["stochastic-programming-expected-cost.svg"]
+    for text in ("x=40：7000", "x=46：7150", "x=80：8000", "晴れ 80個"):
+        assert text in cost
+    tree = generate_lesson_figures()["stochastic-programming-two-stage.svg"]
+    for text in ("x=40", "取り寄せ y=0", "取り寄せ y=40"):
+        assert text in tree
+
+
+def test_external_solver_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import EXT_RUNS, ext_equilibrium, ext_objective
+
+    rows = [
+        (0.1, "α", 0.0, 0.0),
+        (0.35, "α+β", 0.3, 0.04),
+        (0.5, "α+β", 0.6, 0.07),
+        (0.8, "β", 1.0, 0.14),
+    ]
+    for x, phases, fraction, gibbs in rows:
+        got = ext_equilibrium(x)
+        assert got[0] == phases
+        assert math.isclose(got[1], fraction, abs_tol=1e-12)
+        assert math.isclose(got[2], gibbs, abs_tol=1e-12)
+    assert [round(ext_objective(x), 6) for x in (-0.41, 0.0, 0.2, 0.35, 0.6, 0.8)] == [
+        0.09,
+        0.09,
+        0.09,
+        0.0,
+        0.25,
+        0.49,
+    ]
+    assert [(name, end, calls) for name, _, end, calls in EXT_RUNS] == [
+        ("BFGS", -0.41, 4),
+        ("L-BFGS-B", 0.0, 4),
+        ("Nelder–Mead", 0.35, 30),
+    ]
+    figure = generate_lesson_figures()["external-solver-flat-stop.svg"]
+    for text in ("x=−0.41、J=0.09", "x=0.00、J=0.09", "x=0.35、J=0、30回", "始点 x=0.60（J=0.25）"):
+        assert text in figure
+
+
+def test_external_solver_article_python_is_executable() -> None:
+    article = (ROOT / "content/concepts/external-solver-objective.md").read_text(encoding="utf-8")
+    code = article.split("```python\n", 1)[1].split("```", 1)[0]
+    compile(code, "external-solver-objective.md", "exec")
+
+
+def test_robust_optimization_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        ro_coefficients,
+        ro_content,
+        ro_shortfall_probability,
+        ro_solve,
+        ro_switch,
+    )
+
+    nominal, nominal_cost = ro_solve(0.0)
+    robust, robust_cost = ro_solve(1.0)
+    assert [round(v, 9) for v in nominal] == [2.0, 6.0]
+    assert math.isclose(nominal_cost, 13.2)
+    assert math.isclose(robust[0], 50 / 9) and robust[1] == 0.0
+    assert math.isclose(robust_cost, 50 / 3)
+    assert math.isclose(ro_content(nominal, ro_coefficients(1.0)), 6.6)
+    assert math.isclose(ro_shortfall_probability(nominal), 0.5)
+    assert ro_shortfall_probability(robust) == 0.0
+    # The table: k, cost, smallest nitrogen over the recorded box, shortfall percentage
+    rows = {0.25: (14.62, 7.63, 34.8), 0.45: (15.63, 8.35, 21.0), 0.5: (15.79, 9.47, 25.0)}
+    for k, (cost, nitrogen, percent) in rows.items():
+        x, value = ro_solve(k)
+        assert round(value, 2) == cost
+        assert round(ro_content(x, ro_coefficients(1.0)), 2) == nitrogen
+        assert round(100 * ro_shortfall_probability(x), 1) == percent
+    assert math.isclose(ro_switch(), 10 / 21, rel_tol=1e-9)
+    box = generate_lesson_figures()["robust-optimization-box.svg"]
+    for text in ("(2, 6)：13.2千円", "橙の点 (5.56, 0)", "16.67千円", "少ない角 (1.8, 0.5)"):
+        assert text in box
+    size = generate_lesson_figures()["robust-optimization-set-size.svg"]
+    for text in ("k=0.476", "50%", "21%", "25%", "15.75", "16.67"):
+        assert text in size
+
+
+def test_robust_estimation_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        RPE_BAD,
+        rpe_huber_profile,
+        rpe_irls,
+        rpe_residuals,
+        rpe_squares_profile,
+        rpe_valleys,
+        rpe_weights,
+    )
+
+    squares = rpe_valleys(rpe_squares_profile)
+    assert [(round(w, 2), round(v, 2)) for w, v in squares] == [
+        (0.29, 12.83),
+        (2.31, 9.2),
+        (4.57, 11.83),
+        (6.05, 8.3),
+    ]
+    huber = rpe_valleys(rpe_huber_profile)
+    assert [(round(w, 2), round(v, 3)) for w, v in huber] == [
+        (2.01, 1.108),
+        (3.67, 2.418),
+        (4.37, 1.834),
+        (5.73, 1.489),
+    ]
+    rows = rpe_irls()
+    table = [
+        (1.0, 1.8, 1.866),
+        (1.53, 2.087, 1.302),
+        (1.821, 2.016, 1.127),
+        (1.927, 2.006, 1.109),
+        (1.945, 2.006, 1.108),
+    ]
+    for row, (a, w, loss) in zip(rows, table, strict=False):
+        assert (round(row[0], 3), round(row[1], 3), round(row[2], 3)) == (a, w, loss)
+    a, w = rows[-1][:2]
+    assert (round(a, 3), round(w, 3)) == (1.946, 2.005)
+    assert round(rpe_residuals(a, w)[RPE_BAD], 2) == -3.56
+    weights = rpe_weights(a, w)
+    assert round(weights[RPE_BAD], 3) == 0.084
+    assert all(value == 1.0 for i, value in enumerate(weights) if i != RPE_BAD)
+    profile = generate_lesson_figures()["robust-estimation-profile.svg"]
+    for text in ("ω=6.05：8.30", "ω=2.31：9.20", "ω=2.01：1.11"):
+        assert text in profile
+    weight_figure = generate_lesson_figures()["robust-estimation-weights.svg"]
+    for text in ("Huber：ω=2.01", "二乗和：ω=6.05", "0.084"):
+        assert text in weight_figure
+
+
+def test_sat_maxsat_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        sat_feasible,
+        sat_greedy,
+        sat_implications,
+        sat_label,
+        sat_weight,
+    )
+
+    plans = {sat_label(x): sat_weight(x) for x in sat_feasible()}
+    assert plans == {"BD": 0, "BCD": 3, "A": 2, "AE": 4, "AD": 2, "ABD": 2}
+    assert sat_label(sat_greedy()) == "BCD"
+    assert [lit for lit, _ in sat_implications(3)] == [3, -1, 2, 4, -5]
+    assert [reason for _, reason in sat_implications(3)] == ["", "店番A・C", "鍵", "車", "店番D・E"]
+    assert [lit for lit, _ in sat_implications(5)] == [5, -4, -2, 1, -3]
+    grid = generate_lesson_figures()["sat-invite-grid.svg"]
+    for text in ("最も重い：AE（4）", "重い順：BCD（3）"):
+        assert text in grid
+    chain = generate_lesson_figures()["sat-invite-chain.svg"]
+    for text in ("① Cを呼ぶと", "② Eを呼ぶと", "¬E", "¬C"):
+        assert text in chain
+
+
+def test_trajectory_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        TRAJ_RADIUS,
+        traj_clearance,
+        traj_path,
+        traj_solve,
+        traj_states,
+    )
+
+    assert [round(traj_solve(n)[0], 2) for n in (5, 10, 20, 40)] == [3.34, 3.81, 3.77, 3.75]
+    assert round(traj_solve(20, -1.0)[0], 2) == 6.67
+    top = max(y for _, y, _, _ in traj_states(20))
+    assert math.isclose(top, 0.5, abs_tol=1e-6)
+    # Every grid point of the 5-interval answer is outside the pillar, the path between is not.
+    assert min(math.hypot(x - 2.0, y + 0.3) for x, y, _, _ in traj_states(5)) > TRAJ_RADIUS - 1e-6
+    assert round(traj_clearance(traj_path(5, samples=400)), 3) == 0.536
+    assert traj_clearance(traj_path(20, samples=400)) > TRAJ_RADIUS - 1e-6
+    paths = generate_lesson_figures()["trajectory-pillar-paths.svg"]
+    for text in ("上を回る：3.77", "下を回る：6.67"):
+        assert text in paths
+    grid = generate_lesson_figures()["trajectory-grid-check.svg"]
+    for text in ("最大26cm", "3.34", "3.81", "3.77", "3.75"):
+        assert text in grid
+
+
+def _solver_evaluation_article_code() -> str:
+    article = (ROOT / "content/concepts/solver-evaluation-points.md").read_text(encoding="utf-8")
+    return article.split("```python\n", 1)[1].split("```", 1)[0]
+
+
+def test_solver_evaluation_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_NM_C,
+        EVAL_START,
+        eval_cost,
+        eval_first_trial,
+        eval_gradient,
+        eval_hardness,
+        eval_role_counts,
+    )
+
+    assert round(eval_hardness(*EVAL_START), 3) == 0.668
+    assert round(eval_cost(*EVAL_START), 2) == 2.77
+    gradient = eval_gradient(*EVAL_START)
+    assert (round(gradient[0], 4), round(gradient[1])) == (-0.0048, 4940)
+    # The exact gradient agrees with a central difference through the bisection.
+    step_t, step_c = 1e-3, 1e-8
+    central_t = (
+        eval_cost(EVAL_START[0] + step_t, EVAL_START[1])
+        - eval_cost(EVAL_START[0] - step_t, EVAL_START[1])
+    ) / (2 * step_t)
+    central_c = (
+        eval_cost(EVAL_START[0], EVAL_START[1] + step_c)
+        - eval_cost(EVAL_START[0], EVAL_START[1] - step_c)
+    ) / (2 * step_c)
+    assert math.isclose(central_t, gradient[0], rel_tol=1e-4)
+    assert math.isclose(central_c, gradient[1], rel_tol=1e-6)
+    trial = eval_first_trial()
+    assert round(trial[1], 4) == EVAL_BFGS_C[-1] == -1.0095
+    assert abs(trial[0] - EVAL_START[0]) < 2e-6
+    assert len(EVAL_NM_C) == 16 and EVAL_NM_C[-1] < 0 < min(EVAL_NM_C[:-1])
+    # The 16th point expands the 15th reflection away from the centroid c = 0.000264.
+    centroid_c = 2 * EVAL_NM_C[14] - EVAL_NM_C[15]
+    assert round(centroid_c, 6) == 0.000264
+    assert round(centroid_c - EVAL_NM_C[14], 6) == 0.000142
+    assert eval_role_counts() == {"s": 1, "a": 3, "t": 9, "d": 26}
+    # L-BFGS-B's first pair (s, y): y'y/s'y is about 2e4, the updated curvature along T about
+    # 220 (the true value is about 1e-4), so the first T trial of iteration 2 is about 0.00002.
+    first = (EVAL_START[0] + 0.00480046, 1e-5)
+    s_t, s_c = first[0] - EVAL_START[0], first[1] - EVAL_START[1]
+    g_first = eval_gradient(*first)
+    y_t, y_c = g_first[0] - gradient[0], g_first[1] - gradient[1]
+    theta = (y_t * y_t + y_c * y_c) / (s_t * y_t + s_c * y_c)
+    s_bs = theta * (s_t * s_t + s_c * s_c)
+    curvature_t = theta - (theta * s_t) ** 2 / s_bs + y_t * y_t / (s_t * y_t + s_c * y_c)
+    assert round(theta, -2) == 21600 and round(curvature_t) == 223
+    assert round(-g_first[0] / curvature_t, 5) == 0.00002
+    carbon = generate_lesson_figures()["solver-evaluation-carbon.svg"]
+    for text in ("fmin：16回目に c=−0.00002", "16回目に c=0", "4回目 c=−1.01（図の外）"):
+        assert text in carbon
+    breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
+    for text in ("反復3回の裏の評価39回", "直線探索の途中の点 9", "差分のための点 26"):
+        assert text in breakdown
+
+
+def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
+    import contextlib
+
+    import pytest
+
+    np = pytest.importorskip("numpy")
+    optimize = pytest.importorskip("scipy.optimize")
+    from scripts.generate_lesson_figures import (
+        EVAL_BFGS_C,
+        EVAL_LBFGSB_ROLES,
+        EVAL_NM_C,
+        EVAL_NM_LAST_T,
+        EVAL_START,
+        eval_cost,
+    )
+
+    def record(solve):
+        points = []
+
+        def wrapped(x):
+            points.append(np.array(x, dtype=float))
+            return eval_cost(*points[-1])
+
+        with contextlib.suppress(ValueError):
+            solve(wrapped)
+        return points
+
+    start = list(EVAL_START)
+    nelder = record(lambda f: optimize.fmin(f, start, disp=False))
+    assert [round(p[1], 10) for p in nelder] == [round(c, 10) for c in EVAL_NM_C]
+    assert nelder[-1][0] == EVAL_NM_LAST_T
+    # Point 15 reflects point 9 through the midpoint of points 12 and 14; point 16 expands it.
+    middle = (nelder[11] + nelder[13]) / 2
+    assert np.allclose(nelder[14], 2 * middle - nelder[8])
+    assert np.allclose(nelder[15], 2 * nelder[14] - middle)
+    clipped = record(
+        lambda f: optimize.minimize(f, start, method="Nelder-Mead", bounds=[(900, 1600), (0, 0.01)])
+    )
+    assert all(np.array_equal(a, b) for a, b in zip(clipped[:15], nelder[:15], strict=True))
+    assert len(clipped) == 16 and clipped[-1][1] == 0.0
+    bfgs = record(lambda f: optimize.minimize(f, start))
+    assert [round(p[1], 9) for p in bfgs] == [round(c, 9) for c in EVAL_BFGS_C]
+    # Rescaling to T/100 and 1e4 c balances the first trial but still passes c < 0.
+    scaled = record(
+        lambda f: optimize.minimize(lambda z: f([z[0] * 100, z[1] * 1e-4]), [12.0, 5.0])
+    )
+    assert (round(scaled[3][0]), round(scaled[3][1], 5)) == (1248, 0.00045)
+    assert len(scaled) == 13 and round(scaled[-1][1], 5) == -0.00056
+    assert all(p[1] > 0 for p in scaled[:-1])
+    iterates = [np.array(start)]
+    lbfgsb = record(
+        lambda f: optimize.minimize(
+            f,
+            start,
+            method="L-BFGS-B",
+            bounds=[(900, 1600), (1e-5, 0.01)],
+            callback=lambda xk: iterates.append(np.array(xk)),
+        )
+    )
+    roles = []
+    for index, point in enumerate(lbfgsb):
+        if index % 3:
+            shift = point - lbfgsb[index - index % 3]
+            assert np.count_nonzero(shift) == 1 and np.max(np.abs(shift)) <= 1.0001e-8
+            roles.append("d")
+        elif index == 0:
+            roles.append("s")
+        else:
+            accepted = any(np.array_equal(point, x) for x in iterates)
+            roles.append("a" if accepted else "t")
+    assert "".join(roles) == EVAL_LBFGSB_ROLES
+
+
+def test_solver_evaluation_article_python_prints_its_comments() -> None:
+    import contextlib
+    import io
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    code = _solver_evaluation_article_code()
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        exec(compile(code, "solver-evaluation-points.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected
+
+
+def test_distributed_consensus_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import DC_RHOS, DC_SITES, dc_admm, dc_global, dc_local
+
+    assert [round(dc_local(s), 2) for s in DC_SITES] == [0.44, 1.22, 0.73]
+    assert round(dc_global(), 3) == 0.74
+    assert [len(dc_admm(rho)) - 1 for rho in DC_RHOS] == [116, 26, 15, 11, 17, 57, 270]
+    first = dc_admm(2.0)[1]
+    assert [round(first[0][s], 3) for s in DC_SITES] == [0.267, 0.549, 0.489]
+    assert round(first[1], 3) == 0.435
+    losses = generate_lesson_figures()["distributed-consensus-losses.svg"]
+    for text in ("病院A：0.44", "合計の底 0.74", "平均 0.80", "患者の数の重み 0.82"):
+        assert text in losses
+    admm = generate_lesson_figures()["distributed-consensus-admm.svg"]
+    for text in ("ρ=2で11回", "116", "270"):
+        assert text in admm
+
+
+def test_online_optimization_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import ol_alternating, ol_pattern, ol_play
+
+    regrets = {
+        days: [
+            round(ol_play(seq(days), rule)[1], 2)
+            for seq in (ol_alternating, ol_pattern)
+            for rule in ("leader", "half", "ogd")
+        ]
+        for days in (10, 100, 1000, 10000)
+    }
+    assert regrets[10] == [4.75, 0.25, 1.67, 0.5, 2.0, 1.63]
+    assert regrets[100] == [49.75, 0.25, 5.2, 0.5, 17.0, 4.8]
+    assert regrets[10000] == [4999.75, 0.25, 50.24, 0.5, 1667.0, 46.08]
+    shares, _ = ol_play(ol_alternating(10), "leader")
+    assert shares == [0.5, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]
+    days = generate_lesson_figures()["online-budget-days.svg"]
+    for text in ("媒体A", "勾配で少しずつ"):
+        assert text in days
+    growth = generate_lesson_figures()["online-regret-growth.svg"]
+    for text in ("49.75", "17", "5.2", "4.8"):
+        assert text in growth

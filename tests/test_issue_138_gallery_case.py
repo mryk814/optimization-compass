@@ -16,8 +16,8 @@ def test_multi_fidelity_simulator_case_declares_cost_and_failure_policy() -> Non
         {
             "method_id": "M_BAYESIAN_OPT_GP",
             "reason": (
-                "高 fidelity の評価を節約しながら、低 fidelity の観測も含めた surrogate と"
-                "不確実性から次の simulator call を選ぶため"
+                "高精度モデルの評価を節約しながら、低精度モデルの観測も含めた代理モデルと"
+                "不確実性から次のシミュレータ呼び出しを選ぶため"
             ),
         }
     ]
@@ -30,9 +30,9 @@ def test_multi_fidelity_simulator_case_declares_cost_and_failure_policy() -> Non
     }
     assert "c_L=1" in case["decision_variables"]
     assert "c_H=12" in case["decision_variables"]
-    assert "high-fidelity-equivalent" in case["constraints"]
-    assert "status" in case["constraints"]
-    assert "目的値の大きな値へ置換しない" in case["constraints"]
+    assert "高精度モデル換算" in case["constraints"]
+    assert "状態と費用だけを記録に残し" in case["constraints"]
+    assert "目的関数値の大きな値へ置換しない" in case["constraints"]
     assert case["comparison_ids"] == ["COMPARE_BO_MULTIFIDELITY_COST"]
     assert case["visualization_ids"] == [
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
@@ -43,7 +43,7 @@ def test_multi_fidelity_simulator_case_declares_cost_and_failure_policy() -> Non
         "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
         "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
     ]
-    assert "high-fidelity-equivalent costで同期" in case["practical_notes"]
+    assert "高精度モデル換算の費用で同期" in case["practical_notes"]
     assert "順位反転" in case["practical_notes"]
     compile(case["python_example"], "multi-fidelity-simulator", "exec")
 

@@ -23,7 +23,7 @@ def test_shift_scheduling_uses_the_scheduling_archetype_and_explicit_hard_constr
     ]
     assert case["comparison_ids"] == ["COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"]
     ast.parse(case["python_example"])
-    assert "hard constraint" in case["objective"]
+    assert "必ず守る制約" in case["objective"]
     assert "夜勤後の翌日日勤" in case["constraints"]
     assert "最適性は未証明" in case["practical_notes"]
     assert "実際の労働協約" in case["limitations"][0]

@@ -207,16 +207,16 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_text(
-                "残差vector、最大絶対残差、二乗残差を別々に読む。",
+                "残差ベクトル、最大絶対残差、二乗残差を別々に読む。",
                 "Read the residual vector, maximum residual, and squared residual separately.",
             ),
             misconception=_text(
-                "二乗残差が小さければ、各方程式を要求精度で満たしたrootである。",
+                "二乗残差が小さければ、各方程式を要求精度で満たした根である。",
                 "A small squared residual means every equation meets the required root tolerance.",
             )
             if small_squared
             else None,
-            expected_phenomenon_ja="同じ方程式と初期値でも、scalar lossだけの停止は一つの残差が大きい点をrootと誤読させる。",
+            expected_phenomenon_ja="同じ方程式と初期値でも、スカラーの損失だけで停止すると、一つの残差が大きい点を根と誤読させる。",
             expected_phenomenon_en="With the same equations and start, scalar-loss stopping can misread a point with one large residual as a root.",
             success_signals=[
                 VisualizationSignal(
@@ -229,7 +229,7 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             failure_signals=[
                 VisualizationSignal(
                     signal_id="scalar_only_stop",
-                    label_ja="scalar lossだけで停止",
+                    label_ja="スカラーの損失だけで停止",
                     label_en="stop on scalar loss only",
                     observable_ids=["squared_residual", "residual_max_abs"],
                 )
@@ -241,7 +241,7 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="残差vectorを置く",
+                    title_ja="残差ベクトルを置く",
                     title_en="Place the residual vector",
                     observable_ids=["residual_1", "residual_2"],
                 ),
@@ -281,9 +281,9 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
                 "List F1, F2, maximum residual, squared residual, and stopping reason for every iteration.",
             ),
             derived_media_caption=_text(
-                "連立方程式のroot-finding residual ledger", "Residual ledger for root finding"
+                "連立方程式の求根における残差の記録", "Residual ledger for root finding"
             ),
-            limitations_ja="決定的な2変数教材であり、SciPy、Gauss-Newton、Jacobian品質、複数根、大域収束、実計測のscale設定を比較しない。",
+            limitations_ja="決定的な2変数教材であり、SciPy、Gauss-Newton、Jacobian品質、複数根、大域収束、実計測のスケール設定を比較しない。",
             limitations_en="A deterministic two-variable lesson; it does not compare SciPy, Gauss-Newton, Jacobian quality, multiple roots, global convergence, or real measurement scaling.",
         ),
         experiment=VisualizationExperiment(

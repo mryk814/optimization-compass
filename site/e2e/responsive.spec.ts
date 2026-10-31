@@ -77,7 +77,7 @@ test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseUR
   await expect(scenarioCount).toHaveText(`4件を表示 · 条件一致 4件 · 公開 ${total}件`);
   const catalog = page.locator('[aria-label="Theaterのシナリオカタログ"]');
   await expect(catalog.locator("a.theater-card")).toHaveCount(4);
-  await expect(catalog.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
+  await expect(catalog.getByRole("link", { name: /0-1ナップサック: 最適性の証明/u })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");
 });
@@ -98,7 +98,7 @@ test("375px Compare Labで比較条件と非trajectory結果を読める", async
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
   await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
-  await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "0-1ナップサック: 最適性の証明" })).toBeVisible();
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(page.getByRole("tree")).toBeVisible();

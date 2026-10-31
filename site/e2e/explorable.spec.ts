@@ -32,6 +32,7 @@ const figures = [
   { label: "simplex-optimization", route: "/learn/concept.simplex-optimization", id: "simplex-projection-theta" },
   { label: "semidefinite-program", route: "/learn/concept.semidefinite-program", id: "sdp-psd-boundary" },
   { label: "pde-constrained-program", route: "/learn/concept.pde-constrained-program", id: "pde-heat-source-balance" },
+  { label: "external-solver-objective", route: "/learn/concept.external-solver-objective", id: "phase-fraction-target" },
 ];
 
 for (const figure of figures) {
