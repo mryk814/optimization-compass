@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `77`
-- Meeting the concept floor: `77`
+- Published concept guides: `79`
+- Meeting the concept floor: `79`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -22,6 +22,7 @@
 | `concept.cp-scheduling` | 93 | 5114 | 10 | 4 | 0 | pass |
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
 | `concept.discontinuous-simulation` | 141 | 8913 | 12 | 4 | 0 | pass |
+| `concept.distributed-consensus` | 129 | 9246 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
@@ -52,6 +53,7 @@
 | `concept.nonconvex-qp-qcqp` | 117 | 14296 | 13 | 4 | 0 | pass |
 | `concept.nonlinear-least-squares` | 119 | 9987 | 12 | 8 | 0 | pass |
 | `concept.nonsmooth-convex-composite` | 155 | 14826 | 16 | 10 | 0 | pass |
+| `concept.online-optimization` | 130 | 8743 | 13 | 7 | 0 | pass |
 | `concept.optimal-control` | 102 | 6804 | 11 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
@@ -130,6 +132,7 @@
 | `concept.cp-scheduling` | 2 |
 | `concept.derivative-free` | 0 |
 | `concept.discontinuous-simulation` | 0 |
+| `concept.distributed-consensus` | 0 |
 | `concept.dynamics-defect` | 1 |
 | `concept.eigenvalue-problem` | 13 |
 | `concept.evaluation-cost` | 0 |
@@ -160,6 +163,7 @@
 | `concept.nonconvex-qp-qcqp` | 0 |
 | `concept.nonlinear-least-squares` | 16 |
 | `concept.nonsmooth-convex-composite` | 0 |
+| `concept.online-optimization` | 0 |
 | `concept.optimal-control` | 3 |
 | `concept.path-terminal-constraints` | 1 |
 | `concept.pde-constrained-optimization` | 0 |
