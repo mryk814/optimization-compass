@@ -27,10 +27,10 @@ describe("TheaterIndexPage", () => {
     fireEvent.click(advancedGuide);
     expect(screen.getByText(/outer progress · inner residual · solve tolerance/u)).toBeVisible();
     expect(screen.getAllByText(/観測: /u).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: /共通診断probe · TRF適用条件/u })).toHaveAttribute("href", "/traces/exponential-fit-trf");
+    expect(screen.getByRole("link", { name: /共通の診断例 · TRFの適用条件/u })).toHaveAttribute("href", "/traces/exponential-fit-trf");
     expect(screen.getAllByRole("link", { name: /Nelder–Meadの幾何操作/u })[0]).toHaveAttribute("href", "/traces/nelder-mead-quadratic");
-    expect(screen.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toHaveAttribute("href", "/theater/search-tree/binary-knapsack-bnb-complete");
-    expect(screen.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u })).toHaveAttribute("href", "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS");
+    expect(screen.getByRole("link", { name: /0-1ナップサック: 最適性の証明/u })).toHaveAttribute("href", "/theater/search-tree/binary-knapsack-bnb-complete");
+    expect(screen.getByRole("link", { name: /高価な1次元ブラックボックス: 探索寄り \/ ノイズなし/u })).toHaveAttribute("href", "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS");
     expect(screen.queryByText(/問題: INSTANCE_/u)).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("表示範囲"), { target: { value: "all" } });

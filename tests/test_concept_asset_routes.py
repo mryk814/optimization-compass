@@ -99,8 +99,8 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     )
     assert so3.comparison_ids == ("COMPARE_SO3_PROJECTED_RIEMANNIAN",)
     assert "#/gallery/so3-attitude-alignment" in so3.body
-    assert "#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT" in so3.body
-    assert "#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT" in so3.body
+    assert "#/traces/so3-projected-alignment" in so3.body
+    assert "#/traces/so3-riemannian-alignment" in so3.body
     assert "#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN" in so3.body
 
 

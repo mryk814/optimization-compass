@@ -21,7 +21,7 @@ test("Case→Theater→Compare→Caseで共有可能なjourney文脈を保つ", 
   await journey.getByRole("link", { name: /次はCompare/u }).click();
   await expect(journey).toContainText("Step 3/4");
   await expect(page).toHaveURL(/#\/compare\/COMPARE_PARETO_PREFERENCE\?state=/u);
-  await expect(page.getByRole("link", { name: /Theater: preference weightで選択点/u })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: /Theater: 選好の重みで選択点/u })).toHaveAttribute(
     "href",
     expect.stringContaining("SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"),
   );
@@ -45,7 +45,7 @@ test("browser backと画面内Backがそれぞれ予測可能に動く", async (
   await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page.getByRole("complementary", { name: "ケースの学習経路" })).toContainText("Step 2/4");
   await page.getByRole("link", { name: /次はCompare/u }).click();
-  await expect(page.getByRole("heading", { name: "Pareto front上でpreferenceを変える" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "パレートフロント上で選好を変える" })).toBeVisible();
 
   await page.goBack();
   await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_BIOBJECTIVE_QUADRATIC\?state=/u);

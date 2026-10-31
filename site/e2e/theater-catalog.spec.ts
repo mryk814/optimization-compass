@@ -35,7 +35,7 @@ test("Theater catalogのBO variantが指定presetを開く", async ({ page, base
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
   await page.getByLabel("表示範囲").selectOption("all");
   await page.locator('select[aria-label="問題領域"]').selectOption("black-box");
-  await page.getByRole("link", { name: /exploit \/ small_noise/u }).click();
+  await page.getByRole("link", { name: /活用寄り \/ 小さいノイズ/u }).click();
   await expect(page.getByLabel("探索方針")).toHaveValue("exploit");
   await expect(page.getByLabel("観測ノイズ")).toHaveValue("small_noise");
   await expect(page.getByText(/noise σ=0\.08/u)).toBeVisible();

@@ -27,7 +27,7 @@ def test_ecosystem_restoration_case_keeps_the_teaching_scope_explicit() -> None:
     ast.parse(case["python_example"])
     assert "教育用" in case["objective"]
     assert "保証する値ではない" in case["objective"]
-    assert "4品目knapsack" in case["practical_notes"]
+    assert "4品目のナップサック" in case["practical_notes"]
     assert "現地調査" in case["limitations"][1]
 
 

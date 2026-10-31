@@ -15,6 +15,7 @@ from optimization_compass.content_validation import require_published_method_ref
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
 from optimization_compass.formulation_atlas import authored_route_ids
+from optimization_compass.language_mixing import require_language_contract
 from optimization_compass.release_identity import load_dataset_release_identity
 
 MINIMUM_PUBLISHED_CONTENT_PAGES = 12
@@ -82,6 +83,13 @@ def verify_content(root: Path) -> dict[str, int | str]:
         print(
             "skeleton: these pending articles now conform; run "
             "`uv run python scripts/content_skeleton_report.py --prune`: " + ", ".join(prunable)
+        )
+    clean = require_language_contract(root)
+    if clean:
+        print(
+            "language: these pending items no longer mix English; run "
+            "`uv run python scripts/language_mixing_report.py --prune`: "
+            + ", ".join(f"{surface}:{item_id}" for surface, item_id in clean)
         )
 
     repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")

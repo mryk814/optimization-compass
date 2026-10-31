@@ -348,14 +348,11 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
         else [FAILURE_SCENARIO_ID, TOPOLOGY_CONTRAST_SCENARIO_ID]
     )
     expected_ja = (
-        "目的proxyが下がってもgeometry最小gapとmesh qualityが閾値を破れば候補は無効になる"
+        "目的の代理指標が下がっても、形状の最小間隔とメッシュ品質が閾値を破れば候補は無効になる"
         if is_failure
-        else (
-            "density fieldは接続変更を許すため、"
-            "fixed-topology shape parameterと同じ設計空間ではない"
-        )
+        else "密度場は接続の変更を許すため、トポロジー固定の形状パラメータと同じ設計空間ではない"
         if is_topology_contrast
-        else "parameter更新後もgeometry、mesh、state、目的を別々に確認して候補を受理する"
+        else "パラメータ更新後も形状、メッシュ、状態、目的を別々に確認して候補を受理する"
     )
     expected_en = (
         "A lower objective proxy does not rescue a candidate that violates geometry-gap "
@@ -373,12 +370,12 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
     )
     return VisualizationLesson(
         learning_objective=_localized(
-            "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む",
+            "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む",
             "Separate parameters, geometry, mesh, physical state, and objective on one "
             "evaluation axis",
         ),
         misconception=_localized(
-            "離散目的が改善すればgeometryとmeshも有効で、連続体性能も改善している",
+            "離散目的が改善すれば形状とメッシュも有効で、連続体性能も改善している",
             "An improved discrete objective implies valid geometry, a valid mesh, and "
             "improved continuous-domain performance",
         ),
@@ -387,7 +384,7 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
         success_signals=[
             _signal(
                 "layered_shape_diagnostics_visible",
-                "parameter更新とgeometry、mesh、stateの診断を別々に確認できる",
+                "パラメータ更新と、形状・メッシュ・状態の診断を別々に確認できる",
                 "Parameter updates and geometry, mesh, and state diagnostics remain "
                 "separately visible",
                 "parameter_update_norm",
@@ -399,7 +396,7 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
         failure_signals=[
             _signal(
                 "invalid_geometry_or_mesh",
-                "自己交差、gap消失、反転cellを目的改善より先に検出する",
+                "自己交差、間隔の消失、反転セルを目的改善より先に検出する",
                 "Detect self-intersection, gap closure, and inverted cells before reading "
                 "objective improvement",
                 "geometry_min_gap",
@@ -408,34 +405,34 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
             )
         ],
         primary_observables=[
-            _observable("geometry_min_gap", "geometry最小gap", "minimum geometry gap"),
-            _observable("mesh_min_quality", "mesh最小quality", "minimum mesh quality"),
-            _observable("state_residual", "state residual", "state residual"),
+            _observable("geometry_min_gap", "形状の最小間隔", "minimum geometry gap"),
+            _observable("mesh_min_quality", "メッシュの最小品質", "minimum mesh quality"),
+            _observable("state_residual", "状態残差", "state residual"),
         ],
         secondary_observables=[
-            _observable("parameter_update_norm", "parameter update norm", "parameter update norm"),
-            _observable("inverted_cells", "反転cell数", "inverted cells"),
+            _observable("parameter_update_norm", "パラメータ更新のノルム", "parameter update norm"),
+            _observable("inverted_cells", "反転セル数", "inverted cells"),
             _observable("objective_value", "目的関数値", "objective value"),
             _observable("representation_freedom", "表現自由度", "representation freedom"),
         ],
         narration_steps=[
             _step(
                 "start",
-                "初期parameterとgeometryを確認",
+                "初期パラメータと形状を確認",
                 "Inspect the initial parameters and geometry",
                 "parameter_update_norm",
                 "geometry_min_gap",
             ),
             _step(
                 "first_change",
-                "最初のgeometry／mesh変化を追う",
+                "最初の形状／メッシュの変化を追う",
                 "Follow the first geometry and mesh change",
                 "geometry_min_gap",
                 "mesh_min_quality",
             ),
             _step(
                 "pattern_visible",
-                "目的とvalidity診断を分ける",
+                "目的と妥当性の診断を分ける",
                 "Separate objective progress from validity diagnostics",
                 "objective_value",
                 "geometry_min_gap",
@@ -443,7 +440,7 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
             ),
             _step(
                 "termination",
-                "受理、failure、表現差を判定",
+                "受理、失敗、表現の差を判定",
                 "Classify acceptance, failure, or representation difference",
                 "mesh_min_quality",
                 "state_residual",
@@ -456,7 +453,8 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
         known_reference_display=KnownReferenceDisplay(
             policy="not_shown",
             note_ja=(
-                "低cost proxyの既知parameter解を連続PDEや別parameterizationの最適解として表示しない"
+                "計算費用の低い代理指標で得た既知のパラメータ解を、"
+                "連続PDEや別のパラメータ化の最適解として表示しない"
             ),
             note_en=(
                 "Do not display a reduced-proxy parameter solution as the optimum of a "
@@ -464,24 +462,23 @@ def _lesson(trace: AlgorithmTrace) -> VisualizationLesson:
             ),
         ),
         static_summary=_localized(
-            "diffuser更新ごとにparameter、geometry gap、mesh quality、"
-            "state residual、目的を並べる。",
+            "ディフューザの更新ごとに、パラメータ、形状の間隔、メッシュ品質、"
+            "状態残差、目的を並べる。",
             "Align parameters, geometry gap, mesh quality, state residual, and objective "
             "for each diffuser update.",
         ),
         text_alternative=_localized(
-            "各evaluationのupdate norm、gap、quality、反転cell、state residual、"
-            "目的、表現自由度を列挙する。",
+            "各評価の更新ノルム、間隔、品質、反転セル、状態残差、目的、表現自由度を列挙する。",
             "List update norm, gap, quality, inverted cells, state residual, objective, "
             "and representation freedom at every evaluation.",
         ),
         derived_media_caption=_localized(
-            "2D diffuser shapeのgeometry・mesh・state診断履歴",
+            "2Dディフューザの形状・メッシュ・状態の診断履歴",
             "Geometry, mesh, and state diagnostics for a 2D diffuser shape",
         ),
         limitations_ja=(
-            "3 parameterと低cost state proxyの決定論的教材であり、CFD、連続体可行性、"
-            "mesh independence、実性能、shape／topologyの一般rankingを保証しない"
+            "3パラメータと計算費用の低い状態の代理指標による決定論的教材であり、CFD、連続体可行性、"
+            "メッシュ非依存性、実性能、形状とトポロジーの一般的な順位を保証しない"
         ),
         limitations_en=(
             "A deterministic three-parameter lesson with a low-cost state proxy; it does "
@@ -511,13 +508,16 @@ def build_shape_optimization_scenario(trace: AlgorithmTrace) -> VisualizationSce
         else "mechanism"
     )
     titles = {
-        PRIMARY_SCENARIO_ID: ("2D diffuser · 有効なshape更新", "2D diffuser · valid shape update"),
+        PRIMARY_SCENARIO_ID: (
+            "2Dディフューザ · 有効な形状更新",
+            "2D diffuser · valid shape update",
+        ),
         FAILURE_SCENARIO_ID: (
-            "2D diffuser · geometry／mesh failure",
+            "2Dディフューザ · 形状／メッシュの失敗",
             "2D diffuser · geometry and mesh failure",
         ),
         TOPOLOGY_CONTRAST_SCENARIO_ID: (
-            "shape／topology表現contrast",
+            "形状／トポロジーの表現の対比",
             "Shape/topology representation contrast",
         ),
     }

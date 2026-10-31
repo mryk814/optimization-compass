@@ -217,11 +217,11 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
             observable_id="expected_return", label_ja="期待収益", label_en="expected return"
         ),
         VisualizationObservable(
-            observable_id="variance", label_ja="分散risk", label_en="variance risk"
+            observable_id="variance", label_ja="分散（リスク）", label_en="variance risk"
         ),
         VisualizationObservable(
             observable_id="mean_variance_objective",
-            label_ja="平均・分散objective",
+            label_ja="平均・分散の目的関数値",
             label_en="mean-variance objective",
         ),
         VisualizationObservable(
@@ -230,7 +230,7 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
             label_en="maximum allocation weight",
         ),
         VisualizationObservable(
-            observable_id="simplex_residual", label_ja="simplex残差", label_en="simplex residual"
+            observable_id="simplex_residual", label_ja="単体制約の残差", label_en="simplex residual"
         ),
     ]
     payload = canonical_trace_bytes(trace)
@@ -240,7 +240,9 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
         scenario_id=trace.scenario_id,
         identity_status="generated_only",
         canonical_scenario_id=None,
-        title_ja="平均・分散配分: high gamma" if high else "平均・分散配分: low gamma",
+        title_ja="平均・分散配分: リスク回避係数γが大きい場合"
+        if high
+        else "平均・分散配分: リスク回避係数γが小さい場合",
         title_en="Mean-variance allocation: high gamma"
         if high
         else "Mean-variance allocation: low gamma",
@@ -249,14 +251,14 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_text(
-                "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。",
+                "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。",
                 "Read return, variance, and feasibility together without turning gamma into a method ranking.",
             ),
             misconception=_text(
-                "gammaを大きくすれば、将来損失も必ず小さくなる。",
+                "γを大きくすれば、将来の損失も必ず小さくなる。",
                 "A larger gamma necessarily lowers future losses.",
             ),
-            expected_phenomenon_ja="固定入力でもgammaで配分・期待収益・分散が動く。",
+            expected_phenomenon_ja="固定入力でもγで配分・期待収益・分散が動く。",
             expected_phenomenon_en="Even with fixed inputs, gamma changes allocation, expected return, and variance.",
             success_signals=[
                 VisualizationSignal(
@@ -279,7 +281,7 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="入力とgammaを固定",
+                    title_ja="入力とγを固定",
                     title_en="Fix inputs and gamma",
                     observable_ids=["expected_return", "variance"],
                 ),
@@ -291,7 +293,7 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="gammaによる配分差を読む",
+                    title_ja="γによる配分差を読む",
                     title_en="Read the allocation difference across gamma",
                     observable_ids=["expected_return", "variance", "maximum_weight"],
                 ),
@@ -307,22 +309,22 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="将来returnの既知値は表示しない。",
+                note_ja="将来の収益の既知値は表示しない。",
                 note_en="No future-return reference is shown.",
             ),
             static_summary=_text(
-                "固定平均・共分散でgammaだけを変え、配分・期待収益・分散・制約残差を読む。",
+                "固定平均・共分散でγだけを変え、配分・期待収益・分散・制約残差を読む。",
                 "Change only gamma with fixed moments, then read allocation, return, variance, and constraint residual.",
             ),
             text_alternative=_text(
-                "各snapshotの資産比率、期待収益、分散、objective、最大比率、simplex残差を列挙する。",
+                "各スナップショットの資産比率、期待収益、分散、目的関数値、最大比率、単体制約の残差を列挙する。",
                 "List weights, expected return, variance, objective, maximum weight, and simplex residual for each snapshot.",
             ),
             derived_media_caption=_text(
-                "名目平均・分散ポートフォリオのallocation ledger",
+                "名目平均・分散ポートフォリオの配分の記録",
                 "Nominal mean-variance portfolio allocation ledger",
             ),
-            limitations_ja="固定4資産・固定推定値の教材であり、tail risk、推定誤差、将来performanceを示さない。",
+            limitations_ja="固定4資産・固定推定値の教材であり、分布の裾のリスク、推定誤差、将来の運用成績を示さない。",
             limitations_en="A fixed four-asset teaching ledger; it does not establish tail risk, estimation quality, or future performance.",
         ),
         guided_story=None,

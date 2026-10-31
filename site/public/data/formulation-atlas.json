@@ -347,7 +347,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.eigenvalue-problem",
       "cues_ja": [
         "主成分・振動モード・低ランク近似を求めたい",
         "向きだけが問題で、大きさは正規化されている"
@@ -386,7 +386,7 @@
       ],
       "family_id": "reduce_first",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "利用可能",
@@ -429,8 +429,11 @@
       "problem_id": "PA003",
       "reading_ja": "長さ1のベクトルの中で二次形式を最小にします。答えは最小固有値に対応する固有ベクトルです。",
       "source_ids": [
+        "S044",
         "S054",
-        "S071"
+        "S055",
+        "S071",
+        "S173"
       ],
       "standard_form": "\\min_{\\|x\\|_2=1}\\; x^\\top A x,\\quad A=A^\\top",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><msub><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></msub><mspace width=\"0.278em\" /><msup><mi>x</mi><mo>&#x022A4;</mo></msup><mi>A</mi><mi>x</mi><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>A</mi><mo>&#x0003D;</mo><msup><mi>A</mi><mo>&#x022A4;</mo></msup></mrow></math></div>"
@@ -656,7 +659,7 @@
       "cases": [
         {
           "case_id": "nelder-mead-initial-simplex",
-          "title_ja": "初期simplexで局所探索の感度を見抜く"
+          "title_ja": "初期単体で局所探索の感度を見抜く"
         }
       ],
       "content_id": "concept.smooth-low-dimensional-unconstrained",
@@ -1483,7 +1486,7 @@
         },
         {
           "case_id": "multi-fidelity-simulator",
-          "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
+          "title_ja": "低精度／高精度のシミュレータを予算内で使い分ける"
         }
       ],
       "content_id": "concept.expensive-black-box",
@@ -2833,7 +2836,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.sat-maxsat",
       "cues_ja": [
         "条件が「AならばBではない」のような論理で書ける"
       ],
@@ -2871,7 +2874,7 @@
       ],
       "family_id": "integer_combinatorial",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2914,8 +2917,11 @@
       "problem_id": "PA027",
       "reading_ja": "真偽値の変数に対し、論理式（節）をなるべく多く、または重み付きで満たします。全部を満たすかだけを問えばSATです。",
       "source_ids": [
+        "S005",
+        "S016",
         "S022",
-        "S053"
+        "S053",
+        "S176"
       ],
       "standard_form": "\\max_{x\\in\\{0,1\\}^n}\\; \\sum_k w_k\\,\\mathbb{1}\\big[C_k(x)\\big]",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>max</mo><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mi>n</mi></msup></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>k</mi></munder><msub><mi>w</mi><mi>k</mi></msub><mspace width=\"0.167em\" /><mrow><mn mathvariant=\"double-struck\">1</mn></mrow><mo minsize=\"1.2em\" maxsize=\"1.2em\">[</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">]</mo></mrow></math></div>"
@@ -3129,7 +3135,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.assignment-matching",
       "cues_ja": [
         "担当者と案件、機械と作業を一対一で割り当てる"
       ],
@@ -3167,7 +3173,7 @@
       ],
       "family_id": "graph",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -3210,7 +3216,13 @@
       "problem_id": "PA030",
       "reading_ja": "人と仕事のような二つの集合を一対一に組み合わせ、組み合わせの費用の合計を最小にします。",
       "source_ids": [
-        "S054"
+        "S001",
+        "S004",
+        "S005",
+        "S016",
+        "S054",
+        "S144",
+        "S177"
       ],
       "standard_form": "\\min_{x}\\; \\sum_{i,j} c_{ij}x_{ij} \\;\\text{ s.t. }\\; \\sum_j x_{ij}=1,\\; \\sum_i x_{ij}=1,\\; x_{ij}\\in\\{0,1\\}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></munder><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>j</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><munder><mo>&#x02211;</mo><mi>i</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math></div>"
@@ -3766,11 +3778,11 @@
       "cases": [
         {
           "case_id": "energy-cvar-procurement",
-          "title_ja": "価格scenarioのtail costを抑えて電力を調達する"
+          "title_ja": "価格シナリオの裾の費用を抑えて電力を調達する"
         },
         {
           "case_id": "portfolio-cvar-allocation",
-          "title_ja": "scenarioのtail riskを抑えて配分する"
+          "title_ja": "シナリオの裾リスクを抑えて配分する"
         }
       ],
       "content_id": "concept.simplex-optimization",
@@ -3875,7 +3887,7 @@
       "cases": [
         {
           "case_id": "so3-attitude-alignment",
-          "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
+          "title_ja": "SO(3)上で回転角がπに近い姿勢を合わせる"
         }
       ],
       "content_id": "concept.so3-se3-optimization",
@@ -4204,7 +4216,7 @@
       "cases": [
         {
           "case_id": "EC021",
-          "title_ja": "mini-batchで画像分類モデルを学習する"
+          "title_ja": "ミニバッチで画像分類モデルを学習する"
         }
       ],
       "content_id": "concept.neural-network-training",
@@ -4414,7 +4426,7 @@
         },
         {
           "case_id": "EC029",
-          "title_ja": "pendulumを制約内で振り上げる"
+          "title_ja": "振り子を制約内で振り上げる"
         }
       ],
       "content_id": "concept.optimal-control",
@@ -4618,7 +4630,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.trajectory-optimization",
       "cues_ja": [
         "ロボットの動作・ロケットの上昇経路・車の走行ラインを設計する"
       ],
@@ -4656,7 +4668,7 @@
       ],
       "family_id": "dynamics_physics",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4699,9 +4711,13 @@
       "problem_id": "PA044",
       "reading_ja": "始点から目標までの状態と操作の軌道を、経路上の制約を守りながら決めます。",
       "source_ids": [
+        "S002",
+        "S017",
         "S042",
         "S043",
-        "S050"
+        "S050",
+        "S056",
+        "S178"
       ],
       "standard_form": "\\min_{x(\\cdot),u(\\cdot),T}\\; J \\;\\text{ s.t. }\\; \\dot x=f(x,u),\\; c(x,u)\\le 0,\\; x(0)=x_0,\\; x(T)\\in\\mathcal{X}_T",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mo>&#x000B7;</mo><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mo>&#x000B7;</mo><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>T</mi></mrow></msub><mspace width=\"0.278em\" /><mi>J</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mover><mi>x</mi><mo>&#x002D9;</mo></mover><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mi>T</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><msub><mi>&#x1D4B3;</mi><mi>T</mi></msub></mrow></math></div>"
@@ -5134,7 +5150,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.stochastic-programming",
       "cues_ja": [
         "需要が分からないまま発注量を決め、後で不足や余りに対応する"
       ],
@@ -5172,7 +5188,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5215,8 +5231,16 @@
       "problem_id": "PA049",
       "reading_ja": "いま決める x と、不確かさ ξ が明らかになった後の対応（recourse）の費用の期待値を合わせて最小にします。",
       "source_ids": [
+        "S004",
+        "S016",
         "S054",
-        "S061"
+        "S061",
+        "S103",
+        "S134",
+        "S160",
+        "S161",
+        "S163",
+        "S164"
       ],
       "standard_form": "\\min_{x}\\; c^\\top x+\\mathbb{E}_{\\xi}\\big[Q(x,\\xi)\\big]",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><msup><mi>c</mi><mo>&#x022A4;</mo></msup><mi>x</mi><mo>&#x0002B;</mo><msub><mi>&#x1D53C;</mi><mrow><mi>&#x003BE;</mi></mrow></msub><mo minsize=\"1.2em\" maxsize=\"1.2em\">[</mo><mi>Q</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>&#x003BE;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">]</mo></mrow></math></div>"
@@ -5233,7 +5257,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.robust-optimization",
       "cues_ja": [
         "最悪の場合でも制約を守る設計が必要で、分布は分からない"
       ],
@@ -5271,7 +5295,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5314,7 +5338,15 @@
       "problem_id": "PA050",
       "reading_ja": "不確かな値 u が集合 U のどこに来ても制約を破らないように x を決めます。",
       "source_ids": [
-        "S055"
+        "S004",
+        "S010",
+        "S014",
+        "S016",
+        "S028",
+        "S055",
+        "S162",
+        "S174",
+        "S180"
       ],
       "standard_form": "\\min_{x}\\; f(x) \\;\\text{ s.t. }\\; g(x,u)\\le 0 \\;\\;\\forall u\\in\\mathcal{U}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mspace width=\"0.278em\" /><mspace width=\"0.278em\" /><mo>&#x02200;</mo><mi>u</mi><mo>&#x02208;</mo><mi>&#x1D4B0;</mi></mrow></math></div>"
@@ -5327,7 +5359,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.distributed-consensus",
       "cues_ja": [
         "データが複数の拠点に分かれ、一か所に集められない"
       ],
@@ -5365,7 +5397,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5408,7 +5440,10 @@
       "problem_id": "PA051",
       "reading_ja": "目的を各計算機の持つ部分に分け、各部分の解が共通の値 z に一致するよう調整しながら解きます。",
       "source_ids": [
-        "S061"
+        "S055",
+        "S056",
+        "S061",
+        "S181"
       ],
       "standard_form": "\\min_{x_1,\\dots,x_N,z}\\; \\sum_{i=1}^N f_i(x_i) \\;\\text{ s.t. }\\; x_i=z\\;(i=1,\\dots,N)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x02026;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub><mo>&#x0002C;</mo><mi>z</mi></mrow></msub><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>f</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>z</mi><mspace width=\"0.278em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mo>&#x02026;</mo><mo>&#x0002C;</mo><mi>N</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -5421,7 +5456,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.online-optimization",
       "cues_ja": [
         "広告配信や価格設定のように、決めてから結果が分かることを繰り返す"
       ],
@@ -5459,7 +5494,7 @@
       ],
       "family_id": "learning_scale",
       "lens": "application",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5502,7 +5537,8 @@
       "problem_id": "PA052",
       "reading_ja": "目的が毎回変わり、選んだ後に初めて分かる状況で、後から振り返った最良の固定解との差（regret）を小さくします。",
       "source_ids": [
-        "S054"
+        "S054",
+        "S182"
       ],
       "standard_form": "\\text{各回 } t:\\; x_t \\text{ を選び } f_t \\text{ を観測};\\quad \\min\\; \\sum_{t=1}^T f_t(x_t)-\\min_{x}\\sum_{t=1}^T f_t(x)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>各回&#x000A0;</mtext><mi>t</mi><mi>:</mi><mspace width=\"0.278em\" /><msub><mi>x</mi><mi>t</mi></msub><mtext>&#x000A0;を選び&#x000A0;</mtext><msub><mi>f</mi><mi>t</mi></msub><mtext>&#x000A0;を観測</mtext><mi>;</mi><mspace width=\"1em\" /><mo>min</mo><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>t</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>f</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><munderover><mo>&#x02211;</mo><mrow><mi>t</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>f</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
@@ -5817,7 +5853,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.robust-parameter-estimation",
       "cues_ja": [
         "非線形モデルの当てはめで、一部の観測が壊れている"
       ],
@@ -5855,7 +5891,7 @@
       ],
       "family_id": "fitting",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5899,7 +5935,10 @@
       "reading_ja": "非線形モデルのparameterを、外れ値に強い損失で推定します。",
       "source_ids": [
         "S003",
-        "S041"
+        "S041",
+        "S056",
+        "S185",
+        "S186"
       ],
       "standard_form": "\\min_{\\theta}\\; \\sum_{i=1}^m \\rho\\big(y_i-h(x_i;\\theta)\\big)",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>&#x003B8;</mi></mrow></msub><mspace width=\"0.278em\" /><munderover><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mi>m</mi></munderover><mi>&#x003C1;</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>&#x02212;</mo><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mi>;</mi><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo></mrow></math></div>"
@@ -5918,7 +5957,7 @@
       "cases": [
         {
           "case_id": "shape-diffuser",
-          "title_ja": "2D diffuserの壁面shapeを更新する"
+          "title_ja": "2Dディフューザの壁面形状を更新する"
         }
       ],
       "content_id": "concept.shape-dependent-domain",
@@ -6334,6 +6373,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 44
+    "with_article": 53
   }
 }

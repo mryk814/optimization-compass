@@ -1288,15 +1288,15 @@ def _write_dummy_trace(
 def _trace_title(trace_id: str, *, locale: str) -> str:
     simulation_titles = {
         "pde-state-tolerance-tight": (
-            "PDE state solve · tight tolerance",
+            "PDEの状態方程式の求解 · 厳しい許容誤差",
             "PDE state solve · tight tolerance",
         ),
         "pde-state-tolerance-loose": (
-            "PDE state solve · loose tolerance",
+            "PDEの状態方程式の求解 · 緩い許容誤差",
             "PDE state solve · loose tolerance",
         ),
         "pde-state-solve-failure": (
-            "PDE state solve · failure ledger",
+            "PDEの状態方程式の求解 · 失敗の記録",
             "PDE state solve · failure ledger",
         ),
     }
@@ -1304,19 +1304,19 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
         return simulation_titles[trace_id][0 if locale == "ja" else 1]
     parameter_titles = {
         "exponential-fit-trf": (
-            "共通診断probe · TRF適用条件",
+            "共通の診断例 · TRFの適用条件",
             "Shared diagnostic probe · TRF applicability",
         ),
         "exponential-fit-trf-poor-init": (
-            "共通診断probe · 悪い初期値",
+            "共通の診断例 · 悪い初期値",
             "Shared diagnostic probe · poor initialization",
         ),
         "exponential-fit-lm": (
-            "共通診断probe · LM適用条件",
+            "共通の診断例 · LMの適用条件",
             "Shared diagnostic probe · LM applicability",
         ),
         "exponential-fit-lbfgsb": (
-            "共通診断probe · scalar fallback条件",
+            "共通の診断例 · スカラー目的関数による代替の条件",
             "Shared diagnostic probe · scalar fallback applicability",
         ),
         NOMINAL_TRACE_ID: (
@@ -1333,26 +1333,32 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
     if trace_id.startswith("nelder-mead-"):
         return "Nelder–Meadの幾何操作" if locale == "ja" else "Nelder–Mead geometric operations"
     if trace_id == "binary-knapsack-bnb-complete":
-        return "0-1 knapsack: 最適性証明" if locale == "ja" else "0-1 knapsack: optimality proof"
+        return (
+            "0-1ナップサック: 最適性の証明" if locale == "ja" else "0-1 knapsack: optimality proof"
+        )
     if trace_id == "binary-knapsack-bnb-budget":
-        return "0-1 knapsack: node予算で停止" if locale == "ja" else "0-1 knapsack: node budget"
+        return (
+            "0-1ナップサック: ノード数の予算で停止"
+            if locale == "ja"
+            else "0-1 knapsack: node budget"
+        )
     if trace_id == "optimal-control-ec020-history":
         return (
             "Direct collocation · state/control diagnostics"
             if locale == "en"
-            else "Direct collocation · state/control診断"
+            else "Direct Collocation · 状態と制御入力の診断"
         )
     optimal_control_titles = {
         "pendulum-collocation-coarse": (
-            "Pendulum swing-up · N=20 mesh診断",
+            "振り子の振り上げ · N=20のメッシュ診断",
             "Pendulum swing-up · N=20 mesh diagnostics",
         ),
         "pendulum-collocation-refined": (
-            "Pendulum swing-up · N=40 mesh感度",
+            "振り子の振り上げ · N=40のメッシュ感度",
             "Pendulum swing-up · N=40 mesh sensitivity",
         ),
         "pendulum-model-rollout-failure": (
-            "Pendulum swing-up · modelずれrollout",
+            "振り子の振り上げ · モデルずれの前進シミュレーション",
             "Pendulum swing-up · model-mismatch rollout",
         ),
     }
@@ -1443,7 +1449,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
         return GuidedStory(
             story_version="1.0.0",
             introduction=_localized(
-                "勾配、更新vector、次の点を同じframeで結び付けます。",
+                "勾配、更新ベクトル、次の点を同じフレームで結び付けます。",
                 "Connect the gradient, update vector, and next point in each frame.",
             ),
             steps=[
@@ -1464,7 +1470,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 GuidedStoryStep(
                     milestone_id="first_change",
                     annotation=_localized(
-                        "負の勾配方向のupdateが次の現在点を作ります。",
+                        "負の勾配方向への更新が次の現在点を作ります。",
                         "The update along the negative gradient creates the next point.",
                     ),
                     frame_index=min(1, final_index),
@@ -1497,7 +1503,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 GuidedStoryStep(
                     milestone_id="termination",
                     annotation=_localized(
-                        "best-so-farと終了条件を、この固定presetの結果として確認します。",
+                        "これまでの最良値と終了条件を、事前に固定した設定での結果として確認します。",
                         "Inspect best-so-far and stopping under this fixed preset.",
                     ),
                     frame_index=final_index,
@@ -1510,7 +1516,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 ),
             ],
             summary=_localized(
-                "勾配降下法ではgradientからupdateを作り、目的値を下げる方向へ点を移します。",
+                "勾配降下法では勾配から更新を作り、目的値を下げる方向へ点を移します。",
                 "Gradient descent converts gradients into updates that move toward "
                 "lower objective values.",
             ),
@@ -1520,14 +1526,14 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
         return GuidedStory(
             story_version="1.0.0",
             introduction=_localized(
-                "node、bound、incumbent、枝刈りを証明完了まで追います。",
+                "ノード、上界、暫定解、枝刈りを証明完了まで追います。",
                 "Follow nodes, bounds, the incumbent, and pruning until proof completes.",
             ),
             steps=[
                 GuidedStoryStep(
                     milestone_id="start",
                     annotation=_localized(
-                        "root nodeの上界を確認します。", "Inspect the root bound."
+                        "根ノードの上界を確認します。", "Inspect the root bound."
                     ),
                     frame_index=0,
                     auto_pause=True,
@@ -1540,7 +1546,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 GuidedStoryStep(
                     milestone_id="first_change",
                     annotation=_localized(
-                        "最初のbranchで探索候補が二つに分かれます。",
+                        "最初の分枝で探索候補が二つに分かれます。",
                         "The first branch splits the search into two candidates.",
                     ),
                     frame_index=min(1, final_index),
@@ -1554,7 +1560,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 GuidedStoryStep(
                     milestone_id="pattern_visible",
                     annotation=_localized(
-                        "incumbentより改善不能なsubtreeをboundで捨てます。",
+                        "暫定解を改善できない部分木を上界で捨てます。",
                         "A bound removes a subtree that cannot improve the incumbent.",
                     ),
                     frame_index=max(1, round(final_index * 0.6)),
@@ -1568,7 +1574,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 GuidedStoryStep(
                     milestone_id="termination",
                     annotation=_localized(
-                        "open nodeがなくなり、incumbentとboundの一致で最適性を証明します。",
+                        "未探索のノードがなくなり、暫定解と上界の一致で最適性を証明します。",
                         "No open nodes remain; matching incumbent and bound proves optimality.",
                     ),
                     frame_index=final_index,
@@ -1581,7 +1587,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
                 ),
             ],
             summary=_localized(
-                "Branch-and-Boundは全列挙せず、boundとincumbentで不要なsubtreeを除きます。",
+                "Branch-and-Boundは全列挙せず、上界と暫定解で不要な部分木を除きます。",
                 "Branch-and-Bound avoids full enumeration by pruning with bounds and an incumbent.",
             ),
         )
@@ -1607,14 +1613,14 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
     return GuidedStory(
         story_version="1.0.0",
         introduction=_localized(
-            "4つのcueで、初期simplexから終了判断までを順に追います。",
+            "4つの見どころで、初期単体から終了判断までを順に追います。",
             "Follow four cues from the initial simplex to the terminal decision.",
         ),
         steps=[
             GuidedStoryStep(
                 milestone_id="start",
                 annotation=_localized(
-                    "3頂点の位置とbest / worstの役割を先に確認します。",
+                    "3頂点の位置と、最良点・最悪点の役割を先に確認します。",
                     "First locate the three vertices and identify best and worst.",
                 ),
                 frame_index=0,
@@ -1628,7 +1634,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
             GuidedStoryStep(
                 milestone_id="first_change",
                 annotation=_localized(
-                    "worstを重心の反対側へ動かし、候補を受理する根拠を見ます。",
+                    "最悪点を重心の反対側へ動かし、候補を受理する根拠を見ます。",
                     "Move the worst point across the centroid and inspect the decision.",
                 ),
                 frame_index=first_change,
@@ -1646,7 +1652,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
             GuidedStoryStep(
                 milestone_id="pattern_visible",
                 annotation=_localized(
-                    "受理された操作でsimplexと最良値がどう更新されるかを結び付けます。",
+                    "受理された操作で単体と最良値がどう更新されるかを結び付けます。",
                     "Connect an accepted operation to the updated simplex and best value.",
                 ),
                 frame_index=pattern_index,
@@ -1664,7 +1670,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
             GuidedStoryStep(
                 milestone_id="termination",
                 annotation=_localized(
-                    "最終simplexの大きさと終了理由を確認し、一般的性能の証明ではないと切り分けます。",
+                    "最終単体の大きさと終了理由を確認し、一般的性能の証明ではないと切り分けます。",
                     "Inspect the final simplex and stop reason without generalizing performance.",
                 ),
                 frame_index=final_index,
@@ -1677,7 +1683,7 @@ def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
             ),
         ],
         summary=_localized(
-            "Nelder–Meadは勾配ではなく、simplexの候補生成と受理判断で探索を進めます。",
+            "Nelder–Meadは勾配ではなく、単体の候補生成と受理判断で探索を進めます。",
             "Nelder–Mead advances through simplex proposals and decisions, not gradients.",
         ),
     )
@@ -1697,24 +1703,25 @@ def _trace_lesson(
         counterpart = PDE_TIGHT_SCENARIO_ID if is_loose or is_failure else PDE_LOOSE_SCENARIO_ID
         return VisualizationLesson(
             learning_objective=_localized(
-                "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
+                "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、"
+                "同じシミュレータ呼び出しの軸で読む",
                 "Read design updates, state solves, adjoint solves, and failure status "
                 "on one simulator-call axis",
             ),
             misconception=_localized(
-                "state solveの失敗を大きなobjective値へ置き換えれば、"
+                "状態方程式の求解の失敗を大きな目的関数値へ置き換えれば、"
                 "失敗原因と勾配整合性を確認しなくてよい",
                 "Replacing a failed state solve with a large objective removes the need "
                 "to inspect failure cause and gradient consistency",
             ),
             expected_phenomenon_ja=(
-                "preconditioner failureではobjectiveを作らず、state/adjoint残差と"
-                "solver statusを保持する"
+                "前処理が失敗した評価では目的関数値を作らず、状態／随伴方程式の残差と"
+                "ソルバーの終了状態を保持する"
                 if is_failure
-                else "loose toleranceは線形反復を減らす一方、離散objectiveの改善と"
-                "state/adjoint整合性を同時には保証しない"
+                else "緩い許容誤差は線形反復を減らす一方、離散化した目的関数値の改善と"
+                "状態／随伴の整合性を同時には保証しない"
                 if is_loose
-                else "tight toleranceはstate/adjoint残差を抑える一方、線形反復costが増える"
+                else "厳しい許容誤差は状態／随伴方程式の残差を抑えるが、線形反復の計算費用が増える"
             ),
             expected_phenomenon_en=(
                 "A preconditioner failure produces no objective and retains state/adjoint "
@@ -1729,7 +1736,7 @@ def _trace_lesson(
             success_signals=[
                 _signal(
                     "state_and_adjoint_cost_visible",
-                    "state/adjoint残差とそれぞれの線形反復数をobjectiveから分けて確認できる",
+                    "状態／随伴方程式の残差とそれぞれの線形反復数を目的関数値から分けて確認できる",
                     "State/adjoint residuals and their linear iterations remain separate "
                     "from the objective",
                     "state_residual",
@@ -1741,7 +1748,7 @@ def _trace_lesson(
             failure_signals=[
                 _signal(
                     "failed_evaluation_is_explicit",
-                    "state solve失敗にobjective penaltyを捏造せずfailed statusを残す",
+                    "状態方程式の求解の失敗に目的関数の罰則値を捏造せず、失敗という終了状態を残す",
                     "A state-solve failure remains failed instead of becoming a synthetic "
                     "objective penalty",
                     "evaluation_status",
@@ -1749,23 +1756,27 @@ def _trace_lesson(
                 )
             ],
             primary_observables=[
-                _observable("objective_value", "離散objective", "discrete objective"),
-                _observable("state_residual", "state残差", "state residual"),
-                _observable("adjoint_residual", "adjoint残差", "adjoint residual"),
+                _observable("objective_value", "離散化した目的関数値", "discrete objective"),
+                _observable("state_residual", "状態方程式の残差", "state residual"),
+                _observable("adjoint_residual", "随伴方程式の残差", "adjoint residual"),
             ],
             secondary_observables=[
-                _observable("state_linear_iterations", "state線形反復", "state linear iterations"),
+                _observable(
+                    "state_linear_iterations",
+                    "状態方程式の線形反復",
+                    "state linear iterations",
+                ),
                 _observable(
                     "adjoint_linear_iterations",
-                    "adjoint線形反復",
+                    "随伴方程式の線形反復",
                     "adjoint linear iterations",
                 ),
-                _observable("evaluation_status", "evaluation status", "evaluation status"),
+                _observable("evaluation_status", "評価の終了状態", "evaluation status"),
             ],
             narration_steps=[
                 _step(
                     "start",
-                    "design・state・adjointの役割を分ける",
+                    "設計変数・状態変数・随伴変数の役割を分ける",
                     "Separate design, state, and adjoint roles",
                     "objective_value",
                     "state_residual",
@@ -1773,14 +1784,14 @@ def _trace_lesson(
                 ),
                 _step(
                     "first_change",
-                    "最初のstate/adjoint solve costを読む",
+                    "最初の状態／随伴方程式の求解にかかる計算費用を読む",
                     "Read the first state/adjoint solve cost",
                     "state_linear_iterations",
                     "adjoint_linear_iterations",
                 ),
                 _step(
                     "pattern_visible",
-                    "toleranceとresidual/costのtrade-offを読む",
+                    "許容誤差が決める残差と計算費用のトレードオフを読む",
                     "Read the tolerance trade-off between residual and cost",
                     "state_residual",
                     "adjoint_residual",
@@ -1788,7 +1799,7 @@ def _trace_lesson(
                 ),
                 _step(
                     "termination",
-                    "終了statusとclaim scopeを確認",
+                    "終了状態と、主張できる範囲を確認",
                     "Inspect termination status and claim scope",
                     "evaluation_status",
                     "state_residual",
@@ -1805,31 +1816,31 @@ def _trace_lesson(
             recommended_next_scenario_ids=[counterpart],
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
-                note_ja="連続PDEの最適解は示さず、固定mesh上の残差とcostだけを比較する。",
+                note_ja="連続PDEの最適解は示さず、固定メッシュ上の残差と計算費用だけを比較する。",
                 note_en=(
                     "No continuous-PDE optimum is shown; only fixed-mesh residuals and "
                     "costs are contrasted."
                 ),
             ),
             static_summary=_localized(
-                "固定meshのdesign・state・adjoint ledgerで、solver tolerance、残差、"
-                "線形反復、失敗statusを並べる。",
+                "固定メッシュでの設計変数・状態変数・随伴変数の記録に、ソルバーの許容誤差、残差、"
+                "線形反復、失敗を示す終了状態を並べる。",
                 "Align solver tolerance, residuals, linear iterations, and failure status "
                 "in a fixed-mesh design/state/adjoint ledger.",
             ),
             text_alternative=_localized(
-                "各simulator callの離散objective、state/adjoint残差、線形反復数、"
-                "failure statusを列挙する。",
+                "シミュレータ呼び出しごとに、離散化した目的関数値、状態／随伴方程式の残差、"
+                "線形反復数、失敗を示す終了状態を列挙する。",
                 "List discrete objective, state/adjoint residuals, linear iterations, "
                 "and failure status for every simulator call.",
             ),
             derived_media_caption=_localized(
-                "PDE制約付き最適化のstate/adjoint cost ledger",
+                "PDE制約付き最適化における状態／随伴方程式の計算費用の記録",
                 "State/adjoint cost ledger for PDE-constrained optimization",
             ),
             limitations_ja=(
-                "8×4固定meshの決定的教材であり、連続modelの精度、mesh独立性、実runtime、"
-                "preconditionerの一般性能、outer optimizerの順位を保証しない。"
+                "8×4の固定メッシュによる決定的な教材であり、連続モデルの精度、メッシュ独立性、"
+                "実際の実行時間、前処理の一般性能、外側の最適化器の順位を保証しない。"
             ),
             limitations_en=(
                 "A deterministic 8x4 fixed-mesh lesson; it does not establish "
@@ -1848,25 +1859,25 @@ def _trace_lesson(
         ]
         if is_model_mismatch:
             expected_ja = (
-                "modelを変えたvalidation rolloutでは、NLPのdefectが小さくても"
-                "path違反と終端誤差が残る"
+                "モデルを変えた検証用の前進シミュレーションでは、NLPの残差が小さくても"
+                "経路制約の違反と終端誤差が残る"
             )
             expected_en = (
                 "A validation rollout under model mismatch can retain path and terminal "
                 "error even when the NLP defect is small"
             )
             signal_id = "model_validation_failure"
-            signal_ja = "modelずれrolloutでpath違反と終端誤差が残る"
+            signal_ja = "モデルずれの前進シミュレーションで経路制約の違反と終端誤差が残る"
             signal_en = "Path and terminal error remain in the model-mismatch rollout"
             comparison_role = "failure_contrast"
             recommended = ["SCENARIO_PENDULUM_SWING_UP_MESH_20"]
         else:
             expected_ja = (
-                "meshを細かくすると再構成path違反が変わるが、"
-                "有限meshだけで連続時間可行とは判定できない"
+                "メッシュを細かくすると再構成した経路制約の違反が変わるが、"
+                "有限のメッシュだけで連続時間可行とは判定できない"
                 if is_refined_mesh
-                else "objectiveとnode上のdefectが下がっても、"
-                "区間再構成のpath違反が同時に消えるとは限らない"
+                else "目的関数値とノード上の残差が下がっても、"
+                "区間再構成した経路制約の違反が同時に消えるとは限らない"
             )
             expected_en = (
                 "A finer mesh changes reconstructed path violation, but a finite mesh "
@@ -1876,7 +1887,9 @@ def _trace_lesson(
                 "reconstructed between-point path violations"
             )
             signal_id = "mesh_feasibility_limit"
-            signal_ja = "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる"
+            signal_ja = (
+                "メッシュ上の残差が小さくても区間内の再構成・高精度シミュレーションが別途必要になる"
+            )
             signal_en = (
                 "Small mesh defects still require interval reconstruction and "
                 "high-fidelity simulation"
@@ -1892,11 +1905,11 @@ def _trace_lesson(
             )
         return VisualizationLesson(
             learning_objective=_localized(
-                "state・control・dynamics defect・path violationを同じ評価軸で読む",
+                "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
                 "Read state, control, dynamics defects, and path violations on one evaluation axis",
             ),
             misconception=_localized(
-                "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される",
+                "NLPが成功を返せば、メッシュ点の間でも軌道が可行で、連続時間の安全性も保証される",
                 "An NLP success status guarantees feasibility between mesh points and "
                 "continuous-time safety",
             ),
@@ -1905,7 +1918,7 @@ def _trace_lesson(
             success_signals=[
                 _signal(
                     "trajectory_diagnostics_visible",
-                    "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+                    "状態・制御入力と動力学残差・経路制約違反を同じ評価で確認できる",
                     "State/control and dynamics/path diagnostics are visible at the same "
                     "evaluation",
                     "state_norm",
@@ -1924,39 +1937,39 @@ def _trace_lesson(
                 )
             ],
             primary_observables=[
-                _observable("state_norm", "state norm", "state norm"),
-                _observable("control_effort", "control effort", "control effort"),
-                _observable("dynamics_defect", "dynamics defect", "dynamics defect"),
+                _observable("state_norm", "状態のノルム", "state norm"),
+                _observable("control_effort", "制御入力の大きさ", "control effort"),
+                _observable("dynamics_defect", "動力学残差", "dynamics defect"),
             ],
             secondary_observables=[
-                _observable("path_violation", "path violation", "path violation"),
+                _observable("path_violation", "経路制約違反", "path violation"),
                 _observable("objective_value", "目的関数値", "objective value"),
             ],
             narration_steps=[
                 _step(
                     "start",
-                    "初期trajectoryとcontrolを確認",
+                    "初期軌道と制御入力を確認",
                     "Inspect the initial trajectory and control",
                     "state_norm",
                     "control_effort",
                 ),
                 _step(
                     "first_change",
-                    "最初のdynamics defectの変化を追う",
+                    "動力学残差の最初の変化を追う",
                     "Follow the first dynamics-defect change",
                     "dynamics_defect",
                     "objective_value",
                 ),
                 _step(
                     "pattern_visible",
-                    "path violationとobjectiveを分けて読む",
+                    "経路制約違反と目的関数値を分けて読む",
                     "Separate path violations from objective progress",
                     "path_violation",
                     "objective_value",
                 ),
                 _step(
                     "termination",
-                    "mesh上の結果と連続時間の限界を確認",
+                    "メッシュ上の結果と連続時間の限界を確認",
                     "Inspect the mesh result and continuous-time limitation",
                     "dynamics_defect",
                     "path_violation",
@@ -1968,7 +1981,7 @@ def _trace_lesson(
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
                 note_ja=(
-                    "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。"
+                    "連続時間の最適性・安全性は表示しない。メッシュ細分化と再構成で別途検証する。"
                 ),
                 note_en=(
                     "Continuous-time optimality and safety are not shown; validate them "
@@ -1976,24 +1989,24 @@ def _trace_lesson(
                 ),
             ),
             static_summary=_localized(
-                "pendulum swing-upのstate、control、dynamics defect、"
-                f"再構成path violationをN={mesh_nodes}の評価履歴として並べる。",
+                "振り子の振り上げの状態、制御入力、動力学残差、"
+                f"再構成した経路制約違反をN={mesh_nodes}の評価履歴として並べる。",
                 "Align pendulum state, control, dynamics defects, and reconstructed "
                 f"path violations for the N={mesh_nodes} history.",
             ),
             text_alternative=_localized(
-                "各evaluationのstate norm、control effort、dynamics defect、path violation、"
-                "objectiveを列挙する。",
+                "各評価の状態のノルム、制御入力の大きさ、動力学残差、経路制約違反、"
+                "目的関数値を列挙する。",
                 "List state norm, control effort, dynamics defect, path violation, and "
                 "objective at each evaluation.",
             ),
             derived_media_caption=_localized(
-                f"pendulum direct collocationのN={mesh_nodes}診断履歴",
+                f"振り子のDirect CollocationによるN={mesh_nodes}の診断履歴",
                 f"N={mesh_nodes} diagnostics for pendulum direct collocation",
             ),
             limitations_ja=(
-                f"N={mesh_nodes}の固定meshによる教育用履歴であり、連続時間の可行性・"
-                "実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない"
+                f"N={mesh_nodes}の固定メッシュによる教育用履歴であり、連続時間の可行性・"
+                "実機安全性・動力学モデルの妥当性やソルバーの一般性能を保証しない"
             ),
             limitations_en=(
                 f"A fixed N={mesh_nodes} educational mesh history; it does not guarantee "
@@ -2004,16 +2017,16 @@ def _trace_lesson(
     if is_optimal_control:
         return VisualizationLesson(
             learning_objective=_localized(
-                "state・control・dynamics defect・path violationを同じ評価軸で読む",
+                "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む",
                 "Read state, control, dynamics defects, and path violations on one evaluation axis",
             ),
             misconception=_localized(
-                "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される",
+                "NLPが成功を返せば、メッシュ点の間でも軌道が可行で、連続時間の安全性も保証される",
                 "An NLP success status guarantees feasibility between mesh points and "
                 "continuous-time safety",
             ),
             expected_phenomenon_ja=(
-                "objectiveだけでなくdynamics defectとconstraint marginが同時に改善するとは限らない"
+                "目的関数値だけでなく、動力学残差と制約の余裕も同時に改善するとは限らない"
             ),
             expected_phenomenon_en=(
                 "Objective progress does not by itself guarantee smaller dynamics defects "
@@ -2022,7 +2035,7 @@ def _trace_lesson(
             success_signals=[
                 _signal(
                     "trajectory_diagnostics_visible",
-                    "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+                    "状態・制御入力と動力学残差・経路制約違反を同じ評価で確認できる",
                     "State/control and dynamics/path diagnostics are visible at the same "
                     "evaluation",
                     "state_norm",
@@ -2034,7 +2047,7 @@ def _trace_lesson(
             failure_signals=[
                 _signal(
                     "mesh_feasibility_limit",
-                    "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる",
+                    "メッシュ上の残差が小さくても区間内の再構成・高精度シミュレーションが別途必要になる",
                     "Small mesh defects still require interval reconstruction and "
                     "high-fidelity simulation",
                     "dynamics_defect",
@@ -2042,39 +2055,39 @@ def _trace_lesson(
                 )
             ],
             primary_observables=[
-                _observable("state_norm", "state norm", "state norm"),
-                _observable("control_effort", "control effort", "control effort"),
-                _observable("dynamics_defect", "dynamics defect", "dynamics defect"),
+                _observable("state_norm", "状態のノルム", "state norm"),
+                _observable("control_effort", "制御入力の大きさ", "control effort"),
+                _observable("dynamics_defect", "動力学残差", "dynamics defect"),
             ],
             secondary_observables=[
-                _observable("path_violation", "path violation", "path violation"),
+                _observable("path_violation", "経路制約違反", "path violation"),
                 _observable("objective_value", "目的関数値", "objective value"),
             ],
             narration_steps=[
                 _step(
                     "start",
-                    "初期trajectoryとcontrolを確認",
+                    "初期軌道と制御入力を確認",
                     "Inspect the initial trajectory and control",
                     "state_norm",
                     "control_effort",
                 ),
                 _step(
                     "first_change",
-                    "最初のdynamics defectの変化を追う",
+                    "動力学残差の最初の変化を追う",
                     "Follow the first dynamics-defect change",
                     "dynamics_defect",
                     "objective_value",
                 ),
                 _step(
                     "pattern_visible",
-                    "path violationとobjectiveを分けて読む",
+                    "経路制約違反と目的関数値を分けて読む",
                     "Separate path violations from objective progress",
                     "path_violation",
                     "objective_value",
                 ),
                 _step(
                     "termination",
-                    "mesh上の結果と連続時間の限界を確認",
+                    "メッシュ上の結果と連続時間の限界を確認",
                     "Inspect the mesh result and continuous-time limitation",
                     "dynamics_defect",
                     "path_violation",
@@ -2086,7 +2099,7 @@ def _trace_lesson(
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
                 note_ja=(
-                    "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。"
+                    "連続時間の最適性・安全性は表示しない。メッシュ細分化と再構成で別途検証する。"
                 ),
                 note_en=(
                     "Continuous-time optimality and safety are not shown; validate them "
@@ -2094,21 +2107,24 @@ def _trace_lesson(
                 ),
             ),
             static_summary=_localized(
-                "state、control、dynamics defect、path violationをmeshの評価履歴として並べる。",
+                "状態、制御入力、動力学残差、経路制約違反をメッシュ上の評価履歴として並べる。",
                 "Align state, control, dynamics defects, and path violations as a mesh "
                 "evaluation history.",
             ),
             text_alternative=_localized(
-                "各evaluationのstate norm、control effort、dynamics defect、path violation、"
-                "objectiveを列挙する。",
+                "各評価の状態のノルム、制御入力の大きさ、動力学残差、経路制約違反、"
+                "目的関数値を列挙する。",
                 "List state norm, control effort, dynamics defect, path violation, and "
                 "objective at each evaluation.",
             ),
             derived_media_caption=_localized(
-                "direct collocationのstate・control・制約診断履歴",
+                "Direct Collocationの状態・制御入力・制約の診断履歴",
                 "State, control, and constraint diagnostics for direct collocation",
             ),
-            limitations_ja="N=20の固定meshによる教育用履歴であり、連続時間の可行性・実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない",
+            limitations_ja=(
+                "N=20の固定メッシュによる教育用履歴であり、連続時間の可行性・実機安全性・"
+                "動力学モデルの妥当性やソルバーの一般性能を保証しない"
+            ),
             limitations_en=(
                 "A fixed N=20 educational mesh history; it does not guarantee "
                 "continuous-time feasibility, hardware safety, model validity, or "
@@ -2127,26 +2143,28 @@ def _trace_lesson(
         )
         next_id = PRIMARY_SCENARIO_ID if not is_primary else POOR_INITIALIZATION_SCENARIO_ID
         method_condition = {
-            PRIMARY_SCENARIO_ID: "共通診断stateに対するTRFのbounds・残差vector適用条件",
-            POOR_INITIALIZATION_SCENARIO_ID: "同じ診断probeをa=0から始める初期値感度",
-            LM_SCENARIO_ID: "共通診断stateに対するLMのbounds非active適用条件",
-            LBFGSB_SCENARIO_ID: "共通診断stateに対するscalar目的fallback適用条件",
+            PRIMARY_SCENARIO_ID: (
+                "共通の診断状態に対する、上下限と残差ベクトルを扱うTRFの適用条件"
+            ),
+            POOR_INITIALIZATION_SCENARIO_ID: "同じ診断例をa=0から始める初期値感度",
+            LM_SCENARIO_ID: "共通の診断状態に対する、上下限が有効にならない場合のLMの適用条件",
+            LBFGSB_SCENARIO_ID: "共通の診断状態に対する、スカラー目的関数を使う代替手段の適用条件",
         }[trace.scenario_id]
         return VisualizationLesson(
             learning_objective=_localized(
-                "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
+                "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む",
                 "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
             ),
             misconception=(
                 _localized(
-                    "残差二乗和が下がれば、悪い初期値やrank不足を確認しなくてよい",
+                    "残差二乗和が下がれば、悪い初期値やランク不足を確認しなくてよい",
                     "A decreasing residual sum of squares does not remove the need "
                     "to check initialization and rank",
                 )
                 if is_poor_initialization
                 else None
             ),
-            expected_phenomenon_ja=f"{method_condition}として、共通probeのmetric履歴を読みます。",
+            expected_phenomenon_ja=f"{method_condition}として、共通の診断例が記録した指標の履歴を読みます。",
             expected_phenomenon_en=(
                 "Read one solver-independent diagnostic-probe history through the stated "
                 "applicability lens."
@@ -2154,7 +2172,7 @@ def _trace_lesson(
             success_signals=[
                 _signal(
                     "residual_and_rank_visible",
-                    "残差normとJacobian rankをparameter推定値と同時に確認できる",
+                    "残差のノルムとJacobianのランクをパラメータ推定値と同時に確認できる",
                     "Residual norm and Jacobian rank remain visible with the parameter estimate",
                     "parameter_estimate",
                     "residual_norm",
@@ -2165,7 +2183,7 @@ def _trace_lesson(
                 [
                     _signal(
                         "rank_deficient_start",
-                        "初期Jacobian rankが2となり、probe終了時も残差が残る",
+                        "初期のJacobianのランクが2となり、診断例の終了時も残差が残る",
                         "The initial Jacobian rank is two and residual error remains "
                         "when the probe ends",
                         "jacobian_rank",
@@ -2177,18 +2195,18 @@ def _trace_lesson(
                 else []
             ),
             primary_observables=[
-                _observable("parameter_estimate", "parameter推定値", "parameter estimate"),
-                _observable("residual_norm", "残差norm", "residual norm"),
-                _observable("jacobian_rank", "Jacobian rank", "Jacobian rank"),
+                _observable("parameter_estimate", "パラメータ推定値", "parameter estimate"),
+                _observable("residual_norm", "残差のノルム", "residual norm"),
+                _observable("jacobian_rank", "Jacobianのランク", "Jacobian rank"),
             ],
             secondary_observables=[
-                _observable("gradient_norm", "gradient norm", "gradient norm"),
-                _observable("parameter_error", "既知truthからの距離", "distance from known truth"),
+                _observable("gradient_norm", "勾配のノルム", "gradient norm"),
+                _observable("parameter_error", "既知の真値からの距離", "distance from known truth"),
             ],
             narration_steps=[
                 _step(
                     "start",
-                    "初期parameterとrankを確認",
+                    "初期パラメータとランクを確認",
                     "Inspect initial parameters and rank",
                     "parameter_estimate",
                     "jacobian_rank",
@@ -2202,7 +2220,7 @@ def _trace_lesson(
                 ),
                 _step(
                     "pattern_visible",
-                    "rankと収束metricを並べる",
+                    "ランクと収束の指標を並べる",
                     "Align rank and convergence metrics",
                     "residual_norm",
                     "gradient_norm",
@@ -2210,7 +2228,7 @@ def _trace_lesson(
                 ),
                 _step(
                     "termination",
-                    "最終評価の誤差とstatusを確認",
+                    "最終評価の誤差と終了状態を確認",
                     "Inspect error and status at the final evaluation",
                     "residual_norm",
                     "parameter_error",
@@ -2221,30 +2239,30 @@ def _trace_lesson(
             recommended_next_scenario_ids=[next_id],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="合成dataを生成したtruth [1.8, 0.7, 0.25] を教材診断にだけ使う",
+                note_ja="合成データを生成した真値 [1.8, 0.7, 0.25] を教材の診断にだけ使う",
                 note_en=(
                     "Use the synthetic-data truth [1.8, 0.7, 0.25] only for teaching diagnostics"
                 ),
             ),
             static_summary=_localized(
-                f"{method_condition}。20観測に同じsolver非依存probeを適用し、metricを表示します。",
+                f"{method_condition}。20観測に同じソルバー非依存の診断例を適用し、その指標を表示します。",
                 "Apply one solver-independent probe to the same 20 observations and show "
                 "its metrics.",
             ),
             text_alternative=_localized(
-                "各evaluationの [a, k, c]、残差norm、gradient norm、Jacobian rank、"
-                "truthからの距離を列挙します。",
+                "各評価の [a, k, c]、残差のノルム、勾配のノルム、Jacobianのランク、"
+                "真値からの距離を列挙します。",
                 "List [a, k, c], residual norm, gradient norm, Jacobian rank, and "
                 "distance from truth at every evaluation.",
             ),
             derived_media_caption=_localized(
-                "指数減衰fitの共通診断probeによるresidual・rank metric履歴",
+                "指数減衰の当てはめに対する共通の診断例の、残差・ランク指標の履歴",
                 "Residual and rank history from the shared exponential-fit diagnostic probe",
             ),
             limitations_ja=(
-                "deterministic damped Gauss–Newton診断probeであり、member solverは実行して"
-                "いません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataの"
-                "parameter識別性を表しません。"
+                "乱数を使わない減衰付きGauss–Newton法の診断例であり、比較対象のソルバーは実行して"
+                "いません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実データの"
+                "パラメータ識別性を表しません。"
             ),
             limitations_en=(
                 "A deterministic damped Gauss-Newton diagnostic probe; no member solver was "
@@ -2256,25 +2274,25 @@ def _trace_lesson(
         budget_stop = trace.terminal_status == "budget_exhausted"
         return VisualizationLesson(
             learning_objective=_localized(
-                "上界とincumbentが探索範囲を狭める過程を読む",
+                "上界と暫定解が探索範囲を狭める過程を読む",
                 "Read how bounds and the incumbent reduce the search space",
             ),
             misconception=(
                 _localized(
-                    "予算で止まった探索木のincumbentは最適性が証明されている",
+                    "予算で止まった探索木の暫定解は最適性が証明されている",
                     "An incumbent from a budget-stopped tree is proven optimal",
                 )
                 if budget_stop
                 else None
             ),
-            expected_phenomenon_ja="枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する",
+            expected_phenomenon_ja="枝分かれ、上界、暫定解の更新、2種類の枝刈りを追跡する",
             expected_phenomenon_en=(
                 "Observe branching, bounds, incumbent updates, and two pruning reasons"
             ),
             success_signals=[
                 _signal(
                     "subtree_pruned",
-                    "上界または実行不可能性でsubtreeが枝刈りされる",
+                    "上界または実行不可能性で部分木が枝刈りされる",
                     "A subtree is pruned by its bound or infeasibility",
                     "search_nodes",
                     "prune_reason",
@@ -2284,7 +2302,7 @@ def _trace_lesson(
                 [
                     _signal(
                         "proof_gap_remains",
-                        "node予算到達時に未探索nodeとbound gapが残る",
+                        "ノード数の予算に達した時点で、未探索のノードと上界とのギャップが残る",
                         "Unexplored nodes and a bound gap remain at the node budget",
                         "search_nodes",
                         "global_bound",
@@ -2295,23 +2313,23 @@ def _trace_lesson(
                 else []
             ),
             primary_observables=[
-                _observable("search_nodes", "探索node", "search nodes"),
+                _observable("search_nodes", "探索ノード", "search nodes"),
                 _observable("global_bound", "大域上界", "global bound"),
                 _observable("incumbent", "暫定解", "incumbent"),
             ],
             secondary_observables=[_observable("prune_reason", "枝刈り理由", "pruning reason")],
             narration_steps=[
-                _step("start", "root nodeから開始", "Start from the root node", "search_nodes"),
+                _step("start", "根ノードから開始", "Start from the root node", "search_nodes"),
                 _step(
                     "first_change",
-                    "最初のbranchとbound更新",
+                    "最初の分枝と上界の更新",
                     "First branch and bound update",
                     "search_nodes",
                     "global_bound",
                 ),
                 _step(
                     "pattern_visible",
-                    "incumbent更新と枝刈りを比較",
+                    "暫定解の更新と枝刈りを比較",
                     "Compare incumbent updates and pruning",
                     "incumbent",
                     "prune_reason",
@@ -2333,24 +2351,24 @@ def _trace_lesson(
             ],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="既知の最適値とbound gapを表示する",
+                note_ja="既知の最適値と、上界とのギャップを表示する",
                 note_en="Show the known optimum and bound gap",
             ),
             static_summary=_localized(
-                "探索木でnode、bound、incumbent、枝刈り理由を同時に追う。",
+                "探索木でノード、上界、暫定解、枝刈り理由を同時に追う。",
                 "Follow nodes, bounds, the incumbent, and pruning reasons together.",
             ),
             text_alternative=_localized(
-                "各milestoneで展開済みnode、global bound、incumbent、停止理由を読み上げる。",
+                "各段階で展開済みのノード、大域上界、暫定解、停止理由を読み上げる。",
                 "At each milestone, report explored nodes, global bound, incumbent, "
                 "and stop reason.",
             ),
             derived_media_caption=_localized(
-                "Branch-and-Boundの探索木: boundとincumbentによる枝刈り",
+                "Branch-and-Boundの探索木: 上界と暫定解による枝刈り",
                 "Branch-and-Bound tree: pruning by bounds and the incumbent",
             ),
             limitations_ja=(
-                "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
+                "4変数の教育用Branch-and-Boundであり、実際のソルバーの切除平面生成や前処理の性能は再現しない"
             ),
             limitations_en=(
                 "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted"
@@ -2370,11 +2388,11 @@ def _trace_lesson(
             misconception=(
                 _localized(
                     (
-                        "開始位置、initial simplex scale、評価budgetが異なるrunの差を、"
+                        "開始位置、初期単体のスケール、評価予算が異なる実行の差を、"
                         "開始位置だけの感度と解釈できる"
                     )
                     if failure_slice
-                    else "同じ目的関数なら初期simplexを変えても同じ経路を通る",
+                    else "同じ目的関数なら初期単体を変えても同じ経路を通る",
                     (
                         "A run with a different start, initial simplex scale, and evaluation "
                         "budget can be interpreted as start-position sensitivity alone"
@@ -2411,9 +2429,9 @@ def _trace_lesson(
                             else "initial_simplex_changes_path"
                         ),
                         (
-                            "開始位置、scale、budgetが異なるfailure sliceで縮小と予算停止を読む"
+                            "開始位置、スケール、予算がすべて異なる失敗例の切り出しで、縮小と予算停止を読む"
                             if failure_slice
-                            else "初期simplexの位置により受理操作と収束経路が変わる"
+                            else "初期単体の位置により受理操作と収束経路が変わる"
                         ),
                         (
                             "Read shrinkage and budget termination in a failure slice whose "
@@ -2438,9 +2456,7 @@ def _trace_lesson(
             ],
             secondary_observables=[_observable("objective_value", "目的関数値", "objective value")],
             narration_steps=[
-                _step(
-                    "start", "初期simplexを確認", "Inspect the initial simplex", "simplex_vertices"
-                ),
+                _step("start", "初期単体を確認", "Inspect the initial simplex", "simplex_vertices"),
                 _step(
                     "first_change",
                     "最初の候補と受理判断",
@@ -2457,7 +2473,7 @@ def _trace_lesson(
                 ),
                 _step(
                     "termination",
-                    "最終simplexと終了理由",
+                    "最終単体と終了理由",
                     "Final simplex and termination reason",
                     "simplex_vertices",
                     "objective_value",
@@ -2474,25 +2490,25 @@ def _trace_lesson(
             recommended_next_scenario_ids=[next_id],
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
-                note_ja="問題instanceの既知最適点をgoal cueとして表示する",
+                note_ja="問題例の既知最適点を目標の目印として表示する",
                 note_en="Show the problem instance optimum as a goal cue",
             ),
             static_summary=_localized(
-                "等高線上でsimplex頂点、候補点、受理操作、最良値の変化を示す。",
+                "等高線上で単体の頂点、候補点、受理操作、最良値の変化を示す。",
                 "Show simplex vertices, candidate, accepted operation, and best-value "
                 "changes on contours.",
             ),
             text_alternative=_localized(
-                "各frameの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
+                "各フレームの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
                 "Report vertex ranks, candidate, operation, decision, and best value "
                 "for each frame.",
             ),
             derived_media_caption=_localized(
-                "Nelder–Mead: simplexの幾何操作と受理判断",
+                "Nelder–Mead: 単体の幾何操作と受理判断",
                 "Nelder–Mead: simplex geometry and acceptance decisions",
             ),
             limitations_ja=(
-                "2次元の教育用failure sliceであり、開始位置、initial simplex scale、評価budgetを"
+                "2次元の教育用の失敗例の切り出しであり、開始位置、初期単体のスケール、評価予算を"
                 "同時に変えるため、単一要因の感度や一般的な性能優劣を示さない"
                 if failure_slice
                 else "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
@@ -2522,7 +2538,7 @@ def _trace_lesson(
     counterpart = standard_id if is_divergence else failure_id
     return VisualizationLesson(
         learning_objective=_localized(
-            "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+            "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む",
             "Read gradient, update vector, trajectory, and objective at the same evaluation",
         ),
         misconception=(
@@ -2541,7 +2557,7 @@ def _trace_lesson(
         success_signals=[
             _signal(
                 "trajectory_response_visible",
-                "gradientとupdateの向きが次の現在点へ反映される",
+                "勾配と更新の向きが次の現在点へ反映される",
                 "Gradient and update directions are reflected in the next current point",
                 "current_point",
                 "gradient",
@@ -2565,7 +2581,7 @@ def _trace_lesson(
         primary_observables=[
             _observable("current_point", "現在点", "current point"),
             _observable("gradient", "勾配", "gradient"),
-            _observable("update_vector", "更新vector", "update vector"),
+            _observable("update_vector", "更新ベクトル", "update vector"),
         ],
         secondary_observables=[_observable("objective_value", "目的関数値", "objective value")],
         narration_steps=[
@@ -2578,7 +2594,7 @@ def _trace_lesson(
             ),
             _step(
                 "first_change",
-                "最初のupdateを追う",
+                "最初の更新を追う",
                 "Follow the first update",
                 "gradient",
                 "update_vector",
@@ -2593,7 +2609,7 @@ def _trace_lesson(
             ),
             _step(
                 "termination",
-                "best-so-farと終了理由を確認",
+                "これまでの最良値と終了理由を確認",
                 "Check best-so-far and termination reason",
                 "current_point",
                 "objective_value",
@@ -2608,12 +2624,12 @@ def _trace_lesson(
             note_en="Show the known optimum in the trajectory coordinate system",
         ),
         static_summary=_localized(
-            f"{method_label}の現在点、gradient、update、目的値をevaluation軸で同期する。",
+            f"{method_label}の現在点、勾配、更新、目的値を評価の軸で同期する。",
             f"Synchronize {method_label} current point, gradient, update, and objective "
             "by evaluation.",
         ),
         text_alternative=_localized(
-            "各evaluationの現在点、目的値、gradient、update vector、終了状態を読む。",
+            "各評価の現在点、目的値、勾配、更新ベクトル、終了状態を読む。",
             "Report current point, objective, gradient, update vector, and status at "
             "each evaluation.",
         ),
@@ -2621,7 +2637,7 @@ def _trace_lesson(
             f"{method_label}: 細長い谷での更新軌跡",
             f"{method_label}: update trajectory in an elongated valley",
         ),
-        limitations_ja="同一presetの教育用比較であり、一般的な手法の優劣を示さない",
+        limitations_ja="事前に固定した同一設定での教育用比較であり、一般的な手法の優劣を示さない",
         limitations_en="An educational fixed-preset comparison, not a general method ranking",
     )
 

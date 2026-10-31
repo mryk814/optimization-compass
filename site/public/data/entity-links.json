@@ -522,7 +522,7 @@
       "entity_id": "EC021",
       "entity_type": "case",
       "external_url": null,
-      "label": "mini-batchで画像分類モデルを学習する",
+      "label": "ミニバッチで画像分類モデルを学習する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -690,7 +690,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
+      "summary": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -1063,7 +1063,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+      "summary": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
     },
     {
       "aliases": [],
@@ -1192,7 +1192,7 @@
       "entity_id": "EC029",
       "entity_type": "case",
       "external_url": null,
-      "label": "pendulumを制約内で振り上げる",
+      "label": "振り子を制約内で振り上げる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -1305,7 +1305,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+      "summary": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -1421,7 +1421,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -2021,7 +2021,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2140,7 +2140,7 @@
       "entity_id": "energy-cvar-procurement",
       "entity_type": "case",
       "external_url": null,
-      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "label": "価格シナリオの裾の費用を抑えて電力を調達する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -2238,7 +2238,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+      "summary": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。"
     },
     {
       "aliases": [],
@@ -2354,7 +2354,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -2601,7 +2601,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2722,7 +2722,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -2959,7 +2959,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -2967,7 +2967,7 @@
       "entity_id": "multi-fidelity-simulator",
       "entity_type": "case",
       "external_url": null,
-      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "label": "低精度／高精度のシミュレータを予算内で使い分ける",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3105,7 +3105,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+      "summary": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。"
     },
     {
       "aliases": [],
@@ -3113,7 +3113,7 @@
       "entity_id": "nelder-mead-initial-simplex",
       "entity_type": "case",
       "external_url": null,
-      "label": "初期simplexで局所探索の感度を見抜く",
+      "label": "初期単体で局所探索の感度を見抜く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3221,7 +3221,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+      "summary": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。"
     },
     {
       "aliases": [],
@@ -3332,7 +3332,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。"
     },
     {
       "aliases": [],
@@ -3453,7 +3453,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -3461,7 +3461,7 @@
       "entity_id": "portfolio-cvar-allocation",
       "entity_type": "case",
       "external_url": null,
-      "label": "scenarioのtail riskを抑えて配分する",
+      "label": "シナリオの裾リスクを抑えて配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3534,7 +3534,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+      "summary": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。"
     },
     {
       "aliases": [],
@@ -3640,7 +3640,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。"
     },
     {
       "aliases": [],
@@ -3759,7 +3759,7 @@
       "entity_id": "shape-diffuser",
       "entity_type": "case",
       "external_url": null,
-      "label": "2D diffuserの壁面shapeを更新する",
+      "label": "2Dディフューザの壁面形状を更新する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -3877,7 +3877,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+      "summary": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。"
     },
     {
       "aliases": [],
@@ -4021,7 +4021,7 @@
       "entity_id": "so3-attitude-alignment",
       "entity_type": "case",
       "external_url": null,
-      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "label": "SO(3)上で回転角がπに近い姿勢を合わせる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -4134,7 +4134,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+      "summary": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -4381,7 +4381,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+      "summary": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -5061,7 +5061,7 @@
       "entity_id": "COMPARE_IRRIGATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "灌漑更新Caseから探索完了と予算停止を読む",
+      "label": "灌漑更新の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5114,7 +5114,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -5193,7 +5193,7 @@
       "entity_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "small noise下で探索係数だけを変える",
+      "label": "小さいノイズの下で探索係数だけを変える",
       "relations": [
         {
           "relation_type": "case",
@@ -5251,7 +5251,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。"
+      "summary": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。"
     },
     {
       "aliases": [],
@@ -5259,7 +5259,7 @@
       "entity_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "巡回健診Caseから探索完了と予算停止を読む",
+      "label": "巡回健診の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5312,7 +5312,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [
@@ -5383,7 +5383,7 @@
       "entity_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "抽象的な軌道最適化からpendulumのmesh感度を読む",
+      "label": "抽象的な軌道最適化から振り子のメッシュ感度を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5436,7 +5436,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。"
+      "summary": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。"
     },
     {
       "aliases": [],
@@ -5632,7 +5632,7 @@
       "entity_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "risk aversionで平均・分散配分を読み比べる",
+      "label": "リスク回避係数で平均・分散配分を読み比べる",
       "relations": [
         {
           "relation_type": "case",
@@ -5680,7 +5680,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。"
+      "summary": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。"
     },
     {
       "aliases": [],
@@ -5810,7 +5810,7 @@
       "entity_id": "COMPARE_RESTORATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "再生プロジェクト選定Caseから探索完了と予算停止を読む",
+      "label": "再生プロジェクト選定の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -5863,7 +5863,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -6071,7 +6071,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。"
+      "summary": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。"
     },
     {
       "aliases": [],
@@ -6150,7 +6150,7 @@
       "entity_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "支援拠点Caseから探索完了と予算停止を読む",
+      "label": "支援拠点の事例から探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
@@ -6208,7 +6208,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+      "summary": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -7524,6 +7524,92 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.assignment-matching",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "割当問題・マッチング",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S144",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S177",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA030",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.network-flow",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hungarian-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "network-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "割当問題は、人と仕事のような二つの集合を一対一に組み合わせ、組み合わせの費用の合計を最小にする定式化です。変数は0か1ですが、整数条件を外した線形計画でも0と1の答えが返り、行と列に付けた値の合計が、答えが最小であることの証拠になります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.bilevel-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -8225,6 +8311,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.distributed-consensus",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "分散・合意最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S181",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA051",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "分散・合意最適化は、目的関数が拠点ごとの部分の和に分かれ、記録を1か所に集められないときの定式化です。拠点ごとの答えが共通の値に一致するという制約を付けて解きます。拠点は自分の部分だけを解き、共通の値などの少ない数をやり取りしながら、全体の答えに近づきます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.dynamics-defect",
       "entity_id": "concept.dynamics-defect",
       "entity_type": "content",
@@ -8273,6 +8420,77 @@
         }
       ],
       "summary": "動力学残差は、離散化した軌道がモデルの時間発展とどれだけずれているかを表す残差で、費用とは別に可行性として追う指標です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.eigenvalue-problem",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "固有値・特異値問題",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S173",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA003",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonconvex-qp-qcqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.so3-se3-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "固有値問題は、長さ1のベクトルの中で二次形式を最小（または最大）にする定式化です。制約の集合が球面なので凸ではありませんが、最小値は対称行列の最小固有値に、答えはその固有ベクトルに一致し、固有値分解や特異値分解で大域的な答えが得られます。"
     },
     {
       "aliases": [],
@@ -8410,6 +8628,87 @@
         }
       ],
       "summary": "非常に高価な低次元評価は、1回の評価に時間や費用がかかり、試せる回数が数回から数十回ほどしかない最小化の定式化です。式も勾配も見えないため、これまでの観測から次に試す点を選ぶ手順そのものが主題になります。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.external-solver-objective",
+      "entity_id": "concept.external-solver-objective",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "外部の計算ソフトを目的関数の中で呼ぶ最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bilevel-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.root-finding",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "外部の計算ソフトを目的関数の中で呼ぶ最適化は、決めた値をThermo-Calcのような計算ソフトに渡し、返ってきた結果から目的の値を作る問題です。ソフトの中でも平衡を求める最小化が走るので、外側で何を最小にするかを分けて考えます。相が消える範囲では結果が平らになり、勾配を使う方法は動かないまま成功と報告することがあります。"
     },
     {
       "aliases": [],
@@ -10208,6 +10507,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.online-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "オンライン最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S182",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA052",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "オンライン最適化は、決めた後に初めて結果が分かることを何度も繰り返す場面の定式化です。後から振り返って最もよかった固定の決め方との差（後悔・regret）を小さくします。結果の並びに分布を仮定しないので、どんな並びでも後悔が日数より遅く増える決め方を選びます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.optimal-control",
       "entity_type": "content",
       "external_url": null,
@@ -10548,6 +10893,168 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.robust-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ロバスト最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S162",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S174",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S180",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA050",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.chance-risk-contract",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.second-order-cone-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.uncertainty-models",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-dual-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ロバスト最適化は、不確かな値が決めた範囲（不確実性集合）のどこに来ても制約を守るように決め、その中で目的を最もよくする定式化です。制約が不確かな値について線形で、範囲が箱や楕円なら、無数にある制約を最悪の値での1本に書き換えられます。その結果、線形計画や二次錐計画として解けます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.robust-parameter-estimation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "外れ値を含むパラメータ推定",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S185",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S186",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA056",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.nonlinear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.robust-regression",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-start",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "外れ値を含むパラメータ推定は、パラメータについて非線形なモデルを、大きなずれの影響を抑える損失で観測に当てはめる定式化です。二乗和では1点の外れ値が曲線を引っ張るだけでなく、どの谷が最も深いかまで入れ替えることがあります。損失と尺度を選び、複数の始点から解いて答えを比べます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.robust-regression",
       "entity_type": "content",
       "external_url": null,
@@ -10646,6 +11153,77 @@
         }
       ],
       "summary": "方程式の求根は、残差がゼロになる未知量を探す定式化です。目的値を小さくする最適化へ書き換えることもできますが、小さな二乗和や停止の成功だけでは、方程式を要求精度で満たしたとは言えません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.sat-maxsat",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SAT・MaxSAT",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S176",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA027",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cdcl-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.cp-scheduling",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.mixed-integer-linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
+        }
+      ],
+      "summary": "SATは、真か偽かを決める変数に対し、「AかBの少なくとも一方」のような論理の節をすべて満たす割り当てがあるかを問う定式化です。すべては満たせないとき、節に重みを付け、満たした節の重みの合計を最大にするのがMaxSATです。答えが「ない」ときは、ソルバーによっては、ないことの証明も出力できます。"
     },
     {
       "aliases": [],
@@ -11140,7 +11718,7 @@
       "entity_id": "concept.so3-rotation-representation",
       "entity_type": "content",
       "external_url": null,
-      "label": "SO(3)の行列・接空間表現",
+      "label": "リー代数で回転を動かす：SO(3)の接空間",
       "relations": [
         {
           "relation_type": "comparison",
@@ -11174,6 +11752,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.so3-se3-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.variable-domain",
           "target_type": "content"
         },
@@ -11203,7 +11786,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のステップを分けて扱います。射影、レトラクション、指数写像は同じ更新ではありません。"
+      "summary": "回転を最適化するときは、行列の9つの成分を直接動かさず、今の向きから「どの軸のまわりに何rad回すか」を3つの数で決めます。3つの数が自由に動ける平らな空間がリー代数で、それを回転に変えるのが指数写像です。"
     },
     {
       "aliases": [],
@@ -11275,6 +11858,72 @@
         }
       ],
       "summary": "SO(3)/SE(3)上の最適化は、物体の向き（回転）と位置を決めて、測定とのずれを最小にする定式化です。回転行列の9つの成分は自由に動かせず、直交性と行列式1の条件の中だけで動かします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.solver-evaluation-points",
+      "entity_id": "concept.solver-evaluation-points",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ソルバーが目的関数を呼ぶ点と回数",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bound-constrained-smooth",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点は範囲の内側にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、範囲の外の入力と評価の内訳を確かめられます。"
     },
     {
       "aliases": [],
@@ -11420,6 +12069,97 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.stochastic-programming",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "確率計画（2段階の確率計画）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S134",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S160",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S161",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S163",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S164",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA049",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.chance-risk-contract",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.stochastic-erm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.uncertainty-models",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "確率計画は、不確かな値が分かる前に決めることと、分かった後で対応することを分け、いまの費用と、後の対応にかかる費用の期待値の合計を最小にする定式化です。不確かさを有限個のシナリオで表すと、全シナリオを並べた一つの線形計画として解けます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.time-discretization",
       "entity_id": "concept.time-discretization",
       "entity_type": "content",
@@ -11473,6 +12213,87 @@
         }
       ],
       "summary": "時間離散化は連続時間の動力学と制約を有限個の時刻点へ写す設計で、メッシュの粗さは計算量だけでなく解の意味を変えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.trajectory-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "軌道最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S178",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA044",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.model-predictive-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "軌道最適化は、始点から目標までの状態と操作の時間変化（軌道）を決める定式化です。運動の式と経路上の制約を守る軌道の中から、費用が最も小さいものを選びます。時間を区切って有限個の変数にすると、制約付きの非線形計画として解けます。ただし、障害物をよける制約は凸でなく、格子点の間で守れているかも別に確かめる必要があります。"
     },
     {
       "aliases": [],
@@ -22991,7 +23812,7 @@
       "entity_id": "EC021",
       "entity_type": "journey",
       "external_url": null,
-      "label": "mini-batchで画像分類モデルを学習する",
+      "label": "ミニバッチで画像分類モデルを学習する",
       "relations": [
         {
           "relation_type": "alternate",
@@ -23119,7 +23940,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
+      "summary": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -23467,7 +24288,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+      "summary": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
     },
     {
       "aliases": [],
@@ -23571,7 +24392,7 @@
       "entity_id": "EC029",
       "entity_type": "journey",
       "external_url": null,
-      "label": "pendulumを制約内で振り上げる",
+      "label": "振り子を制約内で振り上げる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -23669,7 +24490,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+      "summary": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -23755,7 +24576,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -24305,7 +25126,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -24419,7 +25240,7 @@
       "entity_id": "energy-cvar-procurement",
       "entity_type": "journey",
       "external_url": null,
-      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "label": "価格シナリオの裾の費用を抑えて電力を調達する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -24517,7 +25338,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+      "summary": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。"
     },
     {
       "aliases": [],
@@ -24623,7 +25444,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -24850,7 +25671,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -24961,7 +25782,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。"
     },
     {
       "aliases": [],
@@ -25183,7 +26004,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。"
     },
     {
       "aliases": [],
@@ -25191,7 +26012,7 @@
       "entity_id": "multi-fidelity-simulator",
       "entity_type": "journey",
       "external_url": null,
-      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "label": "低精度／高精度のシミュレータを予算内で使い分ける",
       "relations": [
         {
           "relation_type": "alternate",
@@ -25314,7 +26135,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+      "summary": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。"
     },
     {
       "aliases": [],
@@ -25322,7 +26143,7 @@
       "entity_id": "nelder-mead-initial-simplex",
       "entity_type": "journey",
       "external_url": null,
-      "label": "初期simplexで局所探索の感度を見抜く",
+      "label": "初期単体で局所探索の感度を見抜く",
       "relations": [
         {
           "relation_type": "alternate",
@@ -25425,7 +26246,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+      "summary": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。"
     },
     {
       "aliases": [],
@@ -25531,7 +26352,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+      "summary": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。"
     },
     {
       "aliases": [],
@@ -25642,7 +26463,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -25650,7 +26471,7 @@
       "entity_id": "portfolio-cvar-allocation",
       "entity_type": "journey",
       "external_url": null,
-      "label": "scenarioのtail riskを抑えて配分する",
+      "label": "シナリオの裾リスクを抑えて配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -25748,7 +26569,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+      "summary": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。"
     },
     {
       "aliases": [],
@@ -25859,7 +26680,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+      "summary": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。"
     },
     {
       "aliases": [],
@@ -25973,7 +26794,7 @@
       "entity_id": "shape-diffuser",
       "entity_type": "journey",
       "external_url": null,
-      "label": "2D diffuserの壁面shapeを更新する",
+      "label": "2Dディフューザの壁面形状を更新する",
       "relations": [
         {
           "relation_type": "alternate",
@@ -26111,7 +26932,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+      "summary": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。"
     },
     {
       "aliases": [],
@@ -26230,7 +27051,7 @@
       "entity_id": "so3-attitude-alignment",
       "entity_type": "journey",
       "external_url": null,
-      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "label": "SO(3)上で回転角がπに近い姿勢を合わせる",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -26343,7 +27164,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+      "summary": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -26550,7 +27371,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+      "summary": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
     },
     {
       "aliases": [
@@ -33974,13 +34795,21 @@
       "summary": "線形方程式に還元。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.eigenvalue-problem"
+      ],
       "canonical_url": "/formulations/PA003",
       "entity_id": "PA003",
       "entity_type": "problem",
       "external_url": null,
       "label": "固有値・特異値問題",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.eigenvalue-problem",
+          "target_type": "content"
+        }
+      ],
       "summary": "固有値・特異値問題。変数=matrix、目的=quadratic、制約=manifold。"
     },
     {
@@ -34510,13 +35339,21 @@
       "summary": "制約programming型scheduling。変数=mixed、目的=discrete、制約=combinatorial。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.sat-maxsat"
+      ],
       "canonical_url": "/formulations/PA027",
       "entity_id": "PA027",
       "entity_type": "problem",
       "external_url": null,
       "label": "SAT・MaxSAT",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.sat-maxsat",
+          "target_type": "content"
+        }
+      ],
       "summary": "SAT・MaxSAT。変数=binary、目的=discrete、制約=logical。"
     },
     {
@@ -34556,13 +35393,21 @@
       "summary": "最短路。変数=graph、目的=linear、制約=combinatorial。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.assignment-matching"
+      ],
       "canonical_url": "/formulations/PA030",
       "entity_id": "PA030",
       "entity_type": "problem",
       "external_url": null,
       "label": "割当・matching",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.assignment-matching",
+          "target_type": "content"
+        }
+      ],
       "summary": "割当・matching。変数=binary、目的=linear、制約=combinatorial。"
     },
     {
@@ -35010,13 +35855,21 @@
       "summary": "model predictive control。変数=trajectory、目的=quadratic、制約=dynamics。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.trajectory-optimization"
+      ],
       "canonical_url": "/formulations/PA044",
       "entity_id": "PA044",
       "entity_type": "problem",
       "external_url": null,
       "label": "軌道最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.trajectory-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "軌道最適化。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
     },
     {
@@ -35104,43 +35957,75 @@
       "summary": "相補性問題。変数=continuous、目的=general_nonlinear、制約=nonlinear。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.stochastic-programming"
+      ],
       "canonical_url": "/formulations/PA049",
       "entity_id": "PA049",
       "entity_type": "problem",
       "external_url": null,
       "label": "確率計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.stochastic-programming",
+          "target_type": "content"
+        }
+      ],
       "summary": "確率計画。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.robust-optimization"
+      ],
       "canonical_url": "/formulations/PA050",
       "entity_id": "PA050",
       "entity_type": "problem",
       "external_url": null,
       "label": "robust optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.robust-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "robust optimization。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.distributed-consensus"
+      ],
       "canonical_url": "/formulations/PA051",
       "entity_id": "PA051",
       "entity_type": "problem",
       "external_url": null,
       "label": "分散・合意最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.distributed-consensus",
+          "target_type": "content"
+        }
+      ],
       "summary": "分散・合意最適化。変数=continuous、目的=composite、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.online-optimization"
+      ],
       "canonical_url": "/formulations/PA052",
       "entity_id": "PA052",
       "entity_type": "problem",
       "external_url": null,
       "label": "online optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.online-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "online optimization。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
@@ -35182,13 +36067,21 @@
       "summary": "逆問題。変数=continuous、目的=sum_of_squares、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.robust-parameter-estimation"
+      ],
       "canonical_url": "/formulations/PA056",
       "entity_id": "PA056",
       "entity_type": "problem",
       "external_url": null,
       "label": "外れ値を含むparameter estimation",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.robust-parameter-estimation",
+          "target_type": "content"
+        }
+      ],
       "summary": "外れ値を含むparameter estimation。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
@@ -35253,7 +36146,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -35289,7 +36182,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -35297,7 +36190,7 @@
       "entity_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Bilevel回帰 · exact inner診断",
+      "label": "二階層回帰 · 内側問題を厳密に扱う診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35330,7 +36223,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
+      "summary": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む"
     },
     {
       "aliases": [],
@@ -35338,7 +36231,7 @@
       "entity_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Bilevel回帰 · finite relaxationの残差",
+      "label": "二階層回帰 · 有限の緩和で残る残差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35371,7 +36264,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
+      "summary": "外側の進捗、内側問題の求解、相補性を別々の履歴として読む"
     },
     {
       "aliases": [],
@@ -35379,7 +36272,7 @@
       "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "0-1 knapsack: node予算で停止",
+      "label": "0-1ナップサック: ノード数の予算で停止",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35467,7 +36360,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+      "summary": "上界と暫定解が探索範囲を狭める過程を読む"
     },
     {
       "aliases": [],
@@ -35475,7 +36368,7 @@
       "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "0-1 knapsack: 最適性証明",
+      "label": "0-1ナップサック: 最適性の証明",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35563,7 +36456,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+      "summary": "上界と暫定解が探索範囲を狭める過程を読む"
     },
     {
       "aliases": [],
@@ -35571,7 +36464,7 @@
       "entity_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "preference weightで選択点がどう動くか比べる",
+      "label": "選好の重みで選択点がどう動くか比べる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35614,7 +36507,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じPareto frontから、weightによって選択点が変わることを読む"
+      "summary": "同じパレート前線から、重みによって選択点が変わることを読む"
     },
     {
       "aliases": [],
@@ -35622,7 +36515,7 @@
       "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "単一bestではなくPareto frontを読む",
+      "label": "最良の1点ではなくパレート前線を読む",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35660,7 +36553,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "支配関係とpreferenceを分けて意思決定する"
+      "summary": "支配関係と選好を分けて意思決定する"
     },
     {
       "aliases": [],
@@ -35668,7 +36561,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35726,7 +36619,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -35734,7 +36627,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35792,7 +36685,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -35800,7 +36693,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35858,7 +36751,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -35866,7 +36759,7 @@
       "entity_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35929,7 +36822,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+      "summary": "観測から代理モデルと獲得関数を更新して次の評価点を選ぶ流れを読む"
     },
     {
       "aliases": [],
@@ -35937,7 +36830,7 @@
       "entity_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "high fidelityだけで使う同一cost budget",
+      "label": "同じ費用予算を高精度モデルだけに使う",
       "relations": [
         {
           "relation_type": "artifact",
@@ -35980,7 +36873,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+      "summary": "同じ初期計画と費用予算で、高精度モデルだけを選ぶ場合の評価記録を読む"
     },
     {
       "aliases": [],
@@ -35988,7 +36881,7 @@
       "entity_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "low-fidelity biasで候補順位が反転する",
+      "label": "低精度モデルの偏りで候補の順位が反転する",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36026,7 +36919,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+      "summary": "同じ2点の低精度・高精度の観測を照合し、精度間の食い違いによる順位の反転を検出する"
     },
     {
       "aliases": [],
@@ -36034,7 +36927,7 @@
       "entity_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "低／高 fidelity simulator の評価ledger",
+      "label": "低精度・高精度シミュレータの評価記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36077,7 +36970,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む"
+      "summary": "シミュレータ呼び出しごとの精度・費用・状態を追い、高精度モデルでのそれまでの最良値を読む"
     },
     {
       "aliases": [],
@@ -36192,7 +37085,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · scalar fallback条件",
+      "label": "共通の診断例 · スカラー目的関数による代替の条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36225,7 +37118,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -36233,7 +37126,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LM",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · LM適用条件",
+      "label": "共通の診断例 · LMの適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36266,7 +37159,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -36274,7 +37167,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · TRF適用条件",
+      "label": "共通の診断例 · TRFの適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36307,7 +37200,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -36315,7 +37208,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "共通診断probe · 悪い初期値",
+      "label": "共通の診断例 · 悪い初期値",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36343,7 +37236,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
+      "summary": "パラメータ推定値、残差のノルム、Jacobianのランクを同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -36351,7 +37244,7 @@
       "entity_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "失敗simulation: statusを残すfailure ledger",
+      "label": "失敗を含むシミュレーション: 状態を残す失敗の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36404,7 +37297,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+      "summary": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。"
     },
     {
       "aliases": [],
@@ -36412,7 +37305,7 @@
       "entity_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "失敗simulation: feasible evaluation ledger",
+      "label": "失敗を含むシミュレーション: 実行可能な評価の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36465,7 +37358,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+      "summary": "実行可能率、失敗の状態、実行可能な点での最良目的関数値を混同せずに読む。"
     },
     {
       "aliases": [],
@@ -36501,7 +37394,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36537,7 +37430,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36545,7 +37438,7 @@
       "entity_id": "SCENARIO_HYBRID_MODE_CHATTERING",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Hybrid mode discovery · chattering診断",
+      "label": "ハイブリッド系のモード発見 · チャタリング診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36578,7 +37471,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める"
+      "summary": "目的関数と動力学残差が改善しても、モードのチャタリングはそれとは独立に止める"
     },
     {
       "aliases": [],
@@ -36614,7 +37507,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36650,7 +37543,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+      "summary": "勾配、更新ベクトル、軌跡、目的値を同じ評価で読む"
     },
     {
       "aliases": [],
@@ -36792,7 +37685,7 @@
       "entity_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Direct collocation · state/control診断",
+      "label": "Direct Collocation · 状態と制御入力の診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36815,7 +37708,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -36823,7 +37716,7 @@
       "entity_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · failure ledger",
+      "label": "PDEの状態方程式の求解 · 失敗の記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36856,7 +37749,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -36864,7 +37757,7 @@
       "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · loose tolerance",
+      "label": "PDEの状態方程式の求解 · 緩い許容誤差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36902,7 +37795,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -36910,7 +37803,7 @@
       "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "PDE state solve · tight tolerance",
+      "label": "PDEの状態方程式の求解 · 厳しい許容誤差",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36948,7 +37841,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+      "summary": "設計変数の更新、状態方程式と随伴方程式の求解、失敗を示す終了状態を、同じシミュレータ呼び出しの軸で読む"
     },
     {
       "aliases": [],
@@ -36956,7 +37849,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · N=20 mesh診断",
+      "label": "振り子の振り上げ · N=20のメッシュ診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -36994,7 +37887,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37002,7 +37895,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · N=40 mesh感度",
+      "label": "振り子の振り上げ · N=40のメッシュ感度",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37045,7 +37938,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37053,7 +37946,7 @@
       "entity_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Pendulum swing-up · modelずれrollout",
+      "label": "振り子の振り上げ · モデルずれの前進シミュレーション",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37086,7 +37979,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+      "summary": "状態・制御入力・動力学残差・経路制約違反を同じ評価軸で読む"
     },
     {
       "aliases": [],
@@ -37094,7 +37987,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "CVaR配分のtraining / held-out診断",
+      "label": "CVaR配分を学習用データと評価用データで診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37137,7 +38030,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+      "summary": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。"
     },
     {
       "aliases": [],
@@ -37145,7 +38038,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "平均・分散配分: high gamma",
+      "label": "平均・分散配分: リスク回避係数γが大きい場合",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37173,7 +38066,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+      "summary": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。"
     },
     {
       "aliases": [],
@@ -37181,7 +38074,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "平均・分散配分: low gamma",
+      "label": "平均・分散配分: リスク回避係数γが小さい場合",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37209,7 +38102,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+      "summary": "期待収益・分散・可行性を同時に読み、γを手法の順位へ読み替えない。"
     },
     {
       "aliases": [],
@@ -37217,7 +38110,7 @@
       "entity_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "nominal配分のtraining / held-out診断",
+      "label": "公称配分を学習用データと評価用データで診断",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37260,7 +38153,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+      "summary": "同じ配分を学習用データと、取り分けておいた評価用データで評価し、標本内でのリスク低下を将来の保証と読み替えない。"
     },
     {
       "aliases": [],
@@ -37268,7 +38161,7 @@
       "entity_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "反復MPC QP: cold startのdeadline ledger",
+      "label": "反復MPC QP: コールドスタートでの締め切りの記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37301,7 +38194,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+      "summary": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。"
     },
     {
       "aliases": [],
@@ -37309,7 +38202,7 @@
       "entity_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "反復MPC QP: warm startのdeadline ledger",
+      "label": "反復MPC QP: ウォームスタートでの締め切りの記録",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37342,7 +38235,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+      "summary": "追従誤差、QP残差、反復数、締め切りまでの余裕を制御周期ごとに分けて読む。"
     },
     {
       "aliases": [],
@@ -37393,7 +38286,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+      "summary": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。"
     },
     {
       "aliases": [],
@@ -37444,7 +38337,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+      "summary": "残差ベクトル、最大絶対残差、二乗残差を別々に読む。"
     },
     {
       "aliases": [],
@@ -37452,7 +38345,7 @@
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "2D diffuser · geometry／mesh failure",
+      "label": "2Dディフューザ · 形状／メッシュの失敗",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37490,7 +38383,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -37498,7 +38391,7 @@
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "2D diffuser · 有効なshape更新",
+      "label": "2Dディフューザ · 有効な形状更新",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37541,7 +38434,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -37549,7 +38442,7 @@
       "entity_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "shape／topology表現contrast",
+      "label": "形状／トポロジーの表現の対比",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37592,7 +38485,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+      "summary": "パラメータ、形状、メッシュ、物理状態、目的を同じ評価軸で分けて読む"
     },
     {
       "aliases": [],
@@ -37633,7 +38526,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+      "summary": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
     },
     {
       "aliases": [],
@@ -37674,7 +38567,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+      "summary": "必ず守る制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
     },
     {
       "aliases": [],
@@ -37682,7 +38575,7 @@
       "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "ambient stepとQR projectionによるattitude alignment",
+      "label": "周囲の空間での一歩とQRによる射影で姿勢を合わせる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37720,7 +38613,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+      "summary": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。"
     },
     {
       "aliases": [],
@@ -37728,7 +38621,7 @@
       "entity_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "Lie algebra stepによるattitude alignment",
+      "label": "リー代数での一歩で姿勢を合わせる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37766,7 +38659,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+      "summary": "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。"
     },
     {
       "aliases": [],
@@ -37774,7 +38667,7 @@
       "entity_id": "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "時間窓付き配送: 固定routeの可行性",
+      "label": "時間窓付き配送: 固定経路の実行可能性",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37812,7 +38705,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。"
+      "summary": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。"
     },
     {
       "aliases": [],
@@ -37820,7 +38713,7 @@
       "entity_id": "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "時間窓付き配送: stop 4で違反を検出",
+      "label": "時間窓付き配送: 訪問先4で違反を検出",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37858,7 +38751,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "到着時刻、時間窓、累積移動時間、可行性を別々に読む。"
+      "summary": "到着時刻、時間窓、累積移動時間、実行可能性を別々に読む。"
     },
     {
       "aliases": [],
@@ -37866,7 +38759,7 @@
       "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "filterなしのcheckerboard failureを見つける",
+      "label": "フィルタなしで生じるチェッカーボード模様の失敗を見つける",
       "relations": [
         {
           "relation_type": "artifact",
@@ -37904,7 +38797,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "complianceだけでは判定できないcheckerboard failureを見つける"
+      "summary": "コンプライアンスだけでは判定できないチェッカーボード模様の失敗を見つける"
     },
     {
       "aliases": [],
@@ -37958,7 +38851,7 @@
       "entity_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "片持ちはりの設計fieldを更新過程で読む",
+      "label": "片持ちはりの設計場を更新過程で読む",
       "relations": [
         {
           "relation_type": "artifact",
@@ -38001,7 +38894,7 @@
           "target_type": "journey"
         }
       ],
-      "summary": "設計密度、状態field、感度、更新則を一つの反復で対応づける"
+      "summary": "設計密度、状態場、感度、更新則を一つの反復で対応づける"
     },
     {
       "aliases": [],
@@ -39789,7 +40682,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -39815,7 +40708,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / noiseless",
+      "label": "高価な1次元ブラックボックス: 活用寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "scenario",
@@ -39836,7 +40729,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "comparison",
@@ -39862,7 +40755,7 @@
       "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: exploit / small_noise",
+      "label": "高価な1次元ブラックボックス: 活用寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "scenario",
@@ -39883,7 +40776,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -39909,7 +40802,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / noiseless",
+      "label": "高価な1次元ブラックボックス: 探索寄り / ノイズなし",
       "relations": [
         {
           "relation_type": "comparison",
@@ -39935,7 +40828,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "comparison",
@@ -39966,7 +40859,7 @@
       "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "高価な1次元black-box: explore / small_noise",
+      "label": "高価な1次元ブラックボックス: 探索寄り / 小さいノイズ",
       "relations": [
         {
           "relation_type": "scenario",
@@ -39987,7 +40880,7 @@
       "entity_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
       "entity_type": "trace",
       "external_url": null,
-      "label": "high fidelityだけで使う同一cost budget",
+      "label": "同じ費用予算を高精度モデルだけに使う",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40013,7 +40906,7 @@
       "entity_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
       "entity_type": "trace",
       "external_url": null,
-      "label": "low-fidelity biasで候補順位が反転する",
+      "label": "低精度モデルの偏りで候補の順位が反転する",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40034,7 +40927,7 @@
       "entity_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
       "entity_type": "trace",
       "external_url": null,
-      "label": "低／高 fidelity simulator の評価ledger",
+      "label": "低精度・高精度シミュレータの評価記録",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40164,7 +41057,7 @@
       "entity_id": "binary-knapsack-bnb-budget",
       "entity_type": "trace",
       "external_url": null,
-      "label": "0-1 knapsack: node予算で停止",
+      "label": "0-1ナップサック: ノード数の予算で停止",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40235,7 +41128,7 @@
       "entity_id": "binary-knapsack-bnb-complete",
       "entity_type": "trace",
       "external_url": null,
-      "label": "0-1 knapsack: 最適性証明",
+      "label": "0-1ナップサック: 最適性の証明",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40463,7 +41356,7 @@
       "entity_id": "exponential-fit-lbfgsb",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · scalar fallback条件",
+      "label": "共通の診断例 · スカラー目的関数による代替の条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40489,7 +41382,7 @@
       "entity_id": "exponential-fit-lm",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · LM適用条件",
+      "label": "共通の診断例 · LMの適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40515,7 +41408,7 @@
       "entity_id": "exponential-fit-trf",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · TRF適用条件",
+      "label": "共通の診断例 · TRFの適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40541,7 +41434,7 @@
       "entity_id": "exponential-fit-trf-poor-init",
       "entity_type": "trace",
       "external_url": null,
-      "label": "共通診断probe · 悪い初期値",
+      "label": "共通の診断例 · 悪い初期値",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40835,7 +41728,7 @@
       "entity_id": "optimal-control-ec020-history",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Direct collocation · state/control診断",
+      "label": "Direct Collocation · 状態と制御入力の診断",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40856,7 +41749,7 @@
       "entity_id": "pde-state-solve-failure",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · failure ledger",
+      "label": "PDEの状態方程式の求解 · 失敗の記録",
       "relations": [
         {
           "relation_type": "scenario",
@@ -40877,7 +41770,7 @@
       "entity_id": "pde-state-tolerance-loose",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · loose tolerance",
+      "label": "PDEの状態方程式の求解 · 緩い許容誤差",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40903,7 +41796,7 @@
       "entity_id": "pde-state-tolerance-tight",
       "entity_type": "trace",
       "external_url": null,
-      "label": "PDE state solve · tight tolerance",
+      "label": "PDEの状態方程式の求解 · 厳しい許容誤差",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40929,7 +41822,7 @@
       "entity_id": "pendulum-collocation-coarse",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · N=20 mesh診断",
+      "label": "振り子の振り上げ · N=20のメッシュ診断",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40960,7 +41853,7 @@
       "entity_id": "pendulum-collocation-refined",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · N=40 mesh感度",
+      "label": "振り子の振り上げ · N=40のメッシュ感度",
       "relations": [
         {
           "relation_type": "comparison",
@@ -40991,7 +41884,7 @@
       "entity_id": "pendulum-model-rollout-failure",
       "entity_type": "trace",
       "external_url": null,
-      "label": "Pendulum swing-up · modelずれrollout",
+      "label": "振り子の振り上げ · モデルずれの前進シミュレーション",
       "relations": [
         {
           "relation_type": "scenario",
