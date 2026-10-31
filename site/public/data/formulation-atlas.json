@@ -2309,7 +2309,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.general-conic-optimization",
       "cues_ja": [
         "log・exp・ノルム・行列条件が混在するが、各部品は凸と分かっている"
       ],
@@ -2347,7 +2347,7 @@
       ],
       "family_id": "linear_conic",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -2393,7 +2393,10 @@
         "S010",
         "S013",
         "S014",
-        "S028"
+        "S028",
+        "S055",
+        "S174",
+        "S175"
       ],
       "standard_form": "\\min_{x}\\; c^\\top x \\;\\text{ s.t. }\\; b-Ax\\in\\mathcal{K},\\quad \\mathcal{K} \\text{ は凸錐の直積}",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><msup><mi>c</mi><mo>&#x022A4;</mo></msup><mi>x</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>b</mi><mo>&#x02212;</mo><mi>A</mi><mi>x</mi><mo>&#x02208;</mo><mi>&#x1D4A6;</mi><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>&#x1D4A6;</mi><mtext>&#x000A0;は凸錐の直積</mtext></mrow></math></div>"
@@ -4948,7 +4951,7 @@
         }
       ],
       "cases": [],
-      "content_id": null,
+      "content_id": "concept.equilibrium-variational-inequality",
       "cues_ja": [
         "市場・交通・ゲームで、誰も一人だけ動いて得をしない状態を求める"
       ],
@@ -4986,7 +4989,7 @@
       ],
       "family_id": "uncertainty_structure",
       "lens": "form",
-      "maturity": "skeleton",
+      "maturity": "article",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -5030,7 +5033,11 @@
       "reading_ja": "複数の主体がそれぞれ最適化した結果の釣り合い（均衡）を、変分不等式として求めます。",
       "source_ids": [
         "S054",
-        "S055"
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
       ],
       "standard_form": "\\text{find } x^{*}\\in X \\;\\text{ s.t. }\\; \\langle F(x^{*}),x-x^{*}\\rangle\\ge 0 \\;\\;\\forall x\\in X",
       "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>find&#x000A0;</mtext><msup><mi>x</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo>&#x02208;</mo><mi>X</mi><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><mi>&#x027E8;</mi><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><msup><mi>x</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>x</mi><mo>&#x02212;</mo><msup><mi>x</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mi>&#x027E9;</mi><mo>&#x02265;</mo><mn>0</mn><mspace width=\"0.278em\" /><mspace width=\"0.278em\" /><mo>&#x02200;</mo><mi>x</mi><mo>&#x02208;</mo><mi>X</mi></mrow></math></div>"
@@ -6377,6 +6384,6 @@
   "summary": {
     "formulations": 57,
     "relations": 59,
-    "with_article": 55
+    "with_article": 57
   }
 }

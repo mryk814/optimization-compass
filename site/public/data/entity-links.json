@@ -8550,6 +8550,72 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.equilibrium-variational-inequality",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ゲーム・均衡・変分不等式",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S129",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S171",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S172",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S179",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA047",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bilevel-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.complementarity-problem",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ゲーム・均衡・変分不等式は、複数の主体がそれぞれ自分の目的を最適化した結果の釣り合い（均衡）を求める定式化です。誰も一人だけ決定を変えて得をしない点を、変分不等式という一つの条件にまとめて解きます。全員の目的の合計を最適にした答えとは、一般に一致しません。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.evaluation-cost",
       "entity_id": "concept.evaluation-cost",
       "entity_type": "content",
@@ -8826,6 +8892,82 @@
         }
       ],
       "summary": "失敗・NaNを伴うシミュレーションの最小化は、評価が値を返さない点を含む問題です。失敗は大きな目的値ではなく状態として台帳に残し、実行前に分かる違反・時間切れ・値が得られない失敗を分けて、評価回数の予算に数えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.general-conic-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "一般錐最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S013",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S174",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S175",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA022",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.second-order-cone-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-dual-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一般錐最適化は、線形の目的を、いくつかの凸錐を組み合わせた制約のもとで最小にする定式化です。対数・指数・ノルム・行列の条件が混ざっていても、部品ごとに凸だと分かれば、それぞれを錐の一つに書き換えて一度に解けます。モデリング言語が内部で使う共通の形です。"
     },
     {
       "aliases": [],
@@ -35339,13 +35481,21 @@
       "summary": "半正定値計画。変数=psd_matrix、目的=linear、制約=semidefinite。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.general-conic-optimization"
+      ],
       "canonical_url": "/formulations/PA022",
       "entity_id": "PA022",
       "entity_type": "problem",
       "external_url": null,
       "label": "一般錐最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.general-conic-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "一般錐最適化。変数=continuous、目的=quadratic、制約=conic。"
     },
     {
@@ -36041,13 +36191,21 @@
       "summary": "bilevel optimization。変数=mixed、目的=general_nonlinear、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.equilibrium-variational-inequality"
+      ],
       "canonical_url": "/formulations/PA047",
       "entity_id": "PA047",
       "entity_type": "problem",
       "external_url": null,
       "label": "game・equilibrium・VI",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.equilibrium-variational-inequality",
+          "target_type": "content"
+        }
+      ],
       "summary": "game・equilibrium・VI。変数=continuous、目的=general_nonlinear、制約=mixed。"
     },
     {

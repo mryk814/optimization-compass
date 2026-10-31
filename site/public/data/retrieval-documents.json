@@ -11498,6 +11498,276 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "ある町で、3軒のパン屋A・B・Cが同じパンを売っています。3軒が毎朝焼く量の合計が増えるほど、パンの値段は下がります。値段は 10 − ( 3軒の量の合計 ) で、量の単位は百個です。1あたりの費用はAが1、Bが2、Cが3です。Aのかまどは、2.5までしか焼けません。 どの店も、自分の利益が最も大きくなる量を選びたいと考えます。ところが、自分の最適な量は、ほかの2軒の量で変わります。そこで、どの店も一人だけ量を変えて得をしない組を探します。 決めるもの : 3軒それぞれの1日の量 q A , q B , q C 良くしたいもの : 各店が、自分の利益を大きくすること（3軒の合計ではない） 守ること : どの量も0以上、 q A ≤ 2.5 次の図は、ほかの2軒を均衡の量に固定したときの自分の利益と、3つの決め方の量です。まず「① 自分の量ごとの利益」で、3つの点が曲線のどこにあるかを見てください。続いて「② 3つの決め方の量と値段」で、値段を比べてください。 パン屋の例：値段と費用は教材用の値で、実際の市場は示さない。各店は同時に量を決め、ほかの店の量を知っているとする 「① 自分の量ごとの利益」で、BとCの点は山の頂上にあります。どちらも一人だけ量を変えると、利益が減ります。 Aの山の頂上は2.83で、上限2.5の外です。Aはもっと焼きたいのですが、かまどの上限で止まっています。 「② 3つの決め方の量と値段」で、3軒の利益の合計を最大にする決め方は値段が6.00で、均衡の4.17より高くなります。 どの店も「山の頂上か、上限で止まっている」という条件を、1つの式で書けないでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "ゲーム・均衡・変分不等式は、複数の主体がそれぞれ自分の目的を最適化した結果の釣り合い（均衡）を求める定式化です。誰も一人だけ決定を変えて得をしない点を、変分不等式という一つの条件にまとめて解きます。全員の目的の合計を最適にした答えとは、一般に一致しません。",
+      "title": "ゲーム・均衡・変分不等式"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "3軒の利益の合計を最大にした量を、均衡と思う : 合計を最大にすると ( 2.5 , 1.5 , 0 ) で、利益の合計は18.5です。均衡の13.97より大きいのですが、 F = ( − 2.5 , − 2.5 , − 3 ) です。BもCも一人で増やすと得をするので、各店に任せるとこの量は守られません。均衡を知りたいなら、各店の傾きを並べた F で解きます。 上限を外して解き、後で上限に切る : 上限がなければ均衡は ( 3 , 2 , 1 ) です。Aを2.5に切った ( 2.5 , 2 , 1 ) では、 F = ( − 1 , − 0.5 , − 0.5 ) です。Aが減らした分だけBとCは増やすと得をするので、均衡ではありません。本当の均衡は ( 2.5 , 2.167 , 1.167 ) です。上限は、解く前から範囲 X に入れます。 射影法の幅 γ を大きくするほど速いと思う : 幅0.4で25回ですが、0.5で29回、0.55で57回と増えます。大きくしすぎると遅くなります。幅0.6では、0と ( 2.5 , 4.8 , 4.2 ) を往復して着きません。この例では、 F の偏微分の表の最大固有値が4です。幅は 2 / 4 = 0.5 より小さい値から試します。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "各主体の最適性の条件を並べて変分不等式に書くことは、FacchineiとPangの変分不等式の教科書（S179）に基づきます。 F が強く単調なら均衡がただ1つあることと、偏微分の表が対称なら F が関数の勾配になることも、同じ本にあります。凸関数の最小点の条件が ∇ f の変分不等式になることは、BoydとVandenbergheの『Convex Optimization』（S055）にあります。射影法は、LionsとMercierの論文（S129）の前進後退分割で、単調な作用素を扱う方法の特別な場合です。相補性問題とLemke法は、Cottleらの教科書（S171）とLemkeの論文（S172）にあります。 コードの出力は、NumPy 2.5.3 でこの記事のコードを実行して得た値です。図は、同じ式を図の生成スクリプトが標準ライブラリだけで計算した値から描いています。値段と費用は教材用の値で、実際の市場の動きは示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "実際の課題で次の困りごとがあれば、リンク先を読んでください。 範囲が「0以上」だけで、条件が「量が0か、傾きが0か」の組になる → 相補性問題（LCP・NCP） 1つの主体が先に決め、ほかの主体がそれを見て反応する → 二階層最適化 全員の合計を1つの目的として最適にしてよい → 凸二次計画（凸QP） ゲーム・均衡・変分不等式と関連する問題の関係 相補性問題（LCP・NCP） : 範囲 X が非負の象限のときの変分不等式です。条件が「 q i ≥ 0 、 F i ≥ 0 、どちらかが0」の組になります。 二階層最適化 : 先に決める主体が、後の主体の反応を読んで決める形です。この記事の均衡では、全員が同時に決め、順番の差はありません。 凸二次計画（凸QP） : 1つの関数を最小にする問題です。 F がその関数の勾配のときだけ、変分不等式と同じ答えになります。この例の利益の合計を最大にする問題も凸二次計画ですが、答えは均衡と違います。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "設定は「30秒でつかむ」のパン屋で、初期値は q = ( 0 , 0 , 0 ) です。射影法で均衡を求めます。1回の更新は「 q から 0.25 F ( q ) を引き、範囲 X に戻す」です。1回に動く量が 10 − 6 未満になったら止めます。乱数は使いません。 パン屋の例・射影法の進み方 回 q A q B q C 均衡からの最大のずれ 1 2.25 2.000 1.750 0.583 2 2.438 2.000 1.562 0.396 3 2.5 2.000 1.422 0.255 10 2.5 2.139 1.195 0.028 20 2.5 2.165 1.168 0.0016 42 2.5 2.167 1.167 3 × 10 − 6 1回目は、どの店も F i < 0 なので量を増やします。3回目にAが上限2.5に着き、そこからは範囲に戻す操作でAが2.5に留まります。残るBとCが、互いの量に合わせて少しずつ動き、42回で止まります。 次の図の「① 均衡からの最大のずれ」で、幅 γ を変えたときの減り方を比べてください。「② 幅 γ ごとの、均衡までの回数」では、幅を大きくしたときの回数を見てください。 パン屋の例：初期値は0。回数はこの例でのもので、射影法の速さ一般は示さない。γ=0.6では、0と(2.5, 4.8, 4.2)を往復する 「① 均衡からの最大のずれ」で、幅0.1の線はゆっくり下がり、104回かかります。 「② 幅 γ ごとの、均衡までの回数」は、0.4の25回が最も少なくなります。0.5で29回、0.55で57回と増えます。 幅0.6では着きません。0と ( 2.5 , 4.8 , 4.2 ) を往復し続けます。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "答えは、どの方法でも ( 2.5 , 2.167 , 1.167 ) です。違いは、1回に何を計算し、どんな条件で着くかです。 系統 1回の計算 例での様子 射影法（ 射影勾配法 と同じ形） F を1回計算し、範囲に戻す 幅0.25で42回。幅0.6では着かない 順番に最善の反応をとる 1軒ずつ、ほかの量を固定して自分の最適な量にする この例では7周でずれ 1.5 × 10 − 4 相補性問題に書き換え、Lemke法で解く 頂点から頂点へ移る この例では計算していない 表は速さの順位ではなく、1回の計算と着く条件の違いです。射影法は、 F が強く単調なら、小さい幅で着きます（S129）。この例では、偏微分の表の固有値が1と4で、どちらも正です。順番に最善の反応をとる方法は、この例では Φ の最小化を1変数ずつ進めることと同じなので着きます。 F が勾配でない問題では、着く保証はありません。 次のコードは、パン屋の例を射影法で解き、つまずきやすい点の3つの決め方を確かめます。 python import numpy as np a = 10.0 # 値段 = 10 - (3軒の量の合計) cost = np . array ([ 1.0 , 2.0 , 3.0 ]) # A・B・Cの1あたりの費用 cap = np . array ([ 2.5 , np . inf , np . inf ]) # Aのかまどの上限（百個） def F ( q ): \"\"\"各店の、自分の量を増やしたときの利益の減り方 -(∂利益_i/∂q_i)\"\"\" return q + q . sum () - ( a - cost ) def profit ( q ): return q * ( a - q . sum () - cost ) def projection ( step , rounds = 2000 , tol = 1e-6 ): \"\"\"射影法：q から step·F(q) を引き、範囲 0 ≦ q ≦ cap に戻す。動きが tol 未満で止める\"\"\" q = np . zeros ( 3 ) for k in range ( 1 , rounds + 1 ): nxt = np . clip ( q - step * F ( q ), 0 , cap ) if np . abs ( nxt - q ) . max () < tol : return nxt , k q = nxt return q , None # 着かなかった q , k = projection ( 0.25 ) print ( q . round ( 3 ), k , round ( a - q . sum (), 3 )) # [2.5 2.167 1.167] 42 4.167 print ( F ( q ) . round ( 3 ), profit ( q ) . round ( 3 )) # [-0.667 -0. 0. ] [7.917 4.694 1.361] # 上限を外して解き（連立一次方程式）、後で上限に切る free = np . linalg . solve ( np . ones (( 3 , 3 )) + np . eye ( 3 ), a - cost ) clipped = np . minimum ( free , cap ) print ( free , clipped , F ( clipped )) # [3. 2. 1.] [2.5 2. 1. ] [-1. -0.5 -0.5] # 3軒の利益の合計を最大にする量（Aは上限まで、Cは焼かない） joint = np . array ([ 2.5 , 1.5 , 0.0 ]) print ( profit ( joint ) . sum (), a - joint . sum (), F ( joint )) # 18.5 6.0 [-2.5 -2.5 -3. ] # 順番に最善の反応をとる（1軒ずつ、ほかを固定して自分の最適な量にする） best = np . zeros ( 3 ) for _ in range ( 7 ): for i in range ( 3 ): others = best . sum () - best [ i ] best [ i ] = min ( cap [ i ], max ( 0.0 , ( a - cost [ i ] - others ) / 2 )) print ( best . round ( 4 ), np . abs ( best - q ) . max () . round ( 5 )) # [2.5 2.1668 1.1666] 0.00015 for step in ( 0.1 , 0.25 , 0.5 , 0.55 , 0.6 ): print ( step , projection ( step )[ 1 ]) # 0.1 104 / 0.25 42 / 0.5 29 / 0.55 57 / 0.6 None 最初の2行は、射影法の答えと回数と値段、均衡での F と各店の利益です。Aの F だけが負で、BとCは0です。 次の2行は、つまずきやすい点の「後で切る」と「合計を最大」の量と F です。どちらも、範囲の内側にある店の F が負で、その店は一人で増やすと得をします。 順番に最善の反応をとる行は、7周後の量と、射影法の答えとのずれです。最後の5行は、幅ごとの回数で、 None は2000回で着かなかったことを表します。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "次の式は「範囲 X の中の点 q * で、 q * から範囲の中のどこへ動いても、 F ( q * ) との内積が負にならない点を探す」を表します。 find q * ∈ X s.t. ⟨ F ( q * ) , q − q * ⟩ ≥ 0 for all q ∈ X この式は「答えの点から、範囲の中で動ける向きのどれを選んでも、 F が示す損の増え方は減らない」と読みます。この形の問題を、変分不等式と呼びます。 記号 意味 パン屋の例では q 全員の決定を並べたもの ( q A , q B , q C ) X 決定がとれる範囲 0 ≤ q A ≤ 2.5 、 q B ≥ 0 、 q C ≥ 0 F ( q ) 各主体の、自分の決定についての損の傾き F i = q i + ( q A + q B + q C ) − ( 10 − c i ) 。 c i はその店の費用 q * 均衡 ( 2.5 , 2.167 , 1.167 ) F ( q * ) 均衡での傾き ( − 0.667 , 0 , 0 ) なぜ、各店の傾きを並べるのか 店 i の利益は q i ( 10 − 合計 − c i ) です。自分の量 q i について微分して符号を変えると、 F i になります。 F i は、自分の量を少し増やしたときの利益の減り方です。 店 i が自分の量の範囲で利益を最大にしている条件は、「範囲の中で動ける向きに F i を掛けると0以上」です。この条件を3軒分並べて足したものが、標準形の式です（S179）。 均衡では、 F ( q * ) = ( − 0.667 , 0 , 0 ) です。BとCは範囲の内側にいて、傾きが0なので、山の頂上です。Aは F A < 0 なので、増やせば利益が増えます。ところが、Aが動ける向きは減らす向き（ q A − 2.5 ≤ 0 ）だけです。 − 0.667 に0以下を掛けると0以上なので、条件を満たします。 合計を最適にする問題とは、傾きが違う 1つの関数 f を範囲 X で最小にする問題の答えは、 F = ∇ f とした変分不等式を満たします（S055）。ところが、3軒の利益の合計を最大にする問題の傾きは、店 i の成分が F i + ( ほかの2軒の量の合計 ) です。ほかの店の値段を下げる分まで数えるので、均衡の F とは違います。 この例の F は、たまたま次の関数 Φ の勾配です。 Φ ( q ) = ∑ i ( c i − 10 ) q i + 1 2 ∑ i q i 2 + 1 2 ( ∑ i q i ) 2 そのため、均衡は Φ の最小点でもあります。 F の偏微分の表が対称でないときは、そのような関数はありません（S179）。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.equilibrium-variational-inequality:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.equilibrium-variational-inequality",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bilevel-optimization",
+        "content:concept.complementarity-problem",
+        "content:concept.convex-quadratic-program",
+        "content:concept.convexity",
+        "content:projected-gradient",
+        "problem:PA047",
+        "source:S055",
+        "source:S129",
+        "source:S171",
+        "source:S172",
+        "source:S179"
+      ],
+      "source_ids": [
+        "S055",
+        "S129",
+        "S171",
+        "S172",
+        "S179"
+      ],
+      "text": "「3軒のパン屋が互いの量を見ながら毎朝の量を決めると、どこに落ち着くか」という課題を、次の4段で式にします。 主体は誰で、何を決めるか ：A・B・Cの3軒が、それぞれ自分の量 q i を決めます。 各主体の目的は何か ：自分の利益 q i ( 10 − 合計 − c i ) です。ほかの店の量が値段を通して入ります。 各主体の範囲は何か ：どの量も0以上、Aは2.5以下です。範囲は、ほかの店の量に左右されません。 何を釣り合いとみなすか ：どの店も、一人だけ量を変えて得をしない組です。各店の傾きを並べた F で、変分不等式に書きます。 複数の主体がそれぞれ自分の目的を最適にし、その結果の釣り合いを知りたいとき、ゲーム・均衡・変分不等式として定式化できます。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.evaluation-cost:overview",
       "dataset_version": "0.18.25",
       "document_id": "content:concept.evaluation-cost",
@@ -12643,6 +12913,312 @@
         "S060"
       ],
       "text": "「ときどき計算が落ちるシミュレーションで、20回の評価から設計を選びたい」という課題だけでは、まだこの型とは決まりません。次の4つを順に確かめます。 何を決めるか : 連続の u 1 , u 2 と、二値の mode を決めます。 評価1回は何を返すか : 成功なら目的値、失敗なら状態（クラッシュ・時間切れ・物理的にありえない出力）を返します。値が返るかどうかは、実行した後に分かります。 どのずれを減らすか : 成功した評価の目的値を小さくします。失敗は、値に置き換えず、状態と件数として別に扱います。 何を守り、何を予算とするか : 範囲 0 ≤ u 1 , u 2 ≤ 1 は実行前に守ります。予算は評価回数 20 回で、失敗も1回です。安全の条件などで台帳にないものは、未知として書きます。 次の三つが揃えば、この記事の型です。評価が失敗しうること。失敗には値がないこと。予算を単位つきで数えられること。 自分の課題で4つの答えを書き留めるなら、ギャラリーの 途中で失敗するシミュレーションから設計を探す で「実装用プロンプトを作る」を押します。開いた画面で「評価契約（評価が高価なとき・失敗し得るとき）」を開き、「評価契約をプロンプトに含める」を選びます。予算の単位と量・評価する前に分かる制約違反・時間切れ・計算の失敗は、それぞれ別の欄に書けます。安全と確認済みの初期点のように空欄の項目は、サイトが推測で埋めずに unknown として残します。書き出すのは指示の文章だけで、実験は実行しません。",
+      "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "3つの店に、販促費を合わせて6配ります。販促費を増やすほど効果は増えますが、増え方はだんだん鈍ります。店ごとの効果は w log ( 1 + x ) です。重み w は、店1が3・店2が2・店3が1です。ただし、店ごとの販促費が平均から離れすぎないように、ばらつき（平均からの差の長さ）は1.5以下にします。 対数の効果・予算の合計・ばらつきの長さと、形の違う条件が3種類混ざっています。そこで、それぞれを決まった形の錐の条件に書き直し、一つの問題としてまとめて解きます。 決めるもの : 3店の販促費 x 1 , x 2 , x 3 良くしたいもの : 効果の合計 ∑ i w i log ( 1 + x i ) 守ること : 販促費の合計が6以下、どの販促費も0以上、ばらつきが1.5以下 次の図は、店ごとの効果の曲線と、3つの決め方の配分です。まず「① 店ごとの効果 w log(1 + x)」で、3つの点がどの高さにあるかを見てください。続いて「② 3つの決め方の配分と、効果の合計」で、ばらつきの上限があるときとないときを比べてください。 販促費の例：効果の式と重みは教材用の値で、実際の販促の効果は示さない 「① 店ごとの効果 w log(1 + x)」で、店1の曲線は最も高く、販促費も最も多い3.02です。 「② 3つの決め方の配分と、効果の合計」で、ばらつきの上限がないと配分は3.5・2・0.5です。上限1.5を入れると店3が0.90に増え、効果の合計は7.11から7.07に下がります。 対数を2次式で近似すると、どの店も1ずつになり、予算を半分しか使いません。効果は4.16です。 対数・合計・長さという形の違う条件を、一つの解き方でまとめて扱うには、どう書けばよいのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "一般錐最適化は、線形の目的を、いくつかの凸錐を組み合わせた制約のもとで最小にする定式化です。対数・指数・ノルム・行列の条件が混ざっていても、部品ごとに凸だと分かれば、それぞれを錐の一つに書き換えて一度に解けます。モデリング言語が内部で使う共通の形です。",
+      "title": "一般錐最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "指数錐を避けて、対数を2次式で近似する : log ( 1 + x ) を x − x 2 / 2 にすると、凸二次計画で解けます。ところが x − x 2 / 2 は x = 1 で最大になるので、どの店も1ずつで予算を半分しか使いません。本当の効果は4.159で、答えの7.065より4割少なくなります。対数がある問題は、指数錐を扱えるソルバーで解きます。 書き換えの不等号の向きを逆にする : t i ≥ log ( 1 + x i ) と書くと、 t i はいくらでも大きくできます。目的の ∑ w i t i に上限がなくなり、ソルバーは「有界でない」と返します。最大にしたい凹の部品は、下からの不等式 t i ≤ log ( 1 + x i ) で書きます。 指数錐の成分の順番を、ソルバーをまたいでそのまま使う : この記事の順は s e t / s ≤ u で、SCSやCVXPYと同じです（S013）。MOSEKは ( x 1 , x 2 , x 3 ) で x 1 ≥ x 2 e x 3 / x 2 と書きます（S028）。店1の ( 1.39 , 1 , 4.02 ) をMOSEKの順で読むと、 1.39 ≥ e 4.02 = 55.6 になり成り立ちません。ソルバーを直接使うときは、説明書の錐の定義で順番を確かめます。 2つの上限が同じくらい効いていると思う : 乗数は予算が0.641、ばらつきが0.156です。予算を1増やすと効果は0.606増えますが、ばらつきの上限を0.5広げても0.048です。どの上限を緩めるかは、乗数で比べます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "線形の目的を凸錐の積の条件で最小にする形とその双対は、Ben-TalとNemirovskiの教科書（S174）に基づきます。凸な部品の組み合わせと、錐による一般化された不等式は、BoydとVandenbergheの『Convex Optimization』（S055）にあります。 b − A z ∈ 𝒦 の形と、錐への射影で解く方法は、O'Donoghueらの論文（S175）にあります。解がないときの証明も同じ論文にあります。凸だと分かる書き方を錐の形に自動で直すことは、CVXPYの説明書（S010）にあります。指数錐の成分の順番は、SCSの説明書（S013）とMOSEKの説明書（S028）で確かめられます。 コードの出力は、NumPy 2.5.3 と SciPy 1.18.1 でこの記事のコードを実行して得た値です。図は、同じ式を図の生成スクリプトが標準ライブラリだけで計算した値から描いています。効果の式と重みは教材用の値で、実際の販促の効果は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:困りごとから関連する問題へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "実際の課題で次の困りごとがあれば、リンク先を読んでください。 目的も制約も一次式だけで、錐は非負の象限だけ → 線形計画（LP） 非線形な部品が、長さ（ノルム）の上限だけ → 二次錐計画 行列が半正定値という条件がある → 半正定値計画（SDP） 部品のどれかが凸でない（例えば、ばらつきを1.5以上にしたい） → 一般滑らか制約付きNLP 一般錐最適化と関連する問題の関係 線形計画（LP） : 錐が非負の象限だけの特別な場合です。 二次錐計画 : 錐が二次錐と非負の象限だけの特別な場合です。 半正定値計画（SDP） : 錐が半正定値行列の錐の特別な場合です。この記事の形は、半正定値錐をほかの錐と組み合わせても扱えます。 一般滑らか制約付きNLP : 凸でない部品を含む形です。錐へは書き換えられず、局所解しか保証できないことがあります。",
+      "title": "困りごとから関連する問題へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:小さな例",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "設定は「30秒でつかむ」の3店で、予算は6、ばらつきの上限は1.5です。この記事のコードは錐のソルバーの代わりに、元の形のままSciPyのSLSQPで解き、答えの点で錐の条件を確かめます。乱数は使いません。 販促費の例・答えと2つの上限の効き方 決め方 店1 店2 店3 効果の合計 ばらつきの上限1.5あり（答え） 3.018 2.081 0.901 7.065 対数だけ（ばらつきの上限なし） 3.5 2 0.5 7.115 予算を7に増やす — — — 7.671 ばらつきの上限を2に広げる — — — 7.113 答えでは、予算6をちょうど使い切り、ばらつきもちょうど1.5です。どちらの上限も効いています。 2つの上限がどれだけ効いているかは、乗数で読めます。効果の傾き w i / ( 1 + x i ) を、予算の向きとばらつきの向きに分けると、乗数は0.641と0.156です。予算を1増やすと効果は7.671で、0.606増えます。ばらつきの上限を0.5広げると7.113で、0.048しか増えません。",
+      "title": "小さな例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:数値計算の方法を選ぶ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "答えは、どの方法でも同じ配分 ( 3.018 , 2.081 , 0.901 ) です。違いは、錐の形を使うかと、1回の計算です。 系統 1回の計算 例での様子 主双対錐内点法 （Clarabel・MOSEKなど） 錐の内側を保つ障壁つきで、ニュートン法の一歩を解く この例では計算していない 演算子分割（ADMM型、SCS） 錐への射影と、線形方程式を交互に解く この例では計算していない 元の形のまま、汎用の制約付きの解き方（SLSQP） 錐の形を使わず、勾配で進む 答え7.065。凸であることの確かめは、別に必要 表は速さの順位ではなく、錐の形を使うかどうかの違いです。錐のソルバーは、答えが存在しないときや有界でないときも、その証明を返せます（S175）。SLSQPは、そのような証明を返しません。 次のコードは、販促費の例を元の形のまま解き、答えの点で錐の条件と乗数を確かめます。 python import numpy as np from scipy.optimize import minimize w = np . array ([ 3.0 , 2.0 , 1.0 ]) # 店ごとの効果の大きさ def effect ( x ): return w @ np . log1p ( x ) def solve ( budget = 6.0 , spread = 1.5 , f = effect , grad = lambda x : w / ( 1 + x )): \"\"\"予算とばらつきの上限のもとで f を最大にする（SLSQPで元の形のまま解く）\"\"\" cons = [ { \"type\" : \"ineq\" , \"fun\" : lambda x : budget - x . sum ()}, { \"type\" : \"ineq\" , \"fun\" : lambda x : spread - np . linalg . norm ( x - x . mean ())}, ] res = minimize ( lambda x : - f ( x ), np . ones ( 3 ), jac = lambda x : - grad ( x ), bounds = [( 0 , None )] * 3 , constraints = cons , method = \"SLSQP\" , options = { \"ftol\" : 1e-12 }) return res . x x = solve () print ( x . round ( 3 ), round ( effect ( x ), 3 )) # [3.018 2.081 0.901] 7.065 # 答えの点で b - Ax を錐ごとに区切り、それぞれの条件を確かめる t = np . log1p ( x ) d = x - x . mean () for ti , xi in zip ( t , x ): v = np . array ([ ti , 1.0 , 1 + xi ]) # 指数錐 (t, s, u)：s·exp(t/s) ≦ u print ( v . round ( 3 ), v [ 1 ] * np . exp ( v [ 0 ] / v [ 1 ]) <= v [ 2 ] + 1e-9 ) # [1.391 1. 4.018] True # [1.125 1. 3.081] True # [0.642 1. 1.901] True print ( np . r_ [ 1.5 , d ] . round ( 3 ), np . linalg . norm ( d ) . round ( 3 )) # [ 1.5 1.018 0.081 -1.099] 1.5 print ( np . r_ [ 6.0 - x . sum (), x ] . round ( 3 )) # [0. 3.018 2.081 0.901] # 2つの上限の乗数（効果の傾き w/(1+x) を、予算の向きとばらつきの向きに分ける） g = w / ( 1 + x ) print ( round ( g . mean (), 3 ), round ( g @ d / np . linalg . norm ( d ), 3 )) # 0.641 0.156 print ( round ( effect ( solve ( budget = 7.0 )), 3 ), round ( effect ( solve ( spread = 2.0 )), 3 )) # 7.671 7.113 # 対数を2次式 x - x^2/2 で近似して解いた配分を、本当の効果で測る approx = solve ( f = lambda x : w @ ( x - x * x / 2 ), grad = lambda x : w * ( 1 - x )) print ( approx . round ( 3 ), round ( effect ( approx ), 3 )) # [1. 1. 1.] 4.159 最初の出力は、3店の販促費と効果の合計です。次の3行は、指数錐に入れる ( t i , 1 , 1 + x i ) と、条件 e t i ≤ 1 + x i が成り立つかです。答えでは t i = log ( 1 + x i ) なので、等号で成り立ちます。 その次の2行は、二次錐に入れる ( 1.5 , x − x ¯ ) とその長さ、非負の象限に入れる4つの値です。予算の残りが0なので、予算は使い切っています。 最後の3行の1行目は、予算とばらつきの2つの乗数です。2行目は予算を7にしたときと、ばらつきの上限を2にしたときの効果です。3行目は、2次式で近似した配分と本当の効果です。",
+      "title": "数値計算の方法を選ぶ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:標準形を読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "次の式は「変数 z を選んで、線形の目的 c ⊤ z を、 b − A z が凸錐 𝒦 に入るという条件のもとで最小にする」を表します。 min z c ⊤ z s.t. b − A z ∈ 𝒦 , 𝒦 = 𝒦 1 × 𝒦 2 × … この式は「 b − A z を上から順に区切り、区切った塊がそれぞれ自分の錐に入る」と読みます。 記号 意味 販促費の例では z 変数 販促費 x 1 , x 2 , x 3 と、効果の下限 t 1 , t 2 , t 3 の6つ c 目的の係数 t の係数が − 3 , − 2 , − 1 （効果の最大を、符号を変えた最小にする） b − A z 錐に入れるベクトル 17行。指数錐3つ・二次錐1つ・非負の4行に区切る 指数錐 𝒦 exp ( t , s , u ) で s e t / s ≤ u 、 s > 0 となる点（とその閉包） ( t i , 1 , 1 + x i ) 。 e t i ≤ 1 + x i 、つまり t i ≤ log ( 1 + x i ) 二次錐 𝒬 ( r , v ) で ‖ v ‖ 2 ≤ r となる点 ( 1.5 , x − x ¯ ) 。ばらつきが1.5以下 非負の象限 どの成分も0以上 ( 6 − ∑ x i , x 1 , x 2 , x 3 ) 部品ごとに、錐へ書き換える 効果 log ( 1 + x i ) を直接は書けないので、補助の変数 t i を置き、 t i ≤ log ( 1 + x i ) とします。この条件は 1 · e t i / 1 ≤ 1 + x i と同じなので、 ( t i , 1 , 1 + x i ) が指数錐に入ることと書けます。目的では t i を大きくするので、答えでは t i = log ( 1 + x i ) になります。 ばらつきの長さ ‖ x − x ¯ ‖ 2 ≤ 1.5 は、 ( 1.5 , x − x ¯ ) が二次錐に入ることです。予算と非負の条件は、そのまま非負の象限に入れます。 このように書き換えられるのは、部品がどれも凸だからです（S055、S174）。CVXPYのようなモデリング言語は、凸だと分かる組み合わせ方で書かれた式を、この形に自動で書き換えます（S010）。 次の図は、答えの点で b − A z を錐ごとに区切ったものです。行ごとに、その錐の条件が成り立つかを確かめてください。 販促費の例：答えの点での値。指数錐の成分の順番は、この記事の書き方（SCSやCVXPYと同じ）で、ソルバーによって違う なぜ、線形の目的にそろえるのか 目的が ∑ w i log ( 1 + x i ) のような非線形でも、補助の変数で錐の条件へ移せば、目的は c ⊤ z の線形になります。目的と制約の形が一つにそろうので、ソルバーは錐ごとの決まった計算（錐への射影や、錐の内側を保つ障壁）だけを用意すればよくなります（S175）。",
+      "title": "標準形を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.general-conic-optimization:課題から定式化する",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.general-conic-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.linear-program",
+        "content:concept.second-order-cone-program",
+        "content:concept.semidefinite-program",
+        "content:lp-qp-conic",
+        "content:primal-dual-conic",
+        "problem:PA022",
+        "source:S010",
+        "source:S013",
+        "source:S014",
+        "source:S028",
+        "source:S055",
+        "source:S174",
+        "source:S175"
+      ],
+      "source_ids": [
+        "S010",
+        "S013",
+        "S014",
+        "S028",
+        "S055",
+        "S174",
+        "S175"
+      ],
+      "text": "「予算6を、効果の鈍り方とばらつきの上限を守って3店に配りたい」という課題を、次の4段で式にします。 何を決めるか ：3店の販促費 x 1 , x 2 , x 3 です。 目的と制約の部品は凸か ：効果の log ( 1 + x ) は凹で、それを最大にします。予算と非負は線形、ばらつきはノルムで凸です。 部品はどの錐に当たるか ：対数は指数錐、ノルムは二次錐、線形の不等式は非負の象限です。 どう組み合わせるか ：補助の変数 t i で目的を線形にし、すべての錐の条件を一つの b − A z ∈ 𝒦 に並べます。 目的と制約の部品がどれも凸で、それぞれが知られた錐に書き換えられるとき、一般錐最適化として定式化できます。",
       "title": "課題から定式化する"
     },
     {
@@ -61448,7 +62024,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA022",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.general-conic-optimization"
+      ],
       "source_ids": [
         "S010",
         "S013",
@@ -61935,7 +62513,9 @@
       "dataset_version": "0.18.25",
       "document_id": "problem:PA047",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "content:concept.equilibrium-variational-inequality"
+      ],
       "source_ids": [
         "S054",
         "S055"
