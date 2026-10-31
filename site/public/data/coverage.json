@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 51,
+            "complete": 55,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 14,
-              "no_article": 13,
+              "in_progress": 13,
+              "no_article": 10,
               "stale": 2
             }
           },
@@ -16457,12 +16457,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.general-conic-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -16489,11 +16489,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA022"
+            "/formulations/PA022",
+            "concept.general-conic-optimization"
           ]
         },
         "recommendation": {
@@ -18554,12 +18555,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.equilibrium-variational-inequality"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -18586,11 +18587,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA047"
+            "/formulations/PA047",
+            "concept.equilibrium-variational-inequality"
           ]
         },
         "recommendation": {

@@ -8091,6 +8091,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.equilibrium-variational-inequality",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.evaluation-cost",
       "asset_type": "content",
       "policy": "warning",
@@ -8110,6 +8116,12 @@
     },
     {
       "asset_id": "concept.failed-simulation",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.general-conic-optimization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

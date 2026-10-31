@@ -261,6 +261,25 @@
       },
       "notes": "一次レビュー（執筆と別のエージェント）: 閉じた式・固定成分の傾き1/2.5・べき乗法の比を再計算し一致。n=(1,0)の直線の向き、最小と停留の区別、大きな行列の行き先（Lanczos）、Wahbaの書き方、S054の帰属を修正。1280/375/320pxで横はみ出しなし。"
     },
+    "concept.equilibrium-variational-inequality": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "69d858b44c4a",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 均衡(2.5, 13/6, 7/6)・F(q*)・各店の利益、合計を最大にした(2.5,1.5,0)とそのF、上限を外して切った(2.5,2,1)とそのF、Φの勾配がFであること、ヤコビ行列の固有値1,1,4、歩幅ごとの回数と0.6の往復、Gauss–Seidel型の7周、Lemkeでの乗数0.667を独立に再計算し一致。凸二次計画との関係の条件、各店の最適性と範囲の積の前提、Φが凸であること、強く単調・Lipschitzの条件、歩幅0.5の根拠と0.5・0.55で着く理由、手で解く手順、歩幅・ヤコビ行列・軒の用語、図①のAの頂上の破線と軸を修正。1280/375/320pxで横はみ出し・数式エラーなし。"
+    },
     "concept.expensive-black-box": {
       "reviewed_on": "2026-10-12",
       "reviewer": "claude",
@@ -310,6 +329,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "一次レビュー: コードと数値を再実行して本文と一致を確認。時間切れの説明で1回の打ち切り時間と予算の混同を直し、P=0.05の同点（評価2・4・7）と評価順での解消を明記。「課題から定式化する」の末尾に、EC027の評価契約の書き出しへの導線を追加し、ボタン名・欄名を実画面で照合。1280/375/320pxでページの横はみ出しなし、標準形の式はmath-blockの横スクロール内、操作図は320pxで枠内。"
+    },
+    "concept.general-conic-optimization": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "d1a013717596",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 答え(3.018, 2.081, 0.901)と効果7.065、上限なしの(3.5,2,0.5)、乗数0.641・0.156とKKT残差、予算7・上限2の解き直し、2次式近似の(1,1,1)と4.159、17行の c・A・b の作り方をSCSとClarabelに直接渡して再計算し一致。指数錐の順番（SCS・Clarabel・CVXPYとMOSEK）をパッケージのソースで確認。逆向きの不等式はDCPで断られることに修正し、符号の変え忘れで有界でない例を追加。2次式近似は二次錐計画、乗数の読み方と式、乗数と増分の違い、b − Az の並べ方、出典の割り当て、図の b − Az と e の指数の桁、予算6の線を修正。1280/375/320pxで横はみ出し・数式エラーなし。"
     },
     "concept.general-nonsmooth-local": {
       "reviewed_on": "2026-10-15",
