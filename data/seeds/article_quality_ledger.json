@@ -988,14 +988,15 @@
     "concept.solver-evaluation-points": {
       "reviewed_on": "2026-10-31",
       "reviewer": "claude",
-      "body_sha256": "73fd39186d90",
+      "body_sha256": "b372184e4804",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
         "figure.one-question": "pass",
         "prose.readable": "pass",
         "screen.three-widths": "pass"
-      }
+      },
+      "notes": " 再記録: 水位の式の解き方をRK45からRadauに変え（RK45ではCPUのBLASで評価回数が78・102・120回に分かれるため）、L-BFGS-Bの数値（反復9回・評価54回・呼び直しなし）と図、テストを更新。SkylakeX・Haswell・Zen・Prescottの各kernelでテストが通ることを確認。"
     },
     "concept.stochastic-erm": {
       "reviewed_on": "2026-10-13",
