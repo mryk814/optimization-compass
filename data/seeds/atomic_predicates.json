@@ -61,6 +61,21 @@
       "last_verified": "2026-07-13"
     },
     {
+      "predicate_id": "P_M_BFGS_DERIVATIVE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BFGS",
+      "predicate_kind": "assumption",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "in",
+      "value": ["analytic_gradient", "autodiff", "numerical_difference_only"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.bfgs.derivative_access",
+      "source_ids": ["S002", "S056", "S057"],
+      "confidence": "high",
+      "last_verified": "2026-10-07"
+    },
+    {
       "predicate_id": "P_M_LBFGS_DERIVATIVE",
       "schema_version": "1.0.0",
       "subject_type": "method",
@@ -267,6 +282,11 @@
       "rationale_key": "method.bfgs.incompatibility", "source_ids": ["S002", "S056", "S057"], "confidence": "high", "last_verified": "2026-07-13"
     },
     {
+      "policy_id": "POL_M_BFGS_DERIVATIVE", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_BFGS", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_BFGS_DERIVATIVE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.bfgs.derivative_access", "source_ids": ["S002", "S056", "S057"], "confidence": "high", "last_verified": "2026-10-07"
+    },
+    {
       "policy_id": "POL_M_LBFGS_DERIVATIVE", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_LBFGS", "effect": "require",
       "expression": {"kind": "predicate", "predicate_id": "P_M_LBFGS_DERIVATIVE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
       "rationale_key": "method.lbfgs.derivative_access", "source_ids": ["S002", "S056", "S057", "S065"], "confidence": "high", "last_verified": "2026-07-13"
@@ -330,7 +350,7 @@
   "coverage": [
     {"subject_type": "method", "subject_id": "M_GRADIENT_DESCENT", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
     {"subject_type": "method", "subject_id": "M_NELDER_MEAD", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S018", "S031", "S060", "S063"], "last_verified": "2026-07-13"},
-    {"subject_type": "method", "subject_id": "M_BFGS", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_BFGS", "status": "complete", "rationale": "Current recommendation incompatibility conditions and the derivative-access assumption are represented atomically.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-10-07"},
     {"subject_type": "method", "subject_id": "M_LBFGS", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057", "S065"], "last_verified": "2026-07-13"},
     {"subject_type": "method", "subject_id": "M_LBFGSB", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining bound and numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057", "S065"], "last_verified": "2026-07-13"},
     {"subject_type": "method", "subject_id": "M_SLSQP", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S017", "S029", "S030", "S056", "S064"], "last_verified": "2026-07-13"},

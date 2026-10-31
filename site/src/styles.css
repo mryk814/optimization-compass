@@ -314,6 +314,14 @@ caption {
 .coverage-partial { border-left-color: #b47816; }
 .coverage-missing { border-left-color: #ad3e3e; }
 .coverage-not_applicable { border-left-color: #6f7080; }
+.coverage-scope-unit { display: grid; gap: .6rem; margin-top: .8rem; }
+.coverage-scope-unit h3 { margin: 0; }
+.coverage-scope-unit h3 span { font-size: var(--type-meta, 0.875rem); font-weight: 400; color: var(--muted-text, #62625e); }
+.coverage-scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+.coverage-scope-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
+.coverage-scope-grid ul { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .9rem; }
+.coverage-scope-figure { margin: .2rem 0; font-variant-numeric: tabular-nums; }
+.coverage-scope-figure strong { font-size: 1.7rem; }
 .coverage-baseline { margin: 0; color: var(--muted-text, #62625e); font-size: .88rem; }
 .coverage-priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .8rem; }
 .coverage-priority-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
@@ -2109,7 +2117,8 @@ caption {
 .markdown-body code:not(pre code) { padding: .08rem .25rem; border-radius: .2rem; background: #ecefe9; color: #7a321e; font-size: .88rem; }
 .markdown-body blockquote { margin: .9rem 0; padding: .65rem .8rem; border-left: 3px solid #8ead9c; background: #ecefe9; color: #34453b; font-size: .9rem; line-height: 1.75; }
 .markdown-body blockquote p { margin: 0; }
-.markdown-body table { display: block; max-width: 100%; overflow-x: auto; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+/* Tables scroll sideways instead of breaking numbers: the page-wide overflow-wrap:anywhere would split 0.900 into 0.90 / 0. */
+.markdown-body table { display: block; max-width: 100%; overflow-x: auto; margin: .9rem 0; border-collapse: collapse; font-size: .9rem; line-height: 1.6; overflow-wrap: normal; }
 .markdown-body th, .markdown-body td { padding: .4rem .5rem; border: 1px solid #d5dbd2; text-align: left; vertical-align: top; }
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
@@ -2126,6 +2135,8 @@ caption {
 }
 .markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
+/* Let the table scroll instead of squeezing a formula into the adjacent cell. */
+.markdown-body table math { min-width: max-content; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }
 .callout { margin: .75rem 0; padding: .6rem .7rem; border: 1px solid #cfd8d1; border-left: 4px solid #6c9a7f; border-radius: .35rem; background: #f5f8f3; }
 .callout-warning { border-color: #dfc7a8; border-left-color: #b36b2c; background: #fff9ef; }
@@ -3809,6 +3820,7 @@ main:focus {
   resize: vertical;
 }
 
+.prompt-export-contract,
 .prompt-export-presets,
 .prompt-export-unknowns {
   margin: 0.8rem 0 0;
@@ -4157,4 +4169,30 @@ main:focus {
   .theater-structure-guide > summary { grid-template-columns: minmax(0, 1fr); gap: .2rem; }
   .theater-structure-guide-grid { grid-template-columns: minmax(0, 1fr); }
   .scenario-context-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* OC-EVOL-008: the evaluation contract never fills in unknowns for the reader. */
+.prompt-export-contract summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.prompt-export-contract > p {
+  margin: 0.4rem 0;
+  color: #5f6b63;
+  font-size: 0.74rem;
+}
+
+.prompt-export-contract-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.prompt-export-field select {
+  min-height: 2rem;
+  font: inherit;
 }

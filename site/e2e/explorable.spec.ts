@@ -13,7 +13,8 @@ const figures = [
     route: "/learn/method.gradient-descent",
     id: "gradient-descent-valley",
   },
-  { label: "primal-simplex", route: "/learn/primal-simplex", id: "lp-vertex-walk" },
+  { label: "primal-simplex", route: "/learn/primal-simplex", id: "simplex-pivot" },
+  { label: "linear-program", route: "/learn/concept.linear-program", id: "lp-vertex-walk" },
   { label: "convexity", route: "/learn/concept.convexity", id: "convexity-chord" },
   { label: "nonlinear-least-squares", route: "/learn/concept.nonlinear-least-squares", id: "nonlinear-least-squares-landscape" },
   { label: "newton-method", route: "/learn/newton-method", id: "newton-parabola-jump" },
@@ -21,6 +22,17 @@ const figures = [
   { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
   { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
   { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
+  { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
+  { label: "mixed-integer-linear-program", route: "/learn/concept.mixed-integer-linear-program", id: "milp-integer-lattice" },
+  { label: "convex-quadratic-program", route: "/learn/concept.convex-quadratic-program", id: "convex-qp-projection" },
+  { label: "variable-domain", route: "/learn/concept.variable-domain", id: "variable-domain-switch" },
+  { label: "gauss-newton", route: "/learn/gauss-newton", id: "gauss-newton-lm-steps" },
+  { label: "failed-simulation", route: "/learn/concept.failed-simulation", id: "failure-ledger" },
+  { label: "root-finding", route: "/learn/concept.root-finding", id: "newton-root-residual" },
+  { label: "simplex-optimization", route: "/learn/concept.simplex-optimization", id: "simplex-projection-theta" },
+  { label: "semidefinite-program", route: "/learn/concept.semidefinite-program", id: "sdp-psd-boundary" },
+  { label: "pde-constrained-program", route: "/learn/concept.pde-constrained-program", id: "pde-heat-source-balance" },
+  { label: "external-solver-objective", route: "/learn/concept.external-solver-objective", id: "phase-fraction-target" },
 ];
 
 for (const figure of figures) {
@@ -78,10 +90,23 @@ test("凸性の図で二つの谷を選ぶと定義の違反が見つかり、�
 });
 
 test("LPの図で係数を動かすと最適な頂点が切り替わる", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/primal-simplex");
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/concept.linear-program");
   const region = page.locator('[data-explorable-id="lp-vertex-walk"]');
   await expect(region.getByText("見る問い")).toBeVisible();
-  await expect(region.getByText(/最適解は頂点 \(1\.0, 3\.0\)/u).first()).toBeVisible();
+  await expect(region.getByText(/最適解は頂点 \(4\.0, 3\.0\)、目的値は z=24/u).first()).toBeVisible();
   await region.getByRole("slider", { name: /係数 c₁/u }).fill("-1");
-  await expect(region.getByText(/最適解は頂点 \(0\.0, 4\.0\)/u).first()).toBeVisible();
+  await expect(region.getByText(/最適解は頂点 \(0\.0, 4\.3\)/u).first()).toBeVisible();
+});
+
+test("単体法の図で増やす変数を選び、比の最小値まで進めると最適な頂点に着く", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/primal-simplex");
+  const region = page.locator('[data-explorable-id="simplex-pivot"]');
+  await expect(region.getByText("見る問い")).toBeVisible();
+  await region.getByRole("button", { name: /x₂（クロワッサン）を増やす/u }).click();
+  await region.getByRole("slider", { name: /増やす量 θ/u }).fill("5");
+  await expect(region.getByText(/バターの余りが負になりました/u).first()).toBeVisible();
+  await region.getByRole("button", { name: "比の最小値 θ=13/3 まで進めて s₂ と入れ替える" }).click();
+  await region.getByRole("button", { name: /x₁（食パン）を増やす/u }).click();
+  await region.getByRole("button", { name: "比の最小値 θ=4 まで進めて s₁ と入れ替える" }).click();
+  await expect(region.getByText(/頂点 \(4, 3\) が最適で、売上は 24 です/u).first()).toBeVisible();
 });

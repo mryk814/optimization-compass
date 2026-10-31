@@ -4,7 +4,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BAYESIAN_OPT_GP",
-          "reason": "高 fidelity の評価を節約しながら、低 fidelity の観測も含めた surrogate と不確実性から次の simulator call を選ぶため"
+          "reason": "高精度モデルの評価を節約しながら、低精度モデルの観測も含めた代理モデルと不確実性から次のシミュレータ呼び出しを選ぶため"
         }
       ],
       "case_id": "multi-fidelity-simulator",
@@ -14,17 +14,17 @@
       "conditional_methods": [
         {
           "method_id": "M_HYPERBAND_ASHA",
-          "reason": "fidelity が simulation resource の段階に対応し、中間結果から継続・停止を判断できる場合に resource allocation として組み合わせる"
+          "reason": "精度がシミュレーションに割く計算資源の段階に対応し、中間結果から継続・停止を判断できる場合に、計算資源の配分として組み合わせる"
         }
       ],
-      "constraints": "設計変数は $-3\\le x\\le3$。成功した call の cost 合計を $B=36$（high-fidelity-equivalent では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は failure、high fidelity で $x<-2.2$ は timeout/censored として status と cost だけを ledger に残し、目的値の大きな値へ置換しない。",
-      "decision_variables": "設計変数 x と simulator call ごとの fidelity ℓ。固定教材では $x\\in[-3,3]$、low fidelity の cost を $c_L=1$、high fidelity の cost を $c_H=12$ とする。",
+      "constraints": "設計変数は $-3\\le x\\le3$。成功した呼び出しの費用合計を $B=36$（高精度モデル換算では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は失敗、高精度モデルで $x<-2.2$ は時間切れ・打ち切りとして状態と費用だけを記録に残し、目的関数値の大きな値へ置換しない。",
+      "decision_variables": "設計変数 x と、シミュレータ呼び出しごとの精度 ℓ。固定教材では $x\\in[-3,3]$、低精度モデルの費用を $c_L=1$、高精度モデルの費用を $c_H=12$ とする。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい"
+          "reason": "精度ごとの評価費用、失敗・打ち切りの状態、ノイズを評価の方針として扱う既存契約がなく、少数評価の配分根拠を記録しにくい"
         }
       ],
       "feature_values": [
@@ -60,15 +60,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "固定された1次元・決定論的な教育用 simulator であり、実際の物理 simulator の fidelity 間誤差、noise 分布、runtime、failure 原因を表しません。",
-        "low fidelity の bias は意図的に順位を保存しません。固定Compareとfailure Theaterはdiscrepancyの検出方法を教える最小例であり、少ないhigh-fidelity call、特定kernel、補正model、fidelity policyの妥当性や一般的優劣を保証しません。"
+        "固定された1次元・決定論的な教育用シミュレータであり、実際の物理シミュレータの精度間の誤差、ノイズ分布、実行時間、失敗原因を表しません。",
+        "低精度モデルの偏りは意図的に順位を保存しません。固定した比較のページと失敗例の動きの再生はモデル間の食い違いの検出方法を教える最小例であり、少ない高精度モデル呼び出し、特定のカーネル、補正モデル、精度の使い分け方針の妥当性や一般的優劣を保証しません。"
       ],
       "map_node_id": "answer:Q06:hours_or_more",
-      "objective": "高 fidelity の真の目的 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。low fidelity は $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。low fidelity の順位が high fidelity と一致する保証は置かない。",
-      "practical_notes": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。Compare は initial design、noise、fidelity cost、parallel workers=1、固定tuning、失敗をnullのまま記録してcostを課しretryしないpolicyを固定し、high-fidelity-equivalent costで同期します。独立failure Theaterでは同じ2候補のlow/high観測を照合し、low-fidelity biasによる順位反転を示します。",
+      "objective": "高精度モデルの真の目的関数 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。低精度モデルは $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。低精度モデルの順位が高精度モデルと一致する保証は置かない。",
+      "practical_notes": "教育用の評価記録では呼び出しごとに x、精度、費用、状態、観測値を記録し、それまでの最良値は成功した高精度モデルの観測から別に計算します。比較のページは初期点の配置、ノイズ、精度ごとの費用、並列ワーカー数=1、固定したチューニング、失敗を値なし（null）のまま記録して費用を課し再試行しない方針を固定し、高精度モデル換算の費用で同期します。独立した失敗例の動きの再生では同じ2候補の低精度・高精度の観測を照合し、低精度モデルの偏りによる順位反転を示します。",
       "problem_archetype_id": "PA014",
       "python_example": "import math\n\n\ndef simulator(x: float, fidelity: str) -> dict[str, object]:\n    if not -3.0 <= x <= 3.0:\n        raise ValueError(\"x is outside the design domain\")\n    cost = {\"low\": 1.0, \"high\": 12.0}[fidelity]\n    if x > 2.4:\n        return {\"status\": \"failed\", \"fidelity\": fidelity, \"cost\": cost, \"value\": None}\n    if fidelity == \"high\" and x < -2.2:\n        return {\"status\": \"censored\", \"fidelity\": fidelity, \"cost\": cost, \"value\": None}\n    high = 0.16 * (x - 1.7) ** 2 + 0.45 * math.sin(2.2 * x) + 0.12 * math.sin(5.3 * x)\n    bias = 0.18 * math.sin(1.4 * x + 0.3) if fidelity == \"low\" else 0.0\n    deterministic_noise = 0.03 * math.sin(7.0 * x) if fidelity == \"low\" else 0.01 * math.sin(7.0 * x)\n    return {\"status\": \"ok\", \"fidelity\": fidelity, \"cost\": cost, \"value\": high + bias + deterministic_noise}\n\n\nprint(simulator(0.5, \"low\"))\nprint(simulator(0.5, \"high\"))",
-      "question": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
+      "question": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -92,8 +92,8 @@
       ],
       "status": "published",
       "title_en": "Allocate a budget across low- and high-fidelity simulation",
-      "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける",
-      "variable_domain": "実務では設計変数 x と fidelity ℓ を分け、固定教材では $X=[-3,3]$、$\\ell\\in\\{L,H\\}$。x は設計値、ℓ は同じ設計をどの精度で評価するかを表す policy variable。",
+      "title_ja": "低精度／高精度のシミュレータを予算内で使い分ける",
+      "variable_domain": "実務では設計変数 x と精度 ℓ を分け、固定教材では $X=[-3,3]$、$\\ell\\in\\{L,H\\}$。x は設計値、ℓ は同じ設計をどの精度で評価するかを表す方針の変数。",
       "visualization_ids": [
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
@@ -108,7 +108,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "予算・選択・相互排他を離散制約として直接表し、可行性と最適性gapを確認できるため"
+          "reason": "予算・選択・相互排他を離散制約として直接表し、可行性と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "budget-allocation",
@@ -118,7 +118,7 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "線形緩和が強い小規模modelならMIP familyも比較する"
+          "reason": "線形緩和が強い小規模モデルならMIP系統も比較する"
         }
       ],
       "constraints": "費用 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_D+3x_C\\le7$ と $x_i\\in\\{0,1\\}$。",
@@ -162,12 +162,12 @@
       ],
       "last_reviewed": "2026-07-24",
       "limitations": [
-        "4施策・固定費用・固定期待効果の教育用0-1 knapsackであり、効果推定の不確実性、施策間相互作用、時期、対象者の重複、実行能力を表さない。",
-        "Theaterの決定的Branch-and-Bound traceはboundとgapの読み方を示す教材であり、CP-SATやMIP solverのcut、presolve、並列探索、wall-clock、大規模instanceでの一般性能を順位付けしない。"
+        "4施策・固定費用・固定期待効果の教育用0-1ナップサック問題であり、効果推定の不確実性、施策間相互作用、時期、対象者の重複、実行能力を表さない。",
+        "動きの再生の決定的なBranch-and-Boundの探索記録は、上界とギャップの読み方を示す教材であり、CP-SATやMIPソルバーの切除平面、前処理、並列探索、実時間、大規模な問題例での一般性能を順位付けしない。"
       ],
       "map_node_id": "answer:Q01:binary",
       "objective": "施策ごとの期待効果 $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_D+5x_C$ を最大化する。",
-      "practical_notes": "search-treeは、①nodeの部分assignment、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤incumbentとglobal boundの差、の順に読む。完全探索ではvalue 15の施策A+Bと上界15が一致して最適性を証明するが、4 node停止では可行なincumbentがあっても正のgapが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約をversion管理し、係数感度とheld-out評価を別に行う。",
+      "practical_notes": "探索木は、①ノードの部分割当、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤暫定解と全体の上界の差、の順に読む。完全探索では値15の施策A+Bと上界15が一致して最適性を証明するが、4ノードで停止すると可行な暫定解があっても正のギャップが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約を版管理し、係数感度と検証用に取り分けたデータでの評価を別に行う。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nitems = {\"A\": (4, 9), \"B\": (3, 6), \"D\": (2, 4), \"C\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in items}\nmodel.add(sum(cost * x[name] for name, (cost, _) in items.items()) <= 7)\nmodel.maximize(sum(effect * x[name] for name, (_, effect) in items.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nif status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):\n    raise RuntimeError(solver.status_name(status))\nselected = [name for name in items if solver.value(x[name])]\ncost = sum(items[name][0] for name in selected)\neffect = sum(items[name][1] for name in selected)\nprint({\n    \"status\": solver.status_name(status),\n    \"selected\": selected,\n    \"cost\": cost,\n    \"effect\": effect,\n    \"bound\": solver.best_objective_bound,\n})",
       "question": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
@@ -215,17 +215,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "勤務ルールを線形式で表せ、緩和boundや最適性gapまで必要な場合はMIP familyとして定式化する"
+          "reason": "勤務ルールを線形式で表せ、緩和による下界や最適性ギャップまで必要な場合はMIPの系統として定式化する"
         }
       ],
       "constraints": "各勤務帯の必要人数を $\\sum_sx_{s,d,h}\\ge r_{d,h}$、1日1勤務を $\\sum_hx_{s,d,h}\\le1$、資格のない割当を $x_{s,d,h}=0$ とする。夜勤後の翌日日勤を $x_{s,d,night}+x_{s,d+1,day}\\le1$ とし、各スタッフの勤務数を $u_{min}\\le\\sum_{d,h}x_{s,d,h}\\le u_{max}$ で挟む。",
-      "decision_variables": "スタッフ $s$、日 $d$、勤務帯 $h$ ごとの二値変数 $x_{s,d,h}$ と、勤務数の最大値・最小値 $u_{max},u_{min}$。需要、資格、希望、休暇申請は入力であり、solverが変更するdecision variableではない。",
+      "decision_variables": "スタッフ $s$、日 $d$、勤務帯 $h$ ごとの二値変数 $x_{s,d,h}$ と、勤務数の最大値・最小値 $u_{max},u_{min}$。需要、資格、希望、休暇申請は入力であり、ソルバーが変更する決定変数ではない。",
       "difficulty": "intro",
       "domain": "operations",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "0-1の割当と論理制約を連続gradient updateだけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため"
+          "reason": "0-1の割当と論理制約を連続の勾配更新だけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため"
         }
       ],
       "feature_values": [
@@ -275,12 +275,12 @@
       ],
       "last_reviewed": "2026-07-24",
       "limitations": [
-        "4名・3日・2勤務帯、各枠1名、固定資格・固定希望の教育用instanceであり、実際の労働協約、複数資格、skill mix、有給、突発欠勤、需要変動、長期の公平性を表さない。",
+        "4名・3日・2勤務帯、各枠1名、固定資格・固定希望の教育用の問題例であり、実際の労働協約、複数資格、技能の組合せ、有給、突発欠勤、需要変動、長期の公平性を表さない。",
         "固定教材で実行可能な勤務表が得られても、実運用の法令適合、健康、安全、本人同意、公平性を保証しない。運用前に人事・現場責任者・スタッフによる確認と変更履歴の監査が必要である。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "希望適合度 $p_{s,d,h}$ を増やしながら勤務数の幅を抑えるため、固定教材では $f(x,u)=-10\\sum_{s,d,h}p_{s,d,h}x_{s,d,h}+(u_{max}-u_{min})$ を最小化する。必要人数や資格はpenaltyへ落とさずhard constraintとして扱う。",
-      "practical_notes": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
+      "objective": "希望適合度 $p_{s,d,h}$ を増やしながら勤務数の幅を抑えるため、固定教材では $f(x,u)=-10\\sum_{s,d,h}p_{s,d,h}x_{s,d,h}+(u_{max}-u_{min})$ を最小化する。必要人数や資格は罰則へ落とさず必ず守る制約として扱う。",
+      "practical_notes": "必ず守る制約と、なるべく満たしたい希望を別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点を版管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。状態がFEASIBLEなら勤務表は使えても目的関数値の最適性は未証明なので、停止理由と最良の下界（best bound）を併記する。",
       "problem_archetype_id": "PA026",
       "python_example": "from ortools.sat.python import cp_model\n\nstaff, days, shifts = range(4), range(3), range(2)\nrequired = {(d, h): 1 for d in days for h in shifts}\npreference = {(s, d, h): (s + d + h) % 2 for s in staff for d in days for h in shifts}\nmodel = cp_model.CpModel()\nx = {(s, d, h): model.new_bool_var(f\"x_{s}_{d}_{h}\") for s in staff for d in days for h in shifts}\nfor d in days:\n    for h in shifts:\n        model.add(sum(x[s, d, h] for s in staff) >= required[d, h])\nfor s in staff:\n    for d in days:\n        model.add(sum(x[s, d, h] for h in shifts) <= 1)\n    for d in range(2):\n        model.add(x[s, d, 1] + x[s, d + 1, 0] <= 1)\nmodel.add(x[3, 0, 1] == 0)\nworkloads = [sum(x[s, d, h] for d in days for h in shifts) for s in staff]\nmax_load, min_load = model.new_int_var(0, 3, \"max_load\"), model.new_int_var(0, 3, \"min_load\")\nmodel.add_max_equality(max_load, workloads)\nmodel.add_min_equality(min_load, workloads)\nmodel.maximize(10 * sum(preference[s, d, h] * x[s, d, h] for s in staff for d in days for h in shifts) - (max_load - min_load))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [[solver.value(x[s, d, h]) for h in shifts] for s in staff for d in days])",
       "question": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。",
@@ -319,7 +319,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BAYESIAN_OPT_GP",
-          "reason": "高価なblack-box評価をsurrogateで近似し、少ない試行から次の設定を選べるため"
+          "reason": "高価なブラックボックス評価を代理モデルで近似し、少ない試行から次の設定を選べるため"
         }
       ],
       "case_id": "hyperparameter-search",
@@ -330,7 +330,7 @@
       "conditional_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "低次元・低noiseで局所探索を許容する場合に比較する"
+          "reason": "低次元・低ノイズで局所探索を許容する場合に比較する"
         }
       ],
       "constraints": "$\\eta$ と $\\lambda$ の上下限に加え、実務では評価予算（evaluation budget）$\\sum_k cost(x_k)\\le budget$ を置く。固定教材では評価回数を最大10回とする。",
@@ -340,7 +340,7 @@
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "観測値しか得られないblack-boxで、信頼できるgradientを前提にすると更新根拠を確認できない"
+          "reason": "観測値しか得られないブラックボックスで、信頼できる勾配を前提にすると更新根拠を確認できない"
         }
       ],
       "feature_values": [
@@ -375,7 +375,7 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "固定seed・1次元・RBFカーネル（kernel）・10回評価の教材であり、別データセット、探索空間（search space）、ノイズ条件でのベイズ最適化（BO）やベースライン（baseline）の優位性を示しません。"
+        "固定した乱数の種・1次元・RBFカーネル（kernel）・10回評価の教材であり、別データセット、探索空間（search space）、ノイズ条件でのベイズ最適化（BO）やベースライン（baseline）の優位性を示しません。"
       ],
       "map_node_id": "answer:Q06:hours_or_more",
       "objective": "設定 x を1回評価して得る検証損失 $y=f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックス（black-box）として観測する。",
@@ -420,7 +420,7 @@
       "candidate_methods": [
         {
           "method_id": "MF_LP_QP_CONIC",
-          "reason": "positive semidefiniteな共分散行列による二次riskと、simplex・上下限を凸QPとして明示し、大域解とsolver statusを確認できるため"
+          "reason": "半正定値な共分散行列による二次のリスクと、単体制約・上下限を凸QPとして明示し、大域解とソルバーの状態を確認できるため"
         }
       ],
       "case_id": "portfolio-allocation",
@@ -430,17 +430,17 @@
       "conditional_methods": [
         {
           "method_id": "M_SLSQP",
-          "reason": "市場impactや非線形な運用制約を追加して凸QPとして表せなくなり、gradientを使う局所的な制約付きNLPとして解く場合"
+          "reason": "市場インパクトや非線形な運用制約を追加して凸QPとして表せなくなり、勾配を使う局所的な制約付きNLPとして解く場合"
         }
       ],
-      "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
-      "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
+      "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では売買回転率、最低売買単位、税、流動性、取引費用を入れない。",
+      "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、リスク回避係数 $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
       "difficulty": "intermediate",
       "domain": "finance",
       "excluded_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "共分散の二次構造とsimplex・集中上限をnativeに使わず、可行性や凸大域解の根拠を確認しにくいため"
+          "reason": "共分散の二次構造と単体制約・集中上限をそのまま活用せず、可行性や凸大域解の根拠を確認しにくいため"
         }
       ],
       "feature_values": [
@@ -490,15 +490,15 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
-        "凸QPの大域解は入力したmodel内の保証であり、将来収益、損失上限、tail risk、実現performanceを保証しない。実運用では時系列のheld-out評価と推定不確実性の検証が必要である。"
+        "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用の問題例であり、推定誤差、相場局面の変化、流動性、税、売買単位、既存保有を表さない。",
+        "凸QPの大域解は入力したモデル内の保証であり、将来収益、損失上限、裾のリスク、実際の運用成績を保証しない。実運用では時系列で検証用に取り分けた期間での評価と推定不確実性の検証が必要である。"
       ],
       "map_node_id": "answer:Q11:lp_qp_conic",
-      "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
-      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
+      "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散によるリスク、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
+      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、対象資産の範囲を版管理する。最適化に使った期間と検証用に取り分けた期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。シナリオごとの悪い側の損失を目的へ入れたい場合は、このQPをCVaRへ言い換えず、シナリオ、裾の水準、取り分けた期間での集計を明示した別Caseとして扱う。実運用では現在保有、売買回転率、スリッページ、税、最低売買単位を制約または目的へ追加し、ソルバーの状態だけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "problem_archetype_id": "PA018",
       "python_example": "import cvxpy as cp\nimport numpy as np\n\nmu = np.array([0.08, 0.06, 0.05, 0.03])\nsigma = np.array([[0.040, 0.006, 0.004, 0.002], [0.006, 0.025, 0.005, 0.003], [0.004, 0.005, 0.018, 0.002], [0.002, 0.003, 0.002, 0.010]])\nrisk_aversion = 2.0\nw = cp.Variable(4)\nobjective = cp.Minimize(risk_aversion * cp.quad_form(w, sigma) - mu @ w)\nconstraints = [cp.sum(w) == 1, w >= 0, w <= 0.6]\nproblem = cp.Problem(objective, constraints)\nproblem.solve()\nprint(problem.status, np.round(w.value, 4), float(mu @ w.value), float(w.value @ sigma @ w.value))",
-      "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
+      "question": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "explicit_algebraic",
@@ -531,7 +531,7 @@
       "candidate_methods": [
         {
           "method_id": "MF_LP_QP_CONIC",
-          "reason": "scenario lossのCVaRを補助変数の線形・錐形式へ展開し、simplex制約と合わせて可行性・最適性を確認しやすいため"
+          "reason": "シナリオ損失のCVaRを補助変数の線形・錐形式へ展開し、単体制約と合わせて可行性・最適性を確認しやすいため"
         }
       ],
       "case_id": "portfolio-cvar-allocation",
@@ -541,17 +541,17 @@
       "conditional_methods": [
         {
           "method_id": "M_PROJECTED_GRADIENT",
-          "reason": "CVaRを滑らかな近似へ置き換える、またはscenario lossの勾配を使う場合にsimplexへの射影と組み合わせる"
+          "reason": "CVaRを滑らかな近似へ置き換える、またはシナリオ損失の勾配を使う場合に単体への射影と組み合わせる"
         }
       ],
-      "constraints": "空売りを禁止し、simplex制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
-      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
+      "constraints": "空売りを禁止し、単体制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・売買回転率の制約を入れず、実務では別途追加して再評価する。",
+      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個の学習用の収益率シナリオから配分を決め、検証用に取り分けた4個のシナリオでは解を再評価する。",
       "difficulty": "intermediate",
       "domain": "finance",
       "excluded_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため"
+          "reason": "シナリオごとの損失とCVaRの裾、単体制約を更新・診断の契約として明示しにくいため"
         }
       ],
       "feature_values": [
@@ -565,16 +565,16 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "8個のtraining scenarioと4個のheld-out scenario、4資産、固定return、固定alpha=0.75の教育用instanceであり、scenario生成過程、時系列依存、推定誤差、実際の取引コストや流動性を表さない。",
-        "CVaRのtail objectiveを最適化しただけで、chance constraintの確率保証、robust optimizationのset内保証、DROのambiguity set内保証、母集団・将来データへの性能保証は得られない。",
-        "sample sizeが小さいためtailの順位と保守性は不安定であり、scenario数、alpha、risk weight、取引コスト、held-out期間を揃えた再検証が必要である。"
+        "8個の学習用シナリオと検証用に取り分けた4個のシナリオ、4資産、固定した収益率、固定したα=0.75の教育用の問題例であり、シナリオ生成過程、時系列依存、推定誤差、実際の取引コストや流動性を表さない。",
+        "CVaRという裾の目的関数を最適化しただけで、確率制約の確率保証、ロバスト最適化の集合内保証、DROの曖昧性集合内保証、母集団・将来データへの性能保証は得られない。",
+        "サンプルサイズが小さいため裾の順位と保守性は不安定であり、シナリオ数、α、リスクの重み、取引コスト、検証用に取り分けた期間を揃えた再検証が必要である。"
       ],
       "map_node_id": "answer:Q01:continuous",
-      "objective": "scenario $s$ のlossを $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
-      "practical_notes": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
+      "objective": "シナリオ $s$ の損失を $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
+      "practical_notes": "不確実性の源は将来の収益率のパラメータ不確実性とし、観測ノイズや過程の外乱をこの教材へ混ぜない。8個の学習用シナリオだけを最適化に使い、検証用に取り分けた4個のシナリオは解を固定した後に別集計する。CVaRは損失の裾を目的へ入れるリスク尺度であり、確率制約の違反確率保証、不確実性集合に対するロバスト保証、曖昧性集合に対するDRO保証ではない。結果は列挙したシナリオ上の経験的な比較に限り、母集団や将来の収益率への確率保証は主張しない。$\\alpha$やリスクの重み、不確実性集合の幅を大きくすると保守的になり得る。8/4件では裾の推定が不安定で、シナリオを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列に沿った分割、ブートストラップや信頼区間、推定誤差、スリッページ、売買回転率、再配分頻度を追加検証する。[単体・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[確率制約・CVaR・ロバスト性](#/learn/concept.chance-risk-contract)を先に読む。",
       "problem_archetype_id": "PA036",
       "python_example": "import cvxpy as cp\nimport numpy as np\n\nreturns_train = np.array([[0.08, 0.02, -0.01, 0.04], [-0.03, 0.05, 0.01, 0.02], [0.04, -0.02, 0.03, 0.01], [0.01, 0.00, -0.04, 0.03], [-0.06, 0.03, -0.02, 0.01], [0.02, -0.04, 0.02, 0.00], [0.03, 0.01, 0.00, -0.05], [-0.02, 0.02, 0.04, 0.01]])\nreturns_test = np.array([[0.01, 0.00, -0.02, 0.03], [-0.04, 0.02, 0.01, 0.00], [0.02, -0.01, 0.02, -0.03], [0.00, 0.03, -0.01, 0.02]])\nalpha, risk_weight = 0.75, 0.5\nw = cp.Variable(4)\neta = cp.Variable()\nloss = -returns_train @ w\ncvar = eta + cp.sum(cp.pos(loss - eta)) / ((1 - alpha) * len(returns_train))\nproblem = cp.Problem(cp.Minimize(cp.sum(loss) / len(returns_train) + risk_weight * cvar), [w >= 0, w <= 0.6, cp.sum(w) == 1])\nproblem.solve()\nprint(problem.status, w.value, cvar.value)\nprint(\"held-out mean loss\", float(np.mean(-returns_test @ w.value)))",
-      "question": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "question": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。",
       "question_answers": {
         "Q01": "continuous"
       },
@@ -585,8 +585,8 @@
       ],
       "status": "published",
       "title_en": "Portfolio allocation with CVaR",
-      "title_ja": "scenarioのtail riskを抑えて配分する",
-      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid w_i\\ge0,\\ \\sum_i w_i=1,\\ 0\\le w_i\\le0.6\\}$。$w$ はsimplex上の配分ベクトルである。",
+      "title_ja": "シナリオの裾リスクを抑えて配分する",
+      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid w_i\\ge0,\\ \\sum_i w_i=1,\\ 0\\le w_i\\le0.6\\}$。$w$ は単体上の配分ベクトルである。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_PORTFOLIO_NOMINAL_8_4",
@@ -597,7 +597,7 @@
       "candidate_methods": [
         {
           "method_id": "M_TRUST_REGION_REFLECTIVE",
-          "reason": "parameter boundsを直接扱いながら残差vectorとJacobianを保持し、rank・optimality・active boundsを診断できるため"
+          "reason": "パラメータの上下限を直接扱いながら残差ベクトルとJacobianを保持し、ランク・最適性・有効になった上下限を診断できるため"
         }
       ],
       "case_id": "EC013",
@@ -607,11 +607,11 @@
       "conditional_methods": [
         {
           "method_id": "M_LEVENBERG_MARQUARDT",
-          "reason": "初期値が十分よく、Jacobianがfull rankで、必要なboundsがactiveにならない小規模問題の場合"
+          "reason": "初期値が十分よく、Jacobianがフルランクで、必要な上下限が有効にならない小規模問題の場合"
         },
         {
           "method_id": "M_LBFGSB",
-          "reason": "残差専用solverを使えず、scalar二乗和とそのgradientへ畳んでboundsだけは保持するfallbackが必要な場合"
+          "reason": "残差専用のソルバーを使えず、スカラーの二乗和とその勾配へ畳んで上下限だけは保持する代替手段が必要な場合"
         }
       ],
       "constraints": "パラメータの上下限 $0\\le a\\le5$、$0\\le k\\le3$、$-1\\le c\\le2$。固定教材ではこの直方体（box）以外の制約は置かない。",
@@ -657,12 +657,12 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "TheaterとCompareはsolver非依存の共通診断probeです。TRF・LM・L-BFGS-Bの実行結果ではなく、Compareの3 lineは意図的に同一です。",
-        "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
+        "動きの再生と比較のページはソルバー非依存の共通の診断例です。TRF・LM・L-BFGS-Bの実行結果ではなく、比較のページの3本の線は意図的に同一です。",
+        "局所解とパラメータの識別性は初期値・ランク・残差モデルに依存し、低い二乗和だけでは一意性を示せません。"
       ],
       "map_node_id": "answer:Q11:least_squares",
       "objective": "20個の観測時刻 $t_i$ における残差 $r_i(x)=\\hat y(t_i;x)-y_i$ の二乗和 $f(x)=\\sum_i r_i(x)^2$ を最小化する。",
-      "practical_notes": "残差pattern、Jacobian rank、scale、bounds、外れ値、初期値感度を確認し、二乗和だけでparameterの一意性を断定しません。",
+      "practical_notes": "残差の現れ方、Jacobianのランク、スケール、上下限、外れ値、初期値感度を確認し、二乗和だけでパラメータの一意性を断定しません。",
       "problem_archetype_id": "PA033",
       "python_example": "import numpy as np\nfrom scipy.optimize import least_squares\n\nt = np.linspace(0.0, 5.0, 20)\ntruth = np.array([1.8, 0.7, 0.25])\ny = truth[0] * np.exp(-truth[1] * t) + truth[2]\ndef residual(p):\n    return p[0] * np.exp(-p[1] * t) + p[2] - y\nresult = least_squares(residual, x0=[1.0, 0.4, 0.0], bounds=([0, 0, -1], [5, 3, 2]), method=\"trf\")\nprint(result.x, np.linalg.norm(result.fun), result.optimality)",
       "question": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。",
@@ -714,7 +714,7 @@
       "conditional_methods": [
         {
           "method_id": "M_EPSILON_CONSTRAINT",
-          "reason": "選好（preference）を閾値として表せ、各スカラー部分問題（scalar subproblem）を信頼できるsolverで解ける場合"
+          "reason": "選好（preference）を閾値として表せ、各スカラー部分問題（scalar subproblem）を信頼できるソルバーで解ける場合"
         }
       ],
       "constraints": "固定教材では $0\\le x\\le2$、$0\\le y\\le2$。実務では設計の上下限に加え、安全上の $g_j(x)\\le0$ を実行可能条件として追加する。",
@@ -764,7 +764,7 @@
       ],
       "map_node_id": "answer:Q03:multiobjective",
       "objective": "実問題では費用（cost）$f_1(x)$ と性能損失（performance loss）$f_2(x)$ を同時に最小化する。固定教材では $f_1=x^2+y^2$、$f_2=(x-2)^2+(y-2)^2$。",
-      "practical_notes": "目的の向き、正規化（normalization）、基準点（reference point）、seed、評価予算を記録し、近似フロントと選好で選んだ1点を区別します。",
+      "practical_notes": "目的の向き、正規化（normalization）、基準点（reference point）、乱数の種、評価予算を記録し、近似フロントと選好で選んだ1点を区別します。",
       "problem_archetype_id": "PA038",
       "python_example": "from pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.optimize import minimize\nfrom pymoo.problems import get_problem\n\nresult = minimize(get_problem(\"zdt1\"), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F)",
       "question": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。",
@@ -813,8 +813,8 @@
           "reason": "問題インスタンス（instance）が小さく、論理制約と時間窓を制約充足モデル（CP model）へ自然に書ける場合"
         }
       ],
-      "constraints": "stop 1から4を各1回訪問し、$\\{\\pi_1,\\ldots,\\pi_4\\}=\\{1,2,3,4\\}$ とする。到着時刻は $e_i\\le a_i\\le l_i$、連続する訪問では $a_j\\ge a_i+t_{ij}$、depotへの帰着は30分以内とする。",
-      "decision_variables": "固定教材の訪問順序 $\\pi=(\\pi_1,\\ldots,\\pi_4)$ と各stopへの到着時刻 $a_i$。実務では車両割当 $z_{v,i}$、積載量、休憩、複数depotもdecisionへ加わるが、固定教材では1台・容量制約なしに固定する。",
+      "constraints": "訪問先1から4を各1回訪問し、$\\{\\pi_1,\\ldots,\\pi_4\\}=\\{1,2,3,4\\}$ とする。到着時刻は $e_i\\le a_i\\le l_i$、連続する訪問では $a_j\\ge a_i+t_{ij}$、拠点への帰着は30分以内とする。",
+      "decision_variables": "固定教材の訪問順序 $\\pi=(\\pi_1,\\ldots,\\pi_4)$ と各訪問先への到着時刻 $a_i$。実務では車両割当 $z_{v,i}$、積載量、休憩、複数の拠点も決定変数へ加わるが、固定教材では1台・容量制約なしに固定する。",
       "difficulty": "intermediate",
       "domain": "logistics",
       "excluded_methods": [
@@ -855,12 +855,12 @@
       ],
       "last_reviewed": "2026-07-24",
       "limitations": [
-        "depot 1個・stop 4個・車両1台・固定移動時間・service timeなしの教育用instanceであり、1000 stop、複数車両、容量、pickup-delivery、休憩、交通変動を表さない。",
-        "1秒のlocal searchで得た実行可能routeは大域最適性を保証せず、固定行列上の可行性も実道路の通行可能性・到着時刻・安全を保証しない。実運用では最新交通、車両・driver状態、現場確認で再検証する。"
+        "拠点1個・訪問先4個・車両1台・固定移動時間・現地作業時間なしの教育用の問題例であり、1000訪問先、複数車両、容量、集荷・配達の組、休憩、交通変動を表さない。",
+        "1秒の局所探索で得た実行可能なルートは大域最適性を保証せず、固定行列上の実行可能性も実道路の通行可能性・到着時刻・安全を保証しない。実運用では最新交通、車両・運転者の状態、現場確認で再検証する。"
       ],
       "map_node_id": "answer:Q11:scheduling_routing",
-      "objective": "移動時間行列 $t_{ij}$ を使い、固定教材では $f(\\pi)=t_{0,\\pi_1}+\\sum_{k=1}^{3}t_{\\pi_k,\\pi_{k+1}}+t_{\\pi_4,0}$ を最小化する。時間窓違反はpenaltyへ落とさず、訪問可能性を決めるhard constraintとして扱う。",
-      "practical_notes": "距離・所要時間行列の生成時点、道路区分、タイムゾーン、service time、車両容量、driverの勤務・休憩ルールをversion管理する。探索前に各stopが少なくとも1台から到達可能かを確認し、期限停止時は未訪問stop、時間窓・容量違反、総距離、最良bound、停止理由を別々に報告する。実行可能routeが得られても最適性は未証明であり、交通予測を更新した再計算とdispatcherによる確認経路を残す。",
+      "objective": "移動時間行列 $t_{ij}$ を使い、固定教材では $f(\\pi)=t_{0,\\pi_1}+\\sum_{k=1}^{3}t_{\\pi_k,\\pi_{k+1}}+t_{\\pi_4,0}$ を最小化する。時間窓違反は罰則へ落とさず、訪問可能性を決める必ず守る制約として扱う。",
+      "practical_notes": "距離・所要時間行列の生成時点、道路区分、タイムゾーン、現地作業時間、車両容量、運転者の勤務・休憩ルールを版管理する。探索前に各訪問先が少なくとも1台から到達可能かを確認し、期限停止時は未訪問の訪問先、時間窓・容量違反、総距離、最良の下界、停止理由を別々に報告する。実行可能なルートが得られても最適性は未証明であり、交通予測を更新した再計算と配車担当者による確認経路を残す。",
       "problem_archetype_id": "PA031",
       "python_example": "from ortools.constraint_solver import pywrapcp, routing_enums_pb2\n\ntravel_time = [[0, 4, 6, 8, 7], [4, 0, 3, 5, 6], [6, 3, 0, 4, 5], [8, 5, 4, 0, 3], [7, 6, 5, 3, 0]]\ntime_windows = [(0, 30), (0, 10), (3, 15), (7, 20), (10, 25)]\nmanager = pywrapcp.RoutingIndexManager(5, 1, 0)\nrouting = pywrapcp.RoutingModel(manager)\ndef transit(from_index, to_index):\n    return travel_time[manager.IndexToNode(from_index)][manager.IndexToNode(to_index)]\ntransit_index = routing.RegisterTransitCallback(transit)\nrouting.SetArcCostEvaluatorOfAllVehicles(transit_index)\nrouting.AddDimension(transit_index, 30, 30, True, \"Time\")\ntime = routing.GetDimensionOrDie(\"Time\")\nfor node, window in enumerate(time_windows):\n    time.CumulVar(manager.NodeToIndex(node)).SetRange(*window)\nsearch = pywrapcp.DefaultRoutingSearchParameters()\nsearch.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC\nsearch.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH\nsearch.time_limit.FromSeconds(1)\nsolution = routing.SolveWithParameters(search)\nif solution is None:\n    raise RuntimeError(\"no feasible route\")\nroute, index = [], routing.Start(0)\nwhile not routing.IsEnd(index):\n    route.append((manager.IndexToNode(index), solution.Value(time.CumulVar(index))))\n    index = solution.Value(routing.NextVar(index))\nroute.append((manager.IndexToNode(index), solution.Value(time.CumulVar(index))))\nprint(route, solution.ObjectiveValue())",
       "question": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。",
@@ -889,7 +889,7 @@
       "status": "published",
       "title_en": "Build time-window delivery routes under a deadline",
       "title_ja": "時間窓付き配送ルートを10分以内に組む",
-      "variable_domain": "固定教材では $X=\\{\\text{depot 0を出発・帰着し、stop 1,2,3,4を各1回訪問する順列}\\}$。1台だけなのでdecisionは4 stopの訪問順序であり、連続ベクトルの直方体ではない。",
+      "variable_domain": "固定教材では $X=\\{\\text{depot 0を出発・帰着し、stop 1,2,3,4を各1回訪問する順列}\\}$。1台だけなので決定は4訪問先の訪問順序であり、連続ベクトルの直方体ではない。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
@@ -910,11 +910,11 @@
       "conditional_methods": [
         {
           "method_id": "M_MULTIPLE_SHOOTING",
-          "reason": "長い予測区間（horizon）で単一shooting（single shooting）が不安定だが、区間積分を活用したい場合"
+          "reason": "長い予測区間（horizon）で単一シューティング法（single shooting）が不安定だが、区間積分を活用したい場合"
         }
       ],
-      "constraints": "Direct Collocationの固定教材では、dynamics defect $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、path制約は各mesh／collocation pointでの障害物回避 $g_{obs}(x_k)\\le0$、状態bounds $x_k\\in[x_{min},x_{max}]$、control bounds $u_k\\in[u_{min},u_{max}]$ として課す。",
-      "decision_variables": "Direct Collocationでは、状態列（state sequence）$x_0,\\ldots,x_N$ と制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置き、必要なら終端時刻 $T$ も選ぶ。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作るため、同じtrajectoryでもdecision objectが異なる。",
+      "constraints": "Direct Collocationの固定教材では、動力学残差 $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、経路制約は各メッシュ点／選点での障害物回避 $g_{obs}(x_k)\\le0$、状態の上下限 $x_k\\in[x_{min},x_{max}]$、制御入力の上下限 $u_k\\in[u_{min},u_{max}]$ として課す。",
+      "decision_variables": "Direct Collocationでは、状態列（state sequence）$x_0,\\ldots,x_N$ と制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$ をメッシュ上の決定対象として同時に置き、必要なら終端時刻 $T$ も選ぶ。単一シューティング法（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作るため、同じ軌道でも決定対象が異なる。",
       "difficulty": "intermediate",
       "domain": "control",
       "excluded_methods": [
@@ -956,12 +956,12 @@
       ],
       "last_reviewed": "2026-08-13",
       "limitations": [
-        "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。",
-        "hybrid mode chattering ledgerは固定した合成mode sequenceであり、hybrid solver execution、contact／friction model、物理simulationを表しません。mode discoveryの一般性能やtrajectoryの可行性も保証しません。"
+        "離散メッシュ上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。",
+        "ハイブリッドモードのチャタリング記録は固定した合成モード列であり、ハイブリッド系ソルバーの実行、接触／摩擦モデル、物理シミュレーションを表しません。モード発見の一般性能や軌道の可行性も保証しません。"
       ],
       "map_node_id": "answer:Q11:optimal_control",
       "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
-      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のpendulum Theater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。hybrid mode chattering ledgerもEC020のtrajectoryへmode変数を追加したsolver実行ではない。固定した合成mode sequenceのsecondary failure sliceとして、objective／dynamics defectとは別にmode switch数とswitching intervalを読む。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
+      "practical_notes": "メッシュ／節点数 $N=20$、積分器（integrator）または選点の方式、初期軌道、動力学残差の最大値、経路制約／上下限／終端条件の違反の最大値、NLPの実行可能性の許容誤差を目的関数とは別に保存する。得られたメッシュ上の状態／制御入力から区間内の軌道を再構成し、高精度シミュレーションで経路制約と終端誤差を再評価してからメッシュを細分化する。接続先の振り子の動きの再生と比較のページは固定した振り子教材であり、この抽象Caseと同じ軌道や実データではない。共通する状態／制御入力、動力学残差、メッシュ細分化、モデルずれの検証の読み方だけを再利用する。ハイブリッドモードのチャタリング記録も、EC020の軌道へモード変数を追加したソルバー実行ではない。固定した合成モード列から切り出した副次的な失敗例として、目的関数／動力学残差とは別にモード切替数と切替間隔を読む。ソルバーの成功やメッシュ点での実行可能性だけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "problem_archetype_id": "PA042",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
       "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
@@ -989,7 +989,7 @@
       "status": "published",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
       "title_ja": "非線形動力学を含む軌道を最適化する",
-      "variable_domain": "mesh（knot）数 $N=20$ の固定教材では $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1},T)\\mid x_k\\in\\mathbb{R}^n,u_k\\in[u_{min},u_{max}],T\\in[T_{min},T_{max}]\\}$。",
+      "variable_domain": "メッシュ（節点）数 $N=20$ の固定教材では $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1},T)\\mid x_k\\in\\mathbb{R}^n,u_k\\in[u_{min},u_{max}],T\\in[T_{min},T_{max}]\\}$。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_OPTIMAL_CONTROL_EC020",
@@ -1012,11 +1012,11 @@
       "conditional_methods": [
         {
           "method_id": "M_ACTIVE_SET_QP",
-          "reason": "アクティブ集合（active set）がstep間で安定し、初期解の引き継ぎと小規模な密行列構造を活かせる場合"
+          "reason": "アクティブ集合（active set）が制御周期の間で安定し、初期解の引き継ぎと小規模な密行列構造を活かせる場合"
         }
       ],
-      "constraints": "scalar dynamics $x_{k+1}=x_k+u_k$、初期状態 $x_0=x_{current}$、状態bounds $-1.5\\le x_k\\le1.5$、入力bounds $-0.4\\le u_k\\le0.4$ を全4stepに課す。各周期では最初の入力 $u_0$ だけを適用し、次の計測値で再度解く。",
-      "decision_variables": "次の4周期の予測状態 $x_1,\\ldots,x_4$ と操作量 $u_0,\\ldots,u_3$。現在状態 $x_0=x_{current}$ と参照値 $r=1$ はdecisionではなく、制御周期ごとに更新するparameterである。",
+      "constraints": "スカラーの動力学 $x_{k+1}=x_k+u_k$、初期状態 $x_0=x_{current}$、状態の上下限 $-1.5\\le x_k\\le1.5$、入力の上下限 $-0.4\\le u_k\\le0.4$ を全4段に課す。各周期では最初の入力 $u_0$ だけを適用し、次の計測値で再度解く。",
+      "decision_variables": "次の4周期の予測状態 $x_1,\\ldots,x_4$ と操作量 $u_0,\\ldots,u_3$。現在状態 $x_0=x_{current}$ と参照値 $r=1$ は決定変数ではなく、制御周期ごとに更新するパラメータである。",
       "difficulty": "intermediate",
       "domain": "control",
       "excluded_methods": [
@@ -1057,12 +1057,12 @@
       ],
       "last_reviewed": "2026-07-24",
       "limitations": [
-        "状態1次元・入力1次元・4step・線形時不変・固定boundsの教育用instanceであり、実機の多変数model、非線形性、推定誤差、外乱、actuator遅延を表さない。",
-        "このcodeは行列更新とwarm startの形を示すだけで、100Hz、閉loop安定性、recursive feasibility、安全性を保証しない。target hardware上のworst-case計測と、solver failureを含むclosed-loop試験が別途必要である。"
+        "状態1次元・入力1次元・4段・線形時不変・固定した上下限の教育用の問題例であり、実機の多変数モデル、非線形性、推定誤差、外乱、アクチュエータ遅延を表さない。",
+        "このコードは行列更新とウォームスタートの形を示すだけで、100Hz、閉ループ安定性、再帰的実行可能性、安全性を保証しない。対象ハードウェア上での最悪ケースの計測と、ソルバーの失敗を含む閉ループ試験が別途必要である。"
       ],
       "map_node_id": "answer:Q12:online_or_realtime",
       "objective": "固定教材では $f(z)=\\sum_{k=1}^{4}(x_k-r)^2+0.1\\sum_{k=0}^{3}u_k^2$ を最小化する。第1項で参照追従、第2項で過大な操作を抑え、同じ正定値行列を周期間で再利用する。",
-      "practical_notes": "100Hzは平均10msではなく各周期のdeadlineとして扱う。QPの構造・scaling・solver設定・CPU・build条件を固定し、cold startとwarm startを分けてp50、p99、最大latency、iteration数、primal/dual residual、deadline miss率を計測する。status成功後も動力学とboundsを独立に再計算し、計測値欠落・infeasible・残差未達・deadline miss時には事前検証済みのbackup controllerへ切り替える。",
+      "practical_notes": "100Hzは平均10msではなく各周期の締め切りとして扱う。QPの構造・スケーリング・ソルバー設定・CPU・ビルド条件を固定し、コールドスタートとウォームスタートを分けてp50、p99、最大遅延、反復数、主・双対残差、締め切り超過率を計測する。ソルバーの終了状態が成功でも動力学と上下限を独立に再計算し、計測値欠落・実行不可能・残差未達・締め切り超過時には事前検証済みの予備の制御器へ切り替える。",
       "problem_archetype_id": "PA043",
       "python_example": "import numpy as np\nimport osqp\nfrom scipy import sparse\n\nN = 4\nP = sparse.diags(np.r_[2.0 * np.ones(N), 0.2 * np.ones(N)], format=\"csc\")\nq = np.r_[-2.0 * np.ones(N), np.zeros(N)]\ndynamics = sparse.lil_matrix((N, 2 * N))\nfor k in range(N):\n    dynamics[k, k] = 1.0\n    if k > 0:\n        dynamics[k, k - 1] = -1.0\n    dynamics[k, N + k] = -1.0\nA = sparse.vstack([dynamics, sparse.eye(2 * N)], format=\"csc\")\nlower = np.r_[np.zeros(N), -1.5 * np.ones(N), -0.4 * np.ones(N)]\nupper = np.r_[np.zeros(N), 1.5 * np.ones(N), 0.4 * np.ones(N)]\nsolver = osqp.OSQP()\nsolver.setup(P=P, q=q, A=A, l=lower, u=upper, warm_starting=True, verbose=False)\nprevious = None\nfor x_current in (0.0, 0.25, 0.55):\n    cycle_lower, cycle_upper = lower.copy(), upper.copy()\n    cycle_lower[0] = cycle_upper[0] = x_current\n    solver.update(l=cycle_lower, u=cycle_upper)\n    if previous is not None:\n        solver.warm_start(x=previous)\n    result = solver.solve()\n    if not result.info.status.lower().startswith(\"solved\"):\n        raise RuntimeError(result.info.status)\n    previous = result.x\n    print(x_current, result.x[N], result.info.iter, result.info.prim_res, result.info.dual_res)",
       "question": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。",
@@ -1088,7 +1088,7 @@
       "status": "published",
       "title_en": "Solve a repeated MPC QP at 100 Hz",
       "title_ja": "100Hzで反復MPCの二次計画問題を解く",
-      "variable_domain": "固定教材では予測horizon $N=4$、状態1次元・入力1次元とし、$z=(x_1,\\ldots,x_4,u_0,\\ldots,u_3)\\in X=\\mathbb{R}^8$。線形動力学と状態・入力boundsが、この空間から実行可能領域を切り出す。",
+      "variable_domain": "固定教材では予測区間 $N=4$、状態1次元・入力1次元とし、$z=(x_1,\\ldots,x_4,u_0,\\ldots,u_3)\\in X=\\mathbb{R}^8$。線形動力学と状態・入力の上下限が、この空間から実行可能領域を切り出す。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_REPEATED_MPC_QP_WARM_START",
@@ -1155,7 +1155,7 @@
       "last_reviewed": "2026-07-19",
       "limitations": [
         "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。",
-        "固定meshのsteady教材からtransient checkpointing、multiphysics coupling、実hardware costの一般性能は推論しません。"
+        "固定メッシュの定常問題の教材から、非定常問題でのチェックポイント法、マルチフィジックス連成、実ハードウェアでの計算費用に関する一般性能は推論しません。"
       ],
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
       "objective": "PDEの状態計算から得る性能指標 $J(z,\\theta,q)$ と正則化（regularization）$R(\\theta,q)$ を使い、$f=J+\\lambda R$ を最小化します。",
@@ -1200,7 +1200,7 @@
       "candidate_methods": [
         {
           "method_id": "M_DIRECT_COLLOCATION",
-          "reason": "pendulumのstate・torque・Hermite–Simpson dynamics defectを疎なNLPへ同時に転写できるため"
+          "reason": "振り子の状態・トルク・Hermite–Simpsonの動力学残差を、疎なNLPへ同時に転写できるため"
         }
       ],
       "case_id": "EC029",
@@ -1210,17 +1210,17 @@
       "conditional_methods": [
         {
           "method_id": "M_MULTIPLE_SHOOTING",
-          "reason": "区間積分を使いながら、初期値感度をsegmentへ分けたい場合"
+          "reason": "区間積分を使いながら、初期値感度を複数の区間へ分けたい場合"
         }
       ],
-      "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson defectを各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、path／bound制約はmesh／collocation pointで $|\\omega|\\le8$、$|u|\\le8$ とする。node feasibilityと区間再構成後のviolationは別の診断値として保存する。",
-      "decision_variables": "Direct Collocationでは角度・角速度のstate列 $x_0,\\ldots,x_N$ とtorque列 $u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置く。single shootingではtorque列だけを選び、state列はrolloutで作るため、同じpendulumでもdecision objectが異なる。",
+      "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson残差を各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、経路制約と上下限はメッシュの選点で $|\\omega|\\le8$、$|u|\\le8$ とする。ノード上の実行可能性と、区間を再構成した後の違反は別の診断値として保存する。",
+      "decision_variables": "Direct Collocationでは角度・角速度の状態列 $x_0,\\ldots,x_N$ とトルク列 $u_0,\\ldots,u_{N-1}$ を、メッシュ上の決定変数として同時に置く。単一シューティングではトルク列だけを選び、状態列は前進シミュレーションで作るため、同じ振り子でも決定変数の組が異なる。",
       "difficulty": "intermediate",
       "domain": "control",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "dynamics defectとpath／terminal制約を平坦な無制約目的へ隠してしまう"
+          "reason": "動力学残差と経路／終端制約を、平坦な無制約目的へ隠してしまう"
         }
       ],
       "feature_values": [
@@ -1256,14 +1256,14 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "node／collocation pointの実行可能性は区間内や連続時間の可行性を保証しません。実機安全性、dynamics modelの正確さ、大域最適性、solver family間の一般性能も保証しません。"
+        "ノードや選点での実行可能性は、区間内や連続時間での実行可能性を保証しません。実機の安全性、動力学モデルの正確さ、大域最適性、ソルバーの系統間の一般性能も保証しません。"
       ],
       "map_node_id": "answer:Q11:optimal_control",
-      "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。Theaterではobjective、terminal error、constraint residualを別々に読む。",
-      "practical_notes": "N=20とN=40で、同じdynamics、2秒horizon、初期・終端・path制約、初期trajectory、8 evaluation予算、dynamics defect tolerance $10^{-3}$、node path tolerance $10^{-4}$、terminal tolerance $10^{-3}$ を固定する。max dynamics defect、node path violation、再構成path violation、terminal error、objectiveを別々に保存する。gravityを10%変えたvalidation rolloutは独立failure Theaterで確認する。MPCは[receding horizon](#/learn/concept.receding-horizon)と[Case EC025](#/gallery/EC025)、contact／hybridは[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、safety filterは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
+      "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。動きの再生では目的関数値、終端誤差、制約残差を別々に読む。",
+      "practical_notes": "N=20とN=40で、同じ運動方程式、2秒の計画区間、初期・終端・経路制約、初期軌道、8評価の予算、動力学残差の許容誤差 $10^{-3}$、ノード上の経路制約の許容誤差 $10^{-4}$、終端の許容誤差 $10^{-3}$ を固定する。動力学残差の最大値、ノード上の経路制約違反、再構成後の経路制約違反、終端誤差、目的関数値を別々に保存する。重力を10%変えた検証用の前進シミュレーションは、独立した失敗例の動きの再生で確認する。MPCは[移動予測区間](#/learn/concept.receding-horizon)と[事例 EC025](#/gallery/EC025)、接触／ハイブリッド系は[入れ子・均衡・相補性・ハイブリッド構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、安全フィルタは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
       "problem_archetype_id": "PA042",
       "python_example": "import casadi as ca\n\ntheta, omega, torque = ca.SX.sym(\"theta\"), ca.SX.sym(\"omega\"), ca.SX.sym(\"torque\")\ndynamics = ca.vertcat(omega, torque - 0.05 * omega - 9.81 * ca.sin(theta))\npendulum = ca.Function(\"pendulum\", [ca.vertcat(theta, omega), torque], [dynamics])\nprint(pendulum([0.0, 0.0], 1.0))",
-      "question": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
+      "question": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
       "question_answers": {
         "Q01": "structured_or_unknown",
         "Q02": "automatic_differentiation_graph",
@@ -1285,8 +1285,8 @@
       ],
       "status": "published",
       "title_en": "Swing up a pendulum under constraints",
-      "title_ja": "pendulumを制約内で振り上げる",
-      "variable_domain": "mesh（knot）数 $N=20$ の固定教材では、state $x_k=(\\theta_k,\\omega_k)$ を $k=0,\\ldots,N$、control $u_k$ を $k=0,\\ldots,N-1$ に置く。decision setは $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1})\\mid |\\omega_k|\\le8,|u_k|\\le8\\}$ で、horizonは2秒に固定する。",
+      "title_ja": "振り子を制約内で振り上げる",
+      "variable_domain": "メッシュの節点数 $N=20$ の固定教材では、状態 $x_k=(\\theta_k,\\omega_k)$ を $k=0,\\ldots,N$、制御入力 $u_k$ を $k=0,\\ldots,N-1$ に置く。決定集合は $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1})\\mid |\\omega_k|\\le8,|u_k|\\le8\\}$ で、計画区間は2秒に固定する。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
@@ -1298,7 +1298,7 @@
       "candidate_methods": [
         {
           "method_id": "M_SLSQP",
-          "reason": "3つのbounded shape parameterとgeometry／mesh validity制約を、gradient付きの小規模NLPとして扱えるため"
+          "reason": "上下限付きの3つの形状パラメータと、形状／メッシュの妥当性制約を、勾配付きの小規模NLPとして扱えるため"
         }
       ],
       "case_id": "shape-diffuser",
@@ -1308,21 +1308,21 @@
       "conditional_methods": [
         {
           "method_id": "M_INTERIOR_POINT_NLP",
-          "reason": "shape自由度やstate／geometry制約が増え、疎なJacobianとbarrier法を活かせる場合"
+          "reason": "形状の自由度や状態変数／形状の制約が増え、疎なJacobianとバリア法を活かせる場合"
         },
         {
           "method_id": "M_ADJOINT_SENSITIVITY",
-          "reason": "parameter数が増えたPDE stateで、目的・制約の縮約感度を少ない追加solveで組み立てる場合"
+          "reason": "パラメータ数が増えたPDEの状態変数で、目的・制約の縮約感度を少ない追加の求解で組み立てる場合"
         }
       ],
-      "constraints": "parameter boundsに加え、geometry最小gap $g_{gap}>0.4$、自己交差なし、mesh最小quality $q_{mesh}\\ge0.2$、反転cell数0、state residual $\\lVert R(u,q)\\rVert\\le10^{-6}$、fixed topologyを別々に検査します。",
-      "decision_variables": "optimizerが直接更新するのは3つのparameter $q$ です。geometry座標、mesh node、state $u$ はparameterから生成またはsolveされる従属量です。level-setやdensity fieldは接続変更を許せますが、このCaseのparameterizationは入口1つ・出口1つのtopologyを固定します。",
+      "constraints": "パラメータの上下限に加え、形状の最小間隔 $g_{gap}>0.4$、自己交差なし、メッシュの最小品質 $q_{mesh}\\ge0.2$、反転セル数0、状態残差 $\\lVert R(u,q)\\rVert\\le10^{-6}$、トポロジー固定を別々に検査します。",
+      "decision_variables": "最適化手法が直接更新するのは3つのパラメータ $q$ です。形状の座標、メッシュのノード、状態変数 $u$ はパラメータから生成または求解される従属量です。レベルセットや密度場は接続変更を許せますが、この事例のパラメータ化は入口1つ・出口1つのトポロジーを固定します。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_SIMP_TOPOLOGY",
-          "reason": "このCaseは接続を変えないfixed-topology shape problemであり、density fieldによるtopology changeは別の設計空間だから"
+          "reason": "この事例は接続を変えないトポロジー固定の形状問題であり、密度場によるトポロジー変化は別の設計空間だから"
         }
       ],
       "feature_values": [
@@ -1357,15 +1357,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "3 parameter・21 geometry sample・reduced state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実diffuser性能を示しません。",
-        "shapeとtopologyのcontrastは設計表現の違いを読むためのもので、目的値、速度、解品質のrankingではありません。"
+        "3パラメータ・21形状サンプル・縮約した状態の代理指標による決定論的教材であり、CFD、連続体可行性、メッシュ非依存性、実際のディフューザ性能を示しません。",
+        "形状とトポロジーの対比は設計表現の違いを読むためのもので、目的値、速度、解品質の順位付けではありません。"
       ],
       "map_node_id": "answer:Q04:implicit_or_failure",
-      "objective": "低costな決定論的state proxyとして $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式はlayer分離を学ぶ教材であり、CFDのpressure lossではありません。",
-      "practical_notes": "各evaluationでparameter、geometry、mesh、physical state、目的を別recordにします。有限差分またはadjoint sensitivityはvalid geometryと収束済みstateの後に検査します。mesh motionでqualityを保てなければremeshingへ切り替えます。level-setはtopology changeを許す別表現です。follow-upは、構造ではstress／buckling、CFDではviscous loss、thermalではheat-transfer surface、acousticではwave scattering、photonicではMaxwell stateとfabrication constraintを同じlayer contractへ接続します。",
+      "objective": "計算費用の低い決定論的な状態の代理指標として $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式は層の分離を学ぶ教材であり、CFDの圧力損失ではありません。",
+      "practical_notes": "各評価でパラメータ、形状、メッシュ、物理状態、目的を別々の記録にします。有限差分または随伴感度は、妥当な形状と収束済みの状態を得た後に検査します。メッシュ移動で品質を保てなければ再メッシュへ切り替えます。レベルセットはトポロジー変化を許す別表現です。発展としては、構造では応力／座屈、CFDでは粘性損失、熱では伝熱面、音響では波の散乱、フォトニクスではMaxwellの状態と製造制約を、同じ層構成へ接続します。",
       "problem_archetype_id": "PA057",
       "python_example": "import numpy as np\n\ndef loss_proxy(q: np.ndarray) -> float:\n    r, curvature, shift = q\n    return float((r - 1.45) ** 2 + 0.4 * curvature**2 + 0.2 * shift**2 + 0.05 * (r - 1.0) ** 2)\n\nq = np.array([1.15, 0.0, 0.0])\nprint(loss_proxy(q))",
-      "question": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。",
+      "question": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -1388,8 +1388,8 @@
       ],
       "status": "published",
       "title_en": "Update a two-dimensional diffuser wall shape",
-      "title_ja": "2D diffuserの壁面shapeを更新する",
-      "variable_domain": "固定教材では $X=[1.0,1.8]\\times[-0.3,0.3]\\times[-0.25,0.25]$、$q=(r,c,s)\\in X$。$r$は出口高さ比、$c$は壁面曲率、$s$はthroat位置のshiftです。$q$からgeometry $\\Omega(q)$、mesh $T(q)$、physical state $u(q)$ を順に作ります。",
+      "title_ja": "2Dディフューザの壁面形状を更新する",
+      "variable_domain": "固定教材では $X=[1.0,1.8]\\times[-0.3,0.3]\\times[-0.25,0.25]$、$q=(r,c,s)\\in X$。$r$は出口高さ比、$c$は壁面曲率、$s$はスロート位置の移動量です。$q$から形状 $\\Omega(q)$、メッシュ $T(q)$、物理状態 $u(q)$ を順に作ります。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
@@ -1401,7 +1401,7 @@
       "candidate_methods": [
         {
           "method_id": "M_SIMP_TOPOLOGY",
-          "reason": "要素密度を連続緩和し、体積率制約のもとでminimum-compliance設計を反復できるため"
+          "reason": "要素密度を連続緩和し、体積率制約のもとでコンプライアンス最小化の設計を反復できるため"
         },
         {
           "method_id": "M_OC_TOPOLOGY",
@@ -1419,21 +1419,21 @@
         },
         {
           "method_id": "M_DENSITY_FILTER",
-          "reason": "checkerboardとmesh依存性を抑える正則化を組み込むため"
+          "reason": "チェッカーボード模様とメッシュ依存性を抑える正則化を組み込むため"
         },
         {
           "method_id": "M_ADJOINT_SENSITIVITY",
-          "reason": "状態方程式を解いた後の感度計算を大規模fieldへ拡張するため"
+          "reason": "状態方程式を解いた後の感度計算を大規模な場へ拡張するため"
         }
       ],
-      "constraints": "体積率 $\\frac{1}{32}\\sum_e\\rho_e\\le0.5$、密度bounds $0.001\\le\\rho_e\\le1$、状態方程式 $K(\\rho)u=F$ を課す。固定教材ではfilter半径1.5要素を使い、更新前後の体積率を記録する。",
-      "decision_variables": "各有限要素の設計密度 $\\rho_e$。変位field $u$ はdecisionとして自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 $K(\\rho)u=F$ を解いて得るderived stateである。",
+      "constraints": "体積率 $\\frac{1}{32}\\sum_e\\rho_e\\le0.5$、密度の上下限 $0.001\\le\\rho_e\\le1$、状態方程式 $K(\\rho)u=F$ を課す。固定教材ではフィルタ半径1.5要素を使い、更新前後の体積率を記録する。",
+      "decision_variables": "各有限要素の設計密度 $\\rho_e$。変位場 $u$ は決定変数として自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 $K(\\rho)u=F$ を解いて得る従属した状態変数である。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため"
+          "reason": "密度場、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため"
         }
       ],
       "feature_values": [
@@ -1467,12 +1467,12 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "表示する8×4 traceはfield、感度、filter、更新の関係を学ぶ決定的referenceであり、実際のQ4 FEM解析値や物理的な変位・応力を再現するsolverではない。",
-        "minimum-complianceと体積率だけでは強度、座屈、疲労、接触、最小部材寸法、製造性を保証しない。mesh、filter、初期密度、penalizationを変えた局所解の比較と、独立した高忠実度解析が必要である。"
+        "表示する8×4の記録は、場、感度、フィルタ、更新の関係を学ぶ決定的な参照例であり、実際のQ4 FEM解析値や物理的な変位・応力を再現するソルバーではない。",
+        "コンプライアンス最小化と体積率だけでは強度、座屈、疲労、接触、最小部材寸法、製造性を保証しない。メッシュ、フィルタ、初期密度、罰則の強さを変えた局所解の比較と、独立した高忠実度解析が必要である。"
       ],
       "map_node_id": "answer:Q01:continuous",
-      "objective": "compliance $f(\\rho)=c(\\rho)=F^\\mathsf{T}u$ を最小化する。SIMPでは要素剛性を $E_e=E_{min}+\\rho_e^p(E_0-E_{min})$ と補間し、中間密度をpenalizeしながら荷重経路を残す。",
-      "practical_notes": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。OCとMMAの比較では問題、初期密度、体積率、filter、12回の評価予算を固定し、更新則によるfieldの差を読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
+      "objective": "コンプライアンス $f(\\rho)=c(\\rho)=F^\\mathsf{T}u$ を最小化する。SIMPでは要素剛性を $E_e=E_{min}+\\rho_e^p(E_0-E_{min})$ と補間し、中間密度に罰則をかけながら荷重経路を残す。",
+      "practical_notes": "可視化は、①密度とひずみエネルギーで荷重経路を見る、②フィルタ前の感度とフィルタ後の感度の差から次の更新方向を見る、③体積率とコンプライアンスを確認する、④中間密度の割合とチェッカーボードのスコアで見かけの改善を疑う、の順に読む。OCとMMAの比較では問題、初期密度、体積率、フィルタ、12回の評価予算を固定し、更新則による密度場の差を読む。実務では状態方程式・随伴方程式の残差、勾配の検算、メッシュ、フィルタ半径、罰則の強さ、境界条件、荷重ケースを同じ実行の識別情報へ保存し、メッシュの細分化と別の荷重ケースで再検証する。コンプライアンスの低下だけを成功判定にしない。",
       "problem_archetype_id": "PA045",
       "python_example": "from optimization_compass.learning_slices import generate_topology_field_artifact\n\nartifact = generate_topology_field_artifact(\"teaching\")\nrun = next(item for item in artifact.runs if item.role == \"primary\")\nfor step in run.steps:\n    print({\n        \"iteration\": step.iteration,\n        \"volume\": round(step.volume_fraction, 3),\n        \"compliance\": round(step.compliance, 3),\n        \"gray\": round(step.gray_fraction, 3),\n        \"checkerboard\": round(step.checkerboard_score, 3),\n    })",
       "question": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。",
@@ -1513,7 +1513,7 @@
       "candidate_methods": [
         {
           "method_id": "M_SLSQP",
-          "reason": "少数の連続変数と滑らかな非線形constraintを、解析勾配付きで同時に扱えるため"
+          "reason": "少数の連続変数と滑らかな非線形制約を、解析勾配付きで同時に扱えるため"
         }
       ],
       "case_id": "constrained-design",
@@ -1523,7 +1523,7 @@
       "conditional_methods": [
         {
           "method_id": "M_INTERIOR_POINT_NLP",
-          "reason": "大規模・疎で、barrier法とsparse derivativeを活かせる場合"
+          "reason": "大規模・疎で、バリア法と疎な微分情報を活かせる場合"
         }
       ],
       "constraints": "非線形強度制約 $(x-1)^2+(y-1)^2\\le1$ と上下限 $-1\\le x\\le3$、$-1\\le y\\le3$。円の外側は目的値が低くても実行不可能（infeasible）である。",
@@ -1533,7 +1533,7 @@
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す"
+          "reason": "非線形制約を無視すると目的値が低くても実行不可能な設計を返す"
         }
       ],
       "feature_values": [
@@ -1610,7 +1610,7 @@
       "candidate_methods": [
         {
           "method_id": "M_SLSQP",
-          "reason": "小規模なinnerの非負制約を保ちながら、primal feasibility・stationarity・complementarityを外側の更新と分けて再検証できるため"
+          "reason": "小規模な内側問題の非負制約を保ちながら、主問題の実行可能性・停留性・相補性を外側の更新と分けて再検証できるため"
         }
       ],
       "case_id": "bilevel-regularized-regression",
@@ -1620,17 +1620,17 @@
       "conditional_methods": [
         {
           "method_id": "M_INTERIOR_POINT_NLP",
-          "reason": "innerが大規模・疎になり、KKT系とbarrier continuationを使える場合。ただし有限barrierではrelaxed complementarityとして記録する"
+          "reason": "内側問題が大規模・疎になり、KKT系とバリアを段階的に弱める継続法を使える場合。ただし有限のバリアでは緩和した相補性として記録する"
         }
       ],
-      "constraints": "innerは $w\\ge0$。exact complementarityでは、推定乗数 $\\mu\\ge0$ として stationarity $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、primal violation $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各 residual の $\\ell_\\infty$ norm $\\le10^{-8}$、innerは最大100 iteration、未収束候補はouter gradientへ渡さない。",
-      "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ でinner problemを解き、得られた $w^*(\\lambda)$ をvalidationへ渡す。",
+      "constraints": "内側は $w\\ge0$。厳密な相補性では、推定乗数 $\\mu\\ge0$ として停留性 $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、主問題の制約違反 $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各残差の $\\ell_\\infty$ ノルム $\\le10^{-8}$、内側は最大100反復、未収束の候補は外側の勾配へ渡さない。",
+      "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ で内側問題を解き、得られた $w^*(\\lambda)$ を検証へ渡す。",
       "difficulty": "intermediate",
       "domain": "science",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない"
+          "reason": "制約なしの更新では非負制約とKKTの相補性を保てず、外側の目的関数値が下がっても内側の実行可能な停留点とは確認できない"
         }
       ],
       "feature_values": [
@@ -1665,14 +1665,14 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データのvalidation性能、外側のglobal最適性、実装間の速度順位を示さない。",
-        "ridge項と固定データではinner解を追いやすいが、一般のbilevel問題で解の選択が一意とは限らない。optimistic／pessimisticのどちらを採るかを明記し、KKT stationarityを得てもglobal optimumとは解釈しない。",
-        "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。",
-        "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"
+        "固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データでの検証性能、外側の大域最適性、実装間の速度順位を示さない。",
+        "リッジ項と固定データでは内側の解を追いやすいが、一般の二階層最適化問題で解の選択が一意とは限らない。楽観的／悲観的のどちらの定式化を採るかを明記し、KKTの停留性を得ても大域最適解とは解釈しない。",
+        "陰関数微分には有効制約集合の安定性、LICQやMFCQなどの制約想定、必要に応じて狭義相補性と縮約KKTの非特異性が要る。これらが破れる境界では解写像が非滑らかになり、外側の勾配の保証はない。",
+        "有限の緩和パラメータで得た小さな相補性残差は、厳密な相補性の証明ではない。このCaseは接触・摩擦のモードの発見やハイブリッド系の切り替え順序を扱わず、それらは後続の動きの再生・比較のページと、データの正式な定義で別に扱う。"
       ],
       "map_node_id": "answer:Q11:least_squares",
-      "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的値だけでinnerの解品質を表さない。",
-      "practical_notes": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
+      "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的関数値だけで内側の解の品質を表さない。",
+      "practical_notes": "実務では外側の反復、内側の反復数、内側の許容誤差、ウォームスタート、目的関数値、主問題の制約違反、停留性の残差、相補性の残差を別々に記録する。主経路は、有効制約集合を固定でき、縮約KKT/Jacobianが非特異な区間で陰関数微分すること。有効制約集合が変わる場合は有限差分を勾配の検算に使い、内側が未収束なら外側の更新を止める。厳密な相補性と、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使う緩和した相補性を分け、緩和では $\\tau:10^{-2}\\to10^{-8}$ と段階的に小さくした履歴を残す。読み進める先は[入れ子・均衡・相補性・ハイブリッド構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約の分類](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
       "problem_archetype_id": "PA033",
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nX_train = np.array([[1.0, 0.0], [1.0, 1.0], [1.0, 2.0]])\ny_train = np.array([0.2, 1.0, 1.8])\n\ndef inner_solve(lam: float, start: np.ndarray) -> tuple[np.ndarray, dict[str, float]]:\n    def gradient(w: np.ndarray) -> np.ndarray:\n        return X_train.T @ (X_train @ w - y_train) + lam * w\n\n    result = minimize(\n        lambda w: 0.5 * np.sum((X_train @ w - y_train) ** 2) + 0.5 * lam * np.sum(w ** 2),\n        start,\n        jac=gradient,\n        method=\"SLSQP\",\n        bounds=[(0.0, None), (0.0, None)],\n        options={\"ftol\": 1e-10, \"maxiter\": 100},\n    )\n    w = result.x\n    grad = gradient(w)\n    mu = np.where(w <= 1e-8, np.maximum(grad, 0.0), 0.0)\n    residuals = {\n        \"primal\": float(np.max(np.maximum(-w, 0.0))),\n        \"stationarity\": float(np.max(np.abs(grad - mu))),\n        \"complementarity\": float(np.max(np.abs(w * mu))),\n    }\n    if max(residuals.values()) > 1e-8:\n        raise RuntimeError(\"inner KKT residual exceeds tolerance\")\n    return w, residuals\n\nw, diagnostics = inner_solve(0.2, np.array([0.1, 0.8]))\nprint(w, diagnostics)",
       "question": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。",
@@ -1712,7 +1712,7 @@
       "candidate_methods": [
         {
           "method_id": "M_RIEMANNIAN_GRADIENT",
-          "reason": "ambient gradientをSO(3)の接空間へ移し、Lie algebra stepとretraction／exponential mapを明示したままfeasible iterateを作れるため"
+          "reason": "周囲の空間での勾配をSO(3)の接空間へ移し、リー代数での一歩とレトラクション／指数写像を明示したまま実行可能な反復点を作れるため"
         }
       ],
       "case_id": "so3-attitude-alignment",
@@ -1722,21 +1722,21 @@
       "conditional_methods": [
         {
           "method_id": "M_PROJECTED_GRADIENT",
-          "reason": "ambient update後のSO(3) projection costと修正量を記録し、projectionをmanifold stepと同一視しない場合"
+          "reason": "周囲の空間で更新した後のSO(3)への射影の費用と修正量を記録し、射影を多様体上の一歩と同一視しない場合"
         },
         {
           "method_id": "M_RIEMANNIAN_TRUST_REGION",
-          "reason": "一階法が停滞し、正しいRiemann Hessian-vector積とtrust-region subproblemを検証できる場合"
+          "reason": "一階法が停滞し、正しいRiemann Hessian-vector積と信頼領域の部分問題を検証できる場合"
         }
       ],
-      "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
-      "decision_variables": "body frameからreference frameへのrotation matrix $R$。固定教材はidentityから開始し、target axis $(1,2,3)/\\sqrt{14}$、angle $2.8$ radのrotationへ12 updateで近づける。",
+      "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。射影による更新は周囲の空間の候補をQRでSO(3)へ戻し、リーマン更新は歪対称なリー代数の一歩を指数写像で戻す。どちらも実行可能な反復点を作るが同じ更新ではない。",
+      "decision_variables": "物体座標系から基準座標系への回転行列 $R$。固定教材は単位行列から開始し、目標の回転軸 $(1,2,3)/\\sqrt{14}$、角度 $2.8$ radの回転へ12回の更新で近づける。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため"
+          "reason": "9個の行列成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のパラメータ化または制約処理なしには回転を表さないため"
         }
       ],
       "feature_values": [
@@ -1768,16 +1768,16 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "固定3対応・noiseなし・固定stepの教材であり、複数rotation graph、外れ値、欠測、sensor calibration、実装速度を表さない。",
-        "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
-        "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。"
+        "固定3対応・ノイズなし・固定刻み幅の教材であり、複数の回転をつなぐグラフ、外れ値、欠測、センサーの較正、実装速度を表さない。",
+        "弦距離の目的関数と測地距離の残差は同じ量ではない。固定した問題例で両方が低下しても、すべての初期値や、回転角がπに近い場合のチャートに対する一般収束を保証しない。",
+        "QRによる射影、極分解による射影、レトラクション、厳密な指数写像は同義ではない。比較は実行可能性を保つ方策の対比であり、一般的な性能の順位づけには使わない。"
       ],
       "map_node_id": "answer:Q04:dynamics_or_manifold",
-      "objective": "三つのnoiseless basis correspondenceをまとめたtarget $R_\\star$ に対し、chordal loss $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価ではgeodesic residual $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
-      "practical_notes": "[SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)を先に読み、objective、geodesic residual、orthogonality error、determinant error、projection correctionまたはtangent stepを別々に保存する。quaternionを使う場合は$q$と$-q$の同値を処理し、near-piではlog mapとchartの条件を点検する。",
+      "objective": "三つのノイズなしの基底対応をまとめた目標 $R_\\star$ に対し、弦距離の損失（chordal loss） $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価では測地距離の残差 $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
+      "practical_notes": "[リー代数で回転を動かす：SO(3)の接空間](#/learn/concept.so3-rotation-representation)を先に読み、目的関数値、測地距離の残差、直交性の誤差、行列式の誤差、射影による修正量または接空間での一歩を別々に保存する。四元数を使う場合は$q$と$-q$の同値を処理し、回転角がπに近い場合は対数写像とチャートの条件を点検する。",
       "problem_archetype_id": "PA037",
       "python_example": "import numpy as np\n\ndef project_so3(matrix):\n    u, _, vt = np.linalg.svd(matrix)\n    correction = np.diag([1.0, 1.0, np.linalg.det(u @ vt)])\n    return u @ correction @ vt\n\nR = np.eye(3)\nR_target = np.array([[-0.80349217, 0.00887229, 0.59524920], [0.54604838, -0.38730167, 0.74285165], [0.23713180, 0.92191035, 0.30634916]])\nfor _ in range(12):\n    ambient_gradient = R - R_target\n    R = project_so3(R - 0.35 * ambient_gradient)\nprint(np.linalg.norm(R.T @ R - np.eye(3)), np.linalg.det(R))",
-      "question": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
+      "question": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。",
       "question_answers": {
         "Q01": "structured_or_unknown",
         "Q02": "explicit_algebraic",
@@ -1800,8 +1800,8 @@
       ],
       "status": "published",
       "title_en": "Align a near-pi attitude on SO(3)",
-      "title_ja": "SO(3)上でnear-piのattitudeを合わせる",
-      "variable_domain": "固定教材のfeasible setは $X=SO(3)=\\{R\\in\\mathbb{R}^{3\\times3}\\mid R^{\\mathsf T}R=I,\\ \\det R=1\\}$。ambient成分は9個だがintrinsic degree of freedomは3である。",
+      "title_ja": "SO(3)上で回転角がπに近い姿勢を合わせる",
+      "variable_domain": "固定教材の実行可能集合は $X=SO(3)=\\{R\\in\\mathbb{R}^{3\\times3}\\mid R^{\\mathsf T}R=I,\\ \\det R=1\\}$。周囲の空間での成分は9個だが、内在的な自由度は3である。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_SO3_PROJECTED_ALIGNMENT",
@@ -1812,7 +1812,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BAYESIAN_OPT_GP",
-          "reason": "試作ごとの品質lossと観測noiseをsurrogateの平均・不確実性として分け、限られた追加試作で次の連続条件を選べるため"
+          "reason": "試作ごとの品質損失と観測ノイズを代理モデルの平均・不確実性として分け、限られた追加試作で次の連続条件を選べるため"
         }
       ],
       "case_id": "laser-process-tuning",
@@ -1822,17 +1822,17 @@
       "conditional_methods": [
         {
           "method_id": "M_CMA_ES",
-          "reason": "試作を十分に並列化でき、surrogateの不確実性modelよりもpopulationによる頑健な大域候補探索を優先できる予算がある場合"
+          "reason": "試作を十分に並列化でき、代理モデルの不確実性モデルよりも集団による頑健な大域候補探索を優先できる予算がある場合"
         }
       ],
-      "constraints": "各設定の装置上限・下限を守り、固定教材では $-3\\le x\\le3$、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+      "constraints": "各設定の装置上限・下限を守り、固定教材では $-3\\le x\\le3$、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、状態と消費した予算を別に記録する。",
       "decision_variables": "次に試す加工条件 $x$。実務では3個の連続設定を別々に保持し、固定教材だけが表示のために1次元へ縮約する。",
       "difficulty": "intro",
       "domain": "manufacturing",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "実験観測だけから信頼できるgradientを得られず、noiseを含む差分を勾配として使うと更新根拠を確認できないため"
+          "reason": "実験観測だけから信頼できる勾配を得られず、ノイズを含む差分を勾配として使うと更新根拠を確認できないため"
         }
       ],
       "feature_values": [
@@ -1867,15 +1867,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "固定1次元・決定論的noiseの教育用関数であり、レーザー加工の熱履歴、材料依存性、欠陥機構、装置差、測定再現性をmodel化していない。",
-        "12回の固定budgetと既存BO Theaterは、実工程での良品率、安全性、候補設定の優位性を保証しない。実用化には再現試験、held-out lot、工程能力、安全限界の別検証が必要である。"
+        "固定1次元・決定論的ノイズの教育用関数であり、レーザー加工の熱履歴、材料依存性、欠陥機構、装置差、測定再現性をモデル化していない。",
+        "12回の固定予算と既存のBOの動きの再生は、実工程での良品率、安全性、候補設定の優位性を保証しない。実用化には再現試験、検証用に取り分けたロット、工程能力、安全限界の別検証が必要である。"
       ],
       "map_node_id": "answer:Q02:experiment_only",
-      "objective": "1回の試作後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とする。",
-      "practical_notes": "実務では3変数を1次元へ潰さず、設定値、材料lot、装置状態、測定系、失敗status、試作costを同じledgerへ保存する。Theaterは製造工程そのものではなく、small-noise下でacquisitionが探索と活用を切り替える読み方だけを固定1次元関数で示す。",
+      "objective": "1回の試作後にだけ観測できる品質損失 $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とする。",
+      "practical_notes": "実務では3変数を1次元へ潰さず、設定値、材料ロット、装置状態、測定系、失敗の状態、試作費用を同じ記録へ保存する。動きの再生は製造工程そのものではなく、ノイズの小さい条件下で獲得関数が探索と活用を切り替える読み方だけを固定1次元関数で示す。",
       "problem_archetype_id": "PA014",
       "python_example": "import math\n\n\ndef quality_loss(x: float) -> float:\n    if not -3.0 <= x <= 3.0:\n        raise ValueError(\"setting is outside the teaching domain\")\n    latent = 0.18 * (x - 1.2) ** 2 + 0.35 * math.sin(2.4 * x) + 0.08 * math.sin(6.0 * x)\n    measurement = 0.025 * math.sin(11.0 * x)\n    return latent + measurement\n\nobservations = [(x, quality_loss(x)) for x in (-2.0, 0.0, 2.0)]\nprint(min(observations, key=lambda item: item[1]))",
-      "question": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。",
+      "question": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "experiment_only",
@@ -1898,7 +1898,7 @@
       "status": "published",
       "title_en": "Tune laser process settings with a limited trial budget",
       "title_ja": "少ない試作でレーザー加工条件を絞る",
-      "variable_domain": "実務の候補は出力・走査速度・焦点位置の3次元box。固定教材では、それらを校正済みの1個の正規化条件 $x\\in X=[-3,3]$ に写像し、1次元の観測履歴として読む。",
+      "variable_domain": "実務の候補は出力・走査速度・焦点位置の3次元の箱型領域。固定教材では、それらを校正済みの1個の正規化条件 $x\\in X=[-3,3]$ に写像し、1次元の観測履歴として読む。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
@@ -1911,7 +1911,7 @@
       "candidate_methods": [
         {
           "method_id": "MF_LP_QP_CONIC",
-          "reason": "scenario costのCVaRを補助変数と線形制約へ展開し、調達比率・上限制約と合わせて大域的な凸modelとして解けるため"
+          "reason": "シナリオごとの費用のCVaRを補助変数と線形制約へ展開し、調達比率・上限制約と合わせて大域的な凸モデルとして解けるため"
         }
       ],
       "case_id": "energy-cvar-procurement",
@@ -1921,17 +1921,17 @@
       "conditional_methods": [
         {
           "method_id": "M_PROJECTED_GRADIENT",
-          "reason": "CVaRを滑らかな近似へ置き換え、simplexへの射影とgradient誤差を監視できる大規模scenario集合の場合"
+          "reason": "CVaRを滑らかな近似へ置き換え、単体への射影と勾配の誤差を監視できる大規模なシナリオ集合の場合"
         }
       ],
-      "constraints": "比率のsimplex制約 $\\sum_iw_i=1$、$w_i\\ge0$ と各枠の上限 $w_i\\le0.7$。固定教材では送電制約、時間結合、最小購入量、需給不一致penaltyを入れず、実務適用時は別の制約として追加する。",
+      "constraints": "比率の単体制約 $\\sum_iw_i=1$、$w_i\\ge0$ と各枠の上限 $w_i\\le0.7$。固定教材では送電制約、時間結合、最小購入量、需給不一致の罰則を入れず、実務適用時は別の制約として追加する。",
       "decision_variables": "各調達枠へ割り当てる需要比率 $w=(w_1,w_2,w_3)$。固定教材は需要量を1へ正規化し、絶対電力量と比率を混同しない。",
       "difficulty": "intermediate",
       "domain": "energy",
       "excluded_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "simplex・供給上限とscenarioごとのtail costを明示せず探索すると、低い平均costでも調達制約やtailの根拠を確認できないため"
+          "reason": "単体・供給上限とシナリオごとの裾の費用を明示せずに探索すると、平均費用が低くても調達制約や裾の費用の根拠を確認できないため"
         }
       ],
       "feature_values": [
@@ -1965,15 +1965,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "3調達枠・6価格scenario・単一期間の教育用instanceであり、送電網、unit commitment、蓄電池の時間結合、需給誤差、契約条項、実市場の価格形成を表さない。",
-        "CVaRを下げても供給信頼度や将来価格への確率保証は得られない。scenario設計、sample数、alpha、tail weight、held-out期間を変えた感度確認が必要である。"
+        "3調達枠・6価格シナリオ・単一期間の教育用の問題例であり、送電網、起動停止計画（unit commitment）、蓄電池の時間結合、需給誤差、契約条項、実市場の価格形成を表さない。",
+        "CVaRを下げても供給信頼度や将来価格への確率保証は得られない。シナリオ設計、標本数、CVaRの水準α、裾の重み、検証用に取り分けた期間を変えた感度確認が必要である。"
       ],
       "map_node_id": "answer:Q11:stochastic_or_robust",
-      "objective": "scenario $s$ の単位費用を $L_s(w)=p_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{6}\\sum_sL_s(w)+0.4\\,CVaR_{0.8}(L(w))$ を最小化する。CVaRは列挙scenario上のempirical tailであり、将来価格への確率保証ではない。",
-      "practical_notes": "価格scenarioの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったscenarioとheld-out scenarioを分ける。接続先のCVaR Theater／Compareは4資産の教材であり、この電力調達caseと同じ実データではない。共通するsimplex・scenario loss・tail riskの読み方だけを再利用する。",
+      "objective": "シナリオ $s$ の単位費用を $L_s(w)=p_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{6}\\sum_sL_s(w)+0.4\\,CVaR_{0.8}(L(w))$ を最小化する。CVaRは列挙したシナリオ上の経験分布の裾であり、将来価格への確率保証ではない。",
+      "practical_notes": "価格シナリオの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったシナリオと検証用に取り分けたシナリオを分ける。接続先のCVaRの動きの再生と比較のページは4資産の教材であり、この電力調達の事例と同じ実データではない。共通する単体・シナリオ損失・裾のリスクの読み方だけを再利用する。",
       "problem_archetype_id": "PA036",
       "python_example": "import cvxpy as cp\nimport numpy as np\n\nprices = np.array([[8.0, 6.0, 9.0], [7.0, 8.0, 6.0], [11.0, 5.0, 8.0], [6.0, 10.0, 7.0], [9.0, 7.0, 12.0], [13.0, 8.0, 6.0]])\nalpha, tail_weight = 0.8, 0.4\nw = cp.Variable(3)\neta = cp.Variable()\nloss = prices @ w\ncvar = eta + cp.sum(cp.pos(loss - eta)) / ((1.0 - alpha) * len(prices))\nproblem = cp.Problem(cp.Minimize(cp.sum(loss) / len(prices) + tail_weight * cvar), [w >= 0, w <= 0.7, cp.sum(w) == 1])\nproblem.solve()\nprint(problem.status, w.value, cvar.value)",
-      "question": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
+      "question": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "explicit_algebraic",
@@ -1995,8 +1995,8 @@
       ],
       "status": "published",
       "title_en": "Procure electricity while controlling scenario tail cost",
-      "title_ja": "価格scenarioのtail costを抑えて電力を調達する",
-      "variable_domain": "固定教材では3個の調達枠への比率 $w\\in X=\\{w\\in\\mathbb{R}^3\\mid w_i\\ge0,\\ \\sum_iw_i=1,\\ w_i\\le0.7\\}$。実務では時間帯・契約・供給源を分けたより大きな配分vectorになる。",
+      "title_ja": "価格シナリオの裾の費用を抑えて電力を調達する",
+      "variable_domain": "固定教材では3個の調達枠への比率 $w\\in X=\\{w\\in\\mathbb{R}^3\\mid w_i\\ge0,\\ \\sum_iw_i=1,\\ w_i\\le0.7\\}$。実務では時間帯・契約・供給源を分けた、より大きな配分ベクトルになる。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_PORTFOLIO_NOMINAL_8_4",
@@ -2007,7 +2007,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "拠点の採否、地域ごとの最低配置、相互排他を二値・論理制約として保ち、実行可能解と最適性gapを同時に確認できるため"
+          "reason": "拠点の採否、地域ごとの最低配置、相互排他を二値・論理制約として保ち、実行可能解と最適性ギャップを同時に確認できるため"
         }
       ],
       "case_id": "emergency-shelter-selection",
@@ -2017,17 +2017,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "便益とcostが線形で、被覆や公平性を線形制約として十分に表せる場合はMIP familyで緩和boundを使う"
+          "reason": "便益と費用が線形で、被覆や公平性を線形制約として十分に表せる場合はMIPの手法系統で緩和による上界を使う"
         }
       ],
-      "constraints": "設営cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1拠点 $x_A+x_B\\ge1$、地域2から少なくとも1拠点 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-      "decision_variables": "候補地 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益scoreと設営費用を入力する。",
+      "constraints": "設営費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1拠点 $x_A+x_B\\ge1$、地域2から少なくとも1拠点 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "decision_variables": "候補地 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益スコアと設営費用を入力する。",
       "difficulty": "intro",
       "domain": "public-policy",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "拠点を開く／開かない二値判断と地域配置の論理制約を連続gradient updateだけでは保持できないため"
+          "reason": "拠点を開く／開かない二値判断と地域配置の論理制約を連続的な勾配による更新だけでは保持できないため"
         }
       ],
       "feature_values": [
@@ -2061,12 +2061,12 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "5候補地・固定cost・固定便益scoreの教育用選択問題であり、実際の災害需要、道路寸断、人口移動、施設容量、運営継続性、法令を表さない。",
-        "目的値の最大化やgapの証明は政策の妥当性、公平性、安全性を保証しない。実運用では関係者レビュー、複数scenario、地理的被覆、脆弱性指標、実地確認を別に行う必要がある。"
+        "5候補地・固定費用・固定便益スコアの教育用選択問題であり、実際の災害需要、道路寸断、人口移動、施設容量、運営継続性、法令を表さない。",
+        "目的値の最大化や最適性ギャップの証明は政策の妥当性、公平性、安全性を保証しない。実運用では関係者レビュー、複数シナリオ、地理的被覆、脆弱性指標、実地確認を別に行う必要がある。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
-      "practical_notes": "hard constraintと便益scoreを分け、候補地の可用性、移動時間、accessibility、地域別の最低配置、score作成者と更新日を記録する。接続先の分枝限定Theaterは4品目knapsackであり、この公共政策caseの候補地データではない。incumbent、bound、gap、停止理由の読み方だけを共有する。",
+      "objective": "固定教材では便益スコアの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。スコアは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
+      "practical_notes": "必ず守る制約と便益スコアを分け、候補地の可用性、移動時間、アクセスのしやすさ、地域別の最低配置、スコア作成者と更新日を記録する。接続先の分枝限定法の動きの再生は4品目のナップサック問題であり、この公共政策事例の候補地データではない。暫定解、上界、最適性ギャップ、停止理由の読み方だけを共有する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nbenefit = [8, 7, 6, 5, 4]\ncost = [4, 3, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"site_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(benefit[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
       "question": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。",
@@ -2104,7 +2104,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "更新する／しないの二値判断、系統ごとの最低1件、同時施工できない組合せを論理制約のまま保ち、実行可能案と最適性gapを確認できるため"
+          "reason": "更新する／しないの二値判断、系統ごとの最低1件、同時施工できない組合せを論理制約のまま保ち、実行可能案と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "irrigation-retrofit-selection",
@@ -2114,17 +2114,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "節水proxyと更新costが線形で、系統・施工時期の条件も線形制約として表せる場合はMIP familyの緩和boundを使う"
+          "reason": "節水の代理指標と更新費用が線形で、系統・施工時期の条件も線形制約として表せる場合はMIPの手法系統で緩和による上界を使う"
         }
       ],
-      "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、北系統から少なくとも1区画 $x_A+x_B\\ge1$、南系統から少なくとも1区画 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-      "decision_variables": "圃場区画 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は作物、生育段階、土壌水分をdecision variableへ変換せず、事前に監査した更新costと節水proxyを入力する。",
+      "constraints": "更新費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、北系統から少なくとも1区画 $x_A+x_B\\ge1$、南系統から少なくとも1区画 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "decision_variables": "圃場区画 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は作物、生育段階、土壌水分を決定変数へ変換せず、事前に監査した更新費用と節水の代理指標を入力する。",
       "difficulty": "intro",
       "domain": "agriculture",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "設備更新の採否と系統ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため"
+          "reason": "設備更新の採否と系統ごとの最低配置を連続的な勾配による更新だけでは保持できず、丸め後の予算超過や未配置を防げないため"
         }
       ],
       "feature_values": [
@@ -2158,15 +2158,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "5区画・固定cost・固定節水proxyの教育用選択問題であり、土壌、天候、作物、生育段階、流量損失、設備故障、複数期の更新計画を表さない。",
-        "proxy最大化やgapの証明は、実際の節水量、収量、採算、法令・水利条件への適合を保証しない。実運用では現地計測、複数season、関係者レビュー、施工後の効果検証が必要である。"
+        "5区画・固定費用・固定した節水の代理指標の教育用選択問題であり、土壌、天候、作物、生育段階、流量損失、設備故障、複数期の更新計画を表さない。",
+        "代理指標の最大化や最適性ギャップの証明は、実際の節水量、収量、採算、法令・水利条件への適合を保証しない。実運用では現地計測、複数シーズン、関係者レビュー、施工後の効果検証が必要である。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "固定教材では節水proxyの合計 $f(x)=9x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
-      "practical_notes": "hard constraintと優先度proxyを分け、区画ID、送水系統、設備状態、更新cost、proxyの算定者と更新日を残す。候補案は現地の流量測定、作物ごとの必要水量、施工可能時期、保守要員、水利権を使って再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この農業caseの圃場データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "objective": "固定教材では節水の代理指標の合計 $f(x)=9x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
+      "practical_notes": "必ず守る制約と優先度の代理指標を分け、区画ID、送水系統、設備状態、更新費用、代理指標の算定者と更新日を残す。候補案は現地の流量測定、作物ごとの必要水量、施工可能時期、保守要員、水利権を使って再評価する。接続先の分枝限定法の動きの再生は4品目のナップサック問題であり、この農業事例の圃場データではない。暫定解、上界、最適性ギャップ、予算停止の読み方だけを共有する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nsaving_proxy = [9, 7, 6, 5, 4]\ncost = [4, 3, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"field_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(saving_proxy[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
-      "question": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。",
+      "question": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。",
       "question_answers": {
         "Q01": "binary",
         "Q02": "explicit_algebraic",
@@ -2201,7 +2201,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "採択する／しないの二値判断、地域群ごとの最低1件、同時着工できない組合せを論理制約として保持し、実行可能案と最適性gapを確認できるため"
+          "reason": "採択する／しないの二値判断、地域群ごとの最低1件、同時着工できない組合せを論理制約として保持し、実行可能案と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "ecosystem-restoration-selection",
@@ -2211,17 +2211,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "便益proxyと費用が線形で、地域群・前提事業・排他条件も線形制約として表せる場合はMIP familyの緩和boundを使う"
+          "reason": "便益の代理指標と費用が線形で、地域群・前提事業・排他条件も線形制約として表せる場合はMIP系統の緩和で得る上界を使う"
         }
       ],
-      "constraints": "実施cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、水域系から少なくとも1件 $x_A+x_B\\ge1$、陸域系から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-      "decision_variables": "再生候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は生物種、個体群、空間連結性をdecision variableへ変換せず、事前に監査した実施costと便益proxyを入力する。",
+      "constraints": "実施費用 $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、水域系から少なくとも1件 $x_A+x_B\\ge1$、陸域系から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "decision_variables": "再生候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は生物種、個体群、空間連結性を決定変数へ変換せず、事前に監査した実施費用と便益の代理指標を入力する。",
       "difficulty": "intro",
       "domain": "environment",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "プロジェクトの採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため"
+          "reason": "プロジェクトの採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため"
         }
       ],
       "feature_values": [
@@ -2255,15 +2255,15 @@
       ],
       "last_reviewed": "2026-07-19",
       "limitations": [
-        "5候補・固定cost・固定便益proxyの教育用選択問題であり、種間相互作用、空間連結性、気候変動、土地利用、実施失敗、長期monitoringを表さない。",
-        "proxy最大化やgapの証明は、生物多様性の回復、法令・土地権利への適合、社会的合意を保証しない。実運用では現地調査、複数指標、関係者レビュー、実施後の効果検証が必要である。"
+        "5候補・固定した費用・固定した便益の代理指標による教育用選択問題であり、種間相互作用、空間連結性、気候変動、土地利用、実施失敗、長期モニタリングを表さない。",
+        "代理指標の最大化やギャップの証明は、生物多様性の回復、法令・土地権利への適合、社会的合意を保証しない。実運用では現地調査、複数指標、関係者レビュー、実施後の効果検証が必要である。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "固定教材では便益proxyの合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補を比較する教育用入力であり、生物多様性、個体群回復、将来の生態系サービスを保証する値ではない。",
-      "practical_notes": "hard constraintと便益proxyを分け、候補ID、対象地域、実施cost、許認可、前提事業、proxyの算定者・根拠・更新日を残す。候補案は現地調査、複数scenario、地域の関係者、保全の専門家、実施後monitoringで再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この環境保全caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "objective": "固定教材では便益の代理指標の合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補を比較する教育用入力であり、生物多様性、個体群回復、将来の生態系サービスを保証する値ではない。",
+      "practical_notes": "必ず守る制約と便益の代理指標を分け、候補ID、対象地域、実施費用、許認可、前提事業、代理指標の算定者・根拠・更新日を残す。候補案は現地調査、複数シナリオ、地域の関係者、保全の専門家、実施後のモニタリングで再評価する。接続先の分枝限定法の動きの再生は4品目のナップサック問題であり、この環境保全の事例の候補データではない。暫定解、上界、ギャップ、予算停止の読み方だけを共有する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nbenefit_proxy = [9, 8, 6, 5, 4]\ncost = [4, 4, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"project_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(benefit_proxy[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
-      "question": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。",
+      "question": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。",
       "question_answers": {
         "Q01": "binary",
         "Q02": "explicit_algebraic",
@@ -2298,7 +2298,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "開催する／しないの二値判断、地域群ごとの最低1枠、同時に運営できない候補の排他条件を保ち、実行可能案と最適性gapを確認できるため"
+          "reason": "開催する／しないの二値判断、地域群ごとの最低1枠、同時に運営できない候補の排他条件を保ち、実行可能案と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "mobile-clinic-outreach-selection",
@@ -2308,17 +2308,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "access proxyと運営costが線形で、地域群・設備・人員の条件も線形制約として表せる場合はMIP familyの緩和boundを使う"
+          "reason": "アクセスの代理指標と運営費用が線形で、地域群・設備・人員の条件も線形制約として表せる場合はMIP系統の緩和で得る上界を使う"
         }
       ],
-      "constraints": "運営cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、地域群1から少なくとも1枠 $x_A+x_B\\ge1$、地域群2から少なくとも1枠 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-      "decision_variables": "開催候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、solverが変更するdecision variableではない。",
+      "constraints": "運営費用 $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、地域群1から少なくとも1枠 $x_A+x_B\\ge1$、地域群2から少なくとも1枠 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "decision_variables": "開催候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、ソルバーが変更する決定変数ではない。",
       "difficulty": "intro",
       "domain": "healthcare",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "開催候補の採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため"
+          "reason": "開催候補の採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため"
         }
       ],
       "feature_values": [
@@ -2352,15 +2352,15 @@
       ],
       "last_reviewed": "2026-07-24",
       "limitations": [
-        "5候補・固定cost・固定access proxyの教育用選択問題であり、実際の需要、移動距離、予約枠、検査能力、スタッフ勤務、需要不確実性、複数期の巡回計画を表さない。",
-        "proxy最大化やgapの証明は、医療上の有効性、安全性、公平性、法令・倫理への適合を保証しない。実運用では臨床・地域のレビュー、複数のaccess指標、需要scenario、実施後の評価が必要である。"
+        "5候補・固定した費用・固定したアクセスの代理指標による教育用選択問題であり、実際の需要、移動距離、予約枠、検査能力、スタッフ勤務、需要不確実性、複数期の巡回計画を表さない。",
+        "代理指標の最大化やギャップの証明は、医療上の有効性、安全性、公平性、法令・倫理への適合を保証しない。実運用では臨床・地域のレビュー、複数のアクセス指標、需要シナリオ、実施後の評価が必要である。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "固定教材ではaccess proxyの合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
-      "practical_notes": "hard constraintとaccess proxyを分け、候補ID、対象地域、日時、運営cost、必要資格・設備、会場のaccessibility、予約・紹介先のcapacity、proxyの算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定Theaterは4品目knapsackであり、このhealthcare caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "objective": "固定教材ではアクセスの代理指標の合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
+      "practical_notes": "必ず守る制約とアクセスの代理指標を分け、候補ID、対象地域、日時、運営費用、必要資格・設備、会場の利用しやすさ、予約・紹介先の受け入れ能力、代理指標の算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定法の動きの再生は4品目のナップサック問題であり、この医療の事例の候補データではない。暫定解、上界、ギャップ、予算停止の読み方だけを共有する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\naccess_proxy = [9, 8, 6, 5, 4]\ncost = [4, 4, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"outreach_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(access_proxy[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
-      "question": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。",
+      "question": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。",
       "question_answers": {
         "Q01": "binary",
         "Q02": "explicit_algebraic",
@@ -2395,7 +2395,7 @@
       "candidate_methods": [
         {
           "method_id": "M_ADAMW",
-          "reason": "mini-batchのstochastic gradientを使い、weight decayを勾配updateから分離したbaselineとして学習率・validation・停止時点を診断できるため"
+          "reason": "ミニバッチの確率的勾配を使い、重み減衰を勾配の更新から分離した基準として、学習率・検証結果・停止時点を診断できるため"
         }
       ],
       "case_id": "EC021",
@@ -2406,17 +2406,17 @@
       "conditional_methods": [
         {
           "method_id": "M_MOMENTUM_SGD",
-          "reason": "十分な学習budgetがあり、AdamWより立ち上がりが遅くても最終validationとseed間の安定性を比較したい場合"
+          "reason": "十分な学習予算があり、AdamWより立ち上がりが遅くても、最終的な検証結果と乱数の種を変えたときの安定性を比較したい場合"
         }
       ],
-      "constraints": "明示的なparameter制約は置かない。代わりにupdate回数 $k\\le K$、wall-timeまたはdata accessのbudget、early stopping、learning-rate schedule、weight decay、gradient clippingを事前に実験契約として固定する。",
-      "decision_variables": "各layerのweightとbiasをまとめた連続parameter $\\theta$。dataset split、入力特徴、label、model構造、batch sizeは比較中に固定し、optimizerのparameterへ混ぜない。",
+      "constraints": "明示的なパラメータ制約は置かない。代わりに更新回数 $k\\le K$、実時間またはデータ読み出し量の予算、早期終了、学習率のスケジュール、重み減衰、勾配クリッピングを事前に実験契約として固定する。",
+      "decision_variables": "各層の重みとバイアスをまとめた連続パラメータ $\\theta$。データセットの分割、入力特徴、ラベル、モデル構造、バッチサイズは比較中に固定し、オプティマイザのパラメータへ混ぜない。",
       "difficulty": "intro",
       "domain": "machine-learning",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "非常に高次元のparameterとmini-batchごとに変わるgradientに対し、full-batchの決定的gradientとline searchを前提にすると1 stepの計算・memory負荷が大きいため"
+          "reason": "非常に高次元のパラメータとミニバッチごとに変わる勾配に対し、全データを使う決定的な勾配と直線探索を前提にすると、1反復あたりの計算・メモリ負荷が大きいため"
         }
       ],
       "feature_values": [
@@ -2468,15 +2468,15 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "固定した3 sample・4入力・8 hidden unit・3 classの1 step教材であり、実際の画像、data augmentation、distributed training、mixed precision、長期学習、hardware bottleneckを表さない。",
-        "小さな教材でlossが下がることや2次関数上の軌跡は、実データでのaccuracy、calibration、robustness、公平性、AdamWとMomentum SGDの順位を保証しない。実運用では同じsplit・budget・tuning方針と複数seedで再検証する。"
+        "固定した3標本・4入力・隠れユニット8個・3クラスで1回だけ更新する教材であり、実際の画像、データ拡張、分散学習、混合精度、長期学習、ハードウェアのボトルネックを表さない。",
+        "小さな教材で損失が下がることや2次関数上の軌跡は、実データでの正解率、確率の較正、頑健性、公平性、AdamWとMomentum SGDの順位を保証しない。実運用では同じ分割・予算・調整方針と複数の乱数の種で再検証する。"
       ],
       "map_node_id": "answer:Q05:stochastic_gradient",
-      "objective": "train mini-batch $B_k$ のcross-entropy $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ をstochastic gradientで改善する。採用判断はtrain lossだけでなく、固定したvalidation splitのloss、主要metric、wall time、peak memoryで行う。",
-      "practical_notes": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。通常presetの軌跡ではupdate geometryを読み、高い学習率の感度比較では目的値の増大、振幅、terminal statusを同じ評価軸で確認する。AdamWや実データでの汎化性能を順位付けする比較ではない。",
+      "objective": "学習用ミニバッチ $B_k$ の交差エントロピー $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ を確率的勾配で改善する。採用判断は学習損失だけでなく、固定した検証用データでの損失、主要な評価指標、実時間、ピークメモリで行う。",
+      "practical_notes": "データセットの分割と前処理の版、初期重みの乱数の種、データ順序の乱数の種、バッチサイズ、最大エポック数、学習率のスケジュール、早期終了、ハードウェアを記録する。複数の乱数の種で検証結果の中央値とばらつきを比べ、学習損失が下がっても検証結果が悪化する場合は、オプティマイザの優劣ではなく過学習、正則化、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像データやニューラルネットワークを学習していない。通常設定の軌跡では更新の進み方を幾何的に読み、高い学習率の感度比較では目的関数値の増大、振幅、終了時の状態を同じ評価軸で確認する。AdamWや実データでの汎化性能を順位付けする比較ではない。",
       "problem_archetype_id": "PA040",
       "python_example": "import torch\n\nx = torch.tensor([[1.0, 0.0, 0.5, -0.2], [0.2, 1.0, -0.4, 0.7], [-0.3, 0.4, 1.0, 0.2]])\ny = torch.tensor([0, 1, 2])\nmodel = torch.nn.Sequential(torch.nn.Linear(4, 8), torch.nn.ReLU(), torch.nn.Linear(8, 3))\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)\noptimizer.zero_grad()\nloss = torch.nn.functional.cross_entropy(model(x), y)\nloss.backward()\noptimizer.step()\nprint(float(loss))",
-      "question": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
+      "question": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "automatic_differentiation_graph",
@@ -2501,8 +2501,8 @@
       ],
       "status": "published",
       "title_en": "Train an image classifier with mini-batches",
-      "title_ja": "mini-batchで画像分類モデルを学習する",
-      "variable_domain": "実務のdecision variableはnetwork parameter $\\theta\\in X=\\mathbb{R}^d$ で、$d$ は数万から数十億になり得る。固定教材では4入力・8 hidden unit・3 classの小さなMLPのparameterだけを更新する。",
+      "title_ja": "ミニバッチで画像分類モデルを学習する",
+      "variable_domain": "実務の決定変数はネットワークのパラメータ $\\theta\\in X=\\mathbb{R}^d$ で、$d$ は数万から数十億になり得る。固定教材では4入力・隠れユニット8個・3クラスの小さなMLPのパラメータだけを更新する。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_GD_QUADRATIC",
@@ -2517,7 +2517,7 @@
       "candidate_methods": [
         {
           "method_id": "M_MADS",
-          "reason": "微分を要求せず、simulation failureを隠れた制約として扱いながら、成功した評価点の近傍を直接探索できるため"
+          "reason": "微分を要求せず、シミュレーションの失敗を隠れた制約として扱いながら、成功した評価点の近傍を直接探索できるため"
         }
       ],
       "case_id": "EC027",
@@ -2527,17 +2527,17 @@
       "conditional_methods": [
         {
           "method_id": "M_RANDOM_SEARCH",
-          "reason": "まず失敗領域の分布とfeasible rateを測り、複雑な探索を導入する前の比較baselineを作る場合"
+          "reason": "まず失敗領域の分布と実行可能点の割合を測り、複雑な探索を導入する前の比較の基準を作る場合"
         }
       ],
-      "constraints": "上下限と離散domainに加え、solver crash、非物理解、timeoutで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的なfailure領域とする。",
-      "decision_variables": "2つの連続設計parameter $u_1,u_2$ と、構成を選ぶ二値変数 $z$。simulationの収束設定やtimeoutは設計変数ではなく、評価契約として固定する。",
+      "constraints": "上下限と離散的な定義域に加え、ソルバーの異常終了、非物理解、時間切れで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的な失敗領域とする。",
+      "decision_variables": "2つの連続設計パラメータ $u_1,u_2$ と、構成を選ぶ二値変数 $z$。シミュレーションの収束設定や時間切れの設定は設計変数ではなく、評価契約として固定する。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため"
+          "reason": "NaN、時間切れ、不連続な失敗境界を含む評価から、信頼できる局所的な勾配と直線探索を構成できないため"
         }
       ],
       "feature_values": [
@@ -2572,16 +2572,16 @@
       ],
       "last_reviewed": "2026-07-23",
       "limitations": [
-        "固定した3変数と単純なfailure境界は教育用であり、実solverの収束領域、crash原因、MADSまたはNGOptの一般性能を表さない。",
-        "failureを無限penaltyで渡す短いコードはAPI例であり、すべてのoptimizerが非有限値を同じように扱うとは限らない。実装の入力契約を確認する必要がある。",
-        "実行可能点が見つからない場合はoptimizerを替えるだけでなく、simulation model、初期化、mesh、許容誤差、timeout、設計domainを点検する。"
+        "固定した3変数と単純な失敗境界は教育用であり、実際のソルバーの収束領域、異常終了の原因、MADSまたはNGOptの一般性能を表さない。",
+        "失敗を無限大の罰則で渡す短いコードはAPI例であり、すべての最適化手法が非有限値を同じように扱うとは限らない。実装の入力契約を確認する必要がある。",
+        "実行可能点が見つからない場合は最適化手法を替えるだけでなく、シミュレーションモデル、初期化、メッシュ、許容誤差、時間切れの設定、設計の定義域を点検する。"
       ],
       "map_node_id": "answer:Q04:implicit_or_failure",
-      "objective": "simulationが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、failure種別とともに未評価またはinfeasibleとして保存する。",
-      "practical_notes": "成功・crash・timeout・非物理解を別statusで記録し、入力、software version、seed、wall time、終了理由を保存する。penalty値を使う実装でも、元のfailure statusを失わず、feasible rateと最良feasible値を別々に追う。",
+      "objective": "シミュレーションが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、失敗の種別とともに未評価または実行不可能として保存する。",
+      "practical_notes": "成功・異常終了・時間切れ・非物理解を別々の状態として記録し、入力、ソフトウェアの版、乱数の種、実時間、終了理由を保存する。罰則値を使う実装でも、元の失敗の状態を失わず、実行可能点の割合と実行可能な最良値を別々に追う。",
       "problem_archetype_id": "PA016",
       "python_example": "import nevergrad as ng\n\nspace = ng.p.Dict(\n    u1=ng.p.Scalar(lower=0.0, upper=1.0),\n    u2=ng.p.Scalar(lower=0.0, upper=1.0),\n    mode=ng.p.Choice([0, 1]),\n)\n\ndef evaluate(u1, u2, mode):\n    if u1 + u2 < 0.25:\n        raise RuntimeError(\"simulation did not converge\")\n    return (u1 - 0.65) ** 2 + (u2 - 0.35) ** 2 + 0.08 * mode\n\noptimizer = ng.optimizers.NGOpt(parametrization=space, budget=40)\nfor _ in range(40):\n    candidate = optimizer.ask()\n    try:\n        value = evaluate(**candidate.value)\n    except RuntimeError:\n        value = float(\"inf\")\n    optimizer.tell(candidate, value)\nprint(optimizer.provide_recommendation().value)",
-      "question": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "question": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
       "question_answers": {
         "Q01": "mixed",
         "Q02": "simulation_only",
@@ -2619,7 +2619,7 @@
       "candidate_methods": [
         {
           "method_id": "M_GAUSS_NEWTON",
-          "reason": "方程式が過剰決定または観測誤差を含む場合に、残差vectorとJacobianを保ったleast-squaresとして解けるため"
+          "reason": "方程式が過剰決定または観測誤差を含む場合に、残差ベクトルとJacobianを保った最小二乗問題として解けるため"
         }
       ],
       "case_id": "EC028",
@@ -2629,17 +2629,17 @@
       "conditional_methods": [
         {
           "method_id": "M_LEVENBERG_MARQUARDT",
-          "reason": "残差が滑らかで初期値が十分近く、制約なしの小規模least-squaresとしてstepを安定化したい場合"
+          "reason": "残差が滑らかで初期値が十分近く、制約なしの小規模な最小二乗問題として一歩を安定化したい場合"
         }
       ],
-      "constraints": "固定教材に明示制約はない。square systemでは $F(x)=0$、過剰決定系では許容残差、rank、scale、観測誤差modelを区別する。",
+      "constraints": "固定教材に明示制約はない。未知数と方程式の数が等しい系では $F(x)=0$、過剰決定系では許容残差、階数、尺度、観測誤差モデルを区別する。",
       "decision_variables": "二つの未知量 $x=(x_1,x_2)$。固定教材では方程式 $F_1(x)=x_1^2+x_2-1$、$F_2(x)=x_1+x_2^2-1$ を同時に満たす点を探す。",
       "difficulty": "intro",
       "domain": "science",
       "excluded_methods": [
         {
           "method_id": "M_DIFFERENTIAL_EVOLUTION",
-          "reason": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため"
+          "reason": "平方残差へスカラー化した大域的な発見的手法を先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため"
         }
       ],
       "feature_values": [
@@ -2674,13 +2674,13 @@
       ],
       "last_reviewed": "2026-07-23",
       "limitations": [
-        "2変数・滑らか・決定論的な固定教材であり、すべての根の列挙、大域的な存在・一意性、実物理modelの妥当性を保証しない。",
-        "Gauss-NewtonとLevenberg-Marquardtはleast-squaresへ移した場合の候補である。square systemで信頼できるJacobianがあるなら、まず専用のroot solverを検討する。",
-        "小さな二乗和は各方程式を要求精度で満たすことと同義ではない。residual scalingと成分ごとの許容値を確認する。"
+        "2変数・滑らか・決定論的な固定教材であり、すべての根の列挙、大域的な存在・一意性、実際の物理モデルの妥当性を保証しない。",
+        "Gauss-NewtonとLevenberg-Marquardtは最小二乗へ移した場合の候補である。未知数と方程式の数が等しい系で信頼できるJacobianがあるなら、まず専用の求根ソルバーを検討する。",
+        "小さな二乗和は、各方程式を要求精度で満たすことと同義ではない。残差の尺度の揃え方と成分ごとの許容値を確認する。"
       ],
       "map_node_id": "answer:Q03:equation_or_feasibility",
-      "objective": "本来の目標はscalar目的の最小化ではなく、残差vector $F(x)$ をゼロにすること。least-squaresへ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
-      "practical_notes": "最初にsquare、under-determined、over-determinedを区別する。残差normだけでなく各残差、Jacobian rank、scale、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
+      "objective": "本来の目標はスカラー目的関数の最小化ではなく、残差ベクトル $F(x)$ をゼロにすること。最小二乗へ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
+      "practical_notes": "最初に、未知数と方程式の数が等しい系、劣決定系、過剰決定系を区別する。残差のノルムだけでなく各残差、Jacobianの階数、尺度、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
       "problem_archetype_id": "PA004",
       "python_example": "import numpy as np\nfrom scipy.optimize import root\n\ndef equations(x):\n    return np.array([x[0] ** 2 + x[1] - 1.0, x[0] + x[1] ** 2 - 1.0])\n\ndef jacobian(x):\n    return np.array([[2.0 * x[0], 1.0], [1.0, 2.0 * x[1]]])\n\nresult = root(equations, x0=np.array([0.7, 0.7]), jac=jacobian)\nprint(result.x, np.linalg.norm(equations(result.x)), result.success)",
       "question": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。",
@@ -2708,7 +2708,7 @@
       "status": "published",
       "title_en": "Solve equations as roots before scalar optimization",
       "title_ja": "方程式を最適化に変える前に求根として解く",
-      "variable_domain": "固定教材では $X=\\mathbb{R}^2$。実務では物理的な範囲がある場合も、root solverがboundsを直接扱えるかを確認してからdomainを定める。",
+      "variable_domain": "固定教材では $X=\\mathbb{R}^2$。実務では物理的な範囲がある場合も、求根ソルバーが上下限を直接扱えるかを確認してから変数の範囲を定める。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
@@ -2719,7 +2719,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BAYESIAN_OPT_GP",
-          "reason": "1回の試作・測定が高価でgradientを直接得られない条件で、観測値と不確実性から次に試す工程条件を選べるため"
+          "reason": "1回の試作・測定が高価で勾配を直接得られない条件で、観測値と不確実性から次に試す工程条件を選べるため"
         }
       ],
       "case_id": "manufacturing-process-window",
@@ -2729,17 +2729,17 @@
       "conditional_methods": [
         {
           "method_id": "M_RANDOM_SEARCH",
-          "reason": "探索空間を事前に正規化でき、まず同じ試行budgetでsurrogateを使う価値を測るbaselineが必要な場合"
+          "reason": "探索空間を事前に正規化でき、まず同じ試行予算で代理モデルを使う価値を測る基準が必要な場合"
         }
       ],
-      "constraints": "各工程条件の装置・安全上の上下限と、試作回数のbudgetを守る。固定教材では $-3\\le x\\le3$、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
+      "constraints": "各工程条件の装置・安全上の上下限と、試作回数の予算を守る。固定教材では $-3\\le x\\le3$、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
       "decision_variables": "実務では工程温度 $T$、送り速度 $v$、保持時間 $t$。固定教材ではこの組を1個の無次元化した代理変数 $x$ へ写像し、実際の単位や装置設定とは同一視しない。",
       "difficulty": "intermediate",
       "domain": "manufacturing",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "試作結果だけを観測する高価なblack-boxに対し、信頼できるgradientとline searchを前提にすると追加試作の根拠を説明できないため"
+          "reason": "試作結果だけを観測する高価なブラックボックスに対し、信頼できる勾配と直線探索を前提にすると、追加試作の根拠を説明できないため"
         }
       ],
       "feature_values": [
@@ -2774,13 +2774,13 @@
       ],
       "last_reviewed": "2026-07-23",
       "limitations": [
-        "1次元・10回・決定論的な固定教材であり、実製造工程の温度履歴、材料差、装置差、測定誤差、工程driftを表さない。",
+        "1次元・10回・決定論的な固定教材であり、実製造工程の温度履歴、材料差、装置差、測定誤差、工程の経時変動を表さない。",
         "固定教材の最良点は実工程の安全性、規格適合、歩留まり、再現性を保証しない。候補は確認実験と工程能力評価を経てから採用する必要がある。",
-        "Bayesian optimizationとrandom searchの結果は探索範囲、kernel、noise model、初期点、budgetに依存し、一般的な手法rankingには使わない。"
+        "ベイズ最適化とランダム探索の結果は探索範囲、カーネル、ノイズモデル、初期点、予算に依存し、手法の一般的な順位付けには使わない。"
       ],
       "map_node_id": "answer:Q06:hours_or_more",
-      "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 $f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をblack-boxとして観測する。",
-      "practical_notes": "各試作について材料lot、装置、operator、環境、入力条件、測定値、測定不確かさ、失敗status、wall timeを保存する。random baselineとの比較では初期点、探索範囲、試行budget、並列数、noiseの扱いを固定し、best observedとsurrogate予測を分けて読む。",
+      "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 $f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックスとして観測する。",
+      "practical_notes": "各試作について材料ロット、装置、作業者、環境、入力条件、測定値、測定不確かさ、失敗の状態、実時間を保存する。ランダム探索の基準との比較では初期点、探索範囲、試行予算、並列数、ノイズの扱いを固定し、観測済みの最良値と代理モデルの予測を分けて読む。",
       "problem_archetype_id": "PA014",
       "python_example": "import math\nimport optuna\n\n\ndef quality_loss(trial: optuna.Trial) -> float:\n    x = trial.suggest_float(\"normalized_setting\", -3.0, 3.0)\n    return 0.16 * (x - 1.7) ** 2 + 0.45 * math.sin(2.2 * x) + 0.12 * math.sin(5.3 * x)\n\n\nstudy = optuna.create_study(direction=\"minimize\", sampler=optuna.samplers.GPSampler(seed=2604))\nstudy.optimize(quality_loss, n_trials=10)\nprint(study.best_params, study.best_value)",
       "question": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。",
@@ -2820,7 +2820,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BRANCH_CUT",
-          "reason": "連続の生産量と0-1の段取り判断を同じ線形modelで保ち、実行可能な計画、relaxation bound、optimality gapを分けて確認できるため"
+          "reason": "連続の生産量と0-1の段取り判断を同じ線形モデルで保ち、実行可能な計画、緩和で得る上界、最適性ギャップを分けて確認できるため"
         }
       ],
       "case_id": "production-mix-planning",
@@ -2830,17 +2830,17 @@
       "conditional_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "生産量を妥当な単位で整数化でき、連続量よりも段取り順序・論理・calendar制約が中心になる場合"
+          "reason": "生産量を妥当な単位で整数化でき、連続量よりも段取り順序・論理・稼働カレンダーの制約が中心になる場合"
         }
       ],
-      "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小lot $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
-      "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、machine能力、材料上限、単位利益は入力であり、solverが変更する変数ではない。",
+      "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小ロット $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
+      "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、機械の能力、材料上限、単位利益は入力であり、ソルバーが変更する変数ではない。",
       "difficulty": "intro",
       "domain": "manufacturing",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため"
+          "reason": "段取りの0-1変数と生産量を結ぶ必ず守る制約を連続の勾配更新だけでは保持できず、丸め後の計画が能力や最小ロットを破り得るため"
         }
       ],
       "feature_values": [
@@ -2875,15 +2875,15 @@
       "last_reviewed": "2026-07-26",
       "limitations": [
         "2製品・1週間・決定的な係数の固定教材であり、需要不確実性、複数工程、在庫繰越、欠品、切替順序、保全、人員、品質、納期を表さない。",
-        "固定係数modelの最適性gapが小さくても、需要予測、能力、歩留まり、段取り費の妥当性や実行可能な現場scheduleを保証しない。計画採用前に現場制約と係数感度を別に確認する。",
-        "接続先のBranch-and-Bound traceはboundと停止理由の読み方を示す教育用knapsackであり、SciPy/HiGHS、SCIP、CP-SATの速度や実務生産計画での一般性能を順位付けしない。"
+        "固定係数モデルの最適性ギャップが小さくても、需要予測、能力、歩留まり、段取り費の妥当性や実行可能な現場のスケジュールを保証しない。計画採用前に現場制約と係数感度を別に確認する。",
+        "接続先のBranch-and-Boundの探索記録は上界と停止理由の読み方を示す教育用のナップサック問題であり、SciPy/HiGHS、SCIP、CP-SATの速度や実務生産計画での一般性能を順位付けしない。"
       ],
       "map_node_id": "answer:Q01:mixed",
       "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $f(x)=8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
-      "practical_notes": "需要予測の時点、単位、歩留まり、在庫、machine calendar、段取り費、最小lot、禁止組合せを同じversionで保存する。status、incumbent、bound、gap、time limitを併記し、前週解をwarm startへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木とCompareは4変数knapsackで停止条件を学ぶ別教材であり、この生産計画のsolver実行や利益比較ではない。",
+      "practical_notes": "需要予測の時点、単位、歩留まり、在庫、機械の稼働カレンダー、段取り費、最小ロット、禁止組合せを同じ版で保存する。状態、暫定解、上界、最適性ギャップ、制限時間を併記し、前週解をウォームスタートへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木と比較のページは4変数のナップサック問題で停止条件を学ぶ別教材であり、この生産計画のソルバー実行や利益比較ではない。",
       "problem_archetype_id": "PA023",
       "python_example": "import numpy as np\nfrom scipy.optimize import Bounds, LinearConstraint, milp\n\nc = np.array([-8.0, -7.0, 8.0, 5.0])\nintegrality = np.array([0, 0, 1, 1])\nbounds = Bounds([0.0, 0.0, 0.0, 0.0], [6.0, 6.0, 1.0, 1.0])\nA = np.array([\n    [3.0, 1.0, 0.0, 0.0],\n    [1.0, 4.0, 0.0, 0.0],\n    [1.0, 0.0, -6.0, 0.0],\n    [0.0, 1.0, 0.0, -6.0],\n    [-1.0, 0.0, 1.5, 0.0],\n    [0.0, -1.0, 0.0, 1.0],\n])\nconstraint = LinearConstraint(A, np.full(6, -np.inf), [18.0, 20.0, 0.0, 0.0, 0.0, 0.0])\nresult = milp(c, integrality=integrality, bounds=bounds, constraints=constraint)\nif not result.success or result.x is None:\n    raise RuntimeError(result.message)\nprint({\"q_A\": result.x[0], \"q_B\": result.x[1], \"setup_A\": result.x[2], \"setup_B\": result.x[3], \"profit\": -result.fun})",
-      "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。",
       "question_answers": {
         "Q01": "mixed",
         "Q02": "explicit_algebraic",
@@ -2917,7 +2917,7 @@
       "candidate_methods": [
         {
           "method_id": "M_NSGA_II",
-          "reason": "時系列simulationから得る購入costと充放電throughputを一つの重みに固定せず、複数の運用候補を近似Pareto集合として残せるため"
+          "reason": "時系列シミュレーションから得る購入費用と充放電量を一つの重みに固定せず、複数の運用候補を近似Pareto集合として残せるため"
         }
       ],
       "case_id": "battery-operation-tradeoff",
@@ -2927,17 +2927,17 @@
       "conditional_methods": [
         {
           "method_id": "M_EPSILON_CONSTRAINT",
-          "reason": "許容できる購入costまたはthroughput上限を明示でき、各scalar subproblemを信頼できるsolverで解ける場合"
+          "reason": "許容できる購入費用または充放電量の上限を明示でき、各スカラー化部分問題を信頼できるソルバーで解ける場合"
         }
       ],
-      "constraints": "実務ではpower上下限、state of chargeの遷移・上下限、初期・終端条件を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、energy balanceやefficiencyは表さない。",
-      "decision_variables": "実務では時刻 $t$ ごとの充電power $p_t^+$、放電power $p_t^-$、state of charge $s_t$。固定教材の $x_1,x_2$ はこのscheduleを直接表さず、二つの運用傾向を読むための代理変数である。",
+      "constraints": "実務では電力の上下限、充電状態の遷移・上下限、初期・終端条件を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、エネルギー収支や充放電効率は表さない。",
+      "decision_variables": "実務では時刻 $t$ ごとの充電電力 $p_t^+$、放電電力 $p_t^-$、充電状態 $s_t$。固定教材の $x_1,x_2$ はこの運用計画を直接表さず、二つの運用傾向を読むための代理変数である。",
       "difficulty": "intermediate",
       "domain": "energy",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "二つの目的と状態制約をscalar化せずに通常のBFGSへ渡しても、選べるtrade-off集合や実行可能な時系列運用を得られないため"
+          "reason": "二つの目的と状態制約をスカラー化せずに通常のBFGSへ渡しても、選べるトレードオフの集合や実行可能な時系列運用を得られないため"
         }
       ],
       "feature_values": [
@@ -2972,16 +2972,16 @@
       ],
       "last_reviewed": "2026-07-23",
       "limitations": [
-        "2変数の二次関数はtrade-offの読み方を示す固定教材であり、蓄電池のstate dynamics、efficiency、温度、劣化model、系統制約を表さない。",
-        "throughputは劣化の代理指標にすぎず、寿命や安全性を保証しない。実設備ではmanufacturerの運用範囲と検証済みの劣化modelを別に確認する必要がある。",
-        "有限populationと評価budgetで得る近似Pareto集合であり、真のfront、将来価格での経済性、NSGA-IIの一般的優位性を保証しない。"
+        "2変数の二次関数はトレードオフの読み方を示す固定教材であり、蓄電池の充電状態の動力学、充放電効率、温度、劣化モデル、系統制約を表さない。",
+        "累積充放電量は劣化の代理指標にすぎず、寿命や安全性を保証しない。実設備では製造元の運用範囲と検証済みの劣化モデルを別に確認する必要がある。",
+        "有限の集団と評価予算で得る近似Pareto集合であり、真のパレート前線、将来価格での経済性、NSGA-IIの一般的優位性を保証しない。"
       ],
       "map_node_id": "answer:Q03:multiobjective",
-      "objective": "実務では購入cost $f_1$ と、充放電量に基づくthroughput proxy $f_2$ を同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
-      "practical_notes": "実運用では価格、負荷、再生可能発電、初期state of charge、efficiency、power上限、終端条件、予測時点を固定して比較する。Pareto frontを得た後に、選好や運用規則で1候補を選び、別期間の価格・負荷で再評価する。",
+      "objective": "実務では購入費用 $f_1$ と、充放電量に基づく累積充放電量の代理指標 $f_2$ を同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+      "practical_notes": "実運用では価格、負荷、再生可能発電、初期の充電状態、充放電効率、電力の上限、終端条件、予測時点を固定して比較する。パレート前線を得た後に、選好や運用規則で1候補を選び、別期間の価格・負荷で再評価する。",
       "problem_archetype_id": "PA038",
       "python_example": "import numpy as np\nfrom pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.core.problem import Problem\nfrom pymoo.optimize import minimize\n\n\nclass BatteryProxy(Problem):\n    def __init__(self):\n        super().__init__(n_var=2, n_obj=2, xl=np.zeros(2), xu=np.full(2, 2.0))\n\n    def _evaluate(self, x, out, *args, **kwargs):\n        out[\"F\"] = np.column_stack((np.sum(x**2, axis=1), np.sum((x - 2.0) ** 2, axis=1)))\n\n\nresult = minimize(BatteryProxy(), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F[:5])",
-      "question": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。",
+      "question": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -3004,7 +3004,7 @@
       "status": "published",
       "title_en": "Explore cost-throughput trade-offs in battery operation",
       "title_ja": "蓄電池運用のコストと充放電量を両方見る",
-      "variable_domain": "実務では各時刻の充電・放電powerとstate of chargeを持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 $x=(x_1,x_2)$ を使い、変数領域を $X=[0,2]^2$ とする。",
+      "variable_domain": "実務では各時刻の充電・放電電力と充電状態（SOC）を持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 $x=(x_1,x_2)$ を使い、変数領域を $X=[0,2]^2$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "biobjective-quadratic-pareto-front",
@@ -3016,7 +3016,7 @@
       "candidate_methods": [
         {
           "method_id": "M_NSGA_II",
-          "reason": "交通simulationで得る平均遅れと停止回数を一つの重みに固定せず、並列評価した複数の信号timing候補を近似Pareto集合として残せるため"
+          "reason": "交通シミュレーションで得る平均遅れと停止回数を一つの重みに固定せず、並列評価した複数の信号の時間設定の候補を近似Pareto集合として残せるため"
         }
       ],
       "case_id": "traffic-signal-tradeoff",
@@ -3026,17 +3026,17 @@
       "conditional_methods": [
         {
           "method_id": "M_EPSILON_CONSTRAINT",
-          "reason": "許容できる平均遅れまたは停止回数を運用上の上限として明示でき、各scalar subproblemを同じsimulation条件で解ける場合"
+          "reason": "許容できる平均遅れまたは停止回数を運用上の上限として明示でき、スカラー化した各部分問題を同じシミュレーション条件で解ける場合"
         }
       ],
-      "constraints": "実務ではcycle長、最小green、歩行者横断時間、交差点間offsetの上下限を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、現示順序、queue spillback、歩行者制約は表さない。",
-      "decision_variables": "実務では交差点 $j$ ごとのcycle長 $c_j$、green split $g_j$、offset $o_j$。固定教材の $x_1,x_2$ は実際の秒数や現示を直接表さず、二つのtiming傾向を読むための代理変数である。",
+      "constraints": "実務ではサイクル長、最小青時間、歩行者横断時間、交差点間オフセットの上下限を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、現示順序、上流への待ち行列の延伸、歩行者制約は表さない。",
+      "decision_variables": "実務では交差点 $j$ ごとのサイクル長 $c_j$、青時間の配分 $g_j$、オフセット $o_j$。固定教材の $x_1,x_2$ は実際の秒数や現示を直接表さず、二つの時間設定の傾向を読むための代理変数である。",
       "difficulty": "intermediate",
       "domain": "transportation",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "二つのsimulation目的をscalar化せず、信頼できるgradientもないまま通常のBFGSへ渡しても、選べるtrade-off集合を得られないため"
+          "reason": "二つのシミュレーション目的をスカラー化せず、信頼できる勾配もないまま通常のBFGSへ渡しても、選べるトレードオフの集合を得られないため"
         }
       ],
       "feature_values": [
@@ -3070,16 +3070,16 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "2変数の二次関数はtrade-offの読み方を示す固定教材であり、交通流、信号現示、queue、歩行者、公共交通優先をsimulationしていない。",
-        "平均遅れと停止回数だけでは安全性、公平性、緊急車両、歩行者待ち時間、周辺道路へのspillbackを評価できない。実運用ではこれらを制約または別指標として審査する必要がある。",
-        "有限populationと評価budgetで得る近似Pareto集合であり、真のfront、実交通での改善、NSGA-IIの一般的優位性を保証しない。"
+        "2変数の二次関数はトレードオフの読み方を示す固定教材であり、交通流、信号現示、待ち行列、歩行者、公共交通優先をシミュレーションしていない。",
+        "平均遅れと停止回数だけでは安全性、公平性、緊急車両、歩行者待ち時間、周辺道路への待ち行列の延伸を評価できない。実運用ではこれらを制約または別指標として審査する必要がある。",
+        "有限の集団と評価予算で得る近似Pareto集合であり、真のパレート前線、実交通での改善、NSGA-IIの一般的優位性を保証しない。"
       ],
       "map_node_id": "answer:Q03:multiobjective",
-      "objective": "実務では対象時間帯の平均遅れ $f_1$ と車両1台あたり停止回数 $f_2$ を交通simulationで評価し、同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
-      "practical_notes": "対象network、需要data、時間帯、初期queue、車種、歩行者需要、simulation seed、評価budgetを固定して候補を比較する。Pareto frontから選んだtimingは、異なる需要日と複数seedで再評価し、平均値だけでなくqueue長、最大待ち時間、spillback、歩行者制約違反も確認する。",
+      "objective": "実務では対象時間帯の平均遅れ $f_1$ と車両1台あたり停止回数 $f_2$ を交通シミュレーションで評価し、同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+      "practical_notes": "対象の道路網、需要データ、時間帯、初期の待ち行列、車種、歩行者需要、シミュレーションの乱数の種、評価予算を固定して候補を比較する。パレート前線から選んだ時間設定は、異なる需要日と複数の乱数の種で再評価し、平均値だけでなく待ち行列の長さ、最大待ち時間、上流への延伸、歩行者制約違反も確認する。",
       "problem_archetype_id": "PA038",
       "python_example": "import numpy as np\nfrom pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.core.problem import Problem\nfrom pymoo.optimize import minimize\n\n\nclass SignalTimingProxy(Problem):\n    def __init__(self):\n        super().__init__(n_var=2, n_obj=2, xl=np.zeros(2), xu=np.full(2, 2.0))\n\n    def _evaluate(self, x, out, *args, **kwargs):\n        out[\"F\"] = np.column_stack((np.sum(x**2, axis=1), np.sum((x - 2.0) ** 2, axis=1)))\n\n\nresult = minimize(SignalTimingProxy(), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F[:5])",
-      "question": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "question": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -3101,7 +3101,7 @@
       "status": "published",
       "title_en": "Explore delay-stop trade-offs in traffic signal timing",
       "title_ja": "信号制御の遅れと停止回数を両方見る",
-      "variable_domain": "実務では各交差点のcycle長、green split、offsetを安全な上下限内に置く連続領域。固定教材では二つのtiming傾向を表す無次元代理変数 $x=(x_1,x_2)$ を使い、$X=[0,2]^2$ とする。",
+      "variable_domain": "実務では各交差点のサイクル長、青時間の配分（スプリット）、オフセットを安全な上下限内に置く連続領域。固定教材では二つの時間設定の傾向を表す無次元代理変数 $x=(x_1,x_2)$ を使い、$X=[0,2]^2$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "biobjective-quadratic-pareto-front",
@@ -3113,7 +3113,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "事業の採否、予算、相互排他、同時実施などを整数・Boolean制約として明示し、可行解と最適性gapを確認できるため"
+          "reason": "事業の採否、予算、相互排他、同時実施などを整数制約・論理制約として明示し、可行解と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "public-infrastructure-selection",
@@ -3127,13 +3127,13 @@
         }
       ],
       "constraints": "事業費 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_C+3x_D\\le7$ と $x_i\\in\\{0,1\\}$。実務では地域下限、依存関係、同時実施不可などを別制約として追加する。",
-      "decision_variables": "候補事業 $i$ を採択するとき1、採択しないとき0のbinary variable $x_i$。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
+      "decision_variables": "候補事業 $i$ を採択するとき1、採択しないとき0の二値変数 $x_i$。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
       "difficulty": "intro",
       "domain": "public-policy",
       "excluded_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "事業の採否はbinaryで、予算・依存関係と最適性gapを連続simplexの更新として扱えないため"
+          "reason": "事業の採否は二値で、予算・依存関係と最適性ギャップを連続空間での単体の更新として扱えないため"
         }
       ],
       "feature_values": [
@@ -3167,13 +3167,13 @@
       ],
       "last_reviewed": "2026-07-23",
       "limitations": [
-        "4候補・単一予算・固定scoreの教育用knapsackであり、災害確率、被害推計、事業間相乗効果、着工順序、維持費を表さない。",
-        "便益scoreは意思決定の入力であり、客観的な公共価値や公平性を保証しない。score設計と制約は当事者・専門家による別の審査を必要とする。",
-        "固定instanceの最適解やgapは実計画の妥当性を保証せず、data更新、scenario分析、法令・安全要件、実施可能性の確認を置き換えない。"
+        "4候補・単一予算・固定スコアの教育用ナップサック問題であり、災害確率、被害推計、事業間相乗効果、着工順序、維持費を表さない。",
+        "便益スコアは意思決定の入力であり、客観的な公共価値や公平性を保証しない。スコア設計と制約は当事者・専門家による別の審査を必要とする。",
+        "固定した問題例の最適解や最適性ギャップは実計画の妥当性を保証せず、データ更新、シナリオ分析、法令・安全要件、実施可能性の確認を置き換えない。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "事前に定義した便益score $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_C+5x_D$ を最大化するが、scoreを人命・被害額・確率と同一視しない。",
-      "practical_notes": "便益scoreの定義者、対象期間、地域、根拠data、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、unused budget、最適性gap、停止理由を記録する。scoreやcostを変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
+      "objective": "事前に定義した便益スコア $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_C+5x_D$ を最大化するが、スコアを人命・被害額・確率と同一視しない。",
+      "practical_notes": "便益スコアの定義者、対象期間、地域、根拠データ、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、使わなかった予算、最適性ギャップ、停止理由を記録する。スコアや費用を変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nprojects = {\"drainage\": (4, 9), \"shelter\": (3, 6), \"monitoring\": (2, 4), \"road\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in projects}\nmodel.add(sum(cost * x[name] for name, (cost, _) in projects.items()) <= 7)\nmodel.maximize(sum(score * x[name] for name, (_, score) in projects.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {name: solver.value(var) for name, var in x.items()})",
       "question": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。",
@@ -3221,17 +3221,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "割当ルールを線形式で表せ、緩和boundや最適性gapまで確認したい場合はMIP familyとして定式化する"
+          "reason": "割当ルールを線形式で表せ、緩和による限界値や最適性ギャップまで確認したい場合は、MIPの系統として定式化する"
         }
       ],
       "constraints": "各授業を必要回数だけ配置する条件を $\\sum_{d,h}x_{c,d,h}=1$ とし、同じ教室・教員・受講グループの同時刻利用を $\\sum_cx_{c,d,h}\\le1$ で禁止する。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
-      "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
+      "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、ソルバーが変更する変数ではない。",
       "difficulty": "intro",
       "domain": "education",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため"
+          "reason": "0-1の割当と同時刻の重複禁止を連続的な勾配の更新だけでは保持できず、丸め後に必修授業や教室容量を破り得るため"
         }
       ],
       "feature_values": [
@@ -3281,12 +3281,12 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "4授業・3日・2時間帯、各枠1授業の教育用instanceであり、複数教室、選択科目、学期全体、移動時間、教員負荷、学生ごとの履修を表さない。",
+        "4授業・3日・2時間帯、各枠1授業の教育用の問題例であり、複数教室、選択科目、学期全体、移動時間、教員負荷、学生ごとの履修を表さない。",
         "実行可能な時間割が得られても、教育上の質、学生間の公平性、教職員の合意を保証しない。制約と重みは関係者が確認し、手動変更の履歴を残す必要がある。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
-      "practical_notes": "hard constraintとsoft preferenceを別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点をversion管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先のTheater／Compareは勤務シフトの固定教材であり、この時間割と同じdataではない。共通する二値割当、hard constraint、tie-breakの読み方だけを再利用する。",
+      "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止は罰則へ落とさず、必ず守る制約として扱う。",
+      "practical_notes": "必ず守る制約となるべく満たしたい希望を別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点を版管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先の動きの再生と比較のページは勤務シフトの固定教材であり、この時間割と同じデータではない。共通する二値割当、必ず守る制約、同点時の決め方の読み方だけを再利用する。",
       "problem_archetype_id": "PA026",
       "python_example": "from ortools.sat.python import cp_model\n\ncourses, days, slots = range(4), range(3), range(2)\nmodel = cp_model.CpModel()\nx = {(c, d, h): model.new_bool_var(f\"x_{c}_{d}_{h}\") for c in courses for d in days for h in slots}\nfor c in courses:\n    model.add(sum(x[c, d, h] for d in days for h in slots) == 1)\nfor d in days:\n    for h in slots:\n        model.add(sum(x[c, d, h] for c in courses) <= 1)\nmodel.add(x[3, 0, 0] == 0)\nmodel.maximize(sum(((c + d + h) % 2) * x[c, d, h] for c in courses for d in days for h in slots))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {(c, d, h): solver.value(x[c, d, h]) for c in courses for d in days for h in slots})",
       "question": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。",
@@ -3325,7 +3325,7 @@
       "candidate_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "設備候補の採否、依存関係、同時実施不可、地域ごとの最低更新数を二値・論理制約として保ち、実行可能解と最適性gapを確認できるため"
+          "reason": "設備候補の採否、依存関係、同時実施不可、地域ごとの最低更新数を二値・論理制約として保ち、実行可能解と最適性ギャップを確認できるため"
         }
       ],
       "case_id": "network-upgrade-portfolio",
@@ -3335,17 +3335,17 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "便益と費用が線形で、容量や依存関係を線形制約として表せる場合はMIP familyで緩和boundを使う"
+          "reason": "便益と費用が線形で、容量や依存関係を線形制約として表せる場合はMIPの手法系統で緩和による上界を使う"
         }
       ],
-      "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
-      "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、solverが変更する変数ではない。",
+      "constraints": "更新費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
+      "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、ソルバーが変更する変数ではない。",
       "difficulty": "intro",
       "domain": "telecommunications",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため"
+          "reason": "設備を更新する／しないという二値判断と依存関係を連続的な勾配による更新だけでは保持できないため"
         }
       ],
       "feature_values": [
@@ -3379,15 +3379,15 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "5候補・単一予算・固定scoreの教育用instanceであり、traffic flow、電波伝搬、冗長経路、工事順序、需要変動、障害の相関を表さない。",
-        "score最大化は容量、安全、規制適合、災害耐性を保証しない。候補と制約はnetwork engineerが検証し、scenario別の性能評価を別に行う必要がある。"
+        "5候補・単一予算・固定スコアの教育用の問題例であり、通信量の流れ、電波伝搬、冗長経路、工事順序、需要変動、障害の相関を表さない。",
+        "スコア最大化は容量、安全、規制適合、災害耐性を保証しない。候補と制約はネットワーク技術者が検証し、シナリオ別の性能評価を別に行う必要がある。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
-      "practical_notes": "便益scoreの定義期間、需要予測、障害data、費用単位、設備依存、地域下限をversion管理し、採択だけでなく未採択理由、unused budget、停止理由、best boundを記録する。接続先のTheater／Compareは一般の二値knapsack教材であり、通信網のflowや電波伝搬を計算しない。実務では候補生成とscore推定をnetwork simulationで別途検証する。",
+      "objective": "固定教材では便益スコアの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。スコアは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
+      "practical_notes": "便益スコアの定義期間、需要予測、障害データ、費用単位、設備依存、地域下限を版管理し、採択だけでなく未採択理由、使わなかった予算、停止理由、最良の上界を記録する。接続先の動きの再生と比較のページは一般の二値ナップサック教材であり、通信網の流量や電波伝搬を計算しない。実務では候補生成とスコア推定をネットワークのシミュレーションで別途検証する。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nupgrades = {\"A\": (4, 8), \"B\": (3, 7), \"C\": (3, 6), \"D\": (2, 5), \"E\": (2, 4)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in upgrades}\nmodel.add(sum(cost * x[name] for name, (cost, _) in upgrades.items()) <= 8)\nmodel.add(x[\"A\"] + x[\"B\"] >= 1)\nmodel.add(x[\"C\"] + x[\"D\"] + x[\"E\"] >= 1)\nmodel.maximize(sum(score * x[name] for name, (_, score) in upgrades.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {name: solver.value(var) for name, var in x.items()}, solver.best_objective_bound)",
-      "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。",
       "question_answers": {
         "Q01": "binary",
         "Q02": "explicit_algebraic",
@@ -3411,7 +3411,7 @@
       "status": "published",
       "title_en": "Select network upgrades under a capital budget",
       "title_ja": "予算内で通信設備の更新候補を選ぶ",
-      "variable_domain": "候補設備 $A,B,C,D,E$ ごとの二値変数を扱い、固定教材の領域は $X=\\{0,1\\}^5$ とする。設備位置や通信量を連続変数へ変換せず、事前に監査した便益scoreと更新費用を入力する。",
+      "variable_domain": "候補設備 $A,B,C,D,E$ ごとの二値変数を扱い、固定教材の領域は $X=\\{0,1\\}^5$ とする。設備位置や通信量を連続変数へ変換せず、事前に監査した便益スコアと更新費用を入力する。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
@@ -3422,7 +3422,7 @@
       "candidate_methods": [
         {
           "method_id": "M_BAYESIAN_OPT_GP",
-          "reason": "実験後にだけ得られる品質lossと観測noiseをsurrogateの平均・不確実性として分け、限られた追加実験で次の連続条件を選べるため"
+          "reason": "実験後にだけ得られる品質の損失と観測ノイズを代理モデルの平均・不確実性として分け、限られた追加実験で次の連続条件を選べるため"
         }
       ],
       "case_id": "formulation-experiment-tuning",
@@ -3432,17 +3432,17 @@
       "conditional_methods": [
         {
           "method_id": "M_CMA_ES",
-          "reason": "実験を十分に並列化でき、surrogate modelよりもpopulationによる頑健な大域候補探索を優先できる予算がある場合"
+          "reason": "実験を十分に並列化でき、代理モデルよりも集団による頑健な大域候補探索を優先できる予算がある場合"
         }
       ],
-      "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗やprotocol逸脱は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
-      "decision_variables": "次に試す実験条件 $x$。原料lot、測定系、前処理、実験日、operatorは記録する入力またはblockであり、decision variableと混同しない。",
+      "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗や実験手順からの逸脱は大きな目的関数値へ置換せず、状態と消費した予算を別に記録する。",
+      "decision_variables": "次に試す実験条件 $x$。原料ロット、測定系、前処理、実験日、作業者は記録する入力またはブロックであり、決定変数と混同しない。",
       "difficulty": "intermediate",
       "domain": "life-sciences",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため"
+          "reason": "品質指標が実験後にだけ得られ、再現性のある勾配を直接観測できないため"
         }
       ],
       "feature_values": [
@@ -3476,15 +3476,15 @@
       ],
       "last_reviewed": "2026-07-26",
       "limitations": [
-        "1次元・少数点・小noiseの固定教材であり、実際の混合物制約、カテゴリ原料、batch effect、時間変化、多目的品質、測定限界を表さない。",
-        "Bayesian optimizationが提案した候補は品質、安全性、有効性、規制適合を保証しない。許容領域は専門家が先に定義し、確認実験と独立検証を別に行う必要がある。"
+        "1次元・少数点・小ノイズの固定教材であり、実際の混合物制約、カテゴリ原料、バッチ効果、時間変化、多目的品質、測定限界を表さない。",
+        "ベイズ最適化が提案した候補は品質、安全性、有効性、規制適合を保証しない。許容領域は専門家が先に定義し、確認実験と独立検証を別に行う必要がある。"
       ],
       "map_node_id": "answer:Q05:unreliable_or_none",
-      "objective": "1回の実験後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
-      "practical_notes": "配合単位、原料lot、protocol、測定系、失敗status、実験日時を揃え、surrogate平均、uncertainty、acquisition、候補理由を各iterationで保存する。接続先のTheater／Compareは1次元の合成関数であり、実在の配合や安全性を再現しない。候補は次の実験点であって製品条件ではなく、独立反復、hold-out、専門家審査を経て判断する。",
+      "objective": "1回の実験後にだけ観測できる品質の損失 $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
+      "practical_notes": "配合単位、原料ロット、実験手順、測定系、失敗の状態、実験日時を揃え、代理モデルの平均、不確実性、獲得関数、候補理由を各反復で保存する。接続先の動きの再生と比較のページは1次元の合成関数であり、実在の配合や安全性を再現しない。候補は次の実験点であって製品条件ではなく、独立反復、検証用に取り分けておいた実験、専門家審査を経て判断する。",
       "problem_archetype_id": "PA014",
       "python_example": "import torch\nfrom botorch.acquisition import LogExpectedImprovement\nfrom botorch.fit import fit_gpytorch_mll\nfrom botorch.models import SingleTaskGP\nfrom gpytorch.mlls import ExactMarginalLogLikelihood\n\ntrain_x = torch.tensor([[-2.5], [0.0], [2.5]], dtype=torch.double)\ntrain_y = (0.18 * (train_x - 1.2) ** 2 + 0.35 * torch.sin(2.4 * train_x) + 0.08 * torch.sin(6.0 * train_x))\nmodel = SingleTaskGP(train_x, train_y)\nfit_gpytorch_mll(ExactMarginalLogLikelihood(model.likelihood, model))\nacq = LogExpectedImprovement(model, best_f=train_y.min(), maximize=False)\ngrid = torch.linspace(-3.0, 3.0, 301, dtype=torch.double).unsqueeze(-1)\nnext_x = grid[torch.argmax(acq(grid.unsqueeze(-2)))]\nprint(next_x.item())",
-      "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "experiment_only",
@@ -3507,7 +3507,7 @@
       "status": "published",
       "title_en": "Tune formulation settings with a limited experiment budget",
       "title_ja": "少ない実験で配合条件を絞る",
-      "variable_domain": "実務では成分比、混合時間、温度をそれぞれの安全・設備bounds内で保持する。固定教材だけがacquisitionの読み方を示すため、これらを1個の正規化変数へ縮約し、$X=[-3,3]$ とする。",
+      "variable_domain": "実務では成分比、混合時間、温度をそれぞれの安全・設備上の上下限内で保持する。固定教材だけが獲得関数の読み方を示すため、これらを1個の正規化変数へ縮約し、$X=[-3,3]$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
@@ -3520,7 +3520,7 @@
       "candidate_methods": [
         {
           "method_id": "M_NELDER_MEAD",
-          "reason": "目的値だけを返す低次元・無制約の局所問題で、simplexの頂点配置と受理操作を追いながらgradientなしで候補を更新できるため"
+          "reason": "目的値だけを返す低次元・無制約の局所問題で、単体の頂点配置と受理操作を追いながら勾配なしで候補を更新できるため"
         }
       ],
       "case_id": "nelder-mead-initial-simplex",
@@ -3530,17 +3530,17 @@
       "conditional_methods": [
         {
           "method_id": "M_MADS",
-          "reason": "bounds、black-box制約、評価失敗を追加する場合や、meshに基づく停止診断をNelder–Meadより明示したい場合"
+          "reason": "上下限、ブラックボックス制約、評価失敗を追加する場合や、メッシュに基づく停止診断をNelder–Meadより明示したい場合"
         }
       ],
-      "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance $\\tau=10^{-4}$、scale $s=0.8$、budget $B=80$を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは $s=0.5$、$B=160$、shrink failure sliceは $s=0.8$、$B=80$を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
-      "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
+      "constraints": "固定教材に明示制約はない。二次関数での2回の実行はNelder–Mead係数、単体の許容誤差 $\\tau=10^{-4}$、スケール $s=0.8$、評価予算 $B=80$を固定し、初期単体の位置だけを変える。Rosenbrockの標準実行は $s=0.5$、$B=160$、縮小による失敗例の切り出しは $s=0.8$、$B=80$を使うため、この2回の実行を初期位置だけの一因子比較として扱わない。",
+      "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、初期単体のスケール、反射・拡大・収縮・縮小係数は決定変数ではなく、実行前に固定して比較する実験条件である。",
       "difficulty": "intro",
       "domain": "education",
       "excluded_methods": [
         {
           "method_id": "M_GRADIENT_DESCENT",
-          "reason": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため"
+          "reason": "この評価契約は目的値だけを返し、信頼できる勾配や刻み幅選択の根拠を提供しないため"
         }
       ],
       "feature_values": [
@@ -3574,16 +3574,16 @@
       ],
       "last_reviewed": "2026-08-13",
       "limitations": [
-        "2次元・決定的・安価な標準関数と2個の初期simplexだけを扱う教育用Journeyであり、実calibrationのnoise、失敗、parameter scale、評価費、同定可能性を表さない。",
-        "既知最適点への接近や小さいsimplex diameterは大域最適性、別初期点での再現性、実問題でのNelder–Meadの優位性を保証しない。",
-        "quadraticとRosenbrockは異なる目的関数なので、両者の終端値や評価回数を性能rankingとして比較しない。既存Compareは同じquadratic内で初期simplexだけを変える感度contrastに限る。"
+        "2次元・決定的・安価な標準関数と2個の初期単体だけを扱う教育用の学習の流れであり、実際の較正のノイズ、失敗、パラメータのスケール、評価費、同定可能性を表さない。",
+        "既知最適点への接近や小さい単体の直径は大域最適性、別初期点での再現性、実問題でのNelder–Meadの優位性を保証しない。",
+        "二次関数とRosenbrockは異なる目的関数なので、両者の終端値や評価回数を性能の順位づけとして比較しない。既存の比較のページは同じ二次関数内で初期単体だけを変える感度の対比に限る。"
       ],
       "map_node_id": "answer:Q05:unreliable_or_none",
-      "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
-      "practical_notes": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認する。次にRosenbrockのcanonical runとshrink failure sliceで経路を読むが、scaleとbudgetも異なるため差を初期位置だけに帰属させない。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
+      "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知の参照値であり、最適化器へ勾配や解として渡さない。二次関数の動きの再生は同じ更新則を単純な等高線で先に読む対照教材として使う。",
+      "practical_notes": "変数のスケール、初期点、初期単体の全頂点、係数、評価予算、受理操作、最良の目的関数値、単体の直径、終了理由を実行ごとに保存する。まず二次関数の動きの再生と比較のページで初期単体以外が固定されていることを確認する。次にRosenbrockの標準実行と縮小による失敗例の切り出しで経路を読むが、スケールと評価予算も異なるため差を初期位置だけに帰属させない。その後にNelder–Mead記事と微分を使わない局所探索の選び分けの記事で、単体縮小の停滞、マルチスタート、MADS等への切替条件を確認する。",
       "problem_archetype_id": "PA006",
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\ndef rosenbrock(x):\n    return 100.0 * (x[1] - x[0] ** 2) ** 2 + (1.0 - x[0]) ** 2\n\nruns = ((\"canonical\", np.array([-1.2, 1.0]), 0.5, 160), (\"shrink slice\", np.array([-2.0, -1.0]), 0.8, 80))\nfor label, start, scale, budget in runs:\n    initial_simplex = np.vstack([start, start + [scale, 0.0], start + [0.0, scale]])\n    history = [start.copy()]\n    result = minimize(\n        rosenbrock,\n        start,\n        method=\"Nelder-Mead\",\n        callback=lambda xk: history.append(xk.copy()),\n        options={\n            \"initial_simplex\": initial_simplex,\n            \"maxfev\": budget,\n            \"xatol\": 1e-4,\n            \"fatol\": 1e-4,\n            \"adaptive\": False,\n        },\n    )\n    print(label, start.tolist(), scale, budget, result.x.tolist(), result.fun, result.nfev, len(history), result.message)\n    print(\"final simplex\", result.final_simplex[0].tolist())",
-      "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
+      "question": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "explicit_algebraic",
@@ -3606,8 +3606,8 @@
       ],
       "status": "published",
       "title_en": "Diagnose local-search sensitivity from the initial simplex",
-      "title_ja": "初期simplexで局所探索の感度を見抜く",
-      "variable_domain": "実務ではscaleをそろえた2個の連続calibration parameterを扱う。固定教材では $X=\\mathbb{R}^2$ とし、表示範囲だけを $x\\in[-2,2]$、$y\\in[-1,3]$ に固定する。",
+      "title_ja": "初期単体で局所探索の感度を見抜く",
+      "variable_domain": "実務ではスケールをそろえた2個の連続な較正パラメータを扱う。固定教材では $X=\\mathbb{R}^2$ とし、表示範囲だけを $x\\in[-2,2]$、$y\\in[-1,3]$ に固定する。",
       "visualization_ids": [
         "SCENARIO_NM_QUADRATIC",
         "SCENARIO_NM_QUADRATIC_SHIFTED",
@@ -3617,7 +3617,7 @@
     }
   ],
   "contract_version": "3.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.25",
   "domains": [
     {
       "domain": "agriculture",

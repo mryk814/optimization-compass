@@ -26,7 +26,7 @@ test("bilevel Theaterでouter・inner・complementarityを分けて読める", a
   await expect(
     history.getByRole("heading", { level: 3, name: /complementarity residual/u }),
   ).toBeVisible();
-  await expect(page.getByText(/global最適性、CQ、solution map/u)).toBeVisible();
+  await expect(page.getByText(/大域最適性、CQ、解写像/u)).toBeVisible();
 });
 
 test("bilevel Compareはcomplementarity treatmentだけを変え、順位づけしない", async ({
@@ -42,7 +42,7 @@ test("bilevel Compareはcomplementarity treatmentだけを変え、順位づけ�
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "exact KKTと有限relaxationを残差で読み分ける",
+      name: "厳密なKKTと有限の緩和を残差で読み分ける",
     }),
   ).toBeVisible();
   const conditions = page.getByRole("region", { name: "比較条件" });
@@ -70,5 +70,5 @@ test("hybrid failure Theaterはobjective改善とchattering停止を分ける", 
   const history = page.getByRole("region", { name: "指標の履歴" });
   await expect(history.getByRole("heading", { level: 3, name: /mode切替数/u })).toBeVisible();
   await expect(history.getByRole("heading", { level: 3, name: /切替間隔/u })).toBeVisible();
-  await expect(page.getByText(/contact\/friction model、物理simulationではない/u)).toBeVisible();
+  await expect(page.getByText(/接触／摩擦モデル、物理シミュレーションではない/u)).toBeVisible();
 });

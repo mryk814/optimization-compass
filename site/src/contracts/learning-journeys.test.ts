@@ -15,6 +15,7 @@ describe("LearningJourney parser", () => {
     expect(pilot?.scenarios.find((scenario) => scenario.role === "failure_contrast")?.scenario_id)
       .toBe("SCENARIO_CONSTRAINED_DISK");
     expect(pilot?.status).toBe("complete");
+    expect(pilot?.completion_reasons).toEqual([]);
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
     expect(index.summary.status_counts).toEqual({
@@ -59,7 +60,9 @@ describe("LearningJourney parser", () => {
 
   test("rejects a complete journey with a missing dimension", () => {
     const changed = structuredClone(rawJourneys);
-    const assessment = changed.assessments[0];
+    const assessment = changed.assessments.find(
+      (item) => item.journey_id === "traffic-signal-tradeoff",
+    )!;
     assessment.dimensions.primary_scenario.state = "missing";
     (assessment.dimensions.primary_scenario.reason_codes as string[]).push(
       "missing_primary_scenario",

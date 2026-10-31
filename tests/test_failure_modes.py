@@ -15,12 +15,24 @@ def test_structured_failure_modes_are_closed_and_exportable() -> None:
     repository = KnowledgeRepository(DATABASE)
     failures = repository.structured_failure_modes()
 
-    assert len(failures) == 12
+    expected_ids = [
+        row["failure_mode_id"]
+        for row in repository.fetch_all(
+            "SELECT failure_mode_id FROM failure_mode_profiles "
+            "JOIN failure_modes USING (failure_mode_id)"
+        )
+    ]
+    assert expected_ids
+    assert sorted(item["failure_mode_id"] for item in failures) == sorted(expected_ids)
     assert all(item["triggers"] for item in failures)
     assert all(item["symptoms"] for item in failures)
     assert all(item["diagnostics"] for item in failures)
     assert all(item["mitigations"] for item in failures)
-    assert sum(bool(item["scenario_ids"]) for item in failures) == 4
+    scenario_bound = {
+        row["failure_mode_id"]
+        for row in repository.fetch_all("SELECT failure_mode_id FROM failure_mode_scenarios")
+    }
+    assert {item["failure_mode_id"] for item in failures if item["scenario_ids"]} == scenario_bound
     assert all(item["source_ids"] and item["last_verified"] for item in failures)
     implementation_failure = next(item for item in failures if item["failure_mode_id"] == "FM025")
     assert implementation_failure["failure_scope"] == "implementation_specific"

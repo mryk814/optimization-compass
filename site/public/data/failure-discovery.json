@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.25",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -106,9 +106,9 @@
     {
       "canonical_route": "/failures?entry=case%3AEC019%3AM_BRANCH_CUT",
       "case_context": {
-        "constraints": "stop 1から4を各1回訪問し、$\\{\\pi_1,\\ldots,\\pi_4\\}=\\{1,2,3,4\\}$ とする。到着時刻は $e_i\\le a_i\\le l_i$、連続する訪問では $a_j\\ge a_i+t_{ij}$、depotへの帰着は30分以内とする。",
-        "decision_variables": "固定教材の訪問順序 $\\pi=(\\pi_1,\\ldots,\\pi_4)$ と各stopへの到着時刻 $a_i$。実務では車両割当 $z_{v,i}$、積載量、休憩、複数depotもdecisionへ加わるが、固定教材では1台・容量制約なしに固定する。",
-        "objective": "移動時間行列 $t_{ij}$ を使い、固定教材では $f(\\pi)=t_{0,\\pi_1}+\\sum_{k=1}^{3}t_{\\pi_k,\\pi_{k+1}}+t_{\\pi_4,0}$ を最小化する。時間窓違反はpenaltyへ落とさず、訪問可能性を決めるhard constraintとして扱う。",
+        "constraints": "訪問先1から4を各1回訪問し、$\\{\\pi_1,\\ldots,\\pi_4\\}=\\{1,2,3,4\\}$ とする。到着時刻は $e_i\\le a_i\\le l_i$、連続する訪問では $a_j\\ge a_i+t_{ij}$、拠点への帰着は30分以内とする。",
+        "decision_variables": "固定教材の訪問順序 $\\pi=(\\pi_1,\\ldots,\\pi_4)$ と各訪問先への到着時刻 $a_i$。実務では車両割当 $z_{v,i}$、積載量、休憩、複数の拠点も決定変数へ加わるが、固定教材では1台・容量制約なしに固定する。",
+        "objective": "移動時間行列 $t_{ij}$ を使い、固定教材では $f(\\pi)=t_{0,\\pi_1}+\\sum_{k=1}^{3}t_{\\pi_k,\\pi_{k+1}}+t_{\\pi_4,0}$ を最小化する。時間窓違反は罰則へ落とさず、訪問可能性を決める必ず守る制約として扱う。",
         "question": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。"
       },
       "case_id": "EC019",
@@ -156,8 +156,8 @@
     {
       "canonical_route": "/failures?entry=case%3AEC020%3AM_BFGS",
       "case_context": {
-        "constraints": "Direct Collocationの固定教材では、dynamics defect $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、path制約は各mesh／collocation pointでの障害物回避 $g_{obs}(x_k)\\le0$、状態bounds $x_k\\in[x_{min},x_{max}]$、control bounds $u_k\\in[u_{min},u_{max}]$ として課す。",
-        "decision_variables": "Direct Collocationでは、状態列（state sequence）$x_0,\\ldots,x_N$ と制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置き、必要なら終端時刻 $T$ も選ぶ。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作るため、同じtrajectoryでもdecision objectが異なる。",
+        "constraints": "Direct Collocationの固定教材では、動力学残差 $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、経路制約は各メッシュ点／選点での障害物回避 $g_{obs}(x_k)\\le0$、状態の上下限 $x_k\\in[x_{min},x_{max}]$、制御入力の上下限 $u_k\\in[u_{min},u_{max}]$ として課す。",
+        "decision_variables": "Direct Collocationでは、状態列（state sequence）$x_0,\\ldots,x_N$ と制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$ をメッシュ上の決定対象として同時に置き、必要なら終端時刻 $T$ も選ぶ。単一シューティング法（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作るため、同じ軌道でも決定対象が異なる。",
         "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
         "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
       },
@@ -211,10 +211,10 @@
     {
       "canonical_route": "/failures?entry=case%3AEC021%3AM_BFGS",
       "case_context": {
-        "constraints": "明示的なparameter制約は置かない。代わりにupdate回数 $k\\le K$、wall-timeまたはdata accessのbudget、early stopping、learning-rate schedule、weight decay、gradient clippingを事前に実験契約として固定する。",
-        "decision_variables": "各layerのweightとbiasをまとめた連続parameter $\\theta$。dataset split、入力特徴、label、model構造、batch sizeは比較中に固定し、optimizerのparameterへ混ぜない。",
-        "objective": "train mini-batch $B_k$ のcross-entropy $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ をstochastic gradientで改善する。採用判断はtrain lossだけでなく、固定したvalidation splitのloss、主要metric、wall time、peak memoryで行う。",
-        "question": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
+        "constraints": "明示的なパラメータ制約は置かない。代わりに更新回数 $k\\le K$、実時間またはデータ読み出し量の予算、早期終了、学習率のスケジュール、重み減衰、勾配クリッピングを事前に実験契約として固定する。",
+        "decision_variables": "各層の重みとバイアスをまとめた連続パラメータ $\\theta$。データセットの分割、入力特徴、ラベル、モデル構造、バッチサイズは比較中に固定し、オプティマイザのパラメータへ混ぜない。",
+        "objective": "学習用ミニバッチ $B_k$ の交差エントロピー $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ を確率的勾配で改善する。採用判断は学習損失だけでなく、固定した検証用データでの損失、主要な評価指標、実時間、ピークメモリで行う。",
+        "question": "固定した学習用・検証用データの分割と計算予算のもとで、ミニバッチを使う画像分類モデルのパラメータを更新し、未見データでの分類損失を改善したい。"
       },
       "case_id": "EC021",
       "confidence": "not_applicable",
@@ -265,16 +265,16 @@
         "S049",
         "S070"
       ],
-      "summary": "非常に高次元のparameterとmini-batchごとに変わるgradientに対し、full-batchの決定的gradientとline searchを前提にすると1 stepの計算・memory負荷が大きいため",
+      "summary": "非常に高次元のパラメータとミニバッチごとに変わる勾配に対し、全データを使う決定的な勾配と直線探索を前提にすると、1反復あたりの計算・メモリ負荷が大きいため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Train an image classifier with mini-batches",
-      "title_ja": "mini-batchで画像分類モデルを学習するではBFGS法を選ばない"
+      "title_ja": "ミニバッチで画像分類モデルを学習するではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3AEC025%3AM_DIFFERENTIAL_EVOLUTION",
       "case_context": {
-        "constraints": "scalar dynamics $x_{k+1}=x_k+u_k$、初期状態 $x_0=x_{current}$、状態bounds $-1.5\\le x_k\\le1.5$、入力bounds $-0.4\\le u_k\\le0.4$ を全4stepに課す。各周期では最初の入力 $u_0$ だけを適用し、次の計測値で再度解く。",
-        "decision_variables": "次の4周期の予測状態 $x_1,\\ldots,x_4$ と操作量 $u_0,\\ldots,u_3$。現在状態 $x_0=x_{current}$ と参照値 $r=1$ はdecisionではなく、制御周期ごとに更新するparameterである。",
+        "constraints": "スカラーの動力学 $x_{k+1}=x_k+u_k$、初期状態 $x_0=x_{current}$、状態の上下限 $-1.5\\le x_k\\le1.5$、入力の上下限 $-0.4\\le u_k\\le0.4$ を全4段に課す。各周期では最初の入力 $u_0$ だけを適用し、次の計測値で再度解く。",
+        "decision_variables": "次の4周期の予測状態 $x_1,\\ldots,x_4$ と操作量 $u_0,\\ldots,u_3$。現在状態 $x_0=x_{current}$ と参照値 $r=1$ は決定変数ではなく、制御周期ごとに更新するパラメータである。",
         "objective": "固定教材では $f(z)=\\sum_{k=1}^{4}(x_k-r)^2+0.1\\sum_{k=0}^{3}u_k^2$ を最小化する。第1項で参照追従、第2項で過大な操作を抑え、同じ正定値行列を周期間で再利用する。",
         "question": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。"
       },
@@ -371,10 +371,10 @@
     {
       "canonical_route": "/failures?entry=case%3AEC027%3AM_BFGS",
       "case_context": {
-        "constraints": "上下限と離散domainに加え、solver crash、非物理解、timeoutで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的なfailure領域とする。",
-        "decision_variables": "2つの連続設計parameter $u_1,u_2$ と、構成を選ぶ二値変数 $z$。simulationの収束設定やtimeoutは設計変数ではなく、評価契約として固定する。",
-        "objective": "simulationが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、failure種別とともに未評価またはinfeasibleとして保存する。",
-        "question": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+        "constraints": "上下限と離散的な定義域に加え、ソルバーの異常終了、非物理解、時間切れで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的な失敗領域とする。",
+        "decision_variables": "2つの連続設計パラメータ $u_1,u_2$ と、構成を選ぶ二値変数 $z$。シミュレーションの収束設定や時間切れの設定は設計変数ではなく、評価契約として固定する。",
+        "objective": "シミュレーションが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、失敗の種別とともに未評価または実行不可能として保存する。",
+        "question": "候補の一部が異常終了や時間切れになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
       },
       "case_id": "EC027",
       "confidence": "not_applicable",
@@ -418,7 +418,7 @@
         "S060",
         "S063"
       ],
-      "summary": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため",
+      "summary": "NaN、時間切れ、不連続な失敗境界を含む評価から、信頼できる局所的な勾配と直線探索を構成できないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Search a design space with failed simulations",
       "title_ja": "途中で失敗するシミュレーションから設計を探すではBFGS法を選ばない"
@@ -426,9 +426,9 @@
     {
       "canonical_route": "/failures?entry=case%3AEC028%3AM_DIFFERENTIAL_EVOLUTION",
       "case_context": {
-        "constraints": "固定教材に明示制約はない。square systemでは $F(x)=0$、過剰決定系では許容残差、rank、scale、観測誤差modelを区別する。",
+        "constraints": "固定教材に明示制約はない。未知数と方程式の数が等しい系では $F(x)=0$、過剰決定系では許容残差、階数、尺度、観測誤差モデルを区別する。",
         "decision_variables": "二つの未知量 $x=(x_1,x_2)$。固定教材では方程式 $F_1(x)=x_1^2+x_2-1$、$F_2(x)=x_1+x_2^2-1$ を同時に満たす点を探す。",
-        "objective": "本来の目標はscalar目的の最小化ではなく、残差vector $F(x)$ をゼロにすること。least-squaresへ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
+        "objective": "本来の目標はスカラー目的関数の最小化ではなく、残差ベクトル $F(x)$ をゼロにすること。最小二乗へ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
         "question": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
       },
       "case_id": "EC028",
@@ -467,7 +467,7 @@
         "S056",
         "S080"
       ],
-      "summary": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
+      "summary": "平方残差へスカラー化した大域的な発見的手法を先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
       "symptoms": [],
       "title_en": "Why Differential evolution is excluded for Solve equations as roots before scalar optimization",
       "title_ja": "方程式を最適化に変える前に求根として解くでは差分進化を選ばない"
@@ -475,10 +475,10 @@
     {
       "canonical_route": "/failures?entry=case%3AEC029%3AM_BFGS",
       "case_context": {
-        "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson defectを各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、path／bound制約はmesh／collocation pointで $|\\omega|\\le8$、$|u|\\le8$ とする。node feasibilityと区間再構成後のviolationは別の診断値として保存する。",
-        "decision_variables": "Direct Collocationでは角度・角速度のstate列 $x_0,\\ldots,x_N$ とtorque列 $u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置く。single shootingではtorque列だけを選び、state列はrolloutで作るため、同じpendulumでもdecision objectが異なる。",
-        "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。Theaterではobjective、terminal error、constraint residualを別々に読む。",
-        "question": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+        "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson残差を各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、経路制約と上下限はメッシュの選点で $|\\omega|\\le8$、$|u|\\le8$ とする。ノード上の実行可能性と、区間を再構成した後の違反は別の診断値として保存する。",
+        "decision_variables": "Direct Collocationでは角度・角速度の状態列 $x_0,\\ldots,x_N$ とトルク列 $u_0,\\ldots,u_{N-1}$ を、メッシュ上の決定変数として同時に置く。単一シューティングではトルク列だけを選び、状態列は前進シミュレーションで作るため、同じ振り子でも決定変数の組が異なる。",
+        "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。動きの再生では目的関数値、終端誤差、制約残差を別々に読む。",
+        "question": "下向きで静止した振り子を、トルク・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
       },
       "case_id": "EC029",
       "confidence": "not_applicable",
@@ -519,18 +519,18 @@
         "S050",
         "S102"
       ],
-      "summary": "dynamics defectとpath／terminal制約を平坦な無制約目的へ隠してしまう",
+      "summary": "動力学残差と経路／終端制約を、平坦な無制約目的へ隠してしまう",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Swing up a pendulum under constraints",
-      "title_ja": "pendulumを制約内で振り上げるではBFGS法を選ばない"
+      "title_ja": "振り子を制約内で振り上げるではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Abattery-operation-tradeoff%3AM_BFGS",
       "case_context": {
-        "constraints": "実務ではpower上下限、state of chargeの遷移・上下限、初期・終端条件を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、energy balanceやefficiencyは表さない。",
-        "decision_variables": "実務では時刻 $t$ ごとの充電power $p_t^+$、放電power $p_t^-$、state of charge $s_t$。固定教材の $x_1,x_2$ はこのscheduleを直接表さず、二つの運用傾向を読むための代理変数である。",
-        "objective": "実務では購入cost $f_1$ と、充放電量に基づくthroughput proxy $f_2$ を同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
-        "question": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
+        "constraints": "実務では電力の上下限、充電状態の遷移・上下限、初期・終端条件を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、エネルギー収支や充放電効率は表さない。",
+        "decision_variables": "実務では時刻 $t$ ごとの充電電力 $p_t^+$、放電電力 $p_t^-$、充電状態 $s_t$。固定教材の $x_1,x_2$ はこの運用計画を直接表さず、二つの運用傾向を読むための代理変数である。",
+        "objective": "実務では購入費用 $f_1$ と、充放電量に基づく累積充放電量の代理指標 $f_2$ を同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+        "question": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電量の小さい候補も並べて選びたい。"
       },
       "case_id": "battery-operation-tradeoff",
       "confidence": "not_applicable",
@@ -570,7 +570,7 @@
         "S055",
         "S068"
       ],
-      "summary": "二つの目的と状態制約をscalar化せずに通常のBFGSへ渡しても、選べるtrade-off集合や実行可能な時系列運用を得られないため",
+      "summary": "二つの目的と状態制約をスカラー化せずに通常のBFGSへ渡しても、選べるトレードオフの集合や実行可能な時系列運用を得られないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Explore cost-throughput trade-offs in battery operation",
       "title_ja": "蓄電池運用のコストと充放電量を両方見るではBFGS法を選ばない"
@@ -578,9 +578,9 @@
     {
       "canonical_route": "/failures?entry=case%3Abilevel-regularized-regression%3AM_BFGS",
       "case_context": {
-        "constraints": "innerは $w\\ge0$。exact complementarityでは、推定乗数 $\\mu\\ge0$ として stationarity $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、primal violation $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各 residual の $\\ell_\\infty$ norm $\\le10^{-8}$、innerは最大100 iteration、未収束候補はouter gradientへ渡さない。",
-        "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ でinner problemを解き、得られた $w^*(\\lambda)$ をvalidationへ渡す。",
-        "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的値だけでinnerの解品質を表さない。",
+        "constraints": "内側は $w\\ge0$。厳密な相補性では、推定乗数 $\\mu\\ge0$ として停留性 $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、主問題の制約違反 $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各残差の $\\ell_\\infty$ ノルム $\\le10^{-8}$、内側は最大100反復、未収束の候補は外側の勾配へ渡さない。",
+        "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ で内側問題を解き、得られた $w^*(\\lambda)$ を検証へ渡す。",
+        "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的関数値だけで内側の解の品質を表さない。",
         "question": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。"
       },
       "case_id": "bilevel-regularized-regression",
@@ -624,7 +624,7 @@
         "S056",
         "S064"
       ],
-      "summary": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない",
+      "summary": "制約なしの更新では非負制約とKKTの相補性を保てず、外側の目的関数値が下がっても内側の実行可能な停留点とは確認できない",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Tune regularization around a nonnegative regression solve",
       "title_ja": "正則化を選びながら非負回帰を解くではBFGS法を選ばない"
@@ -727,7 +727,7 @@
         "S055",
         "S064"
       ],
-      "summary": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す",
+      "summary": "非線形制約を無視すると目的値が低くても実行不可能な設計を返す",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探すではBFGS法を選ばない"
@@ -736,8 +736,8 @@
       "canonical_route": "/failures?entry=case%3Acourse-timetabling%3AM_GRADIENT_DESCENT",
       "case_context": {
         "constraints": "各授業を必要回数だけ配置する条件を $\\sum_{d,h}x_{c,d,h}=1$ とし、同じ教室・教員・受講グループの同時刻利用を $\\sum_cx_{c,d,h}\\le1$ で禁止する。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
-        "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
-        "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+        "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、ソルバーが変更する変数ではない。",
+        "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止は罰則へ落とさず、必ず守る制約として扱う。",
         "question": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。"
       },
       "case_id": "course-timetabling",
@@ -780,7 +780,7 @@
         "S055",
         "S079"
       ],
-      "summary": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
+      "summary": "0-1の割当と同時刻の重複禁止を連続的な勾配の更新だけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Build a course timetable with room and instructor constraints",
       "title_ja": "教室・担当・時間帯を守って時間割を組むでは最急降下法を選ばない"
@@ -788,10 +788,10 @@
     {
       "canonical_route": "/failures?entry=case%3Aecosystem-restoration-selection%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "実施cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、水域系から少なくとも1件 $x_A+x_B\\ge1$、陸域系から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-        "decision_variables": "再生候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は生物種、個体群、空間連結性をdecision variableへ変換せず、事前に監査した実施costと便益proxyを入力する。",
-        "objective": "固定教材では便益proxyの合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補を比較する教育用入力であり、生物多様性、個体群回復、将来の生態系サービスを保証する値ではない。",
-        "question": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+        "constraints": "実施費用 $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、水域系から少なくとも1件 $x_A+x_B\\ge1$、陸域系から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+        "decision_variables": "再生候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は生物種、個体群、空間連結性を決定変数へ変換せず、事前に監査した実施費用と便益の代理指標を入力する。",
+        "objective": "固定教材では便益の代理指標の合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補を比較する教育用入力であり、生物多様性、個体群回復、将来の生態系サービスを保証する値ではない。",
+        "question": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益の代理指標を最大化したい。"
       },
       "case_id": "ecosystem-restoration-selection",
       "confidence": "not_applicable",
@@ -828,7 +828,7 @@
         "S054",
         "S079"
       ],
-      "summary": "プロジェクトの採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "summary": "プロジェクトの採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Select ecosystem restoration projects under a budget",
       "title_ja": "予算内で生態系再生プロジェクトを選ぶでは最急降下法を選ばない"
@@ -836,9 +836,9 @@
     {
       "canonical_route": "/failures?entry=case%3Aemergency-shelter-selection%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "設営cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1拠点 $x_A+x_B\\ge1$、地域2から少なくとも1拠点 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-        "decision_variables": "候補地 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益scoreと設営費用を入力する。",
-        "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
+        "constraints": "設営費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1拠点 $x_A+x_B\\ge1$、地域2から少なくとも1拠点 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+        "decision_variables": "候補地 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益スコアと設営費用を入力する。",
+        "objective": "固定教材では便益スコアの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。スコアは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
         "question": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。"
       },
       "case_id": "emergency-shelter-selection",
@@ -876,7 +876,7 @@
         "S054",
         "S079"
       ],
-      "summary": "拠点を開く／開かない二値判断と地域配置の論理制約を連続gradient updateだけでは保持できないため",
+      "summary": "拠点を開く／開かない二値判断と地域配置の論理制約を連続的な勾配による更新だけでは保持できないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Select temporary support sites under a budget",
       "title_ja": "予算内で臨時支援拠点を選ぶでは最急降下法を選ばない"
@@ -884,10 +884,10 @@
     {
       "canonical_route": "/failures?entry=case%3Aenergy-cvar-procurement%3AM_NELDER_MEAD",
       "case_context": {
-        "constraints": "比率のsimplex制約 $\\sum_iw_i=1$、$w_i\\ge0$ と各枠の上限 $w_i\\le0.7$。固定教材では送電制約、時間結合、最小購入量、需給不一致penaltyを入れず、実務適用時は別の制約として追加する。",
+        "constraints": "比率の単体制約 $\\sum_iw_i=1$、$w_i\\ge0$ と各枠の上限 $w_i\\le0.7$。固定教材では送電制約、時間結合、最小購入量、需給不一致の罰則を入れず、実務適用時は別の制約として追加する。",
         "decision_variables": "各調達枠へ割り当てる需要比率 $w=(w_1,w_2,w_3)$。固定教材は需要量を1へ正規化し、絶対電力量と比率を混同しない。",
-        "objective": "scenario $s$ の単位費用を $L_s(w)=p_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{6}\\sum_sL_s(w)+0.4\\,CVaR_{0.8}(L(w))$ を最小化する。CVaRは列挙scenario上のempirical tailであり、将来価格への確率保証ではない。",
-        "question": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+        "objective": "シナリオ $s$ の単位費用を $L_s(w)=p_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{6}\\sum_sL_s(w)+0.4\\,CVaR_{0.8}(L(w))$ を最小化する。CVaRは列挙したシナリオ上の経験分布の裾であり、将来価格への確率保証ではない。",
+        "question": "複数の調達枠へ比率を配分し、平均調達費用だけでなく、価格シナリオの悪い側の裾の費用も抑えたい。"
       },
       "case_id": "energy-cvar-procurement",
       "confidence": "not_applicable",
@@ -925,18 +925,18 @@
         "S055",
         "S103"
       ],
-      "summary": "simplex・供給上限とscenarioごとのtail costを明示せず探索すると、低い平均costでも調達制約やtailの根拠を確認できないため",
+      "summary": "単体・供給上限とシナリオごとの裾の費用を明示せずに探索すると、平均費用が低くても調達制約や裾の費用の根拠を確認できないため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Procure electricity while controlling scenario tail cost",
-      "title_ja": "価格scenarioのtail costを抑えて電力を調達するではNelder–Mead単体法を選ばない"
+      "title_ja": "価格シナリオの裾の費用を抑えて電力を調達するではNelder–Mead単体法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Aformulation-experiment-tuning%3AM_BFGS",
       "case_context": {
-        "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗やprotocol逸脱は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
-        "decision_variables": "次に試す実験条件 $x$。原料lot、測定系、前処理、実験日、operatorは記録する入力またはblockであり、decision variableと混同しない。",
-        "objective": "1回の実験後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
-        "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+        "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗や実験手順からの逸脱は大きな目的関数値へ置換せず、状態と消費した予算を別に記録する。",
+        "decision_variables": "次に試す実験条件 $x$。原料ロット、測定系、前処理、実験日、作業者は記録する入力またはブロックであり、決定変数と混同しない。",
+        "objective": "1回の実験後にだけ観測できる品質の損失 $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
+        "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質の損失が小さい領域へ絞りたい。"
       },
       "case_id": "formulation-experiment-tuning",
       "confidence": "not_applicable",
@@ -978,7 +978,7 @@
         "S059",
         "S075"
       ],
-      "summary": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため",
+      "summary": "品質指標が実験後にだけ得られ、再現性のある勾配を直接観測できないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Tune formulation settings with a limited experiment budget",
       "title_ja": "少ない実験で配合条件を絞るではBFGS法を選ばない"
@@ -1034,7 +1034,7 @@
         "S059",
         "S075"
       ],
-      "summary": "観測値しか得られないblack-boxで、信頼できるgradientを前提にすると更新根拠を確認できない",
+      "summary": "観測値しか得られないブラックボックスで、信頼できる勾配を前提にすると更新根拠を確認できない",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Hyperparameter search",
       "title_ja": "高価な実験の設定を探すではBFGS法を選ばない"
@@ -1042,10 +1042,10 @@
     {
       "canonical_route": "/failures?entry=case%3Airrigation-retrofit-selection%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、北系統から少なくとも1区画 $x_A+x_B\\ge1$、南系統から少なくとも1区画 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-        "decision_variables": "圃場区画 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は作物、生育段階、土壌水分をdecision variableへ変換せず、事前に監査した更新costと節水proxyを入力する。",
-        "objective": "固定教材では節水proxyの合計 $f(x)=9x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
-        "question": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+        "constraints": "更新費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、北系統から少なくとも1区画 $x_A+x_B\\ge1$、南系統から少なくとも1区画 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+        "decision_variables": "圃場区画 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は作物、生育段階、土壌水分を決定変数へ変換せず、事前に監査した更新費用と節水の代理指標を入力する。",
+        "objective": "固定教材では節水の代理指標の合計 $f(x)=9x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
+        "question": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水の代理指標を最大化したい。"
       },
       "case_id": "irrigation-retrofit-selection",
       "confidence": "not_applicable",
@@ -1082,7 +1082,7 @@
         "S054",
         "S079"
       ],
-      "summary": "設備更新の採否と系統ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "summary": "設備更新の採否と系統ごとの最低配置を連続的な勾配による更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Select irrigation retrofits under a capital budget",
       "title_ja": "予算内で圃場の灌漑設備を更新するでは最急降下法を選ばない"
@@ -1090,10 +1090,10 @@
     {
       "canonical_route": "/failures?entry=case%3Alaser-process-tuning%3AM_BFGS",
       "case_context": {
-        "constraints": "各設定の装置上限・下限を守り、固定教材では $-3\\le x\\le3$、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+        "constraints": "各設定の装置上限・下限を守り、固定教材では $-3\\le x\\le3$、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、状態と消費した予算を別に記録する。",
         "decision_variables": "次に試す加工条件 $x$。実務では3個の連続設定を別々に保持し、固定教材だけが表示のために1次元へ縮約する。",
-        "objective": "1回の試作後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とする。",
-        "question": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+        "objective": "1回の試作後にだけ観測できる品質損失 $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とする。",
+        "question": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質損失が小さい領域へ絞りたい。"
       },
       "case_id": "laser-process-tuning",
       "confidence": "not_applicable",
@@ -1135,7 +1135,7 @@
         "S059",
         "S075"
       ],
-      "summary": "実験観測だけから信頼できるgradientを得られず、noiseを含む差分を勾配として使うと更新根拠を確認できないため",
+      "summary": "実験観測だけから信頼できる勾配を得られず、ノイズを含む差分を勾配として使うと更新根拠を確認できないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Tune laser process settings with a limited trial budget",
       "title_ja": "少ない試作でレーザー加工条件を絞るではBFGS法を選ばない"
@@ -1143,9 +1143,9 @@
     {
       "canonical_route": "/failures?entry=case%3Amanufacturing-process-window%3AM_BFGS",
       "case_context": {
-        "constraints": "各工程条件の装置・安全上の上下限と、試作回数のbudgetを守る。固定教材では $-3\\le x\\le3$、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
+        "constraints": "各工程条件の装置・安全上の上下限と、試作回数の予算を守る。固定教材では $-3\\le x\\le3$、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
         "decision_variables": "実務では工程温度 $T$、送り速度 $v$、保持時間 $t$。固定教材ではこの組を1個の無次元化した代理変数 $x$ へ写像し、実際の単位や装置設定とは同一視しない。",
-        "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 $f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をblack-boxとして観測する。",
+        "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 $f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックスとして観測する。",
         "question": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。"
       },
       "case_id": "manufacturing-process-window",
@@ -1189,7 +1189,7 @@
         "S056",
         "S059"
       ],
-      "summary": "試作結果だけを観測する高価なblack-boxに対し、信頼できるgradientとline searchを前提にすると追加試作の根拠を説明できないため",
+      "summary": "試作結果だけを観測する高価なブラックボックスに対し、信頼できる勾配と直線探索を前提にすると、追加試作の根拠を説明できないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Tune manufacturing conditions with expensive experiments",
       "title_ja": "高価な製造実験から工程条件を探すではBFGS法を選ばない"
@@ -1197,10 +1197,10 @@
     {
       "canonical_route": "/failures?entry=case%3Amobile-clinic-outreach-selection%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "運営cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、地域群1から少なくとも1枠 $x_A+x_B\\ge1$、地域群2から少なくとも1枠 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
-        "decision_variables": "開催候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、solverが変更するdecision variableではない。",
-        "objective": "固定教材ではaccess proxyの合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
-        "question": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
+        "constraints": "運営費用 $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、地域群1から少なくとも1枠 $x_A+x_B\\ge1$、地域群2から少なくとも1枠 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+        "decision_variables": "開催候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、ソルバーが変更する決定変数ではない。",
+        "objective": "固定教材ではアクセスの代理指標の合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。代理指標は候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
+        "question": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのアクセスの代理指標を最大化したい。"
       },
       "case_id": "mobile-clinic-outreach-selection",
       "confidence": "not_applicable",
@@ -1237,7 +1237,7 @@
         "S054",
         "S079"
       ],
-      "summary": "開催候補の採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため",
+      "summary": "開催候補の採否と地域群ごとの最低配置を連続的な勾配更新だけでは保持できず、丸め後の予算超過や未配置を防げないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Select mobile clinic outreach sessions under a budget",
       "title_ja": "予算内で巡回健診の開催候補を選ぶでは最急降下法を選ばない"
@@ -1245,10 +1245,10 @@
     {
       "canonical_route": "/failures?entry=case%3Amulti-fidelity-simulator%3AM_NELDER_MEAD",
       "case_context": {
-        "constraints": "設計変数は $-3\\le x\\le3$。成功した call の cost 合計を $B=36$（high-fidelity-equivalent では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は failure、high fidelity で $x<-2.2$ は timeout/censored として status と cost だけを ledger に残し、目的値の大きな値へ置換しない。",
-        "decision_variables": "設計変数 x と simulator call ごとの fidelity ℓ。固定教材では $x\\in[-3,3]$、low fidelity の cost を $c_L=1$、high fidelity の cost を $c_H=12$ とする。",
-        "objective": "高 fidelity の真の目的 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。low fidelity は $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。low fidelity の順位が high fidelity と一致する保証は置かない。",
-        "question": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+        "constraints": "設計変数は $-3\\le x\\le3$。成功した呼び出しの費用合計を $B=36$（高精度モデル換算では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は失敗、高精度モデルで $x<-2.2$ は時間切れ・打ち切りとして状態と費用だけを記録に残し、目的関数値の大きな値へ置換しない。",
+        "decision_variables": "設計変数 x と、シミュレータ呼び出しごとの精度 ℓ。固定教材では $x\\in[-3,3]$、低精度モデルの費用を $c_L=1$、高精度モデルの費用を $c_H=12$ とする。",
+        "objective": "高精度モデルの真の目的関数 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。低精度モデルは $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。低精度モデルの順位が高精度モデルと一致する保証は置かない。",
+        "question": "低精度の安価な近似と高精度の高価なシミュレータを使い分け、限られた評価予算で高精度モデル上の候補を改善したい。"
       },
       "case_id": "multi-fidelity-simulator",
       "confidence": "not_applicable",
@@ -1293,18 +1293,18 @@
         "S069",
         "S075"
       ],
-      "summary": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
+      "summary": "精度ごとの評価費用、失敗・打ち切りの状態、ノイズを評価の方針として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Allocate a budget across low- and high-fidelity simulation",
-      "title_ja": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+      "title_ja": "低精度／高精度のシミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Anelder-mead-initial-simplex%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance $\\tau=10^{-4}$、scale $s=0.8$、budget $B=80$を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは $s=0.5$、$B=160$、shrink failure sliceは $s=0.8$、$B=80$を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
-        "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
-        "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
-        "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+        "constraints": "固定教材に明示制約はない。二次関数での2回の実行はNelder–Mead係数、単体の許容誤差 $\\tau=10^{-4}$、スケール $s=0.8$、評価予算 $B=80$を固定し、初期単体の位置だけを変える。Rosenbrockの標準実行は $s=0.5$、$B=160$、縮小による失敗例の切り出しは $s=0.8$、$B=80$を使うため、この2回の実行を初期位置だけの一因子比較として扱わない。",
+        "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、初期単体のスケール、反射・拡大・収縮・縮小係数は決定変数ではなく、実行前に固定して比較する実験条件である。",
+        "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知の参照値であり、最適化器へ勾配や解として渡さない。二次関数の動きの再生は同じ更新則を単純な等高線で先に読む対照教材として使う。",
+        "question": "勾配を取得できない2変数の較正の目的関数をNelder–Meadで局所探索するとき、初期単体を変えた結果から経路依存と停止の妥当性を診断したい。"
       },
       "case_id": "nelder-mead-initial-simplex",
       "confidence": "not_applicable",
@@ -1343,18 +1343,18 @@
         "S056",
         "S063"
       ],
-      "summary": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため",
+      "summary": "この評価契約は目的値だけを返し、信頼できる勾配や刻み幅選択の根拠を提供しないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Diagnose local-search sensitivity from the initial simplex",
-      "title_ja": "初期simplexで局所探索の感度を見抜くでは最急降下法を選ばない"
+      "title_ja": "初期単体で局所探索の感度を見抜くでは最急降下法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Anetwork-upgrade-portfolio%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
-        "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、solverが変更する変数ではない。",
-        "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
-        "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+        "constraints": "更新費用 $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
+        "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、ソルバーが変更する変数ではない。",
+        "objective": "固定教材では便益スコアの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。スコアは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
+        "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益スコアを最大化したい。"
       },
       "case_id": "network-upgrade-portfolio",
       "confidence": "not_applicable",
@@ -1391,7 +1391,7 @@
         "S054",
         "S079"
       ],
-      "summary": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため",
+      "summary": "設備を更新する／しないという二値判断と依存関係を連続的な勾配による更新だけでは保持できないため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Select network upgrades under a capital budget",
       "title_ja": "予算内で通信設備の更新候補を選ぶでは最急降下法を選ばない"
@@ -1399,10 +1399,10 @@
     {
       "canonical_route": "/failures?entry=case%3Aportfolio-allocation%3AM_NELDER_MEAD",
       "case_context": {
-        "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
-        "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
-        "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
-        "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
+        "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では売買回転率、最低売買単位、税、流動性、取引費用を入れない。",
+        "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、リスク回避係数 $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
+        "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散によるリスク、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
+        "question": "4資産へ全額を配分し、期待収益と共分散によるリスク、集中上限を明示して比率を決めたい。分布の裾の損失やシナリオに基づく不確実性は、このCaseでは目的に入れない。"
       },
       "case_id": "portfolio-allocation",
       "confidence": "not_applicable",
@@ -1443,7 +1443,7 @@
         "S010",
         "S055"
       ],
-      "summary": "共分散の二次構造とsimplex・集中上限をnativeに使わず、可行性や凸大域解の根拠を確認しにくいため",
+      "summary": "共分散の二次構造と単体制約・集中上限をそのまま活用せず、可行性や凸大域解の根拠を確認しにくいため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation",
       "title_ja": "平均・共分散でポートフォリオを配分するではNelder–Mead単体法を選ばない"
@@ -1451,10 +1451,10 @@
     {
       "canonical_route": "/failures?entry=case%3Aportfolio-cvar-allocation%3AM_NELDER_MEAD",
       "case_context": {
-        "constraints": "空売りを禁止し、simplex制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
-        "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
-        "objective": "scenario $s$ のlossを $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
-        "question": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+        "constraints": "空売りを禁止し、単体制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・売買回転率の制約を入れず、実務では別途追加して再評価する。",
+        "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個の学習用の収益率シナリオから配分を決め、検証用に取り分けた4個のシナリオでは解を再評価する。",
+        "objective": "シナリオ $s$ の損失を $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
+        "question": "平均的な収益を保ちながら、複数の収益率シナリオで悪い側の裾の損失を抑えて資産比率を決めたい。"
       },
       "case_id": "portfolio-cvar-allocation",
       "confidence": "not_applicable",
@@ -1487,18 +1487,18 @@
         "S055",
         "S103"
       ],
-      "summary": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため",
+      "summary": "シナリオごとの損失とCVaRの裾、単体制約を更新・診断の契約として明示しにくいため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation with CVaR",
-      "title_ja": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
+      "title_ja": "シナリオの裾リスクを抑えて配分するではNelder–Mead単体法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Aproduction-mix-planning%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小lot $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
-        "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、machine能力、材料上限、単位利益は入力であり、solverが変更する変数ではない。",
+        "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小ロット $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
+        "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、機械の能力、材料上限、単位利益は入力であり、ソルバーが変更する変数ではない。",
         "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $f(x)=8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
-        "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+        "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何バッチ作るかを週間単位で決めたい。"
       },
       "case_id": "production-mix-planning",
       "confidence": "not_applicable",
@@ -1534,7 +1534,7 @@
         "S016",
         "S021"
       ],
-      "summary": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため",
+      "summary": "段取りの0-1変数と生産量を結ぶ必ず守る制約を連続の勾配更新だけでは保持できず、丸め後の計画が能力や最小ロットを破り得るため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Plan a weekly production mix with setup costs",
       "title_ja": "段取り費を含む週間生産計画を組むでは最急降下法を選ばない"
@@ -1543,8 +1543,8 @@
       "canonical_route": "/failures?entry=case%3Apublic-infrastructure-selection%3AM_NELDER_MEAD",
       "case_context": {
         "constraints": "事業費 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_C+3x_D\\le7$ と $x_i\\in\\{0,1\\}$。実務では地域下限、依存関係、同時実施不可などを別制約として追加する。",
-        "decision_variables": "候補事業 $i$ を採択するとき1、採択しないとき0のbinary variable $x_i$。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
-        "objective": "事前に定義した便益score $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_C+5x_D$ を最大化するが、scoreを人命・被害額・確率と同一視しない。",
+        "decision_variables": "候補事業 $i$ を採択するとき1、採択しないとき0の二値変数 $x_i$。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
+        "objective": "事前に定義した便益スコア $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_C+5x_D$ を最大化するが、スコアを人命・被害額・確率と同一視しない。",
         "question": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。"
       },
       "case_id": "public-infrastructure-selection",
@@ -1584,7 +1584,7 @@
         "S054",
         "S079"
       ],
-      "summary": "事業の採否はbinaryで、予算・依存関係と最適性gapを連続simplexの更新として扱えないため",
+      "summary": "事業の採否は二値で、予算・依存関係と最適性ギャップを連続空間での単体の更新として扱えないため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Select resilience projects under a fixed budget",
       "title_ja": "限られた予算で防災事業を選ぶではNelder–Mead単体法を選ばない"
@@ -1592,10 +1592,10 @@
     {
       "canonical_route": "/failures?entry=case%3Ashape-diffuser%3AM_SIMP_TOPOLOGY",
       "case_context": {
-        "constraints": "parameter boundsに加え、geometry最小gap $g_{gap}>0.4$、自己交差なし、mesh最小quality $q_{mesh}\\ge0.2$、反転cell数0、state residual $\\lVert R(u,q)\\rVert\\le10^{-6}$、fixed topologyを別々に検査します。",
-        "decision_variables": "optimizerが直接更新するのは3つのparameter $q$ です。geometry座標、mesh node、state $u$ はparameterから生成またはsolveされる従属量です。level-setやdensity fieldは接続変更を許せますが、このCaseのparameterizationは入口1つ・出口1つのtopologyを固定します。",
-        "objective": "低costな決定論的state proxyとして $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式はlayer分離を学ぶ教材であり、CFDのpressure lossではありません。",
-        "question": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+        "constraints": "パラメータの上下限に加え、形状の最小間隔 $g_{gap}>0.4$、自己交差なし、メッシュの最小品質 $q_{mesh}\\ge0.2$、反転セル数0、状態残差 $\\lVert R(u,q)\\rVert\\le10^{-6}$、トポロジー固定を別々に検査します。",
+        "decision_variables": "最適化手法が直接更新するのは3つのパラメータ $q$ です。形状の座標、メッシュのノード、状態変数 $u$ はパラメータから生成または求解される従属量です。レベルセットや密度場は接続変更を許せますが、この事例のパラメータ化は入口1つ・出口1つのトポロジーを固定します。",
+        "objective": "計算費用の低い決定論的な状態の代理指標として $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式は層の分離を学ぶ教材であり、CFDの圧力損失ではありません。",
+        "question": "入口を固定した2Dディフューザで、自己交差やメッシュの反転を避けながら壁面形状を更新し、縮約した圧力損失の代理指標を下げたい。"
       },
       "case_id": "shape-diffuser",
       "confidence": "not_applicable",
@@ -1633,17 +1633,17 @@
         "S105",
         "S106"
       ],
-      "summary": "このCaseは接続を変えないfixed-topology shape problemであり、density fieldによるtopology changeは別の設計空間だから",
+      "summary": "この事例は接続を変えないトポロジー固定の形状問題であり、密度場によるトポロジー変化は別の設計空間だから",
       "symptoms": [],
       "title_en": "Why SIMP density method is excluded for Update a two-dimensional diffuser wall shape",
-      "title_ja": "2D diffuserの壁面shapeを更新するではSIMP密度法を選ばない"
+      "title_ja": "2Dディフューザの壁面形状を更新するではSIMP密度法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Ashift-scheduling%3AM_GRADIENT_DESCENT",
       "case_context": {
         "constraints": "各勤務帯の必要人数を $\\sum_sx_{s,d,h}\\ge r_{d,h}$、1日1勤務を $\\sum_hx_{s,d,h}\\le1$、資格のない割当を $x_{s,d,h}=0$ とする。夜勤後の翌日日勤を $x_{s,d,night}+x_{s,d+1,day}\\le1$ とし、各スタッフの勤務数を $u_{min}\\le\\sum_{d,h}x_{s,d,h}\\le u_{max}$ で挟む。",
-        "decision_variables": "スタッフ $s$、日 $d$、勤務帯 $h$ ごとの二値変数 $x_{s,d,h}$ と、勤務数の最大値・最小値 $u_{max},u_{min}$。需要、資格、希望、休暇申請は入力であり、solverが変更するdecision variableではない。",
-        "objective": "希望適合度 $p_{s,d,h}$ を増やしながら勤務数の幅を抑えるため、固定教材では $f(x,u)=-10\\sum_{s,d,h}p_{s,d,h}x_{s,d,h}+(u_{max}-u_{min})$ を最小化する。必要人数や資格はpenaltyへ落とさずhard constraintとして扱う。",
+        "decision_variables": "スタッフ $s$、日 $d$、勤務帯 $h$ ごとの二値変数 $x_{s,d,h}$ と、勤務数の最大値・最小値 $u_{max},u_{min}$。需要、資格、希望、休暇申請は入力であり、ソルバーが変更する決定変数ではない。",
+        "objective": "希望適合度 $p_{s,d,h}$ を増やしながら勤務数の幅を抑えるため、固定教材では $f(x,u)=-10\\sum_{s,d,h}p_{s,d,h}x_{s,d,h}+(u_{max}-u_{min})$ を最小化する。必要人数や資格は罰則へ落とさず必ず守る制約として扱う。",
         "question": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。"
       },
       "case_id": "shift-scheduling",
@@ -1686,7 +1686,7 @@
         "S055",
         "S079"
       ],
-      "summary": "0-1の割当と論理制約を連続gradient updateだけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため",
+      "summary": "0-1の割当と論理制約を連続の勾配更新だけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため",
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Shift scheduling",
       "title_ja": "必要人数と希望を両立してシフトを組むでは最急降下法を選ばない"
@@ -1694,10 +1694,10 @@
     {
       "canonical_route": "/failures?entry=case%3Aso3-attitude-alignment%3AM_BFGS",
       "case_context": {
-        "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
-        "decision_variables": "body frameからreference frameへのrotation matrix $R$。固定教材はidentityから開始し、target axis $(1,2,3)/\\sqrt{14}$、angle $2.8$ radのrotationへ12 updateで近づける。",
-        "objective": "三つのnoiseless basis correspondenceをまとめたtarget $R_\\star$ に対し、chordal loss $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価ではgeodesic residual $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
-        "question": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+        "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。射影による更新は周囲の空間の候補をQRでSO(3)へ戻し、リーマン更新は歪対称なリー代数の一歩を指数写像で戻す。どちらも実行可能な反復点を作るが同じ更新ではない。",
+        "decision_variables": "物体座標系から基準座標系への回転行列 $R$。固定教材は単位行列から開始し、目標の回転軸 $(1,2,3)/\\sqrt{14}$、角度 $2.8$ radの回転へ12回の更新で近づける。",
+        "objective": "三つのノイズなしの基底対応をまとめた目標 $R_\\star$ に対し、弦距離の損失（chordal loss） $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価では測地距離の残差 $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
+        "question": "三つの固定ベクトル対応から、回転角がπに近い目標姿勢へ回転行列を合わせたい。"
       },
       "case_id": "so3-attitude-alignment",
       "confidence": "not_applicable",
@@ -1737,17 +1737,17 @@
         "S071",
         "S107"
       ],
-      "summary": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため",
+      "summary": "9個の行列成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のパラメータ化または制約処理なしには回転を表さないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Align a near-pi attitude on SO(3)",
-      "title_ja": "SO(3)上でnear-piのattitudeを合わせるではBFGS法を選ばない"
+      "title_ja": "SO(3)上で回転角がπに近い姿勢を合わせるではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Atopology-cantilever%3AM_BFGS",
       "case_context": {
-        "constraints": "体積率 $\\frac{1}{32}\\sum_e\\rho_e\\le0.5$、密度bounds $0.001\\le\\rho_e\\le1$、状態方程式 $K(\\rho)u=F$ を課す。固定教材ではfilter半径1.5要素を使い、更新前後の体積率を記録する。",
-        "decision_variables": "各有限要素の設計密度 $\\rho_e$。変位field $u$ はdecisionとして自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 $K(\\rho)u=F$ を解いて得るderived stateである。",
-        "objective": "compliance $f(\\rho)=c(\\rho)=F^\\mathsf{T}u$ を最小化する。SIMPでは要素剛性を $E_e=E_{min}+\\rho_e^p(E_0-E_{min})$ と補間し、中間密度をpenalizeしながら荷重経路を残す。",
+        "constraints": "体積率 $\\frac{1}{32}\\sum_e\\rho_e\\le0.5$、密度の上下限 $0.001\\le\\rho_e\\le1$、状態方程式 $K(\\rho)u=F$ を課す。固定教材ではフィルタ半径1.5要素を使い、更新前後の体積率を記録する。",
+        "decision_variables": "各有限要素の設計密度 $\\rho_e$。変位場 $u$ は決定変数として自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 $K(\\rho)u=F$ を解いて得る従属した状態変数である。",
+        "objective": "コンプライアンス $f(\\rho)=c(\\rho)=F^\\mathsf{T}u$ を最小化する。SIMPでは要素剛性を $E_e=E_{min}+\\rho_e^p(E_0-E_{min})$ と補間し、中間密度に罰則をかけながら荷重経路を残す。",
         "question": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。"
       },
       "case_id": "topology-cantilever",
@@ -1791,7 +1791,7 @@
         "S100",
         "S101"
       ],
-      "summary": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため",
+      "summary": "密度場、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くするではBFGS法を選ばない"
@@ -1799,10 +1799,10 @@
     {
       "canonical_route": "/failures?entry=case%3Atraffic-signal-tradeoff%3AM_BFGS",
       "case_context": {
-        "constraints": "実務ではcycle長、最小green、歩行者横断時間、交差点間offsetの上下限を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、現示順序、queue spillback、歩行者制約は表さない。",
-        "decision_variables": "実務では交差点 $j$ ごとのcycle長 $c_j$、green split $g_j$、offset $o_j$。固定教材の $x_1,x_2$ は実際の秒数や現示を直接表さず、二つのtiming傾向を読むための代理変数である。",
-        "objective": "実務では対象時間帯の平均遅れ $f_1$ と車両1台あたり停止回数 $f_2$ を交通simulationで評価し、同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
-        "question": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+        "constraints": "実務ではサイクル長、最小青時間、歩行者横断時間、交差点間オフセットの上下限を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、現示順序、上流への待ち行列の延伸、歩行者制約は表さない。",
+        "decision_variables": "実務では交差点 $j$ ごとのサイクル長 $c_j$、青時間の配分 $g_j$、オフセット $o_j$。固定教材の $x_1,x_2$ は実際の秒数や現示を直接表さず、二つの時間設定の傾向を読むための代理変数である。",
+        "objective": "実務では対象時間帯の平均遅れ $f_1$ と車両1台あたり停止回数 $f_2$ を交通シミュレーションで評価し、同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+        "question": "交差点群の信号の時間設定を、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
       },
       "case_id": "traffic-signal-tradeoff",
       "confidence": "not_applicable",
@@ -1841,7 +1841,7 @@
         "S039",
         "S068"
       ],
-      "summary": "二つのsimulation目的をscalar化せず、信頼できるgradientもないまま通常のBFGSへ渡しても、選べるtrade-off集合を得られないため",
+      "summary": "二つのシミュレーション目的をスカラー化せず、信頼できる勾配もないまま通常のBFGSへ渡しても、選べるトレードオフの集合を得られないため",
       "symptoms": [],
       "title_en": "Why BFGS is excluded for Explore delay-stop trade-offs in traffic signal timing",
       "title_ja": "信号制御の遅れと停止回数を両方見るではBFGS法を選ばない"
@@ -1860,7 +1860,7 @@
       "failure_mode_id": "FM003",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_BFGS",
         "M_NEWTON",
@@ -1902,7 +1902,7 @@
       "failure_mode_id": "FM007",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_BFGS",
         "M_CMA_ES",
@@ -1947,7 +1947,7 @@
       "failure_mode_id": "FM009",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_GAUSS_NEWTON",
         "M_INTERIOR_POINT_NLP",
@@ -1991,7 +1991,7 @@
       "failure_mode_id": "FM011",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_ACTIVE_SET",
         "M_INTERIOR_POINT_NLP",
@@ -2036,7 +2036,7 @@
         "F_CONSTRAINT_CLASS"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [],
       "mitigations": [
         {
@@ -2076,7 +2076,7 @@
       "failure_mode_id": "FM015",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_COBYLA",
         "M_INTERIOR_POINT_NLP",
@@ -2119,7 +2119,7 @@
       "failure_mode_id": "FM016",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_BFGS",
         "M_INTERIOR_POINT_NLP",
@@ -2162,7 +2162,7 @@
       "failure_mode_id": "FM022",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_COBYQA",
         "M_MADS",
@@ -2209,7 +2209,7 @@
         "F_EVALUATION_RELIABILITY"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [],
       "mitigations": [
         {
@@ -2315,7 +2315,7 @@
         "I_TENSORFLOW_OPTIM",
         "I_TOPOPT_88_MATLAB"
       ],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [],
       "mitigations": [
         {
@@ -2355,7 +2355,7 @@
       "failure_mode_id": "FM033",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_BAYESIAN_OPT_GP",
         "M_SMAC_RF"
@@ -2397,7 +2397,7 @@
       "failure_mode_id": "FM037",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-26",
+      "last_verified": "2026-10-14",
       "method_ids": [
         "M_CMA_ES",
         "M_GENETIC_ALGORITHM",
@@ -2427,7 +2427,7 @@
       "title_ja": "population多様性喪失"
     }
   ],
-  "generated_at": "2026-07-26T00:00:00Z",
+  "generated_at": "2026-10-14T00:00:00Z",
   "summary": {
     "case_exclusion_count": 36,
     "entries_with_scenarios": 40,

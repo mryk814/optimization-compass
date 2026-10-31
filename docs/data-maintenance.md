@@ -36,7 +36,7 @@ validatorへversionを重複記載しません。次で2回検証済みtreeを�
 uv run python scripts/rebuild_dataset.py --stage --output .release-stage
 ```
 
-このコマンドは公開済みv0.2.0のversion/hashを確認してstaging領域だけに構築します。
+このコマンドはrelease authorityで指定されたbaseのversion/hashを確認してstaging領域だけに構築します。
 atlas metadata migration/seedは監査可能な入力ですが、runtime authorityはreleased SQLiteです。
 新versionを構築するときは `build_staged_release(..., target_version=..., release_date=...)`
 がversion history/model revisionを含む全artifactを同じidentityで生成します。publish gateはdata
@@ -53,14 +53,14 @@ SQLite / JSON / JSONL / CSV / ZIP / XLSX / report / runtime DB / site JSONが同
 通常の公開済みbase検証は `verify_database(..., require_atlas=False)`、staged release gateは
 `require_atlas=True` とし、Atlas tableが全て欠落してもbase datasetへ誤判定しません。
 
-authorityの境界と明示状態の意味は [metadata-responsibilities.md](metadata-responsibilities.md)
+authorityの境界と明示状態の意味は [architecture.md](architecture.md#authority-boundaries)
 を参照してください。
 
 ## Git tag and GitHub Release
 
-repository内のatomic publishと全検証完了後にのみ `dataset-v<version>` tagをmainの検証済みcommitへ
-付けます。GitHub Releaseにはversioned SQLite、JSON、JSONL、CSV ZIP、XLSX、schema、report、
-manifest、release identityを添付し、manifestのSHA-256をchecksum authorityとして扱います。
+repository内のatomic publishと全検証完了後にのみ `v<version>` tagをmainの検証済みcommitへ
+付けます。GitHub Releaseにはrepository外で準備した完全bundleを添付し、catalogに記録したSHA-256を
+checksum authorityとして扱います。手順は [ADR 0014](adr/0014-release-retention-and-external-bundles.md) を参照してください。
 
 公開前の権利・配布・Pages確認は
 [public-release-checklist.md](public-release-checklist.md) を使用してください。

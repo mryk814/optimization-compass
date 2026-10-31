@@ -24,32 +24,37 @@ for (const width of [1280, 375, 390]) {
         await page.screenshot({ path: `../output/playwright/bnb-v6-initial-eight-${width}.png` });
       }
       for (const name of advanced ? ["A", "B", "G"] : ["A", "B"]) await region.getByRole("checkbox", { name: new RegExp(`^${name} `) }).check();
-      await region.getByRole("button", { name: "Aを入れる／入れないで比べる" }).click();
+      await region.getByRole("button", { name: /を入れる／入れないで比べる$/ }).click();
       const card = region.locator(".bnb-candidate");
       const graph = region.locator(".bnb-branch-focus");
       await expect(card).toHaveCount(1);
       await expect(region.locator(".bnb-candidate-summary")).toHaveCount(2);
       await expect(graph.locator(".bnb-bag")).toHaveCount(0);
-      await graph.locator('[data-branch-id="1"]').focus();
+      // The whole search tree sits outside .bnb-overview and starts with the root and its two children.
+      await expect(region.locator(".bnb-tree .bnb-tree-node")).toHaveCount(3);
+      await expect(region.locator(".bnb-overview .bnb-tree")).toHaveCount(0);
+      // The root splits on its fractional item: B in the four-item example, E in the eight-item one.
+      const first = advanced ? "3:0" : "2:1";
+      await graph.locator(`[data-branch-id="${first}"]`).focus();
       await page.keyboard.press("Enter");
       await expect(card).toBeFocused();
-      await expect(card).toHaveAttribute("data-candidate-id", "1");
-      await expect(graph.locator('[data-branch-id="1"]')).toHaveAttribute("aria-controls", "bnb-selected-candidate");
+      await expect(card).toHaveAttribute("data-candidate-id", first);
+      await expect(graph.locator(`[data-branch-id="${first}"]`)).toHaveAttribute("aria-controls", "bnb-selected-candidate");
       await card.locator(".ex-action").evaluate(n => n.scrollIntoView({ block: "center" }));
       const scrollBefore = await page.evaluate(() => window.scrollY);
       await card.locator(".ex-action").click();
       await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrollBefore);
       await expect(card.locator(".ex-action")).toBeFocused();
-      await region.locator('[data-summary-id="11"]').click();
+      await region.locator(advanced ? '[data-summary-id="3:0,4:0"]' : '[data-summary-id="1:1,2:1"]').click();
       await card.locator(".ex-action").click();
-      await region.locator('[data-summary-id="111"]').click();
-      await expect(graph.locator(".bnb-branch-parent")).toContainText("A✓");
+      await region.locator(advanced ? '[data-summary-id="3:0,4:0,5:0"]' : '[data-summary-id="0:1,1:1,2:1"]').click();
+      await expect(graph.locator(".bnb-branch-parent")).toContainText(advanced ? "E×" : "B✓");
       if (advanced) {
         await expect(region.locator(".bnb-candidate-summary")).toHaveCount(4);
-        await expect(card.locator(".bnb-bag-value")).toContainText("固定品の得点17");
-        await expect(card.locator(".bnb-capacity")).toContainText("9 / 10");
-        await expect(card.locator(".bnb-ceiling")).toContainText("18.5");
-        await expect(region.locator(".bnb-proof")).toContainText("16 ≤ 最適値 ≤ 18.5");
+        await expect(card.locator(".bnb-bag-value")).toContainText("固定品の得点0");
+        await expect(card.locator(".bnb-capacity")).toContainText("0 / 10");
+        await expect(card.locator(".bnb-ceiling")).toContainText("18");
+        await expect(region.locator(".bnb-proof")).toContainText("16 ≤ 最適値 ≤ 18");
       }
       const geometry = await region.evaluate((root) => {
         const detail = root.querySelector(".bnb-candidate")!;
@@ -94,12 +99,14 @@ test("touch selects a compact comparison and operates its single packing", async
   const region = page.locator('[data-explorable-id="branch-bound-proof"]');
   await region.getByRole("checkbox", { name: /^A / }).tap();
   await region.getByRole("checkbox", { name: /^B / }).tap();
-  await region.getByRole("button", { name: "Aを入れる／入れないで比べる" }).tap();
-  await region.locator('[data-summary-id="0"]').tap();
+  await region.getByRole("button", { name: /を入れる／入れないで比べる$/ }).tap();
+  await region.locator('[data-summary-id="2:0"]').tap();
   const card = region.locator(".bnb-candidate");
   await expect(card).toBeFocused();
   await card.locator(".ex-action").tap();
-  await expect(region.locator('[data-branch-id="0"]')).toContainText("終了：記録以下");
+  await region.locator('[data-summary-id="2:0,3:1"]').tap();
+  await card.locator(".ex-action").tap();
+  await expect(region.locator('[data-branch-id="2:0,3:1"]')).toContainText("終了：記録以下");
   await expectNoHorizontalOverflow(page);
   await context.close();
 });
@@ -110,7 +117,7 @@ test("an optimal initial packing receives proof without a fabricated record chan
   const region = page.locator('[data-explorable-id="branch-bound-proof"]');
   await region.getByRole("radio", { name: "発展・8品" }).check();
   for (const name of ["A", "D", "E"]) await region.getByRole("checkbox", { name: new RegExp(`^${name} `) }).check();
-  await region.getByRole("button", { name: "Aを入れる／入れないで比べる" }).click();
+  await region.getByRole("button", { name: /を入れる／入れないで比べる$/ }).click();
   await expect(region.locator(".bnb-proof")).toContainText("選んだ袋の18点は記録です");
   const card = region.locator(".bnb-candidate");
   for (let i = 0; i < 80 && await card.count(); i++) await card.locator(".ex-action").click();

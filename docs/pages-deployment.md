@@ -1,131 +1,51 @@
-# Validated GitHub Pages deployment
+# Pages artifact verification
 
-GitHub Pages is published only by `.github/workflows/ci.yml`. The former independent Pages
-workflow was removed so validation and publication cannot select different commits or rebuild the
-site along separate paths.
+The `Validate and build Pages artifact` check runs on PRs targeting `main`, including updates to
+open PRs. It selects the authoritative validation task, builds the site once, compares an isolated
+data export with the
+committed public data, and stamps and verifies the actual local build. It has read-only repository
+permissions and does not upload or deploy an artifact. Only PR events trigger this workflow;
+standalone push events do not.
 
-## One artifact pipeline
+There is no automatic Pages deployment. Existing public Pages content may still be served, but it
+is not evidence that the current source commit has been published.
 
-`validate_pages_artifact` checks out the workflow commit once and performs the complete gate:
+The artifact and checkpoint scripts remain available for explicit validation and publication work.
+They do not establish a deployment pipeline or change repository settings.
 
-1. install the locked Python and Node.js dependencies;
-2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b`. Pushes classify the delta from the preceding commit: data, generator, release, and unknown changes retain `tier-b`, while non-data changes use `main-fast` (the publishable `pr-fast` check set). Scheduled and manual runs select `tier-b`. Local authoring commands are intentionally lighter than these CI gates;
-3. for `content-ready` and Tier B, delete and regenerate `site/public/data`, then require zero tracked drift;
-4. run the selected registry task; Tier B checks committed content reports and broader source
-   health, while content-oriented tasks stay focused. Unknown paths fail safe to Tier B rather than
-   silently receiving a fast gate;
-5. verify README facts and repository size for every task, and source health plus zero generated
-   drift for Tier B;
-6. retain `site/dist` for non-documentation pull-request and nightly browser jobs;
-7. on `main`, stamp `site/dist/deployment.json` and verify the exact directory locally; and
-8. on `main`, upload that directory once as the `github-pages` artifact.
+## Verify one built artifact
 
-The full Python regression suite is required for backend, canonical data, schema, generator,
-release, backend-test, and unknown-path pull requests, and for every Tier B run. On `main`,
-non-data changes use `main-fast`, which preserves the publishable site build, type checks,
-repository contracts, content, and licensing checks without repeating the full Python regression.
-Draft/prose content uses Tier A; published content and deterministic indexes use
-`content-ready`; site, workflow, validation-contract, and documentation-only pull requests use the
-smaller authoritative task that owns their surface. The browser job runs tagged critical journeys on non-doc pull
-requests. On `main`, the same critical journeys plus the axe route matrix block publication. A
-scheduled/manual nightly job runs the full
-desktop/mobile Playwright suite against the validated artifact and stays visibly red until every
-quarantined legacy expectation has been repaired.
+Run the applicable validation task, then build the site once. `npm --prefix site run build` includes
+TypeScript checks. Browser checks can reuse that build with `npm --prefix site run test:e2e:artifact`;
+`test:e2e` also builds, so do not run both paths for the same artifact.
 
-The deployment identity records the workflow commit SHA, dataset version, release date, database
-SHA-256, and Pages base path. Its commit SHA is `${{ github.sha }}` for the checked-out workflow
-commit; its dataset fields come from the built `data/release.json`. A mismatch in any generated
-JSON asset, built HTML reference, or license path rejects the artifact before upload.
-
-Pull requests run the same validation/build pipeline and retain `site/dist` as
-`validated-site-<commit SHA>`, but the Pages-format artifact and deploy job remain main-only.
-The browser job downloads that artifact without rebuilding it. On `main`, it instead downloads the
-Pages-format `github-pages` artifact, extracts `artifact.tar`, and tests the exact publishable tree:
+For an artifact deliberately prepared for publication, stamp and verify its actual source identity:
 
 ```bash
-python scripts/pages_artifact.py verify-local \
-  --root extracted-artifact \
-  --expected-commit-sha <40-character-sha> \
+uv run python scripts/pages_artifact.py stamp \
+  --root site/dist --commit-sha <40-character-source-sha>
+uv run python scripts/pages_artifact.py verify-local \
+  --root site/dist --expected-commit-sha <40-character-source-sha> \
   --expected-dataset-version <x.y.z>
 ```
 
-The browser E2E job `needs: validate_pages_artifact` and never rebuilds the site. The deploy job
-requires this browser job in addition to validation, so a failed journey, console assertion,
-responsive check, or axe scan blocks publication. Workflow structure tests keep both artifact
-paths and the single Pages upload contract explicit.
-Failure evidence is retained as `playwright-failure-<commit SHA>` with screenshots, traces, console
-logs, JUnit output, and the HTML report.
+The identity includes the source commit, dataset version, release date, database SHA-256, and base
+path. Verification rejects inconsistent data identity, asset references, or license paths. Use the
+same verified directory for browser checks and any separately authorized publication.
 
-The full suite runs daily at 02:30 JST and on `workflow_dispatch`. Known failures are never silently
-skipped: the nightly job fails, retains `playwright-nightly-failure-<commit SHA>`, and each failure
-family must have an owner, cause classification, target date, and explicit exit condition in GitHub
-Issues. Removing a spec from the suite is not a quarantine mechanism.
+## Verify a published site
 
-## Deployment and post-deploy smoke
+After an authorized deployment, `scripts/pages_artifact.py smoke-remote` checks public deployment
+identity, data assets, license paths, and application-shell availability. HTTP requests do not send
+URL fragments, so this check does not prove client-side route rendering or accessibility; those
+belong to the browser suite against the built artifact.
 
-Only a push to `main` may enter `deploy`. It requires the validated artifact job and the Browser E2E
-job. `actions/deploy-pages` consumes the `github-pages` artifact from the same workflow run; it never
-checks out and rebuilds another directory. Deployment and smoke share the `github-pages` concurrency
-lock, so a later deployment cannot replace the site during smoke.
+`scripts/pages_checkpoint.py` compares the local/remote commit, recorded workflow runs, and public
+identity. Its default workflow lookup describes the former `Validated CI and Pages` deployment
+workflow. The current PR-only validation workflow does not prove publication. A missing deployment
+run or stale public identity remains a blocker, not a reason to assume publication succeeded or to
+rerun historical deployment jobs.
 
-After deployment, `scripts/pages_artifact.py smoke-remote` retries propagation and requires the
-public `deployment.json` to match the validated commit SHA and dataset version. It checks these
-public hash-route URLs:
-
-- `/`
-- `/#/map`
-- `/#/diagnose`
-- `/#/theater/nelder-mead`
-- `/#/gallery`
-
-It also parses and version-checks:
-
-- `data/release.json`
-- `data/manifest.json`
-- `data/views/problem-structure.json`
-- `data/content.json`
-- `data/gallery.json`
-- `data/comparisons.json`
-- `data/traces/index.json`
-
-Every license path declared by the deployed site manifest must return a non-empty file.
-
-URL fragments are not transmitted in HTTP requests. The post-deploy hash-route loop therefore
-proves that each public URL resolves to the validated application shell, assets use the configured
-base path, and deployment/data identity is current; it does not claim to exercise client-side
-route rendering. #18 owns browser-level route semantics and accessibility against the extracted
-`artifact.tar` from this same workflow run.
-
-## Failure and rollback
-
-- Validation, regeneration, parity, build, or local artifact failure: `deploy` is
-  skipped. The last successful Pages deployment remains active.
-- Artifact upload or Pages deployment failure: no unvalidated fallback is uploaded. Inspect the
-  failed run, fix the source, and let the complete pipeline create a new artifact.
-- Post-deploy smoke failure: treat the new deployment as bad even if the deploy step succeeded.
-  Prefer reverting the bad commit on `main` through a reviewed PR; the revert commit must pass the
-  complete workflow and will publish a fresh, traceable artifact.
-- Emergency restoration: identify the last known-good `Validated CI and Pages` run with
-  `gh run list`, verify its commit SHA, and use `gh run rerun <run-id>` to rebuild and redeploy that
-  historical commit through its original complete gate. Follow immediately with a source revert
-  so `main`, the public deployment, and the next workflow run converge again.
-
-Never upload a hand-built directory, reuse an artifact from a different commit, or bypass a failed
-gate. The public `deployment.json` and workflow run must always identify the same source commit.
-
-## Interruption-safe operator checkpoint
-
-Capture the current publication state before a long gate, after pushing, and before declaring Pages
-current:
-
-```bash
-uv run python scripts/pages_checkpoint.py --format markdown
-uv run python scripts/pages_checkpoint.py --run-id <run-id> --require-published
-```
-
-The command fetches `origin` by default, locates the workflow run for the exact local commit, lists
-completed and remaining jobs, and compares the public root, `deployment.json`, and
-`data/release.json`. It reports states such as `not-pushed`, `workflow-running`, `workflow-failed`,
-`public-stale`, and `published`; a non-final state is a resume instruction, not permission to start a
-duplicate run. Use `--output <untracked-path>` to preserve a Markdown or JSON handoff when the session
-may be interrupted. Use `--no-fetch` only for an explicitly offline snapshot.
+Do not upload a different tree after validation, stamp an unrelated SHA, or bypass an identity
+failure. Publication and recovery require an explicit current process; this guide does not authorize
+a deploy, a workflow restoration, or a repository-settings change.

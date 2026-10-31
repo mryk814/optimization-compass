@@ -1,0 +1,50 @@
+{
+  "status": "example_not_execution_authorization",
+  "question": "高価な評価を20回の予算で改善する教育例",
+  "facts": [
+    {
+      "key": "evaluation_budget",
+      "value": 20,
+      "status": "confirmed_in_toy",
+      "source": "authored example"
+    },
+    {
+      "key": "gradient_available",
+      "value": null,
+      "status": "unknown",
+      "reason": "評価契約で未確認"
+    },
+    {
+      "key": "safe_initial_set",
+      "value": null,
+      "status": "unknown",
+      "reason": "安全探索の成立条件が未確認"
+    }
+  ],
+  "candidate_method_refs": [],
+  "exclusion_refs": [],
+  "required_questions": [
+    "失敗は制約違反かtimeoutか",
+    "評価にノイズはあるか",
+    "試してはいけない領域はどこか"
+  ],
+  "allowed_actions": [
+    "read",
+    "propose_formulation",
+    "propose_followup"
+  ],
+  "prohibited_actions": [
+    "execute_external_experiment",
+    "infer_unknown_as_false",
+    "invent_canonical_method_id"
+  ],
+  "provenance": {
+    "dataset_version": "0.18.20",
+    "scope_version": "compass-reference-2026-10-draft1",
+    "source_refs": [
+      "E12",
+      "E38",
+      "R11"
+    ]
+  }
+}

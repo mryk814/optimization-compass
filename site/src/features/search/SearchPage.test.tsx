@@ -40,7 +40,8 @@ describe("SearchPage", () => {
   test("resolves an English alias and explains why it matched", async () => {
     mockSearchData();
     render(<MemoryRouter initialEntries={["/search?q=BO&type=method"]}><SearchPage /></MemoryRouter>);
-    expect(await screen.findByRole("heading", { name: /ベイズ最適化/u })).toBeInTheDocument();
+    // Several methods carry a "BO" alias (e.g. constrained BO), so match at least one heading.
+    expect((await screen.findAllByRole("heading", { name: /ベイズ最適化/u })).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/一致: 別名・略語/u).length).toBeGreaterThan(0);
     expect(screen.getByRole("checkbox", { name: /手法/u })).toBeChecked();
   });

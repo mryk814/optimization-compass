@@ -125,6 +125,56 @@
       "id": "027",
       "path": "data/migrations/027_portfolio_mean_variance.sql",
       "sha256": "b29457e30a0b2270a3df1cc894ac2c61155d51ce06a1dba4543b507513acb891"
+    },
+    {
+      "id": "028",
+      "path": "data/migrations/028_stochastic_ml_variants.sql",
+      "sha256": "9a247ca697230cc5edb234dfdd53aea92dedd91af7e8ef09f7d713351c525da3"
+    },
+    {
+      "id": "029",
+      "path": "data/migrations/029_stochastic_ml_variants_2.sql",
+      "sha256": "298e7be43c38c0f74ca2bcb4ffed7b87b7290b23acd7add1dd3af9ec791a398c"
+    },
+    {
+      "id": "030",
+      "path": "data/migrations/030_smooth_local_variants.sql",
+      "sha256": "edda5e12b206365a94a2c6cb6c6ba419ed2e9442752b248596cf4e260bba7019"
+    },
+    {
+      "id": "031",
+      "path": "data/migrations/031_composite_convex_variants.sql",
+      "sha256": "a5ce0f358ee869ce064fe94b6284c6bccfa969a1fb7be05301c97932ebac095d"
+    },
+    {
+      "id": "032",
+      "path": "data/migrations/032_decomposition_variants.sql",
+      "sha256": "d523fa11f8b8bc75bb1f552b00fb101b0cf3db02b12c1145530590fba26fd5b7"
+    },
+    {
+      "id": "033",
+      "path": "data/migrations/033_graph_flow_variants.sql",
+      "sha256": "f0170099e5d68c36e6367fce49cdd21b6bf1d3798b04a44f85bc6fab4f8258e3"
+    },
+    {
+      "id": "034",
+      "path": "data/migrations/034_dfo_bo_combinatorial_topology_variants.sql",
+      "sha256": "e6a6e7b39b25fa1499abad4793fa7b8ff4928a92449d4835bac313f10959b6be"
+    },
+    {
+      "id": "035",
+      "path": "data/migrations/035_stochastic_transport_variants.sql",
+      "sha256": "fae2d4038c52555693a94d23ec8148bbe59732fd8f4d65dc6dd10a20eb52b9fd"
+    },
+    {
+      "id": "036",
+      "path": "data/migrations/036_bilevel_complementarity_sources.sql",
+      "sha256": "684b6a7631a6051e963a63fd2face068cd20e77678c7a94ffba3632b1341caf7"
+    },
+    {
+      "id": "037",
+      "path": "data/migrations/037_formulation_sources_batch.sql",
+      "sha256": "8ed878a65645e0b0da4cf8a13193d653eafc7acaa1440171d3c911e4f921eb5e"
     }
   ],
   "specialized_inputs": [

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -431,18 +432,22 @@ class RecommendationEngine:
         exactness = str(row.get("exactness") or "").lower()
         if "global_certificate" in scope:
             return True
-        certificate_terms = (
-            "gap",
-            "bound",
-            "dual",
-            "primal",
-            "unsat",
-            "certificate",
-            "proof",
-        )
-        if any(term in certificate for term in certificate_terms):
+        tokens = [token.strip() for token in certificate.split(";") if token.strip()]
+        if any(RecommendationEngine._is_certificate_token(token) for token in tokens):
             return True
         return "exact" in exactness and "global" in scope
+
+    @staticmethod
+    def _is_certificate_token(token: str) -> bool:
+        """Whole-token match for a bound, a gap, or an unsat proof.
+
+        Substring matching counted ``first_order_residual`` (contains "dual"),
+        ``primal_dual_residual`` and ``not_global_certificate`` as certificates.
+        Must stay identical to ``isCertificateToken`` in the site recommender.
+        """
+        return bool(
+            re.search(r"(^|_)(gap|bound)$", token) or re.search(r"(^|_)unsat_proof(_|$)", token)
+        )
 
     @staticmethod
     def _variable_compatibility(domain: str, variable_types: str) -> str:

@@ -8,6 +8,8 @@ import pytest
 
 import optimization_compass.site_export as site_export_module
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.formulation_primer import DIAGNOSIS_ROWS
+from optimization_compass.problem_registry import load_problem_suite
 from optimization_compass.release_catalog import ReleaseCatalogError
 from optimization_compass.site_export import export_site_data
 from optimization_compass.trace_models import (
@@ -285,8 +287,15 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "version": "1.0.0",
     }
     problem_catalog = json.loads((first_output / "problems.json").read_bytes())
-    assert len(problem_catalog["definitions"]) == 22
-    assert len(problem_catalog["instances"]) == 25
+    problem_seed = load_problem_suite()
+    assert problem_catalog["definitions"]
+    assert problem_catalog["instances"]
+    assert sorted(
+        item["problem_definition_id"] for item in problem_catalog["definitions"]
+    ) == sorted(item.problem_definition_id for item in problem_seed.definitions)
+    assert sorted(item["problem_instance_id"] for item in problem_catalog["instances"]) == sorted(
+        item.problem_instance_id for item in problem_seed.instances
+    )
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
     search_tree_index = json.loads(search_tree_index_bytes)
     assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
@@ -337,7 +346,11 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     formulation_primer = json.loads(
         (first_output / "formulation-primer.json").read_text(encoding="utf-8")
     )
-    assert len(formulation_primer["diagnosis_mappings"]) == 12
+    # DIAGNOSIS_ROWS in formulation_primer.py is the authority for the mappings.
+    assert [
+        (item["question_id"], item["field_id"]) for item in formulation_primer["diagnosis_mappings"]
+    ] == [(row[0], row[1]) for row in DIAGNOSIS_ROWS]
+    assert formulation_primer["diagnosis_mappings"]
     assert (first_output / "formulation-primer.json").read_bytes() == (
         second_output / "formulation-primer.json"
     ).read_bytes()
@@ -437,12 +450,38 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         if context_id not in forbidden_context_ids
     )
     failure_payload = json.loads((first_output / "failure-modes.json").read_bytes())
-    assert len(failure_payload["failure_modes"]) == 12
-    assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
+    authority_failures = repository.structured_failure_modes()
+    assert failure_payload["failure_modes"]
+    assert [item["failure_mode_id"] for item in failure_payload["failure_modes"]] == [
+        item["failure_mode_id"] for item in authority_failures
+    ]
+    assert {
+        item["failure_mode_id"] for item in failure_payload["failure_modes"] if item["scenario_ids"]
+    } == {item["failure_mode_id"] for item in authority_failures if item["scenario_ids"]}
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
-    assert len(source_payload["sources"]) == 110
-    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4209
+    authority_source_ids = [
+        row["source_id"] for row in repository.fetch_all("SELECT source_id FROM sources")
+    ]
+    assert authority_source_ids
+    assert sorted(source["source_id"] for source in source_payload["sources"]) == sorted(
+        authority_source_ids
+    )
+    # Evidence targets are the canonical evidence_links rows plus generated visualization links.
+    exported_targets = [
+        target for source in source_payload["sources"] for target in source["evidence_targets"]
+    ]
+    canonical_link_ids = {
+        row["evidence_link_id"]
+        for row in repository.fetch_all("SELECT evidence_link_id FROM evidence_links")
+    }
+    assert canonical_link_ids
+    assert {
+        item["evidence_link_id"]
+        for item in exported_targets
+        if not item["evidence_link_id"].startswith("GENERATED_VIS_")
+    } == canonical_link_ids
+    assert len(exported_targets) == len({item["evidence_link_id"] for item in exported_targets})
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     search_trace = next(
         entity

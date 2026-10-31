@@ -1,5 +1,24 @@
-import type { SurrogateFrame } from "../../contracts/surrogate-uncertainty";
+import { useEffect, useRef, useState } from "react";
 
+import type { SurrogateFrame } from "../../contracts/surrogate-uncertainty";
+import {
+  AcquisitionStrip,
+  EvaluationMarks,
+  ModelCurve,
+  ProposalMarker,
+  RangeBand,
+  stageScale,
+  TerrainLine,
+} from "../../visual-system";
+
+const ACQUISITION_HEIGHT = 46;
+
+/**
+ * A recorded surrogate frame drawn with the shared Search Stage marks, so the canonical BO
+ * Theater, its comparisons, and the algorithm-view Theater read the same way: teal band and
+ * line for the model, teal circles for observations, orange for the next proposal and the
+ * acquisition, dashed grey for the teaching objective that the optimizer never sees.
+ */
 export function SurrogatePlot({
   frame,
   visibleLayers,
@@ -7,105 +26,83 @@ export function SurrogatePlot({
   frame: SurrogateFrame;
   visibleLayers: ReadonlySet<string>;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const [width, setWidth] = useState(640);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return undefined;
+    const measure = () => { if (element.clientWidth > 0) setWidth(Math.round(element.clientWidth)); };
+    measure();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   const points = frame.predictive_summary;
-  const minY = Math.min(
-    ...points.flatMap((point) => [point.lower, point.true_value]),
-  );
-  const maxY = Math.max(
-    ...points.flatMap((point) => [point.upper, point.true_value]),
-  );
-  const x = (value: number) => 54 + ((value + 3) / 6) * 612;
-  const y = (value: number) =>
-    258 - ((value - minY) / (maxY - minY || 1)) * 212;
-  const acquisitionMax = Math.max(
-    ...points.map((point) => point.acquisition),
-    1e-9,
-  );
-  const line = (values: (point: (typeof points)[number]) => number) =>
-    points
-      .map(
-        (point, index) =>
-          `${index ? "L" : "M"}${x(point.x).toFixed(1)},${y(values(point)).toFixed(1)}`,
-      )
-      .join(" ");
-  const band = `${points.map((point, index) => `${index ? "L" : "M"}${x(point.x).toFixed(1)},${y(point.upper).toFixed(1)}`).join(" ")} ${[
-    ...points,
-  ]
-    .reverse()
-    .map((point) => `L${x(point.x).toFixed(1)},${y(point.lower).toFixed(1)}`)
-    .join(" ")} Z`;
+  const xs = points.map((point) => point.x);
+  const minY = Math.min(...points.flatMap((point) => [point.lower, point.true_value]));
+  const maxY = Math.max(...points.flatMap((point) => [point.upper, point.true_value]));
+  const xDomain: readonly [number, number] = [Math.min(...xs), Math.max(...xs)];
+  const stageHeight = Math.round(Math.min(300, Math.max(200, width * 0.42)));
+  const height = stageHeight + ACQUISITION_HEIGHT + 22;
+  const pad = (maxY - minY || 1) * 0.06;
+  const scale = stageScale(width, stageHeight, xDomain, [minY - pad, maxY + pad], { left: 10, right: 10, top: 30, bottom: 18 });
+
   return (
-    <figure className="bo-figure">
+    <figure className="bo-figure vs-surrogate-figure" ref={ref}>
       <svg
-        viewBox="0 0 720 390"
-        role="img"
         aria-labelledby="bo-plot-title bo-plot-desc"
+        className="vs-stage"
+        height={height}
+        role="img"
+        width={width}
       >
-        <title id="bo-plot-title">
-          surrogateの平均、不確実性、観測、Expected Improvement
-        </title>
+        <title id="bo-plot-title">surrogateの平均、不確実性、観測、Expected Improvement</title>
         <desc id="bo-plot-desc">
-          上段は教材用の真の目的関数を破線、surrogateの予測を実線、不確実性を帯で示します。下段はacquisition値で、次候補は縦線です。
+          上段は教材用の真の目的関数を灰色の破線、surrogateの予測平均を青緑の線、不確実性を青緑の帯、観測を丸で示します。下段は獲得関数で、橙の縦線が次の候補です。
         </desc>
-        <rect
-          className="bo-chart-bg"
-          x="38"
-          y="24"
-          width="644"
-          height="338"
-          rx="12"
-        />
-        {visibleLayers.has("posterior_uncertainty") && <path className="bo-band" d={band} />}
-        <path className="bo-truth" d={line((point) => point.true_value)} />
-        {visibleLayers.has("posterior_mean") && <path className="bo-mean" d={line((point) => point.mean)} />}
-        {visibleLayers.has("observations") && frame.observations.map((point, index) => (
-          <circle
-            className="bo-observation"
-            key={`${point.x}:${index}`}
-            cx={x(point.x)}
-            cy={y(point.observed_value)}
-            r="5"
-          />
-        ))}
-        {visibleLayers.has("selected_candidate") && frame.selected_point !== null && (
-          <line
-            className="bo-next"
-            x1={x(frame.selected_point)}
-            x2={x(frame.selected_point)}
-            y1="24"
-            y2="362"
+        {visibleLayers.has("posterior_uncertainty") && (
+          <RangeBand lower={points.map((point) => point.lower)} scale={scale} upper={points.map((point) => point.upper)} xs={xs} />
+        )}
+        <TerrainLine scale={scale} xs={xs} ys={points.map((point) => point.true_value)} />
+        {visibleLayers.has("posterior_mean") && <ModelCurve scale={scale} xs={xs} ys={points.map((point) => point.mean)} />}
+        {visibleLayers.has("observations") && (
+          <EvaluationMarks
+            points={frame.observations.map((point, index) => ({
+              key: `${point.x}:${index}`,
+              x: point.x,
+              y: point.observed_value,
+              latest: index === frame.observations.length - 1,
+            }))}
+            scale={scale}
+            shape="circle"
           />
         )}
-        {visibleLayers.has("expected_improvement") && points.map((point) => (
-          <line
-            className="bo-ei"
-            key={point.x}
-            x1={x(point.x)}
-            x2={x(point.x)}
-            y1="350"
-            y2={350 - (point.acquisition / acquisitionMax) * 62}
+        {visibleLayers.has("selected_candidate") && frame.selected_point !== null && (
+          <ProposalMarker scale={scale} x={frame.selected_point} />
+        )}
+        {visibleLayers.has("expected_improvement") && (
+          <AcquisitionStrip
+            height={ACQUISITION_HEIGHT - 6}
+            label="Expected Improvement"
+            next={visibleLayers.has("selected_candidate") ? frame.selected_point : null}
+            scale={scale}
+            top={stageHeight + 14}
+            values={points.map((point) => point.acquisition)}
+            xs={xs}
           />
-        ))}
-        <text x="54" y="46">
-          目的関数 / surrogate
-        </text>
-        <text x="54" y="286">
-          Expected Improvement
-        </text>
-        <g className="bo-legend">
-          <text x="430" y="46">
-          ― surrogate平均
-          </text>
-          <text x="430" y="64">
-            ┄ 真の目的関数 (教材のみ)
-          </text>
-          <text x="430" y="82">
-            ● 観測値
-          </text>
-        </g>
+        )}
+        <text className="vs-stage-label" x={10} y={18}>目的関数 / surrogate</text>
       </svg>
+      <ul className="vs-legend bo-figure-legend" aria-label="記号の読み方">
+        <li><span className="vs-legend-line" aria-hidden="true" />surrogate平均（不確実性の帯つき）</li>
+        <li><span className="vs-legend-line is-terrain" aria-hidden="true" />真の目的関数（教材の答え合わせ用）</li>
+        <li><span className="vs-legend-dot" aria-hidden="true" />観測値</li>
+        <li><span className="vs-legend-line is-proposal" aria-hidden="true" />次の候補</li>
+      </ul>
       <figcaption>
-         surrogateの予測（実線）と教材用の真の目的関数（破線）は別物です。
+        surrogateの予測（青緑）と教材用の真の目的関数（灰色の破線）は別物です。optimizerは観測点以外の真の値を参照しません。
       </figcaption>
     </figure>
   );

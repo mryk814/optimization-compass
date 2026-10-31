@@ -314,3 +314,67 @@
     grid-column: 2;
   }
 }
+
+/* The check label may wrap inside the next-question card so the card fits a 320px column. */
+.path-next-card .path-step-check {
+  white-space: normal;
+}
+
+/* OC-EVOL-007: a reader who is lost can step back to a named page and return. */
+.path-formula-shortcut {
+  justify-self: start;
+  color: var(--path-accent, #315c48);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.path-stumbles {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.path-stumbles h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.path-stumbles ul {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path-stumbles a {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d6dbd3;
+  border-radius: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.path-stumbles a span {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.path-stumbles a small {
+  color: #315c48;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.path-stumbles a:focus-visible,
+.path-return-link:focus-visible,
+.path-formula-shortcut:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 2px;
+}
+
+.path-return-link {
+  font-size: 1rem;
+  font-weight: 700;
+}

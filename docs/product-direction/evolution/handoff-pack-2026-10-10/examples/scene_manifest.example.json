@@ -1,0 +1,77 @@
+{
+  "status": "proposed_contract_example",
+  "scene_id": "SCENE_LP_CERTIFICATE_PROPOSED",
+  "dataset_version": "0.18.20",
+  "canonical_problem_ref": "resolve_after_PR298_reconciliation",
+  "model_revision": "must_be_real_commit_or_hash",
+  "view_revision": "must_be_real_commit_or_hash",
+  "scenario": {
+    "objective": "maximize 3*x+4*y",
+    "constraints": [
+      "3*x+2*y<=18",
+      "x+3*y<=13",
+      "x>=0",
+      "y>=0"
+    ],
+    "number_system": "rational",
+    "seed": null
+  },
+  "information_policy": {
+    "learner_view": [
+      "feasible_region",
+      "current_basis",
+      "reduced_cost",
+      "slack"
+    ],
+    "optimizer_view": [
+      "coefficients",
+      "current_basis"
+    ],
+    "omniscient_view_requires_label": true
+  },
+  "observable_schema": [
+    "decision",
+    "objective",
+    "slack",
+    "dual_price",
+    "gap",
+    "basis"
+  ],
+  "beats": [
+    {
+      "id": "predict",
+      "state": "initial",
+      "prompt_ja": "どちらを増やす？",
+      "pause_for_prediction": true
+    },
+    {
+      "id": "update",
+      "state": "computed_pivot",
+      "prompt_ja": "先に0になる余裕は？"
+    },
+    {
+      "id": "certificate",
+      "state": "optimal",
+      "prompt_ja": "24を超えられない理由は？"
+    }
+  ],
+  "projections": [
+    "text",
+    "table",
+    "svg",
+    "interactive",
+    "video"
+  ],
+  "validation": [
+    "model_fixture",
+    "frame_observable_parity",
+    "keyboard",
+    "caption_transcript",
+    "source_freshness"
+  ],
+  "source_refs": [
+    "R05",
+    "R07"
+  ],
+  "non_guarantee": "教育用の固定問題。一般性能の順位や現実モデルの妥当性を主張しない。"
+}

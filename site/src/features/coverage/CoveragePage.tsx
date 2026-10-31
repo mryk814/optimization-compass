@@ -138,11 +138,91 @@ function CoverageView({
         ]}
       />
 
+      {report.scope && <ScopeSection scope={report.scope} />}
       <JourneyCompleteness journeys={journeys} showTechnical={showTechnical} />
       <CoverageSummary report={report} />
       <PriorityAreas priorities={report.priorities} showTechnical={showTechnical} />
       <Inventory report={report} showTechnical={showTechnical} />
       <Integrity issues={report.integrity_issues} showTechnical={showTechnical} />
+    </section>
+  );
+}
+
+const scopeUnitLabels: Record<string, string> = {
+  knowledge_topic: "知識トピック",
+  problem_structure: "問題構造",
+};
+const scopeCards: Array<{ axis: string; title: string; hint: string }> = [
+  { axis: "identity", title: "収録範囲", hint: "名前と同一性を既存の行・記事と照合した件数" },
+  { axis: "lesson", title: "説明", hint: "品質台帳で「達成」の記事がある件数" },
+  { axis: "experience", title: "体験", hint: "操作して確かめる体験が必要かは、まだ決めていません" },
+  { axis: "transfer", title: "分野横断", hint: "分野をまたぐ転用は、まだ追跡していません" },
+];
+const scopeStateLabels: Record<string, string> = {
+  candidate: "未確認（候補）",
+  unknown: "未照合",
+  unrepresented: "未表現",
+  stale: "stale（記事の更新後に未再確認）",
+  in_progress: "整備中",
+  no_article: "記事なし",
+  undecided: "判定前",
+  no_canonical_row: "正規行なし",
+};
+const scopeInfoLabels: Record<string, string> = { has_interactive: "操作図のある記事（参考）" };
+
+function ScopeSection({ scope }: { scope: NonNullable<CoverageReport["scope"]> }) {
+  return (
+    <section aria-labelledby="scope-title" className="coverage-scope">
+      <div className="coverage-section-heading">
+        <div>
+          <p className="eyebrow">分母</p>
+          <h2 id="scope-title">収録範囲（{scope.scope_version}, {scope.status}）</h2>
+        </div>
+        <p>
+          採用したメンバーの件数を軸ごとに数えます。割合や総合点は出しません。
+          状態が「提案中」のあいだは、分母そのものが確定していません。
+        </p>
+      </div>
+      {Object.entries(scope.units).map(([unit, value]) => (
+        <div className="coverage-scope-unit" key={unit}>
+          <h3>
+            {scopeUnitLabels[unit] ?? unit}
+            <span>
+              {" "}対象 {value.denominator}件 · 対象外 {value.excluded}件 · 保留 {value.held}件 · 統合 {value.merged}件
+            </span>
+          </h3>
+          <div className="coverage-scope-grid">
+            {scopeCards.map(({ axis, title, hint }) => {
+              const item = value.axes[axis];
+              const states = Object.entries({ ...item.states }).filter(([, count]) => count > 0);
+              const info = Object.entries(item.info).filter(([, count]) => count > 0);
+              return (
+                <article aria-label={`${scopeUnitLabels[unit] ?? unit}の${title}`} key={axis}>
+                  <p className="eyebrow">{title}</p>
+                  <p className="coverage-scope-figure">
+                    {item.eligible === 0
+                      ? <strong>判定前</strong>
+                      : <><strong>{item.complete}</strong> / {item.eligible}</>}
+                  </p>
+                  <p className="coverage-baseline">{hint}</p>
+                  {states.length > 0 && (
+                    <ul>
+                      {states.map(([state, count]) => (
+                        <li key={state}>{scopeStateLabels[state] ?? state} {count}件</li>
+                      ))}
+                    </ul>
+                  )}
+                  {info.length > 0 && (
+                    <p className="coverage-baseline">
+                      {info.map(([key, count]) => `${scopeInfoLabels[key] ?? key} ${count}件`).join("、")}
+                    </p>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </section>
   );
 }

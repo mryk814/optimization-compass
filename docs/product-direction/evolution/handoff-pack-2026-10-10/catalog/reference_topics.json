@@ -1,0 +1,3689 @@
+{
+  "scope_version": "compass-reference-2026-10-draft1",
+  "status": "draft_for_owner_review",
+  "denominator_unit": "named_knowledge_topic_not_independent_algorithm",
+  "count": 160,
+  "count_is_not": "new_methods_to_add",
+  "topics": [
+    {
+      "topic_id": "TOPIC_GRADIENT_DESCENT",
+      "slug": "gradient-descent",
+      "title_ja": "勾配降下法",
+      "title_en": "Gradient descent",
+      "aliases": [
+        "Gradient descent",
+        "勾配降下法"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MOMENTUM",
+      "slug": "momentum",
+      "title_ja": "モメンタム法",
+      "title_en": "Momentum",
+      "aliases": [
+        "Momentum",
+        "モメンタム法"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NESTEROV",
+      "slug": "nesterov",
+      "title_ja": "Nesterov加速",
+      "title_en": "Nesterov acceleration",
+      "aliases": [
+        "Nesterov acceleration",
+        "Nesterov加速"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SGD",
+      "slug": "sgd",
+      "title_ja": "確率的勾配降下法",
+      "title_en": "Stochastic gradient descent",
+      "aliases": [
+        "Stochastic gradient descent",
+        "確率的勾配降下法"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_SGD",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADAGRAD",
+      "slug": "adagrad",
+      "title_ja": "AdaGrad",
+      "title_en": "AdaGrad",
+      "aliases": [
+        "AdaGrad",
+        "AdaGrad"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_RMSPROP",
+      "slug": "rmsprop",
+      "title_ja": "RMSProp",
+      "title_en": "RMSProp",
+      "aliases": [
+        "RMSProp",
+        "RMSProp"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADAM",
+      "slug": "adam",
+      "title_ja": "Adam",
+      "title_en": "Adam",
+      "aliases": [
+        "Adam",
+        "Adam"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADAMW",
+      "slug": "adamw",
+      "title_ja": "AdamW",
+      "title_en": "AdamW",
+      "aliases": [
+        "AdamW",
+        "AdamW"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_ADAMW",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NATURAL_GRADIENT",
+      "slug": "natural-gradient",
+      "title_ja": "自然勾配",
+      "title_en": "Natural gradient",
+      "aliases": [
+        "Natural gradient",
+        "自然勾配"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SVRG",
+      "slug": "svrg",
+      "title_ja": "SVRG",
+      "title_en": "Stochastic variance reduced gradient",
+      "aliases": [
+        "Stochastic variance reduced gradient",
+        "SVRG"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SAGA",
+      "slug": "saga",
+      "title_ja": "SAGA",
+      "title_en": "SAGA",
+      "aliases": [
+        "SAGA",
+        "SAGA"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SARAH",
+      "slug": "sarah",
+      "title_ja": "SARAH",
+      "title_en": "SARAH",
+      "aliases": [
+        "SARAH",
+        "SARAH"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MUON",
+      "slug": "muon",
+      "title_ja": "Muon",
+      "title_en": "Muon",
+      "aliases": [
+        "Muon",
+        "Muon"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LION",
+      "slug": "lion",
+      "title_ja": "Lion",
+      "title_en": "Lion",
+      "aliases": [
+        "Lion",
+        "Lion"
+      ],
+      "family": "first-order",
+      "family_label_ja": "勾配・学習",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E06"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NEWTON",
+      "slug": "newton",
+      "title_ja": "Newton法",
+      "title_en": "Newton method",
+      "aliases": [
+        "Newton method",
+        "Newton法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_NEWTON",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DAMPED_NEWTON",
+      "slug": "damped-newton",
+      "title_ja": "減衰Newton法",
+      "title_en": "Damped Newton",
+      "aliases": [
+        "Damped Newton",
+        "減衰Newton法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NEWTON_CG",
+      "slug": "newton-cg",
+      "title_ja": "Newton-CG",
+      "title_en": "Newton-CG",
+      "aliases": [
+        "Newton-CG",
+        "Newton-CG"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_NEWTON_CG",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BFGS",
+      "slug": "bfgs",
+      "title_ja": "BFGS",
+      "title_en": "BFGS",
+      "aliases": [
+        "BFGS",
+        "BFGS"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_BFGS",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DFP",
+      "slug": "dfp",
+      "title_ja": "DFP",
+      "title_en": "DFP",
+      "aliases": [
+        "DFP",
+        "DFP"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SR1",
+      "slug": "sr1",
+      "title_ja": "SR1",
+      "title_en": "Symmetric rank-one",
+      "aliases": [
+        "Symmetric rank-one",
+        "SR1"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LBFGS",
+      "slug": "lbfgs",
+      "title_ja": "L-BFGS",
+      "title_en": "L-BFGS",
+      "aliases": [
+        "L-BFGS",
+        "L-BFGS"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_LBFGS",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LBFGSB",
+      "slug": "lbfgsb",
+      "title_ja": "L-BFGS-B",
+      "title_en": "L-BFGS-B",
+      "aliases": [
+        "L-BFGS-B",
+        "L-BFGS-B"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_LBFGSB",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NONLINEAR_CG",
+      "slug": "nonlinear-cg",
+      "title_ja": "非線形共役勾配",
+      "title_en": "Nonlinear conjugate gradient",
+      "aliases": [
+        "Nonlinear conjugate gradient",
+        "非線形共役勾配"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_GAUSS_NEWTON",
+      "slug": "gauss-newton",
+      "title_ja": "Gauss–Newton法",
+      "title_en": "Gauss-Newton",
+      "aliases": [
+        "Gauss-Newton",
+        "Gauss–Newton法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LEVENBERG_MARQUARDT",
+      "slug": "levenberg-marquardt",
+      "title_ja": "Levenberg–Marquardt法",
+      "title_en": "Levenberg-Marquardt",
+      "aliases": [
+        "Levenberg-Marquardt",
+        "Levenberg–Marquardt法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_LEVENBERG_MARQUARDT",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_TRF",
+      "slug": "trf",
+      "title_ja": "反射型信頼領域法",
+      "title_en": "Trust-region reflective",
+      "aliases": [
+        "Trust-region reflective",
+        "反射型信頼領域法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DOGLEG",
+      "slug": "dogleg",
+      "title_ja": "Dogleg法",
+      "title_en": "Dogleg",
+      "aliases": [
+        "Dogleg",
+        "Dogleg法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_TRUST_EXACT",
+      "slug": "trust-exact",
+      "title_ja": "厳密部分問題型信頼領域",
+      "title_en": "trust-exact",
+      "aliases": [
+        "trust-exact",
+        "厳密部分問題型信頼領域"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_TRUST_KRYLOV",
+      "slug": "trust-krylov",
+      "title_ja": "Krylov型信頼領域",
+      "title_en": "trust-krylov",
+      "aliases": [
+        "trust-krylov",
+        "Krylov型信頼領域"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CUBIC_REGULARIZATION",
+      "slug": "cubic-regularization",
+      "title_ja": "三次正則化法",
+      "title_en": "Cubic regularization",
+      "aliases": [
+        "Cubic regularization",
+        "三次正則化法"
+      ],
+      "family": "curvature",
+      "family_label_ja": "曲率・最小二乗",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SUBGRADIENT",
+      "slug": "subgradient",
+      "title_ja": "劣勾配法",
+      "title_en": "Subgradient",
+      "aliases": [
+        "Subgradient",
+        "劣勾配法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BUNDLE",
+      "slug": "bundle",
+      "title_ja": "バンドル法",
+      "title_en": "Bundle method",
+      "aliases": [
+        "Bundle method",
+        "バンドル法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROXIMAL_GRADIENT",
+      "slug": "proximal-gradient",
+      "title_ja": "近接勾配法",
+      "title_en": "Proximal gradient",
+      "aliases": [
+        "Proximal gradient",
+        "近接勾配法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_PROX_GRADIENT",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FISTA",
+      "slug": "fista",
+      "title_ja": "FISTA",
+      "title_en": "FISTA",
+      "aliases": [
+        "FISTA",
+        "FISTA"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADMM",
+      "slug": "admm",
+      "title_ja": "ADMM",
+      "title_en": "Alternating direction method of multipliers",
+      "aliases": [
+        "Alternating direction method of multipliers",
+        "ADMM"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_ADMM",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DOUGLAS_RACHFORD",
+      "slug": "douglas-rachford",
+      "title_ja": "Douglas–Rachford分割",
+      "title_en": "Douglas-Rachford splitting",
+      "aliases": [
+        "Douglas-Rachford splitting",
+        "Douglas–Rachford分割"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PDHG",
+      "slug": "pdhg",
+      "title_ja": "主双対ハイブリッド勾配",
+      "title_en": "Primal-dual hybrid gradient",
+      "aliases": [
+        "Primal-dual hybrid gradient",
+        "主双対ハイブリッド勾配"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MIRROR_DESCENT",
+      "slug": "mirror-descent",
+      "title_ja": "ミラー降下法",
+      "title_en": "Mirror descent",
+      "aliases": [
+        "Mirror descent",
+        "ミラー降下法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FRANK_WOLFE",
+      "slug": "frank-wolfe",
+      "title_ja": "Frank–Wolfe法",
+      "title_en": "Frank-Wolfe",
+      "aliases": [
+        "Frank-Wolfe",
+        "Frank–Wolfe法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E05"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BLOCK_COORDINATE",
+      "slug": "block-coordinate",
+      "title_ja": "ブロック座標降下",
+      "title_en": "Block coordinate descent",
+      "aliases": [
+        "Block coordinate descent",
+        "ブロック座標降下"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROXIMAL_NEWTON",
+      "slug": "proximal-newton",
+      "title_ja": "近接Newton法",
+      "title_en": "Proximal Newton",
+      "aliases": [
+        "Proximal Newton",
+        "近接Newton法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CCCP",
+      "slug": "cccp",
+      "title_ja": "CCCP",
+      "title_en": "Concave-convex procedure",
+      "aliases": [
+        "Concave-convex procedure",
+        "CCCP"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DCA",
+      "slug": "dca",
+      "title_ja": "DCアルゴリズム",
+      "title_en": "Difference of convex algorithm",
+      "aliases": [
+        "Difference of convex algorithm",
+        "DCアルゴリズム"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROXIMAL_POINT",
+      "slug": "proximal-point",
+      "title_ja": "近接点法",
+      "title_en": "Proximal point",
+      "aliases": [
+        "Proximal point",
+        "近接点法"
+      ],
+      "family": "nonsmooth",
+      "family_label_ja": "近接・非滑らか・分割",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E04"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROJECTED_GRADIENT",
+      "slug": "projected-gradient",
+      "title_ja": "射影勾配法",
+      "title_en": "Projected gradient",
+      "aliases": [
+        "Projected gradient",
+        "射影勾配法"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_PROJECTED_GRADIENT",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SQP",
+      "slug": "sqp",
+      "title_ja": "逐次二次計画",
+      "title_en": "Sequential quadratic programming",
+      "aliases": [
+        "Sequential quadratic programming",
+        "逐次二次計画"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SLSQP",
+      "slug": "slsqp",
+      "title_ja": "SLSQP",
+      "title_en": "SLSQP",
+      "aliases": [
+        "SLSQP",
+        "SLSQP"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_AUGMENTED_LAGRANGIAN",
+      "slug": "augmented-lagrangian",
+      "title_ja": "拡張Lagrange法",
+      "title_en": "Augmented Lagrangian",
+      "aliases": [
+        "Augmented Lagrangian",
+        "拡張Lagrange法"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_EXTERIOR_PENALTY",
+      "slug": "exterior-penalty",
+      "title_ja": "外点ペナルティ",
+      "title_en": "Exterior penalty",
+      "aliases": [
+        "Exterior penalty",
+        "外点ペナルティ"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LOG_BARRIER",
+      "slug": "log-barrier",
+      "title_ja": "対数障壁",
+      "title_en": "Logarithmic barrier",
+      "aliases": [
+        "Logarithmic barrier",
+        "対数障壁"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NLP_INTERIOR_POINT",
+      "slug": "nlp-interior-point",
+      "title_ja": "非線形内点法",
+      "title_en": "Nonlinear interior point",
+      "aliases": [
+        "Nonlinear interior point",
+        "非線形内点法"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FEASIBLE_SQP",
+      "slug": "feasible-sqp",
+      "title_ja": "実行可能性維持SQP",
+      "title_en": "Feasible SQP",
+      "aliases": [
+        "Feasible SQP",
+        "実行可能性維持SQP"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "variant",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FILTER_GLOBALIZATION",
+      "slug": "filter-globalization",
+      "title_ja": "フィルタ大域化",
+      "title_en": "Filter globalization",
+      "aliases": [
+        "Filter globalization",
+        "フィルタ大域化"
+      ],
+      "family": "constrained",
+      "family_label_ja": "制約付き連続",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PRIMAL_SIMPLEX",
+      "slug": "primal-simplex",
+      "title_ja": "主単体法",
+      "title_en": "Primal simplex",
+      "aliases": [
+        "Primal simplex",
+        "主単体法"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DUAL_SIMPLEX",
+      "slug": "dual-simplex",
+      "title_ja": "双対単体法",
+      "title_en": "Dual simplex",
+      "aliases": [
+        "Dual simplex",
+        "双対単体法"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CONIC_INTERIOR_POINT",
+      "slug": "conic-interior-point",
+      "title_ja": "錐内点法",
+      "title_en": "Conic interior point",
+      "aliases": [
+        "Conic interior point",
+        "錐内点法"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ACTIVE_SET_QP",
+      "slug": "active-set-qp",
+      "title_ja": "有効制約QP",
+      "title_en": "Active-set QP",
+      "aliases": [
+        "Active-set QP",
+        "有効制約QP"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADMM_QP",
+      "slug": "admm-qp",
+      "title_ja": "分割型QP",
+      "title_en": "ADMM QP",
+      "aliases": [
+        "ADMM QP",
+        "分割型QP"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PDLP",
+      "slug": "pdlp",
+      "title_ja": "PDLP",
+      "title_en": "Primal-dual linear programming",
+      "aliases": [
+        "Primal-dual linear programming",
+        "PDLP"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_PDLP",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_HOMOGENEOUS_EMBEDDING",
+      "slug": "homogeneous-embedding",
+      "title_ja": "同次埋込み",
+      "title_en": "Homogeneous embedding",
+      "aliases": [
+        "Homogeneous embedding",
+        "同次埋込み"
+      ],
+      "family": "lp-conic",
+      "family_label_ja": "線形・二次・錐",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BRANCH_BOUND",
+      "slug": "branch-bound",
+      "title_ja": "分枝限定法",
+      "title_en": "Branch and bound",
+      "aliases": [
+        "Branch and bound",
+        "分枝限定法"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BRANCH_CUT",
+      "slug": "branch-cut",
+      "title_ja": "分枝カット法",
+      "title_en": "Branch and cut",
+      "aliases": [
+        "Branch and cut",
+        "分枝カット法"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BRANCH_PRICE",
+      "slug": "branch-price",
+      "title_ja": "分枝価格法",
+      "title_en": "Branch and price",
+      "aliases": [
+        "Branch and price",
+        "分枝価格法"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BENDERS",
+      "slug": "benders",
+      "title_ja": "Benders分解",
+      "title_en": "Benders decomposition",
+      "aliases": [
+        "Benders decomposition",
+        "Benders分解"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DANTZIG_WOLFE",
+      "slug": "dantzig-wolfe",
+      "title_ja": "Dantzig–Wolfe分解",
+      "title_en": "Dantzig-Wolfe decomposition",
+      "aliases": [
+        "Dantzig-Wolfe decomposition",
+        "Dantzig–Wolfe分解"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_COLUMN_GENERATION",
+      "slug": "column-generation",
+      "title_ja": "列生成",
+      "title_en": "Column generation",
+      "aliases": [
+        "Column generation",
+        "列生成"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LAGRANGIAN_RELAXATION",
+      "slug": "lagrangian-relaxation",
+      "title_ja": "Lagrange緩和",
+      "title_en": "Lagrangian relaxation",
+      "aliases": [
+        "Lagrangian relaxation",
+        "Lagrange緩和"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CP_SEARCH",
+      "slug": "cp-search",
+      "title_ja": "制約プログラミング探索",
+      "title_en": "Constraint programming search",
+      "aliases": [
+        "Constraint programming search",
+        "制約プログラミング探索"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CDCL",
+      "slug": "cdcl",
+      "title_ja": "CDCL",
+      "title_en": "Conflict-driven clause learning",
+      "aliases": [
+        "Conflict-driven clause learning",
+        "CDCL"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CP_SAT",
+      "slug": "cp-sat",
+      "title_ja": "CP-SAT型統合探索",
+      "title_en": "CP-SAT",
+      "aliases": [
+        "CP-SAT",
+        "CP-SAT型統合探索"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BRANCH_PRICE_CUT",
+      "slug": "branch-price-cut",
+      "title_ja": "分枝価格カット",
+      "title_en": "Branch-price-and-cut",
+      "aliases": [
+        "Branch-price-and-cut",
+        "分枝価格カット"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DYNAMIC_PROGRAMMING",
+      "slug": "dynamic-programming",
+      "title_ja": "動的計画法",
+      "title_en": "Dynamic programming",
+      "aliases": [
+        "Dynamic programming",
+        "動的計画法"
+      ],
+      "family": "decomposition",
+      "family_label_ja": "分解・離散探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E07"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DIJKSTRA",
+      "slug": "dijkstra",
+      "title_ja": "Dijkstra法",
+      "title_en": "Dijkstra",
+      "aliases": [
+        "Dijkstra",
+        "Dijkstra法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ASTAR",
+      "slug": "astar",
+      "title_ja": "A*",
+      "title_en": "A star",
+      "aliases": [
+        "A star",
+        "A*"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BELLMAN_FORD",
+      "slug": "bellman-ford",
+      "title_ja": "Bellman–Ford法",
+      "title_en": "Bellman-Ford",
+      "aliases": [
+        "Bellman-Ford",
+        "Bellman–Ford法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_HUNGARIAN",
+      "slug": "hungarian",
+      "title_ja": "Hungarian法",
+      "title_en": "Hungarian algorithm",
+      "aliases": [
+        "Hungarian algorithm",
+        "Hungarian法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_AUGMENTING_MAXFLOW",
+      "slug": "augmenting-maxflow",
+      "title_ja": "増加路最大流",
+      "title_en": "Augmenting-path maximum flow",
+      "aliases": [
+        "Augmenting-path maximum flow",
+        "増加路最大流"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PUSH_RELABEL",
+      "slug": "push-relabel",
+      "title_ja": "Push–relabel最大流",
+      "title_en": "Push-relabel",
+      "aliases": [
+        "Push-relabel",
+        "Push–relabel最大流"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NETWORK_SIMPLEX",
+      "slug": "network-simplex",
+      "title_ja": "ネットワーク単体法",
+      "title_en": "Network simplex",
+      "aliases": [
+        "Network simplex",
+        "ネットワーク単体法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SUCCESSIVE_SHORTEST_PATH",
+      "slug": "successive-shortest-path",
+      "title_ja": "逐次最短路最小費用流",
+      "title_en": "Successive shortest path",
+      "aliases": [
+        "Successive shortest path",
+        "逐次最短路最小費用流"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_GREEDY_SET_COVER",
+      "slug": "greedy-set-cover",
+      "title_ja": "集合被覆貪欲法",
+      "title_en": "Greedy set cover",
+      "aliases": [
+        "Greedy set cover",
+        "集合被覆貪欲法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SUBMODULAR_GREEDY",
+      "slug": "submodular-greedy",
+      "title_ja": "劣モジュラ貪欲法",
+      "title_en": "Submodular greedy",
+      "aliases": [
+        "Submodular greedy",
+        "劣モジュラ貪欲法"
+      ],
+      "family": "graph",
+      "family_label_ja": "グラフ・構造活用",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E14"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NELDER_MEAD",
+      "slug": "nelder-mead",
+      "title_ja": "Nelder–Mead法",
+      "title_en": "Nelder-Mead",
+      "aliases": [
+        "Nelder-Mead",
+        "Nelder–Mead法"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_NELDER_MEAD",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_POWELL",
+      "slug": "powell",
+      "title_ja": "Powell方向集合",
+      "title_en": "Powell direction set",
+      "aliases": [
+        "Powell direction set",
+        "Powell方向集合"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PATTERN_SEARCH",
+      "slug": "pattern-search",
+      "title_ja": "パターン探索",
+      "title_en": "Pattern search",
+      "aliases": [
+        "Pattern search",
+        "パターン探索"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MADS",
+      "slug": "mads",
+      "title_ja": "MADS",
+      "title_en": "Mesh adaptive direct search",
+      "aliases": [
+        "Mesh adaptive direct search",
+        "MADS"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_MADS",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_COBYLA",
+      "slug": "cobyla",
+      "title_ja": "COBYLA",
+      "title_en": "COBYLA",
+      "aliases": [
+        "COBYLA",
+        "COBYLA"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_COBYQA",
+      "slug": "cobyqa",
+      "title_ja": "COBYQA",
+      "title_en": "COBYQA",
+      "aliases": [
+        "COBYQA",
+        "COBYQA"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BOBYQA",
+      "slug": "bobyqa",
+      "title_ja": "BOBYQA",
+      "title_en": "BOBYQA",
+      "aliases": [
+        "BOBYQA",
+        "BOBYQA"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DIRECT",
+      "slug": "direct",
+      "title_ja": "DIRECT",
+      "title_en": "DIRECT",
+      "aliases": [
+        "DIRECT",
+        "DIRECT"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CMAES",
+      "slug": "cmaes",
+      "title_ja": "CMA-ES",
+      "title_en": "CMA-ES",
+      "aliases": [
+        "CMA-ES",
+        "CMA-ES"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DE",
+      "slug": "de",
+      "title_ja": "差分進化",
+      "title_en": "Differential evolution",
+      "aliases": [
+        "Differential evolution",
+        "差分進化"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PSO",
+      "slug": "pso",
+      "title_ja": "粒子群最適化",
+      "title_en": "Particle swarm",
+      "aliases": [
+        "Particle swarm",
+        "粒子群最適化"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_GA",
+      "slug": "ga",
+      "title_ja": "遺伝的アルゴリズム",
+      "title_en": "Genetic algorithm",
+      "aliases": [
+        "Genetic algorithm",
+        "遺伝的アルゴリズム"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SA",
+      "slug": "sa",
+      "title_ja": "焼きなまし法",
+      "title_en": "Simulated annealing",
+      "aliases": [
+        "Simulated annealing",
+        "焼きなまし法"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DUAL_ANNEALING",
+      "slug": "dual-annealing",
+      "title_ja": "Dual annealing",
+      "title_en": "Dual annealing",
+      "aliases": [
+        "Dual annealing",
+        "Dual annealing"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_BASIN_HOPPING",
+      "slug": "basin-hopping",
+      "title_ja": "Basin hopping",
+      "title_en": "Basin hopping",
+      "aliases": [
+        "Basin hopping",
+        "Basin hopping"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MULTISTART",
+      "slug": "multistart",
+      "title_ja": "多点開始",
+      "title_en": "Multi-start",
+      "aliases": [
+        "Multi-start",
+        "多点開始"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_MULTISTART",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_RANDOM_SEARCH",
+      "slug": "random-search",
+      "title_ja": "ランダム探索",
+      "title_en": "Random search",
+      "aliases": [
+        "Random search",
+        "ランダム探索"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_RANDOM_SEARCH",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SOBOL_DESIGN",
+      "slug": "sobol-design",
+      "title_ja": "Sobol列による初期設計",
+      "title_en": "Sobol design",
+      "aliases": [
+        "Sobol design",
+        "Sobol列による初期設計"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_GRID_SEARCH",
+      "slug": "grid-search",
+      "title_ja": "格子探索",
+      "title_en": "Grid search",
+      "aliases": [
+        "Grid search",
+        "格子探索"
+      ],
+      "family": "derivative-free",
+      "family_label_ja": "微分不要・大域探索",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E03"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_GP_BO",
+      "slug": "gp-bo",
+      "title_ja": "GPベイズ最適化",
+      "title_en": "Gaussian-process Bayesian optimization",
+      "aliases": [
+        "Gaussian-process Bayesian optimization",
+        "GPベイズ最適化"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_TPE",
+      "slug": "tpe",
+      "title_ja": "TPE",
+      "title_en": "Tree-structured Parzen estimator",
+      "aliases": [
+        "Tree-structured Parzen estimator",
+        "TPE"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SMAC",
+      "slug": "smac",
+      "title_ja": "SMAC型モデル探索",
+      "title_en": "SMAC",
+      "aliases": [
+        "SMAC",
+        "SMAC型モデル探索"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_TURBO",
+      "slug": "turbo",
+      "title_ja": "TuRBO",
+      "title_en": "Trust region Bayesian optimization",
+      "aliases": [
+        "Trust region Bayesian optimization",
+        "TuRBO"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SAASBO",
+      "slug": "saasbo",
+      "title_ja": "SAASBO",
+      "title_en": "SAASBO",
+      "aliases": [
+        "SAASBO",
+        "SAASBO"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "variant",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SAFEOPT",
+      "slug": "safeopt",
+      "title_ja": "SafeOpt",
+      "title_en": "SafeOpt",
+      "aliases": [
+        "SafeOpt",
+        "SafeOpt"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P1",
+      "source_refs": [
+        "E38"
+      ],
+      "source_review": "primary_paper_identified_assumptions_review_pending",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CONSTRAINED_BO",
+      "slug": "constrained-bo",
+      "title_ja": "制約付きBO",
+      "title_en": "Constrained Bayesian optimization",
+      "aliases": [
+        "Constrained Bayesian optimization",
+        "制約付きBO"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_QEI",
+      "slug": "qei",
+      "title_ja": "バッチ期待改善",
+      "title_en": "qEI",
+      "aliases": [
+        "qEI",
+        "バッチ期待改善"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_QNEHVI",
+      "slug": "qnehvi",
+      "title_ja": "ノイズ付き多目的期待改善",
+      "title_en": "qNEHVI",
+      "aliases": [
+        "qNEHVI",
+        "ノイズ付き多目的期待改善"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ENTROPY_SEARCH",
+      "slug": "entropy-search",
+      "title_ja": "エントロピー探索",
+      "title_en": "Entropy search",
+      "aliases": [
+        "Entropy search",
+        "エントロピー探索"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_KNOWLEDGE_GRADIENT",
+      "slug": "knowledge-gradient",
+      "title_ja": "Knowledge gradient",
+      "title_en": "Knowledge gradient",
+      "aliases": [
+        "Knowledge gradient",
+        "Knowledge gradient"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MF_BO",
+      "slug": "mf-bo",
+      "title_ja": "多忠実度BO",
+      "title_en": "Multi-fidelity Bayesian optimization",
+      "aliases": [
+        "Multi-fidelity Bayesian optimization",
+        "多忠実度BO"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_HYPERBAND",
+      "slug": "hyperband",
+      "title_ja": "Hyperband",
+      "title_en": "Hyperband",
+      "aliases": [
+        "Hyperband",
+        "Hyperband"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ASHA",
+      "slug": "asha",
+      "title_ja": "ASHA",
+      "title_en": "Asynchronous successive halving",
+      "aliases": [
+        "Asynchronous successive halving",
+        "ASHA"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PBT",
+      "slug": "pbt",
+      "title_ja": "Population-based training",
+      "title_en": "Population based training",
+      "aliases": [
+        "Population based training",
+        "Population-based training"
+      ],
+      "family": "expensive",
+      "family_label_ja": "高価な評価・適応実験",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E12"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_WEIGHTED_SUM",
+      "slug": "weighted-sum",
+      "title_ja": "重み付き和",
+      "title_en": "Weighted sum",
+      "aliases": [
+        "Weighted sum",
+        "重み付き和"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_EPSILON_CONSTRAINT",
+      "slug": "epsilon-constraint",
+      "title_ja": "ε制約法",
+      "title_en": "Epsilon constraint",
+      "aliases": [
+        "Epsilon constraint",
+        "ε制約法"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "strategy",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NSGAII",
+      "slug": "nsgaii",
+      "title_ja": "NSGA-II",
+      "title_en": "NSGA-II",
+      "aliases": [
+        "NSGA-II",
+        "NSGA-II"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_NSGA_II",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_NSGAIII",
+      "slug": "nsgaiii",
+      "title_ja": "NSGA-III",
+      "title_en": "NSGA-III",
+      "aliases": [
+        "NSGA-III",
+        "NSGA-III"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MOEAD",
+      "slug": "moead",
+      "title_ja": "MOEA/D",
+      "title_en": "MOEA/D",
+      "aliases": [
+        "MOEA/D",
+        "MOEA/D"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "algorithm",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PAREGO",
+      "slug": "parego",
+      "title_ja": "ParEGO",
+      "title_en": "ParEGO",
+      "aliases": [
+        "ParEGO",
+        "ParEGO"
+      ],
+      "family": "multiobjective",
+      "family_label_ja": "多目的",
+      "entity_kind": "algorithm",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SAA",
+      "slug": "saa",
+      "title_ja": "標本平均近似",
+      "title_en": "Sample average approximation",
+      "aliases": [
+        "Sample average approximation",
+        "標本平均近似"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "strategy",
+      "scope_tier": "applied",
+      "priority": "P1",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ROBUST_COUNTERPART",
+      "slug": "robust-counterpart",
+      "title_ja": "ロバスト対応問題",
+      "title_en": "Robust counterpart",
+      "aliases": [
+        "Robust counterpart",
+        "ロバスト対応問題"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "strategy",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CCG",
+      "slug": "ccg",
+      "title_ja": "列・制約生成",
+      "title_en": "Column-and-constraint generation",
+      "aliases": [
+        "Column-and-constraint generation",
+        "列・制約生成"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "strategy",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROGRESSIVE_HEDGING",
+      "slug": "progressive-hedging",
+      "title_ja": "Progressive hedging",
+      "title_en": "Progressive hedging",
+      "aliases": [
+        "Progressive hedging",
+        "Progressive hedging"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "strategy",
+      "scope_tier": "applied",
+      "priority": "P1",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SDDP",
+      "slug": "sddp",
+      "title_ja": "確率的双対動的計画",
+      "title_en": "Stochastic dual dynamic programming",
+      "aliases": [
+        "Stochastic dual dynamic programming",
+        "確率的双対動的計画"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P1",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CVAR_REFORMULATION",
+      "slug": "cvar-reformulation",
+      "title_ja": "CVaR再定式化",
+      "title_en": "CVaR reformulation",
+      "aliases": [
+        "CVaR reformulation",
+        "CVaR再定式化"
+      ],
+      "family": "uncertainty",
+      "family_label_ja": "不確実性・段階性",
+      "entity_kind": "strategy",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E09"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_RIEMANNIAN_GD",
+      "slug": "riemannian-gd",
+      "title_ja": "Riemannian勾配法",
+      "title_en": "Riemannian gradient",
+      "aliases": [
+        "Riemannian gradient",
+        "Riemannian勾配法"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_RIEMANNIAN_GRADIENT",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_RIEMANNIAN_TR",
+      "slug": "riemannian-tr",
+      "title_ja": "Riemannian信頼領域",
+      "title_en": "Riemannian trust region",
+      "aliases": [
+        "Riemannian trust region",
+        "Riemannian信頼領域"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_RIEMANNIAN_TRUST_REGION",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DIRECT_SHOOTING",
+      "slug": "direct-shooting",
+      "title_ja": "直接射撃法",
+      "title_en": "Direct shooting",
+      "aliases": [
+        "Direct shooting",
+        "直接射撃法"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MULTIPLE_SHOOTING",
+      "slug": "multiple-shooting",
+      "title_ja": "多重射撃法",
+      "title_en": "Multiple shooting",
+      "aliases": [
+        "Multiple shooting",
+        "多重射撃法"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": "M_MULTIPLE_SHOOTING",
+      "mapping_status": "exact_id_observed_needs_semantic_review",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_COLLOCATION",
+      "slug": "collocation",
+      "title_ja": "直接選点法",
+      "title_en": "Direct collocation",
+      "aliases": [
+        "Direct collocation",
+        "直接選点法"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ILQR",
+      "slug": "ilqr",
+      "title_ja": "iLQR",
+      "title_en": "Iterative LQR",
+      "aliases": [
+        "Iterative LQR",
+        "iLQR"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DDP",
+      "slug": "ddp",
+      "title_ja": "DDP",
+      "title_en": "Differential dynamic programming",
+      "aliases": [
+        "Differential dynamic programming",
+        "DDP"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_RICCATI",
+      "slug": "riccati",
+      "title_ja": "Riccati再帰",
+      "title_en": "Riccati recursion",
+      "aliases": [
+        "Riccati recursion",
+        "Riccati再帰"
+      ],
+      "family": "geometry-control",
+      "family_label_ja": "幾何・最適制御",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SIMP",
+      "slug": "simp",
+      "title_ja": "SIMP",
+      "title_en": "SIMP",
+      "aliases": [
+        "SIMP",
+        "SIMP"
+      ],
+      "family": "shape",
+      "family_label_ja": "形状・トポロジー",
+      "entity_kind": "strategy",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_MMA",
+      "slug": "mma",
+      "title_ja": "移動漸近法",
+      "title_en": "Method of moving asymptotes",
+      "aliases": [
+        "Method of moving asymptotes",
+        "移動漸近法"
+      ],
+      "family": "shape",
+      "family_label_ja": "形状・トポロジー",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_OC",
+      "slug": "oc",
+      "title_ja": "最適性規準法",
+      "title_en": "Optimality criteria",
+      "aliases": [
+        "Optimality criteria",
+        "最適性規準法"
+      ],
+      "family": "shape",
+      "family_label_ja": "形状・トポロジー",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_LEVELSET",
+      "slug": "levelset",
+      "title_ja": "レベルセット形状更新",
+      "title_en": "Level-set shape update",
+      "aliases": [
+        "Level-set shape update",
+        "レベルセット形状更新"
+      ],
+      "family": "shape",
+      "family_label_ja": "形状・トポロジー",
+      "entity_kind": "strategy",
+      "scope_tier": "frontier",
+      "priority": "P3",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SINKHORN",
+      "slug": "sinkhorn",
+      "title_ja": "Sinkhorn法",
+      "title_en": "Sinkhorn",
+      "aliases": [
+        "Sinkhorn",
+        "Sinkhorn法"
+      ],
+      "family": "transport",
+      "family_label_ja": "輸送・分布",
+      "entity_kind": "algorithm",
+      "scope_tier": "applied",
+      "priority": "P1",
+      "source_refs": [
+        "E11"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_UNBALANCED_SINKHORN",
+      "slug": "unbalanced-sinkhorn",
+      "title_ja": "非均衡Sinkhorn法",
+      "title_en": "Unbalanced Sinkhorn",
+      "aliases": [
+        "Unbalanced Sinkhorn",
+        "非均衡Sinkhorn法"
+      ],
+      "family": "transport",
+      "family_label_ja": "輸送・分布",
+      "entity_kind": "variant",
+      "scope_tier": "applied",
+      "priority": "P1",
+      "source_refs": [
+        "E11"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_AUTODIFF",
+      "slug": "autodiff",
+      "title_ja": "自動微分",
+      "title_en": "Automatic differentiation",
+      "aliases": [
+        "Automatic differentiation",
+        "自動微分"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ADJOINT",
+      "slug": "adjoint",
+      "title_ja": "随伴感度",
+      "title_en": "Adjoint sensitivity",
+      "aliases": [
+        "Adjoint sensitivity",
+        "随伴感度"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FINITE_DIFFERENCE",
+      "slug": "finite-difference",
+      "title_ja": "有限差分感度",
+      "title_en": "Finite differences",
+      "aliases": [
+        "Finite differences",
+        "有限差分感度"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_COMPLEX_STEP",
+      "slug": "complex-step",
+      "title_ja": "複素ステップ感度",
+      "title_en": "Complex step",
+      "aliases": [
+        "Complex step",
+        "複素ステップ感度"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ARMIJO",
+      "slug": "armijo",
+      "title_ja": "Armijo条件",
+      "title_en": "Armijo condition",
+      "aliases": [
+        "Armijo condition",
+        "Armijo条件"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_WOLFE",
+      "slug": "wolfe",
+      "title_ja": "Wolfe条件",
+      "title_en": "Wolfe conditions",
+      "aliases": [
+        "Wolfe conditions",
+        "Wolfe条件"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PRECONDITIONING",
+      "slug": "preconditioning",
+      "title_ja": "前処理",
+      "title_en": "Preconditioning",
+      "aliases": [
+        "Preconditioning",
+        "前処理"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SCALING",
+      "slug": "scaling",
+      "title_ja": "変数スケーリング",
+      "title_en": "Variable scaling",
+      "aliases": [
+        "Variable scaling",
+        "変数スケーリング"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_CONTINUATION",
+      "slug": "continuation",
+      "title_ja": "継続法",
+      "title_en": "Continuation",
+      "aliases": [
+        "Continuation",
+        "継続法"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_WARM_START",
+      "slug": "warm-start",
+      "title_ja": "ウォームスタート",
+      "title_en": "Warm start",
+      "aliases": [
+        "Warm start",
+        "ウォームスタート"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_FEASIBILITY_RESTORATION",
+      "slug": "feasibility-restoration",
+      "title_ja": "実行可能性回復",
+      "title_en": "Feasibility restoration",
+      "aliases": [
+        "Feasibility restoration",
+        "実行可能性回復"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_DUALITY_CERTIFICATE",
+      "slug": "duality-certificate",
+      "title_ja": "双対証明書",
+      "title_en": "Duality certificate",
+      "aliases": [
+        "Duality certificate",
+        "双対証明書"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_REGULARIZATION",
+      "slug": "regularization",
+      "title_ja": "疎性・正則化",
+      "title_en": "Sparsity regularization",
+      "aliases": [
+        "Sparsity regularization",
+        "疎性・正則化"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_ELIMINATION",
+      "slug": "elimination",
+      "title_ja": "変数消去",
+      "title_en": "Variable elimination",
+      "aliases": [
+        "Variable elimination",
+        "変数消去"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_EPIGRAPH",
+      "slug": "epigraph",
+      "title_ja": "エピグラフ再定式化",
+      "title_en": "Epigraph reformulation",
+      "aliases": [
+        "Epigraph reformulation",
+        "エピグラフ再定式化"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P1",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_SCHUR",
+      "slug": "schur",
+      "title_ja": "Schur補元",
+      "title_en": "Schur complement",
+      "aliases": [
+        "Schur complement",
+        "Schur補元"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_INTERVAL_BOUNDS",
+      "slug": "interval-bounds",
+      "title_ja": "区間による上下界",
+      "title_en": "Interval bounds",
+      "aliases": [
+        "Interval bounds",
+        "区間による上下界"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    },
+    {
+      "topic_id": "TOPIC_PROX_OPERATOR",
+      "slug": "prox-operator",
+      "title_ja": "近接写像",
+      "title_en": "Proximal operator",
+      "aliases": [
+        "Proximal operator",
+        "近接写像"
+      ],
+      "family": "primitives",
+      "family_label_ja": "共通部品・モデリング操作",
+      "entity_kind": "primitive",
+      "scope_tier": "core",
+      "priority": "P2",
+      "source_refs": [
+        "E02"
+      ],
+      "source_review": "individual_claim_review_required",
+      "existing_canonical_id_hint": null,
+      "mapping_status": "not_audited",
+      "proposed_action": "reuse_extend_or_add_after_reconciliation",
+      "completion_requirement": "定義・前提・隣接概念との差・小さな検算例・失敗/限界・出典を確認。新規canonical行が必要かは別途判定。"
+    }
+  ]
+}

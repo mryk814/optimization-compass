@@ -1,0 +1,71 @@
+/*
+ * Conceptual Visual System tokens (docs/visual-system.md).
+ *
+ * Semantic colour is reserved for meaning and shared by every surface:
+ *   ink       structure lines, axes, settled facts
+ *   observed  observed / known / feasible (teal)
+ *   candidate candidate / next action / update (orange)
+ *   violation violation only — the axis that broke an assumption, a failed evaluation (red)
+ *   open      unknown / not yet answered (hatched blue-grey)
+ *   muted     not applicable, context, the landscape only a human sees
+ * The site's green stays for navigation and brand; it never carries a judgement.
+ */
+:root {
+  --vs-ground: #fbf9f2;
+  --vs-panel: #ffffff;
+  --vs-ink: #1d2b4a;
+  --vs-ink-soft: #4a5673;
+  --vs-line: #ddd8c8;
+  --vs-line-strong: #b9b3a1;
+  --vs-observed: #1a8a85;
+  --vs-observed-ink: #0d5c58;
+  --vs-observed-wash: #dff1ee;
+  --vs-candidate: #e07b2e;
+  --vs-candidate-ink: #8a4108;
+  --vs-candidate-wash: #fbe9da;
+  --vs-violation: #c23a2b;
+  --vs-violation-ink: #9c2417;
+  --vs-violation-wash: #f8e1dd;
+  --vs-open: #7d8aa6;
+  --vs-open-ink: #4b5875;
+  --vs-open-wash: #eef0f5;
+  --vs-muted: #a7a596;
+  --vs-terrain: #b9b3a1;
+
+  --vs-hatch: repeating-linear-gradient(
+    135deg,
+    var(--vs-open-wash) 0 3px,
+    #d5dae6 3px 5px
+  );
+
+  /* Motion semantics: one vocabulary for every surface. */
+  --vs-motion-ink: 320ms;
+  --vs-motion-settle: 220ms;
+  --vs-motion-reveal: 280ms;
+  --vs-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --vs-font-num: "JetBrains Mono", "SFMono-Regular", Consolas, "Noto Sans Mono", monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --vs-motion-ink: 0ms;
+    --vs-motion-settle: 0ms;
+    --vs-motion-reveal: 0ms;
+  }
+}
+
+@keyframes vs-settle {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes vs-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes vs-ink {
+  from { stroke-dashoffset: var(--vs-ink-length, 400); }
+  to { stroke-dashoffset: 0; }
+}

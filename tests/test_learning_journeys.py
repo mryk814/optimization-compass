@@ -334,7 +334,9 @@ def test_index_rejects_missing_and_circular_relations() -> None:
 
 def test_index_rejects_complete_journey_with_missing_dimension() -> None:
     payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    assessment = payload["assessments"][0]
+    assessment = next(
+        item for item in payload["assessments"] if item["journey_id"] == "traffic-signal-tradeoff"
+    )
     assessment["dimensions"]["primary_scenario"]["state"] = "missing"
     assessment["dimensions"]["primary_scenario"]["reason_codes"] = ["missing_primary_scenario"]
     assessment["missing_dimensions"] = ["primary_scenario"]
@@ -475,16 +477,26 @@ def test_source_review_uses_surface_sources_and_type_specific_freshness() -> Non
         "generated_at": index.generated_at,
     }
 
-    assert _source_review_issues(journey, source_index=source_index, **kwargs) == []
+    # Start from sources verified on the generation date so the check does not depend on how
+    # old the released verification dates are, then age one source past its limit.
+    fresh_index = source_index.model_copy(
+        update={
+            "sources": [
+                source.model_copy(update={"last_verified": index.generated_at.date()})
+                for source in source_index.sources
+            ]
+        }
+    )
+    assert _source_review_issues(journey, source_index=fresh_index, **kwargs) == []
 
     stale_source_id = journey.source_ids[0]
-    stale_index = source_index.model_copy(
+    stale_index = fresh_index.model_copy(
         update={
             "sources": [
                 source.model_copy(update={"last_verified": date(2000, 1, 1)})
                 if source.source_id == stale_source_id
                 else source
-                for source in source_index.sources
+                for source in fresh_index.sources
             ]
         }
     )

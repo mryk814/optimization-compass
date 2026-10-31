@@ -9,7 +9,7 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("BO Theaterでcanonical scenarioを切り替え、keyboardで次点選択を追える", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  await page.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u }).click();
+  await page.getByRole("link", { name: /高価な1次元ブラックボックス: 探索寄り \/ ノイズなし/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
   await expect(page.getByText(/surrogate_uncertainty 1\.0\.0/u)).toBeVisible();
   await expect(page.getByRole("img", { name: /surrogateの平均/u })).toBeVisible();

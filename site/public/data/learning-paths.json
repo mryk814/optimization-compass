@@ -1,7 +1,121 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.25",
   "paths": [
+    {
+      "audience_ja": "最適化という言葉は聞いたことがあるが、数式の前提はほとんどない人",
+      "goal_ja": "身近な問いについて、何を決め、何を良くし、何を守るかを自分の言葉で言え、同じ見方を別の配分や選択の問題へ当てはめられるようになります。",
+      "path_id": "what-is-optimization",
+      "route": "/paths/what-is-optimization",
+      "steps": [
+        {
+          "content_id": "concept.linear-program",
+          "has_article": true,
+          "question_ja": "限られた材料で何を何個作るかは、何を決め、何を良くし、何を守る問題なのか。",
+          "route": "/formulations/PA017",
+          "step": 1,
+          "stumbles": [
+            {
+              "route": "/learn/concept.variable-domain",
+              "target_id": "concept.variable-domain",
+              "target_type": "content",
+              "title_ja": "変数の定義域",
+              "trouble_ja": "「決めるもの」が、個数なのか割合なのか選択なのか分からない。"
+            },
+            {
+              "route": "/learn/concept.constraint-class",
+              "target_id": "concept.constraint-class",
+              "target_type": "content",
+              "title_ja": "制約の分類",
+              "trouble_ja": "「守ること（制約）」が、何を指しているのか分からない。"
+            }
+          ],
+          "target_id": "PA017",
+          "target_type": "formulation",
+          "title_ja": "線形計画"
+        },
+        {
+          "content_id": "primal-simplex",
+          "has_article": true,
+          "question_ja": "どの品目を増やすと売上が伸び、どの在庫が先に尽きるかを、一手ずつ予測できるか。",
+          "route": "/methods/M_SIMPLEX",
+          "step": 2,
+          "stumbles": [
+            {
+              "route": "/formulations/PA017",
+              "target_id": "PA017",
+              "target_type": "formulation",
+              "title_ja": "線形計画",
+              "trouble_ja": "図の多角形や直線が、パン屋のどの数字に当たるのか分からない。"
+            },
+            {
+              "route": "/learn/concept.convexity",
+              "target_id": "concept.convexity",
+              "target_type": "content",
+              "title_ja": "凸性",
+              "trouble_ja": "角（頂点）で止めてよい理由が分からない。"
+            }
+          ],
+          "target_id": "primal-simplex",
+          "target_type": "content",
+          "title_ja": "主単体法"
+        },
+        {
+          "content_id": "concept.mixed-integer-linear-program",
+          "has_article": true,
+          "question_ja": "作る個数を整数に限ると、答えと解き方の何が変わるのか。",
+          "route": "/formulations/PA023",
+          "step": 3,
+          "stumbles": [
+            {
+              "route": "/learn/concept.variable-domain",
+              "target_id": "concept.variable-domain",
+              "target_type": "content",
+              "title_ja": "変数の定義域",
+              "trouble_ja": "連続の量と整数の量で、何が違うのか分からない。"
+            },
+            {
+              "route": "/methods/M_SIMPLEX",
+              "target_id": "primal-simplex",
+              "target_type": "content",
+              "title_ja": "主単体法",
+              "trouble_ja": "整数に限る前の答えが、どこで決まったのかを思い出したい。"
+            }
+          ],
+          "target_id": "PA023",
+          "target_type": "formulation",
+          "title_ja": "混合整数線形計画"
+        },
+        {
+          "content_id": "concept.knapsack-set-cover",
+          "has_article": true,
+          "question_ja": "予算の範囲でどの案件を採用するかという別の問いにも、同じ見方を当てはめられるか。",
+          "route": "/formulations/PA032",
+          "step": 4,
+          "stumbles": [
+            {
+              "route": "/formulations/PA023",
+              "target_id": "PA023",
+              "target_type": "formulation",
+              "title_ja": "混合整数線形計画",
+              "trouble_ja": "「選ぶ・選ばない」を数で表す方法が分からない。"
+            },
+            {
+              "route": "/formulations/PA017",
+              "target_id": "PA017",
+              "target_type": "formulation",
+              "title_ja": "線形計画",
+              "trouble_ja": "何を決め、何を良くし、何を守るかの分け方を、もう一度確かめたい。"
+            }
+          ],
+          "target_id": "PA032",
+          "target_type": "formulation",
+          "title_ja": "knapsack・set cover"
+        }
+      ],
+      "summary_ja": "パン屋が在庫の範囲で何を何個焼くかという一つの問いから始めます。決めるもの・良くしたいもの・守ることを分け、一手ずつ予測しながら答えへ近づき、整数の条件と別の選択問題へ考え方を移します。",
+      "title_ja": "最適化って、結局なにをするの？"
+    },
     {
       "audience_ja": "微分と行列の積は分かるが、最適化は初めて学ぶ人",
       "goal_ja": "問題文を読んで「何を決め、何を良くし、何を守るか」を式に書き、その形からおおよその解き方と保証の強さを言えるようになります。",
@@ -14,6 +128,7 @@
           "question_ja": "決めるものが連続か、整数か、選択かで、なぜ使える道具が変わるのか。",
           "route": "/learn/concept.variable-domain",
           "step": 1,
+          "stumbles": [],
           "target_id": "concept.variable-domain",
           "target_type": "content",
           "title_ja": "変数の定義域"
@@ -24,6 +139,7 @@
           "question_ja": "費用も制約も足し算と定数倍で書ける問題は、どんな形をしているか。",
           "route": "/formulations/PA017",
           "step": 2,
+          "stumbles": [],
           "target_id": "PA017",
           "target_type": "formulation",
           "title_ja": "線形計画"
@@ -34,16 +150,60 @@
           "question_ja": "近くで一番低い点が、全体でも一番低いと言えるのはどんなときか。",
           "route": "/learn/concept.convexity",
           "step": 3,
+          "stumbles": [
+            {
+              "route": "/formulations/PA017",
+              "target_id": "PA017",
+              "target_type": "formulation",
+              "title_ja": "線形計画",
+              "trouble_ja": "「凸」が図の上で何を指すのか分からない。"
+            }
+          ],
           "target_id": "concept.convexity",
           "target_type": "content",
           "title_ja": "凸性"
+        },
+        {
+          "content_id": "concept.smooth-low-dimensional-unconstrained",
+          "has_article": true,
+          "question_ja": "勾配が0の点に着いたら、それで一番低い点だと言ってよいのか。",
+          "route": "/formulations/PA006",
+          "step": 4,
+          "stumbles": [
+            {
+              "route": "/learn/concept.convexity",
+              "target_id": "concept.convexity",
+              "target_type": "content",
+              "title_ja": "凸性",
+              "trouble_ja": "「近くで一番低い」と「全体で一番低い」の違いが分からない。"
+            }
+          ],
+          "target_id": "PA006",
+          "target_type": "formulation",
+          "title_ja": "滑らかな低次元無制約"
         },
         {
           "content_id": "primal-simplex",
           "has_article": true,
           "question_ja": "線形計画の答えは、なぜ頂点を順にたどれば見つかるのか。",
           "route": "/methods/M_SIMPLEX",
-          "step": 4,
+          "step": 5,
+          "stumbles": [
+            {
+              "route": "/learn/concept.convexity",
+              "target_id": "concept.convexity",
+              "target_type": "content",
+              "title_ja": "凸性",
+              "trouble_ja": "頂点を順にたどってよい理由が分からない。"
+            },
+            {
+              "route": "/formulations/PA017",
+              "target_id": "PA017",
+              "target_type": "formulation",
+              "title_ja": "線形計画",
+              "trouble_ja": "線形計画の式の各記号が、何を表すのか分からない。"
+            }
+          ],
           "target_id": "primal-simplex",
           "target_type": "content",
           "title_ja": "主単体法"
@@ -53,7 +213,8 @@
           "has_article": true,
           "question_ja": "目的に二乗が入ると、答えの位置と解き方はどう変わるのか。",
           "route": "/formulations/PA018",
-          "step": 5,
+          "step": 6,
+          "stumbles": [],
           "target_id": "PA018",
           "target_type": "formulation",
           "title_ja": "凸二次計画"
@@ -63,7 +224,16 @@
           "has_article": true,
           "question_ja": "「整数であること」を一つ足すだけで、何が難しくなるのか。",
           "route": "/formulations/PA023",
-          "step": 6,
+          "step": 7,
+          "stumbles": [
+            {
+              "route": "/learn/concept.variable-domain",
+              "target_id": "concept.variable-domain",
+              "target_type": "content",
+              "title_ja": "変数の定義域",
+              "trouble_ja": "連続の量と整数の量で、何が違うのか分からない。"
+            }
+          ],
           "target_id": "PA023",
           "target_type": "formulation",
           "title_ja": "混合整数線形計画"
@@ -73,7 +243,16 @@
           "has_article": true,
           "question_ja": "整数の問題を、緩和による下界と分岐でどう絞り込むのか。",
           "route": "/methods/M_BRANCH_BOUND",
-          "step": 7,
+          "step": 8,
+          "stumbles": [
+            {
+              "route": "/formulations/PA023",
+              "target_id": "PA023",
+              "target_type": "formulation",
+              "title_ja": "混合整数線形計画",
+              "trouble_ja": "「緩和」が何を外した問題なのか分からない。"
+            }
+          ],
           "target_id": "branch-and-bound",
           "target_type": "content",
           "title_ja": "Branch-and-Bound（分枝限定法）"
@@ -83,7 +262,8 @@
           "has_article": true,
           "question_ja": "データに直線を合わせる問題は、どんな最適化になるのか。",
           "route": "/formulations/PA005",
-          "step": 8,
+          "step": 9,
+          "stumbles": [],
           "target_id": "PA005",
           "target_type": "formulation",
           "title_ja": "線形最小二乗"
@@ -93,7 +273,16 @@
           "has_article": true,
           "question_ja": "モデルが非線形になると、何が失われ、何が残るのか。",
           "route": "/formulations/PA033",
-          "step": 9,
+          "step": 10,
+          "stumbles": [
+            {
+              "route": "/formulations/PA005",
+              "target_id": "PA005",
+              "target_type": "formulation",
+              "title_ja": "線形最小二乗",
+              "trouble_ja": "線形の最小二乗で、何が解けていたのかを思い出したい。"
+            }
+          ],
           "target_id": "PA033",
           "target_type": "formulation",
           "title_ja": "非線形最小二乗"
@@ -103,7 +292,8 @@
           "has_article": true,
           "question_ja": "残差の構造を使うと、なぜ一般の最小化より速く進めるのか。",
           "route": "/methods/M_GAUSS_NEWTON",
-          "step": 10,
+          "step": 11,
+          "stumbles": [],
           "target_id": "gauss-newton",
           "target_type": "content",
           "title_ja": "Gauss–Newton法"
@@ -124,6 +314,7 @@
           "question_ja": "二乗誤差の最小化は、なぜ線形代数だけで解けるのか。",
           "route": "/formulations/PA005",
           "step": 1,
+          "stumbles": [],
           "target_id": "PA005",
           "target_type": "formulation",
           "title_ja": "線形最小二乗"
@@ -134,6 +325,7 @@
           "question_ja": "モデルが parameter について非線形になると、何が変わるのか。",
           "route": "/formulations/PA033",
           "step": 2,
+          "stumbles": [],
           "target_id": "PA033",
           "target_type": "formulation",
           "title_ja": "非線形最小二乗"
@@ -144,6 +336,7 @@
           "question_ja": "残差を線形化して解く一手は、どんなときに信用できるのか。",
           "route": "/methods/M_GAUSS_NEWTON",
           "step": 3,
+          "stumbles": [],
           "target_id": "gauss-newton",
           "target_type": "content",
           "title_ja": "Gauss–Newton法"
@@ -154,6 +347,7 @@
           "question_ja": "Gauss–Newton法が不安定なとき、減衰項は何を補うのか。",
           "route": "/methods/M_LEVENBERG_MARQUARDT",
           "step": 4,
+          "stumbles": [],
           "target_id": "least-squares",
           "target_type": "content",
           "title_ja": "非線形最小二乗とLevenberg–Marquardt法"
@@ -164,26 +358,29 @@
           "question_ja": "外れ値が混ざると、二乗損失の何が問題になるのか。",
           "route": "/formulations/PA034",
           "step": 5,
+          "stumbles": [],
           "target_id": "PA034",
           "target_type": "formulation",
           "title_ja": "外れ値を含むrobust regression"
         },
         {
-          "content_id": null,
-          "has_article": false,
+          "content_id": "concept.l1-sparse-regularization",
+          "has_article": true,
           "question_ja": "L1 罰則を足すと、なぜ係数がちょうど0になるのか。",
           "route": "/formulations/PA035",
           "step": 6,
+          "stumbles": [],
           "target_id": "PA035",
           "target_type": "formulation",
           "title_ja": "L1・sparse regularization"
         },
         {
-          "content_id": null,
-          "has_article": false,
+          "content_id": "concept.inverse-problem",
+          "has_article": true,
           "question_ja": "データだけで答えが決まらないとき、正則化は何を仮定しているのか。",
           "route": "/formulations/PA055",
           "step": 7,
+          "stumbles": [],
           "target_id": "PA055",
           "target_type": "formulation",
           "title_ja": "逆問題"
@@ -191,6 +388,94 @@
       ],
       "summary_ja": "線形最小二乗から出発し、非線形モデル、外れ値、疎性、逆問題へと、当てはめの問題を一段ずつ広げます。",
       "title_ja": "データに合わせる"
+    },
+    {
+      "audience_ja": "シミュレーションや実験の設定を選ぶ立場で、評価1回が高く、ときどき計算が落ちる問題を抱えている人",
+      "goal_ja": "高価な評価の課題について、予算の単位、制約違反・時間切れ・計算の失敗の区別、分からないまま残る条件を書き出し、失敗を大きな値に置き換えずに次の評価を計画できるようになります。",
+      "path_id": "expensive-evaluation",
+      "route": "/paths/expensive-evaluation",
+      "steps": [
+        {
+          "content_id": "concept.expensive-black-box",
+          "has_article": true,
+          "question_ja": "数十回しか評価できないとき、次に試す1点を選ぶには、問題の何を書き留めればよいのか。",
+          "route": "/formulations/PA014",
+          "step": 1,
+          "stumbles": [
+            {
+              "route": "/learn/concept.evaluation-cost",
+              "target_id": "concept.evaluation-cost",
+              "target_type": "content",
+              "title_ja": "評価費と予算",
+              "trouble_ja": "予算を回数で数えるか時間で数えるかを、もう一度確かめたい。"
+            },
+            {
+              "route": "/learn/concept.derivative-free",
+              "target_id": "concept.derivative-free",
+              "target_type": "content",
+              "title_ja": "微分を使わない最適化",
+              "trouble_ja": "微分を使わずに探す方法を、一通り見ておきたい。"
+            }
+          ],
+          "target_id": "PA014",
+          "target_type": "formulation",
+          "title_ja": "非常に高価な低次元評価"
+        },
+        {
+          "content_id": "concept.failed-simulation",
+          "has_article": true,
+          "question_ja": "評価が値を返さないとき、失敗を台帳にどう残し、予算にどう数えるのか。",
+          "route": "/formulations/PA016",
+          "step": 2,
+          "stumbles": [
+            {
+              "route": "/formulations/PA014",
+              "target_id": "PA014",
+              "target_type": "formulation",
+              "title_ja": "非常に高価な低次元評価",
+              "trouble_ja": "評価が高価で回数が限られる問題の書き方に戻りたい。"
+            },
+            {
+              "route": "/learn/concept.constraint-class",
+              "target_id": "concept.constraint-class",
+              "target_type": "content",
+              "title_ja": "制約の分類",
+              "trouble_ja": "失敗する条件が、実行前の式で書けるかどうかを判断したい。"
+            }
+          ],
+          "target_id": "PA016",
+          "target_type": "formulation",
+          "title_ja": "失敗・NaNを伴うsimulation"
+        },
+        {
+          "content_id": "bayesian-optimization",
+          "has_article": true,
+          "question_ja": "成功した評価と失敗の記録から、次に試す1点をどう選ぶのか。",
+          "route": "/methods/M_BAYESIAN_OPT_GP",
+          "step": 3,
+          "stumbles": [
+            {
+              "route": "/formulations/PA016",
+              "target_id": "PA016",
+              "target_type": "formulation",
+              "title_ja": "失敗・NaNを伴うsimulation",
+              "trouble_ja": "失敗を大きな値に置き換えてよいのか迷う。"
+            },
+            {
+              "route": "/formulations/PA014",
+              "target_id": "PA014",
+              "target_type": "formulation",
+              "title_ja": "非常に高価な低次元評価",
+              "trouble_ja": "代理モデルが予測しているものを、問題の書き方から読み直したい。"
+            }
+          ],
+          "target_id": "bayesian-optimization",
+          "target_type": "content",
+          "title_ja": "ベイズ最適化"
+        }
+      ],
+      "summary_ja": "1回に数時間かかるシミュレーションを、決まった回数だけ回す場面から始めます。数十回の評価で次の1点を選ぶ問題として書き、値が返らない評価を状態として台帳に残してから、成功と失敗の記録で次の点を選ぶ方法へ進みます。予算を何の単位で数えるかに迷ったら、評価費と予算の記事へ戻れます。",
+      "title_ja": "評価1回が高いとき、何を書き留めて次の1点を選ぶの？"
     }
   ]
 }

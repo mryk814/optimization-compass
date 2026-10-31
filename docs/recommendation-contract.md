@@ -30,6 +30,16 @@
 - `unknown` はその質問の `allowed_answers` に存在するときだけデータとして受理し、他の値と同時に選びません。
 - 部分回答は有効です。`required` は診断UIの進捗表示に使い、評価器が未回答を推測で補完することはありません。
 
+## Certificate gate
+
+Q10 で「大域最適性の証明が必要」なら、certificate を返さない候補を除外します。「最適性 gap がほしい」なら、条件付き候補へ下げます。手法が certificate を返すかは、次のどれかで判定します。
+
+- `solution_scope` が `global_certificate` を含む。
+- `optimality_certificate` を `;` で区切った**語のどれか**が、上下界・gap（語の末尾が `_gap` または `_bound`）か、unsat の証明（`unsat_proof` を含む）を表す。
+- `exactness` が `exact` を含み、`solution_scope` が `global` を含む。
+
+語は丸ごと判定します。`first_order_residual`、`kkt_residual;primal_dual_residual` のような停留性の残差や、`not_global_certificate` のような否定の記述は certificate に数えません。以前の実装は部分一致で判定していたため、"residual" の中の "dual" などに反応し、局所法やベイズ最適化を certificate を返す手法として扱っていました。Python の `_is_certificate_token` と TypeScript の `isCertificateToken` は同じ規則で、`tests/test_engine.py` と `recommend.test.ts` が同じ語の例を固定しています。
+
 ## Offline parity
 
 静的アプリは `SiteData 2.0.0` を読み、Pythonと同じ評価phase、候補順、除外優先、compatibility gate、source ID、rule traceをTypeScriptで再現します。2.0.0はatomic predicate、policy、coverage、legacy rule target retirementも含みます。`SiteData` はSQLiteから決定的に生成され、dataset versionがViewSpecや画面状態と一致しない場合は評価を中止します。

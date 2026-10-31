@@ -5,17 +5,29 @@ export interface HalfPlane {
   a: Vec2;
   b: number;
   label: string;
+  /** A narrow-screen label; the full label is used when there is room. */
+  shortLabel?: string;
+  /** Where on the line to put the label (a point of the line, in data coordinates). */
+  labelAt?: Vec2;
+  /** Sign constraints are read off the axes, so their lines are drawn without a label. */
+  unlabeled?: boolean;
 }
 
 const EPSILON = 1e-9;
 
-/** The LP used in the primal simplex article: max 3x + 2y s.t. x + y <= 4, 2x + y <= 5, x, y >= 0. */
+/**
+ * The bakery LP of the linear-program and primal simplex articles: bread x1 and croissants x2,
+ * flour 3x1 + 2x2 <= 18, butter x1 + 3x2 <= 13, x >= 0. Revenue 3x1 + 4x2 peaks at (4, 3) = 24.
+ */
 export const ARTICLE_LP: readonly HalfPlane[] = [
-  { a: [1, 1], b: 4, label: "x + y ≤ 4" },
-  { a: [2, 1], b: 5, label: "2x + y ≤ 5" },
-  { a: [-1, 0], b: 0, label: "x ≥ 0" },
-  { a: [0, -1], b: 0, label: "y ≥ 0" },
+  { a: [3, 2], b: 18, label: "小麦粉 3x₁+2x₂ ≤ 18", shortLabel: "小麦粉 ≤ 18", labelAt: [4.8, 1.8] },
+  { a: [1, 3], b: 13, label: "バター x₁+3x₂ ≤ 13", shortLabel: "バター ≤ 13", labelAt: [5.2, 2.6] },
+  { a: [-1, 0], b: 0, label: "x₁ ≥ 0", unlabeled: true },
+  { a: [0, -1], b: 0, label: "x₂ ≥ 0", unlabeled: true },
 ];
+
+/** Revenue per bread and per croissant in the bakery LP (hundreds of yen). */
+export const ARTICLE_REVENUE: Vec2 = [3, 4];
 
 export function isFeasible(constraints: readonly HalfPlane[], point: Vec2, tolerance = EPSILON): boolean {
   return constraints.every((row) => row.a[0] * point[0] + row.a[1] * point[1] <= row.b + tolerance);

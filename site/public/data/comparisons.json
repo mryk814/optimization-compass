@@ -15,12 +15,12 @@
       "caveat": "勾配と目的関数の計算費は同一と仮定した教材比較です。実装や問題が変わると比較可能性も変わります。",
       "changed_factors": [
         "更新則",
-        "固定済みparameter preset"
+        "事前に固定したパラメータ設定"
       ],
       "comparability": "comparable_with_caveat",
       "comparison_id": "COMPARE_GRADIENT_FAMILY",
       "comparison_question": "同じ初期点と評価回数で、更新則の違いは軌跡と目的値にどう現れる？",
-      "fairness_note": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
+      "fairness_note": "同じ初期点・目的関数・評価予算で、GD / Momentum / Adamを同期します。",
       "fixed_factors": [
         "目的関数",
         "初期点 [-1.6, 1.6]",
@@ -33,7 +33,7 @@
       "last_verified": "2026-07-26",
       "limitations": [
         "2次元の決定的な二次目的に限る。",
-        "wall-clockやmemory costは比較していない。"
+        "実時間やメモリ消費は比較していない。"
       ],
       "members": [
         {
@@ -131,10 +131,10 @@
       ],
       "stopping_policy": "objective < 1e-6 or budget exhausted",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "同じbudgetでも更新則により谷を横切る振動と進み方が変わります。",
+      "takeaway": "同じ評価予算でも更新則により谷を横切る振動と進み方が変わります。",
       "title_en": "First-order methods in an elongated valley",
       "title_ja": "細長い谷で一次法を比べる",
-      "tuning_policy": "各手法の教材用presetを事前固定し、run後に調整しない。"
+      "tuning_policy": "各手法の教材用の設定を事前に固定し、実行後に調整しない。"
     },
     {
       "aliases": [],
@@ -146,26 +146,26 @@
       "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
       "canonical_url": "/compare/COMPARE_GRADIENT_DIVERGENCE",
       "case_id": "EC021",
-      "caveat": "発散を説明するparameter sensitivityであり、手法の一般的な順位付けには使用できません。",
+      "caveat": "発散を説明するパラメータ感度であり、手法の一般的な順位付けには使用できません。",
       "changed_factors": [
-        "learning rate preset",
-        "発散guardを含む停止条件"
+        "学習率の事前に固定した設定",
+        "発散を検出して打ち切る判定を含む停止条件"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_GRADIENT_DIVERGENCE",
-      "comparison_question": "目的と初期点を固定し、学習率だけを攻めるとどのfailure signalが先に出る？",
-      "fairness_note": "同じ目的・初期点・budgetの下で、意図的に攻めた固定parameterによる感度を読みます。",
+      "comparison_question": "目的と初期点を固定し、学習率だけを攻めるとどの失敗の兆候が先に出る？",
+      "fairness_note": "同じ目的・初期点・予算の下で、意図的に攻めた固定パラメータによる感度を読みます。",
       "fixed_factors": [
         "目的関数",
         "初期点 [-1.6, 1.6]",
-        "oracle evaluation budget 40"
+        "評価予算40回"
       ],
       "formulation_summary": "f(x, y) = 100x² + y² を同じ初期点から最小化する。",
       "identity_status": "derived",
       "journey_id": "EC021",
       "last_verified": "2026-07-26",
       "limitations": [
-        "良いparameterを探索する比較ではない。",
+        "良いパラメータを探索する比較ではない。",
         "この二次目的以外へ発散境界を一般化しない。"
       ],
       "members": [
@@ -182,7 +182,7 @@
             "value": 40
           },
           "label_en": "Gradient Descent · high LR",
-          "label_ja": "勾配降下法 · high LR",
+          "label_ja": "勾配降下法 · 大きい学習率",
           "member_id": "gradient-descent-high-lr",
           "method_id": "M_GRADIENT_DESCENT",
           "parameters": {
@@ -204,7 +204,7 @@
             "value": 40
           },
           "label_en": "Momentum · high LR",
-          "label_ja": "モメンタム法 · high LR",
+          "label_ja": "モメンタム法 · 大きい学習率",
           "member_id": "momentum-high-lr",
           "method_id": "M_MOMENTUM_SGD",
           "parameters": {
@@ -227,7 +227,7 @@
             "value": 40
           },
           "label_en": "Adam · fixed preset",
-          "label_ja": "Adam · fixed preset",
+          "label_ja": "Adam · 事前に固定した設定",
           "member_id": "adam-reference",
           "method_id": "M_ADAM",
           "parameters": {
@@ -248,7 +248,7 @@
         },
         {
           "direction": "none",
-          "label_ja": "終了status",
+          "label_ja": "終了状態",
           "metric_id": "terminal_status",
           "unit": "status"
         }
@@ -264,10 +264,10 @@
       ],
       "stopping_policy": "objective < 1e-6, divergence guard, or budget exhausted",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "手法名だけでなくparameterとterminal statusを一緒に記録します。",
+      "takeaway": "手法名だけでなくパラメータと終了状態を一緒に記録します。",
       "title_en": "Observe divergence after changing learning rates",
       "title_ja": "学習率を変えたときの発散を観察する",
-      "tuning_policy": "発散を説明する固定parameterを意図的に使用する。"
+      "tuning_policy": "発散を説明する固定パラメータを意図的に使用する。"
     },
     {
       "aliases": [
@@ -281,14 +281,14 @@
       "canonical_comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
       "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
       "case_id": "hyperparameter-search",
-      "caveat": "初期条件の感度を読む教育用contrastです。2つの開始位置がこの二次目的で収束したことは、別の目的や次元での頑健性・速度・手法順位を示しません。",
+      "caveat": "初期条件の感度を読む教材の対比です。2つの開始位置がこの二次目的で収束したことは、別の目的や次元での頑健性・速度・手法順位を示しません。",
       "changed_factors": [
-        "初期simplexの位置"
+        "初期単体の位置"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
-      "comparison_question": "目的・係数・評価予算を固定し、初期simplexの位置だけを変えると、反射・収縮と目的値の経路はどう変わる？",
-      "fairness_note": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
+      "comparison_question": "目的・係数・評価予算を固定し、初期単体の位置だけを変えると、反射・収縮と目的値の経路はどう変わる？",
+      "fairness_note": "同じ目的関数、係数、スケール、停止条件、評価予算で同期し、初期単体の位置だけを変えます。",
       "fixed_factors": [
         "目的関数 f(x, y) = 100x² + y²",
         "Nelder–Mead係数 α=1, γ=2, ρ=0.5, σ=0.5",
@@ -296,13 +296,13 @@
         "oracle evaluation budget 80",
         "simplex tolerance 1e-4"
       ],
-      "formulation_summary": "f(x, y) = 100x² + y² を、同じNelder–Mead係数とsimplex scale=0.8で最小化する。",
+      "formulation_summary": "f(x, y) = 100x² + y² を、同じNelder–Mead係数と初期単体のスケール0.8で最小化する。",
       "identity_status": "canonical",
       "journey_id": "hyperparameter-search",
       "last_verified": "2026-07-18",
       "limitations": [
         "決定的な2次元二次目的と2つの固定開始位置だけを扱う。",
-        "wall-clock、関数評価の不均一コスト、大域的なbasin、実装差を比較しない。"
+        "実時間、関数評価の不均一な費用、大域的な吸引域、実装差を比較しない。"
       ],
       "members": [
         {
@@ -318,7 +318,7 @@
             "value": 80
           },
           "label_en": "Standard initial simplex",
-          "label_ja": "標準の初期simplex",
+          "label_ja": "標準の初期単体",
           "member_id": "standard-initial-simplex",
           "method_id": "M_NELDER_MEAD",
           "parameters": {
@@ -341,7 +341,7 @@
             "value": 80
           },
           "label_en": "Shifted initial simplex",
-          "label_ja": "移動した初期simplex",
+          "label_ja": "移動した初期単体",
           "member_id": "shifted-initial-simplex",
           "method_id": "M_NELDER_MEAD",
           "parameters": {
@@ -383,10 +383,10 @@
       ],
       "stopping_policy": "simplex tolerance <= 1e-4 or 80 oracle evaluations",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "頂点・重心・候補点を同じevaluationで追うと、同じ更新則でも初期simplexが探索する領域と操作列を変えることが分かります。",
+      "takeaway": "頂点・重心・候補点を評価回数をそろえて追うと、同じ更新則でも初期単体が探索する領域と操作列を変えることが分かります。",
       "title_en": "Read Nelder-Mead paths from the initial simplex",
-      "title_ja": "初期simplexでNelder–Meadの経路を読む",
-      "tuning_policy": "係数とscaleを事前固定し、run後に調整しない。"
+      "title_ja": "初期単体でNelder–Meadの経路を読む",
+      "tuning_policy": "係数とスケールを事前固定し、実行後に調整しない。"
     },
     {
       "aliases": [],
@@ -398,28 +398,28 @@
       "canonical_comparison_id": "COMPARE_CONSTRAINED_FAILURE",
       "canonical_url": "/compare/COMPARE_CONSTRAINED_FAILURE",
       "case_id": "constrained-design",
-      "caveat": "SLSQPやBFGSの実装内部を再現するbenchmarkではなく、failure contrast用の教育Traceです。",
+      "caveat": "SLSQPやBFGSの実装内部を再現するベンチマークではなく、失敗との対比を示す教材用の実行記録です。",
       "changed_factors": [
-        "constraintを評価するか",
-        "終了時のfeasibility"
+        "制約を評価するか",
+        "終了時の実行可能性"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_CONSTRAINED_FAILURE",
-      "comparison_question": "目的値が低くてもconstraint violationが残る点を解と呼べる？",
-      "fairness_note": "同じ問題・初期点で、目的値とfeasibilityを別々に読みます。",
+      "comparison_question": "目的値が低くても制約違反が残る点を解と呼べる？",
+      "fairness_note": "同じ問題・初期点で、目的値と実行可能性を別々に読みます。",
       "fixed_factors": [
         "目的関数",
         "disk constraint",
         "初期点 [1.8, 1.8]",
         "teaching budget 12"
       ],
-      "formulation_summary": "円内のfeasible regionで x²+y² を最小化する。",
+      "formulation_summary": "円内の実行可能領域で x²+y² を最小化する。",
       "identity_status": "canonical",
       "journey_id": "constrained-design",
       "last_verified": "2026-07-16",
       "limitations": [
         "決定的な2次元教材である。",
-        "wall-clockと実装差は比較しない。"
+        "実時間と実装差は比較しない。"
       ],
       "members": [
         {
@@ -435,7 +435,7 @@
             "value": 12
           },
           "label_en": "Constraint-aware run",
-          "label_ja": "制約を評価するrun",
+          "label_ja": "制約を評価する実行",
           "member_id": "constraint-aware",
           "method_id": "M_SLSQP",
           "parameters": {
@@ -457,7 +457,7 @@
             "value": 12
           },
           "label_en": "Unconstrained failure",
-          "label_ja": "制約を無視するrun",
+          "label_ja": "制約を無視する実行",
           "member_id": "unconstrained-failure",
           "method_id": "M_BFGS",
           "parameters": {
@@ -491,12 +491,12 @@
         "S055",
         "S064"
       ],
-      "stopping_policy": "固定teaching pathの終端またはbudget",
+      "stopping_policy": "固定した教材用の経路の終端、または予算",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "目的値だけでなく最大constraint violationと終了statusを必ず確認します。",
+      "takeaway": "目的値だけでなく最大制約違反と終了状態を必ず確認します。",
       "title_en": "Compare a constraint-aware run with an unconstrained failure",
-      "title_ja": "制約を守るrunと無視するrunを比べる",
-      "tuning_policy": "制約対応runと制約無視failure pathを事前固定する。"
+      "title_ja": "制約を守る実行と無視する実行を比べる",
+      "tuning_policy": "制約に対応する実行と、制約を無視して失敗する経路を事前に固定する。"
     },
     {
       "aliases": [],
@@ -508,28 +508,28 @@
       "canonical_comparison_id": "COMPARE_PARETO_PREFERENCE",
       "canonical_url": "/compare/COMPARE_PARETO_PREFERENCE",
       "case_id": "EC017",
-      "caveat": "手法性能の比較ではなく、意思決定上のtrade-offを読むresult comparisonです。",
+      "caveat": "手法性能の比較ではなく、意思決定上のトレードオフを読む結果の比較です。",
       "changed_factors": [
-        "f1とf2のpreference weight",
-        "front上の選択点"
+        "f1とf2への選好の重み",
+        "フロント上の選択点"
       ],
       "comparability": "not_comparable",
       "comparison_id": "COMPARE_PARETO_PREFERENCE",
-      "comparison_question": "非劣候補は同じまま、preferenceを変えると選ぶ点はどう動く？",
-      "fairness_note": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。",
+      "comparison_question": "非劣候補は同じまま、選好を変えると選ぶ点はどう動く？",
+      "fairness_note": "同じ結果の集合とパレートフロントを固定し、選好による選択だけを比較します。",
       "fixed_factors": [
         "sampled result set",
         "objective directions",
         "Pareto dominance",
         "81-point grid"
       ],
-      "formulation_summary": "0≤x,y≤2でf₁=x²+y²とf₂=(x−2)²+(y−2)²を同時に最小化し、同じ非劣frontからweightで1点を選ぶ。",
+      "formulation_summary": "0≤x,y≤2でf₁=x²+y²とf₂=(x−2)²+(y−2)²を同時に最小化し、同じ非劣フロントから重みで1点を選ぶ。",
       "identity_status": "canonical",
       "journey_id": "EC017",
       "last_verified": "2026-07-17",
       "limitations": [
         "凸で解析的な2目的教材である。",
-        "weighted sumは一般の非凸frontを欠落させうる。"
+        "重み付き和は一般の非凸フロントを欠落させうる。"
       ],
       "members": [
         {
@@ -545,7 +545,7 @@
             "value": 81
           },
           "label_en": "f2-priority preference",
-          "label_ja": "f₂優先weight",
+          "label_ja": "f₂優先の重み",
           "member_id": "f2-priority",
           "method_id": "M_WEIGHTED_SUM",
           "parameters": {
@@ -567,7 +567,7 @@
             "value": 81
           },
           "label_en": "Balanced preference",
-          "label_ja": "均衡weight",
+          "label_ja": "均衡の重み",
           "member_id": "balanced-preference",
           "method_id": "M_WEIGHTED_SUM",
           "parameters": {
@@ -589,7 +589,7 @@
             "value": 81
           },
           "label_en": "f1-priority preference",
-          "label_ja": "f₁優先weight",
+          "label_ja": "f₁優先の重み",
           "member_id": "f1-priority",
           "method_id": "M_WEIGHTED_SUM",
           "parameters": {
@@ -625,10 +625,10 @@
       ],
       "stopping_policy": "81-point grid complete",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "Pareto frontと、その中から選ぶpreferenceを混同しません。",
+      "takeaway": "パレートフロントと、その中から選ぶ選好を混同しません。",
       "title_en": "Change preference on a Pareto front",
-      "title_ja": "Pareto front上でpreferenceを変える",
-      "tuning_policy": "result setを固定し、preferenceだけを変更する。"
+      "title_ja": "パレートフロント上で選好を変える",
+      "tuning_policy": "結果の集合を固定し、選好だけを変更する。"
     },
     {
       "aliases": [],
@@ -640,31 +640,31 @@
       "canonical_comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "canonical_url": "/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "case_id": "EC013",
-      "caveat": "TRF・LM・L-BFGS-Bは実行していません。線の一致やlabelから、到達解・収束速度・wall-clock・solver順位を推論できません。",
+      "caveat": "TRF・LM・L-BFGS-Bは実行していません。線の一致や表示名から、到達解・収束速度・実時間・ソルバー順位を推論できません。",
       "changed_factors": [
-        "solverがboundsを直接扱えるかという適用条件annotation",
-        "残差vector interfaceを保持できるかという適用条件annotation"
+        "ソルバーが上下限を直接扱えるかという適用条件の注記",
+        "残差ベクトルを返す呼び出し形式を保持できるかという適用条件の注記"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
-      "comparison_question": "同じsolver非依存probeを見ながら、boundsと残差構造に対する各solverの適用条件をどう切り分ける？",
-      "fairness_note": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
+      "comparison_question": "同じソルバー非依存の診断例を見ながら、上下限と残差構造に対する各ソルバーの適用条件をどう切り分ける？",
+      "fairness_note": "3つの比較対象のフレーム履歴は完全に同一です。比較対象の名前は、同じ診断状態に対する適用条件の見方だけを表します。",
       "fixed_factors": [
-        "20点のnoiseなし合成data",
+        "20点のノイズなし合成データ",
         "model a exp(-kt)+c",
         "初期値 [1.0, 0.4, 0.0]",
         "bounds [0,0,-1]..[5,3,2]",
-        "solver非依存のdamped Gauss–Newton診断probe",
-        "3 memberで完全に同一のframe履歴",
+        "ソルバー非依存の減衰付きGauss–Newton法による診断例",
+        "3つの比較対象で完全に同一のフレーム履歴",
         "oracle evaluation budget 12"
       ],
-      "formulation_summary": "20点の y=a exp(-kt)+c を、[a,k,c]=[1.0,0.4,0.0] からbounds内で残差二乗和fitする。",
+      "formulation_summary": "20点の y=a exp(-kt)+c を、[a,k,c]=[1.0,0.4,0.0] から上下限内で残差二乗和により当てはめる。",
       "identity_status": "canonical",
       "journey_id": "EC013",
       "last_verified": "2026-07-17",
       "limitations": [
-        "20点・3 parameter・noiseなしの合成教材である。",
-        "表示lineはsolver別の実行結果ではなく、意図的に同一のsolver非依存probeである。"
+        "20点・3パラメータ・ノイズなしの合成教材である。",
+        "表示した線はソルバー別の実行結果ではなく、意図的に同一にしたソルバー非依存の診断例である。"
       ],
       "members": [
         {
@@ -680,7 +680,7 @@
             "value": 12
           },
           "label_en": "TRF applicability · bounded residual",
-          "label_ja": "TRF適用条件 · bounds付き残差",
+          "label_ja": "TRF適用条件 · 上下限付き残差",
           "member_id": "trf-bounded-residual",
           "method_id": "M_TRUST_REGION_REFLECTIVE",
           "parameters": {
@@ -705,7 +705,7 @@
             "value": 12
           },
           "label_en": "LM applicability · inactive bounds",
-          "label_ja": "LM適用条件 · bounds非active",
+          "label_ja": "LM適用条件 · 上下限が有効にならない",
           "member_id": "lm-inactive-bounds",
           "method_id": "M_LEVENBERG_MARQUARDT",
           "parameters": {
@@ -730,7 +730,7 @@
             "value": 12
           },
           "label_en": "L-BFGS-B applicability · scalar fallback",
-          "label_ja": "L-BFGS-B適用条件 · scalar fallback",
+          "label_ja": "L-BFGS-B適用条件 · スカラー化による代替",
           "member_id": "lbfgsb-scalar-fallback",
           "method_id": "M_LBFGSB",
           "parameters": {
@@ -746,7 +746,7 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "残差norm",
+          "label_ja": "残差ノルム",
           "metric_id": "residual_norm",
           "unit": "response"
         },
@@ -776,12 +776,12 @@
         "S065",
         "S096"
       ],
-      "stopping_policy": "共通probeはresidual normまたはgradient normが1e-6以下になった最初のframeで停止し、未達なら12評価で停止する。",
+      "stopping_policy": "共通の診断例は、残差ノルムまたは勾配ノルムが1e-6以下になった最初のフレームで停止し、未達なら12評価で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "同一の診断stateでbounds対応と残差vector interfaceの条件を整理し、実際の挙動は選んだsolverを別途実行して確かめます。",
+      "takeaway": "同一の診断状態で上下限への対応と残差ベクトルの呼び出し形式の条件を整理し、実際の挙動は選んだソルバーを別途実行して確かめます。",
       "title_en": "Compare solver conditions for nonlinear fitting",
-      "title_ja": "非線形fitでsolver条件を比べる",
-      "tuning_policy": "同じdeterministic damped Gauss–Newton診断probeを3 memberへ複製する。member solverは実行しない。"
+      "title_ja": "非線形の当てはめでソルバーの適用条件を比べる",
+      "tuning_policy": "同じ決定的な減衰付きGauss–Newton法の診断例を3つの比較対象へ複製する。各比較対象のソルバーは実行しない。"
     },
     {
       "aliases": [],
@@ -793,16 +793,16 @@
       "canonical_comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
       "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
       "case_id": "hyperparameter-search",
-      "caveat": "固定seed・1次元・RBF kernelの教育用contrastである。表示されたbest-so-farの差から、BO、acquisition設定、noise処理、random searchの一般的な優劣や因果効果を推論できない。",
+      "caveat": "固定した乱数の種・1次元・RBFカーネルによる教育用の対比である。表示された現時点の最良値の差から、BO、獲得関数の設定、ノイズの処理、ランダム探索の一般的な優劣や因果効果を推論できない。",
       "changed_factors": [
-        "referenceに対してexploration coefficient ξだけを0.18から0へ変える",
-        "referenceに対してobservation noise σだけを0から0.08へ変える",
-        "referenceに対してproposal policyだけをExpected Improvementからuniform randomへ変える"
+        "参照条件から探索係数 ξ だけを0.18から0へ変える",
+        "参照条件から観測ノイズ σ だけを0から0.08へ変える",
+        "参照条件から次の点の提案方針だけをExpected Improvementから一様ランダムへ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-      "comparison_question": "同じ固定教材とevaluation budgetで、探索係数、観測noise、proposal policyを1つずつ変えると何を読み分ける必要がある？",
-      "fairness_note": "各memberをoracle evaluationsで同期する。3つのBO memberはreferenceから1要因だけを変え、random baselineも同じ初期設計・domain・base seed・budgetを使う。",
+      "comparison_question": "同じ固定教材と評価予算で、探索係数、観測ノイズ、次の点の提案方針を1つずつ変えると、何を読み分ける必要がある？",
+      "fairness_note": "各比較対象を評価回数で同期する。3つのBOの比較対象は参照条件から1要因だけを変え、ランダム探索の基準も同じ初期設計・定義域・基本の乱数の種・評価予算を使う。",
       "fixed_factors": [
         "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D",
         "domain [-3, 3]",
@@ -810,13 +810,13 @@
         "base seed 2604",
         "oracle evaluation budget 10"
       ],
-      "formulation_summary": "x∈[-3,3] の未知な1次元black-boxを、初期観測3点から合計10回評価する。",
+      "formulation_summary": "x∈[-3,3] の未知な1次元ブラックボックス関数を、初期観測3点から合計10回評価する。",
       "identity_status": "canonical",
       "journey_id": "hyperparameter-search",
       "last_verified": "2026-07-17",
       "limitations": [
-        "単一seed・固定initial design・10 evaluationだけを扱う。",
-        "高次元、categorical space、非定常性、evaluation failure、並列acquisitionを扱わない。"
+        "単一の乱数の種・固定した初期設計・10回の評価だけを扱う。",
+        "高次元、カテゴリ変数の空間、非定常性、評価の失敗、複数点を並列に選ぶ獲得関数を扱わない。"
       ],
       "members": [
         {
@@ -832,7 +832,7 @@
             "value": 10
           },
           "label_en": "Exploratory EI · noiseless",
-          "label_ja": "探索寄りEI・noiseなし",
+          "label_ja": "探索寄りEI・ノイズなし",
           "member_id": "explore-noiseless-reference",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -857,7 +857,7 @@
             "value": 10
           },
           "label_en": "Exploitative EI · noiseless",
-          "label_ja": "活用寄りEI・noiseなし",
+          "label_ja": "活用寄りEI・ノイズなし",
           "member_id": "exploit-noiseless-sensitivity",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -882,7 +882,7 @@
             "value": 10
           },
           "label_en": "Exploratory EI · small noise",
-          "label_ja": "探索寄りEI・small noise",
+          "label_ja": "探索寄りEI・小さいノイズ",
           "member_id": "explore-small-noise-sensitivity",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -907,7 +907,7 @@
             "value": 10
           },
           "label_en": "Uniform random · noiseless",
-          "label_ja": "uniform random・noiseなし",
+          "label_ja": "一様ランダム・ノイズなし",
           "member_id": "random-noiseless-baseline",
           "method_id": "M_RANDOM_SEARCH",
           "parameters": {
@@ -935,7 +935,7 @@
         },
         {
           "direction": "none",
-          "label_ja": "選択点のacquisition",
+          "label_ja": "選択点の獲得関数値",
           "metric_id": "selected_acquisition",
           "unit": "Expected Improvement"
         },
@@ -950,19 +950,19 @@
       "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
       "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
       "ranking_eligible": false,
-      "seed_policy": "base seed 2604を固定し、noiseとrandom baselineはgeneratorで分離した決定的streamを使う。",
+      "seed_policy": "基本の乱数の種2604を固定し、ノイズとランダム探索の基準には、生成器で分離した決定的な乱数列を使う。",
       "source_ids": [
         "S034",
         "S035",
         "S059",
         "S075"
       ],
-      "stopping_policy": "初期観測3点を含む10 objective evaluationsで停止する。",
+      "stopping_policy": "初期観測3点を含む目的関数の評価10回で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "観測、model上の不確実性、acquisition、best-so-far、budgetを分け、referenceから何を変えたmemberかを確認する。",
+      "takeaway": "観測、モデル上の不確実性、獲得関数、現時点の最良値、評価予算を分け、参照条件から何を変えた比較対象かを確認する。",
       "title_en": "Read acquisition, noise, and a random baseline under one budget",
-      "title_ja": "acquisition・noise・random baselineを同じbudgetで読む",
-      "tuning_policy": "explore ξ=0.18、exploit ξ=0、noise σ∈{0,0.08}を事前固定し、run後に変更しない。"
+      "title_ja": "獲得関数・ノイズ・ランダム探索の基準を同じ評価予算で読む",
+      "tuning_policy": "探索寄り ξ=0.18、活用寄り ξ=0、ノイズ σ∈{0,0.08}を事前に固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -974,14 +974,14 @@
       "canonical_comparison_id": "COMPARE_BO_MULTIFIDELITY_COST",
       "canonical_url": "/compare/COMPARE_BO_MULTIFIDELITY_COST",
       "case_id": "multi-fidelity-simulator",
-      "caveat": "BENCH_BOは一般的な文脈参照であり、この固定比較の正確な条件はcomparison descriptorと生成artifactが所有する。単一seed・固定call planの差からmethodやfidelity policyの一般的順位を推論できない。",
+      "caveat": "BENCH_BOは一般的な文脈参照であり、この固定比較の正確な条件は比較の記述子と生成された成果物が所有する。単一の乱数の種・固定した呼び出し計画の差から、手法や精度の配分方針の一般的順位を推論できない。",
       "changed_factors": [
         "fidelity allocation and the resulting fixed call plan only: mixed low/high versus high fidelity only"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_BO_MULTIFIDELITY_COST",
-      "comparison_question": "同じ初期design・simulator・noise・failure policy・36 costで、mixed fidelityとhigh fidelityだけの配分はledger上でどう異なる？",
-      "fairness_note": "同じinitial design、simulator、noise、fidelity cost、総cost、parallelism、tuning、failure/no-retry policyを固定し、high-fidelity-equivalent cost以下の最後のledger callで同期する。",
+      "comparison_question": "同じ初期点の配置・シミュレータ・ノイズ・失敗時の方針・費用36で、低精度と高精度を混ぜた配分と高精度だけの配分は、評価記録の上でどう異なる？",
+      "fairness_note": "同じ初期点の配置、シミュレータ、ノイズ、精度ごとの費用、総費用、並列数、チューニング、失敗時は再試行しない方針を固定し、高精度モデル換算の費用を超えない評価記録上の最後の呼び出しで同期する。",
       "fixed_factors": [
         "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D and domain [-3, 3]",
         "initial design x=[-2.9, -2.6, 0.0]",
@@ -992,13 +992,13 @@
         "parallel workers 1 and synchronous call order",
         "failed/censored/timeout status is recorded with null objective, charged cost, and no retry"
       ],
-      "formulation_summary": "x∈[-3,3] の同じ1次元simulatorを、low cost=1、high cost=12、総cost=36（high-fidelity-equivalent cost=3）で評価する。",
+      "formulation_summary": "x∈[-3,3] の同じ1次元シミュレータを、低精度の費用=1、高精度の費用=12、総費用=36（高精度モデル換算の費用=3）で評価する。",
       "identity_status": "canonical",
       "journey_id": "multi-fidelity-simulator",
       "last_verified": "2026-07-19",
       "limitations": [
-        "1次元の固定教材であり、learned discrepancy model、batch/asynchronous実行、実wall-clockを扱わない。",
-        "high-fidelity-only側の最初の2点がcensoredとなる固定例であり、結果差は一般的なpolicy効果や因果効果ではない。"
+        "1次元の固定教材であり、学習で求める精度間の食い違いモデル、バッチ／非同期の実行、実際の実時間を扱わない。",
+        "高精度モデルのみの側で最初の2点が打ち切りとなる固定例であり、結果の差は精度の配分方針の一般的な効果や因果効果ではない。"
       ],
       "members": [
         {
@@ -1014,7 +1014,7 @@
             "value": 3
           },
           "label_en": "Mixed low/high fidelity",
-          "label_ja": "mixed low/high fidelity",
+          "label_ja": "低精度・高精度の混合",
           "member_id": "mixed-fidelity-ledger",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -1043,7 +1043,7 @@
             "value": 3
           },
           "label_en": "High fidelity only",
-          "label_ja": "high fidelity only",
+          "label_ja": "高精度モデルのみ",
           "member_id": "high-fidelity-only-baseline",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -1063,31 +1063,31 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "high-fidelity-equivalent cost",
+          "label_ja": "高精度モデル換算の費用",
           "metric_id": "accumulated_high_fidelity_equivalent_cost",
           "unit": "high-fidelity equivalents"
         },
         {
           "direction": "none",
-          "label_ja": "累積cost",
+          "label_ja": "累積費用",
           "metric_id": "accumulated_cost",
           "unit": "cost units"
         },
         {
           "direction": "none",
-          "label_ja": "成功したhigh fidelity call",
+          "label_ja": "成功した高精度モデルの呼び出し",
           "metric_id": "successful_high_fidelity_calls",
           "unit": "calls"
         },
         {
           "direction": "minimize",
-          "label_ja": "high fidelity best-so-far",
+          "label_ja": "高精度モデルでのそれまでの最良値",
           "metric_id": "best_so_far",
           "unit": "observed objective"
         },
         {
           "direction": "none",
-          "label_ja": "failed・censored・timeout",
+          "label_ja": "失敗・打ち切り・時間切れ",
           "metric_id": "non_ok_calls",
           "unit": "calls"
         }
@@ -1096,7 +1096,7 @@
       "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
       "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
       "ranking_eligible": false,
-      "seed_policy": "seed 2604、simulator式、deterministic noiseを固定する。",
+      "seed_policy": "乱数の種 2604、シミュレータの式、決定的なノイズを固定する。",
       "source_ids": [
         "S035",
         "S038",
@@ -1104,12 +1104,12 @@
         "S069",
         "S075"
       ],
-      "stopping_policy": "累積cost 36または固定call planの終端で停止し、失敗callもcostを消費する。",
+      "stopping_policy": "累積費用36または固定した呼び出し計画の終端で停止し、失敗した呼び出しも費用を消費する。",
       "synchronization_axis": "high_fidelity_equivalent_cost",
-      "takeaway": "iteration数ではなく支払ったcostで揃え、成功したhigh fidelity、失敗status、best-so-farを別々に読む。",
+      "takeaway": "反復回数ではなく支払った費用で揃え、成功した高精度モデルの評価、失敗の状態、それまでの最良値を別々に読む。",
       "title_en": "Compare fidelity allocation at equal high-fidelity-equivalent cost",
-      "title_ja": "同じhigh-fidelity-equivalent costでfidelity配分を比べる",
-      "tuning_policy": "fidelity配分を含むcall planをrun前に固定し、結果を見てkernel、noise、acquisition、retryを変更しない。"
+      "title_ja": "同じ高精度モデル換算の費用で精度の配分を比べる",
+      "tuning_policy": "精度の配分を含む呼び出し計画を実行前に固定し、結果を見てカーネル、ノイズ、獲得関数、再試行を変更しない。"
     },
     {
       "aliases": [],
@@ -1121,14 +1121,14 @@
       "canonical_comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
       "case_id": "budget-allocation",
-      "caveat": "教育用Branch-and-Bound generatorの停止感度です。CP-SAT、MIP solver、総当たり実装の速度や一般性能を順位付けしません。",
+      "caveat": "教育用のBranch-and-Bound生成器の停止感度です。CP-SAT、MIPソルバー、総当たり実装の速度や一般性能を順位付けしません。",
       "changed_factors": [
         "node_stop_limitだけを9から4へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET",
-      "comparison_question": "16割当を調べる可能性がある問題で、同じbound-pruned探索を4 nodeで止めると、incumbent・bound・gap・feasibilityの読み方はどう変わる？",
-      "fairness_note": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。",
+      "comparison_question": "16割当を調べる可能性がある問題で、上界による枝刈りを使う同じ探索を4ノードで止めると、暫定解・上界・ギャップ・実行可能性の読み方はどう変わる？",
+      "fairness_note": "同じ問題例・乱数の種・分枝の順序・初期の暫定解・上界・評価9回の上限を使い、node_stop_limitだけを変えます。",
       "fixed_factors": [
         "problem instance INSTANCE_BINARY_KNAPSACK_4",
         "depth-first include-first strategy",
@@ -1142,8 +1142,8 @@
       "journey_id": "budget-allocation",
       "last_verified": "2026-07-17",
       "limitations": [
-        "4変数の決定的な教材instanceだけを扱う。",
-        "cut生成、presolve、並列探索、wall-clock、memoryを比較しない。"
+        "4変数の決定的な教材の問題例だけを扱う。",
+        "切除平面の生成、前処理、並列探索、実時間、メモリを比較しない。"
       ],
       "members": [
         {
@@ -1159,7 +1159,7 @@
             "value": 9
           },
           "label_en": "Proof completed within 9 nodes",
-          "label_ja": "9 node以内で証明完了",
+          "label_ja": "9ノード以内で証明完了",
           "member_id": "bnb-complete",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -1181,7 +1181,7 @@
             "value": 9
           },
           "label_en": "Stopped at 4 nodes",
-          "label_ja": "4 nodeで予算停止",
+          "label_ja": "4ノードで予算停止",
           "member_id": "bnb-budget-stop",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -1194,13 +1194,13 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "展開node数",
+          "label_ja": "展開ノード数",
           "metric_id": "explored_nodes",
           "unit": "nodes"
         },
         {
           "direction": "maximize",
-          "label_ja": "best feasible値",
+          "label_ja": "実行可能な最良値",
           "metric_id": "incumbent",
           "unit": "objective value"
         },
@@ -1212,13 +1212,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "絶対gap",
+          "label_ja": "絶対ギャップ",
           "metric_id": "absolute_gap",
           "unit": "objective gap"
         },
         {
           "direction": "target",
-          "label_ja": "incumbentの可行性",
+          "label_ja": "暫定解の可行性",
           "metric_id": "feasibility",
           "unit": "status"
         }
@@ -1227,18 +1227,18 @@
       "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
       "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
       "ranking_eligible": false,
-      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "seed_policy": "決定的な生成器の乱数の種0を固定する。",
       "source_ids": [
         "S021",
         "S022",
         "S079"
       ],
-      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "stopping_policy": "共通の評価予算は9とし、比較対象ごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明です。",
+      "takeaway": "予算停止時の暫定解は可行候補でも、未探索ノードと正のギャップが残る限り最適性は未証明です。",
       "title_en": "Compare search completion with a node-stop limit",
-      "title_ja": "探索完了とnode予算停止を同じ上限で比べる",
-      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+      "title_ja": "探索完了とノード予算停止を同じ上限で比べる",
+      "tuning_policy": "分枝の順序、初期の暫定解、緩和による上界を固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -1250,32 +1250,32 @@
       "canonical_comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
       "canonical_url": "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
       "case_id": "portfolio-cvar-allocation",
-      "caveat": "4件のheld-outは順位を推定するには小さく、CVaR目的の一般的優位、母集団risk、将来return、chance constraintの確率保証は推論できない。",
+      "caveat": "検証用の4件は順位を推定するには小さく、CVaR目的の一般的優位、母集団のリスク、将来の収益率、確率制約の確率保証は推論できない。",
       "changed_factors": [
-        "training objectiveのrisk treatmentだけ: mean loss 対 mean loss + 0.5 CVaR_0.75"
+        "学習時の目的関数におけるリスクの扱いだけ: 平均損失 対 平均損失 + 0.5 CVaR_0.75"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
-      "comparison_question": "uncertainty model・sample・risk level・評価budgetを固定し、training objectiveのrisk treatmentだけを変えるとin-sampleとheld-outのrisk summaryはどう変わる？",
-      "fairness_note": "両memberはuncertainty model、8/4 sample policy、alpha、confidence claim、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
+      "comparison_question": "不確実性モデル・標本・リスク水準・評価予算を固定し、学習時の目的関数におけるリスクの扱いだけを変えると、学習用シナリオ上と検証用に取り分けたシナリオ上のリスクの要約値はどう変わる？",
+      "fairness_note": "両比較対象は不確実性モデル、8/4件の標本の分け方、α、信頼度についての主張、決定変数の格子、12回の損失評価を共有し、学習時の目的関数におけるリスクの扱いだけを変える。",
       "fixed_factors": [
-        "4資産のcapped simplex: w_i >= 0, sum(w)=1, w_i <= 0.6",
-        "同じ固定training return scenario 8件",
-        "同じ固定held-out return scenario 4件",
-        "同じscenario順と一様weight",
-        "同じrisk level alpha=0.75",
-        "同じconfidence target: not applicable（確率保証を主張しない）",
-        "同じ0.05刻みの教育用decision grid",
-        "同じ12 loss evaluation budget"
+        "4資産の上限付き単体: w_i >= 0, sum(w)=1, w_i <= 0.6",
+        "同じ固定した学習用の収益率シナリオ8件",
+        "同じ固定した検証用の収益率シナリオ4件",
+        "同じシナリオ順と一様な重み",
+        "同じリスク水準 α=0.75",
+        "同じ信頼度の目標: 該当なし（確率保証を主張しない）",
+        "同じ0.05刻みの教育用の決定変数の格子",
+        "同じ損失の評価予算12回"
       ],
-      "formulation_summary": "4資産のcapped simplex上で、固定training 8件から配分を選び、固定held-out 4件では解を変更せず再評価する。",
+      "formulation_summary": "4資産の上限付き単体上で、固定した学習用シナリオ8件から配分を選び、検証用に取り分けた固定の4件では解を変更せず再評価する。",
       "identity_status": "canonical",
       "journey_id": "portfolio-cvar-allocation",
       "last_verified": "2026-07-19",
       "limitations": [
-        "固定8/4件・4資産・0.05 gridの教育用contrastであり、実solver精度やwall-clockを比較しない。",
-        "scenario生成過程、時系列依存、confidence interval、取引コスト、turnover、slippageを含まない。",
-        "CVaR objectiveはchance constraint、robust feasibility、DRO guaranteeの代替ではない。"
+        "固定8/4件・4資産・0.05刻みの格子による教育用の対比であり、実際のソルバー精度や実時間を比較しない。",
+        "シナリオ生成過程、時系列依存、信頼区間、取引コスト、売買回転率、スリッページを含まない。",
+        "CVaR目的関数は、確率制約、ロバストな実行可能性、DROの保証の代替ではない。"
       ],
       "members": [
         {
@@ -1338,7 +1338,7 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "平均loss",
+          "label_ja": "平均損失",
           "metric_id": "mean_loss",
           "unit": "loss"
         },
@@ -1350,13 +1350,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "最大loss",
+          "label_ja": "最大損失",
           "metric_id": "worst_loss",
           "unit": "loss"
         },
         {
           "direction": "minimize",
-          "label_ja": "最小loss",
+          "label_ja": "最小損失",
           "metric_id": "best_loss",
           "unit": "loss"
         }
@@ -1365,18 +1365,18 @@
       "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
       "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
       "ranking_eligible": false,
-      "seed_policy": "固定済み8 training / 4 held-out scenarioをその順で使うためseedはnot applicable。",
+      "seed_policy": "固定済みの学習用8件・検証用4件のシナリオをその順で使うため、乱数の種は該当なし。",
       "source_ids": [
         "S010",
         "S055",
         "S103"
       ],
-      "stopping_policy": "training 8件を集計した後、解を固定したままheld-out 4件を集計し、合計12 loss evaluationで停止する。",
+      "stopping_policy": "学習用8件を集計した後、解を固定したまま検証用4件を集計し、合計12回の損失評価で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "training上でmeanが同等でもtailを抑える配分は変わり得る。held-outは別集計してsample依存性を診断するが、その1回の差を一般順位にはしない。",
+      "takeaway": "学習用シナリオ上で平均が同等でも、裾を抑える配分は変わり得る。検証用シナリオは別集計して標本への依存性を診断するが、その1回の差を一般順位にはしない。",
       "title_en": "Read nominal and CVaR objectives on the same scenarios",
-      "title_ja": "同じscenarioでnominal目的とCVaR目的を読む",
-      "tuning_policy": "alpha=0.75、CVaR weight=0.5、0.05 gridをrun前に固定し、held-outを見て配分やparameterを変更しない。"
+      "title_ja": "同じシナリオで名目の目的とCVaR目的を読む",
+      "tuning_policy": "α=0.75、CVaRの重み0.5、0.05刻みの格子を実行前に固定し、検証用シナリオを見て配分やパラメータを変更しない。"
     },
     {
       "aliases": [],
@@ -1388,28 +1388,28 @@
       "canonical_comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
       "canonical_url": "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
       "case_id": "EC026",
-      "caveat": "決定的な教育用ledgerであり、実solverを実行したwall-clock比較ではない。loose runの低い離散objectiveを連続modelでの改善と読まない。",
+      "caveat": "決定的な教材用の記録であり、実際のソルバーを実行した実時間の比較ではない。許容誤差を緩めた実行の低い離散目的関数値を、連続モデルでの改善と読まない。",
       "changed_factors": [
-        "state/adjoint relative toleranceだけ: 1e-8 対 1e-3"
+        "状態／随伴の相対許容誤差だけ: 1e-8 対 1e-3"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
-      "comparison_question": "固定mesh・design更新・call budgetの下でstate/adjoint toleranceだけを変えると、離散objective、残差、線形反復costはどう変わる？",
-      "fairness_note": "problem、mesh、design更新、call budget、solver/preconditioner policy、failure mappingを固定し、state/adjoint toleranceだけを変える。",
+      "comparison_question": "固定したメッシュ・設計更新・呼び出し予算の下で状態／随伴の許容誤差だけを変えると、離散目的関数値、残差、線形反復の費用はどう変わる？",
+      "fairness_note": "問題、メッシュ、設計更新、呼び出し予算、ソルバー／前処理の方針、失敗評価の扱いを固定し、状態／随伴の許容誤差だけを変える。",
       "fixed_factors": [
-        "同じINSTANCE_TOPOLOGY_CANTILEVER_2Dと8×4 mesh",
-        "同じ初期density fieldと6回のdesign更新",
-        "同じstate/adjoint solver familyとpreconditioner policy",
-        "同じfailure mapping: failed evaluationをobjective penaltyへ変換しない",
-        "同じ6 state-solve-call budget"
+        "同じINSTANCE_TOPOLOGY_CANTILEVER_2Dと8×4メッシュ",
+        "同じ初期密度場と6回の設計更新",
+        "同じ状態／随伴ソルバーの系統と前処理の方針",
+        "同じ失敗評価の扱い: 失敗した評価を目的関数の罰則へ変換しない",
+        "同じ6回の状態計算の呼び出し予算"
       ],
-      "formulation_summary": "8×4の同じcantilever離散problemでreduced-spaceのdesign→state→adjoint ledgerを6 call実行する。",
+      "formulation_summary": "8×4の同じ片持ち梁の離散問題で、縮約空間の設計→状態→随伴の計算記録を6回の呼び出し分実行する。",
       "identity_status": "canonical",
       "journey_id": "EC026",
       "last_verified": "2026-07-19",
       "limitations": [
-        "固定8×4 meshの合成ledgerであり、mesh refinement、実runtime、preconditionerの一般性能を比較しない。",
-        "連続PDEの可行性・最適性、実装間順位、transient/multiphysics couplingの収束を保証しない。"
+        "固定8×4メッシュの合成記録であり、メッシュ細分化、実際の実行時間、前処理の一般性能を比較しない。",
+        "連続PDEの可行性・最適性、実装間順位、非定常／マルチフィジックス連成の収束を保証しない。"
       ],
       "members": [
         {
@@ -1464,25 +1464,25 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "離散objective",
+          "label_ja": "離散目的関数値",
           "metric_id": "objective_value",
           "unit": "normalized compliance"
         },
         {
           "direction": "minimize",
-          "label_ja": "state残差",
+          "label_ja": "状態残差",
           "metric_id": "state_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "adjoint残差",
+          "label_ja": "随伴残差",
           "metric_id": "adjoint_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "state線形反復",
+          "label_ja": "状態の線形反復",
           "metric_id": "state_linear_iterations",
           "unit": "iterations"
         }
@@ -1491,19 +1491,19 @@
       "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
       "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
       "ranking_eligible": false,
-      "seed_policy": "決定的ledgerのためseedはnot applicable。",
+      "seed_policy": "決定的な記録のため乱数の種は該当なし。",
       "source_ids": [
         "S019",
         "S097",
         "S101",
         "S110"
       ],
-      "stopping_policy": "6 state solve callsで停止し、outer objective toleranceでは早期停止しない。",
+      "stopping_policy": "6回の状態計算で停止し、外側の目的関数の許容誤差では早期停止しない。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "inner toleranceはcostだけでなくstate/adjoint整合性とouter progressの解釈を変えるため、objectiveとは別に残差とsolve costを保存する。",
+      "takeaway": "内側の許容誤差は計算費用だけでなく、状態／随伴の整合性と外側の反復の進み具合の解釈を変えるため、目的関数値とは別に残差と求解の計算費用を保存する。",
       "title_en": "Read state/adjoint tolerance and solve cost under the same design updates",
-      "title_ja": "同じdesign更新でstate/adjoint toleranceとsolve costを読む",
-      "tuning_policy": "toleranceをrun前に固定し、結果を見たpost-run tuningをしない。"
+      "title_ja": "同じ設計更新で、状態／随伴計算の許容誤差と計算費用を読む",
+      "tuning_policy": "許容誤差を実行前に固定し、結果を見てから調整しない。"
     },
     {
       "aliases": [],
@@ -1515,14 +1515,14 @@
       "canonical_comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
       "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
       "case_id": "topology-cantilever",
-      "caveat": "教育用field traceは実装内部のOC・MMAや実FEM solverのwall-clock性能を再現せず、complianceの小ささだけで設計品質を順位付けできません。",
+      "caveat": "教材用の場の記録は、実装内部のOC・MMAや実FEMソルバーの実時間性能を再現せず、コンプライアンスの小ささだけで設計品質を順位付けできません。",
       "changed_factors": [
         "density update rule: Optimality Criteria versus Method of Moving Asymptotes"
       ],
       "comparability": "comparable_with_caveat",
       "comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
-      "comparison_question": "同じ片持ちはり、初期密度、体積率、反復予算で、OCとMMAの更新則はdensity fieldと指標にどう現れる？",
-      "fairness_note": "同じ問題instance、初期density、volume target、filter・projection preset、generator、12回の評価予算で更新則だけを変えます。",
+      "comparison_question": "同じ片持ちはり、初期密度、体積率、反復予算で、OCとMMAの更新則は密度場と指標にどう現れる？",
+      "fairness_note": "同じ問題例、初期密度、目標体積率、事前に固定したフィルタ・射影の設定、生成器、12回の評価予算で更新則だけを変えます。",
       "fixed_factors": [
         "8×4 density field",
         "initial density 0.5",
@@ -1538,7 +1538,7 @@
       "last_verified": "2026-07-18",
       "limitations": [
         "32要素の決定的な教育用比較です。",
-        "実FEMの収束、mesh依存性、製造制約、座屈・強度、wall-clock、memoryは比較しません。"
+        "実FEMの収束、メッシュ依存性、製造制約、座屈・強度、実時間、メモリは比較しません。"
       ],
       "members": [
         {
@@ -1591,7 +1591,7 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "compliance",
+          "label_ja": "コンプライアンス",
           "metric_id": "compliance",
           "unit": "objective value"
         },
@@ -1603,13 +1603,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "gray fraction",
+          "label_ja": "中間密度の割合",
           "metric_id": "gray_fraction",
           "unit": "fraction"
         },
         {
           "direction": "minimize",
-          "label_ja": "checkerboard score",
+          "label_ja": "チェッカーボードのスコア",
           "metric_id": "checkerboard_score",
           "unit": "artifact score"
         }
@@ -1627,10 +1627,10 @@
       ],
       "stopping_policy": "12 iteration budget or volume tolerance 0.001; no post-run tuning",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "同じ制約でも更新則が変わると、fieldの境界、gray fraction、checkerboard scoreの現れ方が変わります。",
+      "takeaway": "同じ制約でも更新則が変わると、場の境界、中間密度の割合、チェッカーボードのスコアの現れ方が変わります。",
       "title_en": "Compare OC and MMA on the same density field",
-      "title_ja": "同じ密度fieldでOCとMMAを比べる",
-      "tuning_policy": "同じ固定presetを使い、run後にparameterを調整しない。"
+      "title_ja": "同じ密度場でOCとMMAを比べる",
+      "tuning_policy": "同じ事前に固定した設定を使い、実行後にパラメータを調整しない。"
     },
     {
       "aliases": [],
@@ -1642,14 +1642,14 @@
       "canonical_comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
       "canonical_url": "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
       "case_id": "EC029",
-      "caveat": "決定的な教育用metric historyによるmesh感度です。実際のCasADi／Drake solverを実行しておらず、N=40が一般に優れるというranking、wall-clock性能、連続時間可行性を示しません。",
+      "caveat": "決定的な教材用の指標の履歴によるメッシュ感度です。実際のCasADi／Drakeのソルバーは実行しておらず、N=40が一般に優れるという順位付け、実時間の性能、連続時間可行性を示しません。",
       "changed_factors": [
         "mesh nodes only: N=20 versus N=40"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
-      "comparison_question": "同じpendulum dynamics・境界／path制約・初期trajectory・評価予算・停止toleranceで、meshをN=20からN=40へ変えるとnode残差と区間再構成の違反はどう変わる？",
-      "fairness_note": "同じdynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変えます。",
+      "comparison_question": "同じ振り子の運動方程式・境界／経路制約・初期軌道・評価予算・停止の許容誤差で、メッシュをN=20からN=40へ変えると、ノード上の残差と区間再構成後の違反はどう変わる？",
+      "fairness_note": "同じ運動方程式、2秒の計画区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変えます。",
       "fixed_factors": [
         "pendulum model m=1, l=1, g=9.81, damping=0.05",
         "horizon 2 seconds",
@@ -1668,8 +1668,8 @@
       "journey_id": "EC029",
       "last_verified": "2026-07-19",
       "limitations": [
-        "2状態・1入力・2秒のpendulum teaching instanceだけを扱います。",
-        "有限meshのcontrastから連続時間の安全性、model妥当性、大域最適性、実機性能を推論しません。"
+        "2状態・1入力・2秒の振り子の教材用の問題例だけを扱います。",
+        "有限メッシュの対比から、連続時間の安全性、モデルの妥当性、大域最適性、実機性能を推論しません。"
       ],
       "members": [
         {
@@ -1685,7 +1685,7 @@
             "value": 8
           },
           "label_en": "Coarse mesh N=20",
-          "label_ja": "coarse mesh N=20",
+          "label_ja": "粗いメッシュ N=20",
           "member_id": "pendulum-collocation-coarse",
           "method_id": "M_DIRECT_COLLOCATION",
           "parameters": {
@@ -1708,7 +1708,7 @@
             "value": 8
           },
           "label_en": "Refined mesh N=40",
-          "label_ja": "refined mesh N=40",
+          "label_ja": "細かいメッシュ N=40",
           "member_id": "pendulum-collocation-refined",
           "method_id": "M_DIRECT_COLLOCATION",
           "parameters": {
@@ -1728,19 +1728,19 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "max dynamics defect",
+          "label_ja": "動力学残差の最大値",
           "metric_id": "dynamics_defect",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "node path violation",
+          "label_ja": "ノード上の経路制約違反",
           "metric_id": "node_path_violation",
           "unit": "constraint violation"
         },
         {
           "direction": "minimize",
-          "label_ja": "再構成path violation",
+          "label_ja": "再構成後の経路制約違反",
           "metric_id": "reconstructed_path_violation",
           "unit": "constraint violation"
         },
@@ -1755,18 +1755,18 @@
       "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
       "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
       "ranking_eligible": false,
-      "seed_policy": "deterministic educational generatorのseed 2026を固定する。",
+      "seed_policy": "決定的な教材用の生成器で、乱数の種2026を固定する。",
       "source_ids": [
         "S042",
         "S050",
         "S102"
       ],
-      "stopping_policy": "両memberとも8 evaluation、dynamics defect 0.001、node path violation 0.0001、terminal error 0.001のうち先に満たす条件で停止する。",
+      "stopping_policy": "どちらの比較対象も、評価8回、動力学残差0.001、ノード上の経路制約違反0.0001、終端誤差0.001のうち先に満たす条件で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "node上の残差が同じtolerance内でも、区間再構成のviolationはmeshで変わります。refinement後も高精度rolloutで別途検証します。",
+      "takeaway": "ノード上の残差が同じ許容誤差内でも、区間を再構成した後の違反はメッシュで変わります。メッシュを細かくした後も、高精度の前進シミュレーションで別途検証します。",
       "title_en": "Contrast coarse and refined collocation meshes for pendulum swing-up",
-      "title_ja": "pendulum collocationのcoarse meshとrefined meshを比べる",
-      "tuning_policy": "dynamics、horizon、初期／終端／path制約、初期trajectory、予算、toleranceを固定し、mesh interval数だけを変える。run後のparameter調整はしない。"
+      "title_ja": "振り子の選点法で粗いメッシュと細かいメッシュを比べる",
+      "tuning_policy": "運動方程式、計画区間、初期／終端／経路制約、初期軌道、予算、許容誤差を固定し、メッシュの区間数だけを変える。実行後のパラメータ調整はしない。"
     },
     {
       "aliases": [],
@@ -1778,14 +1778,14 @@
       "canonical_comparison_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
       "canonical_url": "/compare/COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
       "case_id": "EC020",
-      "caveat": "EC020の抽象的な非線形trajectory全般を再現する結果ではありません。決定的なpendulum教材のmetric historyをbridgeとして再利用し、N=40の一般的優位、solver ranking、wall-clock性能、連続時間可行性を主張しません。",
+      "caveat": "EC020の抽象的な非線形軌道全般を再現する結果ではありません。決定的な振り子教材の指標の履歴を橋渡しとして再利用し、N=40の一般的優位、ソルバーの順位、実時間での性能、連続時間での可行性を主張しません。",
       "changed_factors": [
         "mesh nodes only: N=20 versus N=40"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
-      "comparison_question": "抽象的な軌道最適化Caseで区別したstate、control、dynamics defect、path violationは、固定pendulum教材のN=20とN=40でどう見え方が変わる？",
-      "fairness_note": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。",
+      "comparison_question": "抽象的な軌道最適化の事例で区別した状態、制御入力、動力学残差、経路制約の違反は、固定した振り子教材のN=20とN=40でどう見え方が変わる？",
+      "fairness_note": "同じ固定した振り子教材、動力学、2秒の時間区間、初期／終端／経路制約、初期軌道、8回の評価予算、停止の許容誤差、乱数の種を使い、メッシュの区間数だけを変える。",
       "fixed_factors": [
         "teaching problem INSTANCE_PENDULUM_SWING_UP_EC020",
         "pendulum model m=1, l=1, g=9.81, damping=0.05",
@@ -1800,13 +1800,13 @@
         "terminal tolerance 0.001",
         "seed 2026"
       ],
-      "formulation_summary": "EC020の一般式を直接計算する比較ではなく、min 0.01 Σuₖ²+20||(θ_N,ω_N)−(π,0)||² subject to pendulum dynamics, (θ₀,ω₀)=(0,0), |ω|≤8, |u|≤8 の固定教材へ降りて診断量を読むbridge。",
+      "formulation_summary": "EC020の一般式を直接計算する比較ではなく、振り子の運動方程式と (θ₀,ω₀)=(0,0)、|ω|≤8、|u|≤8 の下で 0.01 Σuₖ²+20||(θ_N,ω_N)−(π,0)||² を最小化する固定教材へ降りて、診断量を読む橋渡し。",
       "identity_status": "canonical",
       "journey_id": "EC020",
       "last_verified": "2026-07-24",
       "limitations": [
-        "EC020の一般式と同じtrajectoryや実データではなく、2状態・1入力・2秒のpendulum teaching instanceだけを扱います。",
-        "有限meshのcontrastから連続時間の安全性、model妥当性、大域最適性、実機性能を推論しません。"
+        "EC020の一般式と同じ軌道や実データではなく、2状態・1入力・2秒の振り子の教材用の問題例だけを扱います。",
+        "有限メッシュの対比から、連続時間の安全性、モデルの妥当性、大域最適性、実機性能を推論しません。"
       ],
       "members": [
         {
@@ -1822,7 +1822,7 @@
             "value": 8
           },
           "label_en": "Fixed pendulum: coarse mesh N=20",
-          "label_ja": "固定pendulum: coarse mesh N=20",
+          "label_ja": "固定した振り子: 粗いメッシュ N=20",
           "member_id": "ec020-bridge-collocation-coarse",
           "method_id": "M_DIRECT_COLLOCATION",
           "parameters": {
@@ -1845,7 +1845,7 @@
             "value": 8
           },
           "label_en": "Fixed pendulum: refined mesh N=40",
-          "label_ja": "固定pendulum: refined mesh N=40",
+          "label_ja": "固定した振り子: 細かいメッシュ N=40",
           "member_id": "ec020-bridge-collocation-refined",
           "method_id": "M_DIRECT_COLLOCATION",
           "parameters": {
@@ -1877,7 +1877,7 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "再構成path violation",
+          "label_ja": "再構成した軌道での経路制約違反",
           "metric_id": "reconstructed_path_violation",
           "unit": "constraint violation"
         },
@@ -1892,18 +1892,18 @@
       "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
       "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
       "ranking_eligible": false,
-      "seed_policy": "deterministic educational generatorのseed 2026を固定する。",
+      "seed_policy": "決定的な教材用生成器の乱数の種2026を固定する。",
       "source_ids": [
         "S042",
         "S050",
         "S102"
       ],
-      "stopping_policy": "両memberとも8 evaluation、dynamics defect 0.001、node path violation 0.0001、terminal error 0.001のうち先に満たす条件で停止する。",
+      "stopping_policy": "両方の比較対象とも、8回の評価、動力学残差0.001、ノードでの経路制約違反0.0001、終端誤差0.001のうち先に満たした条件で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "抽象式のままでは見えにくいnode残差と区間再構成の違反を、同じpendulumでmeshだけ変えた履歴へ降りて分けて読めます。",
+      "takeaway": "抽象式のままでは見えにくいノードでの残差と区間再構成での違反を、同じ振り子でメッシュだけ変えた履歴へ降りて分けて読めます。",
       "title_en": "Use pendulum mesh sensitivity to read a generic trajectory problem",
-      "title_ja": "抽象的な軌道最適化からpendulumのmesh感度を読む",
-      "tuning_policy": "dynamics、horizon、初期／終端／path制約、初期trajectory、予算、toleranceを固定し、mesh interval数だけを変える。run後のparameter調整はしない。"
+      "title_ja": "抽象的な軌道最適化から振り子のメッシュ感度を読む",
+      "tuning_policy": "動力学、時間区間、初期／終端／経路制約、初期軌道、予算、許容誤差を固定し、メッシュの区間数だけを変える。実行後のパラメータ調整はしない。"
     },
     {
       "aliases": [],
@@ -1915,14 +1915,14 @@
       "canonical_comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "case_id": "bilevel-regularized-regression",
-      "caveat": "solver benchmarkではなく固定教材ledgerである。小さいstationarity residualはglobal bilevel optimum、MPECのstationarity class、constraint qualification、solution mapの滑らかさを証明しない。",
+      "caveat": "ソルバーのベンチマークではなく、固定した教材の記録である。小さい停留性の残差は、二階層最適化の大域最適解、MPECの停留性の種類、制約想定、解写像の滑らかさを証明しない。",
       "changed_factors": [
         "complementarity treatment only: exact_kkt_complementarity versus finite_relaxation at tau 1e-2"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
-      "comparison_question": "outer objectiveがより下がっても、有限relaxationをexact complementarityと呼べる？",
-      "fairness_note": "同じdata、outer budget、inner policy、tolerance、implicit derivative routeを使い、exact KKTか有限relaxationかだけを変える。",
+      "comparison_question": "外側の目的関数値がより下がっても、有限の緩和を厳密な相補性と呼べる？",
+      "fairness_note": "同じデータ、外側の予算、内側の方針、許容誤差、陰関数微分の経路を使い、厳密なKKTか有限の緩和かだけを変える。",
       "fixed_factors": [
         "problem instance INSTANCE_BILEVEL_REGRESSION_2COEF",
         "fixed teaching outer sequence",
@@ -1931,13 +1931,13 @@
         "inner tolerance 1e-8 and maximum 100 iterations",
         "derivative route implicit_active_set"
       ],
-      "formulation_summary": "外側で正則化係数を選び、内側で2係数の非負回帰を解く固定bilevel教材。",
+      "formulation_summary": "外側で正則化係数を選び、内側で2係数の非負回帰を解く、固定した二階層最適化の教材。",
       "identity_status": "canonical",
       "journey_id": "bilevel-regularized-regression",
       "last_verified": "2026-07-19",
       "limitations": [
-        "固定した2係数・6 outer updateだけを扱い、wall-clockや実装性能を比較しない。",
-        "optimistic/pessimistic selection、active-set変更、inner未収束時のgradient誤差はこの2 memberでは比較しない。"
+        "固定した2係数・外側の更新6回だけを扱い、実時間や実装性能を比較しない。",
+        "楽観的／悲観的な解の選択、有効制約集合の変化、内側が未収束のときの勾配の誤差は、この2つの比較対象では比較しない。"
       ],
       "members": [
         {
@@ -1953,7 +1953,7 @@
             "value": 6
           },
           "label_en": "Exact KKT complementarity",
-          "label_ja": "exact KKT complementarity",
+          "label_ja": "厳密なKKTの相補性",
           "member_id": "exact-kkt-reference",
           "method_id": "M_SLSQP",
           "parameters": {
@@ -1981,7 +1981,7 @@
             "value": 6
           },
           "label_en": "Finite relaxation tau=1e-2",
-          "label_ja": "有限relaxation τ=1e-2",
+          "label_ja": "有限の緩和 τ=1e-2",
           "member_id": "finite-relaxation-failure",
           "method_id": "M_SLSQP",
           "parameters": {
@@ -2000,31 +2000,31 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "outer objective",
+          "label_ja": "外側の目的関数値",
           "metric_id": "outer_objective",
           "unit": "validation loss"
         },
         {
           "direction": "minimize",
-          "label_ja": "inner residual",
+          "label_ja": "内側の残差",
           "metric_id": "inner_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "stationarity residual",
+          "label_ja": "停留性の残差",
           "metric_id": "stationarity_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "complementarity residual",
+          "label_ja": "相補性の残差",
           "metric_id": "complementarity_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "relaxation parameter",
+          "label_ja": "緩和パラメータ",
           "metric_id": "relaxation_parameter",
           "unit": "tau"
         }
@@ -2039,12 +2039,12 @@
         "S056",
         "S064"
       ],
-      "stopping_policy": "6 outer updatesの後、inner・stationarity・complementarity residualを別々に判定する。",
+      "stopping_policy": "外側の更新6回の後、内側の残差・停留性の残差・相補性の残差を別々に判定する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "outer objective、inner residual、stationarity、complementarity、relaxation parameterを分け、有限tauのrunをexact complementarityとみなさない。",
+      "takeaway": "外側の目的関数値、内側の残差、停留性、相補性、緩和パラメータを分け、有限のτでの実行を厳密な相補性とみなさない。",
       "title_en": "Separate exact KKT from a finite relaxation by residuals",
-      "title_ja": "exact KKTと有限relaxationを残差で読み分ける",
-      "tuning_policy": "outer sequence、inner policy、tolerance、derivative routeを事前固定し、complementarity treatmentだけを変える。"
+      "title_ja": "厳密なKKTと有限の緩和を残差で読み分ける",
+      "tuning_policy": "外側の系列、内側の方針、許容誤差、微分の経路を事前に固定し、相補性の扱いだけを変える。"
     },
     {
       "aliases": [],
@@ -2056,14 +2056,14 @@
       "canonical_comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
       "canonical_url": "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
       "case_id": "shape-diffuser",
-      "caveat": "SLSQPやSIMPの実solverは実行していません。決定的metric historyはparameter、geometry、mesh、stateとtopology-change許可の違いを読む教材であり、wall-clock、解品質、一般性能を示しません。",
+      "caveat": "SLSQPやSIMPの実際のソルバーは実行していません。決定的な指標の履歴は、パラメータ、形状、メッシュ、状態と、トポロジー変化を許すかどうかの違いを読む教材であり、実時間、解品質、一般性能を示しません。",
       "changed_factors": [
         "design representation only: three bounded shape parameters with fixed topology versus a density field that permits connectivity change"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
-      "comparison_question": "同じ物理briefと外側envelopeで、3 parameter shapeとdensity fieldは何を動かし、どのtopology changeを許す？",
-      "fairness_note": "同じ物理briefと診断contractを使いますが、design spaceが異なるためobjective値や到達shapeを性能順位として比較しません。",
+      "comparison_question": "同じ物理条件の概要と外側の設計領域で、3パラメータの形状と密度場はそれぞれ何を動かし、どのトポロジー変化を許す？",
+      "fairness_note": "同じ物理条件の概要と診断の契約を使いますが、設計空間が異なるため、目的関数値や到達した形状を性能順位として比較しません。",
       "fixed_factors": [
         "same reduced diffuser physical brief",
         "same inlet and outer design envelope",
@@ -2076,13 +2076,13 @@
         "same state residual tolerance 1e-6",
         "same seed 134"
       ],
-      "formulation_summary": "同じdiffuser design briefで、q=(r,c,s)のfixed-topology境界更新と、接続変更を許すdensity fieldを表現contractとして比べる。",
+      "formulation_summary": "同じディフューザの設計概要で、q=(r,c,s)によるトポロジー固定の境界更新と、接続変更を許す密度場を、表現の契約として比べる。",
       "identity_status": "canonical",
       "journey_id": "shape-diffuser",
       "last_verified": "2026-07-19",
       "limitations": [
-        "3 parameter・21 geometry sample・reduced state proxyの小さな教材です。",
-        "structural、CFD、thermal、acoustic、photonicの実PDE、mesh refinement、manufacturing constraintは後続Caseで検証します。"
+        "3パラメータ・21形状サンプル・縮約した状態の代理指標による小さな教材です。",
+        "構造、CFD、熱、音響、フォトニクスの実PDE、メッシュ細分化、製造制約は後続の事例で検証します。"
       ],
       "members": [
         {
@@ -2137,13 +2137,13 @@
       "metrics": [
         {
           "direction": "maximize",
-          "label_ja": "geometry最小gap",
+          "label_ja": "形状の最小間隔",
           "metric_id": "geometry_min_gap",
           "unit": "normalized length"
         },
         {
           "direction": "maximize",
-          "label_ja": "mesh最小quality",
+          "label_ja": "メッシュの最小品質",
           "metric_id": "mesh_min_quality",
           "unit": "normalized quality"
         },
@@ -2161,7 +2161,7 @@
         },
         {
           "direction": "none",
-          "label_ja": "教育用objective proxy",
+          "label_ja": "教材用の目的関数の代理指標",
           "metric_id": "objective_value",
           "unit": "diagnostic only"
         }
@@ -2170,7 +2170,7 @@
       "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
       "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
       "ranking_eligible": false,
-      "seed_policy": "deterministic educational generatorのseed 134を固定する。",
+      "seed_policy": "決定的な教材用生成器の乱数の種134を固定する。",
       "source_ids": [
         "S097",
         "S101",
@@ -2178,12 +2178,12 @@
         "S105",
         "S106"
       ],
-      "stopping_policy": "両memberとも6 evaluationで停止し、geometry gap、mesh quality、state residualを同じ閾値で記録する。",
+      "stopping_policy": "両方の比較対象とも6回の評価で停止し、形状の間隔、メッシュ品質、状態残差を同じ閾値で記録する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "shape parameterは接続を固定した低次元の形を探索し、density／level-set系は接続変更を表現できます。表現力の差とsolver性能の差を混同しません。",
+      "takeaway": "形状パラメータは接続を固定した低次元の形を探索し、密度場／レベルセット系は接続変更を表現できます。表現力の差とソルバー性能の差を混同しません。",
       "title_en": "Contrast fixed-topology shape and topology-changing field representations",
-      "title_ja": "fixed-topology shapeとtopology-changing fieldを比べる",
-      "tuning_policy": "物理brief、外側envelope、初期外形、予算、診断、tolerance、seedを固定し、design representationだけを変える。run後のparameter調整はしない。"
+      "title_ja": "トポロジー固定の形状と、トポロジーを変えられる密度場を比べる",
+      "tuning_policy": "物理条件の概要、外側の設計領域、初期外形、予算、診断、許容誤差、乱数の種を固定し、設計表現だけを変える。実行後のパラメータ調整はしない。"
     },
     {
       "aliases": [],
@@ -2195,30 +2195,30 @@
       "canonical_comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
       "canonical_url": "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
       "case_id": "so3-attitude-alignment",
-      "caveat": "QR projectionとexponential mapは一回あたりの演算も理論上のstepも異なるため、iteration数や最終lossから一般的な速度順位を付けない。",
+      "caveat": "QRによる射影と指数写像は一回あたりの演算も理論上の一歩も異なるため、反復回数や最終の損失から一般的な速度順位を付けない。",
       "changed_factors": [
-        "feasibility strategyだけ: ambient step + QR projection 対 Lie algebra step + exponential map"
+        "実行可能性を保つ方策だけ：周囲の空間での一歩 + QRによる射影 対 リー代数での一歩 + 指数写像"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
-      "comparison_question": "target、初期rotation、objective、step size、12 updateを固定し、feasibility strategyだけを変えるとlossとSO(3)構造診断はどう変わる？",
-      "fairness_note": "同じproblem、target、initialization、objective、step、budget、diagnosticを共有し、SO(3)へ戻すstrategyだけを変える。",
+      "comparison_question": "目標、初期の回転、目的関数、刻み幅、12回の更新を固定し、実行可能性を保つ方策だけを変えると、損失とSO(3)構造の診断はどう変わる？",
+      "fairness_note": "同じ問題、目標、初期化、目的関数、刻み幅、予算、診断を共有し、SO(3)へ戻す方策だけを変える。",
       "fixed_factors": [
-        "同じ固定3 correspondenceとtarget rotation",
-        "同じidentity initialization",
-        "同じchordal objectiveとgeodesic diagnostic",
-        "同じstep size 0.35",
-        "同じ12 oracle evaluation budget",
-        "同じfloat64相当の決定的generator"
+        "同じ固定した3個の対応と目標の回転",
+        "同じ単位行列からの初期化",
+        "同じ弦距離の目的関数と測地距離による診断",
+        "同じ刻み幅 0.35",
+        "同じ評価予算12回",
+        "同じfloat64相当の決定的な生成器"
       ],
-      "formulation_summary": "min 0.5 ||R-R_target||_F^2 subject to R^T R=I and det(R)=1。target angleは2.8 rad、初期値はidentity。",
+      "formulation_summary": "制約 R^T R=I、det(R)=1 のもとで min 0.5 ||R-R_target||_F^2 を解く。目標の回転角は2.8 rad、初期値は単位行列。",
       "identity_status": "canonical",
       "journey_id": "so3-attitude-alignment",
       "last_verified": "2026-07-19",
       "limitations": [
-        "固定near-pi target・noiseなし・単一initializationの教育用contrastである。",
-        "quaternion sign、複数rotation averaging、outlier robustness、wall-clock、memoryを比較しない。",
-        "各iterateのSO(3) feasibilityは局所解、大域最適性、一般的なnear-pi安定性を保証しない。"
+        "回転角がπに近い固定の目標・ノイズなし・単一の初期値による教育用の対比である。",
+        "四元数の符号、複数の回転の平均化、外れ値への頑健性、実時間、メモリを比較しない。",
+        "各反復点のSO(3)上での実行可能性は、局所解、大域最適性、回転角がπに近い場合の一般的な安定性を保証しない。"
       ],
       "members": [
         {
@@ -2234,7 +2234,7 @@
             "value": 12
           },
           "label_en": "Ambient step plus QR projection",
-          "label_ja": "ambient step + QR projection",
+          "label_ja": "周囲の空間での一歩 + QRによる射影",
           "member_id": "so3-projected",
           "method_id": "M_PROJECTED_GRADIENT",
           "parameters": {
@@ -2259,7 +2259,7 @@
             "value": 12
           },
           "label_en": "Lie-algebra step plus exponential map",
-          "label_ja": "Lie algebra step + exponential map",
+          "label_ja": "リー代数での一歩 + 指数写像",
           "member_id": "so3-riemannian",
           "method_id": "M_RIEMANNIAN_GRADIENT",
           "parameters": {
@@ -2281,7 +2281,7 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "geodesic residual",
+          "label_ja": "測地距離の残差",
           "metric_id": "geodesic_residual",
           "unit": "radian"
         },
@@ -2293,7 +2293,7 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "determinant残差",
+          "label_ja": "行列式残差",
           "metric_id": "determinant_error",
           "unit": "absolute error"
         }
@@ -2302,19 +2302,19 @@
       "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
       "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
       "ranking_eligible": false,
-      "seed_policy": "決定的な固定rotationを使うためseedはnot applicable。",
+      "seed_policy": "決定的な固定の回転を使うため、乱数の種は該当なし。",
       "source_ids": [
         "S044",
         "S045",
         "S071",
         "S107"
       ],
-      "stopping_policy": "12 updateで停止し、途中のmetricを同じoracle evaluation軸へ同期する。",
+      "stopping_policy": "12回の更新で停止し、途中の指標を同じ評価回数の軸へ同期する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "feasible iterateを作る点は共通でも、ambient correctionとtangent stepは別の量である。objectiveと構造残差を分けると、feasibilityと収束claimを混同しにくい。",
+      "takeaway": "実行可能な反復点を作る点は共通でも、周囲の空間での修正と接空間での一歩は別の量である。目的関数と構造残差を分けると、実行可能性と収束の主張を混同しにくい。",
       "title_en": "Separate SO(3) projection from a Lie-algebra update",
-      "title_ja": "SO(3)へのprojectionとLie algebra updateを分けて読む",
-      "tuning_policy": "step size 0.35をrun前に固定し、結果を見てstrategyごとに調整しない。"
+      "title_ja": "SO(3)への射影とリー代数での更新を分けて読む",
+      "tuning_policy": "刻み幅0.35を実行前に固定し、結果を見て方策ごとに調整しない。"
     },
     {
       "aliases": [],
@@ -2326,14 +2326,14 @@
       "canonical_comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
       "canonical_url": "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
       "case_id": "laser-process-tuning",
-      "caveat": "固定seed・1次元・synthetic objectiveの感度比較であり、レーザー加工条件、BO設定、他手法の一般的優劣や実工程の良品率を推論できない。",
+      "caveat": "固定した乱数の種・1次元・人工的な目的関数での感度比較であり、レーザー加工条件、BO設定、他手法の一般的優劣や実工程の良品率を推論できない。",
       "changed_factors": [
-        "Expected Improvementのexploration coefficient xiだけを0.18から0へ変える"
+        "Expected Improvementの探索係数xiだけを0.18から0へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
-      "comparison_question": "同じ固定1次元教材、初期観測、small noise、10回の評価budgetで、Expected Improvementの探索係数だけを変えると提案点と不確実性の読み方はどう変わる？",
-      "fairness_note": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。",
+      "comparison_question": "同じ固定1次元教材、初期観測、小さいノイズ、10回の評価予算で、Expected Improvementの探索係数だけを変えると提案点と不確実性の読み方はどう変わる？",
+      "fairness_note": "両比較対象は問題、初期点の配置、乱数の種、ノイズ、カーネル、予算を共有し、探索係数だけを変える。",
       "fixed_factors": [
         "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D",
         "domain [-3, 3]",
@@ -2342,13 +2342,13 @@
         "observation noise sigma=0.08",
         "oracle evaluation budget 10"
       ],
-      "formulation_summary": "製造Caseの3変数実験を直接再現せず、x∈[-3,3] の固定1次元black-boxでacquisitionの感度だけを読む。",
+      "formulation_summary": "製造の事例の3変数実験を直接再現せず、x∈[-3,3] の固定1次元ブラックボックス関数で獲得関数の感度だけを読む。",
       "identity_status": "canonical",
       "journey_id": "laser-process-tuning",
       "last_verified": "2026-07-19",
       "limitations": [
-        "製造Caseの3変数・材料lot・装置状態を再現せず、1次元の固定教材だけを扱う。",
-        "単一seed・固定initial design・10 evaluationであり、統計的順位や工程能力を示さない。"
+        "製造の事例の3変数・材料ロット・装置状態を再現せず、1次元の固定教材だけを扱う。",
+        "単一の乱数の種・固定した初期点の配置・10回の評価であり、統計的順位や工程能力を示さない。"
       ],
       "members": [
         {
@@ -2364,7 +2364,7 @@
             "value": 10
           },
           "label_en": "Exploratory EI with small noise",
-          "label_ja": "探索寄りEI・small noise",
+          "label_ja": "探索寄りEI・小さいノイズ",
           "member_id": "laser-bo-explore-small-noise",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -2389,7 +2389,7 @@
             "value": 10
           },
           "label_en": "Exploitative EI with small noise",
-          "label_ja": "活用寄りEI・small noise",
+          "label_ja": "活用寄りEI・小さいノイズ",
           "member_id": "laser-bo-exploit-small-noise",
           "method_id": "M_BAYESIAN_OPT_GP",
           "parameters": {
@@ -2411,13 +2411,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "best-so-far",
+          "label_ja": "それまでの最良値",
           "metric_id": "best_so_far",
           "unit": "observed objective"
         },
         {
           "direction": "none",
-          "label_ja": "選択点のacquisition",
+          "label_ja": "選択点の獲得関数値",
           "metric_id": "selected_acquisition",
           "unit": "Expected Improvement"
         },
@@ -2432,18 +2432,18 @@
       "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
       "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
       "ranking_eligible": false,
-      "seed_policy": "base seed 2604とnoise streamを固定する。",
+      "seed_policy": "基準の乱数の種 2604とノイズの乱数列を固定する。",
       "source_ids": [
         "S035",
         "S059",
         "S075"
       ],
-      "stopping_policy": "初期観測3点を含む10 objective evaluationsで停止する。",
+      "stopping_policy": "初期観測3点を含む10回の目的関数の評価で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "同じnoiseとbudgetでも、探索係数により既知の良好領域と不確実な領域のどちらを提案するかが変わる。",
+      "takeaway": "同じノイズと予算でも、探索係数により既知の良好領域と不確実な領域のどちらを提案するかが変わる。",
       "title_en": "Change only the exploration coefficient under small noise",
-      "title_ja": "small noise下で探索係数だけを変える",
-      "tuning_policy": "kernel、initial design、noise sigma=0.08を固定し、xi∈{0.18,0}だけをrun前に変える。"
+      "title_ja": "小さいノイズの下で探索係数だけを変える",
+      "tuning_policy": "カーネル、初期点の配置、ノイズの標準偏差σ=0.08を固定し、xi∈{0.18,0}だけを実行前に変える。"
     },
     {
       "aliases": [],
@@ -2455,30 +2455,30 @@
       "canonical_comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
       "canonical_url": "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
       "case_id": "energy-cvar-procurement",
-      "caveat": "4資産教材は電力調達データではない。固定12 scenarioの差から将来価格、供給信頼度、CVaR目的の一般的優位や確率保証を推論できない。",
+      "caveat": "4資産教材は電力調達データではない。固定した12シナリオの差から将来価格、供給信頼度、CVaR目的の一般的優位や確率保証を推論できない。",
       "changed_factors": [
-        "training objectiveのrisk treatmentだけ: mean loss 対 mean loss + 0.5 CVaR_0.75"
+        "最適化に使う目的関数でのリスクの扱いだけ: 平均損失 対 平均損失 + 0.5 CVaR_0.75"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
-      "comparison_question": "電力調達Caseと同じsimplex・scenario tailの構造を、固定4資産教材でrisk treatmentだけ変えると、trainingとheld-outのsummaryはどう変わる？",
-      "fairness_note": "両memberはuncertainty model、8/4 sample、alpha、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
+      "comparison_question": "電力調達の事例と同じ単体・シナリオの裾の構造を、固定4資産教材でリスクの扱いだけ変えると、最適化に使ったシナリオと検証用に取り分けたシナリオでの集計はどう変わる？",
+      "fairness_note": "両方の比較対象は不確実性のモデル、8/4件の標本、α、決定変数の格子、12回の損失評価を共有し、最適化に使う目的関数でのリスクの扱いだけを変える。",
       "fixed_factors": [
-        "4資産のcapped simplex: w_i >= 0, sum(w)=1, w_i <= 0.6",
-        "同じ固定training return scenario 8件",
-        "同じ固定held-out return scenario 4件",
-        "同じscenario順と一様weight",
-        "同じrisk level alpha=0.75",
-        "同じ0.05刻みの教育用decision grid",
-        "同じ12 loss evaluation budget"
+        "上限を設けた4資産の単体: w_i >= 0, sum(w)=1, w_i <= 0.6",
+        "最適化に使う同じ固定収益シナリオ8件",
+        "検証用に取り分けた同じ固定収益シナリオ4件",
+        "同じシナリオ順と一様な重み",
+        "同じリスク水準 α=0.75",
+        "同じ0.05刻みの教材用の決定変数の格子",
+        "同じ損失の評価予算12回"
       ],
-      "formulation_summary": "電力市場を再現せず、4資産のcapped simplexと固定8/4 return scenarioでmean lossとmean loss + CVaRを比較する。",
+      "formulation_summary": "電力市場を再現せず、上限を設けた4資産の単体と固定した8/4件の収益シナリオで、平均損失と平均損失 + CVaRを比較する。",
       "identity_status": "canonical",
       "journey_id": "energy-cvar-procurement",
       "last_verified": "2026-07-19",
       "limitations": [
         "電力市場、需要、送電網、契約を再現せず、固定8/4件・4資産の教材だけを扱う。",
-        "CVaR objectiveはchance constraint、robust feasibility、DRO guaranteeの代替ではない。"
+        "CVaRの目的関数は、機会制約、ロバストな実行可能性、DROの保証の代替ではない。"
       ],
       "members": [
         {
@@ -2494,7 +2494,7 @@
             "value": 12
           },
           "label_en": "Nominal: training mean loss",
-          "label_ja": "nominal: training mean loss",
+          "label_ja": "名目: 最適化用シナリオの平均損失",
           "member_id": "energy-bridge-nominal",
           "method_id": "MF_LP_QP_CONIC",
           "parameters": {
@@ -2522,7 +2522,7 @@
             "value": 12
           },
           "label_en": "CVaR: training mean plus tail risk",
-          "label_ja": "CVaR: training mean + tail risk",
+          "label_ja": "CVaR: 最適化用シナリオの平均 + 裾のリスク",
           "member_id": "energy-bridge-cvar",
           "method_id": "MF_LP_QP_CONIC",
           "parameters": {
@@ -2541,7 +2541,7 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "平均loss",
+          "label_ja": "平均損失",
           "metric_id": "mean_loss",
           "unit": "loss"
         },
@@ -2553,13 +2553,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "最大loss",
+          "label_ja": "最大損失",
           "metric_id": "worst_loss",
           "unit": "loss"
         },
         {
           "direction": "minimize",
-          "label_ja": "最小loss",
+          "label_ja": "最小損失",
           "metric_id": "best_loss",
           "unit": "loss"
         }
@@ -2568,18 +2568,18 @@
       "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
       "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
       "ranking_eligible": false,
-      "seed_policy": "固定済み8 training / 4 held-out scenarioを使うためseedはnot applicable。",
+      "seed_policy": "固定済みの最適化用8件／検証用4件のシナリオを使うため、乱数の種は該当なし。",
       "source_ids": [
         "S010",
         "S055",
         "S103"
       ],
-      "stopping_policy": "training 8件を集計した後、解を固定したままheld-out 4件を集計し、合計12 loss evaluationで停止する。",
+      "stopping_policy": "最適化用の8件を集計した後、解を固定したまま検証用に取り分けた4件を集計し、損失の評価が合計12回に達したら停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "meanが近くてもtailを目的へ入れると配分は変わり得る。held-outは解を固定して別集計する。",
+      "takeaway": "平均が近くても裾を目的へ入れると配分は変わり得る。検証用に取り分けたシナリオは解を固定して別に集計する。",
       "title_en": "Read mean cost and CVaR cost on the same scenarios",
-      "title_ja": "同じscenarioで平均costとCVaR costを読み分ける",
-      "tuning_policy": "alpha=0.75、CVaR weight=0.5、0.05 gridをrun前に固定し、held-outを見て変更しない。"
+      "title_ja": "同じシナリオで平均費用とCVaR費用を読み分ける",
+      "tuning_policy": "α=0.75、CVaRの重み0.5、0.05刻みの格子を実行前に固定し、検証用に取り分けたシナリオを見て変更しない。"
     },
     {
       "aliases": [],
@@ -2591,14 +2591,14 @@
       "canonical_comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
       "case_id": "emergency-shelter-selection",
-      "caveat": "4変数教材は実際の候補地・公平性・地理を再現しない。固定探索の差からsolverや政策案の一般的順位を推論できない。",
+      "caveat": "4変数教材は実際の候補地・公平性・地理を再現しない。固定探索の差から、ソルバーや政策案の一般的順位を推論できない。",
       "changed_factors": [
         "node_stop_limitだけを9から4へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
-      "comparison_question": "公共政策の5候補地を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
-      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "comparison_question": "公共政策の5候補地を直接再現しない固定4変数教材で、ノード予算だけを変えると、暫定解・上界・最適性ギャップ・実行可能性の意味はどう変わる？",
+      "fairness_note": "両方の比較対象は、問題例、乱数の種、分枝の順序、初期の暫定解、上界、9回の評価上限を共有し、node_stop_limitだけを変える。",
       "fixed_factors": [
         "problem instance INSTANCE_BINARY_KNAPSACK_4",
         "depth-first include-first strategy",
@@ -2607,13 +2607,13 @@
         "oracle evaluation budget 9",
         "fractional-knapsack upper bound"
       ],
-      "formulation_summary": "支援拠点Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "formulation_summary": "支援拠点の事例と同じ二値選択・予算構造を、4A+3B+2D+3C≤7 の下で 9A+6B+4D+5C を最大化する固定教材で読む。",
       "identity_status": "canonical",
       "journey_id": "emergency-shelter-selection",
       "last_verified": "2026-07-19",
       "limitations": [
-        "公共政策Caseの5候補地ではなく、4変数の決定的なknapsack教材だけを扱う。",
-        "cut生成、presolve、並列探索、wall-clock、地理的被覆、公平性を比較しない。"
+        "公共政策の事例の5候補地ではなく、4変数の決定的なナップサック教材だけを扱う。",
+        "切除平面の生成、前処理、並列探索、実時間、地理的被覆、公平性を比較しない。"
       ],
       "members": [
         {
@@ -2629,7 +2629,7 @@
             "value": 9
           },
           "label_en": "Proof completed within 9 nodes",
-          "label_ja": "9 node以内で証明完了",
+          "label_ja": "9ノード以内で証明完了",
           "member_id": "support-site-bnb-complete",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2651,7 +2651,7 @@
             "value": 9
           },
           "label_en": "Stopped at 4 nodes",
-          "label_ja": "4 nodeで予算停止",
+          "label_ja": "4ノードで予算停止",
           "member_id": "support-site-bnb-budget-stop",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2664,13 +2664,13 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "展開node数",
+          "label_ja": "展開ノード数",
           "metric_id": "explored_nodes",
           "unit": "nodes"
         },
         {
           "direction": "maximize",
-          "label_ja": "best feasible値",
+          "label_ja": "最良の実行可能解の値",
           "metric_id": "incumbent",
           "unit": "objective value"
         },
@@ -2682,13 +2682,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "絶対gap",
+          "label_ja": "絶対ギャップ",
           "metric_id": "absolute_gap",
           "unit": "objective gap"
         },
         {
           "direction": "target",
-          "label_ja": "incumbentの可行性",
+          "label_ja": "暫定解の可行性",
           "metric_id": "feasibility",
           "unit": "status"
         }
@@ -2697,18 +2697,18 @@
       "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
       "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
       "ranking_eligible": false,
-      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "seed_policy": "決定的な生成器の乱数の種0を固定する。",
       "source_ids": [
         "S021",
         "S022",
         "S079"
       ],
-      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "stopping_policy": "共通の評価予算は9とし、比較対象ごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "takeaway": "予算停止時の暫定解は可行な候補でも、未探索ノードと正のギャップが残る限り最適性は未証明である。",
       "title_en": "Read completed and budget-stopped search from the support-site case",
-      "title_ja": "支援拠点Caseから探索完了と予算停止を読む",
-      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+      "title_ja": "支援拠点の事例から探索完了と予算停止を読む",
+      "tuning_policy": "分枝の順序、初期の暫定解、緩和による上界を固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -2720,14 +2720,14 @@
       "canonical_comparison_id": "COMPARE_IRRIGATION_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_IRRIGATION_BNB_BUDGET",
       "case_id": "irrigation-retrofit-selection",
-      "caveat": "4変数教材は実際の圃場、送水系統、作物、節水量を再現しない。固定探索の差からsolver、更新案、農業施策の一般的順位を推論できない。",
+      "caveat": "4変数教材は実際の圃場、送水系統、作物、節水量を再現しない。固定探索の差からソルバー、更新案、農業施策の一般的順位を推論できない。",
       "changed_factors": [
         "node_stop_limitだけを9から4へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_IRRIGATION_BNB_BUDGET",
-      "comparison_question": "農業caseの5区画を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
-      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "comparison_question": "農業の事例の5区画を直接再現しない固定4変数教材で、ノード予算だけを変えると、暫定解・上界・最適性ギャップ・実行可能性の意味はどう変わる？",
+      "fairness_note": "両方の比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
       "fixed_factors": [
         "problem instance INSTANCE_BINARY_KNAPSACK_4",
         "depth-first include-first strategy",
@@ -2736,13 +2736,13 @@
         "oracle evaluation budget 9",
         "fractional-knapsack upper bound"
       ],
-      "formulation_summary": "灌漑更新Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "formulation_summary": "灌漑更新の事例と同じ二値選択・予算構造を、4A+3B+2D+3C≤7 のもとで max 9A+6B+4D+5C とする固定教材で読む。",
       "identity_status": "canonical",
       "journey_id": "irrigation-retrofit-selection",
       "last_verified": "2026-07-19",
       "limitations": [
-        "農業Caseの5区画ではなく、4変数の決定的なknapsack教材だけを扱う。",
-        "cut生成、presolve、並列探索、wall-clock、土壌・天候・設備劣化・複数期計画を比較しない。"
+        "農業の事例の5区画ではなく、4変数の決定的なナップサック教材だけを扱う。",
+        "切除平面の生成、前処理、並列探索、実時間、土壌・天候・設備劣化・複数期計画を比較しない。"
       ],
       "members": [
         {
@@ -2758,7 +2758,7 @@
             "value": 9
           },
           "label_en": "Proof completed within 9 nodes",
-          "label_ja": "9 node以内で証明完了",
+          "label_ja": "9ノード以内で証明完了",
           "member_id": "irrigation-bnb-complete",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2780,7 +2780,7 @@
             "value": 9
           },
           "label_en": "Stopped at 4 nodes",
-          "label_ja": "4 nodeで予算停止",
+          "label_ja": "4ノードで予算停止",
           "member_id": "irrigation-bnb-budget-stop",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2793,13 +2793,13 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "展開node数",
+          "label_ja": "展開したノード数",
           "metric_id": "explored_nodes",
           "unit": "nodes"
         },
         {
           "direction": "maximize",
-          "label_ja": "best feasible値",
+          "label_ja": "最良の実行可能解の値",
           "metric_id": "incumbent",
           "unit": "objective value"
         },
@@ -2811,13 +2811,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "絶対gap",
+          "label_ja": "絶対ギャップ",
           "metric_id": "absolute_gap",
           "unit": "objective gap"
         },
         {
           "direction": "target",
-          "label_ja": "incumbentの可行性",
+          "label_ja": "暫定解の可行性",
           "metric_id": "feasibility",
           "unit": "status"
         }
@@ -2826,18 +2826,18 @@
       "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
       "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
       "ranking_eligible": false,
-      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "seed_policy": "決定的な生成器の乱数の種0を固定する。",
       "source_ids": [
         "S021",
         "S022",
         "S079"
       ],
-      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "stopping_policy": "共通の評価予算は9回とし、比較対象ごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "takeaway": "予算停止時の暫定解は可行候補でも、未探索のノードと正のギャップが残る限り最適性は未証明である。",
       "title_en": "Read completed and budget-stopped search from the irrigation retrofit case",
-      "title_ja": "灌漑更新Caseから探索完了と予算停止を読む",
-      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+      "title_ja": "灌漑更新の事例から探索完了と予算停止を読む",
+      "tuning_policy": "分枝の順序、初期の暫定解、緩和による上界を固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -2849,14 +2849,14 @@
       "canonical_comparison_id": "COMPARE_RESTORATION_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_RESTORATION_BNB_BUDGET",
       "case_id": "ecosystem-restoration-selection",
-      "caveat": "4変数教材は実際の再生候補、地域、生物種、便益proxyを再現しない。固定探索の差からsolver、保全案、環境施策の一般的順位を推論できない。",
+      "caveat": "4変数教材は実際の再生候補、地域、生物種、便益の代理指標を再現しない。固定探索の差から、ソルバー、保全案、環境施策の一般的順位を推論できない。",
       "changed_factors": [
         "node_stop_limitだけを9から4へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_RESTORATION_BNB_BUDGET",
-      "comparison_question": "環境保全caseの5候補を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
-      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "comparison_question": "環境保全の事例の5候補を直接再現しない固定4変数教材で、ノードの予算だけを変えると、暫定解・上界・ギャップ・実行可能性の意味はどう変わる？",
+      "fairness_note": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価の上限9回を共有し、node_stop_limitだけを変える。",
       "fixed_factors": [
         "problem instance INSTANCE_BINARY_KNAPSACK_4",
         "depth-first include-first strategy",
@@ -2865,13 +2865,13 @@
         "oracle evaluation budget 9",
         "fractional-knapsack upper bound"
       ],
-      "formulation_summary": "再生プロジェクト選定Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "formulation_summary": "再生プロジェクト選定の事例と同じ二値選択・予算構造を、制約 4A+3B+2D+3C≤7 のもとで max 9A+6B+4D+5C とする固定教材で読む。",
       "identity_status": "canonical",
       "journey_id": "ecosystem-restoration-selection",
       "last_verified": "2026-07-19",
       "limitations": [
-        "環境保全Caseの5候補ではなく、4変数の決定的なknapsack教材だけを扱う。",
-        "cut生成、presolve、並列探索、wall-clock、空間連結性、気候変動、実施失敗、長期monitoringを比較しない。"
+        "環境保全の事例の5候補ではなく、4変数の決定的なナップサック教材だけを扱う。",
+        "切除平面の生成、前処理、並列探索、実時間、空間連結性、気候変動、実施失敗、長期の監視を比較しない。"
       ],
       "members": [
         {
@@ -2887,7 +2887,7 @@
             "value": 9
           },
           "label_en": "Proof completed within 9 nodes",
-          "label_ja": "9 node以内で証明完了",
+          "label_ja": "9ノード以内で証明完了",
           "member_id": "restoration-bnb-complete",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2909,7 +2909,7 @@
             "value": 9
           },
           "label_en": "Stopped at 4 nodes",
-          "label_ja": "4 nodeで予算停止",
+          "label_ja": "4ノードで予算停止",
           "member_id": "restoration-bnb-budget-stop",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -2922,13 +2922,13 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "展開node数",
+          "label_ja": "展開ノード数",
           "metric_id": "explored_nodes",
           "unit": "nodes"
         },
         {
           "direction": "maximize",
-          "label_ja": "best feasible値",
+          "label_ja": "実行可能解の最良値",
           "metric_id": "incumbent",
           "unit": "objective value"
         },
@@ -2940,13 +2940,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "絶対gap",
+          "label_ja": "絶対ギャップ",
           "metric_id": "absolute_gap",
           "unit": "objective gap"
         },
         {
           "direction": "target",
-          "label_ja": "incumbentの可行性",
+          "label_ja": "暫定解の実行可能性",
           "metric_id": "feasibility",
           "unit": "status"
         }
@@ -2955,18 +2955,18 @@
       "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
       "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
       "ranking_eligible": false,
-      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "seed_policy": "決定的な生成器の乱数の種 0を固定する。",
       "source_ids": [
         "S021",
         "S022",
         "S079"
       ],
-      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "stopping_policy": "共通の評価予算は9とし、比較対象ごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "takeaway": "予算停止時の暫定解は実行可能な候補でも、未探索のノードと正のギャップが残る限り最適性は未証明である。",
       "title_en": "Read completed and budget-stopped search from the restoration selection case",
-      "title_ja": "再生プロジェクト選定Caseから探索完了と予算停止を読む",
-      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+      "title_ja": "再生プロジェクト選定の事例から探索完了と予算停止を読む",
+      "tuning_policy": "分枝の順序、初期の暫定解、緩和による上界を固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -2978,14 +2978,14 @@
       "canonical_comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
       "case_id": "mobile-clinic-outreach-selection",
-      "caveat": "4変数教材は実際の開催候補、地域、需要、医療資源、access proxyを再現しない。固定探索の差からsolver、開催案、医療施策の一般的順位を推論できない。",
+      "caveat": "4変数教材は実際の開催候補、地域、需要、医療資源、アクセスの代理指標を再現しない。固定探索の差からソルバー、開催案、医療施策の一般的順位を推論できない。",
       "changed_factors": [
         "node_stop_limitだけを9から4へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
-      "comparison_question": "healthcare caseの5候補を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
-      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "comparison_question": "医療の事例の5候補を直接再現しない固定4変数教材で、ノード予算だけを変えると、暫定解・上界・ギャップ・実行可能性の意味はどう変わる？",
+      "fairness_note": "両比較対象は問題例、乱数の種、分枝の順序、初期の暫定解、上界、評価9回の上限を共有し、node_stop_limitだけを変える。",
       "fixed_factors": [
         "problem instance INSTANCE_BINARY_KNAPSACK_4",
         "depth-first include-first strategy",
@@ -2994,13 +2994,13 @@
         "oracle evaluation budget 9",
         "fractional-knapsack upper bound"
       ],
-      "formulation_summary": "巡回健診Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "formulation_summary": "巡回健診の事例と同じ二値選択・予算構造を、4A+3B+2D+3C≤7 のもとで max 9A+6B+4D+5C を解く固定教材で読む。",
       "identity_status": "canonical",
       "journey_id": "mobile-clinic-outreach-selection",
       "last_verified": "2026-07-24",
       "limitations": [
-        "巡回健診Caseの5候補ではなく、4変数の決定的なknapsack教材だけを扱う。",
-        "cut生成、presolve、並列探索、wall-clock、需要不確実性、移動、予約・紹介先capacity、医療上の安全性と公平性を比較しない。"
+        "巡回健診の事例の5候補ではなく、4変数の決定的なナップサック教材だけを扱う。",
+        "切除平面の生成、前処理、並列探索、実時間、需要不確実性、移動、予約・紹介先の受け入れ能力、医療上の安全性と公平性を比較しない。"
       ],
       "members": [
         {
@@ -3016,7 +3016,7 @@
             "value": 9
           },
           "label_en": "Proof completed within 9 nodes",
-          "label_ja": "9 node以内で証明完了",
+          "label_ja": "9ノード以内で証明完了",
           "member_id": "mobile-clinic-bnb-complete",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -3038,7 +3038,7 @@
             "value": 9
           },
           "label_en": "Stopped at 4 nodes",
-          "label_ja": "4 nodeで予算停止",
+          "label_ja": "4ノードで予算停止",
           "member_id": "mobile-clinic-bnb-budget-stop",
           "method_id": "M_BRANCH_BOUND",
           "parameters": {
@@ -3051,13 +3051,13 @@
       "metrics": [
         {
           "direction": "none",
-          "label_ja": "展開node数",
+          "label_ja": "展開ノード数",
           "metric_id": "explored_nodes",
           "unit": "nodes"
         },
         {
           "direction": "maximize",
-          "label_ja": "best feasible値",
+          "label_ja": "実行可能な最良値",
           "metric_id": "incumbent",
           "unit": "objective value"
         },
@@ -3069,13 +3069,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "絶対gap",
+          "label_ja": "絶対ギャップ",
           "metric_id": "absolute_gap",
           "unit": "objective gap"
         },
         {
           "direction": "target",
-          "label_ja": "incumbentの可行性",
+          "label_ja": "暫定解の可行性",
           "metric_id": "feasibility",
           "unit": "status"
         }
@@ -3084,18 +3084,18 @@
       "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
       "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
       "ranking_eligible": false,
-      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "seed_policy": "決定的な生成器の乱数の種0を固定する。",
       "source_ids": [
         "S021",
         "S022",
         "S079"
       ],
-      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "stopping_policy": "共通の評価予算は9とし、比較対象ごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "takeaway": "予算停止時の暫定解は可行候補でも、未探索ノードと正のギャップが残る限り最適性は未証明である。",
       "title_en": "Read completed and budget-stopped search from the mobile-clinic case",
-      "title_ja": "巡回健診Caseから探索完了と予算停止を読む",
-      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+      "title_ja": "巡回健診の事例から探索完了と予算停止を読む",
+      "tuning_policy": "分枝の順序、初期の暫定解、緩和による上界を固定し、実行後に変更しない。"
     },
     {
       "aliases": [],
@@ -3107,28 +3107,28 @@
       "canonical_comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
       "canonical_url": "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
       "case_id": "EC025",
-      "caveat": "解時間はdeterministic educational ledgerであり、CPU、OS、linear algebra backend、OSQP/ADMM実装、cache、jitterを測定していない。",
+      "caveat": "解時間は決定的な教材用の記録であり、CPU、OS、線形代数のバックエンド、OSQP/ADMM実装、キャッシュ、ジッタを測定していない。",
       "changed_factors": [
-        "第2周期以降に前周期解をwarm startとして渡すかどうかだけ"
+        "第2周期以降に前周期解をウォームスタートとして渡すかどうかだけ"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
-      "comparison_question": "同じMPC QP、残差ledger、3ms deadline、4 control cycleでwarm startだけを変えると、solver反復とdeadline余裕はどの周期から変わる？",
-      "fairness_note": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。",
+      "comparison_question": "同じMPC QP、残差の記録、3msの締め切り、制御周期4回でウォームスタートだけを変えると、ソルバーの反復数と締め切りまでの余裕はどの周期から変わる？",
+      "fairness_note": "両方の比較対象は問題、動力学、上下限、参照値、残差、締め切りの方針、周期数、反復数から遅延への換算モデルを共有し、ウォームスタートによる解の再利用だけを変える。",
       "fixed_factors": [
-        "INSTANCE_REPEATED_MPC_QP_EC025のstate 1・input 1・horizon 4",
-        "同じ線形dynamics、reference、state/control bounds",
-        "同じ4 control cycleと3ms deadline policy",
-        "同じprimal/dual residual ledger",
-        "同じ決定的iteration-to-latency model"
+        "INSTANCE_REPEATED_MPC_QP_EC025の状態1次元・入力1次元・予測区間4",
+        "同じ線形動力学、参照値、状態・入力の上下限",
+        "同じ制御周期4回と3msの締め切りの方針",
+        "同じ主・双対残差の記録",
+        "同じ決定的な、反復数から遅延への換算モデル"
       ],
       "formulation_summary": "min sum_{k=1}^4(x_k-1)^2+0.1 sum_{k=0}^3u_k^2 subject to x[k+1]=x[k]+u[k]、state/control bounds。",
       "identity_status": "canonical",
       "journey_id": "EC025",
       "last_verified": "2026-07-24",
       "limitations": [
-        "state 1・input 1・horizon 4・4周期だけの教材であり、実機の100Hzやclosed-loop安定性を証明しない。",
-        "このcontrastは一般的なsolver、implementation、hardware、warm-start設定の順位付けに使わない。"
+        "状態1次元・入力1次元・予測区間4・4周期だけの教材であり、実機の100Hzや閉ループ安定性を証明しない。",
+        "この対比は一般的なソルバー、実装、ハードウェア、ウォームスタート設定の順位付けに使わない。"
       ],
       "members": [
         {
@@ -3144,7 +3144,7 @@
             "value": 4
           },
           "label_en": "Reuse the previous solution as a warm start",
-          "label_ja": "前周期解をwarm start",
+          "label_ja": "前周期解でウォームスタート",
           "member_id": "mpc-qp-warm-start",
           "method_id": "M_ADMM_QP",
           "parameters": {
@@ -3169,7 +3169,7 @@
             "value": 4
           },
           "label_en": "Restart cold at every cycle",
-          "label_ja": "毎周期cold start",
+          "label_ja": "毎周期コールドスタート",
           "member_id": "mpc-qp-cold-start",
           "method_id": "M_ADMM_QP",
           "parameters": {
@@ -3185,31 +3185,31 @@
       "metrics": [
         {
           "direction": "minimize",
-          "label_ja": "primal残差",
+          "label_ja": "主残差",
           "metric_id": "primal_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "dual残差",
+          "label_ja": "双対残差",
           "metric_id": "dual_residual",
           "unit": "residual"
         },
         {
           "direction": "minimize",
-          "label_ja": "solver反復",
+          "label_ja": "ソルバーの反復数",
           "metric_id": "solver_iterations",
           "unit": "iterations"
         },
         {
           "direction": "minimize",
-          "label_ja": "解時間ledger",
+          "label_ja": "解時間の記録",
           "metric_id": "solve_time_ms",
           "unit": "ms"
         },
         {
           "direction": "maximize",
-          "label_ja": "deadline余裕",
+          "label_ja": "締め切りまでの余裕",
           "metric_id": "deadline_margin_ms",
           "unit": "ms"
         }
@@ -3218,18 +3218,18 @@
       "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
       "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
       "ranking_eligible": false,
-      "seed_policy": "固定した決定論的ledgerのためseedはnot applicable。",
+      "seed_policy": "固定した決定的な記録のため、乱数の種は該当なし。",
       "source_ids": [
         "S012",
         "S043",
         "S076"
       ],
-      "stopping_policy": "4 control cycleで停止し、deadline missがあっても次周期のledgerを記録する。",
+      "stopping_policy": "制御周期4回で停止し、締め切り超過があっても次周期を記録する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "warm startは初回解を短縮する保証ではない。残差とdeadline余裕を各周期で分け、target hardwareのp99・最大latencyとfailure pathで別途検証する。",
+      "takeaway": "ウォームスタートは初回解を短縮する保証ではない。残差と締め切りまでの余裕を各周期で分け、対象ハードウェアでのp99・最大遅延と失敗時の処理経路で別途検証する。",
       "title_en": "Read warm starts and deadline margin in a repeated MPC QP",
-      "title_ja": "反復MPC QPでwarm startとdeadline余裕を読む",
-      "tuning_policy": "horizon、reference、bounds、deadline、iteration-to-latency modelをrun前に固定し、結果を見て変更しない。"
+      "title_ja": "反復MPC QPでウォームスタートと締め切りまでの余裕を読む",
+      "tuning_policy": "予測区間、参照値、上下限、締め切り、反復数から遅延への換算モデルを実行前に固定し、結果を見て変更しない。"
     },
     {
       "aliases": [],
@@ -3241,28 +3241,28 @@
       "canonical_comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
       "canonical_url": "/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
       "case_id": "EC019",
-      "caveat": "これは固定routeの制約診断であり、OR-Tools、local search、配送会社、交通予測、route品質の性能比較ではない。時間窓違反を小さな目的値差やpenaltyと混同しない。",
+      "caveat": "これは固定ルートの制約診断であり、OR-Tools、局所探索、配送会社、交通予測、ルート品質の性能比較ではない。時間窓違反を小さな目的値差や罰則と混同しない。",
       "changed_factors": [
-        "stop 4の時間窓の終了だけを25分から12分へ狭める"
+        "訪問先4の時間窓の終了だけを25分から12分へ狭める"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
-      "comparison_question": "同じ固定route・時間行列・1車両・4 stopで、stop 4の時間窓の終了だけを25分から12分へ狭めると、到着時刻・総移動時間・可行性はどう分けて読むべきか？",
-      "fairness_note": "両memberは固定route・時間行列・車両・出発時刻・service time・他の時間窓・帰着deadlineを共有し、stop 4の終了時刻だけを変える。",
+      "comparison_question": "同じ固定ルート・時間行列・1車両・訪問先4件で、訪問先4の時間窓の終了だけを25分から12分へ狭めると、到着時刻・総移動時間・可行性はどう分けて読むべきか？",
+      "fairness_note": "両方の比較対象は固定ルート・時間行列・車両・出発時刻・現地作業時間・他の時間窓・帰着の締め切りを共有し、訪問先4の終了時刻だけを変える。",
       "fixed_factors": [
-        "INSTANCE_TIME_WINDOW_ROUTING_EC019のdepot 1個・stop 4個・車両1台",
-        "同じ固定route 0→1→2→3→4→0",
-        "同じ5×5移動時間行列、出発時刻、service time 0分",
-        "stop 1から3の時間窓と30分の帰着deadline",
-        "同じ決定的route ledger"
+        "INSTANCE_TIME_WINDOW_ROUTING_EC019の拠点1個・訪問先4個・車両1台",
+        "同じ固定ルート 0→1→2→3→4→0",
+        "同じ5×5移動時間行列、出発時刻、現地作業時間0分",
+        "訪問先1から3の時間窓と30分の帰着の締め切り",
+        "同じ決定的なルートの記録"
       ],
       "formulation_summary": "min route travel time subject to one visit per stop, travel-time precedence, each stop time window, and a 30-minute depot return deadline.",
       "identity_status": "canonical",
       "journey_id": "EC019",
       "last_verified": "2026-07-24",
       "limitations": [
-        "固定時間行列・4 stop・1車両・service timeなしの教育用contrastであり、1000 stop、複数車両、容量、pickup-delivery、休憩、交通変動を表さない。",
-        "このcontrastからsolver、implementation、交通予測、配送案、実道路での到着保証の一般的順位を推論しない。"
+        "固定時間行列・訪問先4件・1車両・現地作業時間なしの教育用の対比であり、訪問先1000件、複数車両、容量、集荷・配達の組、休憩、交通変動を表さない。",
+        "この対比からソルバー、実装、交通予測、配送案、実道路での到着保証の一般的順位を推論しない。"
       ],
       "members": [
         {
@@ -3278,7 +3278,7 @@
             "value": 6
           },
           "label_en": "Stop 4 ends at 25 minutes: feasible",
-          "label_ja": "stop 4の終了25分: 可行",
+          "label_ja": "訪問先4の終了25分: 可行",
           "member_id": "time-window-route-feasible",
           "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
           "parameters": {
@@ -3302,7 +3302,7 @@
             "value": 6
           },
           "label_en": "Stop 4 ends at 12 minutes: two-minute violation",
-          "label_ja": "stop 4の終了12分: 2分違反",
+          "label_ja": "訪問先4の終了12分: 2分違反",
           "member_id": "time-window-route-violation",
           "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
           "parameters": {
@@ -3341,7 +3341,7 @@
         },
         {
           "direction": "target",
-          "label_ja": "route可行性",
+          "label_ja": "ルートの可行性",
           "metric_id": "route_feasibility",
           "unit": "status"
         }
@@ -3350,19 +3350,19 @@
       "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
       "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
       "ranking_eligible": false,
-      "seed_policy": "固定した決定論的route ledgerのためseedはnot applicable。",
+      "seed_policy": "固定した決定的なルートの記録のため、乱数の種は該当なし。",
       "source_ids": [
         "S022",
         "S023",
         "S024",
         "S079"
       ],
-      "stopping_policy": "depot出発、4 stop、depot帰着の6 frameを記録して停止する。時間窓違反が生じても終端ledgerを残す。",
+      "stopping_policy": "拠点出発、訪問先4件、拠点帰着の6フレームを記録して停止する。時間窓違反が生じても終端の記録を残す。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "総移動時間が同じ21分でも、到着14分がstop 4の終了12分を超えればrouteは時間窓hard constraintを満たさない。可行性を確認してから、実務のroute品質・最適性・再計画を別に評価する。",
+      "takeaway": "総移動時間が同じ21分でも、到着14分が訪問先4の終了12分を超えれば、ルートは時間窓という必ず守る制約を満たさない。可行性を確認してから、実務のルート品質・最適性・再計画を別に評価する。",
       "title_en": "Separate a feasible route from a time-window violation",
-      "title_ja": "時間窓付き配送で可行routeと違反を分けて読む",
-      "tuning_policy": "route、時間行列、車両数、出発時刻、service time、帰着deadlineをrun前に固定し、stop 4の終了時刻だけを変える。"
+      "title_ja": "時間窓付き配送で可行なルートと違反を分けて読む",
+      "tuning_policy": "ルート、時間行列、車両数、出発時刻、現地作業時間、帰着の締め切りを実行前に固定し、訪問先4の終了時刻だけを変える。"
     },
     {
       "aliases": [],
@@ -3374,27 +3374,27 @@
       "canonical_comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
       "canonical_url": "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
       "case_id": "EC027",
-      "caveat": "MADS、Nevergrad、simulation runtime、recovery policy、実設計の品質を比較するbenchmarkではない。",
+      "caveat": "MADS、Nevergrad、シミュレーションの実行時間、失敗からの復旧方針、実設計の品質を比較するベンチマークではない。",
       "changed_factors": [
-        "第5候補のstatusだけを成功からnonphysical failureへ変える"
+        "第5候補の状態だけを成功から非物理解による失敗へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
-      "comparison_question": "同じ6候補・domain・failure policyで、1つの候補が成功からnonphysical failureへ変わると、feasible rateと最良feasible objectiveはどう読むべきか？",
-      "fairness_note": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。",
+      "comparison_question": "同じ6候補・定義域・失敗の扱い方針で、1つの候補が成功から非物理解による失敗へ変わると、実行可能点の割合と実行可能な最良の目的関数値はどう読むべきか？",
+      "fairness_note": "両比較対象は候補列・定義域・評価予算・失敗の分類・状態を罰則へ置換しない方針を共有し、第5候補の状態だけを変える。",
       "fixed_factors": [
-        "INSTANCE_FAILED_SIMULATION_EC027の2連続変数・1二値mode",
-        "同じ6候補、evaluation budget、candidate順",
-        "同じimplicit failure領域、status taxonomy、no-penalty policy",
-        "同じ決定的evaluation ledger"
+        "INSTANCE_FAILED_SIMULATION_EC027の2連続変数と、構成を選ぶ1二値変数",
+        "同じ6候補、評価予算、候補の順序",
+        "同じ暗黙の失敗領域、状態の分類、罰則へ置き換えない方針",
+        "同じ決定的な評価記録"
       ],
       "formulation_summary": "min successful simulation objective over two continuous variables and one binary mode; failures remain explicit statuses rather than penalties.",
       "identity_status": "canonical",
       "journey_id": "EC027",
       "last_verified": "2026-07-24",
       "limitations": [
-        "固定6評価・単純failure領域の教育用contrastである。",
-        "このcontrastからoptimizer、実装、simulation、設計案の一般的順位を推論しない。"
+        "固定6評価・単純な失敗領域による教育用の対比である。",
+        "この対比から最適化手法、実装、シミュレーション、設計案の一般的順位を推論しない。"
       ],
       "members": [
         {
@@ -3433,7 +3433,7 @@
             "value": 6
           },
           "label_en": "The fifth candidate is nonphysical failure",
-          "label_ja": "第5候補はnonphysical failure",
+          "label_ja": "第5候補は非物理解による失敗",
           "member_id": "failed-simulation-nonphysical",
           "method_id": "M_MADS",
           "parameters": {
@@ -3465,7 +3465,7 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "最良feasible objective",
+          "label_ja": "実行可能な最良の目的関数値",
           "metric_id": "best_feasible_objective",
           "unit": "objective"
         }
@@ -3474,7 +3474,7 @@
       "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
       "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
       "ranking_eligible": false,
-      "seed_policy": "固定ledgerのためseedはnot applicable。",
+      "seed_policy": "評価記録が固定されているため、乱数の種は該当なし。",
       "source_ids": [
         "S002",
         "S018",
@@ -3484,12 +3484,12 @@
         "S060",
         "S063"
       ],
-      "stopping_policy": "6評価を記録して停止する。failure後も残りの固定ledgerを記録する。",
+      "stopping_policy": "6評価を記録して停止する。失敗の後も、固定した評価記録の残りを記録する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "failureを大きい目的値に偽装すると、目的の悪さと評価不能が混ざる。status、feasible rate、成功した値だけからの最良値を別々に保存する。",
+      "takeaway": "失敗を大きい目的値に偽装すると、目的の悪さと評価不能が混ざる。状態、実行可能点の割合、成功した値だけからの最良値を別々に保存する。",
       "title_en": "Separate simulation status from feasible objectives",
-      "title_ja": "失敗simulationでstatusとfeasible objectiveを分けて読む",
-      "tuning_policy": "候補列、domain、failure taxonomy、no-penalty policyをrun前に固定し、結果を見て変更しない。"
+      "title_ja": "失敗するシミュレーションで、状態と実行可能な目的関数値を分けて読む",
+      "tuning_policy": "候補列、定義域、失敗の分類、罰則へ置き換えない方針を実行前に固定し、結果を見て変更しない。"
     },
     {
       "aliases": [],
@@ -3501,26 +3501,26 @@
       "canonical_comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
       "canonical_url": "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
       "case_id": "EC028",
-      "caveat": "root solver、least-squares solver、SciPy実装、Jacobian近似、収束速度の性能比較ではない。",
+      "caveat": "求根ソルバー、最小二乗ソルバー、SciPy実装、Jacobian近似、収束速度の性能比較ではない。",
       "changed_factors": [
-        "停止規則だけをcomponent-wise residualからscalar squared residualへ変える"
+        "停止規則だけを、成分ごとの残差からスカラーの二乗残差へ変える"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
-      "comparison_question": "同じ方程式・初期値・Jacobian情報で、component-wise toleranceではなく二乗残差だけで停止すると何を見落とすか？",
-      "fairness_note": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。",
+      "comparison_question": "同じ方程式・初期値・Jacobian情報で、成分ごとの許容誤差ではなく二乗残差だけで停止すると何を見落とすか？",
+      "fairness_note": "両比較対象は方程式、初期点、定義域、残差のスケール、Jacobianの利用可能性を共有し、停止規則だけを変える。",
       "fixed_factors": [
         "INSTANCE_ROOT_FINDING_EC028の2変数・2方程式",
-        "同じ初期値(0.7, 0.7)、residual scaling、Jacobian利用可能性",
-        "同じ決定的ledgerとcomponent tolerance 0.02"
+        "同じ初期値(0.7, 0.7)、残差のスケーリング、Jacobianの利用可能性",
+        "同じ決定的な記録と成分ごとの許容誤差 0.02"
       ],
       "formulation_summary": "solve F(x)=0 for two nonlinear equations; 0.5||F(x)||_2^2 is an auxiliary diagnostic, not the root definition.",
       "identity_status": "canonical",
       "journey_id": "EC028",
       "last_verified": "2026-07-24",
       "limitations": [
-        "固定2変数・短い決定的ledgerの教育用contrastである。",
-        "このcontrastからroot solverやleast-squares solverの一般的順位を推論しない。"
+        "固定2変数・短い決定的な記録による教育用の対比である。",
+        "この対比から、求根ソルバーや最小二乗ソルバーの一般的順位を推論しない。"
       ],
       "members": [
         {
@@ -3600,7 +3600,7 @@
       "problem_definition_id": "PROBLEM_ROOT_FINDING",
       "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
       "ranking_eligible": false,
-      "seed_policy": "決定的ledgerのためseedはnot applicable。",
+      "seed_policy": "決定的な記録のため、乱数の種は該当なし。",
       "source_ids": [
         "S002",
         "S003",
@@ -3608,12 +3608,12 @@
         "S056",
         "S080"
       ],
-      "stopping_policy": "root memberはmax(|F_i|)<0.02、contrast memberは0.5||F||^2<0.003だけで停止する。",
+      "stopping_policy": "根を判定する比較対象はmax(|F_i|)<0.02、対比用の比較対象は0.5||F||^2<0.003だけで停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "二乗残差が小さくても一つの方程式が要求精度を満たさないことがある。rootとしての終了判定は各残差とscaleを明示する。",
+      "takeaway": "二乗残差が小さくても一つの方程式が要求精度を満たさないことがある。根としての終了判定では、各残差とスケールを明示する。",
       "title_en": "Separate residual vectors from squared residuals in root finding",
-      "title_ja": "求根で残差vectorと二乗残差を分けて読む",
-      "tuning_policy": "方程式、初期点、scale、許容値をrun前に固定し、終点を見て変更しない。"
+      "title_ja": "求根で残差ベクトルと二乗残差を分けて読む",
+      "tuning_policy": "方程式、初期点、スケール、許容値を実行前に固定し、終点を見て変更しない。"
     },
     {
       "aliases": [],
@@ -3625,28 +3625,28 @@
       "canonical_comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
       "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
       "case_id": "portfolio-allocation",
-      "caveat": "gammaの二値比較であり、solver、推定器、資産、将来performanceの順位付けではない。",
+      "caveat": "γの二値比較であり、ソルバー、推定器、資産、将来の運用成績の順位付けではない。",
       "changed_factors": [
-        "risk aversion gammaだけ"
+        "リスク回避係数γだけ"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
-      "comparison_question": "平均・共分散と制約を固定し、gammaだけを変えると、配分・期待収益・分散はどう動く？",
-      "fairness_note": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。",
+      "comparison_question": "平均・共分散と制約を固定し、γだけを変えると、配分・期待収益・分散はどう動く？",
+      "fairness_note": "同じ入力の平均・共分散、制約、格子で、γだけを変えるパラメータ感度である。",
       "fixed_factors": [
         "4資産",
         "期待収益",
         "共分散",
-        "simplexと集中上限",
+        "単体制約と集中上限",
         "0.05 teaching grid"
       ],
-      "formulation_summary": "min gamma w^T Sigma w - mu^T w, sum(w)=1, 0<=w_i<=0.6 の固定4資産教育QP。",
+      "formulation_summary": "min γ w^T Σ w - μ^T w, sum(w)=1, 0<=w_i<=0.6 の固定4資産教育QP。",
       "identity_status": "canonical",
       "journey_id": "portfolio-allocation",
       "last_verified": "2026-07-24",
       "limitations": [
         "固定入力の教育用QPに限る。",
-        "tail riskや将来収益を示さない。"
+        "裾のリスクや将来収益を示さない。"
       ],
       "members": [
         {
@@ -3662,7 +3662,7 @@
             "value": 1
           },
           "label_en": "low gamma",
-          "label_ja": "low gamma",
+          "label_ja": "小さいγ",
           "member_id": "gamma-low",
           "method_id": "MF_LP_QP_CONIC",
           "parameters": {
@@ -3687,7 +3687,7 @@
             "value": 1
           },
           "label_en": "high gamma",
-          "label_ja": "high gamma",
+          "label_ja": "大きいγ",
           "member_id": "gamma-high",
           "method_id": "MF_LP_QP_CONIC",
           "parameters": {
@@ -3709,13 +3709,13 @@
         },
         {
           "direction": "minimize",
-          "label_ja": "分散risk",
+          "label_ja": "分散によるリスク",
           "metric_id": "variance",
           "unit": "variance"
         },
         {
           "direction": "minimize",
-          "label_ja": "simplex残差",
+          "label_ja": "単体制約の残差",
           "metric_id": "simplex_residual",
           "unit": "residual"
         }
@@ -3731,10 +3731,10 @@
       ],
       "stopping_policy": "record one fixed allocation snapshot",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "objective値だけでなく期待収益・分散・制約残差を一緒に読む。",
+      "takeaway": "目的関数値だけでなく期待収益・分散・制約残差を一緒に読む。",
       "title_en": "Compare mean-variance allocation across risk aversion",
-      "title_ja": "risk aversionで平均・分散配分を読み比べる",
-      "tuning_policy": "gammaの二つの教材用値を事前固定し、run後に調整しない。"
+      "title_ja": "リスク回避係数で平均・分散配分を読み比べる",
+      "tuning_policy": "γの二つの教材用値を事前に固定し、実行後に調整しない。"
     },
     {
       "aliases": [],
@@ -3746,22 +3746,22 @@
       "canonical_comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
       "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
       "case_id": "shift-scheduling",
-      "caveat": "固定教材の目的設計contrastであり、CP-SAT、MIP、列挙法、勤務表、組織の一般的な優劣を示さない。",
+      "caveat": "固定教材での目的設計の対比であり、CP-SAT、MIP、列挙法、勤務表、組織の一般的な優劣を示さない。",
       "changed_factors": [
-        "勤務数の最大差をsecondary tie-breakへ入れるかどうかだけ"
+        "勤務数の最大差を副次的な同点時の決め方へ入れるかどうかだけ"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
-      "comparison_question": "hard制約・希望・全4096候補を固定し、勤務数の幅をsecondary tie-breakへ加えると、同じ希望充足6件の勤務表はどう変わる？",
-      "fairness_note": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。",
+      "comparison_question": "必ず守る制約・希望・全4096候補を固定し、勤務数の幅を副次的な同点時の決め方へ加えると、同じ希望充足6件の勤務表はどう変わる？",
+      "fairness_note": "両比較対象は同じ可行勤務表441件と希望充足最大6件を共有し、負荷による同点時の決め方だけを変える。",
       "fixed_factors": [
-        "4名・3日・日勤夜勤の固定instance",
-        "同じ希望・資格・hard制約",
+        "4名・3日・日勤夜勤の固定した問題例",
+        "同じ希望・資格・必ず守る制約",
         "同じ4096候補の完全列挙",
-        "同じ希望weight 10",
+        "同じ希望の重み10",
         "seed not applicable"
       ],
-      "formulation_summary": "max 10×fulfilled requests − workload range。各日・各勤務帯1名、1日高々1勤務、資格、夜勤翌日の日勤禁止をhard制約とする。",
+      "formulation_summary": "max 10×（充足した希望の数）−（勤務数の幅）。各日・各勤務帯1名、1日高々1勤務、資格、夜勤翌日の日勤禁止を必ず守る制約とする。",
       "identity_status": "canonical",
       "journey_id": "shift-scheduling",
       "last_verified": "2026-07-26",
@@ -3783,7 +3783,7 @@
             "value": 4096
           },
           "label_en": "Preference plus workload tie-break",
-          "label_ja": "希望 + 負荷のtie-break",
+          "label_ja": "希望 + 負荷で同点を決める",
           "member_id": "balanced-tiebreak",
           "method_id": "M_CP_SAT",
           "parameters": {
@@ -3830,7 +3830,7 @@
         },
         {
           "direction": "target",
-          "label_ja": "hard制約違反",
+          "label_ja": "必ず守る制約の違反",
           "metric_id": "hard_violations",
           "unit": "violations"
         },
@@ -3845,19 +3845,19 @@
       "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
       "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
       "ranking_eligible": false,
-      "seed_policy": "有限集合の決定的な完全列挙のためseedはnot applicable。",
+      "seed_policy": "有限集合の決定的な完全列挙のため、乱数の種は該当なし。",
       "source_ids": [
         "S022",
         "S053"
       ],
-      "stopping_policy": "4^6=4096のslot assignmentをすべて評価して停止する。",
+      "stopping_policy": "4^6=4096通りの勤務枠への割当をすべて評価して停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "希望充足数だけでは同率解の選び方が未定義になる。運用上重要な偏りはsecondary objectiveとして明示し、勤務表のセルと人別集計を一緒に確認する。",
+      "takeaway": "希望充足数だけでは同率解の選び方が未定義になる。運用上重要な偏りは副次的な目的として明示し、勤務表のセルと人別集計を一緒に確認する。",
       "title_en": "Compare tied-preference rosters by workload imbalance",
       "title_ja": "希望が同率の勤務表を負荷の偏りで読み比べる",
-      "tuning_policy": "希望、資格、hard制約、weight、列挙順をrun前に固定し、結果を見て変更しない。"
+      "tuning_policy": "希望、資格、必ず守る制約、重み、列挙順を実行前に固定し、結果を見て変更しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.19"
+  "dataset_version": "0.18.25"
 }

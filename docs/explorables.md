@@ -77,6 +77,29 @@ site/src/features/explorable/
 - **計算は描画から分ける**: `math/` は React に依存しません。解析解（例: 二次関数での誤差の倍率 `1-ηλ`）と一致することをテストで固定します。
 - **停止理由**: 非線形最小二乗の図では、表示精度で二乗和の変化が止まった結果、特異な近似や更新不成立による停止、反復予算の打ち切りを区別します。更新できなかった点や予算を使い切った点を、局所最小の谷に着いたとは表示しません。
 
+## 数値の出どころ（文章・静止図・操作図・動画で同じ値を使う）
+
+一つの例の数値は、一つの計算からだけ出します。記事の表、静止SVG、操作図、録画が別々に計算すると、値がずれても気づけません。
+
+- **操作図の数値は `math/` の関数が出します。** 録画（`#/record/<id>`）は同じ部品を scene time `t` で動かすだけで、別に計算しません。
+- **記事の例をPythonで作った場合**は、TypeScriptで乱数や行列の組み立てを作り直しません。Python側の生成スクリプトが例の入力（真値、観測、行列など）をJSONのfixtureに書き出し、`math/` はそれを読み込みます。生成スクリプトの `--check` で、fixtureが古くないことを確かめます。例: `inverse-problem-alpha` は `scripts/generate_lesson_figures.py` が書く `math/inverseProblem.fixture.json` を使います。
+- **記事・captionが言う数値は、テストで固定します。** 操作図の `math/` のテストと、静止図の生成スクリプトのテストが、同じ記事の数値を確かめます。
+
+### 共有の契約：今あるものと、まだ提案のもの
+
+| 項目 | 状態 | 場所 |
+|---|---|---|
+| 図ごとの問い・固定条件・読み取れないこと | 実装済み | `explorables.json`（`question`、`fixed_conditions`、`not_implied`） |
+| 解説の区切り（beats）と一つの時計 | 実装済み | `explorables.py` の Beat、`scene.ts`、`useSceneTour.ts` |
+| 録画の入力ハッシュ | 実装済み（CIでは検査しない。録画は git 管理外） | `site/scripts/record-scene.mjs` の `manifest.json` |
+| Python の例と操作図で同じ入力を使う fixture と鮮度の検査 | 実装済み（1図） | `generate_lesson_figures.py --check` |
+| 読者に先に予想させる区切り（予想してから結果を見せる） | 提案のみ | 単体法の証明・BO の場面で必要になったときに beats へ足す |
+| 学習者が見える情報と最適化側が見える情報の区別の表示 | 提案のみ | 同上 |
+| 双対価格・余裕・ギャップなど LP の観測量の共有名 | 一部実装済み（右辺 b を引数にした解、双対値、基底が有効な範囲、見積もりとの差） | `math/shadowPrice.ts`（OC-EVOL-011）。余裕・ギャップの共有名はまだ提案 |
+| Python と TypeScript で同じ手法を二度実装している箇所（勾配降下法、Adam） | 既知のずれの危険。同じ例を使う比較のテストはまだない | `math/descent.ts` と `traces/generators.py`、`math/adam.ts` と同 |
+
+提案のものは、使う図ができたときにその図のPRで足します。使い道のない項目を先に契約へ足しません。
+
 ## 解説付き再生（beats）と録画
 
 図には、自動で進む解説（guided scene）を付けられます。方針は [ADR 0018](adr/0018-motion-3d-and-video.md) です。
@@ -115,12 +138,27 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 | id | 掲載先 | 見せるもの |
 |---|---|---|
 | `gradient-descent-valley` | `method.gradient-descent` | learning rate と谷の細長さで、方向ごとの誤差の倍率がどう決まるか。安定限界 `2/L` |
-| `lp-vertex-walk` | `primal-simplex` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
+| `lp-vertex-walk` | `concept.linear-program` | 目的の向きを回すと、最適解が頂点で切り替わること。内部の点は最良の頂点を超えない |
+| `simplex-pivot` | `primal-simplex` | 読者が増やす変数を選び、増やす量 θ を動かして比の最小値を見つける。被約費用を「売値 − 使う資源の値段」で計算し、2回のピボットで最適な頂点に着く |
+| `simplex-shadow-price` | `primal-simplex` | 小麦粉の在庫 b を1/3刻みで動かし、値段 5/7 の見積もりと実際の最適値（原点から厳密に解き直す）が一致する範囲 26/3 ≤ b ≤ 39 と、外での基底の変化。各 b の双対値による証明書 u·b+v·13。`simplex.ts` の右辺を引数にして再利用し、`simplex-pivot` とは別の図 |
 | `convexity-chord` | `concept.convexity` | 定義の不等式を、2点と混合比で数値として確かめる。局所解と全体の最小の違い |
 | `least-squares-bowl` | `concept.linear-least-squares` | 残差の二乗を正方形の面積で見せ、データの平面とパラメータの平面（お椀）をつなぐ。外れ値1点の引っ張り |
 | `adam-step-ratio` | `adam` | 座標ごとの比（勾配の平均÷勾配の大きさ）が一歩を決めること。同じηの勾配降下法、ノイズで縮む一歩 |
 | `bayes-opt-acquisition` | `bayesian-optimization` | GPの予測平均と不確実性、獲得関数で次の点が決まる様子。β・長さの尺度・EIによる探索と活用の違い |
 | `coordinate-descent-walk` | `coordinate-descent` | 一座標の断面の最小と全体の収束の違い。谷の向き・曲率比・座標の結びつきによる軌跡、掃引ごとの停止と予算打ち切り |
+| `inverse-problem-alpha` | `concept.inverse-problem` | 罰則の重みαを対数目盛りで動かし、復元した分布・真の分布との誤差・観測とのずれ（雑音の大きさδとの比較）を同じ計算で見る |
+| `saddle-newton` | `concept.smooth-low-dimensional-unconstrained` | 始点を動かし、純粋なNewton法が谷底と峠のどちらに着くかを、着いた点の勾配とHessianの固有値（曲率）で見分ける。始点Aは6回で左の谷底、始点Bは3回で峠 |
+| `newton-root-residual` | `concept.root-finding` | 残差 `t²+t−1` の曲線で、接線を引き、F=0 との交点へ印を滑らせ、曲線へ落とす1手を再生する。根の周りを手ごとに拡大し、残差の桁数が 0.7 → 2.2 → 5.1 → 10.9 と倍々に伸びる様子。二分法（区間を半分）との比較 |
+| `simplex-projection-theta` | `concept.simplex-optimization` | 希望量 (0.9, 0.3, 0.05) から共通の量 θ を引いて負を0に切る。合計が1に戻る θ=0.1 を、再生が区間の半分化で探す。合計で割る配分との違い |
+| `sdp-psd-boundary` | `concept.semidefinite-program` | `[[1, r], [r, 4]]` の r を動かし、(r, s) 平面の点と二つの固有値で、r=2 の境界で固有値が0になり、超えると負になること |
+| `pde-heat-source-balance` | `concept.pde-constrained-program` | 熱源 q を動かすと状態 u が計算し直され、温度のずれと熱源の罰則の積み上げ、J(q) の曲線上のマーカー。q=4.5 で二つの項が等しく、合計0.5が最小 |
+| `robust-loss-pull` | `concept.robust-regression` | 観測 (0, 0, 0, m) の最後の値 m とHuberの尺度 δ を動かし、二乗損失とHuber損失の定数当てはめ・各観測の損失の傾きを見比べる。Huber の推定値は min(m/4, δ/3) と一致 |
+| `milp-integer-lattice` | `concept.mixed-integer-linear-program` | 二つの資源の上限 b₁, b₂ を動かし、LP緩和の最適解（上界）・それを丸めた点・整数の最適解を格子点の上で見比べる。既定 (24, 6) は LP (3, 1.5)=21、丸め (3, 2) は両方の制約を破り、整数最適 (4, 0)=20。b₂=4 では LP解が整数でギャップ0、b₂=7 ではギャップ1.5 |
+| `convex-qp-projection` | `concept.convex-quadratic-program` | 目標 p と合計の上限 b を動かし、三角形の中で目標に最も近い点（二乗距離の最小点）を、効いている制約の組を全部試して厳密に求める。既定 p=(3,2), b=3 では辺の途中 (2,1)、λ=2、目的値2で、頂点だけを比べると4。p=(5,0) は頂点 (3,0) で λ が 4 と 4、p=(1,1) は内部で λ=0。b を0.1緩めた改善の予測0.2と解き直し0.195 |
+| `variable-domain-switch` | `concept.variable-domain` | 利益 5x₁+4x₂、資源 6x₁+4x₂≤24 と x₁+2x₂≤6 のまま、x₁ と x₂ の定義域を連続・整数・0か1から選ぶ（9通り）。切り替えると可行集合が面・線分・格子点・0-1の頂点へ溶けるように変わり、等利益線と最適点が新しい位置へ動く。両方連続 (3, 1.5)=21、両方整数 (4, 0)=20（ギャップ1）、0-1×整数 (1, 2)=13（ギャップ2）。reduced motion では切り替え後の状態を即時に表示する |
+| `failure-ledger` | `concept.failed-simulation` | 失敗した評価を、状態として記録するか、罰則値 P に置き換えるかを切り替える。7回の評価台帳（成功4・クラッシュ1・時間切れ1・物理的にありえない出力1）を、評価回数 7/20（失敗も数える）の予算メーターと並べる。罰則値 P=10 では、u₁＜0.5 の側の平均が 0.1025（成功1件）から 6.7008 へ、u₁≥0.5 の側が 0.0308 から 2.5231 へ動き、成功どうしの差は記録値の幅の 1.025% になる。P=0 では失敗3件が最良の値 0 と同点。範囲の外の試す点だけが赤の既知の違反で、範囲の中の点は失敗かどうか不明のまま |
+| `gauss-newton-lm-steps` | `gauss-newton`、`least-squares` | 指数減衰5点の当てはめで、Gauss–Newton法の一手とLevenberg–Marquardt法の一手を1試行ずつ進める。一手に沿った費用で線形モデルの予測（放物線）と本当の費用を重ね、遠い始点 (1, 0.1) では試行2で予測 2.589 減に対し実際は 26.451 増（ρ=−10.22）。LMは λ=0.01 から試行2〜4を捨て（ρ=−9.42, −8.66, −3.71）、試行5（λ=3.33, ρ=1.40）で受け入れる。λ=1000 では一手が 0.0084 で最急降下の向きに 0.4° まで寄る。一手の移動は滑らかに動かし、reduced motion では即時に切り替える |
+| `phase-fraction-target` | `concept.external-solver-objective` | 外側で決めるBの分率 x を動かすと、ツールの中で αだけ・βだけ・α+β（共通接線）の3つのギブスエネルギーが比べ直され、最も低い組み合わせのβの量が返る。てこの規則の棒、βの量の折れ線、外側の目的 J=(f_β−0.30)² の平らな範囲（傾き0）と x=0.35 の最小。対比の「G をそのまま最小にする」では最小が x=0.10（βなし）へ移る |
 
 ## 次の候補
 

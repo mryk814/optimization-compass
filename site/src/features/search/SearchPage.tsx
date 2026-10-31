@@ -11,6 +11,7 @@ import {
   type SearchIntent,
 } from "../../contracts/search-index";
 import { loadSearchIndex } from "./search-data";
+import { CaseSignatureGlyph, MethodLensGlyph, useGalleryCases, useSiteData } from "../../visual-system";
 
 const TYPE_LABELS: Record<SearchEntityType, string> = {
   method: "手法", problem: "問題", implementation: "実装", content: "教材", case: "ケース",
@@ -70,6 +71,9 @@ export function SearchPage() {
   const visibleHits = directDocument && !query
     ? [{ document: directDocument, score: 0, matchedFields: [] as SearchField[] }]
     : hits.slice(0, visibleLimit);
+  const hasCases = visibleHits.some(({ document }) => document.entity_type === "case");
+  const galleryCases = useGalleryCases(hasCases);
+  const siteData = useSiteData();
   const availableTypes = useMemo(() => {
     const documents = index?.documents ?? [];
     return SEARCH_ENTITY_TYPES.map((type) => ({ type, count: documents.filter((document) => document.entity_type === type).length })).filter((item) => item.count > 0);
@@ -141,6 +145,7 @@ export function SearchPage() {
       {index && (query || directEntity) && visibleHits.length === 0 && <div className="search-empty"><h2>一致する項目が見つかりません</h2><p>検索語を短くするか、対象・目的の絞り込みを外してください。</p></div>}
       <div className="search-results">{visibleHits.map(({ document, matchedFields }) => <article key={document.document_id} className="search-result-card">
         <div className="search-result-heading"><span className={`search-type search-type-${document.entity_type}`}>{TYPE_LABELS[document.entity_type]}</span><h2><Link to={document.canonical_route}>{document.title_ja}</Link></h2>{document.title_en !== document.title_ja && <p lang="en">{document.title_en}</p>}</div>
+        <SearchResultGlyph entityId={document.entity_id} entityType={document.entity_type} galleryCases={galleryCases} label={document.title_ja} siteData={siteData} />
         {document.summary && <p className="search-result-copy">{document.summary}</p>}
         <div className="search-result-actions"><Link className="text-link" to={document.canonical_route}>開く →</Link>{document.external_url && <a className="text-link" href={document.external_url} rel="noreferrer" target="_blank">公式資料 ↗</a>}</div>
         <details className="search-result-details">
@@ -161,4 +166,28 @@ export function SearchPage() {
 
 function isTypingTarget(target: EventTarget | null): boolean {
   return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || (target instanceof HTMLElement && target.isContentEditable);
+}
+
+/** The shared signature glyph for results that have one: a Case's problem, or a method's lens. */
+function SearchResultGlyph({
+  entityId,
+  entityType,
+  galleryCases,
+  label,
+  siteData,
+}: {
+  entityId: string;
+  entityType: SearchEntityType;
+  galleryCases: ReturnType<typeof useGalleryCases>;
+  label: string;
+  siteData: ReturnType<typeof useSiteData>;
+}) {
+  if (entityType === "case") {
+    const item = galleryCases?.get(entityId);
+    return item ? <div className="search-result-glyph"><CaseSignatureGlyph item={item} /></div> : null;
+  }
+  if (entityType === "method" && siteData) {
+    return <div className="search-result-glyph"><MethodLensGlyph catalog={siteData} label={label} methodId={entityId} /></div>;
+  }
+  return null;
 }

@@ -6,6 +6,7 @@ import { fmt, fmtPair } from "./format";
 import type { Bounds } from "./math/contours";
 import {
   ARTICLE_LP,
+  ARTICLE_REVENUE,
   feasibleVertices,
   greedyVertexWalk,
   levelLine,
@@ -19,10 +20,10 @@ import { LiveMath, mi, mn, mo, paren, row, signed } from "./mathml";
 import { makeScale, polylinePath, useDomainDrag, useStageViewport } from "./svg";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
 
-const BOUNDS: Bounds = { xMin: -1.3, xMax: 6.26, yMin: -0.9, yMax: 4.6 };
+const BOUNDS: Bounds = { xMin: -1.6, xMax: 9.6, yMin: -1.1, yMax: 6.4 };
 const ASPECT = (BOUNDS.yMax - BOUNDS.yMin) / (BOUNDS.xMax - BOUNDS.xMin);
 /** On a phone the plot crops the empty right side so the polygon and its labels stay large. */
-const COMPACT_BOUNDS: Bounds = { xMin: -1.0, xMax: 5.0, yMin: -0.9, yMax: 4.6 };
+const COMPACT_BOUNDS: Bounds = { xMin: -1.3, xMax: 7.9, yMin: -1.1, yMax: 6.4 };
 const COMPACT = {
   below: 520,
   bounds: COMPACT_BOUNDS,
@@ -34,12 +35,12 @@ const CENTROID: Vec2 = [
   VERTICES.reduce((sum, vertex) => sum + vertex[0], 0) / VERTICES.length,
   VERTICES.reduce((sum, vertex) => sum + vertex[1], 0) / VERTICES.length,
 ];
-const DEFAULT_PROBE: Vec2 = [1.4, 1.1];
+const DEFAULT_PROBE: Vec2 = [2, 1.5];
 
 
 export default function LpVertexWalk() {
-  const [c1, setC1] = useState(3);
-  const [c2, setC2] = useState(2);
+  const [c1, setC1] = useState(ARTICLE_REVENUE[0]);
+  const [c2, setC2] = useState(ARTICLE_REVENUE[1]);
   const [probe, setProbe] = useState<Vec2>(DEFAULT_PROBE);
   const svgRef = useRef<SVGSVGElement>(null);
   const { ref: stageRef, viewport } = useStageViewport(BOUNDS, ASPECT, COMPACT);
@@ -93,7 +94,7 @@ export default function LpVertexWalk() {
     : isEdge
       ? `目的の向きが辺と直角なので、頂点 ${best.map((index) => fmtPair(VERTICES[index][0], VERTICES[index][1], 1)).join(" と ")} を結ぶ辺全体が最適です（z=${fmt(bestValue)}）。`
       : `最適解は頂点 ${fmtPair(VERTICES[best[0]][0], VERTICES[best[0]][1], 1)}、目的値は z=${fmt(bestValue)} です。原点から隣の頂点へ${path.length - 1}回移って到達します。`;
-  const summary = `目的の係数は c=(${c1}, ${c2})。${verdictText}実行可能領域の内部の点は、最良の頂点より良くなりません。`;
+  const summary = `パン屋のLPで、1個あたりの売上は c=(${c1}, ${c2})。${verdictText}在庫の範囲の内部の点は、最良の頂点より売上が大きくなりません。`;
 
   return (
     <ExplorableFrame
@@ -101,8 +102,8 @@ export default function LpVertexWalk() {
         <>
           <Slider
             display={fmt(c1, 1)}
-            hint="x を増やすと目的値がどれだけ増えるか（最大化）。"
-            label="係数 c₁（x の重み）"
+            hint="食パンを1個増やすと、売上がどれだけ増えるか（最大化）。記事の値は 3。"
+            label="係数 c₁（食パン1個の売上）"
             max={4}
             min={-4}
             onChange={setC1}
@@ -111,8 +112,8 @@ export default function LpVertexWalk() {
           />
           <Slider
             display={fmt(c2, 1)}
-            hint="y を増やすと目的値がどれだけ増えるか。"
-            label="係数 c₂（y の重み）"
+            hint="クロワッサンを1個増やすと、売上がどれだけ増えるか。記事の値は 4。"
+            label="係数 c₂（クロワッサン1個の売上）"
             max={4}
             min={-4}
             onChange={setC2}
@@ -132,7 +133,7 @@ export default function LpVertexWalk() {
       readout={
         <>
           <section aria-label="いまの位置での目的値" className="ex-equation">
-            <p className="ex-eyebrow">目的値 z = c₁x + c₂y を、いまの位置（橙）と動かせる点（紺）で計算</p>
+            <p className="ex-eyebrow">売上 z = c₁x₁ + c₂x₂ を、いまの位置（橙）と動かせる点（紺）で計算</p>
             <LiveMath
               block
               label={`橙の点 ${fmtPair(walker[0], walker[1])} での目的値は ${fmt(walkerValue)}`}
@@ -169,14 +170,16 @@ export default function LpVertexWalk() {
         </>
       }
       stage={
+        <figure className="ex-panel">
+        <figcaption className="ex-panel-title">在庫の範囲と、売上が等しい直線</figcaption>
         <div className="ex-canvas" ref={stageRef}>
         <svg className="ex-svg" ref={svgRef} viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
           <rect className="ex-ground" height={viewport.height} width={viewport.width} />
           <g className="ex-axes">
             <line x1={scale.px(0)} x2={scale.px(0)} y1={0} y2={viewport.height} />
             <line x1={0} x2={viewport.width} y1={scale.py(0)} y2={scale.py(0)} />
-            <text textAnchor="end" x={viewport.width - 8} y={scale.py(0) - 6}>x</text>
-            <text x={scale.px(0) + 6} y={16}>y</text>
+            <text textAnchor="end" x={viewport.width - 8} y={scale.py(0) - 6}>x₁ 食パン</text>
+            <text x={scale.px(0) + 6} y={16}>x₂ クロワッサン</text>
           </g>
           {faintLevels.map((value) => {
             const line = levelLine(cost, value, viewport.bounds);
@@ -193,7 +196,13 @@ export default function LpVertexWalk() {
           })}
           <path className="ex-feasible" d={polygon} />
           {ARTICLE_LP.map((constraint) => (
-            <ConstraintLine bounds={viewport.bounds} constraint={constraint} key={constraint.label} scale={scale} />
+            <ConstraintLine
+              bounds={viewport.bounds}
+              compact={viewport.width < COMPACT.below}
+              constraint={constraint}
+              key={constraint.label}
+              scale={scale}
+            />
           ))}
           <path className="ex-walk" d={polylinePath(path.map((index) => VERTICES[index]), scale)} />
           {!isZero && (
@@ -209,11 +218,10 @@ export default function LpVertexWalk() {
               />
               <text
                 className="ex-label"
-                x={scale.px(vertex[0]) + (vertex[0] > 2 ? 12 : -12)}
-                y={scale.py(vertex[1]) + (vertex[1] > 2 ? -10 : 20)}
-                textAnchor={vertex[0] > 2 ? "start" : "end"}
+                {...vertexLabelPlacement(vertex, scale)}
               >
-                {String.fromCharCode(65 + index)} z={fmt(values[index], 1)}
+                {/* On a phone the revenue is read from the vertex table below the plot. */}
+                {String.fromCharCode(65 + index)}{viewport.width < COMPACT.below ? "" : ` z=${fmt(values[index], 1)}`}
               </text>
             </g>
           ))}
@@ -262,6 +270,7 @@ export default function LpVertexWalk() {
           </g>
         </svg>
         </div>
+        </figure>
       }
       summary={summary}
     />
@@ -282,22 +291,22 @@ function objectiveEquation(point: Vec2, c1: number, c2: number, value: number): 
 type Constraint = (typeof ARTICLE_LP)[number];
 
 function ConstraintLine({
-  constraint, scale, bounds,
-}: { constraint: Constraint; scale: ReturnType<typeof makeScale>; bounds: Bounds }) {
+  constraint, scale, bounds, compact,
+}: { constraint: Constraint; scale: ReturnType<typeof makeScale>; bounds: Bounds; compact: boolean }) {
   const line = levelLine(constraint.a, constraint.b, bounds);
   if (!line) return null;
   const [from, to] = line;
-  // Label near the lower (or, for a horizontal line, right-hand) end so neighbouring lines
-  // are far apart there, then nudge it toward the infeasible side, off the polygon.
-  const end = from[1] < to[1] - 1e-9 || (Math.abs(from[1] - to[1]) <= 1e-9 && from[0] > to[0])
-    ? from
-    : to;
-  const other = end === from ? to : from;
-  const along = 0.95;
-  const normal = Math.hypot(constraint.a[0], constraint.a[1]);
-  const offset = 0.32;
-  const lx = other[0] + (end[0] - other[0]) * along + (constraint.a[0] / normal) * offset;
-  const ly = other[1] + (end[1] - other[1]) * along + (constraint.a[1] / normal) * offset;
+  const text = compact && constraint.shortLabel ? constraint.shortLabel : constraint.label;
+  let label: { x: number; y: number } | undefined;
+  if (!constraint.unlabeled && constraint.labelAt) {
+    // Sit beside the authored point of the line, pushed 12px toward the infeasible side
+    // (the side the constraint's normal points to), so the label never covers the polygon.
+    const normal = Math.hypot(constraint.a[0], constraint.a[1]);
+    label = {
+      x: scale.px(constraint.labelAt[0]) + (constraint.a[0] / normal) * 12,
+      y: scale.py(constraint.labelAt[1]) - (constraint.a[1] / normal) * 12,
+    };
+  }
   return (
     <g>
       <line
@@ -307,9 +316,22 @@ function ConstraintLine({
         y1={scale.py(from[1])}
         y2={scale.py(to[1])}
       />
-      <text className="ex-label" textAnchor="middle" x={scale.px(lx)} y={scale.py(ly)}>{constraint.label}</text>
+      {label && <text className="ex-label" x={label.x} y={label.y}>{text}</text>}
     </g>
   );
+}
+
+/** Vertex labels go where the bakery LP leaves room: right of the y-axis, above the x-axis end. */
+function vertexLabelPlacement(vertex: Vec2, scale: ReturnType<typeof makeScale>) {
+  const onXAxisEnd = vertex[1] === 0 && vertex[0] > 0;
+  if (onXAxisEnd) {
+    return { x: scale.px(vertex[0]) - 10, y: scale.py(vertex[1]) - 10, textAnchor: "end" as const };
+  }
+  return {
+    x: scale.px(vertex[0]) + 10,
+    y: scale.py(vertex[1]) + (vertex[1] === 0 ? 20 : -12),
+    textAnchor: "start" as const,
+  };
 }
 
 function LevelThrough({

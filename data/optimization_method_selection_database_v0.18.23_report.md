@@ -1,0 +1,210 @@
+# Optimization Method Selection Database staged report
+
+- Version: `0.18.23`
+- Release date: `2026-10-10`
+- Tables: `59`
+- Rows: `9405`
+- Data license: `CC-BY-4.0` (`licenses/DATA_LICENSE.txt`)
+
+| Table | Rows |
+|---|---:|
+| `advanced_view` | 280 |
+| `alternative_solution_checks` | 18 |
+| `atomic_predicates` | 17 |
+| `backlog` | 38 |
+| `beginner_view` | 28 |
+| `benchmark_contexts` | 22 |
+| `case_alternative_map` | 50 |
+| `case_feature_map` | 290 |
+| `case_implementation_map` | 74 |
+| `case_method_map` | 87 |
+| `comparison_set_members` | 3 |
+| `comparison_sets` | 1 |
+| `controlled_vocab` | 129 |
+| `decision_questions` | 12 |
+| `decision_rule_target_retirements` | 7 |
+| `decision_rules` | 78 |
+| `demo_scenarios` | 12 |
+| `diagnostics` | 42 |
+| `evidence_links` | 4272 |
+| `example_cases` | 29 |
+| `failure_mode_affected_entities` | 94 |
+| `failure_mode_diagnostics` | 12 |
+| `failure_mode_mitigations` | 12 |
+| `failure_mode_profiles` | 12 |
+| `failure_mode_scenarios` | 4 |
+| `failure_mode_symptoms` | 12 |
+| `failure_mode_triggers` | 12 |
+| `failure_modes` | 42 |
+| `feature_values` | 93 |
+| `glossary` | 84 |
+| `implementation_claims` | 458 |
+| `implementations` | 65 |
+| `learning_coverage_expectations` | 11 |
+| `learning_edges` | 53 |
+| `learning_slice_priorities` | 6 |
+| `method_hierarchy` | 123 |
+| `method_implementation_map` | 175 |
+| `method_visualization_profiles` | 12 |
+| `methods` | 140 |
+| `model_revisions` | 7 |
+| `predicate_coverage` | 15 |
+| `predicate_policies` | 16 |
+| `problem_alternative_map` | 96 |
+| `problem_archetypes` | 57 |
+| `problem_definition_archetypes` | 32 |
+| `problem_definition_features` | 84 |
+| `problem_definitions` | 22 |
+| `problem_feature_map` | 842 |
+| `problem_features` | 211 |
+| `problem_instances` | 25 |
+| `problem_method_fit` | 280 |
+| `readme` | 24 |
+| `release_checks` | 25 |
+| `schema_dictionary` | 487 |
+| `sheet_catalog` | 33 |
+| `sources` | 159 |
+| `terminology_aliases` | 72 |
+| `version_history` | 3 |
+| `view_presets` | 6 |
+
+## Free-text-only method conditions
+
+Detected `536` populated condition fields across `134` methods without complete atomic-predicate coverage.
+
+| Method | Unmigrated condition fields |
+|---|---|
+| `MF_COMPOSITE_CONVEX` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_CONSTRAINED_NLP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_CONSTRAINT_PROGRAMMING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_DFO_LOCAL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_DISCRETE_EXACT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_EVOLUTIONARY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_GLOBAL_SEARCH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_GRAPH_DP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_LP_QP_CONIC` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_MANIFOLD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_MULTI_OBJECTIVE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_OPTIMAL_CONTROL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_SMOOTH_LOCAL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_STOCHASTIC_ML` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_SURROGATE_HPO` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_TOPOLOGY_OPTIMIZATION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `MF_TRUST_REGION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ACTIVE_SET` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ACTIVE_SET_QP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADAGRAD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADAM` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADAMW` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADJOINT_SENSITIVITY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADMM` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ADMM_QP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_AUGMENTED_LAGRANGIAN` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_AUGMENTING_MAXFLOW` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BARRIER_LP_QP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BASIN_HOPPING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BELLMAN_FORD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BENDERS` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BOBYQA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BRANCH_BOUND` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BRANCH_CUT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BRANCH_PRICE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BRANCH_PRICE_CUT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_BUNDLE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CCCP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CCG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CDCL_SAT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_COBYLA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_COBYQA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_COLUMN_GENERATION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CONSTRAINED_BO` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_COORDINATE_DESCENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CP_SAT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CP_SEARCH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_CUBIC_REGULARIZATION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DANTZIG_WOLFE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DCA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DENSITY_FILTER` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DIFFERENTIAL_EVOLUTION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DIJKSTRA_ASTAR` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DIRECT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DIRECT_COLLOCATION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DIRECT_SHOOTING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DOGLEG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DOUGLAS_RACHFORD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DUAL_SIMPLEX` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_DYNAMIC_PROGRAMMING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_EPSILON_CONSTRAINT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_FISTA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_FRANK_WOLFE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_GAUSS_NEWTON` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_GENETIC_ALGORITHM` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_GRADIENT_DESCENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_HUNGARIAN` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_HYPERBAND_ASHA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_ILQR_DDP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LBFGS` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LBFGSB` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LEVELSET_TOPOLOGY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LEVENBERG_MARQUARDT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_LOCAL_SEARCH_COMBINATORIAL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MADS` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MIRROR_DESCENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MMA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MOEA_D` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MOMENTUM_SGD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MULTIPLE_SHOOTING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MULTISTART` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_MUON` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NATURAL_GRADIENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NETWORK_SIMPLEX` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NEWTON` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NEWTON_CG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NLCG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NSGA_II` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_NSGA_III` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_OC_TOPOLOGY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_OUTER_APPROX_MINLP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PAREGO` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PARTICLE_SWARM` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PATTERN_SEARCH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PBT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PDLP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_POWELL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PRIMAL_DUAL_CONIC` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PROGRESSIVE_HEDGING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PROJECTED_GRADIENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PROX_GRADIENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_PUSH_RELABEL` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_RANDOM_SEARCH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_RIEMANNIAN_GRADIENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_RIEMANNIAN_TRUST_REGION` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_RMSPROP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SAA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SAFEOPT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SAGA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SARAH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SDDP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SGD` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SHGO` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SIMPLEX` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SIMP_TOPOLOGY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SIMULATED_ANNEALING` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SINKHORN` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SMAC_RF` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SPATIAL_BRANCH_BOUND` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SPSA` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SQP` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SR1` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SUBGRADIENT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SUBMODULAR_GREEDY` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SUCCESSIVE_SHORTEST_PATH` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_SVRG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TPE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TRUST_EXACT` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TRUST_KRYLOV` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TRUST_NCG` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TRUST_REGION_REFLECTIVE` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_TURBO_SAASBO` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |
+| `M_WEIGHTED_SUM` | `required_assumptions`, `avoid_conditions`, `first_choice_conditions`, `second_choice_conditions` |

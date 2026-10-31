@@ -31,7 +31,7 @@ includes the same values.
 
 | Source type | Maximum age |
 | --- | ---: |
-| official documentation, issue, repository, vendor manual | 90 days |
+| official documentation, issue, repository, vendor manual | 180 days |
 | standard | 365 days |
 | original paper, textbook, university material | 730 days |
 

@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
+import yaml
 from typer.testing import CliRunner
 
 from optimization_compass import cli as cli_module
@@ -26,12 +29,230 @@ from optimization_compass.validation_tasks import (
 )
 
 runner = CliRunner()
+ROOT = Path(__file__).parents[1]
+
+
+def _pr_workflow() -> dict:
+    return yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
+
+
+def test_pr_workflow_runs_the_required_check_for_every_main_pull_request() -> None:
+    workflow = _pr_workflow()
+    assert workflow["on"] == {"pull_request": {"branches": ["main"]}}
+    assert workflow["permissions"] == {"contents": "read"}
+    assert set(workflow["jobs"]) == {"validate_pages_artifact"}
+    job = workflow["jobs"]["validate_pages_artifact"]
+    assert job["name"] == "Validate and build Pages artifact"
+    assert "if" not in job and "strategy" not in job and "environment" not in job
+    assert "permissions" not in job and "continue-on-error" not in job
+    steps = job["steps"]
+    assert all("continue-on-error" not in step for step in steps)
+    conditional_steps = [step for step in steps if "if" in step]
+    assert len(conditional_steps) == 1
+    assert conditional_steps[0]["if"] == "steps.validation.outputs.needs_build == 'true'"
+    assert conditional_steps[0]["run"] == "npm --prefix site run build"
+    workflows = sorted((ROOT / ".github/workflows").glob("*.y*ml"))
+    assert set(workflows) == {
+        ROOT / ".github/workflows/ci.yml",
+        ROOT / ".github/workflows/pages-deploy.yml",
+    }
+
+
+def _pages_deploy_workflow() -> dict:
+    return yaml.load(
+        (ROOT / ".github/workflows/pages-deploy.yml").read_text(), Loader=yaml.BaseLoader
+    )
+
+
+def test_pages_deploy_workflow_is_dispatch_only_and_gates_publication() -> None:
+    workflow = _pages_deploy_workflow()
+    assert workflow["on"] == {"workflow_dispatch": ""}
+    assert workflow["permissions"] == {"contents": "read"}
+    assert set(workflow["jobs"]) == {
+        "validate_pages_artifact",
+        "browser_e2e",
+        "deploy",
+    }
+    browser = workflow["jobs"]["browser_e2e"]
+    deploy = workflow["jobs"]["deploy"]
+    assert browser["needs"] == "validate_pages_artifact"
+    assert browser["if"] == "github.ref == 'refs/heads/main'"
+    assert deploy["needs"] == ["validate_pages_artifact", "browser_e2e"]
+    assert deploy["if"] == "github.ref == 'refs/heads/main'"
+    assert deploy["permissions"] == {"contents": "read", "pages": "write", "id-token": "write"}
+    assert deploy["concurrency"] == {"group": "github-pages", "cancel-in-progress": "false"}
+    assert deploy["environment"]["name"] == "github-pages"
+    assert "secrets." not in (ROOT / ".github/workflows/pages-deploy.yml").read_text()
+
+
+def test_pages_deploy_workflow_validates_tier_b_before_publishing_the_artifact() -> None:
+    steps = _pages_deploy_workflow()["jobs"]["validate_pages_artifact"]["steps"]
+    validation = next(step for step in steps if step.get("name", "").startswith("Run the"))
+    assert validation["env"] == {"VALIDATION_TASK": "tier-b"}
+    assert validation["run"] == 'uv run --frozen optimization-compass validate "$VALIDATION_TASK"'
+    drift = next(step for step in steps if step.get("name", "").startswith("Verify generated"))
+    assert drift["run"].splitlines() == [
+        'uv run --frozen optimization-compass export-site-data --output "$RUNNER_TEMP/site-data"',
+        'diff --recursive --brief site/public/data "$RUNNER_TEMP/site-data"',
+        "uv run --frozen python scripts/sync_readme_facts.py --check",
+        "uv run --frozen python scripts/repository_size.py --check",
+        "git diff --exit-code -- data site/public/data src/optimization_compass/resources "
+        "site/package-lock.json uv.lock",
+    ]
+    stamped = next(step for step in steps if step.get("name", "").startswith("Stamp"))
+    assert stamped["env"] == {"COMMIT_SHA": "${{ github.sha }}"}
+    assert stamped["run"].splitlines()[:4] == [
+        "uv run --frozen python scripts/pages_artifact.py stamp \\",
+        '  --root site/dist --commit-sha "$COMMIT_SHA" --base-path /optimization-compass/',
+        "uv run --frozen python scripts/pages_artifact.py verify-local \\",
+        '  --root site/dist --expected-commit-sha "$COMMIT_SHA"',
+    ]
+    upload = next(
+        step for step in steps if "uses" in step and step["uses"].startswith("actions/upload-pages")
+    )
+    assert upload["if"] == "github.ref == 'refs/heads/main'"
+    assert upload["with"]["name"] == "github-pages"
+    assert upload["with"]["path"] == "site/dist"
+    assert steps.index(validation) < steps.index(drift) < steps.index(stamped) < steps.index(upload)
+
+
+def test_pages_deploy_workflow_browsers_and_smokes_the_validated_artifact() -> None:
+    workflow = _pages_deploy_workflow()
+    browser_steps = workflow["jobs"]["browser_e2e"]["steps"]
+    downloaded = next(
+        step
+        for step in browser_steps
+        if "uses" in step and step["uses"].startswith("actions/download-artifact")
+    )
+    assert downloaded["with"] == {"name": "github-pages", "path": ".pages-artifact"}
+    extracted = next(step for step in browser_steps if step.get("name", "").startswith("Extract"))
+    assert extracted["run"].splitlines() == [
+        "rm -rf site/dist",
+        "mkdir -p site/dist",
+        "tar -xf .pages-artifact/artifact.tar -C site/dist",
+        "test -f site/dist/deployment.json",
+    ]
+    journeys = next(
+        step for step in browser_steps if step.get("name", "").startswith("Run critical")
+    )
+    assert journeys["run"].splitlines() == [
+        "npm run test:e2e:critical",
+        "npm run test:e2e:artifact -- e2e/accessibility.spec.ts --project=chromium-desktop",
+    ]
+    deploy_steps = workflow["jobs"]["deploy"]["steps"]
+    deploy_actions = [step["uses"].split("@", 1)[0] for step in deploy_steps if "uses" in step]
+    assert deploy_actions == [
+        "actions/deploy-pages",
+        "actions/checkout",
+        "actions/setup-python",
+    ]
+    smoke = next(step for step in deploy_steps if step.get("name", "").startswith("Smoke"))
+    smoke_run = smoke["run"].splitlines()
+    assert smoke_run[0] == "python scripts/pages_artifact.py smoke-remote \\"
+    assert smoke_run[1] == '  --base-url "${{ steps.deployment.outputs.page_url }}" \\'
+    assert smoke_run[2] == (
+        '  --expected-commit-sha "${{ needs.validate_pages_artifact.outputs.commit_sha }}" \\'
+    )
+    assert smoke_run[3] == (
+        '  --expected-dataset-version "${{ needs.validate_pages_artifact'
+        '.outputs.dataset_version }}" \\'
+    )
+    assert smoke_run[4:] == [
+        "  --attempts 10 \\",
+        "  --delay-seconds 6 \\",
+        "  --timeout-seconds 20",
+    ]
+
+
+def test_pr_workflow_uses_locked_dependencies_and_read_only_checkout() -> None:
+    steps = _pr_workflow()["jobs"]["validate_pages_artifact"]["steps"]
+    actions = [step for step in steps if "uses" in step]
+    assert [step["uses"].split("@", 1)[0] for step in actions] == [
+        "actions/checkout",
+        "astral-sh/setup-uv",
+        "actions/setup-node",
+    ]
+    assert actions[0]["with"] == {"fetch-depth": "0", "persist-credentials": "false"}
+    assert actions[1]["with"]["python-version"] == "3.12"
+    assert actions[2]["with"]["node-version"] == "24"
+    install = next(step["run"] for step in steps if step.get("name", "").startswith("Install"))
+    assert install.splitlines() == [
+        "uv lock --check",
+        "uv sync --frozen --all-extras --all-groups",
+        "npm --prefix site ci",
+        "uv run --frozen python scripts/verify_workflow_pins.py",
+    ]
+    result = subprocess.run(
+        [sys.executable, "scripts/verify_workflow_pins.py"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "secrets." not in (ROOT / ".github/workflows/ci.yml").read_text()
+
+
+def test_pr_workflow_selects_and_runs_the_authoritative_registry_task() -> None:
+    steps = _pr_workflow()["jobs"]["validate_pages_artifact"]["steps"]
+    selection = next(step for step in steps if step.get("id") == "validation")
+    assert selection["env"] == {"BASE_REF": "${{ github.base_ref }}"}
+    assert (
+        "uv run --frozen optimization-compass select-validation-task "
+        '--base-ref "origin/$BASE_REF" --format task'
+    ) in selection["run"]
+    validation = next(step for step in steps if step.get("name", "").startswith("Run the"))
+    assert validation["env"] == {"VALIDATION_TASK": "${{ steps.validation.outputs.task }}"}
+    assert validation["run"] == 'uv run --frozen optimization-compass validate "$VALIDATION_TASK"'
+    assert steps.index(selection) < steps.index(validation)
+
+
+@pytest.mark.parametrize("task", sorted(TASKS))
+def test_pr_workflow_build_fallback_follows_the_registry(task: str) -> None:
+    steps = _pr_workflow()["jobs"]["validate_pages_artifact"]["steps"]
+    selection = next(step for step in steps if step.get("id") == "validation")
+    source = selection["run"].split("<<'PY' >> \"$GITHUB_OUTPUT\"\n", 1)[1].rsplit("\nPY", 1)[0]
+    result = subprocess.run(
+        [sys.executable, "-c", source],
+        cwd=ROOT,
+        env={**os.environ, "TASK": task},
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    expected = "site.build" not in TASKS[task].check_codes
+    assert result.stdout.strip() == f"needs_build={str(expected).lower()}"
+
+
+def test_pr_workflow_verifies_drift_and_the_actual_built_artifact() -> None:
+    steps = _pr_workflow()["jobs"]["validate_pages_artifact"]["steps"]
+    build = next(step for step in steps if "if" in step)
+    drift = next(step for step in steps if step.get("name", "").startswith("Verify generated"))
+    assert drift["run"].splitlines() == [
+        'uv run --frozen optimization-compass export-site-data --output "$RUNNER_TEMP/site-data"',
+        'diff --recursive --brief site/public/data "$RUNNER_TEMP/site-data"',
+        "uv run --frozen python scripts/sync_readme_facts.py --check",
+        "uv run --frozen python scripts/repository_size.py --check",
+        "git diff --exit-code -- data site/public/data src/optimization_compass/resources "
+        "site/package-lock.json uv.lock",
+    ]
+    artifact = steps[-1]
+    assert artifact["env"] == {"COMMIT_SHA": "${{ github.sha }}"}
+    assert artifact["run"].splitlines() == [
+        "uv run --frozen python scripts/pages_artifact.py stamp \\",
+        '  --root site/dist --commit-sha "$COMMIT_SHA" --base-path /optimization-compass/',
+        "uv run --frozen python scripts/pages_artifact.py verify-local \\",
+        '  --root site/dist --expected-commit-sha "$COMMIT_SHA"',
+    ]
+    assert steps.index(build) < steps.index(drift) < steps.index(artifact)
 
 
 def test_check_codes_are_unique_and_resolvable() -> None:
     codes = [check.code for check in CHECKS]
     assert len(codes) == len(set(codes))
     for task in TASKS.values():
+        assert len(task.check_codes) == len(set(task.check_codes))
         for code in task.check_codes:
             assert code in codes, f"task {task.name} references unknown check {code}"
 
@@ -41,10 +262,9 @@ def test_every_task_names_a_known_gate() -> None:
         assert task.gate in TASKS, f"task {task.name} declares unknown gate {task.gate}"
 
 
-def test_tier_compositions_match_agents_documentation() -> None:
+def test_tier_compositions_keep_the_required_checks() -> None:
     assert TASKS["tier-a"].check_codes == ("content.pages", "content.licensing")
     assert TASKS["tier-b"].check_codes == (
-        "content.report-drift",
         "python.lint",
         "python.format",
         "python.types",
@@ -125,6 +345,7 @@ def test_independent_browser_check_still_builds_and_build_still_typechecks() -> 
     scripts = json.loads(
         (Path(__file__).parents[1] / "site/package.json").read_text(encoding="utf-8")
     )["scripts"]
+    assert "--exclude=e2e/**" in scripts["test"]
     assert scripts["build"] == "npm run typecheck && vite build"
     assert scripts["test:e2e"] == "npm run build && npm run test:e2e:artifact"
     assert scripts["test:e2e:artifact"] == "playwright test"
@@ -168,13 +389,12 @@ def test_problem_task_gate_is_tier_c() -> None:
         ),
         (["site/public/data/content.json"], "tier-b"),
         (["site/src/App.tsx", ".github/workflows/ci.yml"], "pr-fast"),
-        (["tests/test_validate_cli.py", "tests/test_pages_workflow.py"], "pr-fast"),
+        (["tests/test_validate_cli.py", "tests/test_pages_checkpoint.py"], "pr-fast"),
         (
             [
                 "scripts/pages_checkpoint.py",
                 "src/optimization_compass/validation_tasks.py",
                 "tests/test_pages_checkpoint.py",
-                ".agents/skills/optimization-compass-maintenance/SKILL.md",
             ],
             "pr-fast",
         ),
@@ -240,7 +460,13 @@ def test_repository_contract_gate_runs_publication_checkpoint_tests() -> None:
     check = next(check for check in CHECKS if check.code == "repository.contract-tests")
 
     assert "tests/test_pages_checkpoint.py" in check.command
-    assert "tests/test_repository_skills.py" in check.command
+    assert check.command == (
+        "{python}",
+        "-m",
+        "pytest",
+        "tests/test_validate_cli.py",
+        "tests/test_pages_checkpoint.py",
+    )
 
 
 def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() -> None:

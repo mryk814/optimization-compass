@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import rawCoverage from "../../../public/data/coverage.json";
@@ -15,7 +15,7 @@ describe("CoveragePage", () => {
         ? structuredClone(rawJourneys)
         : structuredClone(rawCoverage),
   }) as Response)));
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
   test("shows priority reasons and filters the full inventory", async () => {
     render(<MemoryRouter><CoveragePage /></MemoryRouter>);
@@ -24,14 +24,22 @@ describe("CoveragePage", () => {
     expect(screen.getByRole("heading", { name: "学習経路の接続状況" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "参照整合性" })).toBeVisible();
     expect(screen.getByText(`${rawJourneys.summary.status_counts.complete}件完了`)).toBeVisible();
-    expect(screen.getByText(/目標5件を達成/u)).toBeVisible();
+    const { complete } = rawJourneys.summary.status_counts;
+    const target = rawJourneys.summary.target_complete_journeys;
+    expect(screen.getByText(complete >= target
+      ? new RegExp(`目標${target}件を達成`, "u")
+      : `目標${target}件まであと${target - complete}件`)).toBeVisible();
     expect(screen.getByRole("region", { name: "学習経路の接続状況一覧（表）" })).toBeVisible();
     const mobileJourneyList = document.querySelector<HTMLElement>(".journey-mobile-list");
     expect(mobileJourneyList).toBeInTheDocument();
     const firstComplete = rawJourneys.journeys.find((journey) => journey.status === "complete");
     expect(firstComplete).toBeDefined();
     expect(mobileJourneyList).toHaveTextContent(`完了した学習経路${rawJourneys.summary.status_counts.complete}件`);
-    expect(mobileJourneyList).not.toHaveTextContent("次に必要な接続");
+    if (rawJourneys.journeys.some((journey) => journey.status !== "complete")) {
+      expect(mobileJourneyList).toHaveTextContent("次に必要な接続");
+    } else {
+      expect(mobileJourneyList).not.toHaveTextContent("次に必要な接続");
+    }
     expect(screen.getByText(/未接続の成果物:/u)).toBeVisible();
     expect(screen.queryByText(new RegExp(rawJourneys.orphan_assets[0].asset_id, "u"))).not.toBeInTheDocument();
     expect(screen.getByText(`${rawCoverage.subjects.length}件中24件を表示`)).toBeVisible();
@@ -45,5 +53,22 @@ describe("CoveragePage", () => {
     expect(inventory.querySelectorAll("tr")).toHaveLength(11);
     fireEvent.change(screen.getByLabelText("状態"), { target: { value: "missing" } });
     expect(inventory.querySelectorAll("tr")).toHaveLength(1);
+  });
+
+  test("shows scope counts per unit and axis without a percentage", async () => {
+    render(<MemoryRouter><CoveragePage /></MemoryRouter>);
+    expect(await screen.findByRole("heading", { name: /^収録範囲（/u })).toBeVisible();
+    const scope = rawCoverage.scope;
+    expect(scope).toBeTruthy();
+    const topic = scope!.units.knowledge_topic;
+    const identity = screen.getByRole("article", { name: "知識トピックの収録範囲" });
+    expect(identity).toHaveTextContent(`${topic.axes.identity.complete}`);
+    expect(identity).toHaveTextContent(`/ ${topic.axes.identity.eligible}`);
+    expect(identity).toHaveTextContent(`未表現 ${topic.axes.identity.states.unrepresented}件`);
+    const experience = screen.getByRole("article", { name: "知識トピックの体験" });
+    expect(experience).toHaveTextContent("判定前");
+    expect(experience).not.toHaveTextContent("0 / 0");
+    const section = document.querySelector<HTMLElement>(".coverage-scope");
+    expect(section?.textContent).not.toMatch(/%|％/u);
   });
 });

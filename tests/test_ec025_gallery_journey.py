@@ -19,6 +19,6 @@ def test_ec025_has_a_complete_repeated_mpc_qp_teaching_instance() -> None:
     assert "solver.update" in case["python_example"]
     assert "solver.warm_start" in case["python_example"]
     assert "$N=4$" in case["variable_domain"]
-    assert "deadline miss率" in case["practical_notes"]
+    assert "締め切り超過率" in case["practical_notes"]
     assert "100Hz" in case["limitations"][1]
-    assert "closed-loop試験" in case["limitations"][1]
+    assert "閉ループ試験" in case["limitations"][1]

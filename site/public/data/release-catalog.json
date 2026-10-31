@@ -1,5 +1,5 @@
 {
-  "current_version": "0.18.19",
+  "current_version": "0.18.25",
   "releases": [
     {
       "archival": null,
@@ -532,6 +532,90 @@
       "source_commit": "d3373079458f69434e9e7b52e06e78ecef2632a4",
       "tag": "v0.18.19",
       "version": "0.18.19"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "f0e4ed8ca8536ca72aa81493e161174d3ec0d059a4d50d64ae7b399000882b3f",
+        "size_bytes": 5732674,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.20/optimization_method_selection_database_v0.18.20_bundle.zip"
+      },
+      "database_sha256": "706ca023ce2256d772ff9ece6f7ac15b1bf6fadb1a7504406619795efb546775",
+      "manifest_sha256": "8078a6a62d61b2abfa5065e424c65950802e55a083375d81014d53373a708ba4",
+      "release_date": "2026-10-07",
+      "source_commit": "83e59f7600787a9784c7c98ce8fd4990e13643a4",
+      "tag": "v0.18.20",
+      "version": "0.18.20"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "22d987e7ba9cf30837ac116fd40125776962ee6164d412f27d7ecea9f222abe0",
+        "size_bytes": 5661472,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.21/optimization_method_selection_database_v0.18.21_bundle.zip"
+      },
+      "database_sha256": "58937405d1bd95c3452acee76783bef17c0714bcdb5cb6e78ad9ad074d1758cc",
+      "manifest_sha256": "c560afa2bed2cd2beb98d93fbe924dd2cada92cb0372d862906755e8b69ef6bf",
+      "release_date": "2026-10-10",
+      "source_commit": "de4e4c558dc61c284b90d804216cfb35fafd3ceb",
+      "tag": "v0.18.21",
+      "version": "0.18.21"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "e77c833b0f355e417e4821b34623dc1b7f47465f7829316461745bbda8163a41",
+        "size_bytes": 6131838,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.22/optimization_method_selection_database_v0.18.22_bundle.zip"
+      },
+      "database_sha256": "319779b949f5a3e79f2eb69fa1be5d3bef91987ef4aeac857f096f2cff810966",
+      "manifest_sha256": "db1d4d58cb2fae67e8ce4670c13e79f3f27edd0524379aff93bd74b118baeef6",
+      "release_date": "2026-10-10",
+      "source_commit": "08f22fa6dda5fc2f4ba8530ff2e2d66a35fe8a9f",
+      "tag": "v0.18.22",
+      "version": "0.18.22"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "46e7cd81d37f342ae69de393ce352767f73ed2fe60dac33d76cacf8f55328891",
+        "size_bytes": 6306363,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.23/optimization_method_selection_database_v0.18.23_bundle.zip"
+      },
+      "database_sha256": "1bc4b246c11477a33735aa1eb292a916fea4627302e913251da195763fb8d95b",
+      "manifest_sha256": "b333d335f00981dd7ee8fd3cfee13fa62c37df33e2529b7bed581a2a0856b437",
+      "release_date": "2026-10-10",
+      "source_commit": "f353246ad11813536b653fc86ef4fb04ae4356d9",
+      "tag": "v0.18.23",
+      "version": "0.18.23"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "c6376787e1723f4667c24ef0cec046326e5e43ca6c48eb581851c8cad452bd36",
+        "size_bytes": 6459949,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.24/optimization_method_selection_database_v0.18.24_bundle.zip"
+      },
+      "database_sha256": "463b513719dd46fe157f18b12a2af32aeda32441318ee6524fefa187a860e04a",
+      "manifest_sha256": "d9d21fd38dd9e928c9076a3437a89097b4e702dd83664f7578a28d4e070a160b",
+      "release_date": "2026-10-13",
+      "source_commit": "ee02cc6a3fcda8d59c67ff62c87d4aadd5063874",
+      "tag": "v0.18.24",
+      "version": "0.18.24"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "e19ec94c441d2f06063a0afcdbf115bd34b75011fa968fe039345474f38cba2b",
+        "size_bytes": 6787658,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.25/optimization_method_selection_database_v0.18.25_bundle.zip"
+      },
+      "database_sha256": "54386be76adb2e9b859d75328ba80695fbbaa5fe508ac7e68836d7c5bff823f4",
+      "manifest_sha256": "e4fe3c70dc9d82460b7b11c8221bb0757570e2629075f9a5cc9bb632cc197de6",
+      "release_date": "2026-10-14",
+      "source_commit": "8b11e62c4153d383caac67c184f2fc2be2d3278f",
+      "tag": "v0.18.25",
+      "version": "0.18.25"
     }
   ],
   "schema_version": 1

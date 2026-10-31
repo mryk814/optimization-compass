@@ -83,3 +83,23 @@ scenario、run、artifact、renderer familyを分離します。authority境界�
 Atlas全体の検索と将来のRAG用documentは、同じcanonical exportからbuild時に決定的生成します。
 lexical-firstの採用理由、semantic retrievalの導入条件、source/attribution境界は
 [`ADR 0007`](adr/0007-global-lexical-search-and-retrieval-index.md) を参照してください。
+
+## Authority boundaries
+
+The editable-input map is in [`adding-knowledge.md`](adding-knowledge.md#2-where-each-kind-of-information-lives).
+Released SQLite owns runtime IDs and relations; seeds and migrations are auditable build inputs.
+Markdown owns explanations and article references. Python registries own executable behavior:
+database expressions are display-only and must never be evaluated as code. Trace frames and
+site indexes are generated projections, not additional authorities.
+
+`entity-links.json` joins these inputs into canonical URLs, aliases, and typed relations.
+Navigation uses this generated index rather than per-entity router crosswalks; dangling relations
+and duplicate URLs reject the export.
+
+`unknown` means not established, `not_applicable` means absent by design, and `unsupported`
+means deliberately outside support. Missing values do not imply any of these states. Optional
+foreign keys may be SQL `NULL` only when their explicit status permits absence.
+
+Release identity and atomic recovery are covered in [`data-maintenance.md`](data-maintenance.md):
+staging is read-only with respect to published files, and publishing validates identity before
+replacing the data, runtime database, version file, and site data together.

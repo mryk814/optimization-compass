@@ -434,8 +434,7 @@ uv run optimization-compass validate {spec.validation_task}
 uv run optimization-compass validate {spec.pr_gate}
 ```
 
-Before opening a PR, complete `docs/knowledge-change-checklist.md` from the
-repository root
+Before opening a PR, follow the Pull request expectations in `docs/adding-knowledge.md`
 and state the authority, evidence, generated impact, and exact validation results.
 """
 
@@ -499,7 +498,7 @@ def _manifest(
         "required_inputs": list(spec.required_inputs),
         "validation": f"optimization-compass validate {spec.validation_task}",
         "pr_gate": f"optimization-compass validate {spec.pr_gate}",
-        "pr_checklist": "docs/knowledge-change-checklist.md",
+        "pr_checklist": "docs/adding-knowledge.md#18-pull-request-expectations",
     }
 
 

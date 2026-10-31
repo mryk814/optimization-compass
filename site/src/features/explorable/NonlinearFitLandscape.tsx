@@ -5,15 +5,20 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import { contourSegments, type Bounds } from "./math/contours";
 import {
+  ALIAS_SHIFT,
   bowlBottom,
   descend,
   GLOBAL_MINIMUM,
   linearizedSse,
+  profileSse,
+  profileValleys,
   residuals,
   SPRING_T,
   SPRING_Y,
   sse,
+  stepReading,
   type Descent,
+  type StepReading,
   type Iterate,
   type Method,
   type Params,
@@ -79,6 +84,7 @@ function iterateAt(run: Descent, position: number): Params {
 
 export default function NonlinearFitLandscape() {
   const [chosen, setChosen] = useState<Settings>(INITIAL);
+  const [alias, setAlias] = useState<"off" | "on">("off");
   const tour = useSceneTour(
     ID,
     EXPLORABLE_META[ID].beats,
@@ -87,8 +93,9 @@ export default function NonlinearFitLandscape() {
   const shown = tour.beat ? fromBeat(tour.beat.settings, chosen) : chosen;
   const run = useMemo(() => descend(shown.method, shown.start), [shown.method, shown.start]);
   const length = run.path.length - 1;
-  const timeline = useTimeline(length, 1.4);
-  useReplayOnChange(timeline, `${shown.method}:${shown.start.a}:${shown.start.w}:${shown.descending}`);
+  const timeline = useTimeline(length, 0.9);
+  // Pressing "この点から下る" or "1手進める" starts the descent itself, so the key leaves out `descending`.
+  useReplayOnChange(timeline, `${shown.method}:${shown.start.a}:${shown.start.w}`);
   // A guided beat walks its descent at an even pace; otherwise the reader's player decides.
   const position = !shown.descending
     ? 0
@@ -99,6 +106,22 @@ export default function NonlinearFitLandscape() {
   const head = shown.descending ? iterateAt(run, position) : shown.start;
   const visibleRun: Descent = shown.descending ? { ...run, path: run.path.slice(0, step + 1) } : { ...run, path: [run.path[0]] };
   const finished = shown.descending && step === length;
+  const reading = shown.descending ? stepReading(run.path, position) : undefined;
+  // The bowl stays where its step began while the head moves toward its bottom.
+  const anchor = reading ? reading.from : shown.start;
+
+  const startDescent = () => {
+    setChosen((value) => ({ ...value, descending: true }));
+    if (timeline.reducedMotion) timeline.finish();
+    else timeline.restart();
+  };
+  const stepOnce = () => {
+    if (!shown.descending) {
+      setChosen((value) => ({ ...value, descending: true }));
+      timeline.seek(0);
+    }
+    timeline.playToNextStep();
+  };
 
   const setStart = (update: Partial<Params>) => setChosen((value) => ({
     ...value,
@@ -166,12 +189,20 @@ export default function NonlinearFitLandscape() {
               value={shown.azimuth}
             />
           )}
+          <Choice<"off" | "on">
+            legend="同じ8点を通る別の曲線"
+            onChange={setAlias}
+            options={[
+              { value: "off", label: "出さない" },
+              { value: "on", label: "ω+4π の曲線を出す" },
+            ]}
+            value={alias}
+          />
           <div className="ex-button-row">
-            <button
-              className="ex-action"
-              onClick={() => setChosen((value) => ({ ...value, descending: true }))}
-              type="button"
-            >
+            <button className="ex-action" onClick={stepOnce} type="button">
+              1手進める
+            </button>
+            <button className="ex-action" onClick={startDescent} type="button">
               この点から下る
             </button>
             <button className="ex-action" onClick={() => setChosen(INITIAL)} type="button">最初の点に戻す</button>
@@ -182,21 +213,26 @@ export default function NonlinearFitLandscape() {
       player={shown.descending ? <PlayerBar positionText={`k = ${step} / ${length}`} stepLabel="反復 k" timeline={timeline} /> : undefined}
       readout={<Readout descending={shown.descending} finished={finished} head={head} last={last} run={run} step={step} start={shown.start} />}
       stage={
-        <div className="ex-twin">
-          <DataPanel head={head} />
-          {shown.view === "contour"
-            ? (
-              <ContourPanel
-                descending={shown.descending}
-                fixed={tour.active}
-                head={head}
-                onMove={(w, a) => setStart({ a, w })}
-                run={visibleRun}
-                start={shown.start}
-              />
-            )
-            : <SurfacePanel camera={camera} head={head} run={visibleRun} />}
-        </div>
+        <>
+          <div className="ex-twin">
+            <DataPanel alias={alias === "on"} ghost={reading?.overshoot ? reading.to : undefined} head={head} />
+            {shown.view === "contour"
+              ? (
+                <ContourPanel
+                  anchor={anchor}
+                  descending={shown.descending}
+                  fixed={tour.active}
+                  head={head}
+                  onMove={(w, a) => setStart({ a, w })}
+                  run={visibleRun}
+                  start={shown.start}
+                />
+              )
+              : <SurfacePanel camera={camera} head={head} run={visibleRun} />}
+          </div>
+          <ProfilePanel descending={shown.descending} head={head} start={shown.start} />
+          {reading && <StepPanel reading={reading} />}
+        </>
       }
       summary={summary}
       tour={tour}
@@ -212,16 +248,31 @@ function outcomeText(run: Descent, last: Iterate): string {
   return `一歩が地図の外（ω=${fmt(last.w, 1)}）へ飛びました。`;
 }
 
-function DataPanel({ head }: { head: Params }) {
+function sampleCurve(p: Params, count: number): Array<readonly [number, number]> {
+  const curve: Array<readonly [number, number]> = [];
+  for (let i = 0; i <= count; i += 1) {
+    const t = DATA_BOUNDS.xMin + ((DATA_BOUNDS.xMax - DATA_BOUNDS.xMin) * i) / count;
+    curve.push([t, p.a * Math.sin(p.w * t)]);
+  }
+  return curve;
+}
+
+interface DataPanelProps {
+  head: Params;
+  /** Where the step in progress ends, drawn faintly when that step makes the fit worse. */
+  ghost?: Params;
+  /** Draw the curve with ω + 4π, which passes through the same eight observations' predictions. */
+  alias: boolean;
+}
+
+function DataPanel({ head, ghost, alias }: DataPanelProps) {
   const { ref, viewport } = useStageViewport(DATA_BOUNDS, 0.8);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const r = residuals(head);
   const unit = scale.py(0) - scale.py(1);
-  const curve: Array<readonly [number, number]> = [];
-  for (let i = 0; i <= 160; i += 1) {
-    const t = DATA_BOUNDS.xMin + ((DATA_BOUNDS.xMax - DATA_BOUNDS.xMin) * i) / 160;
-    curve.push([t, head.a * Math.sin(head.w * t)]);
-  }
+  const curve = sampleCurve(head, 160);
+  const aliasCurve = alias ? sampleCurve({ a: head.a, w: head.w + ALIAS_SHIFT }, 900) : [];
+  const ghostCurve = ghost ? sampleCurve(ghost, 1600) : [];
   return (
     <figure className="ex-panel">
       <figcaption className="ex-panel-title">観測点と曲線</figcaption>
@@ -241,7 +292,7 @@ function DataPanel({ head }: { head: Params }) {
                 <text x={6} y={scale.py(y) - 4}>{y}</text>
               </g>
             ))}
-            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>時刻 t（秒）</text>
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>時刻 t（秒）</text>
           </g>
           {SPRING_T.map((t, index) => {
             const side = Math.abs(r[index]) * unit;
@@ -249,6 +300,8 @@ function DataPanel({ head }: { head: Params }) {
             const left = index === SPRING_T.length - 1 ? scale.px(t) - side : scale.px(t);
             return <rect className="ex-square" height={side} key={`sq${index}`} width={side} x={left} y={Math.min(scale.py(SPRING_Y[index]), scale.py(fitted))} />;
           })}
+          {ghost && <path className="nls-ghost-curve" d={polylinePath(ghostCurve, scale)} />}
+          {alias && <path className="nls-alias-curve" d={polylinePath(aliasCurve, scale)} />}
           <path className="ex-fit-line" d={polylinePath(curve, scale)} fill="none" />
           {SPRING_T.map((t, index) => (
             <line className="ex-residual" key={`r${index}`} x1={scale.px(t)} x2={scale.px(t)} y1={scale.py(SPRING_Y[index])} y2={scale.py(head.a * Math.sin(head.w * t))} />
@@ -258,11 +311,125 @@ function DataPanel({ head }: { head: Params }) {
           ))}
         </svg>
       </div>
+      {ghost && (
+        <p className="ex-hint">
+          薄い破線は、この手の到達点（ω={fmt(ghost.w, 1)}、a={fmt(ghost.a, 1)}）の曲線です。点の間でも激しく振れ、観測点から遠く離れます。
+        </p>
+      )}
+      {alias && (
+        <p className="ex-hint">
+          紫の破線は ω+4π={fmt(head.w + ALIAS_SHIFT)} の曲線です。0.5秒おきの8つの観測の時刻では、実線（ω={fmt(head.w)}）と同じ値を通り、時刻の間では別の曲線になります。
+        </p>
+      )}
     </figure>
   );
 }
 
+const PROFILE_BOUNDS: Bounds = { xMin: W_RANGE[0], xMax: W_RANGE[1], yMin: -1.5, yMax: 16 };
+const PROFILE_SAMPLES = Array.from({ length: 281 }, (_, i) => {
+  const w = W_RANGE[0] + ((W_RANGE[1] - W_RANGE[0]) * i) / 280;
+  return [w, profileSse(w)] as const;
+});
+const PROFILE_VALLEYS = profileValleys();
+
+/** Sum of squares at each ω once the amplitude is chosen best: the five valleys, with the start ω moving along. */
+function ProfilePanel({ start, head, descending }: { start: Params; head: Params; descending: boolean }) {
+  const { ref, viewport } = useStageViewport(PROFILE_BOUNDS, 0.42);
+  const scale = useMemo(() => makeScale(viewport), [viewport]);
+  const startY = profileSse(start.w);
+  const headInView = descending && head.w >= W_RANGE[0] && head.w <= W_RANGE[1];
+  return (
+    <figure className="ex-panel nls-profile">
+      <figcaption className="ex-panel-title">ω ごとの最小の二乗和（a は ω ごとに最良）</figcaption>
+      <div className="ex-canvas" ref={ref}>
+        <svg className="ex-svg" viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+          <rect className="ex-ground" height={viewport.height} width={viewport.width} />
+          <g className="ex-axes">
+            {[1, 2, 3, 4, 5].map((w) => (
+              <g key={`w${w}`}>
+                <line x1={scale.px(w)} x2={scale.px(w)} y1={0} y2={viewport.height} />
+                <text textAnchor="middle" x={scale.px(w)} y={viewport.height - 6}>{w}</text>
+              </g>
+            ))}
+            {[0, 5, 10].map((v) => (
+              <g key={`v${v}`}>
+                <line x1={0} x2={viewport.width} y1={scale.py(v)} y2={scale.py(v)} />
+                <text x={6} y={scale.py(v) - 4}>{v}</text>
+              </g>
+            ))}
+            <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>周波数 ω</text>
+          </g>
+          <path className="nls-profile-line" d={polylinePath(PROFILE_SAMPLES, scale)} fill="none" />
+          {PROFILE_VALLEYS.map((valley) => (
+            <circle className="nls-profile-valley" cx={scale.px(valley.w)} cy={scale.py(valley.sse)} key={valley.w} r={4} />
+          ))}
+          <text className="nls-profile-label" x={scale.px(GLOBAL_MINIMUM.w) + 10} y={Math.min(scale.py(GLOBAL_MINIMUM.sse) - 14, viewport.height - 30)}>最良 {fmt(GLOBAL_MINIMUM.sse, 2)}</text>
+          <line className="nls-profile-start" x1={scale.px(start.w)} x2={scale.px(start.w)} y1={0} y2={viewport.height - 24} />
+          <circle className="ex-observation" cx={scale.px(start.w)} cy={scale.py(startY)} r={6} />
+          {headInView && <circle className="ex-head" cx={scale.px(head.w)} cy={scale.py(profileSse(head.w))} r={7} />}
+        </svg>
+      </div>
+      <p className="ex-hint">
+        各 ω で振幅 a を線形最小二乗で決めたときの二乗和です。縦線と黒い点が始点の ω（いま {fmt(start.w)}、値 {fmt(startY, 2)}）で、「周波数 ω（始点）」を動かすと谷の間を移ります。小さな丸が5つの谷の底で、深いのは ω=2.00 の一つだけです。{descending ? "橙の丸は下っている途中の ω です。" : ""}
+      </p>
+    </figure>
+  );
+}
+
+const BAR_CEILING = 1.5;
+
+function barPercent(value: number, level: number): number {
+  return Math.max(0, Math.min(100, (value / (level * BAR_CEILING)) * 100));
+}
+
+/** The bowl's promise against the real landscape for the step in progress, drawn as three bars. */
+function StepPanel({ reading }: { reading: StepReading }) {
+  const worse = reading.actual > reading.startSse;
+  const done = reading.fraction >= 1;
+  const rows: Array<{ key: string; label: string; value: number; className: string }> = [
+    { key: "start", label: "出発点の二乗和", value: reading.startSse, className: "nls-bar-start" },
+    { key: "predicted", label: "お椀の予測", value: reading.predicted, className: "nls-bar-predicted" },
+    { key: "actual", label: "実際の二乗和", value: reading.actual, className: worse ? "nls-bar-actual nls-bar-worse" : "nls-bar-actual" },
+  ];
+  const marker = barPercent(reading.startSse, reading.startSse);
+  return (
+    <section aria-label="1手の予測と実際" className="ex-panel nls-step">
+      <p className="ex-panel-title">{reading.index + 1}手目：お椀の予測と、実際の二乗和</p>
+      <div className="nls-bars">
+        {rows.map((row) => {
+          const clipped = row.value > reading.startSse * BAR_CEILING;
+          return (
+            <div className="nls-bar-row" key={row.key}>
+              <span className="nls-bar-label">{row.label}</span>
+              <span aria-hidden="true" className="nls-bar-track">
+                <span className={`nls-bar ${row.className}${clipped ? " nls-bar-clipped" : ""}`} style={{ width: `${barPercent(row.value, reading.startSse)}%` }} />
+                {clipped && <span className="nls-bar-overflow">▶ {fmt(row.value, 1)}</span>}
+                <span className="nls-bar-mark" style={{ left: `${marker}%` }} />
+              </span>
+              <span className="nls-bar-value">{fmt(row.value, 3)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <p className={`ex-verdict ${!done ? "ex-tone-swing" : reading.overshoot ? "ex-tone-bad" : "ex-tone-good"}`}>
+        {stepSentence(reading, done)}
+      </p>
+    </section>
+  );
+}
+
+function stepSentence(reading: StepReading, done: boolean): string {
+  if (!done) return "ω と a がお椀の底へ向かって動いています。お椀の予測は下がり続けますが、実際の二乗和がついてくるかは別です。";
+  const promised = `お椀は ${fmt(reading.predictedDecrease, 3)} 減ると予測しました。`;
+  if (reading.overshoot) return `${promised}実際は ${fmt(-reading.actualDecrease, 3)} 増えました。`;
+  const ratio = reading.predictedDecrease > 0 ? reading.actualDecrease / reading.predictedDecrease : 1;
+  if (ratio >= 0.95) return `${promised}実際は ${fmt(reading.actualDecrease, 3)} 減り、予測とほぼ重なりました。`;
+  return `${promised}実際に減ったのは ${fmt(reading.actualDecrease, 3)} で、予測の ${fmt(ratio * 100, 0)}% でした。`;
+}
+
 interface ContourPanelProps {
+  /** Where the bowl is built: the start of the step in progress. */
+  anchor: Params;
   start: Params;
   head: Params;
   run: Descent;
@@ -271,7 +438,7 @@ interface ContourPanelProps {
   onMove(w: number, a: number): void;
 }
 
-function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPanelProps) {
+function ContourPanel({ anchor, start, head, run, descending, fixed, onMove }: ContourPanelProps) {
   const { ref, viewport } = useStageViewport(PARAM_BOUNDS, 0.8);
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -287,7 +454,7 @@ function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPa
     event.preventDefault();
     onMove(snap(start.w + delta[0]), snap(start.a + delta[1]));
   };
-  const bottom = bowlBottom(head);
+  const bottom = bowlBottom(anchor);
   const handleProps = fixed
     ? { className: "ex-handle is-fixed" }
     : {
@@ -313,10 +480,10 @@ function ContourPanel({ start, head, run, descending, fixed, onMove }: ContourPa
           <rect className="ex-ground" height={viewport.height} width={viewport.width} />
           <ParamAxes scale={scale} viewport={viewport} />
           <LandscapeContours scale={scale} />
-          <BowlContours head={head} scale={scale} />
+          <BowlContours head={anchor} scale={scale} />
           {bottom && inView(bottom) && (
             <g className="nls-bowl-bottom">
-              <line x1={scale.px(head.w)} x2={scale.px(bottom.w)} y1={scale.py(head.a)} y2={scale.py(bottom.a)} />
+              <line x1={scale.px(anchor.w)} x2={scale.px(bottom.w)} y1={scale.py(anchor.a)} y2={scale.py(bottom.a)} />
               <circle cx={scale.px(bottom.w)} cy={scale.py(bottom.a)} r={5} />
             </g>
           )}
@@ -380,7 +547,7 @@ function ParamAxes({ scale, viewport }: { scale: Scale; viewport: Viewport }) {
           <text x={6} y={scale.py(a) - 4}>{a}</text>
         </g>
       ))}
-      <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={viewport.height - 22}>周波数 ω</text>
+      <text className="ex-axis-name" textAnchor="end" x={viewport.width - 8} y={16}>周波数 ω</text>
       <text className="ex-axis-name" x={30} y={16}>振幅 a</text>
     </g>
   );
@@ -438,11 +605,13 @@ function Readout({ run, start, head, last, step, descending, finished }: Readout
   return (
     <>
       <section aria-label="反復の記録">
+        <p className="ex-panel-title">反復の記録</p>
         <table className="ex-table">
           <thead>
             <tr>
               <th scope="col">k</th><th scope="col">ω</th><th scope="col">a</th>
               <th scope="col">二乗和</th><th scope="col">お椀の予測</th>
+              {run.path.some((p) => p.lambda !== undefined) && <th scope="col">λ</th>}
             </tr>
           </thead>
           <tbody>
@@ -453,6 +622,7 @@ function Readout({ run, start, head, last, step, descending, finished }: Readout
                 <td>{fmt(p.a, 3)}</td>
                 <td>{fmt(p.sse, 3)}</td>
                 <td>{p.predicted === undefined ? "—" : fmt(p.predicted, 3)}</td>
+                {run.path.some((q) => q.lambda !== undefined) && <td>{p.lambda === undefined ? "—" : fmt(p.lambda, 3)}</td>}
               </tr>
             ))}
           </tbody>

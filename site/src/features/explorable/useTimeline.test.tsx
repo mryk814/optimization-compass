@@ -58,6 +58,27 @@ describe("useTimeline", () => {
     expect(result.current.playing).toBe(true);
   });
 
+  it("plays on to the next whole step and stops there", () => {
+    const frames = stubFrames();
+    const { result } = renderHook(() => useTimeline(5, 1));
+
+    act(() => result.current.seek(1));
+    act(() => result.current.playToNextStep());
+    expect(result.current.playing).toBe(true);
+    act(() => frames.shift()!(0));
+    act(() => frames.shift()!(500));
+    expect(result.current.position).toBeCloseTo(1.5);
+    expect(result.current.playing).toBe(true);
+    act(() => frames.shift()!(5_000));
+
+    expect(result.current.position).toBe(2);
+    expect(result.current.playing).toBe(false);
+    act(() => result.current.play());
+    act(() => frames.shift()!(6_000));
+    act(() => frames.shift()!(7_000));
+    expect(result.current.position).toBeCloseTo(3);
+  });
+
   it("steps and seeks within bounds", () => {
     const { result } = renderHook(() => useTimeline(3));
 

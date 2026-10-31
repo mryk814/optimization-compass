@@ -280,7 +280,7 @@ def test_review_scaffolds_write_only_to_separate_draft_directory(
     assert set(body["files_to_create"]) == expected_files
     assert {path.name for path in output.iterdir()} == expected_files
     readme = (output / "README.md").read_text(encoding="utf-8")
-    assert "docs/knowledge-change-checklist.md" in readme
+    assert "docs/adding-knowledge.md" in readme
     assert "site/public/data/**" in readme
     if json_file is not None and id_field is not None:
         payload = json.loads((output / json_file).read_text(encoding="utf-8"))

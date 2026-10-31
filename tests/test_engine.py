@@ -117,3 +117,61 @@ def test_canonical_unknown_remains_data(engine: RecommendationEngine) -> None:
     assert result.answered_question_count == 1
     assert [followup.question_id for followup in result.followups] == ["Q02"]
     assert [item.rule_id for item in result.trace] == ["R012"]
+
+
+@pytest.mark.parametrize(
+    ("certificate", "expected"),
+    [
+        ("first_order_residual;second_order_optional", False),
+        ("kkt_residual;primal_dual_residual", False),
+        ("training_gradient_or_loss_not_global_certificate", False),
+        ("pareto_stationarity_or_gap_method_specific", False),
+        ("none;posterior_uncertainty_not_certificate", False),
+        ("mip_gap;primal_bound;dual_bound", True),
+        ("duality_gap;primal_dual_residual", True),
+        ("fixed_point_residual;primal_dual_gap", True),
+        ("bound_or_unsat_proof_implementation_dependent", True),
+        ("sat_assignment_or_unsat_proof_by_solver", True),
+    ],
+)
+def test_certificate_tokens_match_whole_tokens(certificate: str, expected: bool) -> None:
+    row = {
+        "solution_scope": "local",
+        "optimality_certificate": certificate,
+        "exactness": "heuristic",
+    }
+    assert RecommendationEngine._supports_certificate(row) is expected
+
+
+def test_global_proof_requirement_excludes_local_quasi_newton(engine: RecommendationEngine) -> None:
+    # "dual" inside "first_order_residual" used to count BFGS as certificate-capable.
+    result = engine.recommend(
+        RecommendationRequest(
+            answers={
+                "Q01": ["continuous"],
+                "Q04": ["none"],
+                "Q05": ["analytic_gradient"],
+                "Q09": ["local_is_fine"],
+                "Q10": ["global_proof_required"],
+            }
+        )
+    )
+    assert {"M_BFGS", "M_LBFGS"} <= ids(result.excluded_methods)
+    assert not {"M_BFGS", "M_LBFGS"} & ids(result.first_choices + result.conditional_choices)
+
+
+def test_gap_request_demotes_kkt_residual_methods(engine: RecommendationEngine) -> None:
+    # "primal_dual_residual" is a stationarity measure, not an optimality gap.
+    result = engine.recommend(
+        RecommendationRequest(
+            answers={
+                "Q01": ["continuous"],
+                "Q04": ["nonlinear"],
+                "Q05": ["analytic_gradient"],
+                "Q10": ["gap_desired"],
+            }
+        )
+    )
+    candidates = result.first_choices + result.conditional_choices
+    sqp = next(item for item in candidates if item.entity_id == "M_SQP")
+    assert any("最適性gap" in warning for warning in sqp.warnings)

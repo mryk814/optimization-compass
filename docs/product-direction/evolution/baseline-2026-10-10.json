@@ -1,0 +1,85 @@
+{
+  "baseline_contract_version": "1.0",
+  "issue": "OC-EVOL-001",
+  "observed_on": "2026-10-10",
+  "repository": {
+    "head": "d4847aa9e8f35b5d48c0d684222d148b6ddaeae1",
+    "head_note": "origin/main と同一。ハンドオフ記載の基準 3099b88 の後に PR297 の merge commit d4847aa が乗った状態。",
+    "dataset_version": "0.18.20",
+    "uncommitted_changes": []
+  },
+  "existing_work": {
+    "PR297": {
+      "title": "記事ごとの品質台帳（article quality ledger）",
+      "state": "merged_to_main",
+      "observation": "main の d4847aa に merge commit として取り込み済み（GitHub上のPR状態はclosed）。article_quality_criteria.json / article_quality_ledger.json / article_quality.py が main に存在する。",
+      "reuse": "OC-EVOL-003 の lesson 軸はこの台帳の記事状態（達成・要修正・要レビュー、stale）を読む。別の品質正本は作らない。"
+    },
+    "PR298": {
+      "title": "主単体法：パン屋のLPでピボットを自分で選ぶ操作図と記事の書き直し",
+      "state": "open",
+      "base": "d4847aa",
+      "observation": "content/methods/primal-simplex.md、explorable（SimplexPivot、math/simplex.ts）、article_quality_ledger.json、site/public/data/* を変更。",
+      "reuse": "OC-EVOL-011 はこの操作図の拡張として扱い、同等の単体法図を新設しない。OC-EVOL-001〜003 は PR298 の変更ファイルに触れない（生成物 coverage.json は各PRで最新mainから再生成する）。"
+    }
+  },
+  "canonical_counts_observed": {
+    "methods": 105,
+    "method_hierarchy": 88,
+    "problem_archetypes": 57,
+    "problem_definitions": 22,
+    "implementations": 65,
+    "sources": 110,
+    "glossary": 84,
+    "terminology_aliases": 37,
+    "failure_modes": 42,
+    "decision_rules": 78,
+    "evidence_links": 4193,
+    "example_cases": 29
+  },
+  "canonical_counts_note": "種類の異なる行数。相互に割り算しない。methods 105 には family 行（MF_*）を含む。",
+  "content_observed": {
+    "published_articles": 144,
+    "by_kind": {
+      "method": 106,
+      "concept": 38
+    },
+    "quality_ledger_status": {
+      "達成": 3,
+      "要修正": 104,
+      "要レビュー": 37
+    },
+    "reviewed_articles": 5
+  },
+  "scope_candidates": {
+    "scope_version": "compass-reference-2026-10-draft1",
+    "knowledge_topics": 160,
+    "problem_structure_topics": 80,
+    "audit_mapping_candidate_counts": {
+      "auto_exact_candidate": 61,
+      "ambiguous": 0,
+      "needs_semantic_review": 99
+    },
+    "status": "candidate_only",
+    "note": "auto_exact_candidate は名前の正規化一致による候補で、意味レビュー前。needs_semantic_review は未照合であって未収録の確定ではない。approved coverage は算出していない（OC-EVOL-002で照合）。"
+  },
+  "artifact_hashes_before_and_after_audit": {
+    "src/optimization_compass/resources/knowledge.sqlite": "706ca023ce2256d772ff9ece6f7ac15b1bf6fadb1a7504406619795efb546775",
+    "site/public/data/coverage.json": "729fd5525e3321e251c7c25791e8a67d7d874d87be44fd020a1f813d4844ba0a",
+    "site/public/data/manifest.json": "aff2ddddf39a4acf8912fc3a91c87a4b459fcc67f67c446bfbca716a8dd3530b",
+    "data/seeds/article_quality_ledger.json": "7910e660ffc94ef413e1d2edae0748f92394ad8db3bd997bb68cff8a196d9cb4",
+    "data/seeds/formulation_atlas.json": "34d9b0250c288d49073554c608283f2ba82fb8e107e5971c91879657829a8e5d",
+    "data/seeds/learning_paths.json": "b1be4e050703b7965fa9ddc9cd8a12a3161647ba2509261f89a4de428467d73c",
+    "src/optimization_compass/resources/explorables.json": "623ebbd04c6f1df35d019b6d2d9bd2675eb9b4c5355e41a5a53a0c4ad948042a"
+  },
+  "audit_side_effects": {
+    "executed_repository_code": false,
+    "network_used": false,
+    "modified_repository": false,
+    "hash_check": "監査前後で knowledge.sqlite のハッシュが一致（sha256sum -c）。"
+  },
+  "inferred_not_observed": [
+    "PR297/298 本文にある試験成功は作者の申告であり、この監査では再実行していない。",
+    "ブラウザでの画面確認・全テスト・site build はこの票の範囲外で、実行していない。"
+  ]
+}

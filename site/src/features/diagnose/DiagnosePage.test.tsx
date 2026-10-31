@@ -207,6 +207,7 @@ describe("DiagnosePage", () => {
     expect(screen.getByRole("progressbar", { name: "診断の回答進捗" })).toHaveAttribute("value", "1");
   });
 
+  // Renders the full result page with every band; ~3 s locally, so the 5 s default times out on loaded CI runners.
   test("renders all result bands, implementations, problems, follow-ups, trace, and safe sources", async () => {
     const answers = {
       Q01: ["binary"], Q02: ["explicit_algebraic"], Q03: ["linear"],
@@ -247,7 +248,7 @@ describe("DiagnosePage", () => {
     const selectedNodeId = decodeAtlasState(tokenFromLocation(), catalog()).state.selectedNodeId;
     const selected = rawView.nodes.find((node) => node.node_id === selectedNodeId);
     expect(selected?.related_entities).toContainEqual({ entity_type: "method", entity_id: methodId });
-  });
+  }, 20_000);
 
   test("preserves the token when navigating to Map", async () => {
     renderDiagnose("/diagnose?keep=1&tag=a&tag=b");

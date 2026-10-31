@@ -21,7 +21,17 @@ def test_health_report_keeps_chk010_unknowns_as_stale_candidates(
         if candidate.entity_type == "implementation"
     ]
     assert report.structural_errors == []
-    assert len(implementation_candidates) == 25
+    unresolved_implementations = {
+        row["implementation_id"]
+        for row in repository.fetch_all("SELECT * FROM implementations")
+        if any(
+            str(row[field] or "unknown") == "unknown"
+            for field in ("last_release", "maintenance_status", "license")
+        )
+    }
+    assert unresolved_implementations
+    assert {item.entity_id for item in implementation_candidates} == unresolved_implementations
+    assert len(implementation_candidates) == len(unresolved_implementations)
     assert all("last_release" in candidate.stale_fields for candidate in implementation_candidates)
 
 
@@ -56,5 +66,7 @@ def test_transient_network_result_is_not_reported_as_broken(
     report = build_source_health_report(
         repository, as_of=date(2026, 7, 15), check_network=True, checker=checker
     )
-    assert len(report.links) == 110
+    source_ids = [row["source_id"] for row in repository.fetch_all("SELECT source_id FROM sources")]
+    assert source_ids
+    assert sorted(item.source_id for item in report.links) == sorted(source_ids)
     assert {item.status for item in report.links} == {"transient"}

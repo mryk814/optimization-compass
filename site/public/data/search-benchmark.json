@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.19",
+  "dataset_version": "0.18.25",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -35,11 +35,11 @@
       "intents": [],
       "query": "BO",
       "query_id": "alias-bo",
-      "result_count": 3,
+      "result_count": 6,
       "top_document_ids": [
         "method:M_BAYESIAN_OPT_GP",
-        "method:M_SMAC_RF",
-        "method:M_TURBO_SAASBO"
+        "method:M_CONSTRAINED_BO",
+        "method:M_PAREGO"
       ]
     },
     {
@@ -53,11 +53,11 @@
       "intents": [],
       "query": "CP-SAT 論理制約",
       "query_id": "mixed-cp-sat",
-      "result_count": 46,
+      "result_count": 57,
       "top_document_ids": [
         "method:M_CP_SAT",
-        "method:MF_CONSTRAINT_PROGRAMMING",
-        "method:M_CP_SEARCH"
+        "method:M_CONSTRAINED_BO",
+        "method:MF_CONSTRAINT_PROGRAMMING"
       ]
     },
     {
@@ -72,7 +72,7 @@
       "intents": [],
       "query": "配送順を決めたい",
       "query_id": "routing-natural-language",
-      "result_count": 9,
+      "result_count": 12,
       "top_document_ids": [
         "case:EC019",
         "problem:PA031",
@@ -93,11 +93,11 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 63,
+      "result_count": 83,
       "top_document_ids": [
         "case:hyperparameter-search",
-        "method:MF_STOCHASTIC_ML",
-        "method:M_GRADIENT_DESCENT"
+        "method:M_NATURAL_GRADIENT",
+        "method:M_SVRG"
       ]
     },
     {
@@ -111,11 +111,11 @@
       "intents": [],
       "query": "制約違反しない連続最適化",
       "query_id": "constrained-continuous",
-      "result_count": 62,
+      "result_count": 79,
       "top_document_ids": [
+        "method:M_CONSTRAINED_BO",
         "method:MF_SMOOTH_LOCAL",
-        "method:MF_CONSTRAINED_NLP",
-        "method:MF_CONSTRAINT_PROGRAMMING"
+        "method:MF_CONSTRAINED_NLP"
       ]
     },
     {
@@ -130,7 +130,7 @@
       "intents": [],
       "query": "凸性とは",
       "query_id": "convexity-concept",
-      "result_count": 15,
+      "result_count": 14,
       "top_document_ids": [
         "content:concept.convexity",
         "glossary:G021",
@@ -167,11 +167,11 @@
       "intents": [],
       "query": "細長い谷 一次法 比較",
       "query_id": "visual-comparison",
-      "result_count": 14,
+      "result_count": 24,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
         "trace:topology-optimization-field-evolution",
-        "comparison:COMPARE_PARETO_PREFERENCE"
+        "comparison:COMPARE_ENERGY_NOMINAL_CVAR_8_4"
       ]
     },
     {
@@ -185,7 +185,7 @@
       "intents": [],
       "query": "SciPy Optimization documentation",
       "query_id": "evidence-source",
-      "result_count": 76,
+      "result_count": 101,
       "top_document_ids": [
         "source:S001",
         "source:S082",

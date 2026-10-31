@@ -20,7 +20,7 @@ def test_ec019_has_a_complete_time_window_routing_teaching_instance() -> None:
     ast.parse(case["python_example"])
     assert "RoutingIndexManager(5, 1, 0)" in case["python_example"]
     assert "time_windows" in case["python_example"]
-    assert "hard constraint" in case["objective"]
+    assert "必ず守る制約" in case["objective"]
     assert "最適性は未証明" in case["practical_notes"]
-    assert "1000 stop" in case["limitations"][0]
+    assert "1000訪問先" in case["limitations"][0]
     assert "大域最適性を保証せず" in case["limitations"][1]

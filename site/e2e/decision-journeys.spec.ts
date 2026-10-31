@@ -108,8 +108,8 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
 
   await page.goBack();
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
-  await page.getByRole("region", { name: "候補・条件付き・除外を理由で分ける" }).locator("details").filter({ hasText: /^条件付き/u }).locator("summary").click();
-  await page.getByRole("link", { name: "Nelder–Mead単体法" }).click();
+  await page.getByRole("tab", { name: /Nelder–Mead単体法/u }).click();
+  await page.getByRole("tabpanel").getByRole("link", { name: "Nelder–Mead単体法" }).click();
   await expect(page).toHaveURL(/#\/methods\/M_NELDER_MEAD\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: /Nelder[–-]Mead/u })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toHaveCount(0);
@@ -119,15 +119,15 @@ test("canonical Gallery caseで候補・条件付き・除外理由を区別で�
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC013");
 
   await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形モデルのパラメータを推定する" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "候補・条件付き・除外を理由で分ける" })).toBeVisible();
-  const dispositions = page.getByRole("region", { name: "候補・条件付き・除外を理由で分ける" });
-  await expect(dispositions.getByText("候補", { exact: true })).toBeVisible();
-  await expect(dispositions.getByText("条件付き", { exact: true })).toBeVisible();
-  await dispositions.locator("details").filter({ hasText: /^条件付き/u }).locator("summary").click();
-  await expect(page.getByText(/初期値が十分よく/u)).toBeVisible();
-  await expect(dispositions.getByText("避ける", { exact: true })).toBeVisible();
-  await dispositions.locator("details").filter({ hasText: /^避ける/u }).locator("summary").click();
-  await expect(page.getByText(/残差とJacobianの構造を捨て/u)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "この問題の署名を、手法ごとの目で読む" })).toBeVisible();
+  const tabs = page.getByRole("tablist", { name: "どの手法の目で見るか" });
+  await expect(tabs.getByText("候補", { exact: true })).toBeVisible();
+  await expect(tabs.getByText("条件付き", { exact: true }).first()).toBeVisible();
+  await expect(tabs.getByText("除外", { exact: true })).toBeVisible();
+  await tabs.getByRole("tab").filter({ hasText: /^条件付き/u }).first().click();
+  await expect(page.getByRole("tabpanel").getByText(/初期値が十分よく/u)).toBeVisible();
+  await tabs.getByRole("tab").filter({ hasText: /^除外/u }).click();
+  await expect(page.getByRole("tabpanel").getByText(/残差とJacobianの構造を捨て/u)).toBeVisible();
   await expect(page.locator("pre code")).toContainText("least_squares");
 
   await page.getByRole("link", { name: "この特徴で診断する" }).click();
@@ -180,7 +180,7 @@ test("制約付きsliceで可行性とunconstrained failureを比較できる", 
 test("Pareto sliceでpreferenceに応じた点をkeyboardで選べる", { tag: "@critical" }, async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC");
 
-  await expect(page.getByRole("heading", { level: 1, name: "単一bestではなくPareto frontを読む" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "最良の1点ではなくパレート前線を読む" })).toBeVisible();
   await expect(page.getByText("パレート前線 (pareto_front) · 1.1.0")).toBeVisible();
   await expect(page.getByText(/単一の最良解ではありません/u)).toBeVisible();
   await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
@@ -215,7 +215,7 @@ test("制約付きCaseをprimary Theater、failure、CompareからCaseへ完走�
   await expect(page.getByRole("heading", { level: 1, name: "実行可能領域と制約を無視した失敗を比べる" })).toBeVisible();
 
   await page.getByRole("link", { name: "Compareへ: COMPARE_CONSTRAINED_FAILURE" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "制約を守る実行と無視する実行を比べる" })).toBeVisible();
   await page.getByRole("link", { name: /ケース: 強度制約/u }).click();
   await expect(page).toHaveURL(/#\/gallery\/constrained-design\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
@@ -238,11 +238,11 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
     /#\/theater\/search-tree\/binary-knapsack-bnb-complete\?state=/u,
   );
   await expect(
-    page.getByRole("heading", { level: 1, name: "0-1 knapsack: 最適性証明" }),
+    page.getByRole("heading", { level: 1, name: "0-1ナップサック: 最適性の証明" }),
   ).toBeVisible();
 
   const alternate = page.getByRole("link", {
-    name: "別のシナリオ: 0-1 knapsack: node予算で停止",
+    name: "別のシナリオ: 0-1ナップサック: ノード数の予算で停止",
   });
   await expect(alternate).toBeVisible();
   await page.waitForLoadState("networkidle");
@@ -252,7 +252,7 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
     /#\/theater\/search-tree\/binary-knapsack-bnb-budget\?state=/u,
   );
   await expect(
-    page.getByRole("heading", { level: 1, name: "0-1 knapsack: node予算で停止" }),
+    page.getByRole("heading", { level: 1, name: "0-1ナップサック: ノード数の予算で停止" }),
   ).toBeVisible();
 
   const compare = page.getByRole("link", {
@@ -268,20 +268,20 @@ test("離散配分Caseを最適性証明、予算停止、CompareからCaseへ�
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "探索完了とnode予算停止を同じ上限で比べる",
+      name: "探索完了とノード予算停止を同じ上限で比べる",
     }),
   ).toBeVisible();
 
   await page.getByLabel("評価回数位置").fill("9");
 
-  const proof = page.getByLabel("9 node以内で証明完了の同期指標");
+  const proof = page.getByLabel("9ノード以内で証明完了の同期指標");
   await expect(metricValue(proof, "Terminal status")).toHaveText("最適性証明済み");
   await expect(metricValue(proof, "最良値")).toHaveText("15");
   await expect(metricValue(proof, "Global bound")).toHaveText("15.00");
   await expect(metricValue(proof, "Absolute gap")).toHaveText("0.00");
   await expect(page.getByText("最適性を証明 · evaluation 9")).toBeVisible();
 
-  const stopped = page.getByLabel("4 nodeで予算停止の同期指標");
+  const stopped = page.getByLabel("4ノードで予算停止の同期指標");
   await expect(metricValue(stopped, "Terminal status")).toHaveText("予算停止・未証明");
   await expect(metricValue(stopped, "最良値")).toHaveText("13");
   await expect(metricValue(stopped, "Global bound")).toHaveText("15.00");
@@ -306,16 +306,16 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
 
   await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · TRF適用条件" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通の診断例 · TRFの適用条件" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: /指標の履歴/u })).toBeVisible();
   await expect(page.getByRole("img", { name: /残差.*評価回数ごとに比較/u })).toBeVisible();
 
-  await page.getByRole("link", { name: /別のシナリオ: 共通診断probe · 悪い初期値/u }).click();
+  await page.getByRole("link", { name: /別のシナリオ: 共通の診断例 · 悪い初期値/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf-poor-init\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · 悪い初期値" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通の診断例 · 悪い初期値" })).toBeVisible();
   await page.getByRole("link", { name: "Compareへ: COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS" }).click();
 
-  await expect(page.getByRole("heading", { level: 1, name: "非線形fitでsolver条件を比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "非線形の当てはめでソルバーの適用条件を比べる" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: /指標の履歴/u })).toBeVisible();
   await expect(page.getByLabel("指標の履歴").getByRole("img", { name: /評価回数ごとに比較/u })).toHaveCount(3);
   await expect(page.getByText(/3本とも1つのsolver非依存診断probe/u)).toBeVisible();
@@ -334,17 +334,17 @@ test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ�
   await expect(page.getByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Case journey breadcrumb" }).getByRole("link", { name: "Case", exact: true })).toHaveAttribute("href", /#\/gallery\/hyperparameter-search\?state=/u);
 
-  await page.getByRole("link", { name: /別のシナリオ: 高価な1次元black-box: explore \/ small_noise/u }).click();
+  await page.getByRole("link", { name: /別のシナリオ: 高価な1次元ブラックボックス: 探索寄り \/ 小さいノイズ/u }).click();
   await expect(page).toHaveURL(/#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE\?state=/u);
   await expect(page.getByLabel("観測ノイズ")).toHaveValue("small_noise");
   await page.getByRole("link", { name: "Compareへ: COMPARE_BO_ACQUISITION_NOISE_BASELINE" }).click();
 
-  await expect(page.getByRole("heading", { level: 1, name: "acquisition・noise・random baselineを同じbudgetで読む" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "獲得関数・ノイズ・ランダム探索の基準を同じ評価予算で読む" })).toBeVisible();
   const evaluation = page.getByRole("slider", { name: "BO比較のevaluation" });
   await evaluation.press("End");
   await expect(page.getByText("Oracle evaluations: 10/10")).toBeVisible();
   await expect(page.getByText(/一般的な優劣や因果効果は推論できません/u)).toBeVisible();
-  const primaryTheater = page.getByRole("link", { name: "Theater: 高価な1次元black-box: explore / noiseless" });
+  const primaryTheater = page.getByRole("link", { name: "Theater: 高価な1次元ブラックボックス: 探索寄り / ノイズなし" });
   await expect(primaryTheater).toHaveAttribute(
     "href",
     /#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_NOISELESS\?state=/u,

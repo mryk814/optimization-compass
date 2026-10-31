@@ -1,0 +1,1144 @@
+{
+  "contract_version": "1.0.0",
+  "reviews": {
+    "adam": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "5af80116bf1a",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "bayesian-optimization": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "0551f92707a8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "waivers": {
+        "figure.checks-after": "読者に先に選ばせる型。図の後の観察は「なぜ、その場所を選びましたか」以下の小見出しで追う"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "branch-and-bound": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "9a1b47cfaa3b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "concept.assignment-matching": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "88f774cd25ef",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値・双対・完全単模を再計算し一致。0.5の個数、完全単模の説明、出典のない主張（SciPyの内部法、blossom）、図の①②③の重複を修正。1280/375/320pxでページの横はみ出しなし、数式は枠内スクロール。"
+    },
+    "concept.bilevel-optimization": {
+      "reviewed_on": "2026-10-14",
+      "reviewer": "claude",
+      "body_sha256": "06e3224c4f1e",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。楽観的・悲観的の違いで変わるのは最適値と最大化する価格の存在であると修正し、内側の打ち切りの主張をこの初期値と刻みに限定。S168〜S170に帰する主張がsupported_claimの範囲内であることを確認。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.bound-constrained-smooth": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "a1dade67f352",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算して一致。記号表の長いインライン式を成分ごとに分割。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.closed-form-candidate": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "e13bfcb3c9df",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "執筆者とは別の担当による数値再実行と本文照合。1280/375/320pxで初期画面・図・数式・表を目視し、目次開閉を確認。証拠: output/playwright/handoff-01825/PA001-*.png（root worktree）。"
+    },
+    "concept.complementarity-problem": {
+      "reviewed_on": "2026-10-14",
+      "reviewer": "claude",
+      "body_sha256": "517b39d6d6cd",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。Lemke法がMによっては解に着かずに止まることを明記、記号表と導入の行列を数式ブロックへ。図の直線（w₁=0、w₂=0）と交点(1/6, 2/3)を手計算で照合。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.convex-quadratic-program": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "53964cc1a2f6",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "concept.convexity": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "d46b5faed399",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "concept.design-of-experiments": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "bfc6078a464d",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: det M（32・16.06・0.131・0）、効率、予測のばらつきの最大（0.50・0.82・25.1）、β2のばらつき、6回の点でのd(x_i)の合計が3、直線のdet 36と24、190℃に回した配置の効率0.936、Frank–Wolfeの厳密な幅と双対ギャップ（10・100・1000回で0.407・0.0558・0.0059）、6回の厳密な最適配置を再計算し一致。重みで測るd_wと6回のdの区別、幅の式の導出、同値定理の明記、効率をdet基準の回数比に限定、SDPの言い回し、中央付近の予測の説明、両端だけで決まらない理由、tr M^-1 の基準、知られている配置の条件を修正。1280/375/320pxで横はみ出し・数式エラーなし。"
+    },
+    "concept.discontinuous-simulation": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "f8daf13c0b08",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。MADSの保証を条件つきの局所的な停留点に限定、図鑑名「不連続決定論black-box」を明記、BOの行を条件つきに。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.distributed-consensus": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "4795a41e4411",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント2件）: 病院ごとの底0.441・1.224・0.732、合計の底0.740、平均0.799・患者の数の重み0.819・曲率の重み0.752、ρごとの回数（116〜270）、ρ=2の表、u_iの平均が0のまま、中央の勾配5回・Newton3回・係数0.3の往復を再計算し一致。底の言い回し、罰則係数の用語、止める条件の明記、凸性による収束と実際の止め方、二乗損失なら曲率の重みで一致すること、ADMMを使う理由、劣勾配法へのリンク、図②の拡大と白抜きの点を修正。1280/375/320pxで横はみ出し・数式エラーなし。 再記録: 30秒でつかむの見出しの語を playbook の『良くしたいもの』へ戻した（内容は変更なし）。"
+    },
+    "concept.eigenvalue-problem": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "56bc1686b555",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 閉じた式・固定成分の傾き1/2.5・べき乗法の比を再計算し一致。n=(1,0)の直線の向き、最小と停留の区別、大きな行列の行き先（Lanczos）、Wahbaの書き方、S054の帰属を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.expensive-black-box": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "1d3964f5fee8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetが執筆（既存の操作図bayes-opt-acquisitionを主図に、1次元の油田の例・予算8回で一本化。確かめ項目はページを操作して照合）。Sonnetの一次レビュー（数値19件中18件一致、0.3325は再現不能。example.computed・reading.formula-sentence・pitfalls・compare.no-rankingがfail）をClaudeが照合して修正：再現できない0.3325を削除、F(x)とa=μ−2σの読みを追加、出典のない一般論をこの例の数字（1世代8点なら予算8回で1世代）に置換、directの評価回数超過をSciPyに限定、事例の予算の数え方を統一。320pxで長いインライン式がページを359pxに広げていたので式を分割し、ページ幅320を確認"
+    },
+    "concept.external-solver-objective": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "35cbb724ced8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.failed-simulation": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "28193d1cee00",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー: コードと数値を再実行して本文と一致を確認。時間切れの説明で1回の打ち切り時間と予算の混同を直し、P=0.05の同点（評価2・4・7）と評価順での解消を明記。「課題から定式化する」の末尾に、EC027の評価契約の書き出しへの導線を追加し、ボタン名・欄名を実画面で照合。1280/375/320pxでページの横はみ出しなし、標準形の式はmath-blockの横スクロール内、操作図は320pxで枠内。"
+    },
+    "concept.general-nonsmooth-local": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "baa7e9b9156e",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "執筆者以外のレビューでClarke微分の解析式・全方向非負の証明・MADS方向条件を照合し、数値実行と図テスト27件の証拠を確認。有限方向検査を停留証明と区別。壊れた表を復元、課題4要素を追加。1280/375/320pxで本文・図・式・各数値表を目視、目次開閉を確認。表内MathMLの共通修正はPA002の回帰検証と同じ。証拠: root output/playwright/handoff-01825/PA011-*.png。"
+    },
+    "concept.high-dimensional-black-box": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "0391899674eb",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当によるPython出力再現と本文照合。格子が予算内の次元、勾配回数と評価数、noiseの題材内の例を修正。固定章構成へ整理し数値表を分割・数式化。1280/375/320pxで本文・図・数式・全数値表を目視し、1275や10が途中改行されないことと目次開閉を確認。共有MathML修正はPA002の回帰検証と同一。証拠: root output/playwright/handoff-01825/PA015-*.png。"
+    },
+    "concept.high-dimensional-smooth-unconstrained": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "9317fe101bdd",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当の保証・停止条件・費用レビューと掲載Python照合。図はraw軌跡から各桁の基準への初回到達回数へ変更し、表示範囲をcaptionに明記。境界/計算値/摂動のfocused3件、ruff両方、report drift確認。1280/375/320pxで新図・本文・数値表を目視。証拠: root output/playwright/handoff-01825/PA007-*.png。Linuxの図一致は次CIで最終確認。"
+    },
+    "concept.hyperparameter-optimization": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "eb58c010498b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "数値は final.py を再実行して一致を確認。1280/375/320px で横のはみ出し0、図の色は共通トークン（更新=橙、観測=緑、構造=紺）。"
+    },
+    "concept.inverse-problem": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "692f5690886b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.knapsack-set-cover": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "aa4abb83dfb5",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Haikuが執筆（既存の操作図branch-bound-proofを主図に埋め込み）、Sonnetが一次レビュー（数値を再計算、pitfalls・observation-to-formula・ui-names・prose.readableがfail）。Claudeが実画面をPlaywrightで操作して確かめ項目を照合し（開始後に選択中の候補のボタンを5回押すと上限13で証明完了、表示は「残る得点の上限」「Aあり／Aなし」）、UI名・観察から式への問い・つまずき3項目の数値（B=4.5の丸め、≥8で4品すべて23、覆えない地区でstatus 2）・重複した出力ブロックを直した。1280/375/320pxで図の重なり・はみ出し0"
+    },
+    "concept.l1-sparse-regularization": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "624db9f41e12",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.linear-least-squares": {
+      "reviewed_on": "2026-10-03",
+      "reviewer": "owner",
+      "body_sha256": "c5cdbf494cad",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "playbookで見本として確定した版。基準ごとに判定したものではなく、見本としての承認を全基準のpassとして記録"
+    },
+    "concept.linear-program": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "f2d32d32dc8b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetの一次レビュー（全項目pass、数値15件を再計算で一致）をClaudeが本文と照合。指摘の文9件（凸と大域解の主語、等式制約の書き換え、頂点に現れる理由、非有界の断定、クロスオーバー、双対値の単位など）を直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.linear-system": {
+      "reviewed_on": "2026-10-15",
+      "reviewer": "codex",
+      "body_sha256": "6a5f49b0b877",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "別担当の独立レビューとPython出力照合。単位変換と物理量変更、conductance用語を修正。S173は公式目次と公開要旨の確認範囲で採用。1280/375/320pxで本文・回路図・数式表を目視し、横スクロールと目次を確認。共有数式表の重なりは回帰E2Eの失敗→修正後通過、他記事の見た目3件とbuildも通過。証拠: root output/playwright/handoff-01825/PA002-*.png。"
+    },
+    "concept.mixed-integer-linear-program": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "b55eff7f56af",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetが新しい操作図milp-integer-latticeと記事の直しを執筆。Claudeが確かめ項目4の誤り（係数が整数なので上界19.75から整数解は19以下と分かり、(3,1)の最適性は言える）を記事と図の判定文で直した。Sonnetの一次レビュー（7項目fail）を受けてClaudeが書き直し（例を冒頭で明示、標準形の前の一文、例の数値によるつまずき3項目＝big-M 18.75/20.91/17・時間切れ19と21・丸め26と7、困りごと起点の次に読む、根拠のない性能の主張の削除）、Sonnetの再レビューの指摘（SAT/スケジューリングのリンク、文5件）も直した。数値は全件scipyで再計算一致。1280/375/320pxで図の重なり・はみ出し0"
+    },
+    "concept.mixed-integer-nonlinear-program": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "577a6d0381e4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。行列の改行の欠落を修正、x=nqの形の凸性をヘッセ行列（行列式0・対角非負）で示した、意味の通らない一文と長いインライン式を修正。1280/375/320pxで横のはみ出しなし、数式の表示崩れなし、図はスマホ幅で目視。"
+    },
+    "concept.mixed-integer-quadratic-program": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "30cca463efac",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "10個の可行な部分集合と最適ADE 120.75をtrust-constrで独立に再計算して一致。1280/375/320pxで確認。"
+    },
+    "concept.model-predictive-control": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "b9888737fbd6",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.network-flow": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "8a2e5cbc4809",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。完全単模性を十分条件として書き直し、満杯の辺の被約費用を0以下に、逐次最短路と矛盾する一文を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.neural-network-training": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "91c02540a43f",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。停留点へ近づく条件（下界と勾配のLipschitz連続）を明記し、L-BFGSの記述と保証の範囲を限定。更新式のインライン式を分割し、標準形の説明を式の外へ移して375pxのはみ出し（428px）を解消。図はスマホ幅で目視。"
+    },
+    "concept.noisy-black-box": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "c644b6904942",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。2000回の表でk=4が良い理由（中点が真の最小に近い）と非推奨を明記、条件のない助言を条件つきに、節の参照を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.nonconvex-qp-qcqp": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "a83b1bd65757",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）+ 統合時の検算: 数値は一致。盆地の境界を格子の分類に限定、長いインライン式を数式ブロックへ。レビューが誤って書き換えた鞍点の説明を、直線x₁+x₂=1上から出発すると鞍点へ近づく（(0,1)から500回で(0.5,0.5)）という計算に合わせて修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.nonlinear-least-squares": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "2a5c4a153613",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "concept.nonsmooth-convex-composite": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "178e3f891fdb",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値を再計算して一致。FISTAの説明をO(1/k²)と非単調に修正、要約に刻み幅の条件を追加、式の後の読み方を補足。図の円が枠からはみ出し下の説明が切れていたのを修正（軸範囲と高さ）。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.online-optimization": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "1ed61e12b4f8",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント2件）: 交互10日の合計14.5・15.0、3つの決め方の成果と後悔、T=10〜10000の後悔の表、学習率0.5固定の25.0・17.0、1/√tの学習率での99.3・66.5を再計算し一致。学習率の用語、後悔の上限の前提（凸・有界・T既知）と1/√tの上限(3/2)DG√T、K上の標準形と日本語の読み、比べる相手が実際の並びのもとの固定のxであること、指数重みとMirror Descentの関係、バンディットを関係の節へ移動、図①の色の説明を修正。1280/375/320pxで横はみ出し・数式エラーなし。 再記録: 30秒でつかむの見出しの語を playbook の『良くしたいもの』へ戻した（内容は変更なし）。"
+    },
+    "concept.pde-constrained-program": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "633423827ab9",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
+    "concept.repeated-parametric-optimization": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "0c2d301c43da",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 3つの領域の式、乗数λ(θ)=dJ*/dθと折れ目での連続、12回の表、ゼロから31回・前回から20回、延ばした解(4.333,2.167)を独立に再計算し一致。コードの手順を有効制約法の簡単な版と明記し停止の注意を追加、λを増やした量あたりの増え方に修正、Qが正定値の前提、1≦θ≦7の範囲、2^mの説明、≦の向きとコードの符号、線形MPCの条件、ウォームスタートの定義、θが決める前に分かる条件、図①に領域名と図②にθ=3・6を追加。1280/375/320pxで横はみ出し・数式エラーなし。"
+    },
+    "concept.robust-optimization": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "d18cb305e8c3",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 中央・箱・楕円の解、角の表、kの表、切り替え点10/21と15.75、19.1%/26.2%、整数解17.4、10〜12kgの不成立を再計算し一致。楕円の厳密解（堆肥1.26袋）と切除平面の停止点の区別、9.44の計算式、±50%の表現、要約の線形の条件、確率の独立性の仮定、楕円の半径と破る確率の上限 e^(-ρ²/2)、標準形の X、図の橙の線の延長とラベルの重なりを修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.robust-parameter-estimation": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "7e7033fe82ba",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 損失の谷、各点の寄与、重みを付けたGauss–Newtonの表、比較表と周期、残差の順位と消した後の解き直し、尺度ごとの答えを再計算し一致。始点の重みの説明の誤り、残差の符号の向き、ω=2π付近の図の端の跳ね上がり、収束の主張の範囲、dogbox、Ceresの残差ブロック、凸の場合の表現、データから作る始点の危うさ、RANSACのしきい値の用語を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.robust-regression": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "0283a5e517fe",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "操作図robust-loss-pullを追加。m=10/50, δ=1でHuber 1/3、二乗 m/4を手で確認。1280/375/320pxで確認。"
+    },
+    "concept.root-finding": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "279a03e9e1a4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
+    "concept.sat-maxsat": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "2fde577f4ee0",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 決まりを守る6通りと重み、重い順の結果、単位伝播の連鎖、CとEの矛盾、極小のコアと被覆の議論、逆向きの含意（11通り・BCE 5）、重みの変更、2^30・2^60、節の線形不等式への書き換えを再計算し一致。局所探索はBCDで止まること、コアの被覆にEとAが同時にかなう前提を足すこと、順位の重み（3・2・1）で同点になる例、y_kの説明、CP-SATとMiniZincの記述、証明の出力の条件、決まりを制約として標準形に書くこと、店番A・C／D・Eの区別、単位節伝播・衝突の用語、図の矢印と色を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.second-order-cone-program": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "8035caf47e8b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: コードと本文の数値を再計算し、半径3.6kmの重なり領域の縦の上端を1.98から1.99に修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.semidefinite-program": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "371550f28d2a",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
+    "concept.shape-dependent-domain": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "036ede062321",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値と閉形式を確認。凡例の位置、状態変化項が負になる理由（∂u/∂L=−sinh x/cosh²L<0）、リンク名を修正。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.shortest-path": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "3d3911c296e0",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。造語「余裕」に定義を付けPA028の被約費用と対応づけ、完全単模の性質に負閉路なしの条件、Bellman–Fordの1巡目の記述を走査順に限定。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.simplex-optimization": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "2b332e5040d4",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
+    "concept.smooth-low-dimensional-unconstrained": {
+      "reviewed_on": "2026-10-12",
+      "reviewer": "claude",
+      "body_sha256": "e230a5c13088",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "Sonnetの一次レビュー（数値19件を再計算で一致。figure.one-questionとprose.readableがfail）をClaudeが本文と照合して修正。静止図のcaptionに読み取れない範囲を足し、Newton法が二次の近似の『最小点』ではなく停留点へ跳ぶと直した（始点AのHessianは不定）。二次収束の明記など文6件も直した。画面は1280/375/320pxをPlaywrightで測り、SVGラベルの重なり・はみ出し0"
+    },
+    "concept.so3-rotation-representation": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "3c4aa703527f",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "na",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.so3-se3-optimization": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "e2802e5d816c",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。長いインライン式を数式ブロックへ移し、根拠のないライブラリ既定の注記を削除。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.solver-evaluation-points": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "49659cd753cf",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "na",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      }
+    },
+    "concept.stochastic-erm": {
+      "reviewed_on": "2026-10-13",
+      "reviewer": "claude",
+      "body_sha256": "113e7a3608a3",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。凸性の理由、重複なしの一様抽出、σ(w)の定義を追加。図の「全データ」を本文の「全件」に統一。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
+    },
+    "concept.stochastic-programming": {
+      "reviewed_on": "2026-10-29",
+      "reviewer": "claude",
+      "body_sha256": "7e6fdba5ccb2",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 期待費用・双対・Benders・SAAを再計算し一致。SAAの同点の扱い（Nを6/21/101に変更）、曇りの双対25の説明、0.4の比較の誤り、図の色の重複と千円表記、出典のない用語を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.trajectory-optimization": {
+      "reviewed_on": "2026-10-30",
+      "reviewer": "claude",
+      "body_sha256": "29b7b5108108",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 費用3.77・6.67、触れる点(2, 0.5)、加速度の大きさ、区間の数の表と5区間の26cm、柱なしの3.01と12d²/T³、8秒の0.47と1/T³、変数と制約の数、押す距離0.5mと1.1mを独立の解法で再計算し一致。下を回る経路は近くに局所解が二つあり、図とコードを同じ解（6.668、格子点の間で7mm入る）にそろえた。最適制御との関係、局所解と初期の経路の表現、最短路とMPCの記述の強さ、PA037への誤った経路、上・下の定義、格子点の用語、手法名、間接法の記述、5区間の費用が下がる理由を修正。1280/375/320pxで横はみ出しなし。"
+    },
+    "concept.variable-domain": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "08918b53cfee",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "explorable.ui-names": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "concept.vehicle-routing": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "688ceee3293c",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "22通りの分け方・最適35.527・1台31.805を全探索で独立に再計算して一致。1280/375/320pxで確認。輪の図でdepot往復(4)(6)は短く記号に隠れるが本文で明記。"
+    },
+    "gauss-newton": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "e39406140518",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "least-squares": {
+      "reviewed_on": "2026-10-26",
+      "reviewer": "claude",
+      "body_sha256": "efcd42222b0b",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
+    },
+    "primal-simplex": {
+      "reviewed_on": "2026-10-10",
+      "reviewer": "claude",
+      "body_sha256": "90487510a6b5",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "pass",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "OC-EVOL-011: 感度の操作図 simplex-shadow-price を追加。b=6,26/3,18,19,25/3,39,40 の値を linprog で独立に検算。1280/375/320px でラベルの重なりを修正後に確認。オーナーの画面確認は未。"
+    }
+  }
+}
