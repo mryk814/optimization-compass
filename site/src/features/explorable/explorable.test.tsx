@@ -9,6 +9,7 @@ import { CompiledContent } from "../content/CompiledContent";
 import ConvexityChord from "./ConvexityChord";
 import GradientDescentValley from "./GradientDescentValley";
 import LpVertexWalk from "./LpVertexWalk";
+import NonlinearFitLandscape from "./NonlinearFitLandscape";
 import { axisRate, runDescent, valleyCurvatures } from "./math/descent";
 import { EXPLORABLE_META } from "./meta";
 import { numberSetting, stringSetting } from "./scene";
@@ -286,6 +287,60 @@ describe("LpVertexWalk", () => {
   });
 });
 
+describe("NonlinearFitLandscape", () => {
+  it("steps the descent and shows the bowl's promise against the real sum of squares", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.click(screen.getByRole("button", { name: "1手進める" }));
+    const scrub = screen.getByLabelText("反復 k");
+
+    fireEvent.change(scrub, { target: { value: "1" } });
+    const panel = within(screen.getByRole("region", { name: "1手の予測と実際" }));
+    expect(panel.getByText("1手目：お椀の予測と、実際の二乗和")).toBeTruthy();
+    expect(panel.getByText("5.420")).toBeTruthy();
+    expect(panel.getByText("0.245")).toBeTruthy();
+    expect(panel.getByText("2.234")).toBeTruthy();
+  });
+
+  it("shows plain Gauss–Newton overshoot on the far start (ω = 3)", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.change(screen.getByRole("slider", { name: /周波数 ω/ }), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "3" } });
+
+    const panel = within(screen.getByRole("region", { name: "1手の予測と実際" }));
+    expect(panel.getByText("3手目：お椀の予測と、実際の二乗和")).toBeTruthy();
+    expect(panel.getByText(/お椀は 1\.737 減ると予測しました。実際は 1\.3e9 増えました/)).toBeTruthy();
+  });
+});
+
+describe("NonlinearFitLandscape extras", () => {
+  it("labels the clipped bar with its real size and ghosts the destination curve", () => {
+    const { container } = render(<NonlinearFitLandscape />);
+    fireEvent.change(screen.getByRole("slider", { name: /周波数 ω/ }), { target: { value: "3" } });
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "3" } });
+
+    expect(screen.getByText("▶ 1.3e9")).toBeTruthy();
+    expect(container.querySelector(".nls-ghost-curve")).toBeTruthy();
+  });
+
+  it("adds a λ column for Levenberg–Marquardt only", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.click(screen.getByRole("radio", { name: "Levenberg–Marquardt" }));
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "2" } });
+    expect(within(screen.getByRole("region", { name: "反復の記録" })).getByRole("columnheader", { name: "λ" })).toBeTruthy();
+  });
+
+  it("overlays the ω + 4π curve on request", () => {
+    const { container } = render(<NonlinearFitLandscape />);
+    expect(container.querySelector(".nls-alias-curve")).toBeNull();
+    fireEvent.click(screen.getByRole("radio", { name: /ω\+4π の曲線を出す/ }));
+    expect(container.querySelector(".nls-alias-curve")).toBeTruthy();
+    expect(screen.getByText(/ω\+4π=14\.37/)).toBeTruthy();
+  });
+});
+
 describe("ConvexityChord", () => {
   it("accepts every pair of points for a convex function", () => {
     render(<ConvexityChord />);
@@ -299,6 +354,48 @@ describe("ConvexityChord", () => {
     fireEvent.click(screen.getByRole("radio", { name: /二つの谷/ }));
 
     expect(screen.getAllByText(/この関数は凸ではありません/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/θ が 0\.\d+ から [\d.]+ のあたり/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/e-3/)).toBeNull();
+  });
+
+  it("plays theta from 0 to 1 and flags the moment the chord dips below the graph", () => {
+    render(<ConvexityChord />);
+    fireEvent.click(screen.getByRole("radio", { name: /二つの谷/ }));
+    fireEvent.click(screen.getByRole("button", { name: /θを0から1へ動かして再生/ }));
+    const scrub = screen.getByLabelText("θの動き");
+
+    fireEvent.change(scrub, { target: { value: "0" } });
+    expect(screen.queryByText(/0を下回った/)).toBeNull();
+
+    fireEvent.change(scrub, { target: { value: "5" } });
+    expect(screen.getByText(/0を下回った/)).toBeTruthy();
+    expect(screen.getAllByText(/θ = 0\.50/).length).toBeGreaterThan(0);
+  });
+
+  it("builds the hump 0.35 theta (1 - theta) (a - b)^2 for the convex quadratic", () => {
+    render(<ConvexityChord />);
+    fireEvent.click(screen.getByRole("button", { name: /θを0から1へ動かして再生/ }));
+    fireEvent.change(screen.getByLabelText("θの動き"), { target: { value: "5" } });
+
+    expect(screen.getByText(/0\.35 × 0\.25 × 16\.00 = 1\.40/)).toBeTruthy();
+    expect(screen.queryByText(/0を下回った/)).toBeNull();
+  });
+
+  it("starts at a = -2 and b = 2 and moves by 0.1 on the keyboard", () => {
+    render(<ConvexityChord />);
+    const a = screen.getByRole("slider", { name: "点aの位置" });
+    expect(a.getAttribute("aria-valuenow")).toBe("-2");
+    expect(screen.getByRole("slider", { name: "点bの位置" }).getAttribute("aria-valuenow")).toBe("2");
+    fireEvent.keyDown(a, { key: "ArrowRight" });
+    expect(a.getAttribute("aria-valuenow")).toBe("-1.9");
+  });
+
+  it("greys out the mixed point when it falls outside the feasible set", () => {
+    render(<ConvexityChord />);
+    fireEvent.click(screen.getByRole("radio", { name: /C=\[−2,−1\]∪\[2,3\]/ }));
+    expect(screen.getAllByText(/混ぜた入力 x=0\.50 は可行集合 C の外です/).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: /下ってみる/ }));
+    expect(screen.getAllByText(/可行集合の中で x=−1\.00/).length).toBeGreaterThan(0);
   });
 
   it("shows that a local stop is not the global minimum", () => {
@@ -310,5 +407,25 @@ describe("ConvexityChord", () => {
     fireEvent.click(screen.getByRole("button", { name: /下ってみる/ }));
 
     expect(screen.getAllByText(/全体の最小とは限りません/).length).toBeGreaterThan(0);
+  });
+});
+
+describe("NonlinearFitLandscape ω-profile", () => {
+  it("draws five valleys and moves the start marker with the ω slider", () => {
+    const { container } = render(<NonlinearFitLandscape />);
+    expect(screen.getByText("ω ごとの最小の二乗和（a は ω ごとに最良）")).toBeTruthy();
+    expect(container.querySelectorAll(".nls-profile-valley").length).toBe(5);
+    const before = container.querySelector(".nls-profile-start")!.getAttribute("x1");
+    fireEvent.change(screen.getByRole("slider", { name: /周波数 ω/ }), { target: { value: "4" } });
+    expect(container.querySelector(".nls-profile-start")!.getAttribute("x1")).not.toBe(before);
+    expect(screen.getByText(/いま 4\.00、値 13\.66/)).toBeTruthy();
+  });
+
+  it("titles the iteration table visibly", () => {
+    render(<NonlinearFitLandscape />);
+    fireEvent.click(screen.getByRole("button", { name: "この点から下る" }));
+    fireEvent.change(screen.getByLabelText("反復 k"), { target: { value: "1" } });
+    const region = within(screen.getByRole("region", { name: "反復の記録" }));
+    expect(region.getByText("反復の記録")).toBeTruthy();
   });
 });

@@ -14,12 +14,18 @@ export const ADVANCED: Scenario = { id: "advanced", title: "発展・8品", capa
   ITEMS[3], { name: "G", weight: 3, value: 3 }, { name: "H", weight: 2, value: 1 },
 ] };
 export const SCENARIOS = [INTRO, ADVANCED] as const;
-export type Choice = readonly (0 | 1)[];
+export type Decision = 0 | 1 | null;
+/** One decision per item; a position beyond the end counts as undecided, so a short prefix is a valid choice. */
+export type Choice = readonly Decision[];
+export const decisionAt = (choice: Choice, i: number): Decision => choice[i] ?? null;
 export function totals(choice: Choice, scenario: Scenario = INTRO) {
-  return choice.reduce((sum, take, i) => ({
-    weight: sum.weight + take * scenario.items[i].weight,
-    value: sum.value + take * scenario.items[i].value,
-  }), { weight: 0, value: 0 });
+  return scenario.items.reduce((sum, item, i) => (choice[i] === 1
+    ? { weight: sum.weight + item.weight, value: sum.value + item.value }
+    : sum), { weight: 0, value: 0 });
+}
+/** The choice with one more item decided. */
+export function withDecision(choice: Choice, item: number, take: 0 | 1, scenario: Scenario = INTRO): Choice {
+  return scenario.items.map((_, i) => (i === item ? take : decisionAt(choice, i)));
 }
 /** Fractional knapsack is an exact relaxation here: all weights/values are positive. */
 export function relaxation(choice: Choice, scenario: Scenario = INTRO) {
@@ -27,8 +33,8 @@ export function relaxation(choice: Choice, scenario: Scenario = INTRO) {
   let room = scenario.capacity - fixed.weight;
   if (room < 0) return { feasible: false, bound: -Infinity, fill: [] as number[] };
   let bound = fixed.value;
-  const fill: number[] = scenario.items.map((_, i) => choice[i] ?? 0);
-  const remaining = scenario.items.map((item, i) => ({ ...item, i })).slice(choice.length).sort((a, b) => b.value / b.weight - a.value / a.weight);
+  const fill: number[] = scenario.items.map((_, i) => decisionAt(choice, i) ?? 0);
+  const remaining = scenario.items.map((item, i) => ({ ...item, i })).filter((item) => decisionAt(choice, item.i) === null).sort((a, b) => b.value / b.weight - a.value / a.weight);
   for (const item of remaining) {
     const part = Math.min(1, room / item.weight);
     fill[item.i] = part;
@@ -37,9 +43,72 @@ export function relaxation(choice: Choice, scenario: Scenario = INTRO) {
   }
   return { feasible: true, bound, fill };
 }
-export const nodeId = (choice: Choice) => choice.join("") || "root";
-export const branchLabel = (choice: Choice, scenario: Scenario = INTRO) => choice.length
-  ? choice.map((take, i) => `${scenario.items[i].name}${take ? "を入れる" : "を外す"}`).join(" → ")
+/**
+ * Index of the undecided item the relaxation packs only partly (0 < part < 1), or -1 when it packs
+ * whole items only. At most one item is partly packed, so no tie-break is needed; the fixed item order
+ * only decides which of several equally dense items is the one cut.
+ */
+export function fractionalItem(choice: Choice, scenario: Scenario = INTRO): number {
+  const { feasible, fill } = relaxation(choice, scenario);
+  if (!feasible) return -1;
+  return fill.findIndex((part, i) => decisionAt(choice, i) === null && part > 1e-12 && part < 1 - 1e-12);
+}
+export interface SplitEffect {
+  /** The item an "open" decides next: the fractional item of this node's relaxation. */
+  splitItem: number;
+  /** The item the node's bound packs only partly. It is the same as the split item. */
+  fractional: number;
+  parentBound: number;
+  children: { take: 0 | 1; feasible: boolean; bound: number; drop: number }[];
+  /** The larger child bound: what is left of the parent's bound after the split. */
+  remaining: number;
+  /** True when deciding the split item takes the fractional part away from the bound. */
+  lowersBound: boolean;
+}
+/** What opening a node does to its bound: the parent's bound against each child's. */
+export function splitEffect(choice: Choice, scenario: Scenario = INTRO): SplitEffect {
+  const parentBound = relaxation(choice, scenario).bound;
+  const item = fractionalItem(choice, scenario);
+  const children = item < 0 ? [] : ([1, 0] as const).map((take) => {
+    const child = relaxation(withDecision(choice, item, take, scenario), scenario);
+    return { take, feasible: child.feasible, bound: child.bound, drop: child.feasible ? parentBound - child.bound : Infinity };
+  });
+  const remaining = children.length ? Math.max(...children.map((child) => child.bound)) : parentBound;
+  return {
+    splitItem: item,
+    fractional: item,
+    parentBound, children, remaining,
+    lowersBound: remaining < parentBound - 1e-9,
+  };
+}
+/** Decided items as "index:take", in item order. The decisions fix the node, so this is its identity. */
+export const nodeId = (choice: Choice) => choice
+  .map((take, i) => (take === null || take === undefined ? "" : `${i}:${take}`))
+  .filter(Boolean).join(",") || "root";
+/** The nodes from the root down to this one: each step decides the fractional item of the node above. */
+export function pathTo(choice: Choice, scenario: Scenario = INTRO): Choice[] {
+  const target = scenario.items.map((_, i) => decisionAt(choice, i));
+  let node: Choice = scenario.items.map(() => null);
+  const path = [node];
+  while (nodeId(node) !== nodeId(target)) {
+    const item = fractionalItem(node, scenario);
+    const take = item < 0 ? null : target[item];
+    if (take === null) return [target];
+    node = withDecision(node, item, take, scenario);
+    path.push(node);
+  }
+  return path;
+}
+/** Items in the order they were decided on the way to this node. */
+export function decisionOrder(choice: Choice, scenario: Scenario = INTRO): number[] {
+  const path = pathTo(choice, scenario);
+  if (path.length > 1) {
+    return path.slice(1).map((node, step) => node.findIndex((take, i) => take !== decisionAt(path[step], i)));
+  }
+  return scenario.items.map((_, i) => i).filter((i) => decisionAt(choice, i) !== null);
+}
+export const branchLabel = (choice: Choice, scenario: Scenario = INTRO) => nodeId(choice) !== "root"
+  ? decisionOrder(choice, scenario).map((i) => `${scenario.items[i].name}${choice[i] ? "を入れる" : "を外す"}`).join(" → ")
   : "根：まだ何も固定していない";
 export interface SearchState {
   scenario: Scenario;
@@ -50,7 +119,7 @@ export interface SearchState {
 }
 export function startSearch(choice: Choice, scenario: Scenario = INTRO): SearchState {
   if (choice.length !== scenario.items.length || totals(choice, scenario).weight > scenario.capacity) throw new Error("A feasible full choice is required");
-  return { scenario, frontier: [[]], best: [...choice], closed: [], message: "まず根を開き、Aを入れる場合と外す場合に分けてみましょう。" };
+  return { scenario, frontier: [scenario.items.map(() => null)], best: [...choice], closed: [], message: "まず根を開き、端数になる品を入れる場合と外す場合に分けてみましょう。" };
 }
 export function certificate(state: SearchState) {
   const lower = totals(state.best, state.scenario).value;
@@ -85,7 +154,39 @@ export function act(state: SearchState, id: string, action: "open" | "prune"): S
     return { ...state, frontier, best, closed: [...state.closed, { choice, reason: "leaf" }],
       message: `${branchLabel(choice, state.scenario)}では分割せずに詰められました。${relaxed.bound} 点の実行可能解に更新し、この枝を閉じます。全体の上界と見比べてみましょう。` };
   }
-  return { ...state, frontier: [...frontier, [...choice, 1], [...choice, 0]],
+  const item = fractionalItem(choice, state.scenario);
+  return { ...state, frontier: [...frontier, withDecision(choice, item, 1, state.scenario), withDecision(choice, item, 0, state.scenario)],
     closed: [...state.closed, { choice, reason: "split" }],
-    message: `${branchLabel(choice, state.scenario)}を、${state.scenario.items[choice.length].name}を入れる枝と外す枝に分けました。どちらの上界も親の上界を超えません。` };
+    message: `${branchLabel(choice, state.scenario)}を、端数だった${state.scenario.items[item].name}を入れる枝と外す枝に分けました。どちらの上界も親の上界を超えません。` };
+}
+export interface TreeRow {
+  id: string;
+  choice: Choice;
+  depth: number;
+  /** "open" is a node not yet looked at; the rest are the reasons a node was closed. */
+  status: "open" | SearchState["closed"][number]["reason"];
+  feasible: boolean;
+  bound: number;
+  /** The node closed or split by the latest action. */
+  current: boolean;
+}
+/** Every node reached so far, parents before children, the "take it" branch before the "leave it" branch. */
+export function searchTree(state: SearchState): TreeRow[] {
+  const scenario = state.scenario;
+  const rows: TreeRow[] = [];
+  const latest = state.closed.at(-1);
+  const walk = (choice: Choice, depth: number) => {
+    const id = nodeId(choice);
+    const closed = state.closed.find((entry) => nodeId(entry.choice) === id);
+    if (!closed && !state.frontier.some((entry) => nodeId(entry) === id)) return;
+    const r = relaxation(choice, scenario);
+    rows.push({ id, choice, depth, status: closed ? closed.reason : "open", feasible: r.feasible, bound: r.bound, current: Boolean(latest && closed === latest) });
+    if (closed?.reason === "split") {
+      const item = fractionalItem(choice, scenario);
+      walk(withDecision(choice, item, 1, scenario), depth + 1);
+      walk(withDecision(choice, item, 0, scenario), depth + 1);
+    }
+  };
+  walk(scenario.items.map(() => null), 0);
+  return rows;
 }

@@ -92,11 +92,11 @@
     "version": "1.0.0"
   },
   "traces": {
-    "bytes": 18667,
+    "bytes": 18873,
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "6d909e47809ec2ecc33bda752b465f2d86ea57841b118a8189609c064a303035"
+    "sha256": "40f4455c0f452f12da2baa9a59bca846edf24ed00e3e915cd515f0761986abbd"
   },
   "version": "1.5.0",
   "views": [

@@ -427,17 +427,17 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         ),
         VisualizationObservable(
             observable_id="geodesic_residual",
-            label_ja="geodesic residual",
+            label_ja="測地距離の残差",
             label_en="geodesic residual",
         ),
         VisualizationObservable(
             observable_id="orthogonality_error",
-            label_ja="直交性残差",
+            label_ja="回転からのはずれ",
             label_en="orthogonality error",
         ),
         VisualizationObservable(
             observable_id="determinant_error",
-            label_ja="determinant残差",
+            label_ja="行列式の残差",
             label_en="determinant error",
         ),
     ]
@@ -448,9 +448,9 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         identity_status=identity_status,
         canonical_scenario_id=canonical_scenario_id,
         title_ja=(
-            "ambient stepとQR projectionによるattitude alignment"
+            "周囲の空間での一歩とQRによる射影で姿勢を合わせる"
             if is_projected
-            else "Lie algebra stepによるattitude alignment"
+            else "リー代数での一歩で姿勢を合わせる"
         ),
         title_en=(
             "Attitude alignment by ambient step and QR projection"
@@ -462,17 +462,17 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
             learning_objective=_localized(
-                "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。",
+                "目的関数の改善と、回転からのはずれ・行列式の残差・測地距離の残差を分けて読む。",
                 "Separate objective progress from orthogonality, determinant, "
                 "and geodesic diagnostics.",
             ),
             misconception=_localized(
-                "projection後にfeasibleなら、ambient updateとmanifold updateは同じ一歩である。",
+                "射影の後で実行可能なら、周囲の空間での更新と多様体上の更新は同じ一歩である。",
                 "A feasible projected point makes an ambient update equivalent "
                 "to a manifold update.",
             ),
             expected_phenomenon_ja=(
-                "どちらもSO(3)上に戻るが、projection correctionと接空間stepの意味は異なる。"
+                "どちらもSO(3)上に戻るが、射影による補正と接空間での一歩の意味は異なる。"
             ),
             expected_phenomenon_en=(
                 "Both remain on SO(3), but projection correction and a tangent-space "
@@ -481,7 +481,7 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             success_signals=[
                 VisualizationSignal(
                     signal_id="feasibility_and_progress_visible",
-                    label_ja="構造残差と目的関数を同じevaluationで確認できる",
+                    label_ja="構造の残差と目的関数を同じ評価で確認できる",
                     label_en="structure residuals and objective progress remain jointly visible",
                     observable_ids=[
                         "objective_value",
@@ -495,7 +495,7 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
                 [
                     VisualizationSignal(
                         signal_id="projection_equivalence_misread",
-                        label_ja="projection correctionを接空間stepと同一視してしまう",
+                        label_ja="射影による補正を接空間での一歩と同一視してしまう",
                         label_en="projection correction is mistaken for a tangent-space step",
                         observable_ids=[
                             "objective_value",
@@ -512,25 +512,25 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             narration_steps=[
                 VisualizationNarrationStep(
                     milestone_id="start",
-                    title_ja="near-pi初期残差を確認",
+                    title_ja="回転角がπに近い初期の残差を確認",
                     title_en="Inspect the near-pi initial residual",
                     observable_ids=["objective_value", "geodesic_residual"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="first_change",
-                    title_ja="最初のfeasibility mapを読む",
+                    title_ja="最初の更新で回転に戻す写像を読む",
                     title_en="Read the first feasibility map",
                     observable_ids=["orthogonality_error", "determinant_error"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="pattern_visible",
-                    title_ja="objectiveとgeodesic residualを分離",
+                    title_ja="目的関数値と測地距離の残差を分けて読む",
                     title_en="Separate objective and geodesic residual",
                     observable_ids=["objective_value", "geodesic_residual"],
                 ),
                 VisualizationNarrationStep(
                     milestone_id="termination",
-                    title_ja="feasible iterateと収束claimを分離",
+                    title_ja="反復点が実行可能であることと収束の主張を分ける",
                     title_en="Separate feasible iterates from convergence claims",
                     observable_ids=[
                         "objective_value",
@@ -548,7 +548,7 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             known_reference_display=KnownReferenceDisplay(
                 policy="show",
                 note_ja=(
-                    "固定target rotationは目的値0の教材referenceであり、一般性能rankingではない。"
+                    "固定した目標の回転は目的値0となる教材上の基準であり、一般的な性能の順位ではない。"
                 ),
                 note_en=(
                     "The fixed target rotation is a zero-loss teaching reference, "
@@ -556,23 +556,23 @@ def build_so3_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
                 ),
             ),
             static_summary=_localized(
-                "同じnear-pi targetへ向かう12 updateで、lossとSO(3)構造残差を追う。",
+                "回転角がπに近い同じ目標へ向かう12回の更新で、損失とSO(3)の構造の残差を追う。",
                 "Follow loss and SO(3) structure residuals over twelve updates "
                 "to one near-pi target.",
             ),
             text_alternative=_localized(
-                "identityから開始し、12 updateでgeodesic residualを縮めながら"
-                "直交性とdeterminantを保つ。",
+                "単位行列から開始し、12回の更新で測地距離の残差を縮めながら、"
+                "直交性と行列式を保つ。",
                 "Starting at identity, twelve updates reduce geodesic residual "
                 "while preserving orthogonality and determinant.",
             ),
             derived_media_caption=_localized(
-                "SO(3) attitude alignmentのfeasibility診断",
+                "SO(3)姿勢合わせの実行可能性の診断",
                 "Feasibility diagnostics for SO(3) attitude alignment",
             ),
             limitations_ja=(
-                "固定3対応・noiseなし・固定stepの教材であり、rotation averagingのrobustness、"
-                "near-pi chartの一般的安定性、実装速度、局所解の一般保証を示さない。"
+                "固定3対応・ノイズなし・固定刻み幅の教材であり、回転平均化の頑健性、回転角がπに近い所での"
+                "地図（局所座標）の一般的な安定性、実装速度、局所解の一般保証を示さない。"
             ),
             limitations_en=(
                 "A noiseless fixed-three-correspondence lesson with a fixed step; it does not "

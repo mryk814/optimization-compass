@@ -26,7 +26,7 @@ def test_mobile_clinic_case_is_a_bounded_healthcare_teaching_case() -> None:
     )
     ast.parse(case["python_example"])
     assert "保証する値ではない" in case["objective"]
-    assert "4品目knapsack" in case["practical_notes"]
+    assert "4品目のナップサック" in case["practical_notes"]
     assert "医療上の有効性" in case["limitations"][1]
 
 

@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
 from optimization_compass.robot_arm_scene import generate_scene
+from optimization_compass.scene_fingerprint import generator_input_sha256
 
 
 def main() -> None:
@@ -21,12 +21,7 @@ def main() -> None:
     scene = generate_scene()
     root = Path(__file__).resolve().parents[1]
     module_path = root / "src/optimization_compass/robot_arm_scene.py"
-    scene["generator_input_sha256"] = hashlib.sha256(
-        b"".join(
-            path.read_text(encoding="utf-8").encode("utf-8")
-            for path in (module_path, Path(__file__), root / "uv.lock")
-        )
-    ).hexdigest()
+    scene["generator_input_sha256"] = generator_input_sha256(root, module_path, Path(__file__))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(scene, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"

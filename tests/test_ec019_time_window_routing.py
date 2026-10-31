@@ -61,7 +61,7 @@ def test_ec019_connects_its_own_instance_scenarios_and_comparison() -> None:
     assert {FEASIBLE_SCENARIO_ID, VIOLATION_SCENARIO_ID} <= set(case["visualization_ids"])
     assert case["comparison_ids"] == ["COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"]
     assert comparison.problem_instance_id == PROBLEM_INSTANCE_ID
-    assert comparison.changed_factors == ["stop 4の時間窓の終了だけを25分から12分へ狭める"]
+    assert comparison.changed_factors == ["訪問先4の時間窓の終了だけを25分から12分へ狭める"]
     assert comparison.comparability == "contrast_only"
     assert comparison.ranking_eligible is False
 

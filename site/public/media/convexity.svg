@@ -3,7 +3,7 @@
   <desc id="desc">青は f(x)=0.35x²+0.2。橙の弦は a=-2 と b=2 を結び、両端の関数値は1.6。中間点 x=0 の関数値0.2との高さの差は1.4。</desc>
   <rect width="440" height="510" rx="18" fill="#f3f5ef"/>
   <g font-family="sans-serif" fill="#173b45">
-    <text x="20" y="32" font-size="21" font-weight="700">弦は関数の上にある</text>
+    <text x="20" y="32" font-size="18" font-weight="700">弦は関数の上にある</text>
     <text x="20" y="61" font-size="18">f(x) = 0.35x² + 0.2</text>
     <rect x="45" y="80" width="373" height="300" rx="10" fill="#fff" stroke="#d6dfdc"/>
     <path d="M45 100 H418 M45 350 H418" stroke="#d6dfdc" stroke-dasharray="4 5"/>
@@ -26,7 +26,7 @@
     </g>
     <circle cx="230" cy="350" r="5" fill="#2563a8"/>
     <path d="M230 112 V338 M224 118 L230 112 L236 118 M224 332 L230 338 L236 332" fill="none" stroke="#647b80" stroke-width="2"/>
-    <text x="248" y="228" font-size="20">差 1.4</text>
+    <text x="248" y="228" font-size="18">差 1.4</text>
     <path d="M20 450 H48" stroke="#2563a8" stroke-width="4"/>
     <text x="57" y="456" font-size="18">関数</text>
     <path d="M156 450 H184" stroke="#c15b27" stroke-width="4" stroke-dasharray="9 6"/>

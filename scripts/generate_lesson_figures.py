@@ -2194,6 +2194,100 @@ def _so3_paths_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# SO(3) and its Lie algebra (content/concepts/so3-rotation-representation.md): a plane rotation
+# [[a, -b], [b, a]] is the point (a, b). Rotations fill the unit circle, the Lie algebra is the
+# tangent line at I, and exp wraps the line onto the circle by arc length.
+SO2_TICKS = (0.5, 1.0, 1.5, 2.0)
+SO2_SHOWN = 1.0
+
+
+def so2_points(theta: float) -> dict[str, float]:
+    """The tangent point I + theta J and the rotation exp(theta J), with the tangent point's det."""
+    return {
+        "line_a": 1.0,
+        "line_b": theta,
+        "line_det": 1.0 + theta * theta,
+        "exp_a": math.cos(theta),
+        "exp_b": math.sin(theta),
+        "exp_det": math.cos(theta) ** 2 + math.sin(theta) ** 2,
+    }
+
+
+def _so2_circle_svg() -> str:
+    shown = so2_points(SO2_SHOWN)
+    cx, cy, radius = 150.0, 290.0, 100.0
+
+    def at(a: float, b: float) -> tuple[float, float]:
+        return cx + radius * a, cy - radius * b
+
+    parts = _open(
+        "平面の回転は円、リー代数は接線",
+        (
+            "平面の回転行列 [[a, −b], [b, a]] を点 (a, b) で表した図。回転は半径1の円の上に並び、"
+            "単位行列 I は (1, 0)。I での接線の点 I+θJ は円の外にあり、"
+            f"θ={SO2_SHOWN:g} の I+J は ({shown['line_a']:g}, {shown['line_b']:g})、"
+            f"行列式 {shown['line_det']:g}。exp(θJ) は接線を円に巻き付けた点で、"
+            f"θ={SO2_SHOWN:g} の exp(J) は ({shown['exp_a']:.3f}, {shown['exp_b']:.3f})、"
+            f"I からの弧の長さは {SO2_SHOWN:g}。"
+            "目盛り 0.5, 1, 1.5, 2 は接線と円で同じ長さに対応する。"
+        ),
+        520,
+    )
+    parts.append(f'<path d="M30 {cy}H430M{cx} 52V408" stroke="{GRID}"/>')
+    parts.append(_text(430, cy - 8, "a", "tick", "end"))
+    parts.append(_text(cx + 8, 64, "b", "tick"))
+    parts.append(
+        f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{LINE}" stroke-width="2"/>'
+    )
+    top, bottom = at(1.0, 2.25), at(1.0, -0.6)
+    parts.append(
+        f'<path d="M{top[0]:.1f} {top[1]:.1f}V{bottom[1]:.1f}" stroke="{UPDATE}" '
+        'stroke-width="2.5"/>'
+    )
+    parts.append(_text(top[0] + 10, top[1] + 6, "接線 θJ", "", "start"))
+    arc_end = at(shown["exp_a"], shown["exp_b"])
+    parts.append(
+        f'<path d="M{at(1.0, 0.0)[0]:.1f} {cy:.1f}A{radius} {radius} 0 0 0 '
+        f'{arc_end[0]:.2f} {arc_end[1]:.2f}" fill="none" stroke="{POINT}" stroke-width="5"/>'
+    )
+    for theta in SO2_TICKS:
+        point = so2_points(theta)
+        lx, ly = at(point["line_a"], point["line_b"])
+        ex, ey = at(point["exp_a"], point["exp_b"])
+        parts.append(f'<path d="M{lx - 6:.1f} {ly:.1f}H{lx + 6:.1f}" stroke="{UPDATE}"/>')
+        parts.append(_text(lx + 12, ly + 5, f"{theta:g}", "tick"))
+        parts.append(f'<circle cx="{ex:.2f}" cy="{ey:.2f}" r="3.5" fill="{POINT}"/>')
+        ox, oy = at(0.8 * point["exp_a"], 0.8 * point["exp_b"])
+        parts.append(_text(ox, oy + 5, f"{theta:g}", "tick", "middle"))
+    ix, iy = at(1.0, 0.0)
+    parts.append(f'<circle cx="{ix}" cy="{iy}" r="6" fill="{INK}"/>')
+    parts.append(_text(ix + 12, iy + 22, "I", ""))
+    lx, ly = at(shown["line_a"], shown["line_b"])
+    parts.append(
+        f'<circle cx="{lx}" cy="{ly}" r="7" fill="#f3d2b5" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(lx + 32, ly + 5, "I+J"))
+    parts.append(
+        f'<circle cx="{arc_end[0]:.2f}" cy="{arc_end[1]:.2f}" r="7" fill="{POINT}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    label = at(1.27 * shown["exp_a"], 1.27 * shown["exp_b"])
+    parts.append(_text(label[0], label[1], "exp(J)", "", "middle"))
+    parts.append(_text(20, 438, "点 (a, b) は回転行列 [a −b; b a] を表す"))
+    parts.append(_text(20, 464, "接線の上は自由に動けるが、円の外（回転でない）"))
+    parts.append(_text(20, 490, "exp は接線を円に巻き付ける：長さ θ → θ rad 回す"))
+    parts.append(
+        _text(
+            20,
+            514,
+            f"θ={SO2_SHOWN:g}：I+J は行列式 {shown['line_det']:g}、exp(J) は弧の長さ {SO2_SHOWN:g}",
+            "note",
+        )
+    )
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 # Neural network training (content/concepts/neural-network-training.md): the smallest network
 # h(x) = v tanh(u x), four steering readings, mean squared error, full-batch gradient descent.
 NN_X = (-2.0, -1.0, 1.0, 2.0)
@@ -4214,6 +4308,2057 @@ def _pa002_circuit_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Assignment (content/concepts/assignment-matching.md): three ambulances, three calls, minutes.
+ASSIGN_TIMES = ((3, 2, 5), (10, 3, 8), (14, 5, 9))
+ASSIGN_ROWS = ("救急車1", "救急車2", "救急車3")
+ASSIGN_COLS = ("A", "B", "C")
+# A row value u and a column value v with u_i + v_j <= time everywhere (the dual certificate).
+ASSIGN_U = (1, 3, 5)
+ASSIGN_V = (2, 0, 4)
+
+
+def assignment_total(columns: Sequence[int]) -> int:
+    return sum(ASSIGN_TIMES[i][j] for i, j in enumerate(columns))
+
+
+def assignment_all() -> list[tuple[int, int, tuple[int, ...]]]:
+    """Every one-to-one assignment as (total, longest single trip, columns), cheapest first."""
+    rows = []
+    for columns in itertools.permutations(range(len(ASSIGN_TIMES))):
+        longest = max(ASSIGN_TIMES[i][j] for i, j in enumerate(columns))
+        rows.append((assignment_total(columns), longest, columns))
+    return sorted(rows)
+
+
+def assignment_greedy() -> list[tuple[int, int]]:
+    """Take the shortest remaining (ambulance, call) pair until every ambulance is sent."""
+    free_rows, free_cols = set(range(3)), set(range(3))
+    picks = []
+    while free_rows:
+        i, j = min(
+            ((i, j) for i in free_rows for j in free_cols),
+            key=lambda cell: (ASSIGN_TIMES[cell[0]][cell[1]], cell),
+        )
+        picks.append((i, j))
+        free_rows.remove(i)
+        free_cols.remove(j)
+    return picks
+
+
+def assignment_reduced() -> list[list[int]]:
+    """time - u_i - v_j: never negative, and 0 on the cells of the cheapest assignment."""
+    return [[ASSIGN_TIMES[i][j] - ASSIGN_U[i] - ASSIGN_V[j] for j in range(3)] for i in range(3)]
+
+
+def _assignment_grid(
+    top: float,
+    values: Sequence[Sequence[int]],
+    chosen: dict[tuple[int, int], str],
+    column_labels: Sequence[str],
+    row_labels: Sequence[str],
+) -> list[str]:
+    """A 3x3 table: column headers at `top`, rows below. Chosen cells are filled orange."""
+    left, cell_w, cell_h = 168, 84, 46
+    parts = []
+    for j, label in enumerate(column_labels):
+        parts.append(_text(left + cell_w * (j + 0.5), top + 18, label, "", "middle"))
+    for i, label in enumerate(row_labels):
+        y = top + 28 + cell_h * i
+        parts.append(_text(left - 12, y + 29, label, "", "end"))
+        for j in range(3):
+            x = left + cell_w * j
+            mark = chosen.get((i, j))
+            fill = "#f3d2b5" if mark is not None else "#ffffff"
+            stroke = UPDATE if mark is not None else GRID
+            width = 2.5 if mark is not None else 1
+            parts.append(
+                f'<rect x="{x + 3}" y="{y + 3:.1f}" width="{cell_w - 6}" height="{cell_h - 6}" '
+                f'rx="6" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>'
+            )
+            parts.append(_text(x + cell_w / 2, y + 29, str(values[i][j]), "", "middle"))
+            if mark:
+                parts.append(_text(x + 9, y + 21, mark, "tick"))
+    return parts
+
+
+def _assignment_greedy_svg() -> str:
+    greedy = assignment_greedy()
+    greedy_times = [ASSIGN_TIMES[i][j] for i, j in greedy]
+    best_total, best_longest, best = assignment_all()[0]
+    best_times = [ASSIGN_TIMES[i][j] for i, j in enumerate(best)]
+    parts = _open(
+        "近い組から決めると、合計が延びる",
+        (
+            "救急車3台と通報A・B・Cの到着時間（分）の表を2枚並べたもの。"
+            f"① 近い組から決めると {'、'.join(map(str, greedy_times))} 分を選び、"
+            f"合計は {sum(greedy_times)} 分。"
+            f"② 合計が最小の割当は {'、'.join(map(str, best_times))} 分を選び、"
+            f"合計は {best_total} 分。どちらも各行・各列から一つずつ選んでいる。"
+        ),
+        520,
+    )
+    columns = [f"通報{name}" for name in ASSIGN_COLS]
+    parts.append(_text(20, 66, "① 近い組から決める"))
+    parts.append(_text(420, 66, f"合計 {sum(greedy_times)} 分", "note", "end"))
+    order = {cell: str(k + 1) for k, cell in enumerate(greedy)}
+    parts += _assignment_grid(76, ASSIGN_TIMES, order, columns, ASSIGN_ROWS)
+    parts.append(_text(20, 296, "② 合計が最小の割当"))
+    parts.append(_text(420, 296, f"合計 {best_total} 分", "note", "end"))
+    parts += _assignment_grid(
+        306, ASSIGN_TIMES, {(i, j): "" for i, j in enumerate(best)}, columns, ASSIGN_ROWS
+    )
+    parts.append(_text(20, 496, f"① {' + '.join(map(str, greedy_times))} = {sum(greedy_times)}"))
+    parts.append(
+        _text(
+            420,
+            496,
+            f"② {' + '.join(map(str, best_times))} = {best_total}",
+            "note",
+            "end",
+        )
+    )
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _assignment_dual_svg() -> str:
+    reduced = assignment_reduced()
+    best_total, _, best = assignment_all()[0]
+    bound = sum(ASSIGN_U) + sum(ASSIGN_V)
+    parts = _open(
+        "どの割当も15分を下回らない理由",
+        (
+            f"救急車ごとの値 u=({', '.join(map(str, ASSIGN_U))}) と、"
+            f"通報ごとの値 v=({', '.join(map(str, ASSIGN_V))}) を到着時間から引いた表。"
+            "すべてのマスが0以上で、合計が最小の割当の3マスは0。"
+            f"そのため、どの割当の合計も u と v の合計 {bound} 分以上になる。"
+        ),
+        360,
+    )
+    columns = [f"{name} v={value}" for name, value in zip(ASSIGN_COLS, ASSIGN_V, strict=True)]
+    rows = [f"{name} u={value}" for name, value in zip(ASSIGN_ROWS, ASSIGN_U, strict=True)]
+    parts.append(_text(20, 64, "時間 − u − v"))
+    parts += _assignment_grid(74, reduced, {(i, j): "" for i, j in enumerate(best)}, columns, rows)
+    parts.append(_text(20, 266, f"u の合計 {sum(ASSIGN_U)} ＋ v の合計 {sum(ASSIGN_V)} = {bound}"))
+    parts.append(_text(20, 292, "どの割当も各行・各列を一度ずつ使うので、"))
+    parts.append(_text(20, 316, f"合計 ＝ {bound} ＋ 選んだマスの値 ≧ {bound}"))
+    parts.append(_text(20, 344, f"橙の3マスは0なので、合計 {best_total} 分が最小", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Eigenvalue problem (content/concepts/eigenvalue-problem.md): five stakes along a straight
+# fence, read off a map with errors in both coordinates. The fence's unit normal n minimises
+# the sum of squared perpendicular distances n^T M n, M = sum of (p - mean)(p - mean)^T.
+EIG_POINTS = ((3.0, 2.0), (3.0, 3.0), (4.0, 1.0), (5.0, 4.0), (5.0, 5.0))
+
+
+def eig_centre() -> tuple[float, float]:
+    count = len(EIG_POINTS)
+    return (sum(p[0] for p in EIG_POINTS) / count, sum(p[1] for p in EIG_POINTS) / count)
+
+
+def eig_scatter() -> tuple[float, float, float]:
+    """(a, b, c) of the centred scatter matrix [[a, b], [b, c]]."""
+    cx, cy = eig_centre()
+    a = sum((x - cx) ** 2 for x, _ in EIG_POINTS)
+    b = sum((x - cx) * (y - cy) for x, y in EIG_POINTS)
+    c = sum((y - cy) ** 2 for _, y in EIG_POINTS)
+    return a, b, c
+
+
+def eig_values() -> tuple[float, float]:
+    a, b, c = eig_scatter()
+    mean, radius = (a + c) / 2, math.hypot((a - c) / 2, b)
+    return mean - radius, mean + radius
+
+
+def eig_perpendicular_sum(angle_deg: float) -> float:
+    """Sum of squared perpendicular distances to the line through the centre at this angle."""
+    a, b, c = eig_scatter()
+    theta = math.radians(angle_deg)
+    nx, ny = -math.sin(theta), math.cos(theta)  # unit normal of the line
+    return a * nx * nx + 2 * b * nx * ny + c * ny * ny
+
+
+def eig_best_angle() -> float:
+    """Direction of the fitted line in degrees in [0, 180): the eigenvector of the larger value."""
+    a, b, _ = eig_scatter()
+    _, upper = eig_values()
+    return math.degrees(math.atan2(upper - a, b)) % 180
+
+
+def _eig_fence_svg() -> str:
+    lower, upper = eig_values()
+    best = eig_best_angle()
+    cx, cy = eig_centre()
+    a, b, _ = eig_scatter()
+    vertical_angle = math.degrees(math.atan(b / a))  # the y-on-x least-squares line
+    vertical_sum = eig_perpendicular_sum(vertical_angle)
+    parts = _open(
+        "塀の向きを変えると、距離の二乗和が波打つ",
+        (
+            f"5本の杭と、重心 ({cx:g}, {cy:g}) を通る直線。"
+            f"傾き{math.tan(math.radians(best)):g}の直線（向き {best:.1f}°）で、"
+            f"杭から直線への垂直な距離の二乗和が最小の {lower:g} になる。"
+            f"二乗和は向きとともに {lower:g} と {upper:g} の間を波打ち、"
+            f"縦のずれで当てはめた傾き1の直線（45°）では {vertical_sum:g}。"
+        ),
+        652,
+    )
+    unit = 34
+    px = _scale(1.0, 7.0, 220 - 3 * unit, 220 + 3 * unit)
+    py = _scale(0.0, 6.0, 288, 288 - 6 * unit)
+    parts.append(_text(20, 64, "① 杭の位置と塀の線"))
+    parts.append(
+        f'<rect x="{px(1):.1f}" y="{py(6):.1f}" width="{6 * unit}" height="{6 * unit}" '
+        f'fill="#ffffff" stroke="{GRID}"/>'
+    )
+    for tick in range(1, 8):
+        parts.append(_text(px(tick), py(0) + 20, str(tick), "tick", "middle"))
+    for tick in range(0, 7, 2):
+        parts.append(_text(px(1) - 8, py(tick) + 5, str(tick), "tick", "end"))
+    dx, dy = math.cos(math.radians(best)), math.sin(math.radians(best))
+    span = 3.0 / dy
+    parts.append(
+        _polyline(
+            [(px(cx - span * dx), py(cy - span * dy)), (px(cx + span * dx), py(cy + span * dy))],
+            LINE,
+            3,
+        )
+    )
+    for x, y in EIG_POINTS:
+        along = (x - cx) * dx + (y - cy) * dy
+        fx, fy = cx + along * dx, cy + along * dy
+        parts.append(
+            f'<path d="M{px(x):.1f} {py(y):.1f}L{px(fx):.1f} {py(fy):.1f}" '
+            f'stroke="{UPDATE}" stroke-width="3"/>'
+        )
+        parts.append(f'<circle cx="{px(x):.1f}" cy="{py(y):.1f}" r="6" fill="{POINT}"/>')
+    parts.append(
+        f'<circle cx="{px(cx):.1f}" cy="{py(cy):.1f}" r="5" fill="#ffffff" stroke="{INK}" '
+        'stroke-width="2"/>'
+    )
+    parts.append(_text(330, 120, f"傾き {math.tan(math.radians(best)):g}", "note"))
+    parts.append(_text(330, 144, f"二乗和 {lower:g}", "note"))
+    parts.append(_text(330, 190, "○ 重心", "tick"))
+    parts.append(_text(330, 212, f"({cx:g}, {cy:g})", "tick"))
+
+    parts.append(_text(20, 350, "② 線の向きと距離の二乗和"))
+    gx = _scale(0.0, 180.0, 60, 410)
+    gy = _scale(0.0, 14.0, 560, 380)
+    parts.append(f'<path d="M60 380V560H410" fill="none" stroke="{GRID}"/>')
+    for angle in (0, 45, 90, 135, 180):
+        parts.append(_text(gx(angle), 580, f"{angle}°", "tick", "middle"))
+    for value in (0, 4, 8, 12):
+        parts.append(_text(52, gy(value) + 5, str(value), "tick", "end"))
+    parts.append(
+        _polyline(
+            [(gx(angle), gy(eig_perpendicular_sum(angle))) for angle in range(0, 181, 2)],
+            LINE,
+            3,
+        )
+    )
+    worst = (best + 90) % 180
+    marks = (
+        (best, lower, UPDATE, f"{best:.1f}° で最小 {lower:g}", "start", 10, 26),
+        (worst, upper, MUTED, f"{worst:.1f}° で最大 {upper:g}", "end", -10, 2),
+        (vertical_angle, vertical_sum, POINT, "", "end", 0, 0),
+    )
+    for angle, value, color, label, anchor, shift, lift in marks:
+        parts.append(f'<circle cx="{gx(angle):.1f}" cy="{gy(value):.1f}" r="6" fill="{color}"/>')
+        parts.append(_text(gx(angle) + shift, gy(value) + lift, label, "tick", anchor))
+    parts.append(_text(20, 612, f"紺の点：45°（縦のずれで当てはめた直線）で {vertical_sum:g}"))
+    parts.append(_text(20, 636, f"二乗和は {lower:g} と {upper:g} の間を行き来する", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _eig_condition_svg() -> str:
+    """Two unit normals n and the arrows M n: parallel only at the eigenvector."""
+    a, b, c = eig_scatter()
+    lower, _ = eig_values()
+    best = eig_best_angle()
+    normal_best = best - 90
+    parts = _open(
+        "最小の向きでは、M n が n と同じ向きになる",
+        (
+            f"長さ1の向き n と、行列 M=[[{a:g},{b:g}],[{b:g},{c:g}]] を掛けた M n の矢印。"
+            f"n=(1,0) では M n=({a:g},{b:g}) で、n と向きが違う。"
+            f"二乗和が最小の向き n=(2,−1)/√5 では M n={lower:g}n で、同じ向きを指す。"
+        ),
+        360,
+    )
+    centres = ((120.0, 190.0), (320.0, 190.0))
+    scale = 14.0
+    cases = (
+        (0.0, "n=(1, 0)", f"M n=({a:g}, {b:g})"),
+        (normal_best, "n=(2, −1)/√5", f"M n={lower:g} n"),
+    )
+    parts.append(
+        "<defs>"
+        f'<marker id="eig-head-n" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" '
+        f'markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{POINT}"/></marker>'
+        f'<marker id="eig-head-m" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" '
+        f'markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="{UPDATE}"/></marker>'
+        "</defs>"
+    )
+    for (ox, oy), (angle, n_label, mn_label) in zip(centres, cases, strict=True):
+        theta = math.radians(angle)
+        nx, ny = math.cos(theta), math.sin(theta)
+        mx, my = a * nx + b * ny, b * nx + c * ny
+        radius = 4 * scale
+        parts.append(
+            f'<circle cx="{ox}" cy="{oy}" r="{radius}" fill="none" stroke="{GRID}" '
+            'stroke-width="1.5"/>'
+        )
+        for (vx, vy), color, factor, head in (
+            ((nx, ny), POINT, radius, "n"),
+            ((mx, my), UPDATE, scale, "m"),
+        ):
+            ex, ey = ox + vx * factor, oy - vy * factor
+            parts.append(
+                f'<path d="M{ox} {oy}L{ex:.1f} {ey:.1f}" stroke="{color}" stroke-width="3" '
+                f'marker-end="url(#eig-head-{head})"/>'
+            )
+        parts.append(_text(ox, 300, n_label, "", "middle"))
+        parts.append(_text(ox, 324, mn_label, "note", "middle"))
+    parts.append(_text(20, 64, "紺：長さ1の向き n（円の上）　橙：M n", "tick"))
+    parts.append(_text(20, 350, "同じ向きのとき、円に沿って回す向きの傾きが0", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Stochastic programming (content/concepts/stochastic-programming.md): lunch boxes made in the
+# morning at 100 yen; any shortage is brought in from a nearby shop at 250 yen each.
+SP_MAKE, SP_BUY = 100, 250
+SP_SCENARIOS = (("雨", 20, 0.3), ("曇り", 40, 0.4), ("晴れ", 80, 0.3))
+
+
+def sp_cost(made: float, demand: float) -> float:
+    return SP_MAKE * made + SP_BUY * max(demand - made, 0.0)
+
+
+def sp_expected(made: float) -> float:
+    return sum(p * sp_cost(made, d) for _, d, p in SP_SCENARIOS)
+
+
+def sp_mean_demand() -> float:
+    return sum(p * d for _, d, p in SP_SCENARIOS)
+
+
+def sp_best() -> tuple[int, float]:
+    """The minimiser over whole boxes (the expected cost is piecewise linear in made)."""
+    return min(((made, sp_expected(made)) for made in range(0, 101)), key=lambda r: r[1])
+
+
+def _sp_cost_svg() -> str:
+    best, best_cost = sp_best()
+    mean = sp_mean_demand()
+    worst = max(d for _, d, _ in SP_SCENARIOS)
+    parts = _open(
+        "天気ごとの費用と、その期待値",
+        (
+            f"朝に作る弁当の数 x（0〜100個）と費用。1個{SP_MAKE}円で作り、"
+            f"足りない分は1個{SP_BUY}円で取り寄せる。"
+            "① 注文が雨20個・曇り40個・晴れ80個の三つの場合の費用の折れ線。"
+            "② 確率0.3・0.4・0.3で重みを付けた期待費用。"
+            f"期待費用は x={best} で最小の {best_cost:g} 円、平均の注文の数 {mean:g} 個では "
+            f"{sp_expected(mean):g} 円、最大の注文の数 {worst} 個では {sp_expected(worst):g} 円。"
+        ),
+        622,
+    )
+    px = _scale(0.0, 100.0, 76, 410)
+    for tick in (0, 20, 40, 60, 80, 100):
+        parts.append(_text(px(tick), 300, str(tick), "tick", "middle"))
+        parts.append(_text(px(tick), 584, str(tick), "tick", "middle"))
+    parts.append(_text(20, 64, "① 天気ごとの費用（千円）"))
+    py = _scale(0.0, 25000.0, 280, 80)
+    parts.append(f'<path d="M76 80V280H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 10000, 20000):
+        parts.append(_text(68, py(value) + 5, str(value // 1000), "tick", "end"))
+    colors = {"雨": RING, "曇り": LINE, "晴れ": INK}
+    for index, (name, demand, _) in enumerate(reversed(SP_SCENARIOS)):
+        points = [(px(x), py(sp_cost(x, demand))) for x in (0, demand, 100)]
+        parts.append(_polyline(points, colors[name], 2.5))
+        y = 104 + 24 * index
+        parts.append(_polyline([(300, y - 5), (322, y - 5)], colors[name], 2.5))
+        parts.append(_text(330, y, f"{name} {demand}個", "tick"))
+    parts.append(_text(20, 340, "② 期待費用（千円）"))
+    gy = _scale(6000.0, 12000.0, 564, 364)
+    parts.append(f'<path d="M76 364V564H410" fill="none" stroke="{GRID}"/>')
+    for value in (6000, 8000, 10000, 12000):
+        parts.append(_text(68, gy(value) + 5, str(value // 1000), "tick", "end"))
+    kinks = [0, *sorted(d for _, d, _ in SP_SCENARIOS), 100]
+    parts.append(_polyline([(px(x), gy(sp_expected(x))) for x in kinks], MUTED, 3))
+    marks = (
+        (best, UPDATE, f"x={best}：{sp_expected(best):g}円", -12, 26),
+        (mean, POINT, f"x={mean:g}：{sp_expected(mean):g}円", 14, 26),
+        (worst, GRID, f"x={worst}：{sp_expected(worst):g}円", -12, -12),
+    )
+    for x, color, label, shift, lift in marks:
+        parts.append(
+            f'<circle cx="{px(x):.1f}" cy="{gy(sp_expected(x)):.1f}" r="7" fill="{color}" '
+            f'stroke="{INK}" stroke-width="1.5"/>'
+        )
+        anchor = "start" if shift > 0 else "end"
+        parts.append(_text(px(x) + shift, gy(sp_expected(x)) + lift, label, "tick", anchor))
+    parts.append(_text(410, 604, "朝に作る数 x（個）", "tick", "end"))
+    parts.append(_text(20, 604, f"最小は x={best}", "note"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _sp_tree_svg() -> str:
+    """One morning decision shared by every branch; the afternoon decision differs by branch."""
+    best, _ = sp_best()
+    parts = _open(
+        "朝の決定は一つ、昼の対応は天気ごと",
+        (
+            f"朝に作る数 x は天気を知る前に一つだけ決める（例では x={best}）。"
+            "天気が分かった後の取り寄せ数 y は、雨・曇り・晴れの枝ごとに別々に決める。"
+            f"x={best} なら y は雨0・曇り0・晴れ{80 - best}。"
+        ),
+        370,
+    )
+    root = (70.0, 210.0)
+    parts.append(
+        f'<rect x="{root[0] - 50}" y="{root[1] - 34}" width="100" height="68" rx="10" '
+        f'fill="#f3d2b5" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(root[0], root[1] - 6, "朝", "", "middle"))
+    parts.append(_text(root[0], root[1] + 18, f"x={best}", "", "middle"))
+    for index, (name, demand, prob) in enumerate(SP_SCENARIOS):
+        y = 120.0 + 90.0 * index
+        bring = max(demand - best, 0)
+        parts.append(
+            f'<path d="M{root[0] + 50} {root[1]}L250 {y}" stroke="{GRID}" stroke-width="2"/>'
+        )
+        parts.append(_text(185, (root[1] + y) / 2 - 10, f"{prob:g}", "tick", "middle"))
+        parts.append(
+            f'<rect x="250" y="{y - 30}" width="170" height="60" rx="10" fill="#ffffff" '
+            f'stroke="{LINE}" stroke-width="2"/>'
+        )
+        parts.append(_text(262, y - 6, f"{name}：注文 {demand}"))
+        parts.append(_text(262, y + 18, f"取り寄せ y={bring}", "note"))
+    parts.append(_text(20, 64, "天気が分かる前", "tick"))
+    parts.append(_text(420, 64, "天気が分かった後", "tick", "end"))
+    parts.append(_text(20, 358, "線の数字は天気の確率", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Optimization with an external solver in the objective
+# (content/concepts/external-solver-objective.md): an A–B alloy whose stand-in "tool" returns the
+# phase combination with the lowest Gibbs energy, g_α = (x − 0.1)², g_β = (x − 0.6)² + 0.1.
+EXT_TANGENT = (0.2, 0.7)  # where the common tangent G = 0.2x − 0.03 touches the two parabolas
+EXT_TARGET = 0.3
+EXT_START = 0.6
+# The three runs of the article's pitfall, as SciPy 1.18.1 reports them from x0 = 0.6 with the
+# article's J (finite-difference gradients for the first two): (name, bounds, end, calls).
+EXT_RUNS = (
+    ("BFGS", "範囲なし", -0.41, 4),
+    ("L-BFGS-B", "範囲 [0,1]", 0.0, 4),
+    ("Nelder–Mead", "範囲 [0,1]", 0.35, 30),
+)
+
+
+def ext_equilibrium(x: float) -> tuple[str, float, float]:
+    """(phases, β fraction, Gibbs energy) of the candidate with the lowest Gibbs energy."""
+    low, high = EXT_TANGENT
+    candidates = [("α", 0.0, (x - 0.1) ** 2), ("β", 1.0, (x - 0.6) ** 2 + 0.1)]
+    if low < x < high:
+        fraction = (x - low) / (high - low)
+        candidates.append(("α+β", fraction, 0.2 * x - 0.03))
+    return min(candidates, key=lambda c: c[2])
+
+
+def ext_objective(x: float) -> float:
+    value = (ext_equilibrium(x)[1] - EXT_TARGET) ** 2
+    return 0.0 if abs(value) < 1e-12 else value
+
+
+def _ext_flat_stop_svg() -> str:
+    low, high = EXT_TANGENT
+    start_j = ext_objective(EXT_START)
+    parts = _open(
+        "差分の勾配は、βが0の平らな範囲で止まる",
+        (
+            "Bの分率 x（−0.5〜1）と外側の目的 J=(βの量−0.30)²。"
+            f"x が {low:g} 以下では β がなく J=0.09 で平ら、"
+            f"{high:g} 以上では β だけで J=0.49 で平ら、"
+            f"そのあいだで J=4(x−0.35)² の谷。始点 {EXT_START:g}（J={start_j:g}）から、"
+            "範囲なしのBFGSは x=−0.41 で、範囲 [0, 1] のL-BFGS-Bは x=0 で、どちらも J=0.09 のまま"
+            "止まる。範囲 [0, 1] のNelder–Meadは 30 回の計算で x=0.35、J=0 に着く。"
+        ),
+        478,
+    )
+    px = _scale(-0.5, 1.0, 56, 416)
+    py = _scale(0.0, 0.5, 300, 84)
+    parts.append(
+        f'<rect x="{px(-0.5):.1f}" y="84" width="{px(0.0) - px(-0.5):.1f}" height="216" '
+        f'fill="{VIOLATION}" opacity="0.08"/>'
+    )
+    parts.append(
+        f'<rect x="{px(low):.1f}" y="84" width="{px(high) - px(low):.1f}" height="216" '
+        f'fill="{RING}" opacity="0.25"/>'
+    )
+    parts.append(_text((px(-0.5) + px(0.0)) / 2, 74, "組成の外", "tick", "middle"))
+    parts.append(_text((px(0.0) + px(low)) / 2, 74, "αだけ", "tick", "middle"))
+    parts.append(_text((px(low) + px(high)) / 2, 74, "α+β", "tick", "middle"))
+    parts.append(_text((px(high) + px(1.0)) / 2, 74, "βだけ", "tick", "middle"))
+    parts.append(f'<path d="M56 84V300H416" fill="none" stroke="{GRID}" stroke-width="1.5"/>')
+    for value in (0.0, 0.09, 0.25, 0.49):
+        parts.append(
+            f'<path d="M56 {py(value):.1f}H416" stroke="{GRID}" stroke-width="0.6" opacity="0.6"/>'
+        )
+        parts.append(_text(48, py(value) + 5, f"{value:g}", "tick", "end"))
+    for value in (-0.5, 0.0, 0.35, 0.6, 1.0):
+        parts.append(_text(px(value), 320, f"{value:g}".replace("-", "−"), "tick", "middle"))
+    parts.append(_text(416, 342, "Bの分率 x", "tick", "end"))
+    xs = [-0.5 + 1.5 * i / 600 for i in range(601)]
+    parts.append(_polyline([(px(x), py(ext_objective(x))) for x in xs], LINE, 3))
+    sx, sy = px(EXT_START), py(start_j)
+    for name, _, end, _ in EXT_RUNS:
+        ex, ey = px(end), py(ext_objective(end))
+        lift = 70 if name == "BFGS" else 40
+        parts.append(
+            f'<path d="M{sx:.1f} {sy:.1f}Q{(sx + ex) / 2:.1f} {min(sy, ey) - lift:.1f} '
+            f'{ex:.1f} {ey:.1f}" fill="none" stroke="{UPDATE}" stroke-width="1.6" '
+            'stroke-dasharray="5 4"/>'
+        )
+        if end == 0.35:
+            parts.append(f'<circle cx="{ex:.1f}" cy="{ey:.1f}" r="7" fill="{LINE}"/>')
+            parts.append(_text(ex, ey - 12, name, "tick", "middle"))
+        else:
+            parts.append(
+                f'<rect x="{ex - 6:.1f}" y="{ey - 6:.1f}" width="12" height="12" fill="#f7f8f3" '
+                f'stroke="{POINT}" stroke-width="2.5"/>'
+            )
+            # Both labels sit under their squares; L-BFGS-B ends at its square to clear Nelder–Mead.
+            if name == "BFGS":
+                parts.append(_text(ex, ey + 26, name, "tick", "middle"))
+            else:
+                parts.append(_text(ex + 6, ey + 26, name, "tick", "end"))
+    parts.append(f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(_text(sx + 12, sy + 5, "始点", ""))
+    parts.append(_text(20, 372, f"始点 x={EXT_START:.2f}（J={start_j:g}）から："))
+    for index, (name, bounds, end, calls) in enumerate(EXT_RUNS):
+        value = ext_objective(end)
+        tail = f"、{calls}回" if name == "Nelder–Mead" else ""
+        line = f"{name}（{bounds}）→ x={end:.2f}、J={value:g}{tail}".replace("-0", "−0")
+        parts.append(_text(20, 396 + 24 * index, line, "note" if value == 0 else ""))
+    parts.append(_text(20, 468, "上の2つは「成功」と報告して止まる"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Robust optimization (content/concepts/robust-optimization.md): ten kilograms of nitrogen
+# from bags of chemical fertilizer (A) and compost (B), whose nitrogen per bag is only known
+# to lie in a range. At most eight bags fit on the truck.
+RO_COST = (3.0, 1.2)  # thousand yen per bag
+RO_MEAN = (2.0, 1.0)  # kg of nitrogen per bag, the middle of the recorded range
+RO_HALF = (0.2, 0.5)  # half-width of the recorded range
+RO_NEED, RO_CAP = 10.0, 8.0
+
+
+def ro_coefficients(k: float) -> tuple[float, float]:
+    """The low corner of the range shrunk to k times its recorded half-width."""
+    return (RO_MEAN[0] - k * RO_HALF[0], RO_MEAN[1] - k * RO_HALF[1])
+
+
+def ro_solve(k: float) -> tuple[tuple[float, float], float]:
+    """min c'x s.t. a(k)'x >= need, x1 + x2 <= cap, x >= 0, by enumerating the vertices."""
+    a = ro_coefficients(k)
+    lines = (  # (p, q, r) for p x1 + q x2 = r
+        (a[0], a[1], RO_NEED),
+        (1.0, 1.0, RO_CAP),
+        (1.0, 0.0, 0.0),
+        (0.0, 1.0, 0.0),
+    )
+    best: tuple[tuple[float, float], float] | None = None
+    for (p1, q1, r1), (p2, q2, r2) in itertools.combinations(lines, 2):
+        det = p1 * q2 - p2 * q1
+        if abs(det) < 1e-12:
+            continue
+        x = ((r1 * q2 - r2 * q1) / det, (p1 * r2 - p2 * r1) / det)
+        feasible = (
+            min(x) >= -1e-9
+            and x[0] + x[1] <= RO_CAP + 1e-9
+            and a[0] * x[0] + a[1] * x[1] >= RO_NEED - 1e-9
+        )
+        cost = RO_COST[0] * x[0] + RO_COST[1] * x[1]
+        if feasible and (best is None or cost < best[1] - 1e-12):
+            best = (x, cost)
+    assert best is not None
+    return best
+
+
+def ro_content(x: Sequence[float], a: Sequence[float]) -> float:
+    return a[0] * x[0] + a[1] * x[1]
+
+
+def ro_shortfall_probability(x: Sequence[float]) -> float:
+    """P(a'x < need) when a is uniform on the recorded box: area of the clipped box / box area."""
+    low = ro_coefficients(1.0)
+    high = (RO_MEAN[0] + RO_HALF[0], RO_MEAN[1] + RO_HALF[1])
+    box = [(low[0], low[1]), (high[0], low[1]), (high[0], high[1]), (low[0], high[1])]
+
+    def gap(point: tuple[float, float]) -> float:
+        return RO_NEED - ro_content(x, point)
+
+    kept: list[tuple[float, float]] = []
+    for p, q in zip(box, box[1:] + box[:1], strict=True):
+        if gap(p) > 0:
+            kept.append(p)
+        if (gap(p) > 0) != (gap(q) > 0):
+            s = gap(p) / (gap(p) - gap(q))
+            kept.append((p[0] + s * (q[0] - p[0]), p[1] + s * (q[1] - p[1])))
+    if len(kept) < 3:
+        return 0.0
+    area = 0.5 * abs(
+        sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(kept, kept[1:] + kept[:1], strict=True))
+    )
+    return area / (4 * RO_HALF[0] * RO_HALF[1])
+
+
+def ro_switch() -> float:
+    """The range factor k at which the cheapest plan stops using compost (bisection)."""
+    low, high = 0.0, 1.0
+    for _ in range(200):
+        mid = (low + high) / 2
+        low, high = (mid, high) if ro_solve(mid)[0][1] > 1e-9 else (low, mid)
+    return (low + high) / 2
+
+
+def _ro_number(value: float, digits: int = 2) -> str:
+    return f"{round(value, digits):g}"
+
+
+def _ro_box_svg() -> str:
+    nominal, nominal_cost = ro_solve(0.0)
+    robust, robust_cost = ro_solve(1.0)
+    worst = ro_coefficients(1.0)
+    parts = _open(
+        "含有量の範囲と、袋数の選び方",
+        (
+            "① 1袋あたりの窒素の範囲：化成肥料1.8〜2.2kg、堆肥0.5〜1.5kg。中央は (2, 1)、"
+            "どちらも少ない角は (1.8, 0.5)。"
+            "② 袋数の平面：化成肥料 x₁ と堆肥 x₂。中央の含有量で窒素10kgの線、"
+            "少ない角の含有量で窒素10kgの線、8袋の線。"
+            f"中央の含有量で最も安い (2, 6) は{_ro_number(nominal_cost)}千円だが、"
+            f"少ない角では窒素{_ro_number(ro_content(nominal, worst))}kg。"
+            f"範囲のどこでも10kgを守る最も安い組み合わせは"
+            f"({_ro_number(robust[0])}, 0)で{_ro_number(robust_cost)}千円。"
+        ),
+        660,
+    )
+    parts.append(_text(20, 64, "① 1袋あたりの窒素（kg）の範囲"))
+    ax = _scale(1.7, 2.3, 96, 400)
+    ay = _scale(0.3, 1.7, 236, 84)
+    parts.append(f'<path d="M96 84V236H400" fill="none" stroke="{GRID}"/>')
+    for value in (1.8, 2.0, 2.2):
+        parts.append(_text(ax(value), 256, f"{value:g}", "tick", "middle"))
+    for value in (0.5, 1.0, 1.5):
+        parts.append(_text(88, ay(value) + 5, f"{value:g}", "tick", "end"))
+    parts.append(_text(400, 280, "化成肥料 a₁", "tick", "end"))
+    parts.append(_text(104, 100, "堆肥 a₂", "tick"))
+    lo, hi = ro_coefficients(1.0), ro_coefficients(-1.0)
+    parts.append(
+        f'<rect x="{ax(lo[0]):.1f}" y="{ay(hi[1]):.1f}" width="{ax(hi[0]) - ax(lo[0]):.1f}" '
+        f'height="{ay(lo[1]) - ay(hi[1]):.1f}" fill="#e3ece6" stroke="{LINE}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<circle cx="{ax(RO_MEAN[0]):.1f}" cy="{ay(RO_MEAN[1]):.1f}" r="7" fill="{POINT}"/>'
+    )
+    parts.append(_text(ax(RO_MEAN[0]) + 12, ay(RO_MEAN[1]) + 5, "中央 (2, 1)"))
+    parts.append(f'<circle cx="{ax(worst[0]):.1f}" cy="{ay(worst[1]):.1f}" r="7" fill="{UPDATE}"/>')
+    parts.append(
+        _text(ax(worst[0]) + 12, ay(worst[1]) - 8, "少ない角 (1.8, 0.5)").replace(
+            "<text ", f'<text style="fill:{UPDATE}" '
+        )
+    )
+
+    parts.append(_text(20, 318, "② 袋数の平面"))
+    parts.append(_text(410, 318, "縦：堆肥 x₂（袋）", "tick", "end"))
+    px = _scale(0.0, 8.0, 76, 410)
+    py = _scale(0.0, 8.0, 584, 348)
+    parts.append(f'<path d="M76 348V584H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 2, 4, 6, 8):
+        parts.append(_text(px(value), 604, str(value), "tick", "middle"))
+        parts.append(_text(68, py(value) + 5, str(value), "tick", "end"))
+    parts.append(_text(410, 628, "化成肥料 x₁（袋）", "tick", "end"))
+    corner = (
+        (RO_NEED - worst[1] * RO_CAP) / (worst[0] - worst[1]),
+        RO_CAP - (RO_NEED - worst[1] * RO_CAP) / (worst[0] - worst[1]),
+    )
+    region = [(RO_NEED / worst[0], 0.0), (RO_CAP, 0.0), corner]
+    joined = " ".join(f"{px(x):.1f},{py(y):.1f}" for x, y in region)
+    parts.append(f'<polygon points="{joined}" fill="#f3d2b5" stroke="none"/>')
+    parts.append(_polyline([(px(0), py(RO_CAP)), (px(RO_CAP), py(0))], MUTED, 2))
+    top = (RO_NEED - RO_MEAN[1] * RO_CAP) / RO_MEAN[0]  # where the mean line meets x2 = 8
+    mean_line = [(px(RO_NEED / RO_MEAN[0]), py(0)), (px(top), py(RO_CAP))]
+    parts.append(_polyline(mean_line, POINT, 2.5))
+    worst_top = (RO_NEED - worst[1] * RO_CAP) / worst[0]  # where it meets x2 = 8
+    worst_line = [(px(RO_NEED / worst[0]), py(0)), (px(worst_top), py(RO_CAP))]
+    parts.append(_polyline(worst_line, UPDATE, 2.5))
+    parts.append(
+        f'<circle cx="{px(nominal[0]):.1f}" cy="{py(nominal[1]):.1f}" r="7" fill="{POINT}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(
+        _text(px(nominal[0]) + 12, py(nominal[1]) - 8, f"(2, 6)：{_ro_number(nominal_cost)}千円")
+    )
+    parts.append(
+        f'<circle cx="{px(robust[0]):.1f}" cy="{py(robust[1]):.1f}" r="7" fill="{UPDATE}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(_text(410, py(7.4), f"橙の点 ({_ro_number(robust[0])}, 0)", anchor="end"))
+    parts.append(_text(410, py(7.4) + 22, f"{_ro_number(robust_cost)}千円", anchor="end"))
+    parts.append(_polyline([(20, 646 - 5), (42, 646 - 5)], POINT, 2.5))
+    parts.append(_text(48, 646, "中央で10kg", "tick"))
+    parts.append(_polyline([(152, 646 - 5), (174, 646 - 5)], UPDATE, 2.5))
+    parts.append(_text(180, 646, "少ない角で10kg", "tick"))
+    parts.append(_polyline([(312, 646 - 5), (334, 646 - 5)], MUTED, 2))
+    parts.append(_text(340, 646, "8袋", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _ro_set_size_svg() -> str:
+    switch = ro_switch()
+    ks = [i / 200 for i in range(201)]
+    parts = _open(
+        "備える範囲の広さと、費用・不足の確率",
+        (
+            "備える範囲を、記録された範囲の k 倍（k=0 は中央の値だけ、k=1 は記録された範囲全体）"
+            "にしたときの最も安い組み合わせ。"
+            f"① 費用は k=0 の{_ro_number(ro_solve(0.0)[1])}千円から k=1 の"
+            f"{_ro_number(ro_solve(1.0)[1])}千円まで増える。"
+            f"k={_ro_number(switch, 3)} で堆肥を使わない組み合わせに切り替わる。"
+            "② 含有量が記録された範囲の中で一様にばらつくと仮定したときの、"
+            "窒素が10kgに届かない確率。"
+            f"k=0 で{_ro_number(100 * ro_shortfall_probability(ro_solve(0.0)[0]), 1)}%、"
+            f"k=1 で0%。切り替わりの直後に確率が上がる。"
+        ),
+        610,
+    )
+    px = _scale(0.0, 1.0, 76, 410)
+    for tick in (0.0, 0.25, 0.5, 0.75, 1.0):
+        parts.append(_text(px(tick), 300, f"{tick:g}", "tick", "middle"))
+        parts.append(_text(px(tick), 564, f"{tick:g}", "tick", "middle"))
+    parts.append(_text(20, 64, "① 最も安い組み合わせの費用（千円）"))
+    cy = _scale(12.0, 17.0, 280, 84)
+    parts.append(f'<path d="M76 84V280H410" fill="none" stroke="{GRID}"/>')
+    for value in (12, 14, 16):
+        parts.append(_text(68, cy(value) + 5, str(value), "tick", "end"))
+    parts.append(_polyline([(px(k), cy(ro_solve(k)[1])) for k in ks], LINE, 3))
+    parts.append(_text(20, 344, "② 窒素が10kgに届かない確率（%）"))
+    qy = _scale(0.0, 60.0, 544, 364)
+    parts.append(f'<path d="M76 364V544H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 25, 50):
+        parts.append(_text(68, qy(value) + 5, str(value), "tick", "end"))
+    before = [k for k in ks if k < switch]
+    after = [k for k in ks if k > switch]
+    for segment in (before, after):
+        points = [(px(k), qy(100 * ro_shortfall_probability(ro_solve(k)[0]))) for k in segment]
+        parts.append(_polyline(points, UPDATE, 3))
+    for top, bottom in ((84, 280), (364, 544)):
+        parts.append(
+            f'<path d="M{px(switch):.1f} {top}V{bottom}" stroke="{MUTED}" stroke-width="1.5" '
+            'stroke-dasharray="5 4"/>'
+        )
+    parts.append(_text(px(switch) + 8, 392, f"k={_ro_number(switch, 3)}", "tick"))
+    parts.append(_text(px(switch) + 8, 412, "ここから堆肥0袋", "tick"))
+    for k, shift, lift, anchor in (
+        (0.0, 10, -10, "start"),
+        (0.45, -10, 22, "end"),
+        (0.5, 10, -10, "start"),
+    ):
+        x, cost = ro_solve(k)
+        probability = 100 * ro_shortfall_probability(x)
+        parts.append(f'<circle cx="{px(k):.1f}" cy="{qy(probability):.1f}" r="5" fill="{INK}"/>')
+        label = f"{_ro_number(probability, 1)}%"
+        parts.append(_text(px(k) + shift, qy(probability) + lift, label, "tick", anchor))
+        parts.append(f'<circle cx="{px(k):.1f}" cy="{cy(cost):.1f}" r="5" fill="{INK}"/>')
+        if k == 0.0:
+            parts.append(_text(px(k) + shift, cy(cost) + 22, _ro_number(cost), "tick"))
+    switch_cost = ro_solve(switch)[1]
+    parts.append(
+        _text(px(switch) - 10, cy(switch_cost) - 12, f"{_ro_number(switch_cost)}", "tick", "end")
+    )
+    full = ro_solve(1.0)[1]
+    parts.append(f'<circle cx="{px(1.0):.1f}" cy="{cy(full):.1f}" r="5" fill="{INK}"/>')
+    parts.append(_text(px(1.0), cy(full) + 24, _ro_number(full), "tick", "end"))
+    parts.append(_text(410, 588, "備える範囲の広さ k", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Robust parameter estimation (content/concepts/robust-parameter-estimation.md): the spring's
+# eight readings from the nonlinear least-squares lesson, with the reading at t=2.5 s recorded
+# without its minus sign (1.7 instead of -1.7). Huber loss with scale 0.3.
+RPE_Y = tuple(1.7 if index == 5 else y for index, y in enumerate(SPRING_Y))
+RPE_BAD = 5
+RPE_DELTA = 0.3
+
+
+def rpe_huber(residual: float, delta: float = RPE_DELTA) -> float:
+    size = abs(residual)
+    return 0.5 * size * size if size <= delta else delta * (size - 0.5 * delta)
+
+
+def rpe_huber_slope(residual: float, delta: float = RPE_DELTA) -> float:
+    return max(-delta, min(delta, residual))
+
+
+def rpe_squares_profile(w: float, ys: Sequence[float] = RPE_Y) -> tuple[float, float]:
+    """(smallest sum of squares over the amplitude, that amplitude) at a fixed ω."""
+    s = [math.sin(w * t) for t in SPRING_T]
+    a = sum(si * yi for si, yi in zip(s, ys, strict=True)) / sum(si * si for si in s)
+    return sum((a * si - yi) ** 2 for si, yi in zip(s, ys, strict=True)), a
+
+
+def rpe_huber_profile(w: float) -> tuple[float, float]:
+    """(smallest Huber loss over the amplitude, that amplitude): bisection on the monotone slope."""
+    s = [math.sin(w * t) for t in SPRING_T]
+    low, high = -20.0, 20.0
+    for _ in range(100):
+        mid = (low + high) / 2
+        slope = sum(rpe_huber_slope(mid * si - yi) * si for si, yi in zip(s, RPE_Y, strict=True))
+        low, high = (low, mid) if slope > 0 else (mid, high)
+    a = (low + high) / 2
+    return sum(rpe_huber(a * si - yi) for si, yi in zip(s, RPE_Y, strict=True)), a
+
+
+def rpe_clean_profile(w: float) -> tuple[float, float]:
+    """The same profile for the eight readings with the correct sign."""
+    return rpe_squares_profile(w, SPRING_Y)
+
+
+@functools.cache
+def rpe_valleys(profile: Callable[[float], tuple[float, float]]) -> list[tuple[float, float]]:
+    """Local minima of a profile on (0.2, 2π], each refined by golden-section search."""
+    grid = [0.2 + (2 * math.pi - 0.2) * i / 1200 for i in range(1201)]
+    values = [profile(w)[0] for w in grid]
+    found = []
+    for i in range(1, len(grid) - 1):
+        if values[i] < values[i - 1] and values[i] <= values[i + 1]:
+            low, high = grid[i - 1], grid[i + 1]
+            ratio = (math.sqrt(5) - 1) / 2
+            for _ in range(80):
+                left, right = high - ratio * (high - low), low + ratio * (high - low)
+                low, high = (low, right) if profile(left)[0] < profile(right)[0] else (left, high)
+            w = (low + high) / 2
+            found.append((w, profile(w)[0]))
+    return found
+
+
+def rpe_residuals(a: float, w: float) -> list[float]:
+    return [a * math.sin(w * t) - y for t, y in zip(SPRING_T, RPE_Y, strict=True)]
+
+
+def rpe_weights(a: float, w: float) -> list[float]:
+    return [min(1.0, RPE_DELTA / max(abs(r), 1e-15)) for r in rpe_residuals(a, w)]
+
+
+def rpe_irls(start: tuple[float, float] = (1.0, 1.8), steps: int = 8) -> list[tuple[float, ...]]:
+    """Weighted Gauss–Newton: (J'WJ) d = -J'W r with Huber weights; rows (a, ω, Huber, SS, r, w)."""
+    a, w = start
+    rows = []
+    for _ in range(steps + 1):
+        r = rpe_residuals(a, w)
+        weights = rpe_weights(a, w)
+        rows.append(
+            (
+                a,
+                w,
+                sum(rpe_huber(ri) for ri in r),
+                sum(ri * ri for ri in r),
+                r[RPE_BAD],
+                weights[RPE_BAD],
+            )
+        )
+        j = [(math.sin(w * t), a * t * math.cos(w * t)) for t in SPRING_T]
+        m11 = sum(wi * ji[0] * ji[0] for wi, ji in zip(weights, j, strict=True))
+        m12 = sum(wi * ji[0] * ji[1] for wi, ji in zip(weights, j, strict=True))
+        m22 = sum(wi * ji[1] * ji[1] for wi, ji in zip(weights, j, strict=True))
+        g1 = sum(wi * ji[0] * ri for wi, ji, ri in zip(weights, j, r, strict=True))
+        g2 = sum(wi * ji[1] * ri for wi, ji, ri in zip(weights, j, r, strict=True))
+        det = m11 * m22 - m12 * m12
+        a += (-m22 * g1 + m12 * g2) / det
+        w += (m12 * g1 - m11 * g2) / det
+    return rows
+
+
+def _rpe_profile_svg() -> str:
+    squares = rpe_valleys(rpe_squares_profile)
+    huber = rpe_valleys(rpe_huber_profile)
+    clean = rpe_valleys(rpe_clean_profile)
+    sq_best = min(squares, key=lambda v: v[1])
+    hu_best = min(huber, key=lambda v: v[1])
+    near = min(squares, key=lambda v: abs(v[0] - 2.0))
+    parts = _open(
+        "外れた1点で、最も深い谷が入れ替わる",
+        (
+            "角周波数ωを固定し、振幅aを最もよく選んだときの損失。2.5秒の読みを1.7と記録した8点。"
+            f"① 二乗和：最も深い谷はω={sq_best[0]:.2f}（{sq_best[1]:.2f}）、"
+            f"ω=2付近の谷はω={near[0]:.2f}（{near[1]:.2f}）。"
+            f"破線は符号が正しい8点の二乗和で、最も深い谷はω={clean[0][0]:.2f}。"
+            f"② Huber損失（尺度0.3）：最も深い谷はω={hu_best[0]:.2f}（{hu_best[1]:.3f}）。"
+        ),
+        612,
+    )
+    px = _scale(0.0, 2 * math.pi, 64, 416)
+    # sin(2π t) is 0 at every reading, so the amplitude is undefined at ω = 2π itself.
+    ws = [0.2 + (2 * math.pi - 0.25) * i / 400 for i in range(401)]
+    for tick in range(7):
+        parts.append(_text(px(tick), 292, str(tick), "tick", "middle"))
+        parts.append(_text(px(tick), 572, str(tick), "tick", "middle"))
+    parts.append(_text(20, 64, "① 二乗和"))
+    sy = _scale(0.0, 16.0, 272, 84)
+    parts.append(f'<path d="M64 84V272H416" fill="none" stroke="{GRID}"/>')
+    for value in (0, 5, 10, 15):
+        parts.append(_text(56, sy(value) + 5, str(value), "tick", "end"))
+    clean_curve = [(px(w), sy(rpe_clean_profile(w)[0])) for w in ws]
+    parts.append(_polyline(clean_curve, MUTED, 1.5).replace("/>", ' stroke-dasharray="5 4"/>'))
+    parts.append(_polyline([(px(w), sy(rpe_squares_profile(w)[0])) for w in ws], POINT, 3))
+    for w, value in squares:
+        color = POINT if (w, value) == sq_best else RING
+        parts.append(f'<circle cx="{px(w):.1f}" cy="{sy(value):.1f}" r="6" fill="{color}"/>')
+    parts.append(
+        _text(
+            px(sq_best[0]) - 10,
+            sy(sq_best[1]) + 26,
+            f"ω={sq_best[0]:.2f}：{sq_best[1]:.2f}",
+            anchor="end",
+        )
+    )
+    parts.append(_text(px(near[0]) + 10, sy(near[1]) + 24, f"ω={near[0]:.2f}：{near[1]:.2f}"))
+    parts.append(_text(20, 318, "実線：記録どおりの8点　破線：符号が正しい8点", "tick"))
+
+    parts.append(_text(20, 344, f"② Huber損失（尺度 {RPE_DELTA:g}）"))
+    hy = _scale(0.0, 3.2, 552, 364)
+    parts.append(f'<path d="M64 364V552H416" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1, 2, 3):
+        parts.append(_text(56, hy(value) + 5, str(value), "tick", "end"))
+    parts.append(_polyline([(px(w), hy(rpe_huber_profile(w)[0])) for w in ws], UPDATE, 3))
+    for w, value in huber:
+        color = UPDATE if (w, value) == hu_best else RING
+        parts.append(f'<circle cx="{px(w):.1f}" cy="{hy(value):.1f}" r="6" fill="{color}"/>')
+    parts.append(
+        _text(px(hu_best[0]) + 10, hy(hu_best[1]) + 24, f"ω={hu_best[0]:.2f}：{hu_best[1]:.2f}")
+    )
+    parts.append(_text(416, 596, "角周波数 ω", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _rpe_weights_svg() -> str:
+    a_h, w_h = rpe_irls()[-1][:2]
+    sq_best = min(rpe_valleys(rpe_squares_profile), key=lambda v: v[1])
+    a_s = rpe_squares_profile(sq_best[0])[1]
+    weights = rpe_weights(a_h, w_h)
+    parts = _open(
+        "Huberの当てはめと、各観測の重み",
+        (
+            "① 8つの観測と2本の曲線。2.5秒の読みは −1.7 を 1.7 と記録したもの。"
+            f"Huber損失の当てはめは a={a_h:.2f}、ω={w_h:.2f}、"
+            f"二乗和で最も深い谷は a={a_s:.2f}、ω={sq_best[0]:.2f}。"
+            "② Huberの当てはめでの各観測の重み min(1, 0.3/|r|)。"
+            f"2.5秒の観測だけが {weights[RPE_BAD]:.3f}、ほかの7つは1。"
+        ),
+        604,
+    )
+    parts.append(_text(20, 64, "① 観測点と曲線"))
+    px = _scale(0.0, 3.5, 64, 410)
+    py = _scale(-2.6, 2.6, 290, 84)
+    parts.append(f'<path d="M64 84V290H410" fill="none" stroke="{GRID}"/>')
+    parts.append(f'<path d="M64 {py(0):.1f}H410" stroke="{GRID}" stroke-width="1"/>')
+    for value in (-2, 0, 2):
+        parts.append(_text(56, py(value) + 5, f"{value}".replace("-", "−"), "tick", "end"))
+    for value in (0, 1, 2, 3):
+        parts.append(_text(px(value), 310, str(value), "tick", "middle"))
+    parts.append(_text(410, 332, "時刻 t（秒）", "tick", "end"))
+    ts = [3.5 * i / 280 for i in range(281)]
+    parts.append(
+        _polyline([(px(t), py(a_s * math.sin(sq_best[0] * t))) for t in ts], POINT, 2).replace(
+            "/>", ' stroke-dasharray="6 4"/>'
+        )
+    )
+    parts.append(_polyline([(px(t), py(a_h * math.sin(w_h * t))) for t in ts], UPDATE, 3))
+    for index, (t, y) in enumerate(zip(SPRING_T, RPE_Y, strict=True)):
+        if index == RPE_BAD:
+            parts.append(
+                f'<circle cx="{px(t):.1f}" cy="{py(y):.1f}" r="9" fill="none" '
+                f'stroke="{VIOLATION}" stroke-width="2.5"/>'
+            )
+        parts.append(f'<circle cx="{px(t):.1f}" cy="{py(y):.1f}" r="5" fill="{INK}"/>')
+    parts.append(_polyline([(20, 360 - 5), (42, 360 - 5)], UPDATE, 3))
+    parts.append(_text(48, 360, f"Huber：ω={w_h:.2f}", "tick"))
+    parts.append(
+        _polyline([(210, 360 - 5), (232, 360 - 5)], POINT, 2).replace(
+            "/>", ' stroke-dasharray="6 4"/>'
+        )
+    )
+    parts.append(_text(238, 360, f"二乗和：ω={sq_best[0]:.2f}", "tick"))
+    parts.append(
+        f'<circle cx="31" cy="379" r="8" fill="none" stroke="{VIOLATION}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(48, 384, "2.5秒の読み：記録は1.7（本来は −1.7）", "tick"))
+
+    parts.append(_text(20, 422, "② Huberの当てはめでの重み"))
+    by = _scale(0.0, 1.0, 536, 446)
+    bx = _scale(-0.25, 3.75, 64, 410)
+    parts.append(f'<path d="M64 446V536H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1):
+        parts.append(_text(56, by(value) + 5, str(value), "tick", "end"))
+    for index, (t, weight) in enumerate(zip(SPRING_T, weights, strict=True)):
+        color = VIOLATION if index == RPE_BAD else LINE
+        top = by(weight)
+        parts.append(
+            f'<rect x="{bx(t) - 10:.1f}" y="{top:.1f}" width="20" height="{536 - top:.1f}" '
+            f'fill="{color}"/>'
+        )
+        parts.append(_text(bx(t), 556, f"{t:g}", "tick", "middle"))
+    parts.append(
+        _text(
+            bx(SPRING_T[RPE_BAD]),
+            by(weights[RPE_BAD]) - 8,
+            f"{weights[RPE_BAD]:.3f}",
+            anchor="middle",
+        )
+    )
+    parts.append(_text(410, 584, "観測の時刻 t（秒）", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# SAT and MaxSAT (content/concepts/sat-maxsat.md): whom to invite to a weekend study group.
+# Variables 1..5 are A..E (true = invite). Clauses list signed variable numbers.
+SAT_NAMES = "ABCDE"
+SAT_HARD = (
+    ((1, 2), "鍵"),  # only A and B hold the key
+    ((-1, -3), "店番A・C"),  # A and C keep the same shop
+    ((-2, 4), "車"),  # B comes in D's car
+    ((-4, -5), "店番D・E"),  # D and E keep the same shop
+)
+SAT_SOFT = (((3,), 3), ((5,), 2), ((1,), 2))  # wishes: C 3, E 2, A 2
+
+
+def sat_holds(clause: Sequence[int], x: Sequence[bool]) -> bool:
+    return any((lit > 0) == x[abs(lit) - 1] for lit in clause)
+
+
+def sat_weight(x: Sequence[bool]) -> int:
+    return sum(w for clause, w in SAT_SOFT if sat_holds(clause, x))
+
+
+def sat_label(x: Sequence[bool]) -> str:
+    return "".join(n for n, b in zip(SAT_NAMES, x, strict=True) if b) or "なし"
+
+
+def sat_feasible() -> list[tuple[bool, ...]]:
+    return [
+        x
+        for x in itertools.product((False, True), repeat=5)
+        if all(sat_holds(clause, x) for clause, _ in SAT_HARD)
+    ]
+
+
+def sat_implications(first: int) -> list[tuple[int, str]]:
+    """Unit propagation from one decided literal over the hard clauses: (literal, reason)."""
+    value = {abs(first): first > 0}
+    chain = [(first, "")]
+    changed = True
+    while changed:
+        changed = False
+        for clause, reason in SAT_HARD:
+            if any(value.get(abs(lit)) == (lit > 0) for lit in clause):
+                continue
+            free = [lit for lit in clause if abs(lit) not in value]
+            if len(free) == 1:
+                value[abs(free[0])] = free[0] > 0
+                chain.append((free[0], reason))
+                changed = True
+    return chain
+
+
+def sat_greedy() -> tuple[bool, ...]:
+    """Grant the wishes heaviest first, keeping each one only if some feasible plan remains."""
+    plans = sat_feasible()
+    for clause, _ in sorted(SAT_SOFT, key=lambda item: -item[1]):
+        kept = [x for x in plans if sat_holds(clause, x)]
+        plans = kept or plans
+    return max(plans, key=sat_weight)
+
+
+def _sat_literal(lit: int) -> str:
+    return ("" if lit > 0 else "¬") + SAT_NAMES[abs(lit) - 1]
+
+
+def _sat_grid_svg() -> str:
+    feasible = set(sat_feasible())
+    best = max(feasible, key=sat_weight)
+    greedy = sat_greedy()
+    parts = _open(
+        "32通りの呼び方と、希望の重み",
+        (
+            "5人A〜Eを呼ぶかどうかの32通り。行はAとBの呼び方、列はC・D・Eの呼び方。"
+            f"決まり（鍵・店番・車・店番）を守るのは{len(feasible)}通りで、"
+            "守る組には、かなった希望の重み（Cが3、Eが2、Aが2）の合計を書く。"
+            f"最も重いのは{sat_label(best)}の{sat_weight(best)}、"
+            f"重い希望から順に決めると{sat_label(greedy)}の{sat_weight(greedy)}。"
+        ),
+        380,
+    )
+    left, top, cell_w, cell_h = 92, 96, 41, 50
+    columns = list(itertools.product((False, True), repeat=3))
+    rows = list(itertools.product((False, True), repeat=2))
+    parts.append(_text(20, 64, "列：C・D・Eのうち呼ぶ人　行：A・Bのうち呼ぶ人", "tick"))
+    for j, cde in enumerate(columns):
+        name = "".join(n for n, b in zip("CDE", cde, strict=True) if b) or "−"
+        parts.append(_text(left + cell_w * (j + 0.5), top - 8, name, "tick", "middle"))
+    for i, ab in enumerate(rows):
+        name = "".join(n for n, b in zip("AB", ab, strict=True) if b) or "−"
+        parts.append(_text(left - 10, top + cell_h * (i + 0.5) + 5, name, "tick", "end"))
+        for j, cde in enumerate(columns):
+            x = (*ab, *cde)
+            cx, cy = left + cell_w * j, top + cell_h * i
+            if x in feasible:
+                fill = "#ffffff"
+                parts.append(
+                    f'<rect x="{cx + 2}" y="{cy + 2}" width="{cell_w - 4}" height="{cell_h - 4}" '
+                    f'rx="6" fill="{fill}" stroke="{LINE}" stroke-width="1.5"/>'
+                )
+                parts.append(
+                    _text(cx + cell_w / 2, cy + cell_h / 2 + 6, str(sat_weight(x)), "", "middle")
+                )
+            else:
+                parts.append(
+                    f'<rect x="{cx + 2}" y="{cy + 2}" width="{cell_w - 4}" height="{cell_h - 4}" '
+                    f'rx="6" fill="#e4e7e1"/>'
+                )
+                parts.append(_text(cx + cell_w / 2, cy + cell_h / 2 + 5, "×", "tick", "middle"))
+            for plan, color in ((best, UPDATE), (greedy, POINT)):
+                if x == plan:
+                    parts.append(
+                        f'<rect x="{cx}" y="{cy}" width="{cell_w}" height="{cell_h}" rx="8" '
+                        f'fill="none" stroke="{color}" stroke-width="3.5"/>'
+                    )
+    bottom = top + cell_h * 4
+    parts.append(
+        f'<rect x="20" y="{bottom + 20}" width="18" height="18" rx="4" fill="none" '
+        f'stroke="{UPDATE}" stroke-width="3"/>'
+    )
+    parts.append(_text(46, bottom + 35, f"最も重い：{sat_label(best)}（{sat_weight(best)}）"))
+    parts.append(
+        f'<rect x="230" y="{bottom + 20}" width="18" height="18" rx="4" fill="none" '
+        f'stroke="{POINT}" stroke-width="3"/>'
+    )
+    parts.append(_text(256, bottom + 35, f"重い順：{sat_label(greedy)}（{sat_weight(greedy)}）"))
+    parts.append(_text(20, bottom + 64, "×：決まりを一つ以上破る組", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _sat_chain_svg() -> str:
+    parts = _open(
+        "1人を決めると、残りが芋づる式に決まる",
+        (
+            "決まりの節だけで単位伝播した結果。"
+            "① Cを呼ぶと、店番A・Cで¬A、鍵でB、車でD、店番D・Eで¬E。"
+            "② Eを呼ぶと、店番D・Eで¬D、車で¬B、鍵でA、店番A・Cで¬C。"
+            "CとEは両方は呼べない。"
+        ),
+        330,
+    )
+    for row, (first, title) in enumerate(((3, "① Cを呼ぶと"), (5, "② Eを呼ぶと"))):
+        base = 64 + 130 * row
+        parts.append(_text(20, base, title))
+        chain = sat_implications(first)
+        step = (420 - 20) / len(chain)
+        for index, (lit, reason) in enumerate(chain):
+            cx = 20 + step * (index + 0.5)
+            color = INK if index == 0 else (POINT if lit > 0 else MUTED)
+            width = 3.5 if index == 0 else 2.5
+            parts.append(
+                f'<rect x="{cx - 30:.1f}" y="{base + 22}" width="60" height="44" rx="10" '
+                f'fill="#ffffff" stroke="{color}" stroke-width="{width}"/>'
+            )
+            parts.append(_text(cx, base + 51, _sat_literal(lit), "", "middle"))
+            if index:
+                arrow = cx - step + 30
+                tip = cx - 32
+                parts.append(
+                    f'<path d="M{arrow:.1f} {base + 44}H{tip - 6:.1f}" stroke="{MUTED}" '
+                    'stroke-width="2"/>'
+                )
+                parts.append(
+                    f'<path d="M{tip - 8:.1f} {base + 39}L{tip:.1f} {base + 44}'
+                    f'L{tip - 8:.1f} {base + 49}Z" fill="{MUTED}"/>'
+                )
+                parts.append(_text(cx - step / 2, base + 92, reason, "tick", "middle"))
+    parts.append(_text(20, 316, "¬A は「Aを呼ばない」。箱の間の文字は使った決まり", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Trajectory optimization (content/concepts/trajectory-optimization.md): a warehouse robot
+# moves 4 m in 4 s from rest to rest around a pillar. The acceleration u is held constant
+# on each of N intervals (zero-order hold), so p and v are linear in u and the path between
+# grid points is a known parabola. Cost: h * sum |u_k|^2. Pillar: centre (2, -0.3), radius 0.8.
+TRAJ_START, TRAJ_GOAL = (0.0, 0.0), (4.0, 0.0)
+TRAJ_PILLAR, TRAJ_RADIUS = (2.0, -0.3), 0.8
+TRAJ_T = 4.0
+
+
+@functools.cache
+def traj_solve(n: int, side: float = 1.0) -> tuple[float, tuple[tuple[float, float], ...]]:
+    """Augmented Lagrangian with Gauss–Newton steps; returns (cost, u_0..u_{n-1})."""
+    h = TRAJ_T / n
+    coef = [[h * h * (k - j - 0.5) if j < k else 0.0 for j in range(n)] for k in range(n + 1)]
+    size = 2 * n
+
+    def position(u: list[float], k: int) -> tuple[float, float]:
+        return (
+            TRAJ_START[0] + sum(coef[k][j] * u[j] for j in range(n)),
+            TRAJ_START[1] + sum(coef[k][j] * u[n + j] for j in range(n)),
+        )
+
+    ends = [
+        [*coef[n], *[0.0] * n],
+        [*[0.0] * n, *coef[n]],
+        [*[h] * n, *[0.0] * n],
+        [*[0.0] * n, *[h] * n],
+    ]
+    target = [TRAJ_GOAL[0] - TRAJ_START[0], TRAJ_GOAL[1] - TRAJ_START[1], 0.0, 0.0]
+    # Start from the controls that best follow an arc on the chosen side of the pillar.
+    hess = [[2 * h if i == j else 0.0 for j in range(size)] for i in range(size)]
+    rhs = [0.0] * size
+    for k in range(n + 1):
+        arc = (4 * k / n, side * 1.2 * math.sin(math.pi * k / n))
+        for d in range(2):
+            for i in range(n):
+                rhs[d * n + i] += 2 * coef[k][i] * (arc[d] - TRAJ_START[d])
+                for j in range(n):
+                    hess[d * n + i][d * n + j] += 2 * coef[k][i] * coef[k][j]
+    u = _solve_linear(hess, rhs)
+    lam_end, lam, mu, last = [0.0] * 4, [0.0] * (n + 1), 10.0, math.inf
+
+    def gaps(u: list[float]) -> list[float]:
+        return [
+            (px - TRAJ_PILLAR[0]) ** 2 + (py - TRAJ_PILLAR[1]) ** 2 - TRAJ_RADIUS**2
+            for px, py in (position(u, k) for k in range(n + 1))
+        ]
+
+    def misses(u: list[float]) -> list[float]:
+        return [
+            sum(r[j] * u[j] for j in range(size)) - t for r, t in zip(ends, target, strict=True)
+        ]
+
+    def merit(u: list[float]) -> float:
+        value = h * sum(x * x for x in u)
+        value += sum(m * e + 0.5 * mu * e * e for m, e in zip(lam_end, misses(u), strict=True))
+        for m, g in zip(lam, gaps(u), strict=True):
+            value += (max(0.0, m - mu * g) ** 2 - m * m) / (2 * mu)
+        return value
+
+    for _ in range(80):
+        for _ in range(50):
+            grad = [2 * h * x for x in u]
+            hess = [[2 * h if i == j else 0.0 for j in range(size)] for i in range(size)]
+            rows = [(lam_end[i] + mu * e, ends[i]) for i, e in enumerate(misses(u))]
+            for k, g in enumerate(gaps(u)):
+                weight = max(0.0, lam[k] - mu * g)
+                if weight > 0:
+                    px, py = position(u, k)
+                    dx, dy = 2 * (px - TRAJ_PILLAR[0]), 2 * (py - TRAJ_PILLAR[1])
+                    rows.append(
+                        (-weight, [dx * c for c in coef[k][:n]] + [dy * c for c in coef[k][:n]])
+                    )
+            for scale, row in rows:
+                nonzero = [i for i in range(size) if row[i]]
+                for i in nonzero:
+                    grad[i] += scale * row[i]
+                    for j in nonzero:
+                        hess[i][j] += mu * row[i] * row[j]
+            step = _solve_linear(hess, [-g for g in grad])
+            slope = sum(g * s for g, s in zip(grad, step, strict=True))
+            base, t = merit(u), 1.0
+            while (
+                merit([x + t * s for x, s in zip(u, step, strict=True)]) > base + 1e-4 * t * slope
+            ):
+                t *= 0.5
+                if t < 1e-10:
+                    break
+            u = [x + t * s for x, s in zip(u, step, strict=True)]
+            if max(abs(t * s) for s in step) < 1e-12:
+                break
+        lam_end = [m + mu * e for m, e in zip(lam_end, misses(u), strict=True)]
+        lam = [max(0.0, m - mu * g) for m, g in zip(lam, gaps(u), strict=True)]
+        violation = max([abs(e) for e in misses(u)] + [max(0.0, -g) for g in gaps(u)])
+        if violation < 1e-11:
+            break
+        if violation > 0.25 * last:
+            mu = min(4 * mu, 1e6)
+        last = violation
+    cost = h * sum(x * x for x in u)
+    return cost, tuple((u[j], u[n + j]) for j in range(n))
+
+
+def traj_states(n: int, side: float = 1.0) -> list[tuple[float, float, float, float]]:
+    """(px, py, vx, vy) at the n+1 grid points."""
+    h = TRAJ_T / n
+    px, py, vx, vy = *TRAJ_START, 0.0, 0.0
+    states = [(px, py, vx, vy)]
+    for ux, uy in traj_solve(n, side)[1]:
+        px, py = px + h * vx + 0.5 * h * h * ux, py + h * vy + 0.5 * h * h * uy
+        vx, vy = vx + h * ux, vy + h * uy
+        states.append((px, py, vx, vy))
+    return states
+
+
+def traj_path(n: int, side: float = 1.0, samples: int = 40) -> list[tuple[float, float]]:
+    """The continuous path: a parabola on each interval, sampled `samples` times."""
+    h = TRAJ_T / n
+    points = []
+    controls = traj_solve(n, side)[1]
+    for (px, py, vx, vy), (ux, uy) in zip(traj_states(n, side), controls, strict=False):
+        for s in range(samples):
+            tau = h * s / samples
+            points.append(
+                (px + vx * tau + 0.5 * ux * tau * tau, py + vy * tau + 0.5 * uy * tau * tau)
+            )
+    points.append(TRAJ_GOAL)
+    return points
+
+
+def traj_clearance(points: Sequence[tuple[float, float]]) -> float:
+    return min(math.hypot(x - TRAJ_PILLAR[0], y - TRAJ_PILLAR[1]) for x, y in points)
+
+
+def _traj_floor(
+    parts: list[str], top: float, bottom: float
+) -> Callable[[float, float], tuple[float, float]]:
+    px = _scale(-0.8, 4.8, 50, 410)
+    unit = (410 - 50) / 5.6
+    mid = (top + bottom) / 2
+
+    def at(x: float, y: float) -> tuple[float, float]:
+        return px(x), mid - unit * (y + 0.3)
+
+    cx, cy = at(*TRAJ_PILLAR)
+    parts.append(
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{unit * TRAJ_RADIUS:.1f}" fill="#e4e7e1" '
+        f'stroke="{MUTED}" stroke-width="1.5"/>'
+    )
+    parts.append(_text(cx, cy + 5, "柱", "tick", "middle"))
+    for (x, y), name in ((TRAJ_START, "出発"), (TRAJ_GOAL, "到着")):
+        sx, sy = at(x, y)
+        parts.append(
+            f'<rect x="{sx - 6:.1f}" y="{sy - 6:.1f}" width="12" height="12" fill="{INK}"/>'
+        )
+        left = x < TRAJ_PILLAR[0]
+        parts.append(
+            _text(sx + (-12 if left else 12), sy + 5, name, "tick", "end" if left else "start")
+        )
+    return at
+
+
+def _traj_paths_svg() -> str:
+    above, below = traj_solve(20, 1.0), traj_solve(20, -1.0)
+    parts = _open(
+        "柱の上を回る経路と、下を回る経路",
+        (
+            "搬送ロボットが4秒で4m先へ、止まった状態から止まった状態へ動く。時間を20区間に分け、"
+            "区間ごとに一定の加速度を決める。"
+            f"① 床の上の経路。柱の上を回る経路は加速度の二乗の積分が{above[0]:.2f}、"
+            f"下を回る経路は{below[0]:.2f}。"
+            "② 時刻ごとの加速度の大きさ。"
+        ),
+        612,
+    )
+    parts.append(_text(20, 64, "① 床の上の経路（m）"))
+    at = _traj_floor(parts, 80, 330)
+    for side, color, dash in ((-1.0, POINT, ' stroke-dasharray="6 4"'), (1.0, UPDATE, "")):
+        parts.append(
+            _polyline([at(x, y) for x, y in traj_path(20, side)], color, 3).replace(
+                "/>", f"{dash}/>"
+            )
+        )
+        for x, y, _, _ in traj_states(20, side):
+            sx, sy = at(x, y)
+            parts.append(f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="3.5" fill="{color}"/>')
+    parts.append(
+        _text(410, 96, f"上を回る：{above[0]:.2f}", anchor="end").replace(
+            "<text ", f'<text style="fill:{UPDATE}" '
+        )
+    )
+    parts.append(
+        _text(410, 324, f"下を回る：{below[0]:.2f}", anchor="end").replace(
+            "<text ", f'<text style="fill:{POINT}" '
+        )
+    )
+
+    parts.append(_text(20, 380, "② 加速度の大きさ（m/s²）"))
+    tx = _scale(0.0, TRAJ_T, 64, 410)
+    ay = _scale(0.0, 3.0, 560, 400)
+    parts.append(f'<path d="M64 400V560H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 1, 2, 3):
+        parts.append(_text(56, ay(value) + 5, str(value), "tick", "end"))
+    for value in (0, 1, 2, 3, 4):
+        parts.append(_text(tx(value), 580, str(value), "tick", "middle"))
+    parts.append(_text(410, 600, "時刻（秒）", "tick", "end"))
+    h = TRAJ_T / 20
+    for side, color, dash in ((-1.0, POINT, ' stroke-dasharray="6 4"'), (1.0, UPDATE, "")):
+        steps = []
+        for k, (ux, uy) in enumerate(traj_solve(20, side)[1]):
+            size = math.hypot(ux, uy)
+            steps += [(tx(k * h), ay(size)), (tx((k + 1) * h), ay(size))]
+        parts.append(_polyline(steps, color, 2.5).replace("/>", f"{dash}/>"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _traj_grid_svg() -> str:
+    coarse_points = traj_path(5)
+    depth = TRAJ_RADIUS - traj_clearance(coarse_points)
+    nodes = traj_states(5)
+    node_gap = min(math.hypot(x - TRAJ_PILLAR[0], y - TRAJ_PILLAR[1]) for x, y, _, _ in nodes)
+    counts = (5, 10, 20, 40)
+    parts = _open(
+        "格子点の外でも、間で柱に入る",
+        (
+            "① 5区間で解いた経路。6つの格子点はどれも柱の外（柱の中心から"
+            f"{node_gap:.2f}m以上）だが、格子点の間の経路は柱に{100 * depth:.0f}cm入る。"
+            "② 区間の数ごとの、加速度の二乗の積分。"
+            + "、".join(f"{n}区間 {traj_solve(n)[0]:.2f}" for n in counts)
+            + "。5区間だけが柱を通り抜けて安くなっている。"
+        ),
+        600,
+    )
+    parts.append(_text(20, 64, "① 5区間で解いた経路"))
+    at = _traj_floor(parts, 80, 330)
+    inside = [
+        p
+        for p in coarse_points
+        if math.hypot(p[0] - TRAJ_PILLAR[0], p[1] - TRAJ_PILLAR[1]) < TRAJ_RADIUS
+    ]
+    parts.append(_polyline([at(x, y) for x, y in coarse_points], UPDATE, 3))
+    parts.append(
+        _polyline([at(x, y) for x, y in inside], VIOLATION, 8).replace(
+            "/>", ' stroke-linecap="round"/>'
+        )
+    )
+    for x, y, _, _ in nodes:
+        sx, sy = at(x, y)
+        parts.append(
+            f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="6" fill="#ffffff" '
+            f'stroke="{UPDATE}" stroke-width="3"/>'
+        )
+    parts.append(
+        _text(410, 324, f"赤：柱の中（最大{100 * depth:.0f}cm）", anchor="end").replace(
+            "<text ", f'<text style="fill:{VIOLATION}" '
+        )
+    )
+    parts.append(_text(20, 380, "② 区間の数と、加速度の二乗の積分"))
+    by = _scale(0.0, 4.0, 540, 400)
+    parts.append(f'<path d="M100 400V540H410" fill="none" stroke="{GRID}"/>')
+    width = (410 - 100) / len(counts)
+    for i, n in enumerate(counts):
+        cost = traj_solve(n)[0]
+        left = 100 + width * i + 14
+        color = VIOLATION if n == 5 else LINE
+        parts.append(
+            f'<rect x="{left:.1f}" y="{by(cost):.1f}" width="{width - 28:.1f}" '
+            f'height="{540 - by(cost):.1f}" fill="{color}"/>'
+        )
+        parts.append(_text(left + (width - 28) / 2, by(cost) - 8, f"{cost:.2f}", "tick", "middle"))
+        parts.append(_text(left + (width - 28) / 2, 560, f"{n}区間", "tick", "middle"))
+    for value in (0, 2, 4):
+        parts.append(_text(92, by(value) + 5, str(value), "tick", "end"))
+    parts.append(_text(20, 590, "赤：格子点の間で柱を通り抜ける解", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Where a solver evaluates (content/concepts/solver-evaluation-points.md): an alloy cost tool
+# that takes the temperature T [K] and the carbon fraction c, and rejects c <= 0.
+EVAL_START = (1200.0, 0.0005)
+# Points SciPy 1.18.1 passed to the tool, as recorded by the article's Python block. The test
+# tests/test_lesson_figures.py reruns SciPy and checks that these sequences still hold.
+EVAL_NM_C = (
+    0.0005,
+    0.0005,
+    0.000525,
+    0.000475,
+    0.00045,
+    0.00045,
+    0.0004875,
+    0.0004375,
+    0.00040625,
+    0.00036875,
+    0.000325,
+    0.0002625,
+    0.0003,
+    0.000265625,
+    0.000121875,
+    -2.03125e-05,
+)
+EVAL_NM_LAST_T = 1268.4375
+EVAL_BFGS_C = (0.0005, 0.0005, 0.000500015, -1.0095)
+# L-BFGS-B with 1e-5 <= c: s start, a accepted iterate, t line-search point, d difference point.
+EVAL_LBFGSB_ROLES = "sddaddtddtddtddtddtddtddtddtddtddaddadd"
+
+
+def eval_hardness(temperature: float, carbon: float) -> float:
+    """Solve y**3 + (T/1000) y = 1 + 200 c by bisection, as the article's tool does."""
+    lower, upper = 0.0, 2.0
+    while upper - lower > 1e-13:
+        middle = 0.5 * (lower + upper)
+        if middle**3 + temperature / 1000 * middle - 1 - 200 * carbon > 0:
+            upper = middle
+        else:
+            lower = middle
+    return 0.5 * (lower + upper)
+
+
+def eval_cost(temperature: float, carbon: float) -> float:
+    if carbon <= 0:
+        raise ValueError("carbon fraction out of range")
+    y = eval_hardness(temperature, carbon)
+    return (y - 1.05) ** 2 + 0.5 * ((temperature - 1250) / 100) ** 2 + 5000 * carbon
+
+
+def eval_gradient(temperature: float, carbon: float) -> tuple[float, float]:
+    """Exact gradient through the implicit function y(T, c)."""
+    y = eval_hardness(temperature, carbon)
+    slope = 3 * y * y + temperature / 1000
+    dy_dt, dy_dc = -y / 1000 / slope, 200 / slope
+    return (
+        2 * (y - 1.05) * dy_dt + (temperature - 1250) / 100**2,
+        2 * (y - 1.05) * dy_dc + 5000,
+    )
+
+
+def eval_first_trial() -> tuple[float, float]:
+    """SciPy's BFGS starts with H = I and a first line-search step of length 1.01."""
+    gradient = eval_gradient(*EVAL_START)
+    norm = math.hypot(*gradient)
+    return (
+        EVAL_START[0] - 1.01 * gradient[0] / norm,
+        EVAL_START[1] - 1.01 * gradient[1] / norm,
+    )
+
+
+def _signed(value: float, digits: int) -> str:
+    return f"{value:.{digits}f}".replace("-", "−")
+
+
+def _eval_carbon_svg() -> str:
+    count = len(EVAL_NM_C)
+    trial = eval_first_trial()
+    parts = _open(
+        "評価の番号と、渡された炭素量 c",
+        (
+            "初期点 T=1200 K、c=0.0005 から、SciPy の三通りの使い方で"
+            "費用の計算ツールを最小化したときに、"
+            "ツールへ渡された炭素量 c を評価の番号ごとに描く。c が 0 以下だとツールはエラーを返す。"
+            f"fmin（Nelder–Mead）は {count} 回目に c={_signed(EVAL_NM_C[-1], 5)} を渡した。"
+            "c の下限 0 を与えた Nelder–Mead は 15 回目まで同じ点を通り、"
+            f"{count} 回目に境界の c=0 そのものを渡した。"
+            f"minimize の既定（BFGS）は 4 回目に c={_signed(trial[1], 2)} を渡した。"
+            "BFGS の◆は、重ならないように少し上にずらして描く。"
+        ),
+        386,
+    )
+    px = _scale(1.0, float(count), 76, 410)
+    py = _scale(-1.5, 6.0, 300, 128)
+    parts.append(f'<path d="M76 128V300H410" fill="none" stroke="{GRID}"/>')
+    for tick in (0, 2, 4, 6):
+        parts.append(_text(68, py(tick) + 5, str(tick), "tick", "end"))
+    for tick in (1, 4, 8, 12, 16):
+        parts.append(_text(px(tick), 322, str(tick), "tick", "middle"))
+    parts.append(
+        f'<path d="M76 {py(0):.1f}H410" stroke="{VIOLATION}" stroke-width="1.5" '
+        'stroke-dasharray="6 4"/>'
+    )
+    parts.append(_text(84, py(0) - 8, "c=0 以下はエラー", "tick"))
+    nelder = [(px(i + 1), py(c * 1e4)) for i, c in enumerate(EVAL_NM_C)]
+    parts.append(_polyline(nelder, RING, 2))
+    for x, y in nelder[:-1]:
+        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{POINT}"/>')
+    last_x, last_y = nelder[-1]
+    parts.append(
+        f'<circle cx="{last_x:.1f}" cy="{last_y:.1f}" r="6" fill="{VIOLATION}" '
+        f'stroke="{INK}" stroke-width="1.5"/>'
+    )
+    parts.append(
+        f'<rect x="{last_x - 6:.1f}" y="{py(0) - 6:.1f}" width="12" height="12" '
+        f'fill="#ffffff" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    for index, c in enumerate(EVAL_BFGS_C[:3]):
+        x, y = px(index + 1), py(c * 1e4) - 14
+        parts.append(
+            f'<path d="M{x:.1f} {y - 6:.1f}L{x + 6:.1f} {y:.1f}L{x:.1f} {y + 6:.1f}'
+            f'L{x - 6:.1f} {y:.1f}Z" fill="{UPDATE}"/>'
+        )
+    arrow_x = px(4)
+    parts.append(
+        f'<path d="M{arrow_x:.1f} {py(0) + 8:.1f}V298" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(
+        f'<path d="M{arrow_x - 6:.1f} 290L{arrow_x:.1f} 300L{arrow_x + 6:.1f} 290" '
+        f'fill="none" stroke="{UPDATE}" stroke-width="2.5"/>'
+    )
+    parts.append(_text(arrow_x + 10, 290, f"4回目 c={_signed(trial[1], 2)}（図の外）", "tick"))
+    legend = (
+        (60, "circle", POINT, f"fmin：{count}回目に c={_signed(EVAL_NM_C[-1], 5)}"),
+        (82, "square", UPDATE, f"下限0つき Nelder–Mead：{count}回目に c=0"),
+    )
+    for y, shape, color, label in legend:
+        if shape == "circle":
+            parts.append(f'<circle cx="28" cy="{y - 5}" r="5" fill="{color}"/>')
+        else:
+            parts.append(
+                f'<rect x="22" y="{y - 11}" width="12" height="12" fill="#ffffff" '
+                f'stroke="{color}" stroke-width="2.5"/>'
+            )
+        parts.append(_text(42, y, label, "tick"))
+    parts.append(f'<path d="M28 93L34 99L28 105L22 99Z" fill="{UPDATE}"/>')
+    parts.append(_text(42, 104, "minimize の既定（BFGS）", "tick"))
+    parts.append(_text(20, 344, "縦軸 c（×10⁻⁴）、横軸 評価の番号。◆は上にずらす", "tick"))
+    parts.append(_text(20, 368, "初期点 T=1200 K、c=0.0005。SciPy 1.18.1", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def eval_role_counts() -> dict[str, int]:
+    return {role: EVAL_LBFGSB_ROLES.count(role) for role in "satd"}
+
+
+def _eval_breakdown_svg() -> str:
+    counts = eval_role_counts()
+    columns = [EVAL_LBFGSB_ROLES[i : i + 3] for i in range(0, len(EVAL_LBFGSB_ROLES), 3)]
+    iterations = counts["a"]
+    parts = _open(
+        f"反復{iterations}回の裏の評価{len(EVAL_LBFGSB_ROLES)}回",
+        (
+            "c の下限を 0.00001 にした L-BFGS-B が、費用の計算ツールを呼んだ順に四角を並べる。"
+            f"列は勾配を求めた点 {len(columns)} 個で、評価の順に左から並ぶ。"
+            f"一段目は初期点 1 個、受け入れた反復点 {counts['a']} 個、"
+            f"直線探索の途中の点 {counts['t']} 個。"
+            f"二段目と三段目は、勾配を差分で作るために T と c を 1e-8 ずらした点 {counts['d']} 個。"
+        ),
+        334,
+    )
+    fills = {"s": MUTED, "a": LINE, "t": RING, "d": "#ffffff"}
+    size, gap, left, top = 22, 6, 40, 92
+    for column, roles in enumerate(columns):
+        for row, role in enumerate(roles):
+            x, y = left + column * (size + gap), top + row * (size + gap)
+            parts.append(
+                f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="3" '
+                f'fill="{fills[role]}" stroke="{INK if role != "d" else GRID}" '
+                f'stroke-width="1.5"/>'
+            )
+    parts.append(_text(20, 64, "1列が勾配を求めた1点。左から評価の順", "tick"))
+    rows_bottom = top + 3 * (size + gap)
+    legend = (
+        ("s", f"初期点 {counts['s']}"),
+        ("a", f"受け入れた反復点 {counts['a']}"),
+        ("t", f"直線探索の途中の点 {counts['t']}"),
+        ("d", f"差分のための点 {counts['d']}（各列の2段目と3段目）"),
+    )
+    for index, (role, label) in enumerate(legend):
+        y = rows_bottom + 24 + index * 26
+        parts.append(
+            f'<rect x="20" y="{y - 14}" width="16" height="16" rx="3" fill="{fills[role]}" '
+            f'stroke="{INK if role != "d" else GRID}" stroke-width="1.5"/>'
+        )
+        parts.append(_text(44, y, label, "tick"))
+    parts.append(_text(20, 318, "SciPy 1.18.1、初期点 T=1200 K、c=0.0005", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Distributed consensus (content/concepts/distributed-consensus.md): three hospitals each keep
+# their own records (dose above the reference t, effective y) and share one coefficient theta
+# in P(effective) = sigma(theta * t). Raw records never leave a hospital.
+DC_SITES = {
+    "A": ((-1, 1, 2, 3), (0, 1, 0, 1)),
+    "B": ((-2, -1, 1, 1, 2), (0, 1, 1, 1, 1)),
+    "C": ((-3, -2, -1, 1, 2, 3), (0, 0, 1, 0, 1, 1)),
+}
+
+
+def _dc_sigmoid(value: float) -> float:
+    return 1.0 / (1.0 + math.exp(-value))
+
+
+def dc_loss(site: str, theta: float) -> float:
+    """Negative log-likelihood of one hospital's records."""
+    ts, ys = DC_SITES[site]
+    return sum(math.log1p(math.exp(theta * t)) - y * theta * t for t, y in zip(ts, ys, strict=True))
+
+
+def _dc_slope(site: str, theta: float) -> float:
+    ts, ys = DC_SITES[site]
+    return sum(t * (_dc_sigmoid(theta * t) - y) for t, y in zip(ts, ys, strict=True))
+
+
+def _dc_curvature(site: str, theta: float) -> float:
+    ts, _ = DC_SITES[site]
+    return sum(t * t * _dc_sigmoid(theta * t) * (1 - _dc_sigmoid(theta * t)) for t in ts)
+
+
+def _dc_newton(slope: Callable[[float], float], curve: Callable[[float], float]) -> float:
+    theta = 0.0
+    for _ in range(60):
+        theta -= slope(theta) / curve(theta)
+    return theta
+
+
+def dc_local(site: str) -> float:
+    return _dc_newton(lambda th: _dc_slope(site, th), lambda th: _dc_curvature(site, th))
+
+
+def dc_global() -> float:
+    return _dc_newton(
+        lambda th: sum(_dc_slope(s, th) for s in DC_SITES),
+        lambda th: sum(_dc_curvature(s, th) for s in DC_SITES),
+    )
+
+
+def dc_admm(rho: float, rounds: int = 2000) -> list[tuple[dict[str, float], float]]:
+    """Consensus ADMM; stops when every hospital is within 1e-3 of z and z is within 1e-3
+    of the pooled answer."""
+    x = dict.fromkeys(DC_SITES, 0.0)
+    u = dict.fromkeys(DC_SITES, 0.0)
+    z = 0.0
+    target = dc_global()
+    history = [(dict(x), z)]
+    for _ in range(rounds):
+        x = {
+            s: _dc_newton(
+                lambda th, s=s, z=z, u=u: _dc_slope(s, th) + rho * (th - z + u[s]),
+                lambda th, s=s: _dc_curvature(s, th) + rho,
+            )
+            for s in DC_SITES
+        }
+        z = sum(x[s] + u[s] for s in DC_SITES) / len(DC_SITES)
+        u = {s: u[s] + x[s] - z for s in DC_SITES}
+        history.append((dict(x), z))
+        if max(abs(x[s] - z) for s in DC_SITES) < 1e-3 and abs(z - target) < 1e-3:
+            break
+    return history
+
+
+DC_COLORS = {"A": RING, "B": POINT, "C": UPDATE}
+
+
+def _dc_losses_svg() -> str:
+    local = {s: dc_local(s) for s in DC_SITES}
+    best = dc_global()
+    mean = sum(local.values()) / 3
+    counts = {s: len(DC_SITES[s][0]) for s in DC_SITES}
+    weighted = sum(counts[s] * local[s] for s in DC_SITES) / sum(counts.values())
+    parts = _open(
+        "病院ごとの損失と、3病院の合計",
+        (
+            "効く確率 σ(θt) の係数 θ ごとの損失。① 病院ごとの損失（底の値を0にそろえた）。"
+            + "、".join(f"病院{s}の底は θ={local[s]:.2f}" for s in DC_SITES)
+            + "。② 3病院の損失の合計。底は "
+            f"θ={best:.3f}。病院ごとの答えの平均 {mean:.3f}、患者の数で重み付けした平均 "
+            f"{weighted:.3f} はどちらも合計の底からずれる。"
+        ),
+        610,
+    )
+    px = _scale(0.0, 2.0, 64, 410)
+    for tick in (0, 0.5, 1, 1.5, 2):
+        parts.append(_text(px(tick), 292, f"{tick:g}", "tick", "middle"))
+    thetas = [2.0 * i / 200 for i in range(201)]
+    parts.append(_text(20, 64, "① 病院ごとの損失（底を0にそろえる）"))
+    ly = _scale(0.0, 1.2, 272, 84)
+    parts.append(f'<path d="M64 84V272H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 0.5, 1):
+        parts.append(_text(56, ly(value) + 5, f"{value:g}", "tick", "end"))
+    for index, s in enumerate(DC_SITES):
+        floor = dc_loss(s, local[s])
+        points = [
+            (px(t), ly(dc_loss(s, t) - floor)) for t in thetas if dc_loss(s, t) - floor <= 1.2
+        ]
+        parts.append(_polyline(points, DC_COLORS[s], 3))
+        parts.append(
+            f'<circle cx="{px(local[s]):.1f}" cy="{ly(0):.1f}" r="6" fill="{DC_COLORS[s]}"/>'
+        )
+        x0 = 20 + 132 * index
+        parts.append(_polyline([(x0, 316 - 5), (x0 + 20, 316 - 5)], DC_COLORS[s], 3))
+        parts.append(_text(x0 + 26, 316, f"病院{s}：{local[s]:.2f}", "tick"))
+    parts.append(_text(20, 364, "② 3病院の損失の合計（θ=0.5〜1を拡大）"))
+    qx = _scale(0.5, 1.0, 64, 410)
+    zoom = [0.5 + 0.5 * i / 200 for i in range(201)]
+    total = [sum(dc_loss(s, t) for s in DC_SITES) for t in zoom]
+    low = min(total)
+    sy = _scale(0.0, 0.3, 552, 384)
+    parts.append(f'<path d="M64 384V552H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 0.1, 0.2, 0.3):
+        parts.append(_text(56, sy(value) + 5, f"{value:g}", "tick", "end"))
+    for tick in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+        parts.append(_text(qx(tick), 572, f"{tick:g}", "tick", "middle"))
+    curve = [(qx(t), sy(min(v - low, 0.3))) for t, v in zip(zoom, total, strict=True)]
+    parts.append(_polyline(curve, LINE, 3))
+    marks = (
+        (best, f"合計の底 {best:.2f}", 120, 470, True),
+        (mean, f"平均 {mean:.2f}", 250, 440, False),
+        (weighted, f"患者の数の重み {weighted:.2f}", 280, 470, False),
+    )
+    for theta, label, tx, ty, solid in marks:
+        value = sum(dc_loss(s, theta) for s in DC_SITES) - low
+        cx, cy = qx(theta), sy(value)
+        parts.append(
+            f'<path d="M{cx:.1f} {cy - 6:.1f}L{tx:.1f} {ty + 6:.1f}" stroke="{MUTED}" '
+            'stroke-width="1"/>'
+        )
+        fill = LINE if solid else "#ffffff"
+        parts.append(
+            f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="5.5" fill="{fill}" stroke="{INK}" '
+            'stroke-width="1.5"/>'
+        )
+        parts.append(_text(tx, ty, label, "tick", "middle"))
+    parts.append(_text(410, 596, "係数 θ", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+DC_RHOS = (0.1, 0.5, 1.0, 2.0, 5.0, 20.0, 100.0)
+
+
+def _dc_admm_svg() -> str:
+    history = dc_admm(2.0)
+    best = dc_global()
+    parts = _open(
+        "合意へ近づく様子と、罰則係数",
+        (
+            f"① 罰則係数 ρ=2 のADMMで、3病院の係数と共通の値 z が {best:.3f} へ近づく。"
+            f"{len(history) - 1}回のやり取りで、各病院の値と z の差が0.001未満、"
+            f"z が {best:.3f} から0.001以内になる。"
+            "② ρ ごとの、そろうまでのやり取りの回数。"
+            + "、".join(f"ρ={rho:g}で{len(dc_admm(rho)) - 1}回" for rho in DC_RHOS)
+            + "。"
+        ),
+        612,
+    )
+    parts.append(_text(20, 64, "① ρ=2 のときの、病院ごとの係数と共通の値 z"))
+    px = _scale(0.0, float(len(history) - 1), 64, 410)
+    vy = _scale(0.0, 1.0, 272, 84)
+    parts.append(f'<path d="M64 84V272H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 0.5, 1):
+        parts.append(_text(56, vy(value) + 5, f"{value:g}", "tick", "end"))
+    for k in range(0, len(history), 2):
+        parts.append(_text(px(k), 292, str(k), "tick", "middle"))
+    parts.append(
+        f'<path d="M64 {vy(best):.1f}H410" stroke="{GRID}" stroke-width="1.5" '
+        'stroke-dasharray="5 4"/>'
+    )
+    for s in DC_SITES:
+        points = [(px(k), vy(x[s])) for k, (x, _) in enumerate(history)]
+        parts.append(_polyline(points, DC_COLORS[s], 2.5))
+    parts.append(
+        _polyline([(px(k), vy(z)) for k, (_, z) in enumerate(history)], INK, 2.5).replace(
+            "/>", ' stroke-dasharray="6 4"/>'
+        )
+    )
+    for index, (name, color) in enumerate(
+        (*((f"病院{s}", DC_COLORS[s]) for s in DC_SITES), ("z", INK))
+    ):
+        x0 = 64 + 88 * index
+        parts.append(_polyline([(x0, 316 - 5), (x0 + 22, 316 - 5)], color, 2.5))
+        parts.append(_text(x0 + 28, 316, name, "tick"))
+    parts.append(_text(410, 340, "やり取りの回数", "tick", "end"))
+
+    parts.append(_text(20, 384, "② ρ ごとの、そろうまでの回数"))
+    by = _scale(0.0, math.log10(1000.0), 560, 410)
+    parts.append(f'<path d="M64 410V560H410" fill="none" stroke="{GRID}"/>')
+    for value in (1, 10, 100, 1000):
+        parts.append(_text(56, by(math.log10(value)) + 5, str(value), "tick", "end"))
+    width = (410 - 64) / len(DC_RHOS)
+    for index, rho in enumerate(DC_RHOS):
+        count = len(dc_admm(rho)) - 1
+        left = 64 + width * index + 8
+        top = by(math.log10(count))
+        color = INK if rho == 2.0 else LINE
+        parts.append(
+            f'<rect x="{left:.1f}" y="{top:.1f}" width="{width - 16:.1f}" height="{560 - top:.1f}" '
+            f'fill="{color}"/>'
+        )
+        parts.append(_text(left + (width - 16) / 2, top - 6, str(count), "tick", "middle"))
+        parts.append(_text(left + (width - 16) / 2, 580, f"{rho:g}", "tick", "middle"))
+    parts.append(_text(410, 602, "罰則係数 ρ（縦は対数目盛）", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# Online optimization (content/concepts/online-optimization.md): every morning a shop splits its
+# ad budget between media A and B (x = share to A); each day's results per share are known only
+# in the evening. Two sequences: alternating days, and an A, A, B pattern.
+OL_STEP_HORIZONS = (10, 100, 1000, 10000)
+
+
+def ol_alternating(days: int) -> list[tuple[float, float]]:
+    """(A, B) results: day 1 is (1.5, 1.0), then B wins on even days and A on odd days."""
+    return [(1.5, 1.0)] + [((1.0, 2.0) if t % 2 == 0 else (2.0, 1.0)) for t in range(2, days + 1)]
+
+
+def ol_pattern(days: int) -> list[tuple[float, float]]:
+    """(A, B) results repeating A, A, B: A wins two days out of three."""
+    return [((1.0, 2.0) if t % 3 == 0 else (2.0, 1.0)) for t in range(1, days + 1)]
+
+
+def ol_play(results: Sequence[tuple[float, float]], rule: str) -> tuple[list[float], float]:
+    """Shares chosen each morning and the regret against the better medium in hindsight."""
+    days = len(results)
+    x, lead, shares, gained = 0.5, 0.0, [], 0.0
+    for a, b in results:
+        if rule == "leader":
+            x = 0.5 if lead == 0 else (1.0 if lead > 0 else 0.0)
+        elif rule == "half":
+            x = 0.5
+        shares.append(x)
+        gained += x * a + (1 - x) * b
+        lead += a - b
+        if rule == "ogd":
+            x = min(1.0, max(0.0, x + (a - b) / math.sqrt(days)))
+    best = max(sum(a for a, _ in results), sum(b for _, b in results))
+    return shares, best - gained
+
+
+OL_RULES = (
+    ("leader", "勝ち側に全額", POINT),
+    ("half", "いつも半分", MUTED),
+    ("ogd", "勾配で少しずつ", UPDATE),
+)
+
+
+def _ol_days_svg() -> str:
+    days = ol_alternating(10)
+    parts = _open(
+        "交互に入れ替わる10日間と、毎朝の割合",
+        (
+            "① 媒体A・Bの1日の成果（広告費1あたり）。1日目はA1.5・B1.0、"
+            "その後は偶数日にB、奇数日にAが2倍。"
+            "② 毎朝Aに回す割合 x。前日までの合計が多い側に全額を回すと、"
+            "2日目から毎日負ける側を選ぶ。"
+            "勾配で少しずつ動かす決め方（学習率 η=1/√10）は0.34と0.66の間を行き来する。"
+        ),
+        560,
+    )
+    px = _scale(1.0, 10.0, 84, 400)
+    for day in range(1, 11):
+        parts.append(_text(px(day), 272, str(day), "tick", "middle"))
+        parts.append(_text(px(day), 520, str(day), "tick", "middle"))
+    parts.append(_text(20, 64, "① 1日の成果"))
+    ay = _scale(0.5, 2.0, 252, 84)
+    parts.append(f'<path d="M64 84V252H410" fill="none" stroke="{GRID}"/>')
+    for value in (1, 2):
+        parts.append(_text(56, ay(value) + 5, str(value), "tick", "end"))
+    for index, (name, color, dash) in enumerate((("A", LINE, ""), ("B", MUTED, "5 4"))):
+        points = [(px(t + 1), ay(r[index])) for t, r in enumerate(days)]
+        line = _polyline(points, color, 2.5)
+        if dash:
+            line = line.replace("/>", f' stroke-dasharray="{dash}"/>')
+        parts.append(line)
+        for x, y in points:
+            parts.append(
+                f'<rect x="{x - 4:.1f}" y="{y - 4:.1f}" width="8" height="8" fill="{color}"/>'
+            )
+        x0 = 100 + 110 * index
+        parts.append(_polyline([(x0, 300 - 5), (x0 + 22, 300 - 5)], color, 2.5))
+        parts.append(_text(x0 + 28, 300, f"媒体{name}", "tick"))
+    parts.append(_text(20, 344, "② 毎朝Aに回す割合 x"))
+    xy = _scale(0.0, 1.0, 500, 364)
+    parts.append(f'<path d="M64 364V500H410" fill="none" stroke="{GRID}"/>')
+    for value in (0, 0.5, 1):
+        parts.append(_text(56, xy(value) + 5, f"{value:g}", "tick", "end"))
+    for rule, _, color in (OL_RULES[0], OL_RULES[2]):
+        shares, _ = ol_play(days, rule)
+        points = [(px(t + 1), xy(s)) for t, s in enumerate(shares)]
+        parts.append(_polyline(points, color, 2.5))
+        for x, y in points:
+            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{color}"/>')
+    parts.append(
+        _text(20, 548, "紺：前日までの勝ち側に全額", "tick").replace(
+            "<text ", f'<text style="fill:{POINT}" '
+        )
+    )
+    parts.append(
+        _text(250, 548, "橙：勾配で少しずつ", "tick").replace(
+            "<text ", f'<text style="fill:{UPDATE}" '
+        )
+    )
+    parts.append(_text(400, 300, "日", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _ol_regret_svg() -> str:
+    sequences = (("① 交互に入れ替わる日", ol_alternating), ("② A・A・Bの繰り返し", ol_pattern))
+    regrets = {
+        (name, rule): [ol_play(seq(days), rule)[1] for days in OL_STEP_HORIZONS]
+        for name, seq in sequences
+        for rule, _, _ in OL_RULES
+    }
+    parts = _open(
+        "日数が増えると、後悔はどう増えるか",
+        (
+            "後悔＝後から見てよかった方の媒体に毎日全額を回した場合との差。"
+            "横は日数 T、縦は後悔（どちらも対数目盛）。"
+            "破線は √T。"
+            + "。".join(
+                f"{name}："
+                + "、".join(f"{label} {regrets[(name, rule)][1]:g}" for rule, label, _ in OL_RULES)
+                + "（T=100）"
+                for name, _ in sequences
+            )
+            + "。"
+        ),
+        620,
+    )
+    px = _scale(1.0, 4.0, 84, 400)
+    ly = {}
+    for panel, (name, _) in enumerate(sequences):
+        top = 84 + 260 * panel
+        bottom = top + 180
+        parts.append(_text(20, top - 20, name))
+        ly[name] = _scale(-1.0, 4.0, bottom, top)
+        y = ly[name]
+        parts.append(f'<path d="M84 {top}V{bottom}H400" fill="none" stroke="{GRID}"/>')
+        for exponent in (0, 2, 4):
+            parts.append(_text(76, y(exponent) + 5, f"{10**exponent:g}", "tick", "end"))
+        for exponent in (1, 2, 3, 4):
+            parts.append(_text(px(exponent), bottom + 20, f"{10**exponent:g}", "tick", "middle"))
+        root = [(px(e), y(e / 2)) for e in (1, 2, 3, 4)]
+        parts.append(_polyline(root, MUTED, 1.5).replace("/>", ' stroke-dasharray="5 4"/>'))
+        parts.append(_text(px(4) - 4, y(2) - 10, "√T", "tick", "end"))
+        parts.append(_text(92, top + 4, "後悔", "tick"))
+        for rule, _, color in OL_RULES:
+            points = [
+                (px(math.log10(days)), y(math.log10(max(value, 0.1))))
+                for days, value in zip(OL_STEP_HORIZONS, regrets[(name, rule)], strict=True)
+            ]
+            parts.append(_polyline(points, color, 2.5))
+            for x, yy in points:
+                parts.append(f'<circle cx="{x:.1f}" cy="{yy:.1f}" r="4" fill="{color}"/>')
+    for x0, (_, label, color) in zip((20, 210, 310), OL_RULES, strict=True):
+        parts.append(
+            _text(x0, 604, label, "tick").replace("<text ", f'<text style="fill:{color}" ')
+        )
+    parts.append(_text(400, 580, "日数 T", "tick", "end"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -4235,6 +6380,7 @@ def generate_lesson_figures() -> dict[str, str]:
         "socp-relay-station.svg": _socp_relay_svg(),
         "network-flow-paths.svg": _network_flow_svg(),
         "so3-rotation-paths.svg": _so3_paths_svg(),
+        "so3-lie-algebra-circle.svg": _so2_circle_svg(),
         "nn-training-two-valleys.svg": _nn_two_valleys_svg(),
         "shape-fin-length.svg": _fin_length_svg(),
         "composite-group-shrink.svg": _composite_group_svg(),
@@ -4250,6 +6396,27 @@ def generate_lesson_figures() -> dict[str, str]:
         "high-dimensional-black-box-budget.svg": _pa015_budget_svg(),
         "general-nonsmooth-kink-valley.svg": _pa011_kink_valley_svg(),
         "linear-system-circuit.svg": _pa002_circuit_svg(),
+        "assignment-greedy-optimal.svg": _assignment_greedy_svg(),
+        "assignment-dual-bound.svg": _assignment_dual_svg(),
+        "eigenvalue-fence-direction.svg": _eig_fence_svg(),
+        "eigenvalue-parallel-condition.svg": _eig_condition_svg(),
+        "stochastic-programming-expected-cost.svg": _sp_cost_svg(),
+        "stochastic-programming-two-stage.svg": _sp_tree_svg(),
+        "external-solver-flat-stop.svg": _ext_flat_stop_svg(),
+        "robust-optimization-box.svg": _ro_box_svg(),
+        "robust-optimization-set-size.svg": _ro_set_size_svg(),
+        "robust-estimation-profile.svg": _rpe_profile_svg(),
+        "robust-estimation-weights.svg": _rpe_weights_svg(),
+        "sat-invite-grid.svg": _sat_grid_svg(),
+        "sat-invite-chain.svg": _sat_chain_svg(),
+        "trajectory-pillar-paths.svg": _traj_paths_svg(),
+        "trajectory-grid-check.svg": _traj_grid_svg(),
+        "solver-evaluation-carbon.svg": _eval_carbon_svg(),
+        "solver-evaluation-breakdown.svg": _eval_breakdown_svg(),
+        "distributed-consensus-losses.svg": _dc_losses_svg(),
+        "distributed-consensus-admm.svg": _dc_admm_svg(),
+        "online-budget-days.svg": _ol_days_svg(),
+        "online-regret-growth.svg": _ol_regret_svg(),
     }
 
 

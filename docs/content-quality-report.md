@@ -1,14 +1,15 @@
 # Content quality report
 
-- Published concept guides: `66`
-- Meeting the concept floor: `66`
+- Published concept guides: `77`
+- Meeting the concept floor: `77`
 - Below the concept floor: `0`
-- Prose review warnings: `629`
+- Prose review warnings: `706`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
+| `concept.assignment-matching` | 119 | 10293 | 14 | 7 | 0 | pass |
 | `concept.bilevel-optimization` | 129 | 9623 | 15 | 8 | 0 | pass |
 | `concept.bound-constrained-smooth` | 127 | 10653 | 15 | 12 | 0 | pass |
 | `concept.chance-risk-contract` | 62 | 4456 | 8 | 4 | 0 | pass |
@@ -16,21 +17,24 @@
 | `concept.complementarity-problem` | 108 | 11257 | 13 | 4 | 0 | pass |
 | `concept.constrained-nlp` | 99 | 9923 | 12 | 4 | 0 | pass |
 | `concept.constraint-class` | 61 | 1847 | 5 | 2 | 0 | pass |
-| `concept.convex-quadratic-program` | 102 | 6344 | 12 | 4 | 0 | pass |
-| `concept.convexity` | 61 | 4701 | 13 | 2 | 0 | pass |
+| `concept.convex-quadratic-program` | 102 | 10750 | 13 | 5 | 0 | pass |
+| `concept.convexity` | 61 | 5963 | 13 | 2 | 0 | pass |
 | `concept.cp-scheduling` | 93 | 5114 | 10 | 4 | 0 | pass |
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
 | `concept.discontinuous-simulation` | 141 | 8913 | 12 | 4 | 0 | pass |
+| `concept.distributed-consensus` | 129 | 9246 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
+| `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
+| `concept.external-solver-objective` | 162 | 11507 | 15 | 15 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
-| `concept.knapsack-set-cover` | 100 | 9648 | 14 | 4 | 0 | pass |
+| `concept.knapsack-set-cover` | 100 | 9857 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
 | `concept.linear-least-squares` | 108 | 9184 | 16 | 10 | 0 | pass |
 | `concept.linear-program` | 114 | 5781 | 9 | 4 | 0 | pass |
@@ -46,30 +50,37 @@
 | `concept.neural-network-training` | 134 | 11565 | 14 | 4 | 0 | pass |
 | `concept.noisy-black-box` | 134 | 10977 | 15 | 4 | 0 | pass |
 | `concept.nonconvex-qp-qcqp` | 117 | 14296 | 13 | 4 | 0 | pass |
-| `concept.nonlinear-least-squares` | 119 | 8046 | 12 | 7 | 0 | pass |
+| `concept.nonlinear-least-squares` | 119 | 9987 | 12 | 8 | 0 | pass |
 | `concept.nonsmooth-convex-composite` | 155 | 14826 | 16 | 10 | 0 | pass |
+| `concept.online-optimization` | 130 | 8743 | 13 | 7 | 0 | pass |
 | `concept.optimal-control` | 102 | 6804 | 11 | 4 | 0 | pass |
 | `concept.path-terminal-constraints` | 54 | 1623 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
-| `concept.pde-constrained-program` | 102 | 4598 | 8 | 4 | 0 | pass |
+| `concept.pde-constrained-program` | 102 | 7078 | 8 | 4 | 0 | pass |
 | `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
+| `concept.robust-optimization` | 140 | 12070 | 14 | 9 | 0 | pass |
+| `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |
-| `concept.root-finding` | 93 | 4253 | 8 | 4 | 0 | pass |
+| `concept.root-finding` | 93 | 7097 | 8 | 4 | 0 | pass |
+| `concept.sat-maxsat` | 148 | 9829 | 14 | 7 | 0 | pass |
 | `concept.second-order-cone-program` | 135 | 9718 | 13 | 6 | 0 | pass |
-| `concept.semidefinite-program` | 96 | 4352 | 8 | 4 | 0 | pass |
+| `concept.semidefinite-program` | 96 | 6589 | 8 | 4 | 0 | pass |
 | `concept.shape-dependent-domain` | 119 | 12804 | 13 | 4 | 0 | pass |
 | `concept.shortest-path` | 154 | 11602 | 15 | 4 | 0 | pass |
 | `concept.simplex` | 63 | 3183 | 7 | 3 | 0 | pass |
-| `concept.simplex-optimization` | 88 | 4130 | 8 | 4 | 0 | pass |
+| `concept.simplex-optimization` | 88 | 6442 | 8 | 4 | 0 | pass |
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
-| `concept.so3-rotation-representation` | 70 | 2580 | 8 | 4 | 0 | pass |
+| `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
+| `concept.solver-evaluation-points` | 149 | 9613 | 14 | 3 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
+| `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |
 | `concept.time-discretization` | 58 | 1651 | 5 | 3 | 0 | pass |
+| `concept.trajectory-optimization` | 159 | 9969 | 15 | 8 | 0 | pass |
 | `concept.trajectory-variable` | 61 | 1762 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
-| `concept.variable-domain` | 51 | 4699 | 9 | 2 | 0 | pass |
+| `concept.variable-domain` | 51 | 6429 | 9 | 3 | 0 | pass |
 | `concept.vehicle-routing` | 172 | 16559 | 16 | 9 | 0 | pass |
 | `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
@@ -79,11 +90,11 @@
 ## Prose warning summary
 
 - `number.overprecise`: 209
-- `prose.choppy`: 6
-- `prose.meta`: 5
-- `prose.work-report`: 18
-- `sentence.commas`: 336
-- `sentence.long`: 55
+- `prose.choppy`: 5
+- `prose.meta`: 4
+- `prose.work-report`: 15
+- `sentence.commas`: 397
+- `sentence.long`: 76
 
 | Content | Warnings |
 |---|---:|
@@ -99,13 +110,14 @@
 | `basin-hopping` | 20 |
 | `bayesian-optimization` | 2 |
 | `bfgs` | 2 |
-| `branch-and-bound` | 4 |
+| `branch-and-bound` | 9 |
 | `branch-and-cut` | 0 |
 | `bundle-method` | 0 |
 | `cdcl-sat` | 1 |
 | `cma-es` | 0 |
 | `cobyla` | 8 |
 | `cobyqa` | 3 |
+| `concept.assignment-matching` | 7 |
 | `concept.bilevel-optimization` | 0 |
 | `concept.bound-constrained-smooth` | 0 |
 | `concept.chance-risk-contract` | 0 |
@@ -113,21 +125,24 @@
 | `concept.complementarity-problem` | 0 |
 | `concept.constrained-nlp` | 6 |
 | `concept.constraint-class` | 0 |
-| `concept.convex-quadratic-program` | 4 |
+| `concept.convex-quadratic-program` | 3 |
 | `concept.convexity` | 12 |
 | `concept.cp-scheduling` | 2 |
 | `concept.derivative-free` | 0 |
 | `concept.discontinuous-simulation` | 0 |
+| `concept.distributed-consensus` | 0 |
 | `concept.dynamics-defect` | 1 |
+| `concept.eigenvalue-problem` | 13 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
+| `concept.external-solver-objective` | 0 |
 | `concept.failed-simulation` | 0 |
 | `concept.general-nonsmooth-local` | 0 |
 | `concept.high-dimensional-black-box` | 0 |
 | `concept.high-dimensional-smooth-unconstrained` | 0 |
 | `concept.hyperparameter-optimization` | 26 |
 | `concept.inverse-problem` | 17 |
-| `concept.knapsack-set-cover` | 2 |
+| `concept.knapsack-set-cover` | 6 |
 | `concept.l1-sparse-regularization` | 33 |
 | `concept.linear-least-squares` | 0 |
 | `concept.linear-program` | 0 |
@@ -143,27 +158,34 @@
 | `concept.neural-network-training` | 0 |
 | `concept.noisy-black-box` | 0 |
 | `concept.nonconvex-qp-qcqp` | 0 |
-| `concept.nonlinear-least-squares` | 1 |
+| `concept.nonlinear-least-squares` | 16 |
 | `concept.nonsmooth-convex-composite` | 0 |
+| `concept.online-optimization` | 0 |
 | `concept.optimal-control` | 3 |
 | `concept.path-terminal-constraints` | 1 |
 | `concept.pde-constrained-optimization` | 0 |
 | `concept.pde-constrained-program` | 0 |
 | `concept.receding-horizon` | 5 |
+| `concept.robust-optimization` | 0 |
+| `concept.robust-parameter-estimation` | 0 |
 | `concept.robust-regression` | 5 |
-| `concept.root-finding` | 6 |
+| `concept.root-finding` | 9 |
+| `concept.sat-maxsat` | 0 |
 | `concept.second-order-cone-program` | 0 |
 | `concept.semidefinite-program` | 0 |
 | `concept.shape-dependent-domain` | 0 |
 | `concept.shortest-path` | 0 |
 | `concept.simplex` | 4 |
-| `concept.simplex-optimization` | 0 |
+| `concept.simplex-optimization` | 3 |
 | `concept.smooth-low-dimensional-unconstrained` | 13 |
-| `concept.so3-rotation-representation` | 1 |
+| `concept.so3-rotation-representation` | 0 |
 | `concept.so3-se3-optimization` | 0 |
+| `concept.solver-evaluation-points` | 0 |
 | `concept.spd-matrix-geometry` | 0 |
 | `concept.stochastic-erm` | 0 |
+| `concept.stochastic-programming` | 14 |
 | `concept.time-discretization` | 1 |
+| `concept.trajectory-optimization` | 0 |
 | `concept.trajectory-variable` | 2 |
 | `concept.uncertainty-models` | 0 |
 | `concept.variable-domain` | 0 |
@@ -198,7 +220,7 @@
 | `family.stochastic-ml` | 4 |
 | `family.trust-region` | 10 |
 | `fista` | 14 |
-| `gauss-newton` | 12 |
+| `gauss-newton` | 18 |
 | `genetic-algorithm` | 0 |
 | `geometry-update-failure-modes` | 0 |
 | `hungarian-algorithm` | 1 |
@@ -207,7 +229,7 @@
 | `interior-point-nlp` | 0 |
 | `lbfgs` | 5 |
 | `lbfgsb` | 1 |
-| `least-squares` | 2 |
+| `least-squares` | 11 |
 | `local-search-combinatorial` | 0 |
 | `lp-qp-conic` | 0 |
 | `mads` | 0 |

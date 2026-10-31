@@ -27,7 +27,7 @@ def test_irrigation_case_is_a_bounded_cross_domain_teaching_case() -> None:
     ast.parse(case["python_example"])
     assert "教育用" in case["limitations"][0]
     assert "保証しない" in case["limitations"][1]
-    assert "4品目knapsack" in case["practical_notes"]
+    assert "4品目のナップサック" in case["practical_notes"]
 
 
 def test_irrigation_comparison_changes_only_the_node_stop_limit() -> None:

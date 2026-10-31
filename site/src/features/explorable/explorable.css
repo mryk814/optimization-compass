@@ -243,9 +243,21 @@
   outline-offset: 2px;
 }
 
+/*
+ * The player follows the stage: on a figure taller than the screen (a phone, a figure with many panels)
+ * it stays at the bottom of the viewport while any part of the figure is visible, so pressing
+ * 「1つ進む」 and watching the panel it changes happen on the same screen.
+ */
 .ex-player {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   display: grid;
   gap: 0.5rem;
+  margin: 0 -0.9rem;
+  padding: 0.5rem 0.9rem;
+  border-top: 1px solid var(--ex-line);
+  background: var(--ex-ground);
 }
 
 .ex-player-buttons {
@@ -347,6 +359,7 @@
 /* MILP lattice: LP optimum = orange diamond, rounded point = ring (red only when infeasible), integer optimum = teal star */
 .milp-dot-in { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
 .milp-dot-out { fill: var(--ex-ink-soft); fill-opacity: 0.35; }
+.vd-diamond-ghost { fill: none; stroke: var(--ex-orange); stroke-width: 3; }
 .milp-lp { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
 .milp-round-ok { fill: var(--ex-ground); fill-opacity: 0.6; stroke: var(--ex-teal-ink); stroke-width: 3; }
 .milp-round-bad { fill: var(--ex-red); fill-opacity: 0.25; stroke: var(--ex-red); stroke-width: 3; }
@@ -354,6 +367,30 @@
 .ex-table.milp-table th[scope="row"] { white-space: normal; }
 .ex-table.milp-table td { white-space: nowrap; }
 .milp-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
+.vd-relaxed { fill: var(--ex-teal); fill-opacity: 0.12; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.vd-level-relaxed { stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 6 5; }
+.vd-gap { stroke: var(--ex-orange); stroke-width: 3; stroke-dasharray: 2 5; stroke-linecap: round; }
+.vd-gap-label { fill: var(--ex-ink); font-size: 14px; font-weight: 600; }
+.vd-segment { stroke: var(--ex-teal); stroke-width: 5; stroke-linecap: round; }
+.vd-baseline { stroke: var(--ex-ink-soft); stroke-opacity: 0.55; stroke-width: 2; }
+.vd-baseline-dot { fill: var(--ex-ink-soft); fill-opacity: 0.55; stroke: none; }
+.vd-bound { stroke: var(--ex-teal-ink); stroke-width: 3; }
+.vd-round-link { stroke: var(--ex-red); stroke-width: 2; stroke-dasharray: 4 4; }
+.vd-round-bad { fill: none; stroke: var(--ex-red); stroke-width: 4; stroke-linecap: round; }
+.vd-round-ok { fill: var(--ex-ground); fill-opacity: 0.7; stroke: var(--ex-teal-ink); stroke-width: 3; }
+.vd-round-floor.vd-round-ok, .vd-round-floor.vd-round-bad { fill: var(--ex-ground); fill-opacity: 0.8; stroke-linejoin: round; }
+.vd-toggle { display: flex; align-items: center; gap: 0.5rem; font-size: var(--type-label); min-height: 44px; }
+.vd-toggle input { width: 1.25rem; height: 1.25rem; }
+.vd-grid { table-layout: fixed; width: 100%; }
+.vd-grid th, .vd-grid td { text-align: center; padding: 0.25rem; white-space: normal; }
+.vd-cell { width: 100%; min-height: 44px; display: grid; gap: 0.1rem; padding: 0.3rem 0.4rem; border: 1px solid var(--ex-line); border-radius: 4px; color: var(--ex-ink); cursor: pointer; font: inherit; background: color-mix(in srgb, var(--ex-orange) calc(var(--gap, 0) * 55%), var(--ex-ground)); }
+.vd-cell.is-current { border: 3px solid var(--ex-ink); }
+.vd-cell:focus-visible { outline: 3px solid var(--ex-orange-ink); outline-offset: 1px; }
+.vd-cell-profit { font-weight: 700; font-variant-numeric: tabular-nums; }
+.vd-cell-gap { font-size: var(--type-label); color: var(--ex-ink); font-variant-numeric: tabular-nums; }
+.ex-table.vd-table th[scope="row"] { white-space: normal; }
+.ex-table.vd-table td { white-space: nowrap; }
+.vd-state { display: block; color: var(--ex-ink-soft); font-size: var(--type-label); font-weight: 400; }
 .milp-glyph { margin-right: 0.35rem; vertical-align: middle; }
 
 /* Failure ledger: success = teal circle, crash = cross, timeout = open square, nonphysical = triangle (navy);
@@ -387,9 +424,24 @@
 .ex-on-graph { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; }
 .ex-on-chord { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
 .ex-on-chord-bad { fill: var(--ex-red); }
+.cvx-actions { flex-wrap: wrap; gap: 0.5rem; }
+.cvx-ghost { fill: none; stroke: var(--ex-ink); stroke-opacity: 0.22; stroke-width: 2; stroke-dasharray: 3 5; }
+.cvx-trace-line { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.cvx-trace-bad { stroke: var(--ex-red); stroke-width: 4.5; }
+.cvx-warning { fill: var(--ex-red-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.cvx-pulse { fill: var(--ex-red); fill-opacity: 0.25; stroke: var(--ex-red); stroke-width: 2; animation: cvx-pulse 0.7s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+.cvx-flash .ex-svg { outline: 3px solid var(--ex-red); outline-offset: -3px; animation: cvx-flash 0.7s ease-in-out infinite; }
+@keyframes cvx-pulse { from { transform: scale(0.8); opacity: 1; } to { transform: scale(2); opacity: 0; } }
+@keyframes cvx-flash { 50% { outline-color: transparent; } }
 .ex-descent-trail { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
 .ex-ball { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2.5; }
 .ex-minimum-mark { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3; }
+.cvx-feasible rect { fill: var(--ex-teal); fill-opacity: 0.18; }
+.cvx-feasible line { stroke: var(--ex-teal-ink); stroke-width: 7; stroke-linecap: butt; }
+.cvx-feasible text { fill: var(--ex-teal-ink); font-size: var(--type-chart); font-weight: 700; }
+.cvx-mix { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; }
+.cvx-mix-out { fill: var(--ex-ground); stroke: var(--ex-red); stroke-width: 3; }
+.cvx-greyed { opacity: 0.4; filter: grayscale(1); }
 
 /* Readout */
 .ex-readout {
@@ -472,8 +524,13 @@
 
 @media (max-width: 40rem) {
   .explorable { padding: 0.6rem; }
-  .ex-scrub { grid-template-columns: 1fr; }
-  .ex-scrub output { text-align: left; }
+  /* The player stays on screen while the figure scrolls, so it keeps to as few rows as it can. */
+  .ex-player { margin: 0 -0.6rem; padding: 0.4rem 0.6rem; gap: 0.35rem; }
+  .ex-player-buttons { gap: 0.3rem; }
+  .ex-player button { padding: 0.3rem 0.55rem; }
+  .ex-player .ex-play { min-width: 6.5rem; }
+  .ex-scrub { gap: 0.4rem; }
+  .ex-scrub output { min-width: 0; }
   .ex-speed { margin-left: 0; }
 }
 
@@ -705,6 +762,22 @@
 }
 
 /* Nonlinear least squares: the local Gauss–Newton bowl and shared 3D surface marks. */
+.nls-step { display: grid; gap: 0.5rem; padding: 0.6rem 0.75rem; border: 1px solid var(--ex-line); border-radius: 0.4rem; background: var(--ex-panel); }
+.nls-bars { display: grid; gap: 0.4rem; }
+.nls-bar-row { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 5rem; align-items: center; gap: 0.5rem; font-size: var(--type-label); }
+.nls-bar-value { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.nls-bar-track { position: relative; display: block; height: 1.1rem; border-radius: 0.25rem; background: var(--ex-line); overflow: hidden; }
+.nls-bar { position: absolute; inset: 0 auto 0 0; display: block; }
+.nls-bar-start { background: var(--ex-ink-soft); }
+.nls-bar-predicted { background: repeating-linear-gradient(135deg, var(--ex-orange) 0 6px, #f4b27d 6px 12px); }
+.nls-bar-actual { background: var(--ex-teal); }
+.nls-bar-worse { background: var(--ex-red); }
+.nls-bar-clipped { background-image: linear-gradient(90deg, transparent calc(100% - 14px), #fff 100%); }
+.nls-bar-mark { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--ex-ink); }
+@media (max-width: 560px) { .nls-bar-row { grid-template-columns: 1fr 5rem; } .nls-bar-label { grid-column: 1 / -1; } }
+.nls-bar-overflow { position: absolute; right: 0.3rem; top: 50%; transform: translateY(-50%); color: #fff; font-weight: 700; font-size: var(--type-label); font-variant-numeric: tabular-nums; }
+.nls-ghost-curve { fill: none; stroke: var(--ex-red); stroke-opacity: 0.35; stroke-width: 1.5; stroke-dasharray: 6 4; }
+.nls-alias-curve { fill: none; stroke: #7a4fb5; stroke-width: 2.5; stroke-dasharray: 7 5; }
 .nls-bowl path { fill: none; stroke: var(--ex-orange-ink); stroke-width: 1.6; stroke-dasharray: 5 4; }
 .nls-bowl-bottom line { stroke: var(--ex-orange-ink); stroke-width: 1.8; stroke-dasharray: 2 3; }
 .nls-bowl-bottom circle { fill: var(--ex-panel); stroke: var(--ex-orange-ink); stroke-width: 2; }
@@ -863,3 +936,152 @@
 .ex-contour-key { fill: none; stroke: var(--ex-ink); stroke-opacity: 0.75; stroke-width: 2; }
 .ex-saddle path { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
 .ex-saddle text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; }
+
+/* Convex QP projection: target = orange cross, nearest point = teal star, level circle through it */
+.qp-level { fill: none; stroke: var(--ex-orange); stroke-width: 3; }
+.qp-link { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.qp-vertex { fill: var(--ex-ground); stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.qp-vertex-best { fill: var(--ex-teal); stroke: var(--ex-ink); }
+.qp-target { fill: none; stroke: var(--ex-orange-ink); stroke-width: 3.5; stroke-linecap: round; }
+.qp-best { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; stroke-linejoin: round; }
+.ex-table.qp-table th[scope="row"] { white-space: normal; }
+.ex-table.qp-table td { white-space: nowrap; }
+.qp-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.qp-edge-tight { stroke: var(--ex-orange-ink); stroke-width: 5; stroke-dasharray: 10 7; }
+.qp-arrow { stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.qp-arrow-grad { stroke: var(--ex-teal-ink); fill: var(--ex-teal-ink); }
+.qp-arrow-push { stroke: var(--ex-orange-ink); fill: var(--ex-orange-ink); }
+.qp-arrow-label-grad { fill: var(--ex-teal-ink); font-weight: 700; }
+.qp-arrow-label-push { fill: var(--ex-orange-ink); font-weight: 700; }
+.qp-edge-active { stroke: var(--ex-orange); stroke-width: 7; stroke-linecap: round; }
+.qp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 4; }
+.qp-bars { display: grid; gap: 0.35rem; margin-bottom: 0.6rem; }
+.qp-bar-row { display: grid; grid-template-columns: minmax(7rem, 1.2fr) 2fr minmax(5rem, auto); gap: 0.5rem; align-items: center; font-size: var(--type-label); }
+.qp-bar-track { height: 0.9rem; background: var(--ex-panel); border: 1px solid var(--ex-line); border-radius: 3px; overflow: hidden; }
+.qp-bar { height: 100%; background: var(--ex-ink-soft); transition: width 120ms linear; }
+.qp-bar-on { background: var(--ex-orange); }
+.qp-bar-value { text-align: right; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .qp-bar { transition: none; } }
+/* Root finding (Newton / bisection): orange = the moving point and tangent, teal = the root. */
+.nr-grid { stroke: var(--ex-line); stroke-width: 1; stroke-dasharray: 3 4; }
+.nr-root { stroke: var(--ex-teal); stroke-width: 2; stroke-dasharray: 6 4; }
+.nr-tangent-line { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.nr-cross { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
+.nr-drop { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 4 4; }
+.nr-old { fill: var(--ex-ink-soft); stroke: var(--ex-ground); stroke-width: 1.5; }
+.nr-from { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.nr-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.nr-bracket { fill: var(--ex-teal); fill-opacity: 0.14; }
+.nr-bracket-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.nr-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1; }
+.nr-bar-now { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+/* Two-variable plane: dashed grey curve = where the Jacobian has no inverse, green rings = roots. */
+.nr-sing-curve { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.8; stroke-dasharray: 6 5; }
+.nr-plane-root { fill: none; stroke: var(--ex-teal); stroke-width: 3; }
+.nr-plane-whole { fill: none; stroke: var(--ex-line); stroke-width: 2; stroke-dasharray: 2 4; }
+.nr-plane-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.nr-plane-a { stroke: var(--ex-orange-ink); }
+.nr-plane-b { stroke: var(--ex-teal-ink); }
+.nr-plane-c { stroke: var(--ex-ink); }
+.nr-plane-dot { stroke: var(--ex-ground); stroke-width: 2; }
+.nr-plane-dot.nr-plane-b { fill: var(--ex-teal); }
+.nr-plane-dot.nr-plane-c { fill: var(--ex-ink); }
+.nr-sing-mark line { stroke: var(--ex-ink); stroke-width: 3.5; stroke-linecap: round; }
+
+/* Simplex projection: orange = what is subtracted, teal = what remains, grey = clipped to zero. */
+.sp-zero { stroke: var(--ex-ink); stroke-width: 1.5; }
+.sp-wish { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-taken { fill: var(--ex-orange); fill-opacity: 0.28; stroke: none; }
+.sp-kept { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-kept-zero { fill: none; stroke: none; }
+.sp-negative { fill: var(--ex-ink-soft); fill-opacity: 0.22; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-ghost line { stroke: var(--ex-ink); stroke-width: 3; }
+.sp-ghost text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.sp-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.sp-meter-track { fill: var(--ex-line); }
+.sp-meter-fill { fill: var(--ex-orange); }
+.sp-meter-ok { fill: var(--ex-teal); }
+.sp-bracket { fill: var(--ex-orange); fill-opacity: 0.16; }
+.sp-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.sp-marker-ok { fill: var(--ex-teal); }
+/* Triangle panel: pale green = the simplex, white ring = y's shadow, green square = projection, black diamond = divided. */
+.sp-tri { fill: var(--ex-teal-wash); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-tri-floor { stroke: var(--ex-teal-ink); stroke-width: 4; stroke-linecap: round; }
+.sp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 5; }
+.sp-perp { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.sp-right-angle { fill: none; stroke: var(--ex-orange-ink); stroke-width: 2; }
+.sp-divide-line { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.sp-shadow-y { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 3; }
+.sp-proj { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.sp-divided { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.sp-map-dot { fill: var(--ex-ink); }
+
+/* SDP slice: teal = feasible, orange = on the boundary, red = infeasible (the only red). */
+.psd-region { fill: var(--ex-teal); fill-opacity: 0.12; stroke: none; }
+.psd-edge { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-fixed { stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.psd-feasible-segment { stroke: var(--ex-teal); stroke-width: 6; stroke-linecap: round; opacity: 0.7; }
+.psd-point { transition: transform 0.18s ease-out; }
+.psd-dot { stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-dot-inside { fill: var(--ex-teal); }
+.psd-dot-boundary { fill: var(--ex-orange); }
+.psd-dot-outside { fill: var(--ex-red); }
+.psd-forbidden { fill: var(--ex-red); fill-opacity: 0.08; }
+.psd-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; transition: y 0.18s ease-out, height 0.18s ease-out; }
+.psd-bar-zero { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+.psd-bar-negative { fill: var(--ex-red); stroke: var(--ex-red-ink); }
+
+/* PDE heat source: teal = temperature misfit, orange = heat-source penalty. */
+.pde-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.pde-gap { stroke: var(--ex-teal); stroke-width: 4; }
+.pde-wall { fill: var(--ex-ink); }
+.pde-heater { stroke: var(--ex-orange-ink); stroke-width: 4; }
+.pde-heater-head { fill: var(--ex-orange-ink); }
+.pde-bar-misfit { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.pde-bar-penalty { fill: var(--ex-orange); stroke: var(--ex-orange-ink); stroke-width: 1.5; }
+.pde-best { stroke: var(--ex-ink); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.pde-curve-misfit { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
+.pde-curve-penalty { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.pde-label-misfit { fill: var(--ex-teal-ink); font-weight: 700; }
+.pde-label-penalty { fill: var(--ex-orange-ink); font-weight: 700; }
+.pde-marker { transition: transform 0.15s ease-out; }
+.pde-link { stroke: var(--ex-ink); stroke-width: 2.5; stroke-dasharray: 3 4; }
+.pde-need { stroke: var(--ex-ink); stroke-width: 3; stroke-dasharray: 5 4; }
+.pde-need-head { fill: var(--ex-ink); }
+.pde-curve-free { stroke-dasharray: 7 5; }
+.pde-bar-residual { fill: var(--ex-red); stroke: var(--ex-red-ink); stroke-width: 1.5; transition: width 0.18s ease-out; }
+.pde-residual-zero { stroke: var(--ex-ink); stroke-width: 2; }
+.pde-marker-free .ex-head { stroke-dasharray: 4 3; }
+
+/* SDP: the objective ruler (-r falls to the right), its contour line, and the eigenvalue sum / product rows. */
+.psd-objective-arrow { stroke: var(--ex-ink); stroke-width: 3; }
+.psd-objective-head { fill: var(--ex-ink); }
+.psd-contour { stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 3 4; }
+.psd-contour-boundary { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.psd-contour-outside { stroke: var(--ex-red-ink); }
+.psd-sum-ok { fill: var(--ex-ink); }
+.psd-sum-zero { fill: var(--ex-orange-ink); }
+.psd-sum-bad { fill: var(--ex-red-ink); }
+
+.cvx-gap-fill { fill: var(--ex-teal); fill-opacity: 0.18; stroke: none; }
+.cvx-gap-fill-bad { fill: var(--ex-red); fill-opacity: 0.3; }
+.cvx-to-band { stroke: var(--ex-orange-ink); stroke-width: 3; stroke-dasharray: 5 4; }
+.nls-profile-line { stroke: var(--ex-ink); stroke-width: 2.5; }
+.nls-profile-valley { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 2; }
+.nls-profile-start { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 5 4; }
+.nls-profile-label { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+
+/* Phase fraction (external solver): α curve solid, β curve dotted, the common tangent dashed orange. */
+.pf-g-alpha { fill: none; stroke: var(--ex-ink); stroke-width: 3; }
+.pf-g-beta { fill: none; stroke: var(--ex-ink); stroke-width: 3; stroke-dasharray: 2 5; stroke-linecap: round; }
+.pf-tangent { stroke: var(--ex-orange); stroke-width: 2.5; stroke-dasharray: 7 5; }
+.pf-tangent-label { fill: var(--ex-orange-ink); font-weight: 700; }
+.pf-tangent-point { fill: var(--ex-ink); }
+.pf-guide { stroke: var(--ex-ink-soft); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.pf-candidate { fill: var(--ex-panel); stroke: var(--ex-ink); stroke-width: 2; }
+.pf-lever-base { stroke: var(--ex-line); stroke-width: 8; stroke-linecap: round; }
+.pf-lever-beta { stroke: var(--ex-orange); stroke-width: 8; stroke-linecap: round; }
+.pf-target { stroke: var(--ex-ink); stroke-width: 1.8; stroke-dasharray: 6 4; }
+.pf-two-phase { fill: var(--ex-teal); fill-opacity: 0.1; }
+.pf-flat { stroke: var(--ex-ink-soft); stroke-width: 9; stroke-opacity: 0.25; stroke-linecap: round; }
+.pf-flat-label { fill: var(--ex-ink); font-weight: 700; }

@@ -108,7 +108,7 @@ def test_pde_tolerance_compare_fixes_every_factor_except_inner_tolerance() -> No
     assert comparison.comparability == "contrast_only"
     assert comparison.ranking_eligible is False
     assert comparison.budget.metric == comparison.synchronization_axis == "oracle_evaluations"
-    assert comparison.changed_factors == ["state/adjoint relative toleranceだけ: 1e-8 対 1e-3"]
+    assert comparison.changed_factors == ["状態／随伴の相対許容誤差だけ: 1e-8 対 1e-3"]
     assert {member.scenario_id for member in comparison.members} == {
         TIGHT_SCENARIO_ID,
         LOOSE_SCENARIO_ID,

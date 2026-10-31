@@ -45,7 +45,7 @@ describe("BayesianOptimizationPage", () => {
     expect(await screen.findByText(/再生を押すと、観測/u)).toBeVisible();
     expect(screen.getByRole("heading", { level: 2, name: "再生して、次の評価点が選ばれるまでを見る" })).toBeVisible();
     expect(await screen.findByText(/最適化方向: minimize/u)).toBeVisible();
-    expect(screen.getByText(/optimizerが参照しない真の目的関数/u)).toBeVisible();
+    expect(screen.getByText(/最適化手法が参照しない真の目的関数/u)).toBeVisible();
     expect(screen.getByRole("img", { name: /surrogateの平均/u })).toBeVisible();
     expect(screen.getByRole("table", { name: /best-so-far/u })).toBeVisible();
     const player = screen.getByLabelText(/左右矢印で移動/u);
@@ -87,7 +87,7 @@ describe("BayesianOptimizationPage", () => {
   test("renders the independent low-fidelity bias failure scenario", async () => {
     renderPage("/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS");
 
-    expect(await screen.findByText(/fidelity discrepancyによる順位反転を検出する/u)).toBeVisible();
+    expect(await screen.findByText(/精度間の食い違いによる順位の反転を検出する/u)).toBeVisible();
     fireEvent.change(screen.getByLabelText("評価位置"), { target: { value: "1" } });
     expect(screen.getByRole("table", { name: "Simulator evaluation ledger" })).toHaveTextContent("4/4");
     expect(screen.queryByRole("combobox", { name: /探索方針/u })).toBeNull();

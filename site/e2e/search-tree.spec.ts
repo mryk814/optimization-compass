@@ -9,7 +9,7 @@ test("0-1 Gallery caseから決定的search-treeをkeyboardで再生できる", 
   await expect(theaterLink).toBeVisible();
   await theaterLink.click();
   await expect(page).toHaveURL(/#\/theater\/search-tree\/binary-knapsack-bnb-complete\?state=/u);
-  await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "0-1ナップサック: 最適性の証明" })).toBeVisible();
   const artifactBadges = page.locator(".artifact-badges");
   await expect(artifactBadges.getByText("実行Trace / Executable", { exact: true })).toBeVisible();
   await expect(artifactBadges.getByText("search_tree 1.0.0", { exact: true })).toBeVisible();
@@ -35,7 +35,7 @@ test("0-1 Gallery caseから決定的search-treeをkeyboardで再生できる", 
 
 test("最適性証明とnode予算停止を区別し、重大なa11y違反がない", async ({ page }) => {
   await page.goto(`${basePath}#/theater/search-tree/binary-knapsack-bnb-budget`);
-  await expect(page.getByRole("heading", { name: "0-1 knapsack: node予算で停止" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "0-1ナップサック: ノード数の予算で停止" })).toBeVisible();
   const seek = page.getByLabel("フレーム位置");
   await seek.fill(await seek.getAttribute("max") ?? "0");
   await expect(page.getByText(/node予算で停止 — 実行可能な候補解/u)).toBeVisible();

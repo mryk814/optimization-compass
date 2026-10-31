@@ -26,9 +26,9 @@ def test_topology_cantilever_connects_formulation_to_visual_diagnostics() -> Non
     ast.parse(case["python_example"])
     assert "generate_topology_field_artifact" in case["python_example"]
     assert "checkerboard_score" in case["python_example"]
-    assert "derived state" in case["decision_variables"]
-    assert "①density" in case["practical_notes"]
-    assert "④gray fraction" in case["practical_notes"]
+    assert "従属した状態変数" in case["decision_variables"]
+    assert "①密度" in case["practical_notes"]
+    assert "④中間密度の割合" in case["practical_notes"]
     assert "OCとMMAの比較" in case["practical_notes"]
     assert "Q4 FEM解析値" in case["limitations"][0]
     assert case["implementation_ids"] == ["I_TOPOPT_88_MATLAB"]

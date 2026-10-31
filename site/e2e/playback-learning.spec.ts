@@ -88,7 +88,7 @@ test("旧canonical comparison IDのdeep linkが現行の比較へ解決する", 
 test("制約failure comparisonでfixed・changed・feasibilityを読める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
 
-  await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "制約を守る実行と無視する実行を比べる" })).toBeVisible();
   const comparisonConditions = page.getByRole("region", { name: "比較条件" });
   await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここまで同じ" })).toBeVisible();
   await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここだけ違う" })).toBeVisible();
@@ -102,9 +102,9 @@ test("制約failure comparisonでfixed・changed・feasibilityを読める", asy
 test("Pareto result comparisonでpreferenceだけを変えられる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_PARETO_PREFERENCE");
 
-  await expect(page.getByRole("heading", { level: 1, name: "Pareto front上でpreferenceを変える" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "パレートフロント上で選好を変える" })).toBeVisible();
   const comparisonConditions = page.getByRole("region", { name: "比較条件" });
-  await expect(comparisonConditions.getByText("f1とf2のpreference weight", { exact: true })).toBeVisible();
+  await expect(comparisonConditions.getByText("f1とf2への選好の重み", { exact: true })).toBeVisible();
   const paretoRenderer = page.getByRole("region", { name: "単一の最良解ではなく、トレードオフ集合を選ぶ" });
   const preference = paretoRenderer.getByRole("slider", { name: /^f₁の重み \(weight\)/u });
   await expect(preference).toHaveValue("50");
@@ -115,9 +115,9 @@ test("Pareto result comparisonでpreferenceだけを変えられる", async ({ p
   await expect.poll(async () => selectedObjectives.allTextContents()).not.toEqual(objectivesBefore);
   await expect(paretoRenderer.getByText(/f₁の重み 0\.55 で選んだ点/u)).toBeVisible();
   await expect(page.getByLabel("パレート前線の集計")).toContainText("サンプル数81");
-  await expect(page.getByLabel("f₂優先weightの選択結果")).toContainText("Decision(1.6, 1.6)");
-  await expect(page.getByLabel("均衡weightの選択結果")).toContainText("f₁2");
-  await expect(page.getByLabel("f₁優先weightの選択結果")).toContainText("f₂5.12");
+  await expect(page.getByLabel("f₂優先の重みの選択結果")).toContainText("Decision(1.6, 1.6)");
+  await expect(page.getByLabel("均衡の重みの選択結果")).toContainText("f₁2");
+  await expect(page.getByLabel("f₁優先の重みの選択結果")).toContainText("f₂5.12");
   await comparisonConditions.getByText("評価条件の詳細を開く", { exact: true }).click();
   const rankingPolicy = comparisonConditions.getByText("順位づけ", { exact: true }).locator("..");
   await expect(rankingPolicy).toContainText("しない");

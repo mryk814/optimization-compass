@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, sse } from "./sineFit";
+import { ALIAS_SHIFT, bestAmplitude, gaussNewton, GLOBAL_MINIMUM, levenbergMarquardt, linearizedSse, profileSse, profileValleys, SPRING_T, sse, stepReading } from "./sineFit";
 
 describe("spring sine fit", () => {
   it("matches the article's best fit and the aliased copy 4π away", () => {
@@ -22,6 +22,55 @@ describe("spring sine fit", () => {
     // The bowl predicted far less than the true sum of squares at the first step.
     expect(run.path[1].predicted).toBeLessThan(run.path[1].sse);
     expect(linearizedSse({ a: 1, w: 1.8 }, { a: 1, w: 1.8 })).toBeCloseTo(5.42, 2);
+  });
+
+  it("reads each step's promised and actual fall against the article's tables", () => {
+    const near = gaussNewton({ a: 1, w: 1.8 }).path;
+    const first = stepReading(near, 1)!;
+    expect(first.startSse).toBeCloseTo(5.42, 2);
+    expect(first.head.w).toBeCloseTo(2.185, 3);
+    expect(first.predicted).toBeCloseTo(0.245, 3);
+    expect(first.actual).toBeCloseTo(2.234, 3);
+    expect(first.predictedDecrease).toBeCloseTo(5.42 - 0.245, 2);
+    expect(first.actualDecrease).toBeCloseTo(5.42 - 2.234, 2);
+    expect(first.overshoot).toBe(false);
+    const third = stepReading(near, 3)!;
+    expect(third.index).toBe(2);
+    expect(third.predicted).toBeCloseTo(0.19, 3);
+    expect(third.actual).toBeCloseTo(0.19, 3);
+    expect(third.head.w).toBeCloseTo(2.003, 3);
+    expect(stepReading(near, 2)!.head.w).toBeCloseTo(1.987, 3);
+  });
+
+  it("starts every step with the bowl and the landscape agreeing, and lets them part on the way", () => {
+    const path = gaussNewton({ a: 1, w: 3 }).path;
+    for (let index = 0; index < path.length - 1; index += 1) {
+      const begin = stepReading(path, index + 1e-7)!;
+      expect(begin.index).toBe(index);
+      expect(begin.predicted).toBeCloseTo(begin.startSse, 3);
+      expect(begin.actual).toBeCloseTo(begin.startSse, 3);
+    }
+    expect(stepReading(path, 1)!.head.w).toBeCloseTo(2.589, 3);
+    expect(stepReading(path, 2)!.head.w).toBeCloseTo(6.302, 3);
+    const last = stepReading(path, 3)!;
+    expect(last.head.w).toBeCloseTo(401.455, 3);
+    expect(last.predicted).toBeCloseTo(12.672, 3);
+    expect(last.actual).toBeGreaterThan(1e9);
+    expect(last.overshoot).toBe(true);
+    expect(last.actualDecrease).toBeLessThan(0);
+    // The bowl promises a fall all along the step; the landscape does not give it.
+    const half = stepReading(path, 2.5)!;
+    expect(half.predicted).toBeLessThan(half.startSse);
+    expect(half.actual).toBeGreaterThan(half.startSse);
+  });
+
+  it("never lets a Levenberg–Marquardt step end above where it started", () => {
+    const path = levenbergMarquardt({ a: 1, w: 3 }).path;
+    for (let index = 1; index < path.length; index += 1) {
+      const reading = stepReading(path, index)!;
+      expect(reading.overshoot).toBe(false);
+      expect(reading.actualDecrease).toBeGreaterThan(0);
+    }
   });
 
   it("lets plain Gauss–Newton fly off from ω = 3", () => {
@@ -60,5 +109,31 @@ describe("spring sine fit", () => {
   it("reports budget exhaustion before the fit has settled", () => {
     expect(gaussNewton({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
     expect(levenbergMarquardt({ a: 1, w: 1.8 }, 1).outcome).toBe("budget");
+  });
+
+  it("records the λ of each accepted Levenberg–Marquardt trial, starting from 1", () => {
+    const path = levenbergMarquardt({ a: 1, w: 3 }).path;
+    expect(path[0].lambda).toBeUndefined();
+    expect(path[1].lambda).toBeGreaterThanOrEqual(1);
+    path.slice(1).forEach((p) => expect(p.lambda).toBeGreaterThan(0));
+  });
+
+  it("gives the same eight predictions for ω and ω + 4π, and different curves between them", () => {
+    const p = { a: 1.98586, w: 2.00189 };
+    const shifted = { a: p.a, w: p.w + ALIAS_SHIFT };
+    SPRING_T.forEach((t) => expect(shifted.a * Math.sin(shifted.w * t)).toBeCloseTo(p.a * Math.sin(p.w * t), 9));
+    expect(shifted.a * Math.sin(shifted.w * 0.25)).not.toBeCloseTo(p.a * Math.sin(p.w * 0.25), 1);
+    expect(shifted.w).toBeCloseTo(14.5683, 3);
+  });
+
+  it("profiles the sum of squares over ω into five valleys, the deepest at ω = 2.00", () => {
+    // Values from numpy (scratchpad fix2_numbers.py).
+    expect(profileSse(1.8)).toBeCloseTo(3.3973, 3);
+    expect(profileSse(3)).toBeCloseTo(14.003, 3);
+    const valleys = profileValleys();
+    expect(valleys.map((v) => Number(v.w.toFixed(2)))).toEqual([0.76, 2, 3.25, 4.13, 4.96]);
+    expect(valleys[1].sse).toBeCloseTo(0.19, 2);
+    expect(Math.min(...valleys.filter((_, i) => i !== 1).map((v) => v.sse))).toBeGreaterThan(13.4);
+    expect(Math.max(...valleys.map((v) => v.sse))).toBeLessThan(14.1);
   });
 });
