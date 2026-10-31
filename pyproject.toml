@@ -67,7 +67,9 @@ target-version = "py312"
 line-length = 100
 # Immutable review transcripts are checked by their reproduction manifest, not rewritten as app code.
 # The OC-EVOL handoff pack is kept verbatim as received; its tools are not app code.
+# Ruff 0.16 also formats Python blocks inside Markdown; articles keep their own code layout.
 extend-exclude = [
+  "*.md",
   "docs/article-revisions/2026-10-04/reproduce",
   "docs/product-direction/evolution/handoff-pack-2026-10-10",
 ]
