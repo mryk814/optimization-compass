@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `79`
-- Meeting the concept floor: `79`
+- Published concept guides: `81`
+- Meeting the concept floor: `81`
 - Below the concept floor: `0`
 - Prose review warnings: `706`
 
@@ -26,10 +26,12 @@
 | `concept.distributed-consensus` | 129 | 9245 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
+| `concept.equilibrium-variational-inequality` | 128 | 8779 | 12 | 6 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
 | `concept.external-solver-objective` | 162 | 11507 | 15 | 15 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
+| `concept.general-conic-optimization` | 131 | 8824 | 12 | 8 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
@@ -136,10 +138,12 @@
 | `concept.distributed-consensus` | 0 |
 | `concept.dynamics-defect` | 1 |
 | `concept.eigenvalue-problem` | 13 |
+| `concept.equilibrium-variational-inequality` | 0 |
 | `concept.evaluation-cost` | 0 |
 | `concept.expensive-black-box` | 0 |
 | `concept.external-solver-objective` | 0 |
 | `concept.failed-simulation` | 0 |
+| `concept.general-conic-optimization` | 0 |
 | `concept.general-nonsmooth-local` | 0 |
 | `concept.high-dimensional-black-box` | 0 |
 | `concept.high-dimensional-smooth-unconstrained` | 0 |
