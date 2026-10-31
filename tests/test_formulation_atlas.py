@@ -112,9 +112,19 @@ def test_index_merges_database_seed_and_articles(repository: KnowledgeRepository
     assert any(method["role"] == "avoid" for method in lp["methods"])
     assert by_id["PA009"]["maturity"] == "article"
     assert by_id["PA034"]["maturity"] == "article_with_figure"
-    assert by_id["PA047"]["maturity"] == "skeleton"
     assert index["summary"]["formulations"] == len(by_id)
     assert all(family["problem_ids"] for family in index["families"])
+    # Every formulation now has an article; drop one to check the skeleton fallback.
+    without = [page for page in pages if page.canonical_entity_id != "PA047"]
+    skeleton = build_formulation_atlas_index(
+        repository,
+        load_formulation_atlas_seed(ATLAS_SEED),
+        dataset_version="test",
+        content_pages=without,
+    )
+    by_id = {item["problem_id"]: item for item in skeleton["formulations"]}
+    assert by_id["PA047"]["maturity"] == "skeleton"
+    assert by_id["PA047"]["content_id"] is None
 
 
 def test_paths_resolve_routes_and_stubs(pages, archetype_ids: set[str]) -> None:  # type: ignore[no-untyped-def]
