@@ -622,11 +622,11 @@
             }
           },
           "lesson": {
-            "complete": 50,
+            "complete": 51,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 15,
+              "in_progress": 14,
               "no_article": 13,
               "stale": 2
             }

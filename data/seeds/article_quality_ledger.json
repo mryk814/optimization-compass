@@ -185,6 +185,25 @@
       },
       "notes": "2026-10-26: Sonnet一次・二次レビュー（数値を独立に再計算、UI名と操作の追跡）で出た指摘を修正し、Claudeが修正点をgrepで照合。1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）と e2e 61件で判定。"
     },
+    "concept.design-of-experiments": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "bfc6078a464d",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: det M（32・16.06・0.131・0）、効率、予測のばらつきの最大（0.50・0.82・25.1）、β2のばらつき、6回の点でのd(x_i)の合計が3、直線のdet 36と24、190℃に回した配置の効率0.936、Frank–Wolfeの厳密な幅と双対ギャップ（10・100・1000回で0.407・0.0558・0.0059）、6回の厳密な最適配置を再計算し一致。重みで測るd_wと6回のdの区別、幅の式の導出、同値定理の明記、効率をdet基準の回数比に限定、SDPの言い回し、中央付近の予測の説明、両端だけで決まらない理由、tr M^-1 の基準、知られている配置の条件を修正。1280/375/320pxで横はみ出し・数式エラーなし。"
+    },
     "concept.discontinuous-simulation": {
       "reviewed_on": "2026-10-13",
       "reviewer": "claude",
@@ -706,6 +725,25 @@
         "screen.three-widths": "pass"
       },
       "notes": "2026-10-26: Sonnet二次レビュー（数値を独立に再計算し一致、UI名と操作の追跡を確認）とClaudeによる1280/375/320pxの実画面計測（横はみ出し・SVG文字の重なりと切れなし）で判定。"
+    },
+    "concept.repeated-parametric-optimization": {
+      "reviewed_on": "2026-10-31",
+      "reviewer": "claude",
+      "body_sha256": "0c2d301c43da",
+      "verdicts": {
+        "compare.no-ranking": "pass",
+        "example.computed": "pass",
+        "example.single-thread": "pass",
+        "explorable.ui-names": "na",
+        "figure.observation-to-formula": "pass",
+        "figure.one-question": "pass",
+        "pitfalls.with-example": "pass",
+        "prose.readable": "pass",
+        "reading.formula-sentence": "pass",
+        "routes.trouble-first": "pass",
+        "screen.three-widths": "pass"
+      },
+      "notes": "一次レビュー（執筆と別のエージェント）: 3つの領域の式、乗数λ(θ)=dJ*/dθと折れ目での連続、12回の表、ゼロから31回・前回から20回、延ばした解(4.333,2.167)を独立に再計算し一致。コードの手順を有効制約法の簡単な版と明記し停止の注意を追加、λを増やした量あたりの増え方に修正、Qが正定値の前提、1≦θ≦7の範囲、2^mの説明、≦の向きとコードの符号、線形MPCの条件、ウォームスタートの定義、θが決める前に分かる条件、図①に領域名と図②にθ=3・6を追加。1280/375/320pxで横はみ出し・数式エラーなし。"
     },
     "concept.robust-optimization": {
       "reviewed_on": "2026-10-30",
