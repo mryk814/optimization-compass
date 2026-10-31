@@ -6460,7 +6460,7 @@ def _doe_designs_svg() -> str:
         values = [(x, doe_variance(m, x)) for x in grid]
         parts.append(_polyline([(_doe_x(x), vy(v)) for x, v in values if v <= 1.2], color, 3))
     for t in (160, 180, 200):
-        parts.append(_text(_doe_x((t - 180) / 20), 560, f"{t}", "tick", "middle"))
+        parts.append(_text(_doe_x((t - 180) / 20), 560, f"{t}℃", "tick", "middle"))
     labels = (
         (f"等間隔：最大 {worst['等間隔']:.2f}", POINT),
         (f"中央付近：両端で {worst['中央付近']:.0f}", UPDATE),
@@ -6486,7 +6486,7 @@ def _doe_weights_svg() -> str:
                 f"{sum(history[k][0][i] for i in (0, 10, 20)):.3f}"
                 for k in DOE_SHOWN_STEPS
             )
-            + "。② 予測のばらつきの最大値と係数の数3の差。"
+            + "。② 重みで測った予測のばらつき（6回の値の6倍）の最大値と、係数の数3の差。"
             + "、".join(f"{k}回で {history[k][1]:.3g}" for k in (1, 10, 100, 1000))
             + "。0になる重みが最適。"
         ),
@@ -6509,7 +6509,7 @@ def _doe_weights_svg() -> str:
         parts.append(_text(_doe_x((t - 180) / 20), 312, f"{t}", "tick", "middle"))
     parts.append(_text(410, 334, "焼き温度（℃）", "tick", "end"))
 
-    parts.append(_text(20, 378, "② 予測のばらつきの最大値 − 3"))
+    parts.append(_text(20, 378, "② 重みで測った予測のばらつきの最大値 − 3"))
     gx = _scale(0.0, 3.0, 64, 410)
     gy = _scale(-3.0, 1.0, 548, 396)
     parts.append(f'<path d="M64 396V548H410" fill="none" stroke="{GRID}"/>')

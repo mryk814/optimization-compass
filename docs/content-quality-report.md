@@ -21,7 +21,7 @@
 | `concept.convexity` | 61 | 5963 | 13 | 2 | 0 | pass |
 | `concept.cp-scheduling` | 93 | 5114 | 10 | 4 | 0 | pass |
 | `concept.derivative-free` | 51 | 2215 | 8 | 4 | 0 | pass |
-| `concept.design-of-experiments` | 85 | 8632 | 13 | 6 | 0 | pass |
+| `concept.design-of-experiments` | 93 | 9630 | 13 | 6 | 0 | pass |
 | `concept.discontinuous-simulation` | 141 | 8913 | 12 | 4 | 0 | pass |
 | `concept.distributed-consensus` | 129 | 9245 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
