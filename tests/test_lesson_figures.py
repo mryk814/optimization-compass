@@ -999,18 +999,18 @@ def test_solver_evaluation_figures_use_the_article_numbers() -> None:
     assert [i + 1 for i, q in enumerate(EVAL_NM_Q) if q < 0] == [13, 14, 15]
     step = math.hypot(EVAL_BFGS_TRIAL[0] - EVAL_START[0], EVAL_BFGS_TRIAL[1] - EVAL_START[1])
     assert round(step, 2) == 1.01
-    assert eval_role_counts() == {"s": 1, "a": 11, "t": 20, "r": 2}
+    assert eval_role_counts() == {"s": 1, "a": 9, "t": 8, "r": 0}
     inflow = generate_lesson_figures()["solver-evaluation-inflow.svg"]
     for text in ("4回目 q=−0.25 m³/s（図の外）", "fmin（白抜きは負の q）", "ツールが失敗"):
         assert text in inflow
     breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
     for text in (
-        "反復11回の裏の評価102回",
-        "直線探索の途中の点 20",
-        "呼び直し 2",
-        "差分のための点 68",
+        "反復9回の裏の評価54回",
+        "直線探索の途中の点 8",
+        "差分のための点 36",
     ):
         assert text in breakdown
+    assert "呼び直し" not in breakdown
 
 
 def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
@@ -1099,7 +1099,7 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
             callback=lambda xk: iterates.append(np.array(xk)),
         )
     )
-    assert len(lbfgsb) == 102 and len(iterates) == 12
+    assert len(lbfgsb) == 54 and len(iterates) == 10
     roles, seen, accepted = [], [], 1
     for index, point in enumerate(lbfgsb):
         if index % 3:
@@ -1118,9 +1118,9 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
         seen.append(point)
     assert "".join(roles) == EVAL_LBFGSB_ROLES
     assert list(lbfgsb[3]) == [1e-3, 1e-5]
-    # Points 20 to 34 agree to 3 digits; point 19 does not.
-    assert {(round(p[0], 6), round(p[1], 6)) for p in lbfgsb[57::3]} == {(0.000401, 0.000501)}
-    assert round(lbfgsb[54][0], 6) != 0.000401
+    # Points 17 and 18 agree to 3 digits; point 16 does not.
+    assert {(round(p[0], 6), round(p[1], 6)) for p in lbfgsb[48::3]} == {(0.000401, 0.000501)}
+    assert round(lbfgsb[45][1], 6) != 0.000501
     # The clipped simplex collapses onto q = 1e-5 although increasing q still lowers the fit.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
@@ -1130,13 +1130,15 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     corner_q = collapsed.x + [0.0, 1e-8]
     slope_q = (sse(corner_q, 1e-10) - sse(collapsed.x - [0.0, 1e-8], 1e-10)) / 2e-8
     assert round(slope_q, -1) == -350
-    assert round(collapsed.fun / sse(lbfgsb[-3], 1e-3)) == 150
-    # A tighter ODE tolerance halves the L-BFGS-B evaluations.
+    assert round(collapsed.fun / sse(lbfgsb[-3], 1e-3)) == 149
+    # With Radau, a tighter ODE tolerance leaves the L-BFGS-B counts unchanged.
     tight = optimize.minimize(lambda x: sse(x, 1e-8), start, method="L-BFGS-B", bounds=box)
-    assert (tight.nit, tight.nfev) == (9, 51)
+    assert (tight.nit, tight.nfev) == (9, 54)
     # Rescaled to 1e4 a and 1e4 q, BFGS never passes a negative value and reaches the fit.
     scaled = record(lambda f: optimize.minimize(lambda z: f(np.asarray(z) * 1e-4), [1.0, 1.0]))
-    assert len(scaled) == 57 and min(min(p) for p in scaled) > 0
+    # The evaluation count depends on the BLAS kernel (57 or 66); the path and answer do not.
+    assert min(min(p) for p in scaled) > 0
+    assert np.allclose(scaled[-1], [0.000401, 0.000501], rtol=0, atol=1e-6)
     assert [round(v, 6) for v in scaled[3]] == [0.000198, 0.000075]
 
 

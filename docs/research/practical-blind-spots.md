@@ -65,7 +65,7 @@ each trap appears without being staged:
 
 - the start `a = q = 1e-4` is physically valid, yet solvers pass impossible or uncomputable points;
 - `a` and `q` are about `1e-4`, so a unit step in the raw variables is ten thousand times the value;
-- the default `solve_ivp` tolerance `rtol=1e-3` makes the objective rough at small scales;
+- with the default RK45 method, the objective depends on the CPU's BLAS kernel at small scales, so L-BFGS-B makes 78, 102 or 120 calls on the same SciPy; the shared example therefore solves the model with `method="Radau"`, whose results did not change across the kernels tried;
 - the real constraint, "the tank does not run dry", couples `a` and `q` and is not a bound.
 
 Each article peels one layer off the same example, and every article uses the same evaluation
@@ -74,9 +74,9 @@ evaluation ledger in `concept.evaluation-cost`.
 
 | Order | Article | What the running example shows (SciPy 1.18.1) |
 |---|---|---|
-| 1 | `concept.solver-evaluation-points`: where and how often a solver evaluates (published) | `minimize(f, x0)` passes `(0.979, -0.248)` on its 4th call; `fmin` passes negative `q` from its 13th call and fails on its 15th; bounds `[0, 0.01]` make L-BFGS-B pass the corner `(0.01, 0)` and fail; with bounds `[1e-5, 1e-3]` L-BFGS-B makes 102 calls in 11 iterations, while Nelder–Mead reports success at a point whose fit is 150 times worse because its clipped simplex collapsed onto `q = 1e-5` |
+| 1 | `concept.solver-evaluation-points`: where and how often a solver evaluates (published) | `minimize(f, x0)` passes `(0.979, -0.248)` on its 4th call; `fmin` passes negative `q` from its 13th call and fails on its 15th; bounds `[0, 0.01]` make L-BFGS-B pass the corner `(0.01, 0)` and fail; with bounds `[1e-5, 1e-3]` L-BFGS-B makes 54 calls in 9 iterations, while Nelder–Mead reports success at a point whose fit is about 150 times worse because its clipped simplex collapsed onto `q = 1e-5` |
 | 2 | Written constraints versus real constraints (planned) | negative inflow is evaluated silently; the run-dry condition couples `a` and `q`; `q > 0` keeps the level above `(q/a)^2/(2g)`; handling a failure as a state instead of a large value |
-| 3 | Is the objective really smooth? (planned) | `rtol=1e-3` versus `rtol=1e-8`: L-BFGS-B needs 102 versus 51 evaluations, and its last 12 gradient points sit at the same 3-digit answer |
+| 3 | Is the objective really smooth? (planned) | the RK45 method makes the evaluation count depend on the CPU (78, 102 or 120 L-BFGS-B calls), while Radau gives 54 calls with `rtol=1e-3` and with `rtol=1e-8`; the inner solver's method and tolerance shape what the outer optimizer sees |
 
 ## Follow-up work
 

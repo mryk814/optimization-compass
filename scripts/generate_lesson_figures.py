@@ -5807,10 +5807,10 @@ EVAL_NM_Q = (
     -8.46875e-5,
 )
 EVAL_NM_LAST_A = 0.000265547
-EVAL_BFGS_TRIAL = (0.979186, -0.247872)
+EVAL_BFGS_TRIAL = (0.979185, -0.247878)
 # L-BFGS-B with 1e-5 <= a, q <= 1e-3, one letter per point whose gradient it computed:
 # s start, a accepted iterate, t line-search point, r a point it had already evaluated.
-EVAL_LBFGSB_ROLES = "sattttttatartattaaaaaattttttttattr"
+EVAL_LBFGSB_ROLES = "sattttttattaaaaaaa"
 
 
 def eval_dry_time(a: float, q: float = 0.0) -> float:
@@ -5920,7 +5920,9 @@ def _eval_breakdown_svg() -> str:
             "ツールを呼んだ順に四角を並べる。"
             f"列は勾配を求めた点 {points} 個で、評価の順に左から並ぶ。"
             f"一段目は初期点 {counts['s']} 個、受け入れた反復点 {counts['a']} 個、"
-            f"直線探索の途中の点 {counts['t']} 個、前に呼んだ点の呼び直し {counts['r']} 個。"
+            f"直線探索の途中の点 {counts['t']} 個"
+            + (f"、前に呼んだ点の呼び直し {counts['r']} 個" if counts["r"] else "")
+            + "。"
             f"二段目と三段目は、勾配を差分で作るために a と q を 1e-8 ずらした点 {2 * points} 個。"
         ),
         334,
@@ -5941,7 +5943,7 @@ def _eval_breakdown_svg() -> str:
         ("s", f"初期点 {counts['s']}"),
         ("a", f"受け入れた反復点 {counts['a']}"),
         ("t", f"直線探索の途中の点 {counts['t']}"),
-        ("r", f"前に呼んだ点の呼び直し {counts['r']}"),
+        *((("r", f"前に呼んだ点の呼び直し {counts['r']}"),) if counts["r"] else ()),
         ("d", f"差分のための点 {2 * points}（各列の2段目と3段目）"),
     )
     for index, (role, label) in enumerate(legend):
