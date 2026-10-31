@@ -5887,7 +5887,10 @@ def _eval_inflow_svg() -> str:
     )
     parts.append(
         _text(
-            arrow_x + 10, py(-0.55), f"4回目 q={_signed(EVAL_BFGS_TRIAL[1], 2)}（図の外）", "tick"
+            arrow_x + 10,
+            py(-0.55),
+            f"4回目 q={_signed(EVAL_BFGS_TRIAL[1], 2)} m³/s（図の外）",
+            "tick",
         )
     )
     parts.append(f'<circle cx="28" cy="55" r="5" fill="{POINT}"/>')
@@ -5913,7 +5916,7 @@ def _eval_breakdown_svg() -> str:
     parts = _open(
         f"反復{counts['a']}回の裏の評価{3 * points}回",
         (
-            "a と q の範囲を 0.00001 から 0.001 にした L-BFGS-B が、"
+            "a と q の上下限を 0.00001 から 0.001 にした L-BFGS-B が、"
             "ツールを呼んだ順に四角を並べる。"
             f"列は勾配を求めた点 {points} 個で、評価の順に左から並ぶ。"
             f"一段目は初期点 {counts['s']} 個、受け入れた反復点 {counts['a']} 個、"

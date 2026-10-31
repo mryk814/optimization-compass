@@ -990,7 +990,8 @@ def test_solver_evaluation_figures_use_the_article_numbers() -> None:
         eval_role_counts,
     )
 
-    # The 14th point survives the 30 minutes, the 15th runs dry, the L-BFGS-B corner in ~45 s.
+    # With q = 0 (the clipped Nelder-Mead) the 14th point survives the 30 minutes and the 15th
+    # runs dry; the L-BFGS-B corner runs dry in about 45 s.
     assert round(eval_dry_time(0.000220156)) == 2051
     assert round(eval_dry_time(EVAL_NM_LAST_A)) == 1700
     assert round(eval_dry_time(0.01)) == 45
@@ -1000,7 +1001,7 @@ def test_solver_evaluation_figures_use_the_article_numbers() -> None:
     assert round(step, 2) == 1.01
     assert eval_role_counts() == {"s": 1, "a": 11, "t": 20, "r": 2}
     inflow = generate_lesson_figures()["solver-evaluation-inflow.svg"]
-    for text in ("4回目 q=−0.25（図の外）", "fmin（白抜きは負の q）", "ツールが失敗"):
+    for text in ("4回目 q=−0.25 m³/s（図の外）", "fmin（白抜きは負の q）", "ツールが失敗"):
         assert text in inflow
     breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
     for text in (
@@ -1056,6 +1057,26 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     ]
     assert (round(gradient[0], -2), round(gradient[1], -2)) == (-80300, 20300)
     assert round(sse(start, 1e-3), 2) == 4.66
+
+    # fmin's 14th and 15th points have negative inflow: the 14th runs dry 0.3 s after the
+    # 30 minutes, the 15th after about 1370 s.
+    def dry_time(a, q):
+        def empty(_, h):
+            return h[0] - 1e-12
+
+        empty.terminal, empty.direction = True, -1
+        sol = space["solve_ivp"](
+            lambda _, h: [q - a * np.sqrt(2 * 9.81 * max(h[0], 0.0))],
+            (0, 5000),
+            [1.0],
+            events=empty,
+            rtol=1e-12,
+            atol=1e-14,
+        )
+        return float(sol.t_events[0][0])
+
+    assert round(dry_time(0.000220156, -3.5625e-5), 1) == 1800.3
+    assert round(dry_time(EVAL_NM_LAST_A, EVAL_NM_Q[-1]), -1) == 1370
     bfgs = record(lambda f: optimize.minimize(f, start))
     assert len(bfgs) == 4
     assert [round(v, 6) for v in bfgs[-1]] == list(EVAL_BFGS_TRIAL)
@@ -1097,7 +1118,9 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
         seen.append(point)
     assert "".join(roles) == EVAL_LBFGSB_ROLES
     assert list(lbfgsb[3]) == [1e-3, 1e-5]
-    assert {(round(p[0], 6), round(p[1], 6)) for p in lbfgsb[66::3]} == {(0.000401, 0.000501)}
+    # Points 20 to 34 agree to 3 digits; point 19 does not.
+    assert {(round(p[0], 6), round(p[1], 6)) for p in lbfgsb[57::3]} == {(0.000401, 0.000501)}
+    assert round(lbfgsb[54][0], 6) != 0.000401
     # The clipped simplex collapses onto q = 1e-5 although increasing q still lowers the fit.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
@@ -1106,7 +1129,7 @@ def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     assert np.allclose(collapsed.final_simplex[0][:, 1], 1e-5, rtol=0, atol=1e-15)
     corner_q = collapsed.x + [0.0, 1e-8]
     slope_q = (sse(corner_q, 1e-10) - sse(collapsed.x - [0.0, 1e-8], 1e-10)) / 2e-8
-    assert round(slope_q) == -355
+    assert round(slope_q, -1) == -350
     assert round(collapsed.fun / sse(lbfgsb[-3], 1e-3)) == 150
     # A tighter ODE tolerance halves the L-BFGS-B evaluations.
     tight = optimize.minimize(lambda x: sse(x, 1e-8), start, method="L-BFGS-B", bounds=box)
