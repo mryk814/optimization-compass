@@ -1,146 +1,89 @@
-# Optimization Compass agent instructions
+# Optimization Compass
 
-This file is the first entry point for humans and automated agents changing this repository.
-For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). To write or rewrite a teaching article (formulation or method), follow [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md); AIs that cannot read the repository use [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md). Prose style for articles lives in [`docs/article-style.md`](docs/article-style.md).
+最適化の定式化・手法・実装・根拠をつなぐ、版つきのデータ駆動 Optimization Atlas。
 
-## What we are building for the learner
+人が使う情報（起動、検証）は [`README.md`](README.md)、変更の種類ごとの手順は [`docs/adding-knowledge.md`](docs/adding-knowledge.md) にある。記事を書くときは [`docs/teaching-article-playbook.md`](docs/teaching-article-playbook.md)（リポジトリを読めない AI には [`docs/prompts/teaching-article.md`](docs/prompts/teaching-article.md)）と [`docs/article-style.md`](docs/article-style.md) に従う。
 
-Read this before any rule below. Every change should make one of these better for a reader:
+## 読者に届けるもの
 
-1. **引ける（dictionary）** — every optimization formulation has a page at `/formulations/<PROBLEM_ID>` with its standard form, a plain reading, recognition cues, its place on the formulation compass (more general / more special / relaxed or rewritten / look-alikes), and candidate methods.
-2. **進める（paths）** — `/paths/<path_id>` orders formulations and articles by the question each answers. Every step page shows "this step's question" on top and "the next question" at the bottom.
-3. **当てはめる（solve）** — Diagnose and Gallery apply the same knowledge to the reader's own problem.
+どの変更も、次の3つのどれかを読者にとって良くするためにする。ページ・行・文字を増やしただけで、どれも良くならない変更は前進ではない。
 
-The structure is **skeleton → lessons → projections**: the skeleton (released database + `data/seeds/formulation_atlas.json`) makes every entity visible from day one; lessons (`content/**/*.md`, one fixed section skeleton per kind) are added one at a time; the app screens are projections generated from both. Pick what to write next with `uv run python scripts/formulation_backlog.py` instead of guessing. Whether each published article meets the teaching criteria, and which reviews went stale after an edit or a new criterion, is tracked in the article quality ledger: run `uv run python scripts/article_quality.py show <article>` before and after changing an article, and `record` your review ([`docs/article-quality.md`](docs/article-quality.md)). Direction and the rules review: [`docs/product-direction/learning-atlas.md`](docs/product-direction/learning-atlas.md); decision: [ADR 0017](docs/adr/0017-formulation-atlas-and-learning-paths.md); recipes: [`docs/formulation-atlas.md`](docs/formulation-atlas.md).
+1. **引ける** — 定式化ごとの `/formulations/<PROBLEM_ID>` に、標準形、読み下し、見分ける手がかり、定式化どうしの位置（より一般・より特殊・緩和や書き換え・似ているだけ）、候補の手法がある。
+2. **進める** — `/paths/<path_id>` が定式化と記事を問いの順に並べる。各ステップの上に「この項の問い」、下に「次の問い」を出す。
+3. **当てはめる** — Diagnose と Gallery が、同じ知識を読者自身の問題に当てる。
 
-A change that only adds pages, rows, or characters without improving one of the three reader actions above is not progress.
+構造は「骨格 → 記事 → 投影」。骨格（リリースした DB と `data/seeds/formulation_atlas.json`）が最初からすべての entity を見せ、記事（`content/**/*.md`）を1本ずつ足し、画面は両方から生成する。方針は [`docs/product-direction/learning-atlas.md`](docs/product-direction/learning-atlas.md) と [ADR 0017](docs/adr/0017-formulation-atlas-and-learning-paths.md)。
 
-## Product boundary
+- 次に書く記事は勘で選ばず、`uv run python scripts/formulation_backlog.py` で選ぶ。
+- 記事を変える前後に `uv run python scripts/article_quality.py show <article>` で基準の満たし方を見て、レビューしたら `record` で台帳に残す（[`docs/article-quality.md`](docs/article-quality.md)）。台帳は、記事の編集や基準の追加で古くなったレビューを見つけるためにある。
 
-Optimization Compass is a versioned, data-driven Optimization Atlas. Keep these responsibilities separate:
+## どこを直すか
 
-| Responsibility | Authority / editable input |
+| 変えたいもの | 正本 |
 |---|---|
-| Stable IDs, structured relations, support scope, evidence, canonical knowledge | SQL migrations and validated seed/catalog inputs used to build the released SQLite database |
-| Human-readable method, concept, and formulation explanations | `content/**/*.md` frontmatter and Markdown body |
-| Formulation families, standard forms, readings, cues, and formulation relations | `data/seeds/formulation_atlas.json` (must cover every problem archetype; see [`docs/formulation-atlas.md`](docs/formulation-atlas.md)) |
-| Learning paths (ordered questions) | `data/seeds/learning_paths.json` |
-| Gallery cases | `data/seeds/site_gallery.json` |
-| Comparison definitions | `data/seeds/site_comparisons.json` |
-| Problem definitions and instances | `src/optimization_compass/resources/problem-suite.json` |
-| Executable problem behavior | `src/optimization_compass/problem_registry.py` |
-| Interactive teaching figures (explorables) | `src/optimization_compass/resources/explorables.json` and `site/src/features/explorable/` (see [`docs/explorables.md`](docs/explorables.md)) |
-| View and visualization metadata | validated seeds and Python contracts under `data/seeds/` and `src/optimization_compass/` |
-| Generated site indexes and distributions | generated from the inputs above; never treated as editable authority |
+| stable ID、構造化した関係、対応範囲、根拠、正典の知識 | SQL migration と検証済みの seed・catalog（ここからリリース用の SQLite を作る） |
+| 手法・概念の解説文 | `content/**/*.md` の frontmatter と本文 |
+| 定式化の記事 | `content/concepts/*.md`（`canonical_entity_type: problem`）。[`docs/formulation-atlas.md`](docs/formulation-atlas.md) のレシピ A |
+| 定式化の族、標準形、読み下し、手がかり、定式化どうしの関係 | `data/seeds/formulation_atlas.json`（同レシピ B） |
+| 学習経路 | `data/seeds/learning_paths.json`（同レシピ C） |
+| 編集範囲（Coverage の分母） | `data/seeds/editorial_scope.json`（[`docs/editorial-scope.md`](docs/editorial-scope.md)） |
+| Gallery の事例 | `data/seeds/site_gallery.json` |
+| 比較の定義 | `data/seeds/site_comparisons.json` |
+| 問題の定義とインスタンス | `src/optimization_compass/resources/problem-suite.json`（変えるとリリースが要る。下の「リリース」） |
+| 問題の実行時の振る舞い | `src/optimization_compass/problem_registry.py` |
+| 動く図（explorable） | `src/optimization_compass/resources/explorables.json` と `site/src/features/explorable/`（[`docs/explorables.md`](docs/explorables.md)） |
+| 問題・手法・判断・探索の図 | `site/src/visual-system/` の部品を使う（[`docs/visual-system.md`](docs/visual-system.md)） |
+| 表示・可視化のメタデータ | `data/seeds/` の seed と `src/optimization_compass/` の Python の契約 |
 
-The released SQLite database is the runtime authority, but contributors do **not** edit it directly. They edit auditable inputs and regenerate a deterministic staged release.
+## 生成物を直接編集しない
 
-## Never edit generated artifacts directly
+リリースした SQLite が実行時の正本だが、直接は編集しない。見た目の結果を直すために次を手で書き換えず、正本を直して再生成する。
 
-Do not hand-edit these paths to fix a visible result:
+| 生成物 | 再生成 |
+|---|---|
+| `src/optimization_compass/resources/knowledge.sqlite`、`src/optimization_compass/resources/DATASET_VERSION`、`data/optimization_method_selection_database_v*` | `uv run python scripts/rebuild_dataset.py --stage`（公開済みの成果物は変えない）。置き換えるのはリリースの publish だけ |
+| `site/public/data/**` | 既存 entity の記事を公開するなら `uv run optimization-compass ready content <content-id>`、それ以外は `uv run optimization-compass export-site-data --output site/public/data` |
+| `docs/content-quality-report.md`、`docs/method-content-density-report.md` | `uv run python scripts/content_quality_report.py`、`uv run python scripts/method_content_density_report.py` |
+| README の「現在のデータセット」 | `uv run python scripts/sync_readme_facts.py` |
+| Trace、media、検索・retrieval、Coverage、manifest、release の生成物 | それぞれの生成手順（[`docs/adding-knowledge.md`](docs/adding-knowledge.md)） |
 
-- `src/optimization_compass/resources/knowledge.sqlite`
-- `src/optimization_compass/resources/DATASET_VERSION`
-- `site/public/data/**`
-- `data/optimization_method_selection_database_v*`
-- generated Trace, media, search, retrieval, Coverage, manifest, or release artifacts
+- 生成した JSON は手でマージしない。他の PR と衝突したら、main を取り込んでブランチの最新の状態から作り直す。
+- 再生成で、変更と関係のない生成物の差分が大量に出たら、コミットせずに原因を調べる。ビルドは決定的なので、それ自体が異常のしるし。
+- リリース用の生成物がコミットに入るのは、生成手順が作ったリリースのコミットだけ。
 
-Find and change the canonical input instead. Generated artifacts may appear in a final release commit only after the repository's generation workflow has produced them.
+## 不変条件（Core invariants）
 
-## Route the change before editing
+- stable ID を黙って別の意味に使い回さない。
+- `method`（理論上の手法）と `implementation`（ライブラリ・API）を分ける。
+- `unknown`、`not_applicable`、`unsupported` は、別々の明示的な状態として保つ。
+- 事実として足す知識は、出典・根拠までたどれるようにする。出典は公式ドキュメント、公式リポジトリ、原論文、標準・仕様を優先する。Qiita と Zenn は出典にしない。
+- ライブラリの既定値を、どこでも通じる推奨や順位として示さない。
+- 比較では、固定した要因、変えた要因、予算、同期、指標、公平性、注意点、順位づけしてよいかを書く。
+- 離散化して解いた結果から、連続モデルでの保証を条件なしに導かない。
+- PDE 制約のデータでは、決定変数、導かれる状態、残差制約、評価の失敗、ソルバーのコストを区別できるように保つ。
+- 公開する解説文は日本語で書く。英語は、正式な用語、固有名、API、出典の題名、コード、式、識別子に残す。
+- 正典の関係からルートを生成できるときは、UI のコードに entity ごとの対応表を足さない。
+- すべての問題型（problem archetype）は formulation atlas にちょうど1回ずつ現れる。`special_case_of` と `relaxes_to` は循環を作らない。どの関係も、成り立つ条件を `note_ja` に書く。
+- 定式化・手法・族の記事は、決まった節の骨組み（`src/optimization_compass/content_skeletons.py`）に従う。例の数値は見積もらず計算する。骨組みより前に書いた記事は `data/seeds/content_skeleton_pending.json` にあり、この一覧は減る一方にする。
+- 学習経路のステップは、それぞれ答える問いを持ち、自分の前提より前に来ない。
+- 推薦の出力を変えるときは、その変化を示す回帰ケースを足す。
 
-| Requested change | Start here | Risk |
-|---|---|---:|
-| Correct prose, examples, limitations, or citations on an existing page | `content/**/*.md` | low |
-| Add a method or concept article for an existing canonical entity | `content/**/*.md` | low |
-| Add a formulation article (8-section skeleton) for an existing problem archetype | `content/concepts/*.md` with `canonical_entity_type: problem`; recipe A in `docs/formulation-atlas.md` | low |
-| Add or correct a standard form, cue, or formulation relation | `data/seeds/formulation_atlas.json`; recipe B | low–medium |
-| Add or reorder a learning path | `data/seeds/learning_paths.json`; recipe C | low |
-| Add, merge, or re-tier an editorial scope member (the coverage denominator) | `data/seeds/editorial_scope.json`; [`docs/editorial-scope.md`](docs/editorial-scope.md) | low–medium |
-| Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
-| Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
-| Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
-| Draw a problem, method, decision, or search on any surface | reuse `site/src/visual-system/` primitives; rules in [`docs/visual-system.md`](docs/visual-system.md) | low–medium |
-| Add an interactive explorable figure to an article | `docs/explorables.md` recipe: registry JSON, `math/` core with tests, figure component, `::: explorable` block | medium |
-| Add a new method, implementation, source, evidence relation, or controlled vocabulary | dataset migration/build inputs plus content | high |
-| Add a scenario, generator, artifact contract, or renderer family | Python contracts/generators plus site implementation | high |
-| Change recommendation behavior, schema, release identity, or publishing | dedicated design and release flow | critical |
+## 先にメンテナーに相談すること
 
-For high or critical changes, inspect similar merged work and document the authority boundary before coding.
+次は公開済みデータセットの版・引用・互換性に関わり、あとから戻しにくい。決める前に相談する。
 
-## Core invariants
+- 新しい stable ID の名前空間や、スキーマの欄が要りそうなとき。
+- release の版上げや migration の順序。
+- 新しい renderer や artifact contract の版。
 
-- Stable IDs are never silently repurposed.
-- `method` and `implementation` remain distinct.
-- `unknown`, `not_applicable`, and `unsupported` remain distinct explicit states.
-- Every factual knowledge addition has a source/evidence trail.
-- Official documentation, official repositories, original papers, standards, and specifications are preferred.
-- Qiita and Zenn are not accepted as sources.
-- A library default is not presented as a universal recommendation or ranking.
-- Comparisons state fixed factors, changed factors, budget, synchronization, metrics, fairness, caveats, and ranking eligibility.
-- Continuous-model guarantees are not inferred from a discretized solve without qualification.
-- Published explanatory prose uses Japanese as the sentence language; English remains for canonical terms, proper names, APIs, source titles, code, formulas, and identifiers.
-- PDE-constrained data keeps decision variables, derived state, residual constraints, evaluation failures, and solver cost distinguishable. Detailed modeling guidance belongs in the PDE article and ADR, not in this entry point.
-- UI code does not gain per-entity routing crosswalks when canonical relations can generate the route.
-- Generated JSON is regenerated from the latest branch state; it is not manually merged.
-- Every problem archetype appears exactly once in the formulation atlas; `special_case_of` and `relaxes_to` never form cycles, and every relation states its condition in `note_ja`.
-- Formulation, method, and family articles follow their fixed section skeleton (`src/optimization_compass/content_skeletons.py`); worked examples are computed, not estimated. Articles written before the skeleton are listed in `data/seeds/content_skeleton_pending.json`, which only shrinks.
-- Every learning-path step carries the question it answers, and no step comes before its own prerequisites.
+## リリース
 
-## Lightweight workflow
+- 公開（GitHub Pages への deploy、dataset の publish、release catalog の更新）は、普段の記事や seed の編集に混ぜない。Pages に deploy するのは手動の `.github/workflows/pages-deploy.yml`（workflow_dispatch）だけ。
+- `src/optimization_compass/resources/problem-suite.json` の変更はリリースの境界を越える。release authority を更新し、staged の SQLite とサイトを作って publish し、`CITATION.cff` と dataset card を作り直す。普段の site export は、seed と runtime の SQLite の食い違いをわざと拒む。
+- release catalog に過去の版が入っているので、staging のテストには未公開の版を使う。公開済みの版を使うと、identity の検証で（正しく）落ちる。
+- まだ公開していない staged release のサイト出力には、前の版までの catalog が入る。新しい版が current として載るのは、外部の bundle と catalog を更新した後。
 
-1. Classify the change using the routing table above.
-2. Read the matching recipe only when adding a new entity or changing a contract.
-3. Edit the canonical input, preserve IDs and sources, and run the smallest focused validation.
-4. For prose or small seed corrections, inspect the rendered local preview.
-5. Use the complete release validation only for schema, recommendation, generator, executable-problem, or release changes.
+## その他
 
-## Validation policy
-
-Use the smallest task exposed by `optimization-compass validate`. The local content tasks check parsing, relations, licensing, and the focused authoring contract. They do not run the full Python suite, site build, or browser suite.
-
-Pull requests targeting `main`, including updates to open PRs, run the selected authoritative validation task, build the site, and verify generated-data drift and the local Pages artifact. Run the applicable gates locally while editing. The workflow runs only on PR events, not standalone push events, and there is no automatic Pages upload or deployment. Preserve generated-data identity, canonical data integrity, stable IDs, and deployment identity.
-
-For an existing canonical method article, `ready content <content-id>` exports public data and runs the focused content contract. It no longer regenerates review reports as a side effect; report scripts remain available when a report is explicitly needed.
-
-A staged build is read-only with respect to published repository artifacts. Publishing is a separate atomic operation and must not be improvised in an ordinary content edit.
-
-## Stop and escalate conditions
-
-Stop and document the uncertainty instead of guessing when any of these is true:
-
-- a new stable-ID namespace or schema field appears necessary;
-- an apparently new entity may duplicate an existing method, family, implementation, problem, or source;
-- a primary or authoritative source cannot be found;
-- recommendation output changes without an explicit regression case;
-- a new renderer or artifact contract version is required;
-- a release version bump or migration ordering decision is unclear;
-- the requested change would require editing generated artifacts only;
-- validation creates widespread unrelated diffs.
-
-## Pull request shape
-
-Prefer one reviewable concern per PR. Separate when practical:
-
-- canonical structured data;
-- human-readable content;
-- executable generators/engine behavior;
-- frontend renderer or UX;
-- generated release artifacts.
-
-Every commit must include a DCO sign-off. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/adding-knowledge.md`](docs/adding-knowledge.md).
-
-## Lessons from issue-scale maintenance
-
-- When the release catalog contains historical entries, staging tests must use an unpublished target
-  version; reusing an already-published version correctly fails identity validation.
-- Site exports for a not-yet-published staged release embed a predecessor-only catalog snapshot. The
-  published site may include the new current entry only after the external bundle and catalog update.
-- After changing a test or generated-data policy, run both `ruff check .` and `ruff format --check .`
-  before relying on longer validation; a focused test pass alone is not sufficient.
-- A change to `resources/problem-suite.json` is a release-boundary change: update the release
-  authority, build and publish the staged SQLite/site tree, then regenerate `CITATION.cff` and the
-  dataset card. The normal site export intentionally rejects a seed/runtime SQLite mismatch.
-- For browser diagnosis, prefer `CI=1` with a unique `PLAYWRIGHT_PORT` so Playwright uses one worker;
-  a many-worker local run can turn existing route failures into resource/timeout noise. Record new
-  focused E2E results separately from the repository's pre-existing full-suite failures.
+- コミットには DCO の sign-off（`git commit -s`）を付ける（[`CONTRIBUTING.md`](CONTRIBUTING.md)）。
+- ブラウザーのテストで原因を調べるときは、`CI=1` と他と重ならない `PLAYWRIGHT_PORT` を付けて1 worker で動かす。多 worker では、ルートの失敗が資源不足やタイムアウトに埋もれる。
