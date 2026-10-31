@@ -72,7 +72,7 @@
 | `concept.smooth-low-dimensional-unconstrained` | 132 | 13217 | 15 | 11 | 0 | pass |
 | `concept.so3-rotation-representation` | 103 | 16824 | 21 | 5 | 0 | pass |
 | `concept.so3-se3-optimization` | 94 | 12284 | 15 | 4 | 0 | pass |
-| `concept.solver-evaluation-points` | 149 | 9613 | 14 | 3 | 0 | pass |
+| `concept.solver-evaluation-points` | 154 | 11537 | 15 | 3 | 0 | pass |
 | `concept.spd-matrix-geometry` | 45 | 2681 | 10 | 3 | 0 | pass |
 | `concept.stochastic-erm` | 136 | 13967 | 14 | 10 | 0 | pass |
 | `concept.stochastic-programming` | 118 | 11166 | 14 | 9 | 0 | pass |

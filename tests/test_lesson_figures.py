@@ -972,138 +972,178 @@ def _solver_evaluation_article_code() -> str:
     return article.split("```python\n", 1)[1].split("```", 1)[0]
 
 
+def _solver_evaluation_tool() -> dict[str, object]:
+    """Run the article's definitions (simulate, observed, tool) without its solver calls."""
+    namespace: dict[str, object] = {}
+    setup = _solver_evaluation_article_code().split("x0 = [1e-4", 1)[0]
+    exec(compile(setup, "solver-evaluation-points.md", "exec"), namespace)
+    return namespace
+
+
 def test_solver_evaluation_figures_use_the_article_numbers() -> None:
     from scripts.generate_lesson_figures import (
-        EVAL_BFGS_C,
-        EVAL_NM_C,
+        EVAL_BFGS_TRIAL,
+        EVAL_NM_LAST_A,
+        EVAL_NM_Q,
         EVAL_START,
-        eval_cost,
-        eval_first_trial,
-        eval_gradient,
-        eval_hardness,
+        eval_dry_time,
         eval_role_counts,
     )
 
-    assert round(eval_hardness(*EVAL_START), 3) == 0.668
-    assert round(eval_cost(*EVAL_START), 2) == 2.77
-    gradient = eval_gradient(*EVAL_START)
-    assert (round(gradient[0], 4), round(gradient[1])) == (-0.0048, 4940)
-    # The exact gradient agrees with a central difference through the bisection.
-    step_t, step_c = 1e-3, 1e-8
-    central_t = (
-        eval_cost(EVAL_START[0] + step_t, EVAL_START[1])
-        - eval_cost(EVAL_START[0] - step_t, EVAL_START[1])
-    ) / (2 * step_t)
-    central_c = (
-        eval_cost(EVAL_START[0], EVAL_START[1] + step_c)
-        - eval_cost(EVAL_START[0], EVAL_START[1] - step_c)
-    ) / (2 * step_c)
-    assert math.isclose(central_t, gradient[0], rel_tol=1e-4)
-    assert math.isclose(central_c, gradient[1], rel_tol=1e-6)
-    trial = eval_first_trial()
-    assert round(trial[1], 4) == EVAL_BFGS_C[-1] == -1.0095
-    assert abs(trial[0] - EVAL_START[0]) < 2e-6
-    assert len(EVAL_NM_C) == 16 and EVAL_NM_C[-1] < 0 < min(EVAL_NM_C[:-1])
-    # The 16th point expands the 15th reflection away from the centroid c = 0.000264.
-    centroid_c = 2 * EVAL_NM_C[14] - EVAL_NM_C[15]
-    assert round(centroid_c, 6) == 0.000264
-    assert round(centroid_c - EVAL_NM_C[14], 6) == 0.000142
-    assert eval_role_counts() == {"s": 1, "a": 3, "t": 9, "d": 26}
-    # L-BFGS-B's first pair (s, y): y'y/s'y is about 2e4, the updated curvature along T about
-    # 220 (the true value is about 1e-4), so the first T trial of iteration 2 is about 0.00002.
-    first = (EVAL_START[0] + 0.00480046, 1e-5)
-    s_t, s_c = first[0] - EVAL_START[0], first[1] - EVAL_START[1]
-    g_first = eval_gradient(*first)
-    y_t, y_c = g_first[0] - gradient[0], g_first[1] - gradient[1]
-    theta = (y_t * y_t + y_c * y_c) / (s_t * y_t + s_c * y_c)
-    s_bs = theta * (s_t * s_t + s_c * s_c)
-    curvature_t = theta - (theta * s_t) ** 2 / s_bs + y_t * y_t / (s_t * y_t + s_c * y_c)
-    assert round(theta, -2) == 21600 and round(curvature_t) == 223
-    assert round(-g_first[0] / curvature_t, 5) == 0.00002
-    carbon = generate_lesson_figures()["solver-evaluation-carbon.svg"]
-    for text in ("fmin：16回目に c=−0.00002", "16回目に c=0", "4回目 c=−1.01（図の外）"):
-        assert text in carbon
+    # With q = 0 (the clipped Nelder-Mead) the 14th point survives the 30 minutes and the 15th
+    # runs dry; the L-BFGS-B corner runs dry in about 45 s.
+    assert round(eval_dry_time(0.000220156)) == 2051
+    assert round(eval_dry_time(EVAL_NM_LAST_A)) == 1700
+    assert round(eval_dry_time(0.01)) == 45
+    assert len(EVAL_NM_Q) == 15
+    assert [i + 1 for i, q in enumerate(EVAL_NM_Q) if q < 0] == [13, 14, 15]
+    step = math.hypot(EVAL_BFGS_TRIAL[0] - EVAL_START[0], EVAL_BFGS_TRIAL[1] - EVAL_START[1])
+    assert round(step, 2) == 1.01
+    assert eval_role_counts() == {"s": 1, "a": 11, "t": 20, "r": 2}
+    inflow = generate_lesson_figures()["solver-evaluation-inflow.svg"]
+    for text in ("4回目 q=−0.25 m³/s（図の外）", "fmin（白抜きは負の q）", "ツールが失敗"):
+        assert text in inflow
     breakdown = generate_lesson_figures()["solver-evaluation-breakdown.svg"]
-    for text in ("反復3回の裏の評価39回", "直線探索の途中の点 9", "差分のための点 26"):
+    for text in (
+        "反復11回の裏の評価102回",
+        "直線探索の途中の点 20",
+        "呼び直し 2",
+        "差分のための点 68",
+    ):
         assert text in breakdown
 
 
 def test_solver_evaluation_points_match_a_scipy_rerun() -> None:
     import contextlib
+    import warnings
 
     import pytest
 
     np = pytest.importorskip("numpy")
     optimize = pytest.importorskip("scipy.optimize")
     from scripts.generate_lesson_figures import (
-        EVAL_BFGS_C,
+        EVAL_BFGS_TRIAL,
         EVAL_LBFGSB_ROLES,
-        EVAL_NM_C,
-        EVAL_NM_LAST_T,
+        EVAL_NM_LAST_A,
+        EVAL_NM_Q,
         EVAL_START,
-        eval_cost,
     )
+
+    space = _solver_evaluation_tool()
+    tool, simulate, observed = space["tool"], space["simulate"], space["observed"]
+
+    def sse(x, rtol):
+        return float(np.sum((simulate(*x, rtol=rtol).y[0] - observed) ** 2))
 
     def record(solve):
         points = []
 
         def wrapped(x):
             points.append(np.array(x, dtype=float))
-            return eval_cost(*points[-1])
+            return tool(points[-1])
 
-        with contextlib.suppress(ValueError):
+        with warnings.catch_warnings(), contextlib.suppress(ValueError):
+            warnings.simplefilter("ignore", RuntimeWarning)
             solve(wrapped)
         return points
 
     start = list(EVAL_START)
-    nelder = record(lambda f: optimize.fmin(f, start, disp=False))
-    assert [round(p[1], 10) for p in nelder] == [round(c, 10) for c in EVAL_NM_C]
-    assert nelder[-1][0] == EVAL_NM_LAST_T
-    # Point 15 reflects point 9 through the midpoint of points 12 and 14; point 16 expands it.
-    middle = (nelder[11] + nelder[13]) / 2
-    assert np.allclose(nelder[14], 2 * middle - nelder[8])
-    assert np.allclose(nelder[15], 2 * nelder[14] - middle)
-    clipped = record(
-        lambda f: optimize.minimize(f, start, method="Nelder-Mead", bounds=[(900, 1600), (0, 0.01)])
-    )
-    assert all(np.array_equal(a, b) for a, b in zip(clipped[:15], nelder[:15], strict=True))
-    assert len(clipped) == 16 and clipped[-1][1] == 0.0
+    zero_box = [(0, 0.01), (0, 0.01)]
+    box = [(1e-5, 1e-3), (1e-5, 1e-3)]
+    # Gradient at the start, by central differences through a tight ODE solve.
+    gradient = [
+        (sse(np.add(start, step), 1e-10) - sse(np.subtract(start, step), 1e-10)) / 2e-7
+        for step in ([1e-7, 0.0], [0.0, 1e-7])
+    ]
+    assert (round(gradient[0], -2), round(gradient[1], -2)) == (-80300, 20300)
+    assert round(sse(start, 1e-3), 2) == 4.66
+
+    # fmin's 14th and 15th points have negative inflow: the 14th runs dry 0.3 s after the
+    # 30 minutes, the 15th after about 1370 s.
+    def dry_time(a, q):
+        def empty(_, h):
+            return h[0] - 1e-12
+
+        empty.terminal, empty.direction = True, -1
+        sol = space["solve_ivp"](
+            lambda _, h: [q - a * np.sqrt(2 * 9.81 * max(h[0], 0.0))],
+            (0, 5000),
+            [1.0],
+            events=empty,
+            rtol=1e-12,
+            atol=1e-14,
+        )
+        return float(sol.t_events[0][0])
+
+    assert round(dry_time(0.000220156, -3.5625e-5), 1) == 1800.3
+    assert round(dry_time(EVAL_NM_LAST_A, EVAL_NM_Q[-1]), -1) == 1370
     bfgs = record(lambda f: optimize.minimize(f, start))
-    assert [round(p[1], 9) for p in bfgs] == [round(c, 9) for c in EVAL_BFGS_C]
-    # Rescaling to T/100 and 1e4 c balances the first trial but still passes c < 0.
-    scaled = record(
-        lambda f: optimize.minimize(lambda z: f([z[0] * 100, z[1] * 1e-4]), [12.0, 5.0])
-    )
-    assert (round(scaled[3][0]), round(scaled[3][1], 5)) == (1248, 0.00045)
-    assert len(scaled) == 13 and round(scaled[-1][1], 5) == -0.00056
-    assert all(p[1] > 0 for p in scaled[:-1])
+    assert len(bfgs) == 4
+    assert [round(v, 6) for v in bfgs[-1]] == list(EVAL_BFGS_TRIAL)
+    nelder = record(lambda f: optimize.fmin(f, start, disp=False))
+    assert [round(p[1], 12) for p in nelder] == [round(q, 12) for q in EVAL_NM_Q]
+    assert round(nelder[-1][0], 9) == EVAL_NM_LAST_A
+    clipped = record(lambda f: optimize.minimize(f, start, method="Nelder-Mead", bounds=zero_box))
+    assert len(clipped) == 15
+    assert all(np.array_equal(a, b) for a, b in zip(clipped[:12], nelder[:12], strict=True))
+    assert [p[1] for p in clipped[12:]] == [0.0, 0.0, 0.0]
+    corner = record(lambda f: optimize.minimize(f, start, method="L-BFGS-B", bounds=zero_box))
+    assert len(corner) == 4 and list(corner[-1]) == [0.01, 0.0]
     iterates = [np.array(start)]
     lbfgsb = record(
         lambda f: optimize.minimize(
             f,
             start,
             method="L-BFGS-B",
-            bounds=[(900, 1600), (1e-5, 0.01)],
+            bounds=box,
             callback=lambda xk: iterates.append(np.array(xk)),
         )
     )
-    roles = []
+    assert len(lbfgsb) == 102 and len(iterates) == 12
+    roles, seen, accepted = [], [], 1
     for index, point in enumerate(lbfgsb):
         if index % 3:
             shift = point - lbfgsb[index - index % 3]
             assert np.count_nonzero(shift) == 1 and np.max(np.abs(shift)) <= 1.0001e-8
-            roles.append("d")
-        elif index == 0:
+            continue
+        if not roles:
             roles.append("s")
+        elif any(np.array_equal(point, x) for x in seen):
+            roles.append("r")
+        elif accepted < len(iterates) and np.array_equal(point, iterates[accepted]):
+            roles.append("a")
+            accepted += 1
         else:
-            accepted = any(np.array_equal(point, x) for x in iterates)
-            roles.append("a" if accepted else "t")
+            roles.append("t")
+        seen.append(point)
     assert "".join(roles) == EVAL_LBFGSB_ROLES
+    assert list(lbfgsb[3]) == [1e-3, 1e-5]
+    # Points 20 to 34 agree to 3 digits; point 19 does not.
+    assert {(round(p[0], 6), round(p[1], 6)) for p in lbfgsb[57::3]} == {(0.000401, 0.000501)}
+    assert round(lbfgsb[54][0], 6) != 0.000401
+    # The clipped simplex collapses onto q = 1e-5 although increasing q still lowers the fit.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        collapsed = optimize.minimize(tool, start, method="Nelder-Mead", bounds=box)
+    assert collapsed.success and (collapsed.nit, collapsed.nfev) == (16, 31)
+    assert np.allclose(collapsed.final_simplex[0][:, 1], 1e-5, rtol=0, atol=1e-15)
+    corner_q = collapsed.x + [0.0, 1e-8]
+    slope_q = (sse(corner_q, 1e-10) - sse(collapsed.x - [0.0, 1e-8], 1e-10)) / 2e-8
+    assert round(slope_q, -1) == -350
+    assert round(collapsed.fun / sse(lbfgsb[-3], 1e-3)) == 150
+    # A tighter ODE tolerance halves the L-BFGS-B evaluations.
+    tight = optimize.minimize(lambda x: sse(x, 1e-8), start, method="L-BFGS-B", bounds=box)
+    assert (tight.nit, tight.nfev) == (9, 51)
+    # Rescaled to 1e4 a and 1e4 q, BFGS never passes a negative value and reaches the fit.
+    scaled = record(lambda f: optimize.minimize(lambda z: f(np.asarray(z) * 1e-4), [1.0, 1.0]))
+    assert len(scaled) == 57 and min(min(p) for p in scaled) > 0
+    assert [round(v, 6) for v in scaled[3]] == [0.000198, 0.000075]
 
 
 def test_solver_evaluation_article_python_prints_its_comments() -> None:
     import contextlib
     import io
+    import warnings
 
     import pytest
 
@@ -1111,7 +1151,8 @@ def test_solver_evaluation_article_python_prints_its_comments() -> None:
     code = _solver_evaluation_article_code()
     expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
     output = io.StringIO()
-    with contextlib.redirect_stdout(output):
+    with warnings.catch_warnings(), contextlib.redirect_stdout(output):
+        warnings.simplefilter("ignore", RuntimeWarning)
         exec(compile(code, "solver-evaluation-points.md", "exec"), {})
     assert output.getvalue().splitlines() == expected
 

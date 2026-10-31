@@ -948,9 +948,9 @@
       "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。長いインライン式を数式ブロックへ移し、根拠のないライブラリ既定の注記を削除。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
     "concept.solver-evaluation-points": {
-      "reviewed_on": "2026-10-30",
+      "reviewed_on": "2026-10-31",
       "reviewer": "claude",
-      "body_sha256": "49659cd753cf",
+      "body_sha256": "73fd39186d90",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
