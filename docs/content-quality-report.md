@@ -59,7 +59,7 @@
 | `concept.pde-constrained-optimization` | 59 | 4201 | 9 | 5 | 0 | pass |
 | `concept.pde-constrained-program` | 102 | 7078 | 8 | 4 | 0 | pass |
 | `concept.receding-horizon` | 58 | 1681 | 5 | 4 | 0 | pass |
-| `concept.repeated-parametric-optimization` | 137 | 8108 | 12 | 6 | 0 | pass |
+| `concept.repeated-parametric-optimization` | 151 | 8858 | 12 | 6 | 0 | pass |
 | `concept.robust-optimization` | 140 | 12070 | 14 | 9 | 0 | pass |
 | `concept.robust-parameter-estimation` | 138 | 10976 | 13 | 7 | 0 | pass |
 | `concept.robust-regression` | 77 | 7172 | 10 | 4 | 0 | pass |

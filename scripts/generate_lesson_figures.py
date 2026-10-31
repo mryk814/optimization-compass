@@ -6602,7 +6602,8 @@ def _pq_regions_svg() -> str:
             "θ>6 では1号機の上限4が効き、2号機が θ−4 を作る。"
             "② 2時間ごとの12回の注文量："
             + "・".join(f"{t:g}" for t in PQ_ORDERS)
-            + "。点の色は、その回にどの制約が効くか。"
+            + "。点の色は、その回にどの制約が効くか"
+            "（白は2号機の下限、緑は注文だけ、紺は1号機の上限）。"
         ),
         610,
     )
@@ -6626,6 +6627,15 @@ def _pq_regions_svg() -> str:
                 [(tx(t), vy(p[machine])) for t, p in zip(thetas, plans, strict=True)], color, 3
             )
         )
+    regions = ((2.0, "下限", "#ffffff"), (4.5, "注文だけ", LINE), (6.5, "上限", POINT))
+    for theta, label, color in regions:
+        width = 15 * len(label) + 16
+        left = tx(theta) - width / 2
+        parts.append(
+            f'<circle cx="{left + 6:.1f}" cy="95" r="6" fill="{color}" '
+            f'stroke="{INK}" stroke-width="1.5"/>'
+        )
+        parts.append(_text(left + 16, 100, label, "tick"))
     parts.append(_text(tx(4.0), vy(2.67) - 14, "1号機", "tick", "end"))
     parts.append(_text(tx(4.5), vy(1.5) + 26, "2号機", "tick", "middle"))
     parts.append(_text(410, 314, "注文量 θ（百個）", "tick", "end"))
@@ -6640,6 +6650,8 @@ def _pq_regions_svg() -> str:
         )
     for value in (1, 3, 5, 7):
         parts.append(_text(56, oy(value) + 5, f"{value}", "tick", "end"))
+    for boundary in (3, 6):
+        parts.append(_text(70, oy(boundary) - 5, f"θ={boundary}", "tick"))
     region_colors = {frozenset({0, 2}): "#ffffff", frozenset({0}): LINE, frozenset({0, 1}): POINT}
     for k, theta in enumerate(PQ_ORDERS, start=1):
         color = region_colors[pq_solve(theta)[2]]
@@ -6648,7 +6660,7 @@ def _pq_regions_svg() -> str:
             f'stroke="{INK}" stroke-width="1.5"/>'
         )
         parts.append(_text(ox(k), 568, str(k), "tick", "middle"))
-    legend = (("2号機の下限", "#ffffff"), ("どちらも余裕", LINE), ("1号機の上限", POINT))
+    legend = (("2号機の下限", "#ffffff"), ("注文だけ", LINE), ("1号機の上限", POINT))
     for index, (label, color) in enumerate(legend):
         x0 = 64 + 118 * index
         parts.append(
