@@ -8061,6 +8061,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.design-of-experiments",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.discontinuous-simulation",
       "asset_type": "content",
       "policy": "warning",
@@ -8278,6 +8284,12 @@
     },
     {
       "asset_id": "concept.receding-horizon",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.repeated-parametric-optimization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

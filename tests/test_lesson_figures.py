@@ -1155,3 +1155,51 @@ def test_online_optimization_figures_use_the_article_numbers() -> None:
     growth = generate_lesson_figures()["online-regret-growth.svg"]
     for text in ("49.75", "17", "5.2", "4.8"):
         assert text in growth
+
+
+def test_design_of_experiments_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        DOE_DESIGNS,
+        DOE_ENDS,
+        _det3,
+        doe_frank_wolfe,
+        doe_information,
+        doe_variance,
+    )
+
+    dets = [round(_det3(doe_information(xs)), 3) for _, xs, _ in DOE_DESIGNS]
+    assert dets == [16.056, 0.131, 32.0]
+    assert abs(_det3(doe_information(DOE_ENDS))) < 1e-9
+    grid = [i / 100 for i in range(-100, 101)]
+    worst = [
+        round(max(doe_variance(doe_information(xs), x) for x in grid), 2)
+        for _, xs, _ in DOE_DESIGNS
+    ]
+    assert worst == [0.82, 25.11, 0.5]
+    history = doe_frank_wolfe()
+    assert [round(history[k][1], 4) for k in (10, 100, 1000)] == [0.4068, 0.0558, 0.0059]
+    assert round(sum(history[1000][0][i] for i in (0, 10, 20)), 3) == 0.996
+    designs = generate_lesson_figures()["doe-designs-variance.svg"]
+    for text in ("等間隔：最大 0.82", "中央付近：両端で 25", "最大 0.50"):
+        assert text in designs
+    weights = generate_lesson_figures()["doe-weights-gap.svg"]
+    for text in ("1000回", "0.996", "0.407"):
+        assert text in weights
+
+
+def test_repeated_parametric_figures_use_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import pq_sequence, pq_solve
+
+    assert [round(v, 3) for v in pq_solve(2.0)[0]] == [1.0, 1.0]
+    assert [round(v, 3) for v in pq_solve(4.5)[0]] == [3.0, 1.5]
+    assert [round(v, 3) for v in pq_solve(6.5)[0]] == [4.0, 2.5]
+    assert [round(pq_solve(t)[1][0], 3) for t in (2.0, 4.5, 6.5)] == [1.0, 3.0, 5.0]
+    cold, warm = pq_sequence()
+    assert cold == [3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 3, 3]
+    assert warm == [3, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 3]
+    regions = generate_lesson_figures()["parametric-production-regions.svg"]
+    for text in ("1号機", "2号機の下限", "1号機の上限"):
+        assert text in regions
+    warm_svg = generate_lesson_figures()["parametric-warm-start.svg"]
+    for text in ("合計31", "合計20"):
+        assert text in warm_svg
