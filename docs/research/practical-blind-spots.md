@@ -56,20 +56,27 @@ Reading the result (FM015, FM016, FM025, FM038) is already covered and is out of
 
 The blind spots cut across formulations and methods, so they do not fit the formulation or
 method skeleton. They enter as three concept articles, one per layer, that share one running
-example: choosing the heat-treatment temperature `T` and carbon fraction `c` of a steel through an
-equilibrium-calculation tool that rejects `c <= 0` and solves an equation internally. Each article
-peels one layer off the same example, and every article uses the same evaluation recorder (a
-wrapper that stores each x passed to the objective), which also connects to the evaluation ledger
-in `concept.evaluation-cost`.
+example: estimating the outlet area `a` [m^2] and inflow `q` [m^3/s] of a tank from 31 water-level
+readings, by solving `dh/dt = q - a sqrt(2 g h)` with `solve_ivp` and minimizing the sum of
+squared differences. The tool fails when the tank runs dry within the 30 minutes. The example
+replaced an earlier steel heat-treatment example (2026-10-31) because parameter estimation of an
+ODE model is something most readers in science, engineering and data analysis meet, and because
+each trap appears without being staged:
 
-| Order | Article | What the running example shows |
+- the start `a = q = 1e-4` is physically valid, yet solvers pass impossible or uncomputable points;
+- `a` and `q` are about `1e-4`, so a unit step in the raw variables is ten thousand times the value;
+- with the default RK45 method, the objective depends on the CPU's BLAS kernel at small scales, so L-BFGS-B makes 78, 102 or 120 calls on the same SciPy; the shared example therefore solves the model with `method="Radau"`, whose results did not change across the kernels tried;
+- the real constraint, "the tank does not run dry", couples `a` and `q` and is not a bound.
+
+Each article peels one layer off the same example, and every article uses the same evaluation
+recorder (a wrapper that stores each x passed to the objective), which also connects to the
+evaluation ledger in `concept.evaluation-cost`.
+
+| Order | Article | What the running example shows (SciPy 1.18.1) |
 |---|---|---|
-| 1 | `concept.solver-evaluation-points`: where and how often a solver evaluates (published) | `minimize(f, x0)` passes `c = -1.01` on its 4th call; `fmin` crosses 0 on its 16th; bounds clip to `c = 0` exactly; L-BFGS-B makes 39 calls in 3 iterations |
-| 2 | Written constraints versus real constraints (planned) | the domain `c > 0` exists only as an exception; closed bounds; validity range of the internal equation |
-| 3 | Is the objective really smooth? (planned) | loosening the internal bisection tolerance to 1e-3 makes L-BFGS-B report convergence after 7 iterations and 304 evaluations at F about 28 times the optimum, with T barely moved from 1200 K |
-
-The third row was observed with SciPy 1.18.1 on an earlier three-variable version of the example
-and must be recomputed on the two-variable model before it is written up.
+| 1 | `concept.solver-evaluation-points`: where and how often a solver evaluates (published) | `minimize(f, x0)` passes `(0.979, -0.248)` on its 4th call; `fmin` passes negative `q` from its 13th call and fails on its 15th; bounds `[0, 0.01]` make L-BFGS-B pass the corner `(0.01, 0)` and fail; with bounds `[1e-5, 1e-3]` L-BFGS-B makes 54 calls in 9 iterations, while Nelder–Mead reports success at a point whose fit is about 150 times worse because its clipped simplex collapsed onto `q = 1e-5` |
+| 2 | Written constraints versus real constraints (planned) | negative inflow is evaluated silently; the run-dry condition couples `a` and `q`; `q > 0` keeps the level above `(q/a)^2/(2g)`; handling a failure as a state instead of a large value |
+| 3 | Is the objective really smooth? (planned) | the RK45 method makes the evaluation count depend on the CPU (78, 102 or 120 L-BFGS-B calls), while Radau gives 54 calls with `rtol=1e-3` and with `rtol=1e-8`; the inner solver's method and tolerance shape what the outer optimizer sees |
 
 ## Follow-up work
 

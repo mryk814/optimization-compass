@@ -1024,16 +1024,17 @@
       "notes": "一次レビュー（執筆と別のエージェント）: 数値は一致。長いインライン式を数式ブロックへ移し、根拠のないライブラリ既定の注記を削除。1280/375/320pxで横のはみ出しなし、図はスマホ幅で目視。"
     },
     "concept.solver-evaluation-points": {
-      "reviewed_on": "2026-10-30",
+      "reviewed_on": "2026-10-31",
       "reviewer": "claude",
-      "body_sha256": "49659cd753cf",
+      "body_sha256": "b372184e4804",
       "verdicts": {
         "compare.no-ranking": "pass",
         "explorable.ui-names": "na",
         "figure.one-question": "pass",
         "prose.readable": "pass",
         "screen.three-widths": "pass"
-      }
+      },
+      "notes": " 再記録: 水位の式の解き方をRK45からRadauに変え（RK45ではCPUのBLASで評価回数が78・102・120回に分かれるため）、L-BFGS-Bの数値（反復9回・評価54回・呼び直しなし）と図、テストを更新。SkylakeX・Haswell・Zen・Prescottの各kernelでテストが通ることを確認。"
     },
     "concept.stochastic-erm": {
       "reviewed_on": "2026-10-13",
