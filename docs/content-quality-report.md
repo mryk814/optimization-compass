@@ -26,12 +26,12 @@
 | `concept.distributed-consensus` | 129 | 9245 | 12 | 7 | 0 | pass |
 | `concept.dynamics-defect` | 60 | 1440 | 5 | 3 | 0 | pass |
 | `concept.eigenvalue-problem` | 119 | 10391 | 16 | 11 | 0 | pass |
-| `concept.equilibrium-variational-inequality` | 128 | 7897 | 12 | 6 | 0 | pass |
+| `concept.equilibrium-variational-inequality` | 128 | 8779 | 12 | 6 | 0 | pass |
 | `concept.evaluation-cost` | 59 | 5331 | 9 | 3 | 0 | pass |
 | `concept.expensive-black-box` | 102 | 11062 | 10 | 5 | 0 | pass |
 | `concept.external-solver-objective` | 162 | 11507 | 15 | 15 | 0 | pass |
 | `concept.failed-simulation` | 107 | 10784 | 13 | 11 | 0 | pass |
-| `concept.general-conic-optimization` | 126 | 7963 | 12 | 8 | 0 | pass |
+| `concept.general-conic-optimization` | 131 | 8824 | 12 | 8 | 0 | pass |
 | `concept.general-nonsmooth-local` | 158 | 16018 | 18 | 5 | 0 | pass |
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |

@@ -6757,18 +6757,18 @@ def eq_equilibrium() -> tuple[float, ...]:
 EQ_PLANS = (
     ("均衡", None),
     ("上限を外して解き、後で切る", (2.5, 2.0, 1.0)),
-    ("3店の利益の合計を最大", (2.5, 1.5, 0.0)),
+    ("3軒の利益の合計を最大", (2.5, 1.5, 0.0)),
 )
 
 
 def _eq_profit_svg() -> str:
     eq = eq_equilibrium()
     parts = _open(
-        "ほかの2店を固定したときの、自分の利益",
+        "パン屋の例：自分の利益と、3つの決め方",
         (
-            "① ほかの2店が均衡の量のとき、自分の量ごとの利益。均衡の量は"
+            "① ほかの2軒が均衡の量のとき、自分の量ごとの利益。均衡の量は"
             + "・".join(f"{n} {q:.2f}" for n, q in zip(EQ_NAMES, eq, strict=True))
-            + "。BとCは利益の山の頂上、Aは上限2.5で止まる。"
+            + "。BとCは利益の山の頂上、Aは上限2.5で止まる（Aの頂上は2.83）。"
             "② 3つの決め方の量と値段。"
             + "、".join(
                 f"{name}は値段 {EQ_PRICE - sum(plan or eq):.2f}・"
@@ -6777,34 +6777,48 @@ def _eq_profit_svg() -> str:
             )
             + "。"
         ),
-        600,
+        624,
     )
     px = _scale(0.0, 4.0, 64, 410)
     py = _scale(0.0, 9.0, 272, 84)
-    parts.append(_text(20, 64, "① 自分の量ごとの利益（ほかの2店は均衡の量）"))
+    parts.append(_text(20, 64, "① 自分の量ごとの利益（ほかの2軒は均衡の量）"))
     parts.append(f'<path d="M64 84V272H410" fill="none" stroke="{GRID}"/>')
     for value in (0, 4, 8):
         parts.append(_text(56, py(value) + 5, f"{value}", "tick", "end"))
     for value in range(5):
         parts.append(_text(px(value), 292, f"{value}", "tick", "middle"))
+
+    def own_profit(i: int, x: float) -> float:
+        return x * (EQ_PRICE - (sum(eq) - eq[i]) - x - EQ_COSTS[i])
+
     parts.append(
-        f'<path d="M{px(2.5):.1f} 84V272" stroke="{GRID}" stroke-width="1.5" '
-        'stroke-dasharray="5 4"/>'
+        f'<path d="M{px(2.5):.1f} {py(own_profit(0, eq[0])) + 9:.1f}V272" stroke="{GRID}" '
+        'stroke-width="1.5" stroke-dasharray="5 4"/>'
     )
     parts.append(_text(px(2.5) + 6, 262, "Aの上限 2.5", "tick"))
     for i, (name, color) in enumerate(zip(EQ_NAMES, EQ_COLORS, strict=True)):
-        others = sum(eq) - eq[i]
-        upper = min(4.0, EQ_CAPS[i])
-        own = [upper * k / 120 for k in range(121)]
-        curve = [(px(x), py(x * (EQ_PRICE - others - x - EQ_COSTS[i]))) for x in own]
-        curve = [(x, y) for x, y in curve if y <= 272]
-        parts.append(_polyline(curve, color, 3))
-        value = eq[i] * (EQ_PRICE - others - eq[i] - EQ_COSTS[i])
+        own = [4.0 * k / 160 for k in range(161)]
+        inside = [(px(x), py(own_profit(i, x))) for x in own if x <= EQ_CAPS[i]]
+        parts.append(_polyline([(x, y) for x, y in inside if y <= 272], color, 3))
+        if EQ_CAPS[i] < 4.0:
+            beyond = [(px(x), py(own_profit(i, x))) for x in own if x >= EQ_CAPS[i]]
+            parts.append(
+                _polyline([(x, y) for x, y in beyond if y <= 272], color, 1.5).replace(
+                    "/>", ' stroke-dasharray="4 4"/>'
+                )
+            )
+            top = (EQ_PRICE - (sum(eq) - eq[i]) - EQ_COSTS[i]) / 2
+            parts.append(
+                f'<circle cx="{px(top):.1f}" cy="{py(own_profit(i, top)):.1f}" r="5" '
+                f'fill="#ffffff" stroke="{color}" stroke-width="2"/>'
+            )
+            parts.append(_text(px(2.5) + 8, py(own_profit(i, top)) + 30, f"頂上 {top:.2f}", "tick"))
+        value = own_profit(i, eq[i])
         parts.append(
             f'<circle cx="{px(eq[i]):.1f}" cy="{py(value):.1f}" r="6" fill="{color}" '
             f'stroke="#ffffff" stroke-width="1.5"/>'
         )
-        parts.append(_text(px(eq[i]), py(value) - 12, name, "tick", "middle"))
+        parts.append(_text(px(eq[i]) - 10, py(value) - 6, name, "tick", "end"))
     parts.append(_text(410, 314, "自分の量（百個）", "tick", "end"))
 
     parts.append(_text(20, 358, "② 3つの決め方の量と値段"))
@@ -6823,11 +6837,13 @@ def _eq_profit_svg() -> str:
                 )
             left += width
         parts.append(_text(310, y + 15, f"値段 {EQ_PRICE - sum(q):.2f}", "tick"))
+    for value in (0, 2, 4, 6):
+        parts.append(_text(bx(value), 554, f"{value}", "tick", "middle"))
     for index, (name, color) in enumerate(zip(EQ_NAMES, EQ_COLORS, strict=True)):
-        x0 = 64 + 70 * index
-        parts.append(f'<rect x="{x0}" y="572" width="14" height="14" fill="{color}"/>')
-        parts.append(_text(x0 + 20, 584, f"{name}店", "tick"))
-    parts.append(_text(410, 584, "横は量（百個）", "tick", "end"))
+        x0 = 64 + 50 * index
+        parts.append(f'<rect x="{x0}" y="584" width="14" height="14" fill="{color}"/>')
+        parts.append(_text(x0 + 20, 596, name, "tick"))
+    parts.append(_text(410, 596, "横は3軒の量の合計（百個）", "tick", "end"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
 
@@ -6837,11 +6853,11 @@ def _eq_steps_svg() -> str:
     counts = {step: len(eq_projection(step)) - 1 for step in EQ_STEPS}
     shown = (0.1, 0.25, 0.5)
     parts = _open(
-        "射影法の幅と、均衡までの回数",
+        "射影法の歩幅と、均衡までの回数",
         (
-            "① 幅 γ ごとの、均衡からの最大のずれ。γ=0.25は"
-            f"{counts[0.25]}回、γ=0.5は{counts[0.5]}回で、1回に動く量が0.000001未満になる。"
-            "② 幅ごとの回数。"
+            "① 歩幅 γ ごとの、均衡からの最大のずれ。γ=0.25は"
+            f"{counts[0.25]}回、γ=0.5は{counts[0.5]}回で、1回に動く量が10⁻⁶未満になる。"
+            "② 歩幅ごとの回数。"
             + "、".join(
                 f"γ={s:g}で{counts[s]}回" if counts[s] < 2000 else f"γ={s:g}では着かない"
                 for s in EQ_STEPS
@@ -6854,8 +6870,8 @@ def _eq_steps_svg() -> str:
     gx = _scale(0.0, 110.0, 64, 410)
     gy = _scale(-7.0, 1.0, 272, 84)
     parts.append(f'<path d="M64 84V272H410" fill="none" stroke="{GRID}"/>')
-    for e in (-6, -4, -2, 0):
-        parts.append(_text(56, gy(e) + 5, f"{10.0**e:g}", "tick", "end"))
+    for e, label in ((-6, "10⁻⁶"), (-4, "10⁻⁴"), (-2, "10⁻²"), (0, "1")):
+        parts.append(_text(56, gy(e) + 5, label, "tick", "end"))
     for value in (0, 25, 50, 75, 100):
         parts.append(_text(gx(value), 292, f"{value}", "tick", "middle"))
     for step, color in zip(shown, (MUTED, UPDATE, POINT), strict=True):
@@ -6871,7 +6887,7 @@ def _eq_steps_svg() -> str:
         parts.append(_text(x0 + 26, 316, f"γ={step:g}", "tick"))
     parts.append(_text(410, 336, "回数（縦は対数目盛）", "tick", "end"))
 
-    parts.append(_text(20, 380, "② 幅 γ ごとの、均衡までの回数"))
+    parts.append(_text(20, 380, "② 歩幅 γ ごとの、均衡までの回数"))
     by = _scale(0.0, 120.0, 520, 400)
     parts.append(f'<path d="M64 400V520H410" fill="none" stroke="{GRID}"/>')
     width = (410 - 64) / len(EQ_STEPS)
@@ -6889,7 +6905,7 @@ def _eq_steps_svg() -> str:
         else:
             parts.append(_text(center, 510, "×", "tick", "middle"))
         parts.append(_text(center, 540, f"{step:g}", "tick", "middle"))
-    parts.append(_text(410, 556, "幅 γ（×は着かない）", "tick", "end"))
+    parts.append(_text(410, 556, "歩幅 γ（×は着かない）", "tick", "end"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
 
@@ -6998,7 +7014,12 @@ def _cn_allocation_svg() -> str:
                 f'<rect x="{left:.1f}" y="{y:.1f}" width="{width:.1f}" height="18" fill="{color}"/>'
             )
             left += width
-        parts.append(_text(310, y + 15, f"効果 {cn_effect(q):.2f}", "tick"))
+        parts.append(_text(318, y + 15, f"効果 {cn_effect(q):.2f}", "tick"))
+    parts.append(
+        f'<path d="M{bx(CN_BUDGET):.1f} 384V540" stroke="{MUTED}" stroke-width="1.5" '
+        'stroke-dasharray="5 4"/>'
+    )
+    parts.append(_text(bx(CN_BUDGET), 556, "予算6", "tick", "middle"))
     for index, color in enumerate(CN_COLORS):
         x0 = 64 + 70 * index
         parts.append(f'<rect x="{x0}" y="572" width="14" height="14" fill="{color}"/>')
@@ -7015,12 +7036,12 @@ def cn_blocks() -> list[tuple[str, list[float], str]]:
     mean = sum(x) / 3
     d = [v - mean for v in x]
     blocks = [
-        (f"指数錐{i + 1}", [ti, 1.0, 1 + xi], f"e^{ti:.2f} = {math.exp(ti):.2f} ≦ {1 + xi:.2f}")
+        (f"指数錐{i + 1}", [ti, 1.0, 1 + xi], f"e^{ti:.3f} = {math.exp(ti):.2f} ≦ {1 + xi:.2f}")
         for i, (ti, xi) in enumerate(zip(t, x, strict=True))
     ]
     norm = math.sqrt(sum(v * v for v in d))
     blocks.append(("二次錐", [CN_SPREAD, *d], f"長さ {norm:.2f} ≦ {CN_SPREAD:g}"))
-    blocks.append(("非負", [CN_BUDGET - sum(x), *x], "どれも 0 以上"))
+    blocks.append(("非負の象限", [CN_BUDGET - sum(x), *x], "どれも 0 以上"))
     return blocks
 
 
@@ -7028,18 +7049,20 @@ def _cn_blocks_svg() -> str:
     blocks = cn_blocks()
     rows = sum(len(v) for _, v, _ in blocks)
     parts = _open(
-        "b − Ax を、錐ごとに区切る",
+        "b − Az を、錐ごとに区切る",
         (
-            f"答えの点での {rows} 行のベクトル b − Ax を、5つの錐に区切ったもの。"
+            f"答えの点での {rows} 行のベクトル b − Az を、5つの錐に区切ったもの。"
             + "。".join(
-                f"{name}：(" + ", ".join(f"{v:.2f}" for v in values) + f")、{check}"
+                f"{name}：("
+                + ", ".join(f"{v:.2f}".replace("-", "−") for v in values)
+                + f")、{check}"
                 for name, values, check in blocks
             )
             + "。"
         ),
         84 + 76 * len(blocks),
     )
-    colors = {"指数錐": POINT, "二次錐": UPDATE, "非負": LINE}
+    colors = {"指数錐": POINT, "二次錐": UPDATE, "非負の象限": LINE}
     for row, (name, values, check) in enumerate(blocks):
         y = 64 + 76 * row
         color = next(c for key, c in colors.items() if name.startswith(key))
@@ -7050,7 +7073,9 @@ def _cn_blocks_svg() -> str:
                 f'<rect x="{left}" y="{y}" width="58" height="32" rx="4" fill="#ffffff" '
                 f'stroke="{color}" stroke-width="2"/>'
             )
-            parts.append(_text(left + 29, y + 22, f"{value:.2f}", "tick", "middle"))
+            parts.append(
+                _text(left + 29, y + 22, f"{value:.2f}".replace("-", "−"), "tick", "middle")
+            )
         parts.append(_text(108, y + 54, check, "note"))
     parts.append("</svg>")
     return "".join(parts) + "\n"
