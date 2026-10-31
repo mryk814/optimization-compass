@@ -8261,6 +8261,62 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "concept.design-of-experiments",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "実験計画",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S131",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S184",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA054",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.linear-least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.semidefinite-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "実験計画は、実験の回数が限られるとき、どの条件で測るかを前もって決める定式化です。推定したい式の係数が最も正確に決まるように、情報行列の行列式を最大にする条件を選びます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "concept.discontinuous-simulation",
       "entity_type": "content",
       "external_url": null,
@@ -10889,6 +10945,62 @@
         }
       ],
       "summary": "移動予測区間は有限予測区間の軌道最適化を観測のたびに解き直し、計画した操作量列の先頭だけを実行する運用の考え方です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "concept.repeated-parametric-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "反復パラメトリック最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S183",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "PA053",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convex-quadratic-program",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.model-predictive-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.online-optimization",
+          "target_type": "content"
+        }
+      ],
+      "summary": "反復パラメトリック最適化は、目的と制約の形は同じまま、パラメータ θ だけが変わる問題を何度も解く定式化です。凸二次計画なら、答えは θ の区分的な一次式になります。前回どの制約が効いたかを次の初期値に使うか、θ ごとの答えの式を前もって求めて、解き直しの手間を減らします。"
     },
     {
       "aliases": [],
@@ -36029,23 +36141,39 @@
       "summary": "online optimization。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.repeated-parametric-optimization"
+      ],
       "canonical_url": "/formulations/PA053",
       "entity_id": "PA053",
       "entity_type": "problem",
       "external_url": null,
       "label": "反復parametric optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.repeated-parametric-optimization",
+          "target_type": "content"
+        }
+      ],
       "summary": "反復parametric optimization。変数=continuous、目的=quadratic、制約=mixed。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/concept.design-of-experiments"
+      ],
       "canonical_url": "/formulations/PA054",
       "entity_id": "PA054",
       "entity_type": "problem",
       "external_url": null,
       "label": "実験計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning",
+          "target_id": "concept.design-of-experiments",
+          "target_type": "content"
+        }
+      ],
       "summary": "実験計画。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
