@@ -622,12 +622,12 @@
             }
           },
           "lesson": {
-            "complete": 50,
+            "complete": 51,
             "eligible": 80,
             "info": {},
             "states": {
               "in_progress": 14,
-              "no_article": 14,
+              "no_article": 13,
               "stale": 2
             }
           },
@@ -19044,12 +19044,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.repeated-parametric-optimization"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -19076,11 +19076,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA053"
+            "/formulations/PA053",
+            "concept.repeated-parametric-optimization"
           ]
         },
         "recommendation": {
@@ -19126,12 +19127,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "concept.design-of-experiments"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -19158,11 +19159,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "/formulations/PA054"
+            "/formulations/PA054",
+            "concept.design-of-experiments"
           ]
         },
         "recommendation": {
