@@ -12132,7 +12132,7 @@
         "S063",
         "S065"
       ],
-      "text": "計算1回の重さと予算の数え方: 評価費と予算 計算が収束しない組成がある: 失敗・NaNを伴うシミュレーション 値だけで進む方法の中身: Nelder–Mead単体法 1つの目標に合わせる: 方程式の求根",
+      "text": "計算1回の重さと予算の数え方: 評価費と予算 計算が収束しない組成がある: 失敗・NaNを伴うシミュレーション ソルバーがツールをどの点で何回呼ぶか: ソルバーが目的関数を呼ぶ点と回数 値だけで進む方法の中身: Nelder–Mead単体法 1つの目標に合わせる: 方程式の求根",
       "title": "次に読む"
     },
     {
@@ -13665,6 +13665,286 @@
       ],
       "text": "「モデルの設定を決めたい」という課題だけでは、まだこの型とは決まりません。次の4つを順に確かめます。 何を決めるか : 次数（整数）と λ （対数目盛りの連続値）を決めます。罰則の種類のように選択肢があれば、それによって使われる設定が変わる条件付きの構造になります。 評価1回は何をするか : 設定を決めて学習し、学習に使っていないデータで誤差を測ります。この例の1回は係数を求める計算5回で、実際のモデルなら数時間かかります。分割や乱数で値が変わるなら、その大きさを先に測ります。 どのずれを減らすか : 学習用の誤差ではなく、検証損失（5分割の交差検証の平均二乗誤差）を減らします。選んだ後の点数は、選択に使っていないデータで測ります。 何を守り、何を予算とするか : 設定の範囲の上下限と、評価の回数（16回）が条件です。並列で評価できるかも、探し方に効きます。 探索範囲に整数や対数目盛りが含まれ、評価が学習と検証の組で、勾配が得られない設定を選ぶとき、この記事の型になります。",
       "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ソルバーが目的関数を呼ぶ点と回数 と同じ、鋼の熱処理の例を使います。温度 T （K）と炭素の量 c をツールに渡すと、費用 F が返ります。ツールは中で硬さ y の方程式を二分法で解き、区間の幅が許容誤差より狭くなったら止めます。 1回の計算を速くしたくて、この許容誤差を 10 − 13 から 10 − 3 に緩めたとします。二分法の回数は45回から11回に減ります。同じ初期点と範囲でL-BFGS-Bを実行すると、次の結果になりました。 内側の許容誤差 評価の回数 答えの温度 T 報告された F 細かいツールで測り直した F 10 − 13 39 1247.73 0.2387 0.2387 10 − 6 27 1250.00 0.2390 0.2390 10 − 3 12 1250.00 0.2386 0.2390 10 − 3 の行は、評価が少なく、報告された費用も一番小さく見えます。ところが、細かいツールで同じ点を測り直すと0.2390で、 10 − 13 の答えの0.2387より高くなります。 10 − 6 でも、答えの温度は1250.00で、本当の最小からずれています。 決めるもの : 温度 T と炭素の量 c 良くしたいもの : ツールが返す費用 F 守ること : 900 ≤ T ≤ 1600 、 10 − 5 ≤ c ≤ 0.01 炭素の量はどの実行でも下限の 10 − 5 に着くので、違いは温度だけに出ます。式は同じなのに、なぜ許容誤差を緩めると、答えが1250 Kに寄るのでしょうか。0.2386という、本当の最小より小さい費用は、どこから来たのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ツールが中で方程式を反復で解いていると、目的関数は式の上では滑らかでも、返る値は細かな階段になります。差分の幅がその段より細かいと、勾配から内側の量の変化が消え、ソルバーは本当の最小からずれた点で収束したと報告します。差分の幅を変えて傾きを見比べれば、この段差を見つけられます。",
+      "title": "内側の計算の許容誤差が作る目的関数の段差"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:python",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "次のコードは、許容誤差を引数にした例のツールを作り、三つの確かめ方を実行します。 # → の行は、SciPy 1.18.1で実行したときの出力です。 python from scipy.optimize import minimize def hardness ( T , c , tol ): # 平衡計算の代わり: y**3 + (T/1000)*y = 1 + 200*c を、幅が tol になるまで二分法で解く lo , hi = 0.0 , 2.0 while hi - lo > tol : mid = 0.5 * ( lo + hi ) if mid ** 3 + T / 1000 * mid - 1 - 200 * c > 0 : hi = mid else : lo = mid return 0.5 * ( lo + hi ) def make_tool ( tol ): def tool ( x ): T , c = x if c <= 0 : raise ValueError ( \"炭素量が範囲外\" ) y = hardness ( T , c , tol ) return ( y - 1.05 ) ** 2 + 0.5 * (( T - 1250 ) / 100 ) ** 2 + 5000 * c return tool exact = make_tool ( 1e-13 ) # 答え合わせ用の、十分に細かいツール x0 = [ 1200.0 , 0.0005 ] box = [( 900 , 1600 ), ( 1e-5 , 0.01 )] # 1. 内側の許容誤差だけを変えて、L-BFGS-B を同じ条件で実行する for tol in [ 1e-13 , 1e-6 , 1e-3 ]: res = minimize ( make_tool ( tol ), x0 , method = \"L-BFGS-B\" , bounds = box ) print ( f \"tol= { tol : g } : 評価 { res . nfev } 回, T= { res . x [ 0 ] : .2f } , \" f \"報告 F= { res . fun : .4f } , 本当の F= { exact ( res . x ) : .4f } \" ) # → tol=1e-13: 評価 39 回, T=1247.73, 報告 F=0.2387, 本当の F=0.2387 # → tol=1e-06: 評価 27 回, T=1250.00, 報告 F=0.2390, 本当の F=0.2390 # → tol=0.001: 評価 12 回, T=1250.00, 報告 F=0.2386, 本当の F=0.2390 # 2. 答えの温度 T*=1247.76 で、差分の幅 h を変えて傾きを作る T_star , c = 1247.7584 , 1e-5 for tol in [ 1e-13 , 1e-6 ]: f = make_tool ( tol ) slopes = [( f ([ T_star + h , c ]) - f ([ T_star , c ])) / h for h in [ 1e-8 , 1e-4 , 1e-2 , 1e-1 ]] print ( f \"tol= { tol : g } :\" , \" \" . join ( f \" { s * 1e4 : +.2f } \" for s in slopes )) # 傾き×10^4 # → tol=1e-13: +0.03 +0.00 +0.00 +0.05 # → tol=1e-06: -2.24 -2.24 -0.58 +0.04 # 3. 差分の幅を段差より大きくする（L-BFGS-B の eps） res = minimize ( make_tool ( 1e-6 ), x0 , method = \"L-BFGS-B\" , bounds = box , options = { \"eps\" : 1e-2 }) print ( f \"eps=0.01: T= { res . x [ 0 ] : .2f } , 本当の F= { exact ( res . x ) : .4f } \" ) # → eps=0.01: T=1247.83, 本当の F=0.2387 1の出力の「本当の F」は、答えの点を許容誤差 10 − 13 のツールで測り直した値です。報告された値と測り直した値が違えば、返る値に段差があります。2の出力は、本文の表と同じ傾きを 10 4 倍した値です。許容誤差 10 − 13 の h = 10 − 8 の + 0.03 は、浮動小数点の丸めによる小さなずれです。3の出力は、差分の幅を変えるだけで、同じツールのまま答えが本当の最小に戻ることを示します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "評価が少なく、報告された費用が小さい実行を良い結果だと考える : 許容誤差 10 − 3 の実行は、評価12回で0.2386と報告しました。細かいツールで測り直すと0.2390で、本当の最小0.2387より高い点です。速く終わったのは、段差のせいで傾きが早く0に見えたからです。報告された値は、細かい設定で測り直してから比べてください。 差分の幅は小さいほど正確だと考える : 許容誤差 10 − 6 の傾きは、 h = 10 − 8 でも 10 − 4 でも − 0.000224 です。本当の傾き0とは符号まで違います。差分の幅を細かくしても、段の幅0.0037 Kより細かい限り、硬さの変化は見えません。 勾配を使わない方法なら段差は関係ないと考える : 許容誤差 10 − 6 では、範囲を指定したNelder–Meadは T = 1247.75 に着きました。ただし評価は133回で、細かいツールでの79回より増えています。許容誤差 10 − 3 では、段の幅3.8 Kが単体より大きくなり、評価84回で T = 1250.00 に着きました。手法を変えても、段の幅より細かい違いは見分けられません。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:内側の許容誤差は値を階段にする",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "ツールの中の二分法は、硬さ y が入る区間 [ 0 , 2 ] を半分にし続けます。区間の幅が許容誤差より狭くなったら、最後の区間の中点を y として返します。そのため、返る y は、幅 w の格子の上の値しか取りません。 w = 2 2 k ここで k は、区間の幅が許容誤差より狭くなるまでに半分にした回数です。 許容誤差 10 − 6 では k = 21 で、 w は 9.5 × 10 − 7 です。温度を動かしても、本当の y が隣の格子の値に移るまで、返る y は変わりません。 本当の硬さは、答えの温度の近くで1 Kあたり − 0.000258 だけ変わります。返る y が一段変わるには、温度を次の幅だけ動かす必要があります。 w | d y / d T | = 9.5 × 10 − 7 0.000258 ≈ 0.0037 K 許容誤差 10 − 3 では w が 9.8 × 10 − 4 になり、段の幅は約3.8 Kに広がります。 次の図は、本当の最小の温度 T * = 1247.76 の前後0.01 Kで、硬さを描いたものです。 炭素の量 c=0.00001、T*=1247.76 K の前後：返る硬さの階段。教材用のツールの式で、実際の鋼の硬さは示さない 緑の直線は細かいツールの y 、橙の階段は許容誤差 10 − 6 の y です。費用 F は y の式なので、 F も同じ幅の階段になります。",
+      "title": "内側の許容誤差は値を階段にする"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "差分の誤差と、値の誤差に合わせた差分の幅の目安は、Nocedal・Wrightの教科書『Numerical Optimization』（S056）に基づきます。L-BFGS-Bの上下限の扱いはByrdらの論文（S065）に、Nelder–Meadは原論文（S063）に基づきます。 minimize の bounds と options の eps は、SciPyの公式文書（S002）に基づきます。 例の数値は、SciPy 1.18.1で上のコードを実行して得た値です。 T * = 1247.7584 は、許容誤差 10 − 13 のツールで c = 10 − 5 のまま温度だけを最小にした値です。ツールの式は教材用で、実際の鋼の平衡計算や、ほかのツールの段差の幅は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:困りごとから関連する記事へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "同じ入力でも、呼ぶたびに値が違う → noiseを含むblack-box 入力を少し変えると、値が段差より大きく飛ぶ → 決定論的だが不連続なsimulation 範囲の外の点がツールに渡る、評価の回数が多い → ソルバーが目的関数を呼ぶ点と回数 相が消える範囲で、値が広く平らになる → 外部の計算ソフトを目的関数の中で呼ぶ最適化 答えの変数が、自分で書いた下限や上限にちょうど着いた → 書いた制約と本当の制約 この記事の段差は、同じ入力なら同じ値が返る点で、noiseを含むblack-boxと違います。そのため、同じ点を何度も評価して平均しても消えません。また、段の高さは許容誤差の程度で小さく、値が大きく飛ぶ不連続とも違います。勾配を差分で作るときにだけ、段差は大きな誤りとして現れます。",
+      "title": "困りごとから関連する記事へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:小さな例・答えの温度で差分の傾きを作る",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "鋼の例・本当の傾きは二つの項の釣り合い c = 10 − 5 のまま温度だけを動かすと、費用の温度に対する傾きは、二つの項の和です。 d F d T = 2 ( y − 1.05 ) d y d T ⏟ 硬さの項 + T − 1250 10000 ⏟ 温度の項 T * = 1247.76 では、 y = 0.6158 、 d y / d T = − 0.000258 です。硬さの項と温度の項は、それぞれ次のとおりです。 2 ( y − 1.05 ) d y d T = + 0.000224 T * − 1250 10000 = − 0.000224 二つが打ち消し合って、傾きは0になります。 温度を上げると、硬さが下がって費用が増えます。一方で1250 Kに近づくので、温度の費用は減ります。最小は、この二つが釣り合う所です。 鋼の例・差分の幅ごとの傾き ソルバーは、この傾きを差分 ( F ( T + h ) − F ( T ) ) / h で作ります。 T * で、差分の幅 h を変えて計算すると、次のようになります。表の値は傾きを 10 4 倍したもので、 − 2.24 は傾き − 0.000224 を表します。 差分の幅 h 10 − 8 10 − 4 10 − 2 10 − 1 許容誤差 10 − 13 +0.03 +0.00 +0.00 +0.05 許容誤差 10 − 6 −2.24 −2.24 −0.58 +0.04 許容誤差 10 − 6 では、 h が段の幅0.0037 Kより細かいと、 T と T + h が同じ段に乗ります。 y の差が0になり、差分は温度の項 − 0.000224 だけを見ます。そのため、本当は傾き0の T * で、ソルバーには「温度を上げれば下がる」と見えます。L-BFGS-Bの差分の幅は 10 − 8 なので、この実行は温度の項だけが0になる1250 Kまで進みました。 h = 0.1 は段をいくつもまたぐので、差分は本当の傾きに近い + 0.000004 になります。 h = 0.01 は段を2〜3段しかまたがないので、その間の値になります。 T*=1247.76 K、c=0.00001：差分の幅ごとの傾き。教材用のツールの式で、ほかのツールの段差の幅は示さない 鋼の例・本当の最小より小さい費用 許容誤差 10 − 3 では、返る y が本当の値から最大で区間の幅の半分、約 4.9 × 10 − 4 ずれます。1250 Kでは、本当の y = 0.61527 に対して、返る y は 0.61572 でした。目標の1.05に 4.5 × 10 − 4 近い値が返ったので、費用は 3.9 × 10 − 4 だけ低く出ます。これが、本当の最小0.2387より小さい0.2386の正体です。",
+      "title": "小さな例・答えの温度で差分の傾きを作る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "勾配を差分で作る手法の一つの反復は、 L-BFGS-B法 で確かめられます。値の比較だけで進む方法は、 Nelder–Mead単体法 にあります。評価の回数を予算として扱う方法は、 評価費と予算 へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-tolerance-noise:確かめ方と直し方",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-tolerance-noise",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.external-solver-objective",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "content:method.nelder-mead",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S063",
+        "S065"
+      ],
+      "text": "段差は、答えの点で差分の幅を変えて傾きを作れば見つかります。表のように、幅を 10 − 8 から 10 − 1 まで変えて傾きを作ります。傾きが幅によって大きく変わるなら、返る値に段差があると疑います。滑らかな関数なら、細かい幅ではどれもほぼ同じ傾きになります。 直し方は二つあります。 内側の許容誤差を小さくする : 差分の幅 10 − 8 で、硬さは 2.6 × 10 − 12 しか動きません。1 Kあたりの変化 0.000258 に幅を掛けた量です。許容誤差 10 − 13 はこれより小さいので、 10 − 13 の行は本当の最小に着きました。ツールの許容誤差を設定できるなら、差分で動く量より小さくします。 差分の幅を、段の幅より大きくする : L-BFGS-Bの差分の幅は、 options の eps で変えられます。許容誤差 10 − 6 のまま eps=0.01 にすると、 T = 1247.83 に着き、細かいツールで測り直した費用は0.2387でした。段差の上を進むので、評価の回数は計算機によって数回ずれます。ただし、幅を大きくしすぎると、今度は曲がり（2階微分）による誤差が増えます。値に ε 程度の誤差があるとき、前進差分の幅は ε 程度が目安です。 許容誤差を設定できず、段の幅も分からないツールなら、値の比較だけで進む方法も候補です。その場合も、段の幅より細かい答えは得られません。",
+      "title": "確かめ方と直し方"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -24268,6 +24548,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24297,6 +24578,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24326,6 +24608,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24355,6 +24638,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24384,6 +24668,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24413,6 +24698,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24442,6 +24728,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24456,7 +24743,7 @@
         "S063",
         "S065"
       ],
-      "text": "ツールが範囲の外ではなく、計算の途中で失敗して値を返さない → 失敗・NaNを伴うシミュレーション 評価1回が高く、回数を予算として数えて計画したい → 評価費と予算 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 勾配を作れない、または差分の値が当てにならない → 微分を使わない最適化 どの手法も、ツールが拒む点を渡すことがあります。BFGS は範囲の外の点を渡します。上下限を与えた2つの手法も、下限を0のままにすれば境界の c = 0 を渡しえます。例の L-BFGS-B も、下限 c = 0.00001 ちょうどの点を評価しています。 BFGS法 : 範囲を受け取らない手法です。範囲の外でツールがエラーになる問題には、そのままでは使えません。 L-BFGS-B法 : 上下限を受け取り、反復の点を範囲の中に保ちます。この例では、差分の点も範囲の内側でした。ただし、境界の値そのものは渡すので、下限はツールが受け付ける値にします。 Nelder–Mead単体法 : 勾配を使わないので、差分の点はありません。そのかわり、拡大の点は反射の点のさらに先まで飛びます。範囲を指定すると、外へ出た点は境界へ戻されます。",
+      "text": "ツールが範囲の外ではなく、計算の途中で失敗して値を返さない → 失敗・NaNを伴うシミュレーション 評価1回が高く、回数を予算として数えて計画したい → 評価費と予算 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 勾配を作れない、または差分の値が当てにならない → 微分を使わない最適化 ツールの中の反復の許容誤差を緩めたら、答えがずれた → 内側の計算の許容誤差が作る目的関数の段差 答えの変数が、自分で書いた下限や上限にちょうど着いた → 書いた制約と本当の制約 どの手法も、ツールが拒む点を渡すことがあります。BFGS は範囲の外の点を渡します。上下限を与えた2つの手法も、下限を0のままにすれば境界の c = 0 を渡しえます。例の L-BFGS-B も、下限 c = 0.00001 ちょうどの点を評価しています。 BFGS法 : 範囲を受け取らない手法です。範囲の外でツールがエラーになる問題には、そのままでは使えません。 L-BFGS-B法 : 上下限を受け取り、反復の点を範囲の中に保ちます。この例では、差分の点も範囲の内側でした。ただし、境界の値そのものは渡すので、下限はツールが受け付ける値にします。 Nelder–Mead単体法 : 勾配を使わないので、差分の点はありません。そのかわり、拡大の点は反射の点のさらに先まで飛びます。範囲を指定すると、外へ出た点は境界へ戻されます。",
       "title": "困りごとから関連する記事へ"
     },
     {
@@ -24471,6 +24758,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24500,6 +24788,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -24514,7 +24803,7 @@
         "S063",
         "S065"
       ],
-      "text": "ツールが値を返さない点の記録の仕方は、 失敗・NaNを伴うシミュレーション で扱います。評価の回数を予算として扱う方法は、 評価費と予算 へ進みます。勾配を差分で作る手法の一つの反復は、 L-BFGS-B法 で確かめられます。",
+      "text": "ツールが値を返さない点の記録の仕方は、 失敗・NaNを伴うシミュレーション で扱います。評価の回数を予算として扱う方法は、 評価費と予算 へ進みます。勾配を差分で作る手法の一つの反復は、 L-BFGS-B法 で確かめられます。 ツールの中でも平衡を求める最小化が走るとき、外側で何を最小にするかは、 外部の計算ソフトを目的関数の中で呼ぶ最適化 で扱います。相が消える範囲で目的が平らになり、勾配法が動かないまま終了する例も同じ記事にあります。",
       "title": "次に読む"
     },
     {
@@ -24529,6 +24818,7 @@
         "content:concept.bound-constrained-smooth",
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
+        "content:concept.external-solver-objective",
         "content:concept.failed-simulation",
         "content:lbfgsb",
         "content:method.nelder-mead",
@@ -26775,6 +27065,256 @@
       ],
       "text": "「2台で7軒に届けたい」という課題だけでは、まだこの型とは決まりません。次の4つを順に確かめます。 何を決めるか : 各車が回る顧客と順番です。顧客の分け方だけ、または1本の順番だけを決める問題なら、別の型です。 どの量を最小にするか : 総移動時間（または距離）です。車の台数を減らしたい、遅れを最小にしたい、というときは、目的が変わります。 何を必ず守るか : 各顧客をちょうど1回訪れる、積載が容量以下、depotを出て戻る、の3つです。 時間の条件があるか : 顧客ごとに、着いてよい時刻の範囲があるなら、窓の式を足します。窓を破ると使えない（守る条件）なら、費用への罰則にせず、制約として入れます。 depotを出て戻る経路を、容量の下で選び、各顧客を1回ずつ訪れて、総移動時間を最小にするとき、この記事の型になります。",
       "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ソルバーが目的関数を呼ぶ点と回数 と同じ、鋼の熱処理の例を使います。温度 T （K）と炭素の量 c をツールに渡すと、費用 F が返ります。ツールは c ≤ 0 を受け付けないので、その記事では炭素の下限を c ≥ 10 − 5 と書きました。 L-BFGS-Bの答えは ( T , c ) = ( 1247.73 , 10 − 5 ) で、費用は F = 0.2387 です。炭素の量は、書いた下限にちょうど着いています。そこで、下限だけを変えて同じ条件で解き直しました。 炭素の下限 答えの T 答えの c 費用 F 10 − 6 1247.7 10 − 6 0.1944 10 − 5 1247.7 10 − 5 0.2387 10 − 4 1247.8 10 − 4 0.6823 温度はほとんど変わらないのに、費用は下限につれて3倍以上も変わります。どの答えも、炭素の量は下限そのものです。 決めるもの : 温度 T と炭素の量 c 良くしたいもの : ツールが返す費用 F 守ること : 900 ≤ T ≤ 1600 、 c min ≤ c ≤ 0.01 。 c min は自分で書いた値 この答えを決めているのは、ツールの中の式でしょうか。それとも、自分で書いた c min でしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ソルバーの答えが自分で書いた下限や上限に着いたら、その答えを決めたのはツールではなく、その境界の値です。境界での傾きは、境界を1だけ動かしたときに費用がどれだけ変わるかを表します。本当の制約が開いた範囲なら最小は存在せず、どこに境界を書くかが答えになります。",
+      "title": "書いた制約と本当の制約"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:python",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "次のコードは、下限だけを変えて解き直し、境界での傾きから見積もった費用と比べます。 # → の行は、SciPy 1.18.1で実行したときの出力です。 python from scipy.optimize import minimize def hardness ( T , c ): # 平衡計算の代わり: y**3 + (T/1000)*y = 1 + 200*c を二分法で解く lo , hi = 0.0 , 2.0 while hi - lo > 1e-13 : mid = 0.5 * ( lo + hi ) if mid ** 3 + T / 1000 * mid - 1 - 200 * c > 0 : hi = mid else : lo = mid return 0.5 * ( lo + hi ) def tool ( x ): T , c = x if c <= 0 : raise ValueError ( \"炭素量が範囲外\" ) y = hardness ( T , c ) return ( y - 1.05 ) ** 2 + 0.5 * (( T - 1250 ) / 100 ) ** 2 + 5000 * c x0 = [ 1200.0 , 0.0005 ] # 1. 炭素の下限だけを変えて、同じ条件で解く for c_min in [ 1e-6 , 1e-5 , 1e-4 ]: res = minimize ( tool , x0 , method = \"L-BFGS-B\" , bounds = [( 900 , 1600 ), ( c_min , 0.01 )]) T , c = res . x print ( f \"下限 { c_min : g } : T= { T : .1f } , c= { c : g } , F= { res . fun : .4f } , dF/dc= { res . jac [ 1 ] : .0f } \" ) # → 下限 1e-06: T=1247.7, c=1e-06, F=0.1944, dF/dc=4927 # → 下限 1e-05: T=1247.7, c=1e-05, F=0.2387, dF/dc=4927 # → 下限 0.0001: T=1247.8, c=0.0001, F=0.6823, dF/dc=4929 # 2. 境界での傾き（下限の値段）から、下限を動かしたときの F を見積もる base = minimize ( tool , x0 , method = \"L-BFGS-B\" , bounds = [( 900 , 1600 ), ( 1e-5 , 0.01 )]) price = base . jac [ 1 ] for c_min in [ 1e-6 , 1e-4 ]: print ( f \"下限 { c_min : g } の見積もり: F= { base . fun + price * ( c_min - 1e-5 ) : .4f } \" ) # → 下限 1e-06 の見積もり: F=0.1944 # → 下限 0.0001 の見積もり: F=0.6822 1の出力では、どの下限でも c が下限と同じ値です。 res.jac の c の成分 dF/dc は約4927で、下限によってほとんど変わりません。 T は小数第1位で表示しています。L-BFGS-Bは傾きが十分小さくなった所で止まるので、その先の桁は計算機によって変わることがあります。2の出力は、下限 10 − 5 での傾きだけを使った見積もりで、1の解き直した費用と小数第3位まで合います。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "収束した点を、ツールが選んだ答えだと読む : 下限 10 − 5 の答え c = 10 − 5 は、自分で書いた値そのものです。下限を 10 − 4 にすれば c = 10 − 4 が答えになり、費用は0.6823です。答えの変数が範囲の端に着いていないかを、まず確かめてください。 下限を0に近づけるほど良い答えになると考える : 下限を 10 − 12 にすれば、費用は0.1895に近づきます。ただし、0.1895に届く点はありません。炭素の量が 10 − 12 の鋼を作れるかは、ツールもソルバーも知りません。下限は、作れる最小の炭素量のような本当の要求から決めます。 res.jac の大きな値を、収束していない印だと読む : 答えの res.jac は ( − 0.000005 , 4927 ) で、 c の成分が大きく見えます。それでも success は True です。下限に着いた変数の傾きは正のままで構いません。収束を見るときは、範囲の内側にある変数の成分（例では T ）を見ます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "上下限に着いた最小で勾配の成分が0以上になる条件は、Nocedal・Wrightの教科書『Numerical Optimization』（S056）に基づきます。乗数が、制約を動かしたときの目的の変化を表すことも同じ教科書にあります。L-BFGS-Bの射影勾配による停止はByrdらの論文（S065）に、 minimize の bounds と jac はSciPyの公式文書（S002）に基づきます。 例の数値は、SciPy 1.18.1で上のコードを実行して得た値です。図の線は、炭素の量ごとに温度を黄金分割探索で最適にして描きました。ツールの式は教材用で、実際の鋼の費用や、作れる炭素量の下限は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:困りごとから関連する記事へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "範囲の内側から始めたのに、範囲の外や境界の点でツールがエラーになる → ソルバーが目的関数を呼ぶ点と回数 ツールの中の反復の許容誤差を緩めたら、答えがずれた → 内側の計算の許容誤差が作る目的関数の段差 上下限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 外側で何を最小にするかが決まらない → 外部の計算ソフトを目的関数の中で呼ぶ最適化 上下限制約付き滑らかの記事は、上下限が問題の一部として与えられている場合を扱います。この記事は、上下限を自分で書いた場合に、その値が答えを決めてしまうことを扱います。",
+      "title": "困りごとから関連する記事へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:小さな例・境界での傾きは下限の値段",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "鋼の例・答えの点の傾き L-BFGS-Bは、答えの点での勾配を res.jac に返します。下限 10 − 5 の答えでは、次の値です。 ( ∂ F ∂ T , ∂ F ∂ c ) = ( − 0.000005 , 4927 ) T の成分はほぼ0で、温度は範囲の内側で最小になっています。 c の成分4927は0から遠い値です。この値は「 c を減らせば、費用はまだ下がる」と読みます。 c を減らす向きは下限でふさがれているので、ソルバーはそこで止まりました。 下限に着いた変数の最小では、その変数の傾きは0以上になります。傾きが正なら、境界がなければもっと減らせたことを表します。L-BFGS-Bの停止の条件も、境界の外を向く成分を除いた勾配（射影勾配）が小さいことです。 鋼の例・4927の内訳 炭素の量を増やすと、炭素の費用 5000 c が増えます。一方で硬さ y が上がり、目標の1.05に近づくので、硬さのずれの費用は減ります。 ∂ F ∂ c = 2 ( y − 1.05 ) ∂ y ∂ c ⏟ 硬さの項 + 5000 ⏟ 炭素の費用 答えの点では y = 0.6158 、 ∂ y / ∂ c = 83.8 で、硬さの項は − 72.8 です。 5000 − 72.8 ≈ 4927 になります。炭素の費用が硬さの得を大きく上回るので、炭素は減らせるだけ減らすのが得です。 鋼の例・下限を動かしたときの見積もり この傾きは、下限を少し動かしたときの費用の変化を表します。下限を 10 − 5 から c min に動かすと、費用は次のように見積もれます。 F ( c min ) ≈ 0.2387 + 4927 ( c min − 10 − 5 ) 新しい下限 見積もり 解き直した値 10 − 6 0.1944 0.1944 10 − 4 0.6822 0.6823 見積もりは、解き直さなくても、表の小数第3位まで合っています。下限に着いた変数の傾きは、その下限の値段として報告できます。",
+      "title": "小さな例・境界での傾きは下限の値段"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:書いた制約と本当の制約",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "例には、炭素の量についての制約が三つあります。 制約 誰が知っているか 例では 書いた制約 ソルバー。点を選ぶときに使う bounds の c ≥ c min ツールのエラー ツールだけ。ソルバーは呼んでみるまで分からない c ≤ 0 でエラーになる 本当の要求 書かなければ誰も知らない 実際に作れる最小の炭素量 ツールのエラーが表す範囲 c > 0 は、端の0を含まない開いた範囲です。費用は炭素を減らすほど下がるので、 c を0に近づけると、費用は0.1895に近づきます。ところが c = 0 はツールが拒むので、0.1895にはどの点でも届きません。この範囲には最小の点がありません。 そのため、 c min をどこに書くかで、答えが決まります。下限を書いたことで、最小の点のない問題が、最小の点のある問題に変わりました。その代わり、答えの c はツールの式ではなく、書いた値から来ています。 炭素の量ごとに温度を最適にしたときの費用：下限を動かすと、答えはこの線に沿って動く。教材用のツールの式で、実際の鋼の費用は示さない",
+      "title": "書いた制約と本当の制約"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:本当の制約を書く",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "答えが書いた境界に着いたら、次の順に確かめます。 どの変数が境界に着いたか : 例では c が下限に着き、 T は内側です。 その境界はどこから来たか : 例の 10 − 5 は、ツールのエラーを避けるために置いた値でした。作れる最小の炭素量のような本当の要求があるなら、その値を下限に書きます。 境界の値段はいくらか : res.jac の成分から、下限を動かしたときの費用の変化を見積もります。例では、下限を 10 − 5 上げるごとに、費用は約 0.049 増えます。 境界が本当は費用なのか : 炭素を減らすほど工程の費用が増えるなら、その費用は下限ではなく目的の式に入れます。そうすれば、答えの c は書いた値ではなく、費用の釣り合いから決まります。 答えを報告するときは、境界に着いた変数と、その値段を一緒に書きます。例なら「炭素は下限 10 − 5 に着いた。下限を 10 − 5 下げるごとに、費用は約0.049下がる」と書きます。",
+      "title": "本当の制約を書く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-bound-answer:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-bound-answer",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.bound-constrained-smooth",
+        "content:concept.external-solver-objective",
+        "content:concept.inner-tolerance-noise",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "上下限を受け取る手法の一つの反復は、 L-BFGS-B法 で確かめられます。境界に着いた最小の条件は、 上下限制約付き滑らか で扱います。",
+      "title": "次に読む"
     },
     {
       "attribution": "Optimization Compass contributors",

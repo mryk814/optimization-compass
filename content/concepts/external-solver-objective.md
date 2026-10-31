@@ -275,6 +275,7 @@ L-BFGS-Bの行は、$x=0$、$J=0.09$ で `success` が `True` です。「成功
 
 - 計算1回の重さと予算の数え方: [評価費と予算](#/learn/concept.evaluation-cost)
 - 計算が収束しない組成がある: [失敗・NaNを伴うシミュレーション](#/formulations/PA016)
+- ソルバーがツールをどの点で何回呼ぶか: [ソルバーが目的関数を呼ぶ点と回数](#/learn/concept.solver-evaluation-points)
 - 値だけで進む方法の中身: [Nelder–Mead単体法](#/learn/method.nelder-mead)
 - 1つの目標に合わせる: [方程式の求根](#/formulations/PA004)
 

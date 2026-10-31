@@ -6359,6 +6359,240 @@ def _ol_regret_svg() -> str:
     return "".join(parts) + "\n"
 
 
+# Computational noise (content/concepts/inner-tolerance-noise.md): the same alloy cost tool as
+# solver-evaluation-points, with the inner bisection stopped at a tolerance `tol`.
+NOISE_CARBON = 1e-5  # the lower bound c reaches in every run of the article
+# The minimum of the exact tool along T at c = 1e-5 (SciPy 1.18.1 minimize_scalar, xatol 1e-9).
+NOISE_T_STAR = 1247.7584
+NOISE_TOLERANCES = (1e-13, 1e-6, 1e-3)
+
+
+def noise_hardness(temperature: float, carbon: float, tol: float) -> float:
+    """y**3 + (T/1000) y = 1 + 200 c, bisected on [0, 2] until the bracket is narrower than tol."""
+    lower, upper = 0.0, 2.0
+    while upper - lower > tol:
+        middle = 0.5 * (lower + upper)
+        if middle**3 + temperature / 1000 * middle - 1 - 200 * carbon > 0:
+            upper = middle
+        else:
+            lower = middle
+    return 0.5 * (lower + upper)
+
+
+def noise_cost(temperature: float, carbon: float, tol: float) -> float:
+    y = noise_hardness(temperature, carbon, tol)
+    return (y - 1.05) ** 2 + 0.5 * ((temperature - 1250) / 100) ** 2 + 5000 * carbon
+
+
+def noise_slope(step: float, tol: float) -> float:
+    """Forward-difference slope in T at T*, the value a solver would build with step h."""
+    base = noise_cost(NOISE_T_STAR, NOISE_CARBON, tol)
+    return (noise_cost(NOISE_T_STAR + step, NOISE_CARBON, tol) - base) / step
+
+
+def noise_stair_width(tol: float) -> float:
+    """Temperature span of one hardness step: bracket width over |dy/dT| at T*."""
+    width = 2.0 / 2 ** math.ceil(math.log2(2.0 / tol))
+    dy = (
+        noise_hardness(NOISE_T_STAR + 1e-4, NOISE_CARBON, 1e-13)
+        - noise_hardness(NOISE_T_STAR - 1e-4, NOISE_CARBON, 1e-13)
+    ) / 2e-4
+    return width / abs(dy)
+
+
+def _noise_slope_svg() -> str:
+    stair = noise_stair_width(1e-6)
+    parts = _open(
+        "差分の幅 h と、作った傾き",
+        (
+            f"本当の最小の温度 T*={NOISE_T_STAR:g} K、c=0.00001 で、温度方向の前進差分の傾きを、"
+            "差分の幅 h（1e−9 から 1 K）ごとに描いた図。本当の傾きは0。"
+            "内側の許容誤差 1e−13 では h によらずほぼ0。1e−6 では h が段差の幅 "
+            f"{stair:.4f} K より小さいと −0.000224 のままで、h=0.1 でほぼ0に戻る。"
+            "1e−3 では h=1 でも −0.000174。"
+        ),
+        452,
+    )
+    px = _scale(-9.0, 0.0, 64, 416)
+    py = _scale(-3.0, 1.0, 300, 64)
+    parts.append(f'<path d="M64 64V300H416" fill="none" stroke="{GRID}" stroke-width="1.5"/>')
+    for value in (-3, -2, -1, 0, 1):
+        parts.append(
+            f'<path d="M64 {py(value):.1f}H416" stroke="{GRID}" stroke-width="0.6" opacity="0.6"/>'
+        )
+        parts.append(_text(56, py(value) + 5, f"{value:g}".replace("-", "−"), "tick", "end"))
+    for exponent in (-8, -6, -4, -2, 0):
+        label = "1" if exponent == 0 else f"1e{exponent}".replace("-", "−")
+        parts.append(_text(px(exponent), 320, label, "tick", "middle"))
+    parts.append(_text(416, 342, "差分の幅 h（K）", "tick", "end"))
+    parts.append(_text(20, 52, "傾き（×10⁻⁴）", "tick"))
+    sx = px(math.log10(stair))
+    parts.append(
+        f'<path d="M{sx:.1f} 64V300" stroke="{UPDATE}" stroke-width="1.2" stroke-dasharray="4 4"/>'
+    )
+    parts.append(_text(sx - 6, 82, f"段差の幅 {stair:.4f} K", "tick", "end"))
+    parts.append(
+        f'<path d="M64 {py(0):.1f}H416" stroke="{INK}" stroke-width="1.6" stroke-dasharray="6 4"/>'
+    )
+    colors = {1e-13: LINE, 1e-6: UPDATE, 1e-3: POINT}
+    # 1e-3 first: below the step width it coincides with 1e-6, which is drawn on top.
+    for tol in (1e-13, 1e-3, 1e-6):
+        points = []
+        for index in range(-36, 1):
+            step = 10.0 ** (index / 4)
+            value = max(-3.0, min(1.0, noise_slope(step, tol) * 1e4))
+            points.append((px(index / 4), py(value)))
+        parts.append(_polyline(points, colors[tol], 3))
+    rows = (
+        (LINE, "許容誤差 1e−13：どの h でもほぼ0"),
+        (UPDATE, "許容誤差 1e−6：h が段差より細かいと −2.24"),
+        (POINT, "許容誤差 1e−3：h=1 K でも −1.74"),
+    )
+    for index, (color, label) in enumerate(rows):
+        y = 372 + 24 * index
+        parts.append(_polyline([(20, y - 5), (44, y - 5)], color, 3))
+        parts.append(_text(52, y, label))
+    parts.append(_text(20, 444, "破線：本当の傾き 0。h が細かい所では橙と紺が重なる", "tick"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+def _noise_stair_svg() -> str:
+    stair = noise_stair_width(1e-6)
+    y_star = noise_hardness(NOISE_T_STAR, NOISE_CARBON, 1e-13)
+    height = 2.0 / 2 ** math.ceil(math.log2(2.0 / 1e-6))
+    parts = _open(
+        "許容誤差 1e−6 の硬さは階段になる",
+        (
+            f"T* の前後 0.01 K で、硬さ y を本当の値との差（×10⁻⁶）で描いた図。"
+            f"許容誤差 1e−13 の y はなめらかな直線。1e−6 の y は、高さ {height:.2g}、"
+            f"幅 {stair:.4f} K の階段。差分の幅 1e−8 K の2点は同じ段に乗り、"
+            "幅 0.01 K の2点は段をまたぐ。"
+        ),
+        412,
+    )
+    px = _scale(-0.01, 0.01, 64, 416)
+    py = _scale(-3.0, 3.0, 300, 64)
+    parts.append(f'<path d="M64 64V300H416" fill="none" stroke="{GRID}" stroke-width="1.5"/>')
+    for value in (-3, 0, 3):
+        parts.append(_text(56, py(value) + 5, f"{value:g}".replace("-", "−"), "tick", "end"))
+    for value in (-0.01, 0.0, 0.01):
+        label = "T*" if value == 0 else f"{value:+g}".replace("-", "−")
+        parts.append(_text(px(value), 320, label, "tick", "middle"))
+    parts.append(_text(416, 342, "温度 T − T*（K）", "tick", "end"))
+    parts.append(_text(20, 52, "硬さ y − y(T*)（×10⁻⁶）", "tick"))
+    offsets = [-0.01 + 0.02 * i / 800 for i in range(801)]
+
+    def shift(offset: float, tol: float) -> float:
+        value = noise_hardness(NOISE_T_STAR + offset, NOISE_CARBON, tol)
+        return (value - y_star) * 1e6
+
+    parts.append(_polyline([(px(o), py(shift(o, 1e-13))) for o in offsets], LINE, 2.5))
+    stairs: list[tuple[float, float]] = []
+    for offset in offsets:
+        value = py(shift(offset, 1e-6))
+        if stairs and abs(stairs[-1][1] - value) > 1e-9:
+            stairs.append((px(offset), stairs[-1][1]))
+        stairs.append((px(offset), value))
+    parts.append(_polyline(stairs, UPDATE, 3))
+    for offset, label, lift in ((0.0, "h=1e−8：同じ段", -16), (0.01, "h=0.01", 26)):
+        for point in (0.0, offset if offset else 1e-8):
+            parts.append(
+                f'<circle cx="{px(point):.1f}" cy="{py(shift(point, 1e-6)):.1f}" r="5.5" '
+                f'fill="{POINT}"/>'
+            )
+        anchor = "end" if offset else "start"
+        dx = -8 if offset else 10
+        parts.append(_text(px(offset) + dx, py(shift(offset, 1e-6)) + lift, label, "tick", anchor))
+    parts.append(_text(20, 372, "緑の線：許容誤差 1e−13（なめらか）"))
+    parts.append(_text(20, 396, f"橙の階段：許容誤差 1e−6（段の幅 {stair:.4f} K）"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
+# A written bound decides the answer (content/concepts/written-bound-answer.md): the same alloy
+# cost tool, solved with different lower bounds on the carbon fraction.
+BOUND_PRICE = 4927.0  # dF/dc at the answer for c >= 1e-5, as res.jac reports it (SciPy 1.18.1)
+
+
+def bound_best(carbon: float) -> tuple[float, float]:
+    """(T, F) minimizing the cost over T for a fixed carbon fraction, by golden-section search."""
+    lower, upper = 1240.0, 1260.0
+    ratio = (math.sqrt(5) - 1) / 2
+    for _ in range(80):
+        left = upper - ratio * (upper - lower)
+        right = lower + ratio * (upper - lower)
+        if eval_cost(left, carbon) < eval_cost(right, carbon):
+            upper = right
+        else:
+            lower = left
+    temperature = 0.5 * (lower + upper)
+    return temperature, eval_cost(temperature, carbon)
+
+
+def bound_price_parts(carbon: float = 1e-5) -> tuple[float, float]:
+    """(hardness part, carbon part) of dF/dc at the answer: 2 (y - 1.05) dy/dc and 5000."""
+    temperature, _ = bound_best(carbon)
+    y = eval_hardness(temperature, carbon)
+    dy_dc = 200 / (3 * y * y + temperature / 1000)
+    return 2 * (y - 1.05) * dy_dc, 5000.0
+
+
+def _bound_price_svg() -> str:
+    limit = bound_best(1e-12)[1]
+    marks = [(c, bound_best(c)[1]) for c in (1e-6, 1e-5, 1e-4)]
+    shown = marks[1:]  # 1e-6 sits on top of the c=0 circle at this scale; the text gives it
+    parts = _open(
+        "答えは書いた下限に沿って動く",
+        (
+            "炭素の量 c（0〜0.00011）を横軸に、その c で温度を最適にしたときの費用 F を描いた図。"
+            "F はほぼ直線で、傾きは約4927。下限を 1e−6、1e−5、1e−4 にした答えは、"
+            f"それぞれ F={marks[0][1]:.4f}、{marks[1][1]:.4f}、{marks[2][1]:.4f}。"
+            f"c=0 ではツールがエラーになるので、F は {limit:.4f} に近づくが届かない。"
+        ),
+        428,
+    )
+    px = _scale(0.0, 1.1e-4, 64, 416)
+    py = _scale(0.15, 0.75, 300, 64)
+    parts.append(f'<path d="M64 64V300H416" fill="none" stroke="{GRID}" stroke-width="1.5"/>')
+    for value in (0.2, 0.4, 0.6):
+        parts.append(
+            f'<path d="M64 {py(value):.1f}H416" stroke="{GRID}" stroke-width="0.6" opacity="0.6"/>'
+        )
+        parts.append(_text(56, py(value) + 5, f"{value:g}", "tick", "end"))
+    for value in (0, 2, 4, 6, 8, 10):
+        parts.append(_text(px(value * 1e-5), 320, str(value), "tick", "middle"))
+    parts.append(_text(416, 342, "炭素の量 c（×10⁻⁵）", "tick", "end"))
+    parts.append(_text(20, 52, "費用 F", "tick"))
+    carbons = [1.1e-4 * i / 60 for i in range(1, 61)]
+    parts.append(_polyline([(px(c), py(bound_best(c)[1])) for c in carbons], LINE, 3))
+    base_c, base_f = marks[1]
+    ends = (0.0, 1.1e-4)
+    parts.append(
+        f'<path d="M{px(ends[0]):.1f} {py(base_f + BOUND_PRICE * (ends[0] - base_c)):.1f}'
+        f'L{px(ends[1]):.1f} {py(base_f + BOUND_PRICE * (ends[1] - base_c)):.1f}" '
+        f'stroke="{UPDATE}" stroke-width="1.6" stroke-dasharray="6 4"/>'
+    )
+    parts.append(
+        f'<circle cx="{px(0):.1f}" cy="{py(limit):.1f}" r="6.5" fill="#f7f8f3" '
+        f'stroke="{VIOLATION}" stroke-width="2.5"/>'
+    )
+    for c, value in shown:
+        parts.append(f'<circle cx="{px(c):.1f}" cy="{py(value):.1f}" r="6.5" fill="{POINT}"/>')
+    labels = (
+        (marks[1], f"下限 1e−5：{marks[1][1]:.4f}", 14, 24),
+        (marks[2], f"下限 1e−4：{marks[2][1]:.4f}", -14, -10),
+    )
+    for (c, value), label, dx, dy in labels:
+        anchor = "end" if dx < 0 else "start"
+        parts.append(_text(px(c) + dx, py(value) + dy, label, "tick", anchor))
+    parts.append(_text(20, 372, f"白い丸：c=0 はツールが拒む。F は {limit:.4f} に届かない"))
+    parts.append(_text(20, 396, f"橙の破線：下限 1e−5 での傾き {BOUND_PRICE:.0f}"))
+    parts.append(_text(20, 420, "紺の丸：下限ごとの答え（どれも c が下限に着く）"))
+    parts.append("</svg>")
+    return "".join(parts) + "\n"
+
+
 def generate_lesson_figures() -> dict[str, str]:
     return {
         "least-squares-residuals.svg": _least_squares_residuals_svg(),
@@ -6413,6 +6647,9 @@ def generate_lesson_figures() -> dict[str, str]:
         "trajectory-grid-check.svg": _traj_grid_svg(),
         "solver-evaluation-carbon.svg": _eval_carbon_svg(),
         "solver-evaluation-breakdown.svg": _eval_breakdown_svg(),
+        "inner-tolerance-slope.svg": _noise_slope_svg(),
+        "inner-tolerance-stair.svg": _noise_stair_svg(),
+        "written-bound-price.svg": _bound_price_svg(),
         "distributed-consensus-losses.svg": _dc_losses_svg(),
         "distributed-consensus-admm.svg": _dc_admm_svg(),
         "online-budget-days.svg": _ol_days_svg(),

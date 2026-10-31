@@ -7,7 +7,7 @@ title_ja: ソルバーが目的関数を呼ぶ点と回数
 title_en: Where and How Often a Solver Evaluates
 summary: ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点は範囲の内側にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、範囲の外の入力と評価の内訳を確かめられます。
 prerequisites: [concept.evaluation-cost]
-related_ids: [bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
+related_ids: [concept.external-solver-objective, bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
 source_ids: [S002, S056, S063, S065]
 status: published
 last_reviewed: 2026-10-30
@@ -221,6 +221,8 @@ for method in ["L-BFGS-B", "Nelder-Mead"]:
 - 評価1回が高く、回数を予算として数えて計画したい → [評価費と予算](#/learn/concept.evaluation-cost)
 - 下限と上限だけを守って、勾配で最小化したい → [上下限制約付き滑らか](#/formulations/PA008)
 - 勾配を作れない、または差分の値が当てにならない → [微分を使わない最適化](#/learn/concept.derivative-free)
+- ツールの中の反復の許容誤差を緩めたら、答えがずれた → [内側の計算の許容誤差が作る目的関数の段差](#/learn/concept.inner-tolerance-noise)
+- 答えの変数が、自分で書いた下限や上限にちょうど着いた → [書いた制約と本当の制約](#/learn/concept.written-bound-answer)
 
 どの手法も、ツールが拒む点を渡すことがあります。BFGS は範囲の外の点を渡します。上下限を与えた2つの手法も、下限を0のままにすれば境界の $c=0$ を渡しえます。例の L-BFGS-B も、下限 $c=0.00001$ ちょうどの点を評価しています。
 
@@ -231,6 +233,8 @@ for method in ["L-BFGS-B", "Nelder-Mead"]:
 ## 次に読む
 
 ツールが値を返さない点の記録の仕方は、[失敗・NaNを伴うシミュレーション](#/formulations/PA016)で扱います。評価の回数を予算として扱う方法は、[評価費と予算](#/learn/concept.evaluation-cost)へ進みます。勾配を差分で作る手法の一つの反復は、[L-BFGS-B法](#/learn/lbfgsb)で確かめられます。
+
+ツールの中でも平衡を求める最小化が走るとき、外側で何を最小にするかは、[外部の計算ソフトを目的関数の中で呼ぶ最適化](#/learn/concept.external-solver-objective)で扱います。相が消える範囲で目的が平らになり、勾配法が動かないまま終了する例も同じ記事にあります。
 
 ## 出典と再現条件
 
