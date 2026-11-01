@@ -9340,6 +9340,62 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.inner-solver-error",
+      "entity_id": "concept.inner-solver-error",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "内側の計算が作る目的関数のずれと段差",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.discontinuous-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.evaluation-cost",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.noisy-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.written-and-real-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ツールが中で微分方程式を解いていると、ソルバーが受け取る値は式の値ではなく、解き方の誤差を足した値です。誤差は変数につれてなめらかに変わる所と、刻みの数が変わって跳ぶ所があります。そのため、報告される値や差分の傾きは式のものからずれ、評価の回数は計算機によって変わることがあります。答えは、細かい許容誤差で測り直して確かめます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "concept.inverse-problem",
       "entity_type": "content",
@@ -12168,6 +12224,16 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.inner-solver-error",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.written-and-real-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "lbfgsb",
           "target_type": "content"
         },
@@ -12802,6 +12868,62 @@
         }
       ],
       "summary": "配送経路問題（VRP）は、depotを出る複数の車両が、各顧客をちょうど1回ずつ回って戻る経路を選び、総移動時間を最小にする定式化です。どの車がどの顧客を、どの順に回るかを同時に決め、容量や時間窓を制約として足せます。顧客が少なければ全探索やMILPで最適を確かめられますが、近似の結果がどれだけ最適に近いかは、最適値を知らなければ言えません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.written-and-real-constraints",
+      "entity_id": "concept.written-and-real-constraints",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "書いた制約と本当の制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.bound-constrained-smooth",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.failed-simulation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.inner-solver-error",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.solver-evaluation-points",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        }
+      ],
+      "summary": "ツールがエラーを出す範囲と、本当にありうる値の範囲は同じではありません。ツールは、ありえない値でも黙って計算し、ありうる値で失敗することもあります。失敗した点に大きな値を返すと、その値の選び方で答えが変わります。ありうる値は自分で制約として書き、その中ではツールが必ず値を返すように直します。"
     },
     {
       "aliases": [],
