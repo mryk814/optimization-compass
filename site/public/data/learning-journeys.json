@@ -8151,6 +8151,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.inner-solver-error",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.inverse-problem",
       "asset_type": "content",
       "policy": "warning",
@@ -8446,6 +8452,12 @@
     },
     {
       "asset_id": "concept.vehicle-routing",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.written-and-real-constraints",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

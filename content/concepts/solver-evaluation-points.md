@@ -7,10 +7,10 @@ title_ja: ソルバーが目的関数を呼ぶ点と回数
 title_en: Where and How Often a Solver Evaluates
 summary: ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点はありうる値の中にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、ありうる値の外の入力と評価の内訳を確かめられます。
 prerequisites: [concept.evaluation-cost]
-related_ids: [bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
+related_ids: [concept.written-and-real-constraints, concept.inner-solver-error, bfgs, lbfgsb, method.nelder-mead, concept.failed-simulation, concept.bound-constrained-smooth, concept.derivative-free]
 source_ids: [S002, S056, S063, S065]
 status: published
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-01
 ---
 
 ソルバーが目的関数を呼ぶのは、反復の点だけではありません。勾配を差分で作るための点や直線探索の試し点、Nelder–Mead の単体の頂点でも呼びます。これらの点はありうる値の中にあるとは限らず、呼ぶ回数も反復の回数より多くなります。呼ばれた点を記録すれば、ありうる値の外の入力と評価の内訳を確かめられます。
@@ -240,6 +240,8 @@ for method in ["L-BFGS-B", "Nelder-Mead"]:
 - 評価1回が高く、回数を予算として数えて計画したい → [評価費と予算](#/learn/concept.evaluation-cost)
 - 下限と上限だけを守って、勾配で最小化したい → [上下限制約付き滑らか](#/formulations/PA008)
 - 勾配を作れない、または差分の値が当てにならない → [微分を使わない最適化](#/learn/concept.derivative-free)
+- ツールが失敗する点と、本当にありえない点が食い違う → [書いた制約と本当の制約](#/learn/concept.written-and-real-constraints)
+- 内側の計算の解き方や許容誤差で、値や評価の回数が変わる → [内側の計算が作る目的関数のずれと段差](#/learn/concept.inner-solver-error)
 
 この例の3つの手法は、どれもツールが拒む点を渡しました。BFGS はありうる値の外の点を、上下限を与えた2つの手法は境界の値や上下限の角を渡しています。
 

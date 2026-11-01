@@ -1159,6 +1159,160 @@ def test_solver_evaluation_article_python_prints_its_comments() -> None:
     assert output.getvalue().splitlines() == expected
 
 
+def _article_code(name: str) -> str:
+    article = (ROOT / f"content/concepts/{name}.md").read_text(encoding="utf-8")
+    return article.split("```python\n", 1)[1].split("```", 1)[0]
+
+
+def _article_setup(name: str, marker: str) -> dict[str, object]:
+    """Run an article's definitions without the solver calls that follow ``marker``."""
+    namespace: dict[str, object] = {}
+    setup = _article_code(name).split(marker, 1)[0]
+    exec(compile(setup, f"{name}.md", "exec"), namespace)
+    return namespace
+
+
+def _assert_article_prints_its_comments(name: str) -> None:
+    import contextlib
+    import io
+    import warnings
+
+    import pytest
+
+    pytest.importorskip("scipy.optimize")
+    code = _article_code(name)
+    expected = [line[len("# → ") :] for line in code.splitlines() if line.startswith("# → ")]
+    output = io.StringIO()
+    with warnings.catch_warnings(), contextlib.redirect_stdout(output):
+        warnings.simplefilter("ignore", RuntimeWarning)
+        exec(compile(code, f"{name}.md", "exec"), {})
+    assert output.getvalue().splitlines() == expected
+
+
+def test_written_constraint_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import (
+        CON_CLIPPED,
+        CON_FMIN,
+        CON_PENALTY_100,
+        EVAL_NM_LAST_A,
+        EVAL_NM_Q,
+        con_boundary_q,
+        con_critical_area,
+        con_dry_time,
+    )
+
+    # The points come from the same runs as the solver-evaluation figure.
+    assert [q for _, q in CON_FMIN] == list(EVAL_NM_Q[12:15])
+    assert CON_FMIN[2][0] == CON_CLIPPED[0] == EVAL_NM_LAST_A
+    assert round(con_critical_area(), 6) == 0.000251
+    assert round(con_dry_time(EVAL_NM_LAST_A, 0.0)) == 1700
+    # fmin's 13th and 14th points survive the 30 minutes; the 15th runs dry after ~1370 s.
+    assert con_dry_time(*CON_FMIN[0]) > 1800 and con_dry_time(*CON_FMIN[1]) > 1800
+    assert round(con_dry_time(*CON_FMIN[2]), -1) == 1370
+    # The answer with a penalty of 100 sits 1.5 s inside the boundary.
+    assert round(con_dry_time(*CON_PENALTY_100), 1) == 1801.5
+    assert round(con_boundary_q(0.0), 6) == -0.000556
+    assert con_dry_time(1e-4, 1e-6) == math.inf
+    plane = generate_lesson_figures()["written-constraint-plane.svg"]
+    for text in ("ありうる値", "ツールが失敗", "失敗を100にした答え", "記録に合う答え"):
+        assert text in plane
+
+
+def test_written_constraint_runs_match_a_scipy_rerun() -> None:
+    import warnings
+
+    import pytest
+
+    np = pytest.importorskip("numpy")
+    optimize = pytest.importorskip("scipy.optimize")
+    from scripts.generate_lesson_figures import CON_PENALTY_100, con_dry_time
+
+    space = _article_setup("written-and-real-constraints", "x0 = [1e-4")
+    tool, penalized = space["tool"], space["penalized"]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        res = optimize.minimize(penalized(100), [1e-4, 1e-4])
+    assert not res.success
+    assert np.allclose(res.x, CON_PENALTY_100, rtol=1e-5, atol=0)
+    # At that answer the computable sum of squares still falls toward the boundary, and a step
+    # of 1e-6 downhill runs the tank dry after about 1791 s.
+    gradient = np.array([(tool(res.x + d) - tool(res.x - d)) / 2e-10 for d in np.eye(2) * 1e-10])
+    assert (round(gradient[0], -2), round(gradient[1], -1)) == (-24600, 6340)
+    step = res.x - 1e-6 * gradient / np.linalg.norm(gradient)
+    assert round(con_dry_time(*step)) == 1791
+    with pytest.raises(ValueError), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        tool(step)
+    # With q > 0 the equations never run dry, but the tool still fails where the balance level
+    # (q/a)^2/(2g) is tiny; the empty-state tool returns a value on a 7 x 7 grid of the box.
+    with pytest.raises(ValueError), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        tool([0.01, 1e-6])
+    assert round((1e-6 / 0.01) ** 2 / (2 * 9.81), 11) == 5.1e-10
+    code = _article_code("written-and-real-constraints")
+    snippet = "def tool_empty" + code.split("def tool_empty", 1)[1].split("\nprint(", 1)[0]
+    exec(compile(snippet, "written-and-real-constraints.md", "exec"), space)
+    values = [0.0, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
+    assert all(np.isfinite(space["tool_empty"]([a, q])) for a in values for q in values)
+
+
+def test_written_constraint_article_python_prints_its_comments() -> None:
+    _assert_article_prints_its_comments("written-and-real-constraints")
+
+
+def test_inner_solver_figure_uses_the_article_numbers() -> None:
+    from scripts.generate_lesson_figures import INNER_E, INNER_JUMPS, INNER_RUNS, inner_samples
+
+    samples = inner_samples()
+    assert len(samples) == len(INNER_E) == 181
+    assert round(samples[-1][0], 9) == 0.00049
+    assert [count for count, _ in INNER_RUNS] == [50, 62, 68, 74, 80, 86]
+    assert (round(min(INNER_E) * 1e-5, 5), round(max(INNER_E) * 1e-5, 5)) == (-0.00024, 0.00009)
+    # The answer a = 0.000401 lies inside the 68-evaluation range, and near it the offset
+    # grows by about 1.6e-6 for each 1e-6 of a.
+    answer = next(s for s in samples if round(s[0], 9) == 0.000401)
+    assert answer[2] == 68
+    assert round((INNER_E[92] - INNER_E[90]) / 2, 2) == 0.16  # 0.16e-5 per 1e-6 of a
+    for jump_a, _ in INNER_JUMPS:
+        before = max(s for s in samples if s[0] < jump_a)
+        after = min(s for s in samples if s[0] > jump_a)
+        assert before[2] != after[2]
+    steps = generate_lesson_figures()["inner-solver-steps.svg"]
+    for text in ("段差 −6.79", "段差 −1.23", "答え"):
+        assert text in steps
+
+
+def test_inner_solver_steps_match_a_scipy_rerun() -> None:
+    import pytest
+
+    np = pytest.importorskip("numpy")
+    pytest.importorskip("scipy.integrate")
+    from scripts.generate_lesson_figures import INNER_JUMPS, INNER_Q, inner_samples
+
+    space = _article_setup("inner-solver-error", "x0 = [1e-4")
+    simulate, tool, model = space["simulate"], space["tool"], space["model"]
+    for a, error, count in inner_samples():
+        sol = simulate(a, INNER_Q, "RK45")
+        assert sol.nfev == count
+        assert abs((tool([a, INNER_Q], "RK45") - model([a, INNER_Q])) * 1e5 - error) < 0.01
+    for jump_a, jump in INNER_JUMPS:
+        low, high = jump_a - 5e-13, jump_a + 5e-13
+        assert simulate(low, INNER_Q, "RK45").nfev < simulate(high, INNER_Q, "RK45").nfev
+        change = tool([high, INNER_Q], "RK45") - tool([low, INNER_Q], "RK45")
+        assert round(change, 7) == jump
+    # At the other three count changes the result bends but does not jump.
+    for a in (0.0003524915843, 0.0004169641882, 0.0004618028082):
+        low, high = a - 5e-13, a + 5e-13
+        assert simulate(low, INNER_Q, "RK45").nfev != simulate(high, INNER_Q, "RK45").nfev
+        assert abs(tool([high, INNER_Q], "RK45") - tool([low, INNER_Q], "RK45")) < 1e-7
+    # The initial point's value differs between BLAS kernels only from about the 14th digit.
+    assert np.isclose(tool([1e-4, 1e-4], "RK45"), 4.66189639906857, rtol=1e-13, atol=0)
+
+
+def test_inner_solver_article_python_prints_its_comments() -> None:
+    _assert_article_prints_its_comments("inner-solver-error")
+
+
 def test_distributed_consensus_figures_use_the_article_numbers() -> None:
     from scripts.generate_lesson_figures import DC_RHOS, DC_SITES, dc_admm, dc_global, dc_local
 

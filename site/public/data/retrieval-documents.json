@@ -14479,6 +14479,266 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ソルバーが目的関数を呼ぶ点と回数 と同じ、タンクの水位の例を使います。ツールは流出口の面積 a （m²）と流入量 q （m³/s）を受け取り、水位の式を solve_ivp で解きます。返すのは、31回の記録とのずれの二乗和です。 solve_ivp は、時間の刻みを自分で選びながら式を解きます。選び方の基準になるのが、解き方（ method ）と許容誤差（ rtol ）です。この二つだけを変えて、同じ初期点と上下限で L-BFGS-B を実行しました。 解き方と許容誤差 報告された二乗和 測り直した二乗和 評価の回数 RK45、 10 − 3 （既定） 0.000498 0.000497 96〜126回 Radau、 10 − 3 0.000503 0.000497 54回 RK45、 10 − 8 0.000497 0.000497 51〜177回 Radau、 10 − 8 0.000497 0.000497 54回 「測り直した二乗和」は、答えの点を許容誤差 10 − 10 の Radau で解き直した値です。評価の回数は、同じ版の SciPy で、NumPy が使う行列計算の部品（OpenBLAS）を4通りに切り替えて実行したときの範囲です。 答えは、どの設定でも3桁で ( a , q ) = ( 0.000401 , 0.000501 ) でした。ところが、報告された二乗和は設定ごとに違います。許容誤差 10 − 3 の Radau は、測り直した値より約1%大きい 0.000503 を報告しました。RK45 の評価の回数は、計算機の部品を替えるだけで変わります。 決めるもの : 流出口の面積 a と流入量 q 良くしたいもの : 計算した水位と記録のずれの二乗和 守ること : 0.00001 ≤ a , q ≤ 0.001 式は同じなのに、なぜ報告される値が設定で変わり、評価の回数が計算機で変わるのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ツールが中で微分方程式を解いていると、ソルバーが受け取る値は式の値ではなく、解き方の誤差を足した値です。誤差は変数につれてなめらかに変わる所と、刻みの並びが変わって跳ぶ所があります。そのため、報告される値や差分の傾きは式のものからずれ、評価の回数は計算機によって変わることがあります。答えは、細かい許容誤差で測り直して確かめます。",
+      "title": "内側の計算が作る目的関数のずれと段差"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:python",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "次のコードは、解き方と許容誤差を引数にした例のツールで、表と小さな例の値を計算します。 # → の行は、SciPy 1.18.1 で実行したときの出力です。評価の回数は計算機によって変わるので、出力に入れていません。回数は res.nfev で確かめられます。 python import numpy as np from scipy.integrate import solve_ivp from scipy.optimize import minimize G , AREA , H0 = 9.81 , 1.0 , 1.0 # 重力加速度、タンクの断面積 1 m²、最初の水位 1 m t = np . arange ( 0 , 1801 , 60.0 ) # 30分間、1分おきに31回測る def simulate ( a , q , method = \"Radau\" , rtol = 1e-3 ): # 水位の式 AREA * dh/dt = q - a * sqrt(2 g h) を、指定した解き方と許容誤差で解く def rhs ( _ , h ): return [( q - a * np . sqrt ( 2 * G * h [ 0 ])) / AREA ] return solve_ivp ( rhs , ( 0 , t [ - 1 ]), [ H0 ], t_eval = t , rtol = rtol , method = method ) # 教材用の記録：a=0.0004、q=0.0005 の水位に、測定のばらつきを足したもの rng = np . random . default_rng ( 0 ) observed = simulate ( 4e-4 , 5e-4 , rtol = 1e-10 ) . y [ 0 ] + rng . normal ( 0 , 0.005 , t . size ) def tool ( x , method = \"Radau\" , rtol = 1e-3 ): sol = simulate ( * x , method , rtol ) if sol . status != 0 or not np . all ( np . isfinite ( sol . y )): raise ValueError ( \"タンクが空になり、水位を計算できない\" ) return float ( np . sum (( sol . y [ 0 ] - observed ) ** 2 )) def model ( x ): # 答え合わせ用：十分に細かい許容誤差で解いた二乗和 return tool ( x , \"Radau\" , 1e-10 ) x0 = [ 1e-4 , 1e-4 ] box = [( 1e-5 , 1e-3 ), ( 1e-5 , 1e-3 )] # 1. 内側の解き方と許容誤差だけを変えて、L-BFGS-B を同じ条件で実行する for method , rtol in [( \"RK45\" , 1e-3 ), ( \"Radau\" , 1e-3 ), ( \"RK45\" , 1e-8 ), ( \"Radau\" , 1e-8 )]: res = minimize ( tool , x0 , args = ( method , rtol ), method = \"L-BFGS-B\" , bounds = box ) a , q = res . x print ( f \" { method } { rtol : g } : a= { a : .3g } , q= { q : .3g } , 報告 { res . fun : .6f } , 測り直し { model ( res . x ) : .6f } \" ) # → RK45 0.001: a=0.000401, q=0.000501, 報告 0.000498, 測り直し 0.000497 # → Radau 0.001: a=0.000401, q=0.000501, 報告 0.000503, 測り直し 0.000497 # → RK45 1e-08: a=0.000401, q=0.000501, 報告 0.000497, 測り直し 0.000497 # → Radau 1e-08: a=0.000401, q=0.000501, 報告 0.000497, 測り直し 0.000497 # 2. q を固定して a を少し動かすと、右辺を計算した回数が変わる所で二乗和が跳ぶ q = 0.000501 for a in [ 0.0003288929879 , 0.0003288929889 ]: sol = simulate ( a , q , \"RK45\" ) print ( f \"a= { a : .13f } : 右辺 { sol . nfev } 回, 二乗和 { tool ([ a , q ], 'RK45' ) : .6f } \" ) # → a=0.0003288929879: 右辺 50 回, 二乗和 0.331977 # → a=0.0003288929889: 右辺 62 回, 二乗和 0.331909 # 3. 段差をまたぐ差分と、またがない差分（幅 1e-8） jump , h = 0.0003288929884 , 1e-8 across = ( tool ([ jump + h / 2 , q ], \"RK45\" ) - tool ([ jump - h / 2 , q ], \"RK45\" )) / h beside = ( tool ([ jump - 2 * h , q ], \"RK45\" ) - tool ([ jump - 3 * h , q ], \"RK45\" )) / h exact = ( model ([ jump + h / 2 , q ]) - model ([ jump - h / 2 , q ])) / h print ( f \"またぐ { across : .0f } , またがない { beside : .0f } , 式の傾き { exact : .0f } \" ) # → またぐ -17492, またがない -10754, 式の傾き -10790 # 4. 答えの点で、a についての傾きを中心差分で作る x = np . array ([ 0.000401 , 0.000501 ]) d = np . array ([ 1e-9 , 0.0 ]) for label , f in [( \"RK45 1e-3\" , lambda y : tool ( y , \"RK45\" )), ( \"Radau 1e-3\" , tool ), ( \"式\" , model )]: print ( f \" { label } : 傾き { ( f ( x + d ) - f ( x - d )) / 2e-9 : .1f } \" ) # → RK45 1e-3: 傾き -12.6 # → Radau 1e-3: 傾き -14.5 # → 式: 傾き -14.2 1の出力では、答えはどの設定でも同じで、報告された二乗和だけが設定で変わります。測り直した値は、どれも 0.000497 です。2の出力は、 a の 10 − 12 の違いで右辺の回数が50回から62回に変わり、二乗和が 0.000068 下がることを示します。3の出力の「またぐ」と「またがない」の差は、その段差を幅 10 − 8 で割った量です。4の出力は、段差のない答えの点でも、RK45（ 10 − 3 ）のツールの傾きが式の傾きと違うことを示します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "評価の回数で、設定の良し悪しを比べる : 許容誤差 10 − 8 の RK45 は、ある部品では51回で別の部品では177回でした。同じ設定でも回数は計算機で変わるので、回数の差を設定の差と読まないでください。回数は計算時間の見積もりに使います。設定を比べるときは、同じ計算機で答えと測り直した二乗和を並べます。 報告された二乗和を、当てはまりの良さとして比べる : 許容誤差 10 − 3 の Radau は 0.000503 を報告しました。同じ点を測り直すと 0.000497 です。約1%の差は、解き方の誤差です。二つのモデルや二つの記録の当てはまりを比べるときは、同じ細かい許容誤差で測り直した値を使ってください。 許容誤差を締めれば、評価の回数も揃うと考える : RK45 の許容誤差を 10 − 8 に締めても、回数は51回から177回に分かれました。締めると e は小さくなりますが、終わりに近い判断が値の下の桁で決まることは変わりません。 差分の傾きを、式の傾きだと考える : 答えの点での傾きは、RK45（ 10 − 3 ）のツールで − 12.6 でした。式の傾きは − 14.2 です。段差をまたぐと、 − 17492 と − 10790 のように大きく外れます。勾配が正しいかを差分で確かめるときは、ツールの許容誤差を締めた値でも作って比べてください。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:ツールの値は-式の値に解き方の誤差を足したもの",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "水位の式を正確に解いたときの二乗和を F ( a , q ) とします。ツールが返すのは、これに解き方の誤差 e ( a , q ) を足した値です。 F tool ( a , q ) = F ( a , q ) + e ( a , q ) この式は「ソルバーが最小にしているのは、式の二乗和ではなく、誤差を足した二乗和だ」と読みます。 e は、解き方と許容誤差を変えると変わります。 solve_ivp が選ぶ刻みは、 a と q によって変わります。刻みの並び方が変わらない範囲では、刻みの幅が a につれて少しずつ動くので、 e もなめらかに変わります。刻みの並びが変わる所では、 e が跳ぶことがあります。並びの変化は、水位の式の右辺を計算した回数（ sol.nfev ）の変化として見えます。この回数は、受け入れた刻みと、誤差が大きくてやり直した刻みの両方で増えます。 次の図は、 q = 0.000501 に固定して a だけを動かしたときの e です。既定の RK45 で解いた二乗和から、細かい許容誤差で解いた二乗和を引きました。 q=0.000501、RK45、rtol=1e−3：二乗和の、式からのずれ。SciPy 1.18.1 での計算で、ほかの解き方や記録での段差の位置は示さない 図から、次の三つが読めます。 e は0のまわりではなく、 − 0.00024 から + 0.00009 まで、 a につれて大きく変わります。答えの近くで e が0に近いのは、この記録とこの範囲での偶然です。 右辺の回数が変わる5か所のうち、2か所で e が跳びます。残りの3か所では、線は跳ばずに折れます。 答えの a = 0.000401 は、回数68回の範囲の中にあり、近くに段差はありません。",
+      "title": "ツールの値は、式の値に解き方の誤差を足したもの"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "差分の誤差が、値の誤差を差分の幅で割った量だけ大きくなることは、Nocedal・Wright の教科書『Numerical Optimization』（S056）に基づきます。L-BFGS-B は Byrd らの論文（S065）に、 minimize の args ・ bounds ・ nfev は SciPy の公式文書（S002）に基づきます。 例の数値は、SciPy 1.18.1 と NumPy 2.5.3 で上のコードを実行して得た値です。次の値と処理は SciPy 1.18.1 の実装の性質で、根拠はそのソースと実行の記録です。 solve_ivp が、誤差の見積もりと許容誤差から時間の刻みを選ぶこと solve_ivp の nfev が、右辺を計算した回数であること L-BFGS-B の差分の幅 10 − 8 評価の回数は、OpenBLAS の計算の部品を SkylakeX・Haswell・Sandybridge・Prescott に切り替えて数えました。ほかの計算機では、表の範囲の外の回数になることもあります。 ソルバーが目的関数を呼ぶ点と回数 に記録した78回と120回は、この4通りの範囲の外です。図のずれは、 a を 10 − 6 ずつ動かした181点で計算し、段差の位置は右辺の回数が変わる所を二分法で探しました。タンクの数値は教材用で、実際の設備の値や、ほかの式での段差の位置は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:困りごとから関連する記事へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "同じ入力でも、呼ぶたびに値が違う → noiseを含むblack-box 入力を少し変えると、値が大きく飛ぶ → 決定論的だが不連続なsimulation 評価の回数が反復の回数よりずっと多い → ソルバーが目的関数を呼ぶ点と回数 ツールが失敗する点や、ありえない点が渡る → 書いた制約と本当の制約 評価1回が重く、回数を予算として計画したい → 評価費と予算 この記事のずれと段差は、同じ入力なら同じ値が返る点で、noiseを含むblack-boxと違います。同じ点を何度評価しても、平均で消すことはできません。また、段差の大きさは二乗和の0.02%程度で、決定論的だが不連続なsimulationが扱う大きな飛びとも違います。差分で勾配を作るときと、二乗和の下の桁を比べるときにだけ、はっきり現れます。",
+      "title": "困りごとから関連する記事へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:小さな例・段差と傾きのずれを数値で見る",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "タンクの例・a を 10⁻¹² 動かすと二乗和が跳ぶ q = 0.000501 のまま、 a を 0.0003288929879 から 0.0003288929889 へ、 10 − 12 だけ動かします。RK45 の右辺の回数は50回から62回に増え、ツールが返す二乗和は 0.331977 から 0.331909 に下がります。差は − 0.000068 です。 式の二乗和は、この点で a について傾き − 10790 で変わります。 10 − 12 動かしたときの変化は、次の大きさしかありません。 − 10790 × 10 − 12 ≈ − 1 × 10 − 8 ツールが返した差 − 0.000068 は、その約6300倍です。この差は、式の変化ではなく、解き方の段差から来ています。 タンクの例・段差をまたぐ差分の傾き L-BFGS-B は、変数を 10 − 8 ずらした差分で勾配を作ります。同じ幅で、段差をまたぐ差分とまたがない差分を作ると、次の値になりました。 差分の取り方（幅 10 − 8 ） a についての傾き 段差をまたぐ − 17492 段差の手前でまたがない − 10754 式の傾き − 10790 段差をまたぐ差分は、式の傾きより約60%急です。差のほとんどは、段差の大きさを幅で割った量です。 − 6.79 × 10 − 5 10 − 8 ≈ − 6790 段差のない所では、差分は式の傾きの近くに出ます。ただし、それは式の傾きではなく、 F tool の傾きです。 タンクの例・答えの近くの傾きのずれ 答えの点 ( 0.000401 , 0.000501 ) で、 a をずらす幅 10 − 9 の中心差分で傾きを作ると、次の値になりました。 何の傾きか a についての傾き RK45、 10 − 3 のツール − 12.6 Radau、 10 − 3 のツール − 14.5 式（Radau、 10 − 10 ） − 14.2 答えの近くでは、RK45 の e は a が 10 − 6 増えるごとに約 1.6 × 10 − 6 増えます。 e の傾き約 + 1.6 が、式の傾き − 14.2 に足されて − 12.6 になります。段差がない所でも、差分の傾きは誤差の傾きの分だけ式とずれます。 このずれで、答えの位置はわずかに動きます。終了の条件を十分に厳しくして解き比べると、RK45（ 10 − 3 ）の答えは式の答えとずれていました。ずれは a で約 0.0000001 、 q で約 0.0000003 です。表示した3桁では、どちらも同じ値です。 タンクの例・評価の回数が計算機で変わる 同じ点を同じ設定で解いても、ツールの値の下の桁は計算機の部品によって変わります。初期点 ( 0.0001 , 0.0001 ) の二乗和は、RK45 では次のように14桁目から違いました。Radau の値も、同じ程度に違います。 計算の部品 RK45 の二乗和 SkylakeX 4.6618963990685724 Prescott 4.6618963990688789 L-BFGS-B は終わりに近づくと、このくらい小さな差しかない値どうしを比べて、次の点や止めるかどうかを決めます。SkylakeX の部品での RK45（ 10 − 3 ）の実行は108回でした。64回目から先の45回は、どれも答えから 1.2 × 10 − 7 以内の点で、その間に二乗和は 10 − 17 程度しか下がっていません。値の下の桁どうしを比べて次の点を決める場面では、部品による下の桁の違いで判断が変わりえます。この例の RK45 では、評価の回数が96回から126回までばらつきました。Radau の実行は、4通りの部品のどれでも54回目で止まり、答えの近くで同じような点を評価し続ける部分がありませんでした。",
+      "title": "小さな例・段差と傾きのずれを数値で見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "勾配を差分で作る手法の一つの反復は、 L-BFGS-B法 で確かめられます。評価の回数を予算として扱う方法は、 評価費と予算 へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.inner-solver-error:確かめ方と直し方",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.inner-solver-error",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.discontinuous-simulation",
+        "content:concept.evaluation-cost",
+        "content:concept.noisy-black-box",
+        "content:concept.solver-evaluation-points",
+        "content:concept.written-and-real-constraints",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "答えを、細かい許容誤差で測り直す : 報告された二乗和の代わりに、答えの点を許容誤差 10 − 10 程度で解き直した値を報告します。例では、どの設定の答えも 0.000497 でした。 答えの近くに段差がないか確かめる : 答えの点と、そこから差分の幅だけずらした点で、右辺の回数（ sol.nfev ）を比べます。例の答えの近くは、回数68回の範囲の中で、段差はありませんでした。差分の幅を 10 − 9 と 10 − 8 のように変えて傾きを作り、大きく違えば段差を疑います。 外側で比べる差より、内側の誤差を小さくする : 許容誤差を 10 − 8 に締めると、報告された二乗和は測り直した値と表示した桁で一致しました。答えの点の RK45 の傾きも − 14.2 になり、式と一致します。 回数を見積もるなら、使う計算機で数える : 評価の回数は、計算時間の見積もりの材料です。ほかの計算機での回数や、ほかの設定の回数から見積もらず、実際に使う計算機と設定で数えてください。",
+      "title": "確かめ方と直し方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.inverse-problem:30秒でつかむ",
       "dataset_version": "0.18.25",
       "document_id": "content:concept.inverse-problem",
@@ -25313,6 +25573,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25342,6 +25604,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25371,6 +25635,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25400,6 +25666,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25429,6 +25697,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25458,6 +25728,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25487,6 +25759,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25500,7 +25774,7 @@
         "S063",
         "S065"
       ],
-      "text": "ツールが計算の途中で失敗して、値を返さない点がある → 失敗・NaNを伴うシミュレーション 評価1回が高く、回数を予算として数えて計画したい → 評価費と予算 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 勾配を作れない、または差分の値が当てにならない → 微分を使わない最適化 この例の3つの手法は、どれもツールが拒む点を渡しました。BFGS はありうる値の外の点を、上下限を与えた2つの手法は境界の値や上下限の角を渡しています。 BFGS法 : 上下限を受け取らない手法です。ありうる値の外の点を渡さない保証はありません。 L-BFGS-B法 : 上下限を受け取り、反復の点を上下限の内側に保ちます。この例では、差分の点も内側でした。上下限の角も渡すので、上下限はツールが計算できる値の中に取ります。 Nelder–Mead単体法 : 勾配を使わないので、差分の点はありません。上下限を渡すと、外へ出た点は境界へ戻されます。そのため単体が境界の上につぶれ、答えでない点で終了することがあります。",
+      "text": "ツールが計算の途中で失敗して、値を返さない点がある → 失敗・NaNを伴うシミュレーション 評価1回が高く、回数を予算として数えて計画したい → 評価費と予算 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 勾配を作れない、または差分の値が当てにならない → 微分を使わない最適化 ツールが失敗する点と、本当にありえない点が食い違う → 書いた制約と本当の制約 内側の計算の解き方や許容誤差で、値や評価の回数が変わる → 内側の計算が作る目的関数のずれと段差 この例の3つの手法は、どれもツールが拒む点を渡しました。BFGS はありうる値の外の点を、上下限を与えた2つの手法は境界の値や上下限の角を渡しています。 BFGS法 : 上下限を受け取らない手法です。ありうる値の外の点を渡さない保証はありません。 L-BFGS-B法 : 上下限を受け取り、反復の点を上下限の内側に保ちます。この例では、差分の点も内側でした。上下限の角も渡すので、上下限はツールが計算できる値の中に取ります。 Nelder–Mead単体法 : 勾配を使わないので、差分の点はありません。上下限を渡すと、外へ出た点は境界へ戻されます。そのため単体が境界の上につぶれ、答えでない点で終了することがあります。",
       "title": "困りごとから関連する記事へ"
     },
     {
@@ -25516,6 +25790,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25545,6 +25821,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -25574,6 +25852,8 @@
         "content:concept.derivative-free",
         "content:concept.evaluation-cost",
         "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.written-and-real-constraints",
         "content:lbfgsb",
         "content:method.nelder-mead",
         "source:S002",
@@ -27819,6 +28099,266 @@
       ],
       "text": "「2台で7軒に届けたい」という課題だけでは、まだこの型とは決まりません。次の4つを順に確かめます。 何を決めるか : 各車が回る顧客と順番です。顧客の分け方だけ、または1本の順番だけを決める問題なら、別の型です。 どの量を最小にするか : 総移動時間（または距離）です。車の台数を減らしたい、遅れを最小にしたい、というときは、目的が変わります。 何を必ず守るか : 各顧客をちょうど1回訪れる、積載が容量以下、depotを出て戻る、の3つです。 時間の条件があるか : 顧客ごとに、着いてよい時刻の範囲があるなら、窓の式を足します。窓を破ると使えない（守る条件）なら、費用への罰則にせず、制約として入れます。 depotを出て戻る経路を、容量の下で選び、各顧客を1回ずつ訪れて、総移動時間を最小にするとき、この記事の型になります。",
       "title": "課題から定式化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:30秒でつかむ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ソルバーが目的関数を呼ぶ点と回数 と同じ、タンクの水位の例を使います。ツールは、流出口の面積 a （m²）と流入量 q （m³/s）を受け取って水位の式を解き、31回の記録とのずれの二乗和を返します。30分のうちにタンクが空になると、ツールはエラーを出します。 計算が途中で止まらないように、エラーのときは大きな値を返すことにしました。初期点 a = q = 0.0001 から minimize(f, x0) の既定（BFGS）で解きます。エラーのときに返す値だけを変えて、4回解き直しました。 エラーのときに返す値 止まった点の a 止まった点の q 二乗和 10 0.000401 0.000500 0.000503 100 − 0.0000112 − 0.000588 0.923 1000 0.000401 0.000501 0.000503 1000000 0.000401 0.000501 0.000503 100のときだけ、止まった点は a も q も負でした。面積が負の流出口も、水を汲み出す流入もありえません。それでも、ツールはこの点でエラーを出さず、二乗和0.923を返しています。4回とも結果の success は False で、記録に合う点で止まった回も含めて、BFGS は終了の条件を満たせていません。 決めるもの : 流出口の面積 a と流入量 q 良くしたいもの : 計算した水位と記録のずれの二乗和 守ること : a ≥ 0 、 q ≥ 0 。ただし、例のツールはこの条件を知らず、タンクが空になったときだけエラーを出します ツールのエラーは、どの点を拒み、どの点を通していたのでしょうか。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:overview",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "ツールがエラーを出す範囲と、本当にありうる値の範囲は同じではありません。ツールは、ありえない値でも黙って計算し、ありうる値で失敗することもあります。失敗した点に大きな値を返すと、その値の選び方で答えが変わります。ありうる値は自分で制約として書き、その中ではツールが必ず値を返すように直します。",
+      "title": "書いた制約と本当の制約"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:python",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "次のコードは、失敗した点に返す値を変えて解き、そのあと空のタンクを状態として扱うツールで解き直します。 # → の行は、SciPy 1.18.1 で実行したときの出力です。タンクが空になる点では、 sqrt の警告（ RuntimeWarning ）も出ます。 python import numpy as np from scipy.integrate import solve_ivp from scipy.optimize import minimize G , AREA , H0 = 9.81 , 1.0 , 1.0 # 重力加速度、タンクの断面積 1 m²、最初の水位 1 m t = np . arange ( 0 , 1801 , 60.0 ) # 30分間、1分おきに31回測る def simulate ( a , q , rtol = 1e-3 , empty = False ): # empty=True なら、水位が0のタンクからは水が出ない（空を状態として扱う） def rhs ( _ , h ): level = max ( h [ 0 ], 0.0 ) if empty else h [ 0 ] return [( q - a * np . sqrt ( 2 * G * level )) / AREA ] return solve_ivp ( rhs , ( 0 , t [ - 1 ]), [ H0 ], t_eval = t , rtol = rtol , method = \"Radau\" ) # 教材用の記録：a=0.0004、q=0.0005 の水位に、測定のばらつきを足したもの rng = np . random . default_rng ( 0 ) observed = simulate ( 4e-4 , 5e-4 , rtol = 1e-10 ) . y [ 0 ] + rng . normal ( 0 , 0.005 , t . size ) def tool ( x ): sol = simulate ( * x ) if sol . status != 0 or not np . all ( np . isfinite ( sol . y )): raise ValueError ( \"タンクが空になり、水位を計算できない\" ) return float ( np . sum (( sol . y [ 0 ] - observed ) ** 2 )) def penalized ( big ): # ツールが失敗した点では、二乗和の代わりに big を返す def f ( x ): try : return tool ( x ) except ValueError : return big return f x0 = [ 1e-4 , 1e-4 ] # 1. 失敗した点に返す値だけを変えて、minimize の既定（BFGS）で解く for big in [ 10 , 100 , 1000 , 1e6 ]: res = minimize ( penalized ( big ), x0 ) a , q = res . x print ( f \"失敗を { big : g } に: a= { a : .3g } , q= { q : .3g } , 二乗和= { res . fun : .3g } , success= { res . success } \" ) # → 失敗を 10 に: a=0.000401, q=0.0005, 二乗和=0.000503, success=False # → 失敗を 100 に: a=-1.12e-05, q=-0.000588, 二乗和=0.923, success=False # → 失敗を 1000 に: a=0.000401, q=0.000501, 二乗和=0.000503, success=False # → 失敗を 1e+06 に: a=0.000401, q=0.000501, 二乗和=0.000503, success=False # 2. 100 のときの答えで、水位の式を解き直す a , q = minimize ( penalized ( 100 ), x0 ) . x level = simulate ( a , q ) . y [ 0 ] print ( f \"30分後の水位 { level [ - 1 ] * 1000 : .2f } mm\" ) # → 30分後の水位 0.85 mm # 3. 空のタンクを状態として扱うツールで、a と q の下限を0にして解く def tool_empty ( x ): sol = simulate ( * x , empty = True ) return float ( np . sum (( sol . y [ 0 ] - observed ) ** 2 )) print ( f \"(0.01, 0) の二乗和 { tool_empty ([ 0.01 , 0.0 ]) : .3g } \" ) # → (0.01, 0) の二乗和 5.44 box = [( 0 , 0.01 ), ( 0 , 0.01 )] res = minimize ( tool_empty , x0 , method = \"L-BFGS-B\" , bounds = box ) a , q = res . x print ( f \"反復 { res . nit } 回, 評価 { res . nfev } 回, a= { a : .3g } , q= { q : .3g } , 二乗和= { res . fun : .3g } \" ) # → 反復 9 回, 評価 60 回, a=0.000401, q=0.000501, 二乗和=0.000503 1の出力の q = 0.0005 は、 0.0005004 を3桁で表示したものです。どの行も success=False で、 res.message は4回とも、精度が足りずに終了の条件を確かめられなかったことを表す Desired error not necessarily achieved due to precision loss. でした。2の出力の0.85 mmは、100を返したときに止まった点が、ありえない点でもツールに計算されたことを示します。3の出力の5.44は、元のツールが失敗した角でも、直したツールが値を返すことを示します。 tool_empty には try も大きな値もありません。上下限 0 ≤ a , q ≤ 0.01 の中で、元のツールが失敗した ( 0.01 , 0.000001 ) を含む49点の格子を試すと、どの点でも二乗和を返しました。この例では、上下限を守る L-BFGS-B と組み合わせれば、失敗の扱いを考える必要がなくなります。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:つまずきやすい点",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "失敗した点に大きな値を返して、そのまま解く : 返す値が10と1000なら記録に合う答えに着き、100なら a も q も負の点で止まりました。どの実行も success は False です。返す値はツールにも記録にもない数なのに、それが答えを決めています。失敗が起きない範囲を制約に書き、ありうる点ではツールが値を返すように直してください。 ツールが値を返したら、ありうる点だと考える : 100を返したときに止まった点は、 a も q も負です。それでもツールは二乗和0.923を返しました。 fmin の13回目と14回目も、負の q をエラーなしで計算しています。ツールが拒むのは、計算が続けられない点だけです。ありうる値の条件は、自分で書いてソルバーに渡してください。 ツールが失敗する点は、ありえない点だと考える : q = 0 は弁を閉じた状態で、ありうる値です。それでも a > 0.000251 ならツールは失敗します。失敗を避けるために下限を q ≥ 0.00001 にすると、流入のない場合を答えの候補から外すことになります。弁を閉じていた日の記録なら、答えの q = 0 が下限の外に出ます。",
+      "title": "つまずきやすい点"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:出典と再現条件",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "BFGS と直線探索は、Nocedal・Wright の教科書『Numerical Optimization』（S056）に基づきます。L-BFGS-B が反復の点を上下限の中に保つことは Byrd らの論文（S065）に基づきます。差分の点も上下限の中に取ることは、SciPy 1.18.1 の実装の性質です。 minimize の bounds と success は、SciPy の公式文書（S002）に基づきます。 例の数値は、SciPy 1.18.1 と NumPy 2.5.3 で上のコードを実行して得た値です。返す値が10から1000000までの4通りの止まった点は、OpenBLAS の部品を上の5通りに切り替えても変わりませんでした。評価の回数は部品によって変わるので、表には載せていません。返す値を1e10にしたときの結果は、部品によって変わります。図の境目の曲線は、水位の式から空になるまでの時間を式で計算して描きました。タンクの数値は教材用で、実際の設備の値は示しません。",
+      "title": "出典と再現条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:困りごとから関連する記事へ",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "初期点がありうる値なのに、範囲の外や境界の点がツールに渡る → ソルバーが目的関数を呼ぶ点と回数 ツールが値を返さない点を、評価の台帳にどう書くか → 失敗・NaNを伴うシミュレーション 下限と上限だけを守って、勾配で最小化したい → 上下限制約付き滑らか 守る条件が変数の組の式で、上下限では書けない → 一般滑らか制約付きNLP ツールの中の計算の誤差で、値が細かく跳ぶ → 内側の計算が作る目的関数のずれと段差 失敗・NaNを伴うシミュレーションの記事は、失敗を避けられない高価な計算を扱います。失敗をどう記録し、次の点をどう選ぶかが主題です。この記事は、失敗の範囲と本当の要求を見比べ、ありうる点で失敗が起きないようにツールと制約を直す場合を扱います。例のタンクでは、失敗はすべて「空のタンク」という状態で書けたので、記録の工夫なしで解けました。",
+      "title": "困りごとから関連する記事へ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:小さな例・失敗に返した値が答えを動かす",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "タンクの例・100を返したときに止まった点は境目のすぐ外 100を返したときに止まった点 ( a , q ) = ( − 0.0000112 , − 0.000588 ) は、図の◆です。毎秒0.588 Lを汲み出し、流出口からは水位に応じて水が入る、という意味の点です。水位の式を解き直すと、30分後の水位は0.85 mmで、空になるのは約1801.5秒後です。30分を、1.5秒の差で持ちこたえています。 この点で、二乗和の勾配は次の値です。 ∂ F ∂ a = − 24600 , ∂ F ∂ q = 6340 勾配の逆向きに進めば、二乗和はまだ下がります。ところが、その向きに長さ 10 − 6 だけ進むと、タンクは約1791秒で空になります。そこでツールは失敗します。計算できる範囲だけを見ると、二乗和は境目に向かって下がり続けます。そして境目の向こうでは、100が返ります。目的関数は境目で0.92から100へ跳ぶので、BFGS はその手前から進めなくなり、 success が False のまま止まりました。 タンクの例・返す値の大小と止まった点 10と1000では記録に合う答えに着き、その間の100では着きませんでした。返す値を大きくするほど安全、小さくするほど安全、という並びにはなっていません。どの値で境目の手前に止まるかは、途中の点が境目の近くをどう通ったかで決まり、前もっては分かりません。 返す値を1e10にすると、止まる点は計算機によって変わりました。計算機の違いは、NumPy が使う行列計算の部品（OpenBLAS）を切り替えて試しました。部品は SkylakeX・Haswell・Sandybridge・Prescott・Nehalem の5通りです。Haswell 以外の4通りで q が負の点で止まり、その点も実行ごとに違いました。",
+      "title": "小さな例・失敗に返した値が答えを動かす"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:書いた制約-ツールのエラー-本当の要求",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "例には、点を拒む仕組みが三つあります。 仕組み 誰が知っているか 例では 本当の要求 書かなければ自分だけ a ≥ 0 、 q ≥ 0 ツールのエラー ツールだけ。呼んでみるまで分からない 30分のうちにタンクが空になる ( a , q ) 書いた制約 ソルバー。点を選ぶときに使う bounds に書いた下限と上限 次の図は、 a と q の平面に、本当の要求とツールのエラーを重ねたものです。 初期点 a=q=0.0001、SciPy 1.18.1 で渡された点と、水位の式から計算した境目。教材用のタンクで、実際の設備の値は示さない 「ありうる値」と「ツールが失敗」の二つの範囲は、ぴったり補い合ってはいません。どちらにも入らない「計算できるがありえない」範囲があり、「ありうる値」の端にも失敗する部分があります。 q > 0 なら、水位の式の上ではタンクは空になりません。水位は、最初の1 mと、流入と流出がつり合う高さ ( q / a ) 2 / ( 2 g ) の低い方より下がらないからです。ただし、ツールは式を数値で解くので、つり合う高さがごく低い点では失敗します。たとえば ( a , q ) = ( 0.01 , 0.000001 ) では、つり合う高さは 5 × 10 − 10 m で、ツールはエラーを出しました。図の赤の範囲は、式から計算したもので、この数値の失敗は描いていません。 q < 0 でも、30分のうちに空にならなければ、ツールは値を返します。白抜きの丸は、 fmin の13回目 ( 0.000192 , − 0.0000144 ) と14回目 ( 0.000220 , − 0.0000356 ) です。どちらもエラーにならずに計算されました。 q = 0 は、流入の弁を閉じた状態で、ありうる値です。それでも a が 0.000251 より大きいと、タンクは30分のうちに空になり、ツールは失敗します。図の q = 0 の線のうち、赤の太線の部分です。 q = 0 では、満水の1 mから空になるまでの時間 T （秒）が次の式で決まります。 T = 2 a 2 g この式は「流出口が広いほど、早く空になる」と読みます。 T = 1800 になる a が 0.000251 です。赤の範囲の境目の曲線は、 q が負の側で、30分ちょうどで空になる ( a , q ) を結んだものです。",
+      "title": "書いた制約、ツールのエラー、本当の要求"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:本当の制約を書く",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "答えがありえない点に着いたり、ありうる点でツールが失敗したりしたら、次の順に直します。 本当の要求を、上下限として書く : 例では a ≥ 0 、 q ≥ 0 です。上限は、十分に広い流出口と流入として0.01を置きます。上下限を受け取る L-BFGS-B は、評価する点をこの範囲の中に保ちます。 ありうる点では、ツールが値を返すように直す : 弁を閉じたタンクは空になったら空のままで、流出口から水は出ません。そこで、水位の式の流出の項では、水位を max ( h , 0 ) に置き換えます。空のタンクを「エラー」ではなく「水位0の状態」として扱うわけです。こうすると a ≥ 0 かつ q ≥ 0 のどの点でも、ツールは二乗和を返します。 同じ上下限で解き直す : 前の記事 では、上下限 0 ≤ a , q ≤ 0.01 の L-BFGS-B が4回目に角 ( 0.01 , 0 ) を渡しました。そこでツールが失敗しています。直したツールでは、角の二乗和は5.44です。タンクは約45秒で空になり、そのあとは水位0のままだからです。L-BFGS-B は反復9回・評価60回で ( 0.000401 , 0.000501 ) に着き、 success は True でした。 状態で表せない失敗は、値に置き換えずに記録する : 内側の計算が収束しない場合や時間切れのように、物理の状態では書けない失敗もあります。その記録の仕方は、 失敗・NaNを伴うシミュレーション で扱います。 ソルバーが目的関数を呼ぶ点と回数 で使った上下限 0.00001 ≤ a , q ≤ 0.001 も、ツールの失敗を防ぎます。 q ≥ 0.00001 なら、 a ≤ 0.001 でもつり合う高さは 5 × 10 − 6 m あり、ツールは値を返しました。ただし、この上下限は本当の要求より狭く、流入のない場合を外しています。",
+      "title": "本当の制約を書く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.written-and-real-constraints:次に読む",
+      "dataset_version": "0.18.25",
+      "document_id": "content:concept.written-and-real-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.bound-constrained-smooth",
+        "content:concept.failed-simulation",
+        "content:concept.inner-solver-error",
+        "content:concept.solver-evaluation-points",
+        "content:lbfgsb",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "上下限を受け取る手法の一つの反復は、 L-BFGS-B法 で確かめられます。上下限を受け取らない手法の直線探索は、 BFGS法 にあります。ツールの中で微分方程式を解くことが、目的関数の値と傾きをどう変えるかは、 内側の計算が作る目的関数のずれと段差 へ進みます。",
+      "title": "次に読む"
     },
     {
       "attribution": "Optimization Compass contributors",
