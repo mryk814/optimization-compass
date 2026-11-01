@@ -36,7 +36,7 @@
 | `concept.high-dimensional-black-box` | 166 | 11311 | 16 | 5 | 0 | pass |
 | `concept.high-dimensional-smooth-unconstrained` | 133 | 15259 | 16 | 14 | 0 | pass |
 | `concept.hyperparameter-optimization` | 151 | 20380 | 15 | 11 | 0 | pass |
-| `concept.inner-solver-error` | 164 | 9461 | 13 | 2 | 0 | pass |
+| `concept.inner-solver-error` | 165 | 9716 | 13 | 2 | 0 | pass |
 | `concept.inverse-problem` | 142 | 13632 | 17 | 8 | 0 | pass |
 | `concept.knapsack-set-cover` | 100 | 9857 | 14 | 4 | 0 | pass |
 | `concept.l1-sparse-regularization` | 165 | 17338 | 18 | 13 | 0 | pass |
@@ -87,7 +87,7 @@
 | `concept.uncertainty-models` | 57 | 3680 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 51 | 6429 | 9 | 3 | 0 | pass |
 | `concept.vehicle-routing` | 172 | 16559 | 16 | 9 | 0 | pass |
-| `concept.written-and-real-constraints` | 146 | 8461 | 11 | 3 | 0 | pass |
+| `concept.written-and-real-constraints` | 146 | 8962 | 11 | 3 | 0 | pass |
 | `geometry-update-failure-modes` | 48 | 1877 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2121 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 80 | 2156 | 7 | 3 | 0 | pass |

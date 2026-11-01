@@ -6289,7 +6289,7 @@ INNER_E = (
 )
 INNER_RUNS = ((50, 19), (62, 24), (68, 64), (74, 30), (80, 15), (86, 29))
 # Where the count changes, found by bisection: (a, sum-of-squares jump). Two of the five
-# changes move the result; the other three add only rejected steps.
+# changes make the result jump; at the other three it only bends.
 INNER_JUMPS = ((0.0003288929884, -6.79e-5), (0.0004466880265, -1.23e-5))
 
 

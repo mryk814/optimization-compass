@@ -1243,6 +1243,17 @@ def test_written_constraint_runs_match_a_scipy_rerun() -> None:
     with pytest.raises(ValueError), warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         tool(step)
+    # With q > 0 the equations never run dry, but the tool still fails where the balance level
+    # (q/a)^2/(2g) is tiny; the empty-state tool returns a value on a 7 x 7 grid of the box.
+    with pytest.raises(ValueError), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        tool([0.01, 1e-6])
+    assert round((1e-6 / 0.01) ** 2 / (2 * 9.81), 11) == 5.1e-10
+    code = _article_code("written-and-real-constraints")
+    snippet = "def tool_empty" + code.split("def tool_empty", 1)[1].split("\nprint(", 1)[0]
+    exec(compile(snippet, "written-and-real-constraints.md", "exec"), space)
+    values = [0.0, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
+    assert all(np.isfinite(space["tool_empty"]([a, q])) for a in values for q in values)
 
 
 def test_written_constraint_article_python_prints_its_comments() -> None:
@@ -1289,7 +1300,7 @@ def test_inner_solver_steps_match_a_scipy_rerun() -> None:
         assert simulate(low, INNER_Q, "RK45").nfev < simulate(high, INNER_Q, "RK45").nfev
         change = tool([high, INNER_Q], "RK45") - tool([low, INNER_Q], "RK45")
         assert round(change, 7) == jump
-    # Three of the five count changes add evaluations without moving the result.
+    # At the other three count changes the result bends but does not jump.
     for a in (0.0003524915843, 0.0004169641882, 0.0004618028082):
         low, high = a - 5e-13, a + 5e-13
         assert simulate(low, INNER_Q, "RK45").nfev != simulate(high, INNER_Q, "RK45").nfev
