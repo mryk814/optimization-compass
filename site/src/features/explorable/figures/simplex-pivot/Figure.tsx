@@ -12,6 +12,7 @@ import {
 } from "../../math/simplex";
 import { frac as mfrac, LiveMath, mi, mn, mo, paren, row, signed, sub, tint } from "../../mathml";
 import { makeScale, polylinePath, useStageViewport, type Scale } from "../../svg";
+import "./style.css";
 
 const ID = "simplex-pivot";
 const BOUNDS: Bounds = { xMin: -0.9, xMax: 9.8, yMin: -1.35, yMax: 10.4 };

@@ -10,6 +10,7 @@ import { numberSetting, stringSetting, type BeatSettings } from "../../scene";
 import { makeScale, polylinePath, segmentsPath, useStageViewport, type Scale, type Viewport } from "../../svg";
 import { useSceneTour } from "../../useSceneTour";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const ID = "cmaes-shape-learning";
 const BOUNDS: Bounds = { xMin: -1.6, xMax: 4.4, yMin: -2, yMax: 3 };

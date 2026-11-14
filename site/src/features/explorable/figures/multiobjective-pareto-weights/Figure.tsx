@@ -18,6 +18,7 @@ import { EXPLORABLE_META } from "../../figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "../../scene";
 import { clamp, makeScale, polylinePath, useDomainDrag, useStageViewport, type Scale, type Viewport } from "../../svg";
 import { useSceneTour } from "../../useSceneTour";
+import "./style.css";
 
 const ID = "multiobjective-pareto-weights";
 const DESIGN_BOUNDS: Bounds = { xMin: -0.12, xMax: 1.3, yMin: -0.15, yMax: 1.12 };

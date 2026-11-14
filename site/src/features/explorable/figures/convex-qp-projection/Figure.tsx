@@ -9,6 +9,7 @@ import type { Vec2 } from "../../math/lp2d";import {
 } from "./math";
 import { makeScale, polylinePath, useStageViewport } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const BOUNDS: Bounds = { xMin: -1.5, xMax: 5.6, yMin: -1.5, yMax: 5.6 };
 const ASPECT = 1;

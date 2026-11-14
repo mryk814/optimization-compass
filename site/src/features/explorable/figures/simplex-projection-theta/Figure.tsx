@@ -11,6 +11,7 @@ import { smooth } from "../../math/rootFinding";
 import { useStageViewport } from "../../svg";
 import { useManualOrPlayback } from "../../useManualOrPlayback";
 import { useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const NAMES = ["調査", "制作", "確認"] as const;
 const SEARCH_STEPS = 14;

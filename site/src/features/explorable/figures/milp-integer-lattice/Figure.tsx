@@ -9,6 +9,7 @@ import {
   LATTICE_MAX, MILP_ARTICLE_LIMITS, MILP_LIMIT_RANGE, MILP_PROFIT, solveMilp, type MilpSolution,
 } from "./math";
 import { makeScale, polylinePath, useStageViewport } from "../../svg";
+import "./style.css";
 
 const BOUNDS: Bounds = { xMin: -0.7, xMax: LATTICE_MAX + 0.4, yMin: -0.7, yMax: LATTICE_MAX - 0.1 };
 const ASPECT = (BOUNDS.yMax - BOUNDS.yMin) / (BOUNDS.xMax - BOUNDS.xMin);

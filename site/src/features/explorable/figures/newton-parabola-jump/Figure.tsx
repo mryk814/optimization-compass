@@ -21,6 +21,7 @@ import { numberSetting, stringSetting, type BeatSettings } from "../../scene";
 import { clamp, makeScale, polylinePath, useDomainDrag, useStageViewport, type Scale, type Viewport } from "../../svg";
 import { useSceneTour } from "../../useSceneTour";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const ID = "newton-parabola-jump";
 const CURVE_BOUNDS: Bounds = { xMin: -2.4, xMax: 2.4, yMin: -0.8, yMax: 3.2 };

@@ -12,6 +12,7 @@ import {
 import { frac, fracText, less, value, VARIABLE_INFO, type Fraction } from "../../math/simplex";
 import { frac as mfrac, LiveMath, mn, mo, row, tint } from "../../mathml";
 import { makeScale, polylinePath, useStageViewport, type Scale } from "../../svg";
+import "./style.css";
 
 const ID = "simplex-shadow-price";
 

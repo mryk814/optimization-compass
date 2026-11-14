@@ -9,6 +9,7 @@ import {
 import { useStageViewport } from "../../svg";
 import { useManualOrPlayback } from "../../useManualOrPlayback";
 import { useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const R_MIN = -3, R_MAX = 3;
 const BOUNDS = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };

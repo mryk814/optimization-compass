@@ -1,3 +1,11 @@
+.ex-band { fill: var(--ex-teal); fill-opacity: 0.14; stroke: none; }
+.ex-mean { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.ex-truth { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 2 4; }
+.ex-incumbent { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2.5; stroke-dasharray: 3 2; }
+.ex-next-line { stroke: var(--ex-orange-ink); stroke-width: 1.8; stroke-dasharray: 5 4; }
+.ex-acq { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.ex-acq-fill { fill: var(--ex-orange); fill-opacity: 0.12; }
+
 .bo-drilling { display: grid; gap: 1rem; min-width: 0; }
 .bo-drilling p { margin: 0; }
 .bo-actions { display: flex; flex-wrap: wrap; gap: .6rem; }

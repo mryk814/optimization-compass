@@ -19,6 +19,7 @@ import {
 import { LiveMath, mi, mn, mo, paren, row, signed } from "../../mathml";
 import { makeScale, polylinePath, useDomainDrag, useStageViewport } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const BOUNDS: Bounds = { xMin: -1.6, xMax: 9.6, yMin: -1.1, yMax: 6.4 };
 const ASPECT = (BOUNDS.yMax - BOUNDS.yMin) / (BOUNDS.xMax - BOUNDS.xMin);

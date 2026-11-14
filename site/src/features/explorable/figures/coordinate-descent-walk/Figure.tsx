@@ -12,6 +12,7 @@ import {
 import { frac, LiveMath, mi, mn, mo, row, signed, sub } from "../../mathml";
 import { makeScale, polylinePath, useStageViewport, type Viewport } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 type Preset = "aligned" | "article" | "slanted" | "custom";
 type DetailView = "slice" | "loss";

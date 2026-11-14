@@ -1,0 +1,21 @@
+/* PDE heat source: teal = temperature misfit, orange = heat-source penalty. */
+.pde-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.pde-gap { stroke: var(--ex-teal); stroke-width: 4; }
+.pde-wall { fill: var(--ex-ink); }
+.pde-heater { stroke: var(--ex-orange-ink); stroke-width: 4; }
+.pde-heater-head { fill: var(--ex-orange-ink); }
+.pde-bar-misfit { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.pde-bar-penalty { fill: var(--ex-orange); stroke: var(--ex-orange-ink); stroke-width: 1.5; }
+.pde-best { stroke: var(--ex-ink); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.pde-curve-misfit { fill: none; stroke: var(--ex-teal); stroke-width: 2.5; }
+.pde-curve-penalty { fill: none; stroke: var(--ex-orange); stroke-width: 2.5; }
+.pde-label-misfit { fill: var(--ex-teal-ink); font-weight: 700; }
+.pde-label-penalty { fill: var(--ex-orange-ink); font-weight: 700; }
+.pde-marker { transition: transform 0.15s ease-out; }
+.pde-link { stroke: var(--ex-ink); stroke-width: 2.5; stroke-dasharray: 3 4; }
+.pde-need { stroke: var(--ex-ink); stroke-width: 3; stroke-dasharray: 5 4; }
+.pde-need-head { fill: var(--ex-ink); }
+.pde-curve-free { stroke-dasharray: 7 5; }
+.pde-bar-residual { fill: var(--ex-red); stroke: var(--ex-red-ink); stroke-width: 1.5; transition: width 0.18s ease-out; }
+.pde-residual-zero { stroke: var(--ex-ink); stroke-width: 2; }
+.pde-marker-free .ex-head { stroke-dasharray: 4 3; }

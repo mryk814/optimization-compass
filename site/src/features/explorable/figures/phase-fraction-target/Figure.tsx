@@ -9,6 +9,7 @@ import {
   TARGET, X_ALPHA, X_BETA, type Candidate,
 } from "./math";
 import { useStageViewport } from "../../svg";
+import "./style.css";
 
 const ID = "phase-fraction-target";
 const BOUNDS = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };

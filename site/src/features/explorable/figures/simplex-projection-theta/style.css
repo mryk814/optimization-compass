@@ -1,0 +1,27 @@
+/* Simplex projection: orange = what is subtracted, teal = what remains, grey = clipped to zero. */
+.sp-zero { stroke: var(--ex-ink); stroke-width: 1.5; }
+.sp-wish { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-taken { fill: var(--ex-orange); fill-opacity: 0.28; stroke: none; }
+.sp-kept { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-kept-zero { fill: none; stroke: none; }
+.sp-negative { fill: var(--ex-ink-soft); fill-opacity: 0.22; stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.sp-ghost line { stroke: var(--ex-ink); stroke-width: 3; }
+.sp-ghost text { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.sp-target { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.sp-meter-track { fill: var(--ex-line); }
+.sp-meter-fill { fill: var(--ex-orange); }
+.sp-meter-ok { fill: var(--ex-teal); }
+.sp-bracket { fill: var(--ex-orange); fill-opacity: 0.16; }
+.sp-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.sp-marker-ok { fill: var(--ex-teal); }
+/* Triangle panel: pale green = the simplex, white ring = y's shadow, green square = projection, black diamond = divided. */
+.sp-tri { fill: var(--ex-teal-wash); stroke: var(--ex-teal-ink); stroke-width: 1.5; }
+.sp-tri-floor { stroke: var(--ex-teal-ink); stroke-width: 4; stroke-linecap: round; }
+.sp-trail { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 2 5; }
+.sp-perp { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.sp-right-angle { fill: none; stroke: var(--ex-orange-ink); stroke-width: 2; }
+.sp-divide-line { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 6 4; }
+.sp-shadow-y { fill: var(--ex-ground); stroke: var(--ex-ink); stroke-width: 3; }
+.sp-proj { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 2; }
+.sp-divided { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.sp-map-dot { fill: var(--ex-ink); }

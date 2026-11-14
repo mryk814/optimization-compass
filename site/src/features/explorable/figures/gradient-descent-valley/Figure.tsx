@@ -31,6 +31,7 @@ import {
 } from "../../svg";
 import { useSceneTour } from "../../useSceneTour";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const MAX_STEPS = 100;
 const CENTER = { cx: 1, cy: -2 } as const;

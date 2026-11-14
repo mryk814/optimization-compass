@@ -23,6 +23,7 @@ import { makeScale, polylinePath, segmentsPath, useStageViewport, type Scale, ty
 import { Surface3D } from "../../Surface3D";
 import { useSceneTour } from "../../useSceneTour";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const ID = "interior-point-barrier-path";
 const PLANE: Bounds = { xMin: -1.25, xMax: 2.35, yMin: -1.25, yMax: 1.55 };

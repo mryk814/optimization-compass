@@ -1,0 +1,28 @@
+.ex-chord { fill: none; stroke: var(--ex-orange); stroke-width: 3; }
+.ex-chord-violation { fill: none; stroke: var(--ex-red); stroke-width: 6; stroke-linecap: round; }
+.ex-gap { stroke: var(--ex-ink); stroke-width: 2; stroke-dasharray: 4 3; }
+.ex-gap-bad { stroke: var(--ex-red); }
+.ex-on-graph { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; }
+.ex-on-chord { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
+.ex-on-chord-bad { fill: var(--ex-red); }
+.cvx-actions { flex-wrap: wrap; gap: 0.5rem; }
+.cvx-ghost { fill: none; stroke: var(--ex-ink); stroke-opacity: 0.22; stroke-width: 2; stroke-dasharray: 3 5; }
+.cvx-trace-line { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.cvx-trace-bad { stroke: var(--ex-red); stroke-width: 4.5; }
+.cvx-warning { fill: var(--ex-red-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.cvx-pulse { fill: var(--ex-red); fill-opacity: 0.25; stroke: var(--ex-red); stroke-width: 2; animation: cvx-pulse 0.7s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+.cvx-flash .ex-svg { outline: 3px solid var(--ex-red); outline-offset: -3px; animation: cvx-flash 0.7s ease-in-out infinite; }
+@keyframes cvx-pulse { from { transform: scale(0.8); opacity: 1; } to { transform: scale(2); opacity: 0; } }
+@keyframes cvx-flash { 50% { outline-color: transparent; } }
+.ex-descent-trail { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
+.ex-ball { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2.5; }
+.ex-minimum-mark { fill: none; stroke: var(--ex-teal-ink); stroke-width: 3; }
+.cvx-feasible rect { fill: var(--ex-teal); fill-opacity: 0.18; }
+.cvx-feasible line { stroke: var(--ex-teal-ink); stroke-width: 7; stroke-linecap: butt; }
+.cvx-feasible text { fill: var(--ex-teal-ink); font-size: var(--type-chart); font-weight: 700; }
+.cvx-mix { fill: var(--ex-teal); stroke: var(--ex-ink); stroke-width: 2; }
+.cvx-mix-out { fill: var(--ex-ground); stroke: var(--ex-red); stroke-width: 3; }
+.cvx-greyed { opacity: 0.4; filter: grayscale(1); }
+.cvx-gap-fill { fill: var(--ex-teal); fill-opacity: 0.18; stroke: none; }
+.cvx-gap-fill-bad { fill: var(--ex-red); fill-opacity: 0.3; }
+.cvx-to-band { stroke: var(--ex-orange-ink); stroke-width: 3; stroke-dasharray: 5 4; }

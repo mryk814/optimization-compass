@@ -1,0 +1,23 @@
+/* SDP slice: teal = feasible, orange = on the boundary, red = infeasible (the only red). */
+.psd-region { fill: var(--ex-teal); fill-opacity: 0.12; stroke: none; }
+.psd-edge { fill: none; stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-fixed { stroke: var(--ex-ink-soft); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.psd-feasible-segment { stroke: var(--ex-teal); stroke-width: 6; stroke-linecap: round; opacity: 0.7; }
+.psd-point { transition: transform 0.18s ease-out; }
+.psd-dot { stroke: var(--ex-ink); stroke-width: 2.5; }
+.psd-dot-inside { fill: var(--ex-teal); }
+.psd-dot-boundary { fill: var(--ex-orange); }
+.psd-dot-outside { fill: var(--ex-red); }
+.psd-forbidden { fill: var(--ex-red); fill-opacity: 0.08; }
+.psd-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1.5; transition: y 0.18s ease-out, height 0.18s ease-out; }
+.psd-bar-zero { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+.psd-bar-negative { fill: var(--ex-red); stroke: var(--ex-red-ink); }
+/* SDP: the objective ruler (-r falls to the right), its contour line, and the eigenvalue sum / product rows. */
+.psd-objective-arrow { stroke: var(--ex-ink); stroke-width: 3; }
+.psd-objective-head { fill: var(--ex-ink); }
+.psd-contour { stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 3 4; }
+.psd-contour-boundary { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.psd-contour-outside { stroke: var(--ex-red-ink); }
+.psd-sum-ok { fill: var(--ex-ink); }
+.psd-sum-zero { fill: var(--ex-orange-ink); }
+.psd-sum-bad { fill: var(--ex-red-ink); }

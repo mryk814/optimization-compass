@@ -6,6 +6,7 @@ import { fmt } from "../../format";
 import { LiveMath, mi, mn, mo, paren, row } from "../../mathml";
 import { articleClosedForm, compareFits, type ConstantFit } from "./math";
 import { useStageViewport } from "../../svg";
+import "./style.css";
 
 const ID = "robust-loss-pull";
 const M_RANGE: readonly [number, number] = [0, 100];

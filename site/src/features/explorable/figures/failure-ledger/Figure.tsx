@@ -25,6 +25,7 @@ import {
 } from "./math";
 import { markerBox, placeLabel, placeLabels, type Box, type PlacedLabel } from "../../math/labelLayout";
 import { makeScale, useStageViewport, type Scale } from "../../svg";
+import "./style.css";
 
 const BOUNDS = { xMin: -0.2, xMax: 1.25, yMin: -0.2, yMax: 1.25 };
 const ASPECT = 1;

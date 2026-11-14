@@ -30,6 +30,7 @@ import { clamp, makeScale, polylinePath, segmentsPath, useDomainDrag, useStageVi
 import { Surface3D } from "../../Surface3D";
 import { useSceneTour } from "../../useSceneTour";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const ID = "nonlinear-least-squares-landscape";
 const DATA_BOUNDS: Bounds = { xMin: -0.2, xMax: 3.75, yMin: -3, yMax: 3 };

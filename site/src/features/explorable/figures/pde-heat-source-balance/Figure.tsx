@@ -10,6 +10,7 @@ import {
 import { useStageViewport } from "../../svg";
 import { useManualOrPlayback } from "../../useManualOrPlayback";
 import { useTimeline } from "../../useTimeline";
+import "./style.css";
 
 type Mode = "design" | "free";
 const BOUNDS = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };

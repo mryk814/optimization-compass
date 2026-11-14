@@ -1,0 +1,12 @@
+.ex-controls:has(.lsq-point-controls) { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.ex-controls:has(.lsq-point-controls) > .ex-choice { grid-column: 1 / -1; }
+.lsq-squared-terms { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 0.5rem; margin: 0.25rem 0; }
+/* Least squares: the handle communicates its movable direction in the figure. */
+[data-explorable-id="least-squares-bowl"] .ex-svg { touch-action: none; }
+[data-explorable-id="least-squares-bowl"] .ex-handle { touch-action: none; cursor: grab; }
+[data-explorable-id="least-squares-bowl"] .ex-handle:active { cursor: grabbing; }
+[data-explorable-id="least-squares-bowl"] .ex-handle:focus-visible .ex-handle-ring,
+[data-explorable-id="least-squares-bowl"] .ex-handle:hover .ex-handle-ring { stroke-width: 3; }
+.lsq-drag-cue { fill: #315c48; font-size: 16px; font-weight: 700; pointer-events: none; }
+.lsq-point-controls { width: 100%; }
+.lsq-point-controls summary { min-height: 44px; cursor: pointer; }

@@ -1,0 +1,23 @@
+/* Root finding (Newton / bisection): orange = the moving point and tangent, teal = the root. */
+.nr-tangent-line { stroke: var(--ex-orange-ink); stroke-width: 2.5; }
+.nr-cross { fill: var(--ex-ground); stroke: var(--ex-orange-ink); stroke-width: 3; }
+.nr-drop { stroke: var(--ex-orange-ink); stroke-width: 2; stroke-dasharray: 4 4; }
+.nr-old { fill: var(--ex-ink-soft); stroke: var(--ex-ground); stroke-width: 1.5; }
+.nr-from { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.nr-marker { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2.5; }
+.nr-bracket { fill: var(--ex-teal); fill-opacity: 0.14; }
+.nr-bracket-edge { stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.nr-bar { fill: var(--ex-teal); stroke: var(--ex-teal-ink); stroke-width: 1; }
+.nr-bar-now { fill: var(--ex-orange); stroke: var(--ex-orange-ink); }
+/* Two-variable plane: dashed grey curve = where the Jacobian has no inverse, green rings = roots. */
+.nr-sing-curve { fill: none; stroke: var(--ex-ink-soft); stroke-width: 1.8; stroke-dasharray: 6 5; }
+.nr-plane-root { fill: none; stroke: var(--ex-teal); stroke-width: 3; }
+.nr-plane-whole { fill: none; stroke: var(--ex-line); stroke-width: 2; stroke-dasharray: 2 4; }
+.nr-plane-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.nr-plane-a { stroke: var(--ex-orange-ink); }
+.nr-plane-b { stroke: var(--ex-teal-ink); }
+.nr-plane-c { stroke: var(--ex-ink); }
+.nr-plane-dot { stroke: var(--ex-ground); stroke-width: 2; }
+.nr-plane-dot.nr-plane-b { fill: var(--ex-teal); }
+.nr-plane-dot.nr-plane-c { fill: var(--ex-ink); }
+.nr-sing-mark line { stroke: var(--ex-ink); stroke-width: 3.5; stroke-linecap: round; }

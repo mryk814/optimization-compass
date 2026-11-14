@@ -1,0 +1,3 @@
+.ex-vertex-best { fill: var(--ex-teal); stroke: var(--ex-ink); }
+.ex-cost-arrow { stroke: var(--ex-orange-ink); stroke-width: 3.5; }
+.ex-probe { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }

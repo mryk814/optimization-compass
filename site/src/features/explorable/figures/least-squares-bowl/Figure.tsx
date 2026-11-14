@@ -10,6 +10,7 @@ import { EXPLORABLE_META } from "../../figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "../../scene";
 import { clamp, makeScale, segmentsPath, useDomainDrag, useStageViewport, type Scale, type Viewport } from "../../svg";
 import { useSceneTour } from "../../useSceneTour";
+import "./style.css";
 
 const ID = "least-squares-bowl";
 const TS = [0, 1, 2, 3] as const;

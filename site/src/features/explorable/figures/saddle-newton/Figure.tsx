@@ -10,6 +10,7 @@ import {
 } from "./math";
 import { makeScale, polylinePath, segmentsPath, useDomainDrag, useStageViewport } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const BOUNDS: Bounds = { xMin: -1.8, xMax: 1.8, yMin: -1.2, yMax: 1.2 };
 const ASPECT = (BOUNDS.yMax - BOUNDS.yMin) / (BOUNDS.xMax - BOUNDS.xMin);

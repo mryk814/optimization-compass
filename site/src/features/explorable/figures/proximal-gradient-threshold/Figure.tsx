@@ -7,6 +7,7 @@ import { PROXIMAL_BUDGET, proximalMinimum, proximalObjective, proximalRun, softT
 import { LiveMath, mi, mn, mo, paren, row, signed, sub } from "../../mathml";
 import { useStageViewport } from "../../svg";
 import { useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const BOUNDS = { xMin: -3, xMax: 5, yMin: -3, yMax: 5 };
 

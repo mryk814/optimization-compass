@@ -10,6 +10,7 @@ import {
 } from "../../math/rootFinding";
 import { useStageViewport } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 type Method = "newton" | "bisection";
 type Zoom = "auto" | "wide";

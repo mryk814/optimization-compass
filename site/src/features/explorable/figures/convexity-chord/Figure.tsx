@@ -25,6 +25,7 @@ import {
 import { LiveMath, mi, mn, mo, paren, row, signed, tint } from "../../mathml";
 import { clamp, makeScale, polylinePath, useDomainDrag, useStageViewport, type Scale } from "../../svg";
 import { useReplayOnChange, useTimeline } from "../../useTimeline";
+import "./style.css";
 
 const BOUNDS: Bounds = { xMin: -3, xMax: 3, yMin: -0.6, yMax: 4.7 };
 const ASPECT = 0.58;

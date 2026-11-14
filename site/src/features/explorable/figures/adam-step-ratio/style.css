@@ -1,0 +1,10 @@
+/* Adam */
+.ex-step-box { fill: var(--ex-orange); fill-opacity: 0.08; stroke: var(--ex-orange-ink); stroke-width: 1; stroke-dasharray: 3 3; }
+.ex-compare { fill: none; stroke: var(--ex-ink-soft); stroke-width: 2; stroke-dasharray: 6 4; }
+.ex-compare-dot { fill: var(--ex-ink-soft); }
+.ex-ratio-x { fill: none; stroke: var(--ex-ink); stroke-width: 2.2; }
+.ex-ratio-y { fill: none; stroke: var(--ex-orange); stroke-width: 2.2; }
+.ex-ratio-x-dot { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.ex-ratio-y-dot { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
+.ex-ratio-x-label { fill: var(--ex-ink); font-weight: 700; }
+.ex-ratio-y-label { fill: var(--ex-orange-ink); font-weight: 700; }
