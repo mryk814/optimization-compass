@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from pathlib import Path
+from types import MappingProxyType
 from xml.etree import ElementTree
 
 import pytest
@@ -35,6 +37,16 @@ from scripts.generate_article_figures import (
 
 ROOT = Path(__file__).parents[1]
 VERSION = read_dataset_version()
+
+
+@pytest.fixture(scope="module")
+def figures() -> Mapping[str, bytes]:
+    """One generation of every execution figure, shared read-only by this module.
+
+    Generating them runs every probe, so it is done once here; the determinism test
+    generates a second set to compare against this one.
+    """
+    return MappingProxyType(generate_article_figures(VERSION))
 
 
 def test_active_set_qp_probe_adds_and_removes_constraints_sequentially() -> None:
@@ -371,10 +383,10 @@ def test_hpo_probes_keep_sampling_model_allocation_and_local_control_distinct() 
     assert len({step[2] for step in turbo_probe["steps"]}) > 1
 
 
-def test_turbo_figure_clips_local_boxes_to_the_search_domain() -> None:
-    root = ElementTree.fromstring(
-        generate_article_figures(VERSION)["turbo-trust-region-execution.svg"]
-    )
+def test_turbo_figure_clips_local_boxes_to_the_search_domain(
+    figures: Mapping[str, bytes],
+) -> None:
+    root = ElementTree.fromstring(figures["turbo-trust-region-execution.svg"])
     boxes = [
         node
         for node in root.findall("{http://www.w3.org/2000/svg}rect")
@@ -398,9 +410,9 @@ def test_turbo_figure_clips_local_boxes_to_the_search_domain() -> None:
         assert top <= y < y + height <= bottom + 0.01
 
 
-def test_article_figures_are_deterministic_and_current() -> None:
+def test_article_figures_are_deterministic_and_current(figures: Mapping[str, bytes]) -> None:
     assert "\n" not in VERSION
-    first = generate_article_figures(VERSION)
+    first = figures
     second = generate_article_figures(VERSION)
 
     assert first == second
@@ -442,9 +454,9 @@ def test_article_figures_are_deterministic_and_current() -> None:
         assert payload == (ROOT / "site" / "public" / "media" / name).read_bytes()
 
 
-def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -> None:
-    figures = generate_article_figures(VERSION)
-
+def test_article_figures_have_accessible_svg_titles_and_execution_provenance(
+    figures: Mapping[str, bytes],
+) -> None:
     for payload in figures.values():
         root = ElementTree.fromstring(payload)
         namespace = {"svg": "http://www.w3.org/2000/svg"}
@@ -455,11 +467,13 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
         assert "実行生成:" in payload.decode("utf-8")
 
 
-def test_article_figures_keep_text_readable_on_phone_and_pc() -> None:
+def test_article_figures_keep_text_readable_on_phone_and_pc(
+    figures: Mapping[str, bytes],
+) -> None:
     # Drawn 440 wide and shown 1:1 on a PC and at
     # 353/440 on a 375 px phone, so 15-18 unit text reads 12-14.4 px and never above 18 px.
     font_size = re.compile(r'font-size(?:="|:\s*)([\d.]+)|font:[^;"]*?([\d.]+)px')
-    for name, payload in generate_article_figures(VERSION).items():
+    for name, payload in figures.items():
         svg = payload.decode("utf-8")
         root = ElementTree.fromstring(payload)
         assert root.attrib["width"] == "440", name
