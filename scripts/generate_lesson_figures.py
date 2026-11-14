@@ -22,15 +22,14 @@ from __future__ import annotations
 import argparse
 import importlib
 import pkgutil
+import sys
 from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
 from types import ModuleType
 
 ROOT = Path(__file__).parents[1]
 OUTPUT = ROOT / "site" / "public" / "figures"
-# Run as a file, this script has no package and scripts/ is first on sys.path; the tests import it
-# as scripts.generate_lesson_figures. Either way the figure modules import as one package.
-PACKAGE = f"{__package__}.lesson_figures" if __package__ else "lesson_figures"
+PACKAGE = "scripts.lesson_figures"
 
 
 def figure_modules(package: str = PACKAGE) -> list[ModuleType]:
@@ -93,4 +92,7 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 
 if __name__ == "__main__":
+    # Run as a file, only scripts/ is on sys.path. Put the repository root first so the figure
+    # modules import as scripts.lesson_figures, the names the tests import them by.
+    sys.path.insert(0, str(ROOT))
     main()
