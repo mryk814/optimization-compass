@@ -9,7 +9,7 @@ uv run python scripts/article_inventory.py --approve adam # only when the owner 
 
 Columns: whether a learning path (data/seeds/learning_paths.json) steps through the article, its
 kind and entity, body characters, static figures, explorables (``*`` when the explorable has
-guided beats in src/optimization_compass/resources/explorables.json), the owner's approval
+guided beats in its figure folder's meta.json), the owner's approval
 (``approved``, or ``changed`` when the body was edited after the approval), and last_reviewed.
 
 ``--figure-text`` lists every static SVG the selected articles show, with the smallest and largest

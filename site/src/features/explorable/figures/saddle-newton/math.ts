@@ -2,7 +2,7 @@
  * Pure Newton's method on the running example of the smooth unconstrained article (PA006):
  * f(x) = (x1² − 1)² + x1·x2 + 2·x2², with a saddle at the origin (f = 1) and two valley
  * bottoms at ±(√17/4, −√17/16) (f = −33/256). The same iteration as
- * `landscape_newton_path` in scripts/generate_lesson_figures.py.
+ * `landscape_newton_path` in scripts/lesson_figures/smooth_low_dimensional_unconstrained.py.
  */
 export type Point2 = readonly [number, number];
 

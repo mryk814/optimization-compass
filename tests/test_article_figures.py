@@ -456,7 +456,7 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
 
 
 def test_article_figures_keep_text_readable_on_phone_and_pc() -> None:
-    # docs/teaching-article-playbook.md §5.4: drawn 440 wide and shown 1:1 on a PC and at
+    # Drawn 440 wide and shown 1:1 on a PC and at
     # 353/440 on a 375 px phone, so 15-18 unit text reads 12-14.4 px and never above 18 px.
     font_size = re.compile(r'font-size(?:="|:\s*)([\d.]+)|font:[^;"]*?([\d.]+)px')
     for name, payload in generate_article_figures(VERSION).items():

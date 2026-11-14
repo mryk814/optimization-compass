@@ -3,7 +3,7 @@
 Supporting figures are drawn at the width they are shown on a PC (440 px, the 27.5rem cap for
 static figures), so one SVG unit is one CSS pixel there. Text uses 16 px (15 px for axis ticks):
 the same size as the body on a PC and 12 px or more at a 375 px phone width. Every coordinate comes
-from the lesson's data, never from hand-placed numbers. See docs/teaching-article-playbook.md §5.4.
+from the lesson's data, never from hand-placed numbers.
 
 A change here redraws the figures of many articles: regenerate them all and look at the diff.
 """
