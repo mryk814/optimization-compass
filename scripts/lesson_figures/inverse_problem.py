@@ -78,6 +78,15 @@ def inverse_problem_curve() -> tuple[float, float, list[tuple[float, float]]]:
 def inverse_problem_fixture() -> str:
     """JSON text of the rod example's fixed inputs for the inverse-problem explorable."""
     blur, truth, data = inverse_problem_data()
+
+    # Full 17-digit floats differ in the last digits between Windows and Linux libm, which made
+    # `--check` fail on one platform. Twelve significant digits are far beyond what the figure
+    # displays and are the same on both.
+    def rounded(values: list[float]) -> list[float]:
+        return [float(f"{value:.12g}") for value in values]
+
+    blur = [rounded(row) for row in blur]
+    truth, data = rounded(truth), rounded(data)
     payload = {
         # Written into the committed fixture as it is: the script that writes the file and
         # the function that computes the data. Changing it changes the fixture's bytes.

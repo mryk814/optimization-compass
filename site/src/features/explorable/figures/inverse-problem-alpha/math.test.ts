@@ -12,7 +12,9 @@ describe("inverse problem (rod example)", () => {
     expect(INVERSE_TRUTH).toHaveLength(40);
     expect(INVERSE_DATA).toHaveLength(40);
     expect(fixture.blur).toHaveLength(40);
-    for (const row of fixture.blur) expect(row.reduce((a, b) => a + b, 0)).toBeCloseTo(1, 12);
+    // The fixture stores 12 significant digits (same bytes on Windows and Linux), so a row of 40
+    // entries sums to 1 only to about 1e-11.
+    for (const row of fixture.blur) expect(row.reduce((a, b) => a + b, 0)).toBeCloseTo(1, 10);
     expect(INVERSE_DELTA).toBeCloseTo(0.00632, 5);
     expect(Math.sqrt(INVERSE_TRUTH.reduce((s, v) => s + v * v, 0))).toBeCloseTo(2.257, 3);
   });

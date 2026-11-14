@@ -245,10 +245,13 @@ def _traj_grid_svg() -> str:
     )
     parts.append(_text(20, 64, "① 5区間で解いた経路"))
     at = _traj_floor(parts, 80, 330)
+    # The grid nodes where the clearance constraint is active sit exactly on the pillar's edge,
+    # and floating-point noise put them on either side depending on the platform's libm. Count
+    # the edge as part of the red stretch so the figure is the same on Windows and Linux.
     inside = [
         p
         for p in coarse_points
-        if math.hypot(p[0] - TRAJ_PILLAR[0], p[1] - TRAJ_PILLAR[1]) < TRAJ_RADIUS
+        if math.hypot(p[0] - TRAJ_PILLAR[0], p[1] - TRAJ_PILLAR[1]) < TRAJ_RADIUS + 1e-9
     ]
     parts.append(_polyline([at(x, y) for x, y in coarse_points], UPDATE, 3))
     parts.append(
