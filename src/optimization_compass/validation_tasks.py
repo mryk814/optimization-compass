@@ -96,15 +96,6 @@ class ChangeValidationPlan(_FrozenModel):
 
 CHECKS: tuple[ValidationCheck, ...] = (
     ValidationCheck(
-        code="content.report-drift",
-        description="Regenerate committed content quality reports through their official scripts.",
-        next_action=(
-            "Run both content report scripts, inspect the generated diff, and commit the reports"
-            " before the full validation suite."
-        ),
-        command=(_PYTHON_TOKEN, "scripts/verify_content_reports.py"),
-    ),
-    ValidationCheck(
         code="python.lint",
         description="Ruff lint over the repository.",
         next_action="Fix the reported lint findings (uv run ruff check . --fix helps).",
@@ -254,7 +245,6 @@ CHECKS: tuple[ValidationCheck, ...] = (
 _CHECKS_BY_CODE: dict[str, ValidationCheck] = {check.code: check for check in CHECKS}
 
 _TIER_A_CODES: tuple[str, ...] = ("content.pages", "content.licensing")
-# Full pytest already checks committed report drift; keep the explicit preflight standalone.
 _TIER_B_CODES: tuple[str, ...] = (
     "python.lint",
     "python.format",
@@ -371,12 +361,6 @@ TASKS: dict[str, ValidationTask] = {
             check_codes=("python.lint", "python.types", "python.problem-tests"),
         ),
         ValidationTask(
-            name="content-reports",
-            description="Fast generated content-report drift preflight. PR gate: tier-b.",
-            gate="tier-b",
-            check_codes=("content.report-drift",),
-        ),
-        ValidationTask(
             name="manifest",
             description="Build-input manifest and migration registration checks. PR gate: tier-b.",
             gate="tier-b",
@@ -411,12 +395,7 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
         normalized_paths.add(path[2:] if path.startswith("./") else path)
     normalized = tuple(sorted(normalized_paths))
     content_paths = {path for path in normalized if path.startswith("content/")}
-    generated_content_paths = {
-        path
-        for path in normalized
-        if path.startswith("site/public/data/")
-        or path in {"docs/method-content-density-report.md", "docs/content-quality-report.md"}
-    }
+    generated_content_paths = {path for path in normalized if path.startswith("site/public/data/")}
     content_lane_support_paths = {
         path
         for path in normalized

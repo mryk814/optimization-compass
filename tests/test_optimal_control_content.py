@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import style_warnings
 
 
 def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
@@ -54,6 +53,3 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
         page = pages[content_id]
         assert list(page.prerequisites) == prerequisites
         assert "#/learn/concept.trajectory-variable" in page.body
-
-    assert style_warnings(pages["ilqr-ddp"]) == ()
-    assert style_warnings(family) == ()

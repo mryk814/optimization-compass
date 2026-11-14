@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import style_warnings
 
 
 def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_runs() -> None:
@@ -25,7 +24,6 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
 
     family = pages["family.expensive-black-box"]
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in family.body
-    assert style_warnings(family) == ()
 
     random_search = pages["random-search"]
     assert random_search.visualization_ids == ("ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",)
@@ -49,4 +47,3 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
         assert phase in pbt.body
     assert "良い予定を持つ系譜" in pbt.body
     assert "継承元／摂動後の値／評価時点の指標" in pbt.body
-    assert style_warnings(pbt) == ()

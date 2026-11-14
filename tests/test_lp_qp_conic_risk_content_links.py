@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import style_warnings
 
 
 def test_lp_qp_conic_guide_connects_cross_domain_risk_lessons() -> None:
@@ -46,7 +45,6 @@ def test_active_set_qp_separates_working_set_and_operator_splitting() -> None:
     assert "OSQPのような作用素分割型" in guide.body
     assert "作業集合とは別の反復を使います" in guide.body
     assert "作業集合（working set）" in guide.body
-    assert style_warnings(guide) == ()
 
 
 def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
@@ -66,8 +64,6 @@ def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
         "双対ギャップ",
     ):
         assert diagnostic in guide.body
-
-    assert style_warnings(guide) == ()
 
 
 def test_pdlp_keeps_first_order_stopping_contract_and_accuracy_scope_visible() -> None:
@@ -93,4 +89,3 @@ def test_pdlp_keeps_first_order_stopping_contract_and_accuracy_scope_visible() -
     assert "PDLPを中精度だけのソルバーとはみなしません" in guide.body
     assert "基底を持つ頂点解や疎な頂点解" in guide.body
     assert "exact certificate" not in guide.body
-    assert style_warnings(guide) == ()

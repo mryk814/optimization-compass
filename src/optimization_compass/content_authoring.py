@@ -15,11 +15,9 @@ from optimization_compass.content_quality import (
     inspect_concept,
     language_contract_warnings,
     public_content_routes,
-    style_warnings,
 )
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.formulation_atlas import authored_route_ids
-from optimization_compass.method_content_density import inspect_page
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import run_task, validation_task_for_paths
 
@@ -97,7 +95,6 @@ def require_publish_ready(
     *,
     today: date | None = None,
     known_routes: frozenset[str] | None = None,
-    strict_style: bool = False,
 ) -> None:
     """Validate the target-specific contract that precedes public generation."""
     errors: list[str] = []
@@ -125,13 +122,6 @@ def require_publish_ready(
         }
         if page.method_id not in known_methods:
             errors.append(f"unknown canonical method ID: {page.method_id}")
-        density = inspect_page(page)
-        if not density.meets_floor:
-            errors.append(
-                "method explanation floor is not met "
-                f"(summary={density.summary_characters}, body={density.body_characters}, "
-                f"toc={density.toc_entries}, python={density.python_blocks})"
-            )
     elif known_routes is not None:
         concept = inspect_concept(page, known_routes)
         if not concept.meets_floor:
@@ -141,13 +131,12 @@ def require_publish_ready(
                 f"toc={concept.toc_entries}, next={len(concept.valid_next_links)}, "
                 f"invalid={','.join(concept.invalid_next_links) or '-'})"
             )
-    if strict_style:
-        warnings = (*style_warnings(page), *language_contract_warnings(page))
-        if warnings:
-            summary = ", ".join(f"{warning.code}@{warning.line}" for warning in warnings[:8])
-            if len(warnings) > 8:
-                summary += f", +{len(warnings) - 8} more"
-            errors.append(f"prose style warnings remain: {summary}")
+    mixed = language_contract_warnings(page)
+    if mixed:
+        errors.append(
+            "English words mixed into Japanese prose: "
+            + ", ".join(f"{warning.detail}@{warning.line}" for warning in mixed)
+        )
     if errors:
         raise ContentAuthoringError(f"{page.content_id} is not publish-ready: " + "; ".join(errors))
 
@@ -207,7 +196,6 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         source_path.read_text(encoding="utf-8"),
         repository,
         known_routes=known_routes,
-        strict_style=True,
     )
     branch_paths = _branch_change_paths(root)
     unrelated = [

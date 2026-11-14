@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import style_warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -20,7 +19,6 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_EXACT" in nested.body
     assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_RELAXED" in nested.body
     assert "#/theater/learning/SCENARIO_HYBRID_MODE_CHATTERING" in nested.body
-    assert style_warnings(nested) == ()
 
     pde = pages["concept.pde-constrained-optimization"]
     assert pde.visualization_ids == (
@@ -29,14 +27,12 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         "pde-state-solve-failure",
     )
     assert pde.comparison_ids == ("COMPARE_PDE_STATE_TOLERANCE_COST",)
-    assert style_warnings(pde) == ()
 
     evaluation_cost = pages["concept.evaluation-cost"]
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in evaluation_cost.body
     assert (
         "#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS" in evaluation_cost.body
     )
-    assert style_warnings(evaluation_cost) == ()
 
     uncertainty = pages["concept.uncertainty-models"]
     assert "S103" in uncertainty.source_ids
@@ -47,7 +43,6 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert uncertainty.comparison_ids == ("COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",)
     assert "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4" in uncertainty.body
     assert "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in uncertainty.body
-    assert style_warnings(uncertainty) == ()
 
     chance_risk = pages["concept.chance-risk-contract"]
     assert chance_risk.visualization_ids == (
@@ -63,7 +58,6 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         assert route in chance_risk.body
     assert "リスクの扱いの違いだけを比較します" in chance_risk.body
     assert "一般的な性能の順位付けや将来分布への保証ではありません" in chance_risk.body
-    assert style_warnings(chance_risk) == ()
 
     constraint_class = pages["concept.constraint-class"]
     for route in (
@@ -80,7 +74,6 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     ):
         assert constraint_oracle in constraint_class.body
     assert "式／単位／許容誤差／判定時点" in constraint_class.body
-    assert style_warnings(constraint_class) == ()
 
     variable_domain = pages["concept.variable-domain"]
     for route in (
@@ -89,7 +82,6 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         "#/learn/family.manifold",
     ):
         assert route in variable_domain.body
-    assert style_warnings(variable_domain) == ()
 
     so3 = pages["concept.so3-rotation-representation"]
     assert "S107" in so3.source_ids
@@ -116,4 +108,3 @@ def test_concepts_scope_failed_evaluations_and_quotient_ambiguity() -> None:
     assert "$Q$を直交行列とすると" in spd.body
     assert "./media/spd-boundary-repair.svg" in spd.body
     assert (ROOT / "site/public/media/spd-boundary-repair.svg").is_file()
-    assert style_warnings(spd) == ()

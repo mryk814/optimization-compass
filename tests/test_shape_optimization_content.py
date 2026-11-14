@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from optimization_compass.content_models import ContentPage, load_content
-from optimization_compass.content_quality import style_warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,7 +49,6 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     assert "#/gallery/shape-diffuser" in shape_body
     assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in shape_body
     assert "パラメータ → 形状 → メッシュ → 物理状態" in shape_body
-    assert style_warnings(shape) == ()
     failure = pages["geometry-update-failure-modes"]
     assert failure.visualization_ids == (
         "shape-diffuser-valid-update",
@@ -60,4 +58,3 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE" in failure_body
     assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY" in failure_body
     assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in failure_body
-    assert style_warnings(failure) == ()

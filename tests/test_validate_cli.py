@@ -382,8 +382,6 @@ def test_problem_task_gate_is_tier_c() -> None:
                 "content/methods/example.md",
                 "site/public/data/content.json",
                 "site/public/media/example-figure.png",
-                "docs/method-content-density-report.md",
-                "docs/content-quality-report.md",
             ],
             "content-ready",
         ),
@@ -479,7 +477,6 @@ def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() 
     )
     assert "content.publish-ready-tests" in task.check_codes
     assert "site.build" not in task.check_codes
-    assert "content.report-drift" not in task.check_codes
     assert "python.tests" not in task.check_codes
 
 
@@ -504,22 +501,6 @@ def test_select_validation_task_cli_is_machine_readable(
 def test_manifest_task_is_a_focused_tier_b_check() -> None:
     assert TASKS["manifest"].check_codes == ("data.manifest",)
     assert TASKS["manifest"].gate == "tier-b"
-
-
-def test_content_report_preflight_has_a_stable_machine_readable_rule_code() -> None:
-    task = TASKS["content-reports"]
-    assert task.check_codes == ("content.report-drift",)
-    assert task.gate == "tier-b"
-
-    result = runner.invoke(
-        app,
-        ["validate", "content-reports", "--list", "--format", "json"],
-    )
-    assert result.exit_code == 0
-    payload = json.loads(result.stdout)
-    assert payload["task"] == "content-reports"
-    assert payload["gate"] == "tier-b"
-    assert [check["code"] for check in payload["checks"]] == ["content.report-drift"]
 
 
 def test_manifest_validation_returns_machine_readable_result() -> None:

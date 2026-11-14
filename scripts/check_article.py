@@ -4,8 +4,8 @@
 
 For each file this reports, from the Markdown sources and the released database only:
 parse errors, the concept publication floor and its "次に読む" links,
-unknown source / prerequisite / related IDs, and prose style warnings. Exit code 1 on errors;
-style warnings are listed but do not fail the check.
+unknown source / prerequisite / related IDs, and English words mixed into Japanese prose.
+Exit code 1 on errors; warnings are listed but do not fail the check.
 """
 
 from __future__ import annotations
@@ -19,7 +19,6 @@ from optimization_compass.content_quality import (
     inspect_concept,
     language_contract_warnings,
     public_content_routes,
-    style_warnings,
 )
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.formulation_atlas import authored_route_ids
@@ -74,13 +73,13 @@ def main(paths: list[str]) -> int:
                     f"toc={row.toc_entries}, next={len(row.valid_next_links)}, "
                     f"invalid={','.join(row.invalid_next_links) or '-'})"
                 )
-        warnings = [*style_warnings(page), *language_contract_warnings(page)]
+        warnings = language_contract_warnings(page)
         status = "ERROR" if errors else "ok"
-        print(f"{page.content_id} [{article_kind(page)}]: {status}, {len(warnings)} style warnings")
+        print(f"{page.content_id} [{article_kind(page)}]: {status}, {len(warnings)} warnings")
         for error in errors:
             print(f"  error: {error}")
         for warning in warnings:
-            print(f"  style: {warning.code} line~{warning.line}: {warning.detail}")
+            print(f"  warning: {warning.code} line~{warning.line}: {warning.detail}")
         failed = failed or bool(errors)
     return 1 if failed else 0
 

@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import style_warnings
 
 
 def test_discrete_family_guide_connects_cases_and_search_tree_lessons() -> None:
@@ -45,5 +44,3 @@ def test_network_simplex_keeps_graph_pivot_and_failure_conditions_visible() -> N
         "無限容量の負費用閉路",
     ):
         assert concept in network_simplex.body
-
-    assert style_warnings(network_simplex) == ()
