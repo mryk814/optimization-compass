@@ -13,6 +13,7 @@
  */
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
 import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -43,19 +44,32 @@ if (!id || !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u.test(id)) {
 const fps = Number(values.fps);
 const scale = Number(values.scale);
 const outDir = resolve(values.out ?? join(siteRoot, ".scene-media", id));
+const explorableRoot = join(siteRoot, "src", "features", "explorable");
+const figuresRoot = join(explorableRoot, "figures");
+const figureRoot = join(figuresRoot, id);
+if (!existsSync(join(figureRoot, "meta.json"))) {
+  console.error(`unknown explorable: no ${relative(siteRoot, join(figureRoot, "meta.json")).replaceAll("\\", "/")}`);
+  process.exit(2);
+}
 
-/** Everything a frame depends on: the registry and the figure's source. */
+/**
+ * Everything a frame depends on: the shared explorable code and this figure's folder (its
+ * meta.json carries the beats). Other figures' folders are left out, so editing one figure
+ * makes only its own recording stale.
+ */
 async function inputHash() {
   const hash = createHash("sha256");
-  const files = [join(repoRoot, "src", "optimization_compass", "resources", "explorables.json")];
+  const files = [];
   const walk = async (dir) => {
     for (const entry of (await readdir(dir, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
       const path = join(dir, entry.name);
-      if (entry.isDirectory()) await walk(path);
-      else if (!/\.test\.tsx?$/u.test(entry.name)) files.push(path);
+      if (entry.isDirectory()) {
+        if (path !== figuresRoot) await walk(path);
+      } else if (!/\.test\.tsx?$/u.test(entry.name)) files.push(path);
     }
   };
-  await walk(join(siteRoot, "src", "features", "explorable"));
+  await walk(explorableRoot);
+  await walk(figureRoot);
   for (const file of files) {
     hash.update(relative(repoRoot, file).replaceAll("\\", "/"));
     hash.update("\0");

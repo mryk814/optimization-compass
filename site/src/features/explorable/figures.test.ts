@@ -1,13 +1,13 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
 import { EXPLORABLE_META, type MetaFile } from "./figureMeta";
 import { EXPLORABLE_COMPONENTS } from "./registry";
 
-// Adding a figure means adding one folder. These checks hold the folder contract that
-// replaces the old hand-kept lists (registry entries, the meta.ts copy of explorables.json).
+// Adding a figure means adding one folder, with no shared list to edit. These checks hold
+// that contract for the site; src/optimization_compass/explorables.py checks meta.json itself.
 const SRC = join(__dirname, "..", "..");
 const FIGURES = join(__dirname, "figures");
 const folders = readdirSync(FIGURES, { withFileTypes: true })
@@ -85,6 +85,27 @@ describe("figure folders", () => {
         })),
       });
     }
+  });
+});
+
+describe("figure imports", () => {
+  // A figure imports only its own folder and shared code outside figures/, and shared code does
+  // not import a figure (registry.tsx and figureMeta.ts find them by glob). The recording hash
+  // (site/scripts/record-scene.mjs) reads exactly a figure's folder plus the shared files, so an
+  // import from another figure would change frames without making the recording stale.
+  it("reach only the figure's own folder and the shared code", () => {
+    const problems: string[] = [];
+    const specifier = /(?:\bfrom\s+|\bimport\s*\(\s*|\bimport\s+)["'](\.{1,2}\/[^"']+)["']/gu;
+    for (const file of sourceFiles(SRC)) {
+      if (file.endsWith(".css")) continue;
+      const own = file.startsWith(FIGURES + sep) ? join(FIGURES, relative(FIGURES, file).split(sep)[0]) + sep : null;
+      for (const match of readFileSync(file, "utf8").matchAll(specifier)) {
+        const target = join(dirname(file), match[1]);
+        if (!target.startsWith(FIGURES + sep) || (own && target.startsWith(own))) continue;
+        problems.push(`${relative(SRC, file)} imports ${match[1]}`);
+      }
+    }
+    expect(problems).toEqual([]);
   });
 });
 
