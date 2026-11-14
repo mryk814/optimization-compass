@@ -36,6 +36,9 @@ HPO_RACE_SEEDS = 8
 # "Fresh" points: same formula, another seed, never used to choose a setting.
 HPO_FRESH_SEED = 999
 HPO_FRESH_N = 5000
+# A setting decided without looking at any score: the middle of each range (degree 2..15 has two
+# middle values, 8 and 9; the lower one is used).
+HPO_FIXED_SETTING = (8, -2.5)
 
 
 def hpo_data(seed: int = HPO_DATA_SEED, n: int = HPO_N) -> tuple[list[float], list[float]]:
@@ -312,9 +315,10 @@ def hpo_selection_data() -> dict[str, list[tuple[float, float]]]:
     """100 other datasets: the score when chosen, and the score on the fresh points.
 
     `selected` picks the best of 16 random settings by cross-validation. `fixed` uses one setting
-    decided in advance, (degree 3, log10 lambda = -3.5), so nothing is chosen.
+    decided in advance, `HPO_FIXED_SETTING`, so nothing is chosen.
     """
     fresh = _Fresh()
+    degree, lam = HPO_FIXED_SETTING[0], 10.0 ** HPO_FIXED_SETTING[1]
     selected, fixed = [], []
     for seed in range(100, 200):
         xs, ys = hpo_data(seed)
@@ -323,7 +327,7 @@ def hpo_selection_data() -> dict[str, list[tuple[float, float]]]:
         scores = [cv.mse(d, lam) for d, lam in configs]
         best = min(range(len(configs)), key=lambda i: scores[i])
         selected.append((scores[best], fresh.mse(xs, ys, *configs[best])))
-        fixed.append((cv.mse(3, 10.0**-3.5), fresh.mse(xs, ys, 3, 10.0**-3.5)))
+        fixed.append((cv.mse(degree, lam), fresh.mse(xs, ys, degree, lam)))
     return {"selected": selected, "fixed": fixed}
 
 

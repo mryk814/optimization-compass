@@ -112,6 +112,10 @@ def test_other_splits_move_the_scores_and_the_chosen_setting() -> None:
     ]
     # In all 12 splits the random run's best score is the smaller one.
     assert all(_best(rand, s)["cv"][s] < _best(grid, s)["cv"][s] for s in range(12))
+    # Against the grid at the centres the order moves with the split: random is lower in 5 of 12.
+    mid = data["grid_mid"]
+    lower = [s for s in range(12) if _best(rand, s)["cv"][s] < _best(mid, s)["cv"][s]]
+    assert lower == [2, 3, 4, 8, 11]
 
 
 def test_the_gap_between_the_two_winners_closes_on_fresh_points() -> None:
@@ -130,8 +134,9 @@ def test_choosing_makes_the_score_optimistic_and_not_choosing_does_not() -> None
     chosen, fresh, worse = hpo_selection_summary(data["selected"])
     assert (round(chosen, 3), round(fresh, 3), worse) == (0.188, 0.198, 64)
     chosen, fresh, worse = hpo_selection_summary(data["fixed"])
-    assert (round(chosen, 3), round(fresh, 3), worse) == (0.200, 0.185, 43)
-    assert sum(pair[1] < pair[0] for pair in data["fixed"]) == 57
+    # The fixed setting is the middle of the search range, not a cell read off a map of scores.
+    assert (round(chosen, 3), round(fresh, 3), worse) == (0.249, 0.217, 46)
+    assert sum(pair[1] < pair[0] for pair in data["fixed"]) == 54
 
 
 def test_the_fixture_holds_the_same_scores_rounded() -> None:
