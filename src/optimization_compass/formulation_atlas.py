@@ -21,9 +21,9 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any, Literal
 
-from latex2mathml.converter import convert as latex_to_mathml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from optimization_compass.content_markdown import latex_to_mathml
 from optimization_compass.content_models import ContentPage
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.explorables import embedded_figure_ids

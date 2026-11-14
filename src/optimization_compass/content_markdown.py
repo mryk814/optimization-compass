@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, cast
 from urllib.parse import urlsplit
 
-from latex2mathml.converter import convert as latex_to_mathml
+from latex2mathml.converter import convert as _latex2mathml
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from mdit_py_plugins.container import container_plugin
@@ -81,6 +81,23 @@ def render_markdown(source: str, *, path: Path) -> RenderedMarkdown:
     )
 
 
+# Commands latex2mathml does not know. It prints them as literal text (`<mi>\arg</mi>`), which a
+# Japanese font then shows as "¥arg". Rewrite them to forms it renders, before conversion.
+_TEX_REWRITES = (
+    (re.compile(r"\\arg(?![A-Za-z])"), r"\\mathrm{arg}"),
+    (re.compile(r"\\lvert(?![A-Za-z])"), "|"),
+    (re.compile(r"\\rvert(?![A-Za-z])"), "|"),
+)
+_LITERAL_COMMAND = re.compile(r">\\[A-Za-z]+<")
+
+
+def latex_to_mathml(latex: str, display: str = "inline") -> str:
+    """The site's one LaTeX to MathML conversion (articles, metadata, the formulation atlas)."""
+    for pattern, replacement in _TEX_REWRITES:
+        latex = pattern.sub(replacement, latex)
+    return _latex2mathml(latex, display=display)
+
+
 def unrenderable_math(source: str) -> tuple[str, ...]:
     """Formulas whose row breaks or alignment the site's LaTeX to MathML conversion would garble.
 
@@ -95,7 +112,11 @@ def unrenderable_math(source: str) -> tuple[str, ...]:
             continue
         display = "block" if token.type.startswith("math_block") else "inline"
         mathml = latex_to_mathml(token.content, display=display)
-        if 'linebreak="newline"' in mathml or "<mi>&</mi>" in mathml:
+        if (
+            'linebreak="newline"' in mathml
+            or "<mi>&</mi>" in mathml
+            or _LITERAL_COMMAND.search(mathml)
+        ):
             broken.append(" ".join(token.content.split()))
     return tuple(broken)
 
