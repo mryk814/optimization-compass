@@ -1,15 +1,22 @@
 """Hyperparameter optimization (content/concepts/hyperparameter-optimization.md): a ridge polynomial
 fit on 30 noisy points; the objective is the 5-fold cross-validation error.
+
+The article's lesson is the explorable `hpo-budget-race`. Python owns the example (the data, the
+splits, the random settings, the fresh points); the figure reads the scores from the fixture
+written here and only fits the curves it draws.
 """
 
 from __future__ import annotations
 
+import json
 import math
 import random
+import statistics
 from collections.abc import Callable, Sequence
+from functools import cache
+from typing import TypedDict
 
 from ._numeric import _solve_linear
-from ._svg import LINE, POINT, UPDATE, _open, _scale, _text
 
 HPO_N = 30
 HPO_SIGMA = 0.4
@@ -19,6 +26,16 @@ HPO_DATA_SEED = 1
 HPO_BUDGET = 16
 HPO_RANDOM_SEED = 0
 HPO_GRID_DEGREES = (2, 6, 11, 15)
+HPO_GRID_MID_DEGREES = (3, 7, 10, 14)
+# The settings map of the figure: every degree at log10 lambda = -6, -5.5, ..., 1.
+HPO_LATTICE_LOG_LAM = [HPO_LOG_LAM[0] + 0.5 * i for i in range(15)]
+# Split 0 is the one the article measures with; the others are the lesson's re-measurements.
+HPO_SPLITS = 12
+# Random runs the reader can switch between; the lesson uses seed 0.
+HPO_RACE_SEEDS = 8
+# "Fresh" points: same formula, another seed, never used to choose a setting.
+HPO_FRESH_SEED = 999
+HPO_FRESH_N = 5000
 
 
 def hpo_data(seed: int = HPO_DATA_SEED, n: int = HPO_N) -> tuple[list[float], list[float]]:
@@ -81,114 +98,247 @@ def hpo_grid_configs() -> list[tuple[int, float]]:
     return [(d, 10.0**e) for d in HPO_GRID_DEGREES for e in exponents]
 
 
-def hpo_search_data() -> dict[str, object]:
+def hpo_grid_mid_configs() -> list[tuple[int, float]]:
+    """The same 4 x 4 grid moved by half a cell: the centre of each quarter of the range."""
+    low, high = HPO_LOG_LAM
+    exponents = [low + (high - low) * (i + 0.5) / 4 for i in range(4)]
+    return [(d, 10.0**e) for d in HPO_GRID_MID_DEGREES for e in exponents]
+
+
+class _Cv:
+    """`hpo_cv_mse` for many settings on one dataset, with the same arithmetic in the same order.
+
+    A degree-d Legendre row is a prefix of the degree-15 row, so each training set's Gram matrix is
+    summed once per split and its top-left block is reused for every degree.
+    """
+
+    def __init__(self, xs: Sequence[float], ys: Sequence[float], k: int = 5) -> None:
+        self.ys = list(ys)
+        self.k = k
+        self.size = HPO_DEGREES[-1] + 1
+        self.rows = [_legendre_row(x, self.size - 1) for x in xs]
+        self._splits: dict[int, list[tuple[list[int], list[list[float]], list[float]]]] = {}
+
+    def _folds(self, split_seed: int) -> list[tuple[list[int], list[list[float]], list[float]]]:
+        if split_seed not in self._splits:
+            order = list(range(len(self.ys)))
+            random.Random(split_seed).shuffle(order)
+            folds = []
+            for i in range(self.k):
+                fold = order[i :: self.k]
+                rows = [self.rows[j] for j in order if j not in fold]
+                targets = [self.ys[j] for j in order if j not in fold]
+                span = range(self.size)
+                gram = [[sum(r[a] * r[b] for r in rows) for b in span] for a in span]
+                rhs = [sum(r[a] * y for r, y in zip(rows, targets, strict=True)) for a in span]
+                folds.append((fold, gram, rhs))
+            self._splits[split_seed] = folds
+        return self._splits[split_seed]
+
+    def mse(self, degree: int, lam: float, split_seed: int = 0) -> float:
+        size = degree + 1
+        penalty = (len(self.ys) - len(self.ys) // self.k) * lam
+        errors = []
+        for fold, gram, rhs in self._folds(split_seed):
+            matrix = [
+                [gram[a][b] + (penalty if a == b else 0.0) for b in range(size)]
+                for a in range(size)
+            ]
+            w = _solve_linear(matrix, rhs[:size])
+            squares = [
+                (sum(c * b for c, b in zip(w, self.rows[j], strict=False)) - self.ys[j]) ** 2
+                for j in fold
+            ]
+            errors.append(sum(squares) / len(squares))
+        return sum(errors) / self.k
+
+
+class _Fresh:
+    """Mean squared error, on the fresh points, of a curve fitted on a whole dataset.
+
+    The 5000 points enter only through sum(row row^T), sum(row y) and sum(y^2), so one score is a
+    quadratic form in the coefficients. A degree-d Legendre row is a prefix of the degree-15 row.
+    """
+
+    def __init__(self) -> None:
+        xs, ys = hpo_data(HPO_FRESH_SEED, HPO_FRESH_N)
+        size = HPO_DEGREES[-1] + 1
+        rows = [_legendre_row(x, size - 1) for x in xs]
+        self.n = len(ys)
+        self.gram = [[sum(r[i] * r[j] for r in rows) for j in range(size)] for i in range(size)]
+        self.moment = [sum(r[i] * y for r, y in zip(rows, ys, strict=True)) for i in range(size)]
+        self.square = sum(y * y for y in ys)
+
+    def mse(self, xs: Sequence[float], ys: Sequence[float], degree: int, lam: float) -> float:
+        w = _hpo_fit(xs, ys, degree, lam)
+        size = len(w)
+        quadratic = sum(w[i] * self.gram[i][j] * w[j] for i in range(size) for j in range(size))
+        cross = sum(c * m for c, m in zip(w, self.moment, strict=False))
+        return (quadratic - 2 * cross + self.square) / self.n
+
+
+def hpo_fresh_mse(degree: int, lam: float) -> float:
+    """The fresh-point error of the article's 30-point fit, point by point (checks `_Fresh`)."""
     xs, ys = hpo_data()
-    out: dict[str, object] = {}
-    for name, configs in (("grid", hpo_grid_configs()), ("random", hpo_random_configs())):
-        values = [hpo_cv_mse(xs, ys, d, lam) for d, lam in configs]
-        best = min(range(len(configs)), key=lambda i: values[i])
-        out[name] = {
-            "configs": configs,
-            "values": values,
-            "best": best,
-            "distinct_lam": len({lam for _, lam in configs}),
-            "distinct_degree": len({d for d, _ in configs}),
-        }
-    low, high = HPO_LOG_LAM
-    columns = int((high - low) * 2)
-    out["terrain"] = {
-        (d, c): hpo_cv_mse(xs, ys, d, 10.0 ** (low + (c + 0.5) / 2))
-        for d in HPO_DEGREES
-        for c in range(columns)
+    w = _hpo_fit(xs, ys, degree, lam)
+    new_x, new_y = hpo_data(HPO_FRESH_SEED, HPO_FRESH_N)
+    errors = [
+        (sum(c * b for c, b in zip(w, _legendre_row(x, degree), strict=True)) - y) ** 2
+        for x, y in zip(new_x, new_y, strict=True)
+    ]
+    return sum(errors) / len(errors)
+
+
+class RacePoint(TypedDict):
+    d: int
+    log_lam: float
+    cv: list[float]  # one score per split
+    fresh: float
+
+
+class RaceFit(TypedDict):
+    d: int
+    log_lam: float
+    coef: list[float]
+
+
+class RaceData(TypedDict):
+    x: list[float]
+    y: list[float]
+    map_cv: list[list[list[float]]]  # [split][degree][log_lam]
+    map_fresh: list[list[float]]  # [degree][log_lam]
+    grid: list[RacePoint]
+    grid_mid: list[RacePoint]
+    random: list[list[RacePoint]]  # [seed]
+    random_bests_200: list[float]
+    fits: list[RaceFit]
+
+
+@cache
+def hpo_race_data() -> RaceData:
+    """Everything the lesson shows: the map of scores, the runs of 16, and their re-measurements.
+
+    Scores are unrounded here; `hpo_race_fixture` rounds them for the figure.
+    """
+    xs, ys = hpo_data()
+    fresh = _Fresh()
+    cv = _Cv(xs, ys)
+
+    def points(configs: Sequence[tuple[int, float]]) -> list[RacePoint]:
+        return [
+            {
+                "d": d,
+                "log_lam": math.log10(lam),
+                "cv": [cv.mse(d, lam, s) for s in range(HPO_SPLITS)],
+                "fresh": fresh.mse(xs, ys, d, lam),
+            }
+            for d, lam in configs
+        ]
+
+    lattice = [[(d, 10.0**e) for e in HPO_LATTICE_LOG_LAM] for d in HPO_DEGREES]
+    return {
+        "x": xs,
+        "y": ys,
+        "map_cv": [
+            [[cv.mse(d, lam, s) for d, lam in row] for row in lattice] for s in range(HPO_SPLITS)
+        ],
+        "map_fresh": [[fresh.mse(xs, ys, d, lam) for d, lam in row] for row in lattice],
+        "grid": points(hpo_grid_configs()),
+        "grid_mid": points(hpo_grid_mid_configs()),
+        "random": [points(hpo_random_configs(seed)) for seed in range(HPO_RACE_SEEDS)],
+        "random_bests_200": [
+            min(cv.mse(d, lam) for d, lam in hpo_random_configs(seed)) for seed in range(200)
+        ],
+        # Coefficients of three fits, so that the figure's own ridge fit is checked against this.
+        "fits": [
+            {"d": d, "log_lam": e, "coef": _hpo_fit(xs, ys, d, 10.0**e)}
+            for d, e in ((3, -3.5), (15, -6.0), (15, -1.5))
+        ],
     }
-    return out
 
 
-def _hpo_shade(value: float) -> str:
-    """Grey ramp for the cross-validation error: pale at 0.13 or less, dark at 1 or more."""
-    t = (math.log10(max(value, 0.13)) - math.log10(0.13)) / (math.log10(1.0) - math.log10(0.13))
-    t = min(max(t, 0.0), 1.0)
-    low, high = (0xEE, 0xF0, 0xEA), (0x7C, 0x86, 0x7E)
-    r, g, b = (round(a + (c - a) * t) for a, c in zip(low, high, strict=True))
-    return f"#{r:02x}{g:02x}{b:02x}"
+def hpo_race_fixture() -> str:
+    """JSON text of the race example for the `hpo-budget-race` explorable."""
+    data = hpo_race_data()
+
+    # Six decimals: the figure prints three, and rounding a rounded number disagrees with rounding
+    # the original only when the original sits within 5e-7 of a tie. Full floats would differ in
+    # their last digits between platforms and make `--check` fail (see FAILURES.md).
+    def r(value: float) -> float:
+        return round(value, 6)
+
+    def points(run: list[RacePoint]) -> list[RacePoint]:
+        return [
+            {
+                "d": p["d"],
+                "log_lam": r(p["log_lam"]),
+                "cv": [r(v) for v in p["cv"]],
+                "fresh": r(p["fresh"]),
+            }
+            for p in run
+        ]
+
+    payload = {
+        # Written into the committed fixture as it is: the script that writes the file and
+        # the function that computes the data.
+        "generated_by": "scripts/generate_lesson_figures.py (hpo_race_data)",
+        # The figure fits its curves from these, and a degree-15 fit magnifies input rounding, so
+        # the points keep 12 significant digits (the same on every platform).
+        "data": {
+            "x": [float(f"{v:.12g}") for v in data["x"]],
+            "y": [float(f"{v:.12g}") for v in data["y"]],
+        },
+        "space": {"degrees": HPO_DEGREES, "log_lam": HPO_LATTICE_LOG_LAM},
+        "map": {
+            "cv": [[[r(v) for v in row] for row in split] for split in data["map_cv"]],
+            "fresh": [[r(v) for v in row] for row in data["map_fresh"]],
+        },
+        "runs": {
+            "grid": points(data["grid"]),
+            "grid_mid": points(data["grid_mid"]),
+            "random": [points(run) for run in data["random"]],
+        },
+        "random_bests_200": [r(v) for v in data["random_bests_200"]],
+        "fits": [
+            {"d": f["d"], "log_lam": f["log_lam"], "coef": [float(f"{c:.9g}") for c in f["coef"]]}
+            for f in data["fits"]
+        ],
+    }
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n"
 
 
-def _hpo_search_svg() -> str:
-    data = hpo_search_data()
-    terrain = data["terrain"]
-    low, high = HPO_LOG_LAM
-    grid, rand = data["grid"], data["random"]
-    parts = _open(
-        "同じ16回で試す設定",
-        (
-            "次数と正則化の強さの2つの設定を、評価16回で探す2つの方法です。"
-            f"格子ではlog10 λの値が{grid['distinct_lam']}種類、"  # type: ignore[index]
-            f"ランダムでは{rand['distinct_lam']}種類（seed 0）になります。"  # type: ignore[index]
-            f"背景の灰色の濃さは交差検証誤差で、16点の最良は格子が{grid['values'][grid['best']]:.3f}、"  # type: ignore[index]
-            f"ランダムが{rand['values'][rand['best']]:.3f}です。"  # type: ignore[index]
-        ),
-        596,
+@cache
+def hpo_selection_data() -> dict[str, list[tuple[float, float]]]:
+    """100 other datasets: the score when chosen, and the score on the fresh points.
+
+    `selected` picks the best of 16 random settings by cross-validation. `fixed` uses one setting
+    decided in advance, (degree 3, log10 lambda = -3.5), so nothing is chosen.
+    """
+    fresh = _Fresh()
+    selected, fixed = [], []
+    for seed in range(100, 200):
+        xs, ys = hpo_data(seed)
+        configs = hpo_random_configs(seed + 5000)
+        cv = _Cv(xs, ys)
+        scores = [cv.mse(d, lam) for d, lam in configs]
+        best = min(range(len(configs)), key=lambda i: scores[i])
+        selected.append((scores[best], fresh.mse(xs, ys, *configs[best])))
+        fixed.append((cv.mse(3, 10.0**-3.5), fresh.mse(xs, ys, 3, 10.0**-3.5)))
+    return {"selected": selected, "fixed": fixed}
+
+
+def hpo_selection_summary(pairs: Sequence[tuple[float, float]]) -> tuple[float, float, int]:
+    """Median score when chosen, median score on the fresh points, datasets where fresh is worse."""
+    return (
+        statistics.median(p[0] for p in pairs),
+        statistics.median(p[1] for p in pairs),
+        sum(p[1] > p[0] for p in pairs),
     )
-    px = _scale(low, high, 64, 420)
-    cell_w = (420 - 64) / ((high - low) * 2)
-    cell_h = 10
-    for index, (key, label) in enumerate(
-        (
-            ("grid", "格子（4×4）：λは{n}種類"),
-            ("random", "ランダム：λは{n}種類"),
-        )
-    ):
-        top = 66 + index * 216
-        group = data[key]
-        parts.append(_text(20, top - 12, label.format(n=group["distinct_lam"])))  # type: ignore[index]
-        for d in HPO_DEGREES:
-            y = top + (15 - d) * cell_h
-            for c in range(int((high - low) * 2)):
-                parts.append(
-                    f'<rect x="{64 + c * cell_w:.2f}" y="{y}" width="{cell_w + 0.4:.2f}" '
-                    f'height="{cell_h}" fill="{_hpo_shade(terrain[(d, c)])}"/>'  # type: ignore[index]
-                )
-        parts.append(
-            f'<path d="M64 {top}V{top + 14 * cell_h}H420" fill="none" stroke="{POINT}" '
-            'stroke-width="1.5"/>'
-        )
-        for d in (2, 8, 15):
-            parts.append(_text(56, top + (15 - d) * cell_h + 9, f"{d}", "tick", "end"))
-        for e in (-6, -4, -2, 0):
-            parts.append(_text(px(e), top + 14 * cell_h + 36, f"{e}", "tick", "middle"))
-        for _, lam in group["configs"]:  # type: ignore[index]
-            parts.append(
-                f'<path d="M{px(math.log10(lam)):.2f} {top + 14 * cell_h + 3}v10" '
-                f'stroke="{POINT}" stroke-width="2"/>'
-            )
-        for i, (d, lam) in enumerate(group["configs"]):  # type: ignore[index]
-            cx, cy = px(math.log10(lam)), top + (15 - d) * cell_h + cell_h / 2
-            parts.append(
-                f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="4.5" fill="{LINE}" stroke="#f7f8f3" '
-                'stroke-width="1.5"/>'
-            )
-            if i == group["best"]:  # type: ignore[index]
-                parts.append(
-                    f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="9" fill="none" stroke="{UPDATE}" '
-                    'stroke-width="3"/>'
-                )
-    parts.append(_text(420, 66 + 216 + 14 * cell_h + 58, "log10 λ", "tick", "end"))
-    parts.append(_text(70, 66 + 216 + 14 * cell_h + 58, "各パネルの縦は次数 d", "tick"))
-    parts.append(_text(20, 520, "緑の丸：評価した設定　橙の輪：16点のうちの最良"))
-    parts.append(_text(20, 544, "紺の短い線：試したλの値　灰が濃いほど誤差が大きい", "note"))
-    parts.append(
-        _text(
-            20,
-            568,
-            f"最良の誤差　格子 {grid['values'][grid['best']]:.3f}　"  # type: ignore[index]
-            f"ランダム {rand['values'][rand['best']]:.3f}",
-            "note",
-        )
-    )
-    parts.append("</svg>")
-    return "".join(parts) + "\n"
 
 
-FIGURES: dict[str, Callable[[], str]] = {
-    "hpo-search-points.svg": _hpo_search_svg,
+# The lesson's explorable replaced this article's static figure.
+FIGURES: dict[str, Callable[[], str]] = {}
+# Scores of the race explorable, keyed by the path from the repository root.
+EXTRA_OUTPUTS: dict[str, Callable[[], str]] = {
+    "site/src/features/explorable/figures/hpo-budget-race/fixture.json": hpo_race_fixture,
 }

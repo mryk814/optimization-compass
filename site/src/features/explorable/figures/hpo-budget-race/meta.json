@@ -1,0 +1,18 @@
+{
+  "id": "hpo-budget-race",
+  "title_ja": "同じ16回の評価を、格子とランダムで使って比べる",
+  "question": "同じ16回で見つけた最良の点数の差は、設定の良さの差か。",
+  "fixed_conditions": "30点（乱数の種1、y=sin 3x+0.5x に標準偏差0.4のノイズ）に Legendre 基底のリッジ多項式を当てはめる。設定は次数2〜15と log10 λ −6〜1。点数は5分割交差検証の平均二乗誤差で、分け方を変える場面以外は分け方を1つに固定する。予算は評価16回。格子は次数 2, 6, 11, 15 と、log10 λ の両端を含む4点。ランダムは乱数の種0で、次数と log10 λ を一様に引く。2つの実行で違うのは設定の置き方だけ。「新しい5000点」は同じ式から別の乱数で作り、30点すべてで当てはめ直した曲線を測る。点数は Python が計算した固定データで、曲線だけを図が30点から当てはめる。",
+  "not_implied": "1つのデータ、1つの予算、1つの乱数の種での結果であり、格子探索とランダム探索の優劣を示さない。格子は置き方を半マス変えると最良が0.192から0.137になる。新しい点で差が消えることも、この2つの設定についての結果で、交差検証の差がいつも意味を持たないことは示さない。選んだ点数がどれだけ甘くなるかは、データの量、候補の数、ノイズで変わる。真の曲線と新しい5000点は答え合わせ用で、実際の問題では手に入らない。評価1回は数ミリ秒で、「高価」は想定である。",
+  "params": {
+    "mode": { "type": "choice", "choices": ["probe", "race"], "default": "race" },
+    "d": { "type": "integer", "min": 2, "max": 15, "default": 3 },
+    "loglam": { "type": "number", "min": -6, "max": 1, "default": -3.5 },
+    "evals": { "type": "number", "min": 0, "max": 16, "default": 16 },
+    "grid": { "type": "choice", "choices": ["edge", "center"], "default": "edge" },
+    "split": { "type": "integer", "min": 0, "max": 11, "default": 0 },
+    "score": { "type": "choice", "choices": ["cv", "fresh"], "default": "cv" },
+    "seed": { "type": "integer", "min": 0, "max": 7, "default": 0 },
+    "spread": { "type": "choice", "choices": ["off", "on"], "default": "off" }
+  }
+}
