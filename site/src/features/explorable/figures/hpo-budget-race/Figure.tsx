@@ -53,8 +53,6 @@ function fromValues(values: BeatSettings | ResolvedSettings, base: Settings): Se
   };
 }
 
-/** Seconds the grid takes to slide to its new place when a lesson step moves it. */
-const SLIDE_S = 1.2;
 /** Seconds the bars take to move from the score when chosen to the score on fresh points. */
 const REVEAL_S = 1.6;
 const GAP = 8;
@@ -125,8 +123,9 @@ export default function HpoBudgetRace() {
 
   const evals = guided ? numberSetting(tour.values, "evals", BUDGET) : timeline.position;
   const count = Math.min(BUDGET, Math.floor(evals + 1e-9));
-  // A lesson step that moves the grid shows it sliding there; the scores change when it arrives.
-  const slide = guided && grid === "center" ? clamp(tour.local / SLIDE_S, 0, 1) : 1;
+  // The lesson step that re-places the grid sweeps `slide` from 0 to 1, so the grid is seen moving
+  // there; the scores change when it arrives. Everywhere else the grid is simply where it is.
+  const slide = guided && grid === "center" ? clamp(numberSetting(tour.values, "slide", 1), 0, 1) : 1;
   const reveal = score === "fresh" ? (guided ? clamp(tour.local / REVEAL_S, 0, 1) : 1) : 0;
 
   const gridPoints = gridRun(slide < 1 ? "edge" : grid);

@@ -20,6 +20,7 @@ function renderStep(settings: BeatSettings, local = 6) {
 
 const RACE = {
   mode: "race", d: 3, loglam: -3.5, evals: 16, grid: "edge", split: 0, score: "cv", seed: 0, spread: "off",
+  slide: 1,
 } as const;
 
 describe("hpo budget race figure", () => {
@@ -78,7 +79,7 @@ describe("hpo budget race figure", () => {
   });
 
   it("slides the grid before the moved grid's scores count, and grows the fresh bars", () => {
-    renderStep({ ...RACE, grid: "center", spread: "on" }, 0.5);
+    renderStep({ ...RACE, grid: "center", spread: "on", slide: 0.4 });
     expect(readout()).toContain("格子の最良 0.192");
     expect(svgText()).toContain("乱数200通り");
     cleanup();

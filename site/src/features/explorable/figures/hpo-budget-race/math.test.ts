@@ -60,13 +60,16 @@ describe("hpo budget race (30-point example)", () => {
     expect([distinctLambdas(grid, 5), distinctLambdas(random, 5), bestIndex(grid, 0, 0)]).toEqual([4, 5, -1]);
   });
 
-  it("step 3: moving the grid by half a cell swaps the order", () => {
+  it("step 3: placing the grid at the centre of each interval swaps the order", () => {
     const center = gridRun("center");
     expect(r3(bestSoFar(center, 0)[0])).toBe(0.137);
     expect(setting(center[bestIndex(center, 16, 0)])).toEqual([3, -3.38]);
     expect(bestSoFar(center, 0)[15]).toBeLessThan(bestSoFar(randomRun(0), 0)[15]);
     expect(RANDOM_BESTS).toHaveLength(200);
     expect([r3(Math.min(...RANDOM_BESTS)), r3(Math.max(...RANDOM_BESTS))]).toEqual([0.137, 0.192]);
+    const sorted = [...RANDOM_BESTS].sort((a, b) => a - b);
+    expect(r3((sorted[99] + sorted[100]) / 2)).toBe(0.138);
+    expect(RANDOM_BESTS.filter((best) => r3(best) <= 0.137)).toHaveLength(95);
   });
 
   it("step 4: other splits move the scores and the chosen setting", () => {
@@ -82,6 +85,13 @@ describe("hpo budget race (30-point example)", () => {
     for (let split = 0; split < SPLITS; split += 1) {
       expect(bestSoFar(random, split)[15]).toBeLessThan(bestSoFar(grid, split)[15]);
     }
+    // Against the grid at the centres (what the step shows) the order itself moves with the split:
+    // the random run is lower in 5 of the 12, the grid in 7.
+    const center = gridRun("center");
+    const randomLower = Array.from({ length: SPLITS }, (_, split) => split)
+      .filter((split) => bestSoFar(random, split)[15] < bestSoFar(center, split)[15]);
+    expect(randomLower).toEqual([2, 3, 4, 8, 11]);
+    expect([r3(bestSoFar(center, 11)[15]), r3(bestSoFar(random, 11)[15])]).toEqual([0.153, 0.153]);
   });
 
   it("step 6: on the fresh points the gap between the two winners closes", () => {
@@ -93,6 +103,9 @@ describe("hpo budget race (30-point example)", () => {
     expect([r3(scoreOf(g, "fresh", 0)), r3(scoreOf(r, "fresh", 0))]).toEqual([0.175, 0.173]);
     expect(r3(g.cv[0] - r.cv[0])).toBe(0.048);
     expect(r3(g.fresh - r.fresh)).toBe(0.002);
+    // Both sit near the lowest fresh-point score anywhere on the map.
+    const cells = DEGREES.flatMap((_, row) => LOG_LAMS.map((__, column) => mapScore(row, column, "fresh", 0)));
+    expect(r3(Math.min(...cells))).toBe(0.17);
     // Where there are data points (x up to 0.89) the two chosen curves are nearly the same line:
     // under 0.2 apart on a panel that spans 5. Past the last point they part (0.44 at x = 1).
     const gap = (x: number) => Math.abs(
