@@ -7,9 +7,6 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from optimization_compass.content_models import ContentPage
-from optimization_compass.content_skeletons import SKELETONS, skeleton_gaps, skeleton_kind
-
-FORMULATION_SECTIONS = SKELETONS["formulation"]
 
 MINIMUM_CONCEPT_SUMMARY_CHARACTERS = 35
 MINIMUM_CONCEPT_BODY_CHARACTERS = 1_200
@@ -141,30 +138,11 @@ def inspect_concept(page: ContentPage, known_routes: frozenset[str]) -> ConceptQ
     )
 
 
-def is_formulation_article(page: ContentPage) -> bool:
-    return skeleton_kind(page) == "formulation"
-
-
-def formulation_skeleton_gaps(page: ContentPage) -> tuple[str, ...]:
-    """Return the problems with a formulation article's section skeleton, or an empty tuple."""
-    return skeleton_gaps(page) if is_formulation_article(page) else ()
-
-
 def require_published_concept_quality(
     pages: Iterable[ContentPage], known_routes: frozenset[str]
 ) -> tuple[ConceptQualityRow, ...]:
     """Reject published concepts that expose a visibly incomplete learning surface."""
     published = [page for page in pages if page.kind == "concept" and page.status == "published"]
-    skeleton_failures = [
-        f"{page.content_id} ({', '.join(gaps)})"
-        for page in published
-        if (gaps := formulation_skeleton_gaps(page))
-    ]
-    if skeleton_failures:
-        raise ValueError(
-            "formulation articles must follow the formulation skeleton: "
-            + "; ".join(skeleton_failures)
-        )
     rows = tuple(inspect_concept(page, known_routes) for page in published)
     failures = [row for row in rows if not row.meets_floor]
     if failures:

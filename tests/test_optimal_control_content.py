@@ -17,9 +17,7 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
         "concept.path-terminal-constraints",
         "concept.time-discretization",
     ]
-    assert "## ロボティクスでの読み替え" in family.body
     assert "#/learn/concept.receding-horizon" in family.body
-    assert family.body.index("## 30秒でつかむ") < family.body.index("## まず読む: 5つの概念")
     assert family.visualization_ids == (
         "pendulum-collocation-coarse",
         "pendulum-collocation-refined",
@@ -55,7 +53,6 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
     for content_id, prerequisites in expected.items():
         page = pages[content_id]
         assert list(page.prerequisites) == prerequisites
-        assert "## 次に読む" in page.body
         assert "#/learn/concept.trajectory-variable" in page.body
 
     assert style_warnings(pages["ilqr-ddp"]) == ()

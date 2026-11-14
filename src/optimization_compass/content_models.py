@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -9,6 +10,9 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from optimization_compass.content_markdown import ContentHeading, render_markdown
+
+ArticleKind = Literal["formulation", "method", "family", "concept"]
+_ARCHETYPE_ID_PATTERN = re.compile(r"^PA\d{3}$")
 
 
 class _Frontmatter(BaseModel):
@@ -106,6 +110,17 @@ class ContentPage:
     body: str
     html: str
     toc: tuple[ContentHeading, ...]
+
+
+def article_kind(page: ContentPage) -> ArticleKind:
+    """What an article explains: a formulation (problem archetype), method, family, or concept."""
+    if page.canonical_entity_type == "problem" and _ARCHETYPE_ID_PATTERN.match(
+        page.canonical_entity_id
+    ):
+        return "formulation"
+    if page.kind == "method":
+        return "family" if page.content_id.startswith("family.") else "method"
+    return "concept"
 
 
 def load_content(directory: Path) -> list[ContentPage]:

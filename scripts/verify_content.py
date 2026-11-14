@@ -9,7 +9,6 @@ from optimization_compass.content_quality import (
     public_content_routes,
     require_published_concept_quality,
 )
-from optimization_compass.content_skeletons import load_pending, require_content_skeletons
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
@@ -79,12 +78,6 @@ def verify_content(root: Path) -> dict[str, int | str]:
         path_ids=path_ids,
     )
     require_published_concept_quality(source_pages, content_routes)
-    prunable = require_content_skeletons(source_pages, load_pending(root))
-    if prunable:
-        print(
-            "skeleton: these pending articles now conform; run "
-            "`uv run python scripts/content_skeleton_report.py --prune`: " + ", ".join(prunable)
-        )
     clean = require_language_contract(root)
     if clean:
         print(

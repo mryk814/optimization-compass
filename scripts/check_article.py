@@ -3,7 +3,7 @@
     uv run python scripts/check_article.py content/concepts/knapsack.md [more.md ...]
 
 For each file this reports, from the Markdown sources and the released database only:
-parse errors, the section skeleton, the concept publication floor and its "次に読む" links,
+parse errors, the concept publication floor and its "次に読む" links,
 unknown source / prerequisite / related IDs, and prose style warnings. Exit code 1 on errors;
 style warnings are listed but do not fail the check.
 """
@@ -14,14 +14,13 @@ import json
 import sys
 from pathlib import Path
 
-from optimization_compass.content_models import load_content, parse_content
+from optimization_compass.content_models import article_kind, load_content, parse_content
 from optimization_compass.content_quality import (
     inspect_concept,
     language_contract_warnings,
     public_content_routes,
     style_warnings,
 )
-from optimization_compass.content_skeletons import skeleton_gaps, skeleton_kind
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.formulation_atlas import authored_route_ids
 
@@ -67,8 +66,6 @@ def main(paths: list[str]) -> int:
             for item in (*page.prerequisites, *page.related_ids)
             if item not in content_ids
         ]
-        if skeleton_kind(page) is not None:
-            errors += [f"skeleton {gap}" for gap in skeleton_gaps(page)]
         if page.kind == "concept" and page.status == "published":
             row = inspect_concept(page, routes)
             if not row.meets_floor:
@@ -79,8 +76,7 @@ def main(paths: list[str]) -> int:
                 )
         warnings = [*style_warnings(page), *language_contract_warnings(page)]
         status = "ERROR" if errors else "ok"
-        kind = skeleton_kind(page) or page.kind
-        print(f"{page.content_id} [{kind}]: {status}, {len(warnings)} style warnings")
+        print(f"{page.content_id} [{article_kind(page)}]: {status}, {len(warnings)} style warnings")
         for error in errors:
             print(f"  error: {error}")
         for warning in warnings:

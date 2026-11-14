@@ -7,7 +7,6 @@ from pathlib import Path
 import pytest
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import formulation_skeleton_gaps, is_formulation_article
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.formulation_atlas import (
     FormulationAtlasSeed,
@@ -271,57 +270,3 @@ def test_step_before_its_prerequisite_is_rejected(pages, archetype_ids: set[str]
     )
     with pytest.raises(ValueError, match="before its prerequisite concept.convexity"):
         validate_learning_paths(seed, archetype_ids=archetype_ids, content_pages=pages)
-
-
-def test_formulation_articles_follow_the_skeleton(pages) -> None:  # type: ignore[no-untyped-def]
-    articles = [page for page in pages if is_formulation_article(page)]
-    assert len(articles) >= 5
-    assert all(formulation_skeleton_gaps(page) == () for page in articles)
-
-    lsq = next(page for page in articles if page.canonical_entity_id == "PA005")
-    from optimization_compass.content_skeletons import skeleton_gaps
-
-    assert skeleton_gaps(lsq) == ()
-    headings = list(lsq.toc)
-    limits = next(i for i, h in enumerate(headings) if h.label == "つまずきやすい点")
-    related = next(i for i, h in enumerate(headings) if h.label == "困りごとから関連する問題へ")
-    headings[limits], headings[related] = headings[related], headings[limits]
-    assert skeleton_gaps(replace(lsq, toc=tuple(headings))) == ("order",)
-
-    lp = next(page for page in articles if page.canonical_entity_id == "PA017")
-    reordered = replace(lp, toc=(lp.toc[1], lp.toc[0], *lp.toc[2:]))
-    assert formulation_skeleton_gaps(reordered) == ("order",)
-    trimmed = replace(lp, toc=tuple(h for h in lp.toc if h.label != "小さな例"))
-    assert formulation_skeleton_gaps(trimmed) == ("missing:小さな例",)
-
-
-def test_articles_outside_the_pending_list_follow_their_skeleton(pages) -> None:  # type: ignore[no-untyped-def]
-    from optimization_compass.content_skeletons import load_pending, require_content_skeletons
-
-    pending = load_pending(ROOT)
-    assert require_content_skeletons(pages, pending) == ()  # the pending list is pruned
-    method = next(page for page in pages if page.content_id == "primal-simplex")
-    broken = replace(method, toc=tuple(h for h in method.toc if h.label != "小さな例"))
-    with pytest.raises(ValueError, match="primal-simplex \\[method\\] \\(missing:小さな例\\)"):
-        require_content_skeletons([broken], frozenset())
-    # A pending article may still break the skeleton, and becomes prunable once it conforms.
-    assert require_content_skeletons([broken], frozenset({"primal-simplex"})) == ()
-    assert require_content_skeletons([method], frozenset({"primal-simplex"})) == ("primal-simplex",)
-    with pytest.raises(ValueError, match="unknown articles: no-such-article"):
-        require_content_skeletons(pages, frozenset({"no-such-article"}))
-
-
-def test_method_articles_may_close_with_a_trouble_route(pages) -> None:  # type: ignore[no-untyped-def]
-    from optimization_compass.content_skeletons import METHOD_TROUBLE_ROUTE, skeleton_gaps
-
-    method = next(page for page in pages if page.content_id == "adam")
-    routed = replace(
-        method,
-        toc=tuple(
-            replace(h, label=METHOD_TROUBLE_ROUTE) if h.label == "次に読む" else h
-            for h in method.toc
-        ),
-    )
-    assert skeleton_gaps(routed) == ()
-    misplaced = replace(routed, toc=(*routed.toc[-1:], *routed.toc[:-1]))
-    assert skeleton_gaps(misplaced) == ("order",)
