@@ -4151,7 +4151,7 @@
       ],
       "family_id": "black_box",
       "lens": "oracle",
-      "maturity": "article",
+      "maturity": "article_with_figure",
       "methods": [
         {
           "fit_label_ja": "標準第一候補",
@@ -4937,7 +4937,7 @@
         "S170"
       ],
       "standard_form": "\\min_{x}\\; F\\big(x,y^{*}\\big) \\;\\text{ s.t. }\\; y^{*}\\in\\arg\\min_{y}\\, f(x,y)",
-      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><mi>x</mi><mo>&#x0002C;</mo><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo>&#x02208;</mo><mi>\\arg</mi><msub><mo>min</mo><mrow><mi>y</mi></mrow></msub><mspace width=\"0.167em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
+      "standard_form_html": "<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi></mrow></msub><mspace width=\"0.278em\" /><mi>F</mi><mo minsize=\"1.2em\" maxsize=\"1.2em\">(</mo><mi>x</mi><mo>&#x0002C;</mo><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo minsize=\"1.2em\" maxsize=\"1.2em\">)</mo><mspace width=\"0.278em\" /><mtext>&#x000A0;s.t.&#x000A0;</mtext><mspace width=\"0.278em\" /><msup><mi>y</mi><mrow><mo>&#x0002A;</mo></mrow></msup><mo>&#x02208;</mo><mrow><mi mathvariant=\"normal\">a</mi><mi mathvariant=\"normal\">r</mi><mi mathvariant=\"normal\">g</mi></mrow><msub><mo>min</mo><mrow><mi>y</mi></mrow></msub><mspace width=\"0.167em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>"
     },
     {
       "alternatives": [
