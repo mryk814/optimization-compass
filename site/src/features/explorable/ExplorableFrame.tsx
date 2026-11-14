@@ -48,7 +48,8 @@ export function ExplorableFrame({
       <div aria-describedby={summaryId} aria-label="図" className="ex-stage" role="group">
         {stage}
       </div>
-      <p aria-live="polite" className="ex-sr-only" id={summaryId}>{summary}</p>
+      {/* A guided scene or lesson moves the settings every frame; its caption is announced per step instead. */}
+      <p aria-live={guided ? "off" : "polite"} className="ex-sr-only" id={summaryId}>{summary}</p>
       {!guided && player}
       <div className="ex-readout">{readout}</div>
       <details className="ex-limits">

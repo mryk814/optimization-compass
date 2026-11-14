@@ -10,6 +10,7 @@ import { useSceneTour } from "./useSceneTour";
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
   vi.unstubAllGlobals();
   document.body.replaceChildren();
 });
@@ -90,7 +91,13 @@ function Probe({ onExit }: { onExit(settings: BeatSettings): void }) {
   const tour = useSceneTour("probe", [], onExit);
   return (
     <output data-testid="probe">
-      {JSON.stringify({ lesson: tour.lesson, active: tour.active, index: tour.index, values: tour.values })}
+      {JSON.stringify({
+        lesson: tour.lesson,
+        active: tour.active,
+        index: tour.index,
+        values: tour.values,
+        beatSettings: tour.beat?.settings,
+      })}
     </output>
   );
 }
@@ -105,6 +112,7 @@ function renderLesson(steps: StepSpec[] = STEPS) {
     active: boolean;
     index: number;
     values: ResolvedSettings;
+    beatSettings?: BeatSettings;
   };
   const stepNodes = markup.steps.map((step) => step.node);
   const active = () => stepNodes.findIndex((node) => node.getAttribute("aria-current") === "step");
@@ -146,6 +154,8 @@ describe("Lesson", () => {
 
     frames.advance(1.8); // a sweep is linear over the beat less its 1.5 s hold: 1.8 / 4.5 of 90
     expect(probe().values.iter).toBeCloseTo(36, 5);
+    // A figure that still reads `tour.beat.settings` gets the same plain values, not the sweep.
+    expect(probe().beatSettings).toEqual(probe().values);
     frames.advance(10);
     expect(probe().values.iter).toBe(90);
     expect(active()).toBe(0); // without auto mode a finished step waits for the reader
@@ -190,6 +200,7 @@ describe("Lesson", () => {
   });
 
   it("advances by itself in auto mode, waits at a predict step, and stops at the end", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     const frames = stubFrames();
     const { markup, active } = renderLesson();
 
@@ -204,7 +215,11 @@ describe("Lesson", () => {
     expect(active()).toBe(2); // the predict step waits for a choice
 
     fireEvent.click(within(markup.steps[2].node).getByRole("button", { name: "発散する" }));
+    // The marked answer stays up for a moment before the lesson moves on.
     frames.advance(0.2);
+    act(() => { vi.advanceTimersByTime(1_000); });
+    expect(active()).toBe(2);
+    act(() => { vi.advanceTimersByTime(1_000); });
     expect(active()).toBe(3);
     frames.advance(6);
     expect(active()).toBe(3);
@@ -250,9 +265,29 @@ describe("Lesson", () => {
     expect(active()).toBe(2);
   });
 
+  it("starts a narrow screen's first step once the figure has come up to the middle", () => {
+    const frames = stubFrames();
+    const observers: Array<{ callback: IntersectionObserverCallback; options?: IntersectionObserverInit }> = [];
+    vi.stubGlobal("IntersectionObserver", class {
+      constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+        observers.push({ callback, options });
+      }
+      observe() {}
+      disconnect() {}
+    });
+    const { probe } = renderLesson();
+
+    frames.advance(3);
+    expect(probe().values.iter).toBe(0);
+    expect(observers.map((observer) => observer.options?.rootMargin)).toEqual(["0px 0px -50% 0px"]);
+    act(() => observers[0].callback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    frames.advance(1.8);
+    expect(probe().values.iter).toBeCloseTo(36, 5);
+  });
+
   it("follows the step crossing the middle of a wide screen, except while it scrolls there itself", () => {
     stubMedia("min-width");
-    stubFrames();
+    const frames = stubFrames();
     const observers: Array<{ callback: IntersectionObserverCallback; options?: IntersectionObserverInit }> = [];
     vi.stubGlobal("IntersectionObserver", class {
       constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
@@ -265,7 +300,7 @@ describe("Lesson", () => {
     Element.prototype.scrollIntoView = function scrollIntoView(this: Element) {
       scrolled.push(this);
     };
-    const { markup, stepNodes, active, probe } = renderLesson();
+    const { markup, stepNodes, active, probe, onExit } = renderLesson();
     const cross = (node: Element) => act(() => observers
       .filter((observer) => observer.options?.rootMargin === "-50% 0px -50% 0px")
       .forEach((observer) => observer.callback(
@@ -274,8 +309,14 @@ describe("Lesson", () => {
       )));
 
     expect(markup.root).toHaveClass("is-live", "is-wide");
-    // The clock waits until the lesson is first on screen.
-    act(() => observers[0].callback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    // The first step waits until its text reaches the middle; the figure alone being on screen
+    // is not enough, or its motion would be over before the reader gets to the text.
+    frames.advance(3);
+    expect(probe().values.iter).toBe(0);
+    cross(stepNodes[0]);
+    frames.advance(1.8);
+    expect(probe().values.iter).toBeCloseTo(36, 5);
+
     cross(stepNodes[3]);
     expect(active()).toBe(3);
     expect(probe()).toMatchObject({ index: 3, values: { eta: 0.053, iter: 0 } });
@@ -284,6 +325,18 @@ describe("Lesson", () => {
     expect(scrolled.at(-1)).toBe(stepNodes[2]);
     cross(stepNodes[3]); // the scroll it started passes other steps; they must not take over
     expect(active()).toBe(2);
+
+    // In free play the step already showing may cross the middle again without taking the
+    // figure back; a different step does take it back.
+    vi.spyOn(performance, "now").mockReturnValue(performance.now() + 5_000);
+    cross(stepNodes[3]);
+    fireEvent.click(screen.getByRole("button", { name: "自分で動かす" }));
+    expect(onExit).toHaveBeenCalledTimes(1);
+    cross(stepNodes[3]);
+    expect(probe().active).toBe(false);
+    cross(stepNodes[2]);
+    expect(probe()).toMatchObject({ active: true, index: 2 });
+    vi.restoreAllMocks();
     delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
   });
 
@@ -342,11 +395,27 @@ describe("a lesson inside compiled content", () => {
     expect(within(lesson).getAllByText("見る問い")).toHaveLength(1);
     expect(screen.queryByText("別の図の代替")).not.toBeInTheDocument();
 
+    // The figure's summary changes with every frame of a sweep, so it is not announced while the
+    // lesson drives it; the lesson announces each step once instead.
+    const summary = within(lesson).getByText(/学習率 0\.020、/);
+    expect(summary).toHaveAttribute("aria-live", "off");
+    expect(within(lesson).getByText("解説 1 / 2。学習率が小さい段。")).toHaveAttribute("aria-live", "polite");
+
     fireEvent.click(within(lesson).getByRole("button", { name: "次へ ▶" }));
     expect(within(lesson).getByText(/学習率 0\.045、/)).toBeInTheDocument();
+    expect(within(lesson).getByText("解説 2 / 2。学習率を上げた段。")).toBeInTheDocument();
 
-    fireEvent.click(within(lesson).getByRole("button", { name: "自分で動かす" }));
-    expect(within(lesson).getByRole("slider", { name: /学習率/ })).toHaveValue("0.045");
+    // Changing mode swaps the bar's buttons; focus goes where the reader acts next.
+    const takeOver = within(lesson).getByRole("button", { name: "自分で動かす" });
+    takeOver.focus();
+    fireEvent.click(takeOver);
+    const eta = within(lesson).getByRole("slider", { name: /学習率/ });
+    expect(eta).toHaveValue("0.045");
+    expect(eta).toHaveFocus();
+    expect(within(lesson).getByText(/学習率 0\.045、/)).toHaveAttribute("aria-live", "polite");
+
+    fireEvent.click(within(lesson).getByRole("button", { name: "◀ 解説に戻る" }));
+    expect(within(lesson).getByRole("button", { name: "自分で動かす" })).toHaveFocus();
   });
 
   it("keeps the static steps and fallback for a figure the site does not know", () => {
