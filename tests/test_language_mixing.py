@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
+from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.language_mixing import (
     PENDING_PATH,
     SURFACES,
+    article_mixed_words,
     mixed_words,
     pending_document,
+    require_article_language,
     require_language_contract,
     surface_hits,
 )
@@ -95,3 +99,29 @@ def test_pending_list_is_sorted_and_canonical() -> None:
         for item_id in ids
     }
     assert raw == pending_document(keys)  # type: ignore[arg-type]
+
+
+def _article(body: str) -> ContentPage:
+    page = next(page for page in load_content(ROOT / "content") if page.kind == "concept")
+    return replace(page, body=body, status="published")
+
+
+def test_article_detector_finds_english_glued_into_japanese_prose() -> None:
+    body = (
+        "## 見出し\n\ncostを最小化し、状態fieldを更新します。\n\n"
+        "```python\nsolverを = 1\n```\n\n`stateが` はコードなので数えません。"
+    )
+
+    hits = article_mixed_words(_article(body))
+
+    assert [(hit.line, hit.text) for hit in hits] == [(3, "costを"), (3, "状態field")]
+
+
+def test_published_articles_must_write_ordinary_words_in_japanese() -> None:
+    published = [page for page in load_content(ROOT / "content") if page.status == "published"]
+    require_article_language(published)
+
+    noisy = _article("## 見出し\n\ncostを最小化します。")
+    with pytest.raises(ValueError, match=r"writing-articles\.md.*\(costを\)"):
+        require_article_language([noisy])
+    require_article_language([replace(noisy, status="draft")])

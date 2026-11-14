@@ -12,12 +12,9 @@ from pydantic import BaseModel, ConfigDict
 
 from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import ContentPage, load_content, parse_content
-from optimization_compass.content_quality import (
-    broken_internal_links,
-    known_public_routes,
-    language_contract_warnings,
-)
+from optimization_compass.content_quality import broken_internal_links, known_public_routes
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.language_mixing import article_mixed_words
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import run_task, validation_task_for_paths
 
@@ -129,11 +126,11 @@ def require_publish_ready(
     garbled = unrenderable_math(page.body)
     if garbled:
         errors.append("formulas will not render: " + " / ".join(garbled))
-    mixed = language_contract_warnings(page)
+    mixed = article_mixed_words(page)
     if mixed:
         errors.append(
             "English words mixed into Japanese prose: "
-            + ", ".join(f"{warning.detail}@{warning.line}" for warning in mixed)
+            + ", ".join(f"{hit.text}@body line {hit.line}" for hit in mixed)
         )
     if errors:
         raise ContentAuthoringError(f"{page.content_id} is not publish-ready: " + "; ".join(errors))

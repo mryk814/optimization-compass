@@ -1,29 +1,36 @@
-"""Ordinary English words inside Japanese reader-facing data text (ADR 0013, article-style §2).
+"""Ordinary English words inside Japanese reader-facing text (ADR 0013).
 
-Articles already have ``prose.no-language-mixing``. Gallery cases, comparisons, and the lesson text
-of visualization scenarios are written in seeds and Python contracts instead, and they reach the
-reader just as directly. This check finds lowercase English words inside their Japanese strings.
+docs/writing-articles.md（「文章」）asks for ordinary words in Japanese (ソルバー, ブラックボックス,
+信頼領域 included); names, acronyms, code, identifiers, and formulas stay as they are. Two
+detectors apply it where readers meet the text:
 
-What stays allowed: capitalised names and acronyms (Newton, BFGS, QR), code and identifiers,
-formulas, a short ASCII gloss in parentheses after a Japanese term, and the few lowercase tokens
-in ``ALLOWED_WORDS`` (math function names and units). Everything else is an ordinary word that
-article-style §2.1 asks to write in Japanese (ソルバー, ブラックボックス, 信頼領域 included).
+- Articles (``content/**/*.md``): ``article_mixed_words`` finds an ordinary English word joined
+  directly to Japanese grammar (``costを``) or glued into a Japanese compound (``状態field``). Every
+  published article must be clean (``require_article_language``).
+- Gallery cases, comparisons, and the lesson text of visualization scenarios, which are written in
+  seeds and Python contracts: ``mixed_words`` finds lowercase English words inside their Japanese
+  strings. Allowed there: capitalised names and acronyms (Newton, BFGS, QR), code and identifiers,
+  formulas, a short ASCII gloss in parentheses after a Japanese term, and the few lowercase tokens
+  in ``ALLOWED_WORDS`` (math function names and units).
 
-Items written before this check are listed in ``data/seeds/language_mixing_pending.json``. The list
-only shrinks: an item outside it must have no hits, and a pending item without hits is reported so
-it can be removed.
+Data items written before that check are listed in ``data/seeds/language_mixing_pending.json``.
+The list only shrinks: an item outside it must have no hits, and a pending item without hits is
+reported so it can be removed.
 """
 
 from __future__ import annotations
 
 import json
 import re
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
+from optimization_compass.content_models import ContentPage
+
 Surface = Literal["gallery", "comparison", "scenario"]
+_WRITE_IN_JAPANESE = "write them in Japanese (docs/writing-articles.md「文章」)"
 
 PENDING_PATH = Path("data/seeds/language_mixing_pending.json")
 # Where each surface's reader-facing text is authored or, for scenarios, exported.
@@ -53,6 +60,24 @@ _GLOSS = re.compile(r"(?<=[ぁ-んァ-ヶ一-龠ー])\s?[（(][A-Za-z][A-Za-z \-
 # A lowercase word of three or more letters, optionally hyphenated, that is not part of code.
 _WORD = re.compile(r"(?<![A-Za-z0-9_./\\-])([a-z]{3,}(?:-[a-z]+)*)(?![A-Za-z0-9_(])")
 
+# Articles: code blocks, display formulas, tables, figures, and link targets are not prose.
+_ARTICLE_FENCE = re.compile(r"^```.*?^```$", re.MULTILINE | re.DOTALL)
+_ARTICLE_DISPLAY_MATH = re.compile(r"^\$\$.*?^\$\$$", re.MULTILINE | re.DOTALL)
+_ARTICLE_LINK = re.compile(r"\[([^\]]+)\]\([^)]+\)")
+_ARTICLE_CODE = re.compile(r"`[^`]+`")
+_ENGLISH_BEFORE_PARTICLE = re.compile(
+    r"\b(?:cost|model|state|design|mesh|solver|tolerance|field|objective|constraint|"
+    r"gradient|residual|failure|success|boundary|load|scale|iteration|policy|reason|"
+    r"status|update|quality|parameter|geometry|physics|optimization|progress|valid|"
+    r"unknown|time|storage)(?:を|は|が|の|に|で|へ|と|も|だけ|した|する|しない|"
+    r"まで|から|より)"
+)
+_ENGLISH_IN_COMPOUND = re.compile(
+    r"(?:statefield|designfield|statevariable|designvariable|"
+    r"失敗status|失敗theater|状態field|状態status|設計field|設計status)",
+    re.IGNORECASE,
+)
+
 
 @dataclass(frozen=True)
 class MixingHit:
@@ -60,6 +85,48 @@ class MixingHit:
     item_id: str
     field: str
     word: str
+
+
+@dataclass(frozen=True)
+class ArticleMixingHit:
+    content_id: str
+    line: int  # line in the article body (after the frontmatter)
+    text: str
+
+
+def article_mixed_words(page: ContentPage) -> tuple[ArticleMixingHit, ...]:
+    """English words glued to Japanese grammar or compounds in one article's prose."""
+
+    def blank(match: re.Match[str]) -> str:
+        return "\n" * match.group(0).count("\n")  # keep line numbers
+
+    body = _ARTICLE_DISPLAY_MATH.sub(blank, _ARTICLE_FENCE.sub(blank, page.body))
+    hits: list[ArticleMixingHit] = []
+    for line_number, raw_line in enumerate(body.splitlines(), start=1):
+        line = raw_line.strip()
+        if not line or line.startswith(("|", ":::", "![")):
+            continue
+        visible = _ARTICLE_CODE.sub("code", _ARTICLE_LINK.sub(r"\1", line))
+        for pattern in (_ENGLISH_BEFORE_PARTICLE, _ENGLISH_IN_COMPOUND):
+            hits.extend(
+                ArticleMixingHit(page.content_id, line_number, match.group(0))
+                for match in pattern.finditer(visible)
+            )
+    return tuple(hits)
+
+
+def require_article_language(pages: Iterable[ContentPage]) -> None:
+    """Reject published articles whose prose glues ordinary English words into Japanese."""
+    failures = [
+        f"{page.content_id} ({', '.join(dict.fromkeys(hit.text for hit in hits))})"
+        for page in pages
+        if page.status == "published" and (hits := article_mixed_words(page))
+    ]
+    if failures:
+        raise ValueError(
+            "articles mix ordinary English words into Japanese prose; "
+            f"{_WRITE_IN_JAPANESE}: " + "; ".join(failures)
+        )
 
 
 def mixed_words(text: str) -> list[str]:
@@ -144,8 +211,8 @@ def require_language_contract(root: Path) -> tuple[tuple[Surface, str], ...]:
     ]
     if failures:
         raise ValueError(
-            "Japanese reader-facing text mixes in ordinary English words; write them in Japanese "
-            "(docs/article-style.md §2.1): " + "; ".join(failures)
+            "Japanese reader-facing text mixes in ordinary English words; "
+            f"{_WRITE_IN_JAPANESE}: " + "; ".join(failures)
         )
     return tuple(sorted(key for key in pending if not hits[key]))
 

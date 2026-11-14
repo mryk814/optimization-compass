@@ -13,7 +13,10 @@ from optimization_compass.content_quality import (
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
-from optimization_compass.language_mixing import require_language_contract
+from optimization_compass.language_mixing import (
+    require_article_language,
+    require_language_contract,
+)
 from optimization_compass.owner_approvals import require_owner_approvals
 from optimization_compass.release_identity import load_dataset_release_identity
 
@@ -70,6 +73,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
 
     require_internal_links(source_pages, known_public_routes(root, source_pages))
     require_renderable_math(source_pages)
+    require_article_language(source_pages)
     clean = require_language_contract(root)
     if clean:
         print(

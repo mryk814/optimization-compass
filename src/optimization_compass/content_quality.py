@@ -2,7 +2,8 @@
 
 Articles may take any shape. What is checked is what a reader would trip over: every internal app
 link (``#/...``) in a published article must open a page, not the site's "not found" page, and
-every formula must render as written.
+every formula must render as written. English words glued into Japanese prose are checked in
+``language_mixing``.
 """
 
 from __future__ import annotations
@@ -11,7 +12,6 @@ import html
 import json
 import re
 from collections.abc import Iterable
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -47,29 +47,6 @@ LEARNING_SLICE_FAMILIES = frozenset(
     {"feasible_region", "pareto_front", "field_evolution", "assignment_schedule"}
 )
 _INTERNAL_HREF = re.compile(r'<a href="(#/[^"]*)"')
-_FENCED_CODE_PATTERN = re.compile(r"^```.*?^```$", re.MULTILINE | re.DOTALL)
-_DISPLAY_MATH_PATTERN = re.compile(r"^\$\$.*?^\$\$$", re.MULTILINE | re.DOTALL)
-_MARKDOWN_LINK_PATTERN = re.compile(r"\[([^\]]+)\]\([^)]+\)")
-_BARE_ENGLISH_PARTICLE_PATTERN = re.compile(
-    r"\b(?:cost|model|state|design|mesh|solver|tolerance|field|objective|constraint|"
-    r"gradient|residual|failure|success|boundary|load|scale|iteration|policy|reason|"
-    r"status|update|quality|parameter|geometry|physics|optimization|progress|valid|"
-    r"unknown|time|storage)(?:を|は|が|の|に|で|へ|と|も|だけ|した|する|しない|"
-    r"まで|から|より)"
-)
-_GLUED_ENGLISH_PATTERN = re.compile(
-    r"(?:statefield|designfield|statevariable|designvariable|"
-    r"失敗status|失敗theater|状態field|状態status|設計field|設計status)",
-    re.IGNORECASE,
-)
-
-
-@dataclass(frozen=True)
-class StyleWarning:
-    content_id: str
-    code: str
-    line: int
-    detail: str
 
 
 def public_content_routes(
@@ -183,38 +160,6 @@ def require_renderable_math(pages: Iterable[ContentPage]) -> None:
             "formulas must render: write rows with cases, array, or matrix environments "
             "(aligned and bare \\\\ or & are shown as one garbled line): " + "; ".join(failures)
         )
-
-
-def language_contract_warnings(page: ContentPage) -> tuple[StyleWarning, ...]:
-    """Detect clear Japanese/English prose mixing in the article being prepared.
-
-    Canonical English terms, proper names, code, formulas, and identifiers remain allowed.
-    This check targets only English ordinary words joined directly to Japanese grammar or
-    glued into Japanese compounds.
-    """
-    body = _FENCED_CODE_PATTERN.sub("", page.body)
-    body = _DISPLAY_MATH_PATTERN.sub("", body)
-    warnings: list[StyleWarning] = []
-    for line_number, raw_line in enumerate(body.splitlines(), start=1):
-        line = raw_line.strip()
-        if not line or line.startswith(("|", ":::", "![")):
-            continue
-        visible = _MARKDOWN_LINK_PATTERN.sub(r"\1", line)
-        visible = re.sub(r"`[^`]+`", "code", visible)
-        matches = [
-            *_BARE_ENGLISH_PARTICLE_PATTERN.finditer(visible),
-            *_GLUED_ENGLISH_PATTERN.finditer(visible),
-        ]
-        for match in matches:
-            warnings.append(
-                StyleWarning(
-                    page.content_id,
-                    "prose.language-mixing",
-                    line_number,
-                    match.group(0),
-                )
-            )
-    return tuple(warnings)
 
 
 def _read_json(path: Path) -> Any:

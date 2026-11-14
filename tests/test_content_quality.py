@@ -11,7 +11,6 @@ from optimization_compass.content_quality import (
     broken_internal_links,
     internal_links,
     known_public_routes,
-    language_contract_warnings,
     public_content_routes,
     require_internal_links,
     require_renderable_math,
@@ -77,18 +76,6 @@ def test_draft_content_is_not_a_valid_public_next_route() -> None:
     routes = public_content_routes([draft])
 
     assert f"#/learn/{draft.content_id}" not in routes
-
-
-def test_language_contract_detects_bare_mixed_prose() -> None:
-    page = next(page for page in _published_pages() if page.kind == "concept")
-    noisy = replace(page, body="costを最小化し、状態fieldを更新します。")
-
-    warnings = language_contract_warnings(noisy)
-
-    assert [(warning.code, warning.detail) for warning in warnings] == [
-        ("prose.language-mixing", "costを"),
-        ("prose.language-mixing", "状態field"),
-    ]
 
 
 def _math(tex: str) -> str:
