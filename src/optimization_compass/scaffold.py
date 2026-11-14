@@ -58,7 +58,8 @@ def _yaml_scalar(value: str) -> str:
 
 
 def _content_method_files(requested_id: str) -> dict[str, str]:
-    summary = _todo("Japanese summary whose first body paragraph matches exactly")
+    summary = _todo("short Japanese summary for cards, search, and the page description")
+    opening = _todo("opening paragraph; it need not repeat the summary")
     article = f"""---
 content_id: {requested_id}
 kind: method
@@ -75,7 +76,7 @@ status: draft
 last_reviewed: null
 ---
 
-{summary}
+{opening}
 
 ## 直感
 
@@ -97,7 +98,8 @@ last_reviewed: null
         extra=(
             "`method_id` は既存canonical methodを確認してから埋める。content IDと"
             "canonical method IDが同じだとは仮定しない。",
-            "published記事はsummaryと最初の本文段落を完全一致させ、日本語だけで説明を完結させる。",
+            "summaryはカード・検索・ページの説明に出す短い文。本文の書き出しは自由で、"
+            "summaryと同じ文にしなくてよい。説明は日本語だけで完結させる。",
         ),
     )
     return {"method-article.md": article, "README.md": readme}

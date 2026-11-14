@@ -147,7 +147,7 @@ export function MethodPage() {
   return (
     <section className="page-panel method-detail-page">
       <p className="eyebrow">手法</p>
-      {/* The article's title is the learner-facing name; its first paragraph already states the summary. */}
+      {/* The article's title is the learner-facing name; the article opens in its own words, and its summary is card and search text, so none is repeated here. */}
       <h1>{content?.title_ja ?? method?.label ?? "手法を読み込み中…"}</h1>
       {!content && method?.summary && <p className="content-lead">{method.summary}</p>}
       <PageOrientation

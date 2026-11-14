@@ -324,7 +324,8 @@ def _branch_change_paths(root: Path, base_ref: str = "origin/main") -> list[str]
 
 
 def _method_draft(content_id: str, method_id: str) -> str:
-    summary = "TODO: 最初の本文段落と完全に一致する、レビュー済みの日本語summaryに置き換える。"
+    summary = "TODO: カード・検索・ページの説明に出す、短い日本語のsummaryに置き換える。"
+    opening = "TODO: 本文の書き出し。summaryと同じ文にしなくてよい。"
     return f'''---
 content_id: {content_id}
 kind: method
@@ -341,7 +342,7 @@ status: draft
 last_reviewed: null
 ---
 
-{summary}
+{opening}
 
 ## 30秒でつかむ
 

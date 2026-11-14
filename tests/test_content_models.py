@@ -137,11 +137,14 @@ def test_frontmatter_is_strict_yaml_schema(tmp_path: Path) -> None:
         parse_content(path)
 
 
-def test_frontmatter_summary_must_match_body(tmp_path: Path) -> None:
+def test_summary_does_not_have_to_repeat_the_opening_paragraph(tmp_path: Path) -> None:
+    # The article may open with a scene; the summary is the card and search text.
     path = _write_page(tmp_path, "## Safe\n\nDifferent.")
 
-    with pytest.raises(ValueError, match="summary must match"):
-        parse_content(path)
+    page = parse_content(path)
+
+    assert page.summary == "Summary."
+    assert "<p>Different.</p>" in page.html
 
 
 def _write_page(tmp_path: Path, body: str, *, extra: str = "") -> Path:

@@ -287,7 +287,7 @@ def test_review_scaffolds_write_only_to_separate_draft_directory(
         assert payload[id_field].endswith("draft")
 
 
-def test_content_method_scaffold_keeps_frontmatter_parseable_and_summary_aligned(
+def test_content_method_scaffold_keeps_frontmatter_parseable(
     tmp_path: Path,
 ) -> None:
     output = tmp_path / "article-draft"
@@ -311,7 +311,8 @@ def test_content_method_scaffold_keeps_frontmatter_parseable_and_summary_aligned
     metadata = yaml.safe_load(frontmatter)
     first_paragraph = body.strip().split("\n\n", 1)[0]
     assert metadata["status"] == "draft"
-    assert metadata["summary"] == first_paragraph
+    assert metadata["summary"].startswith("TODO:")
+    assert first_paragraph.startswith("TODO:")
     assert metadata["method_id"].startswith("TODO:")
 
 

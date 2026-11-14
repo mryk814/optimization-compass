@@ -154,9 +154,9 @@ def parse_content(path: Path) -> ContentPage:
     except ValueError as error:
         raise ValueError(f"{path}: invalid frontmatter: {error}") from error
     body = raw[end + 5 :].strip()
+    # ``summary`` is the short text for cards, search, and the page description. The article may
+    # open however it likes; the summary is not required to repeat its first paragraph.
     rendered = render_markdown(body, path=path)
-    if rendered.summary != fields.summary:
-        raise ValueError(f"{path}: frontmatter summary must match the first body paragraph exactly")
     return ContentPage(
         content_id=fields.content_id,
         kind=fields.kind,
