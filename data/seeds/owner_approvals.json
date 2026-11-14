@@ -9,9 +9,21 @@
       "body_sha256": "0551f92707a8",
       "approved_on": "2026-10-03"
     },
+    "concept.dynamics-defect": {
+      "body_sha256": "b08f4d758991",
+      "approved_on": "2026-11-14"
+    },
+    "concept.hyperparameter-optimization": {
+      "body_sha256": "f9e00fe79fa9",
+      "approved_on": "2026-11-14"
+    },
     "concept.linear-least-squares": {
       "body_sha256": "c5cdbf494cad",
       "approved_on": "2026-10-03"
+    },
+    "concept.linear-program": {
+      "body_sha256": "09b960951a5d",
+      "approved_on": "2026-11-14"
     }
   }
 }
