@@ -107,6 +107,13 @@ def test_a_step_keeps_what_the_previous_step_ended_on() -> None:
     assert (settings[3]["eta"], settings[3]["iter"], settings[3]["kappa"]) == (0.2, 10, 16)
 
 
+def test_a_carried_rate_ends_where_the_site_stops_it() -> None:
+    # 2.32 * 12.5 is 28.999999999999996 in floating point; scene.ts counts it as 29 whole steps.
+    html = _render(_lesson(_step("seconds=12.5 kappa=1..40@2.32"), _step()))
+
+    assert json.loads(_steps(html)[1]["data-settings"])["kappa"] == 30
+
+
 def test_the_first_step_must_set_every_param_without_a_default(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
