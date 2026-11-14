@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-from optimization_compass.article_quality import require_ledger_integrity
 from optimization_compass.content_models import load_content
 from optimization_compass.content_quality import (
     public_content_routes,
@@ -16,6 +15,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
 from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.language_mixing import require_language_contract
+from optimization_compass.owner_approvals import require_owner_approvals
 from optimization_compass.release_identity import load_dataset_release_identity
 
 MINIMUM_PUBLISHED_CONTENT_PAGES = 12
@@ -39,8 +39,9 @@ def verify_content(root: Path) -> dict[str, int | str]:
     _load_payload(data_root / "formulation-atlas.json", identity.dataset_version)
     _load_payload(data_root / "learning-paths.json", identity.dataset_version)
 
-    source_pages = [page for page in load_content(root / "content") if page.status == "published"]
-    require_ledger_integrity(root)
+    all_pages = load_content(root / "content")
+    source_pages = [page for page in all_pages if page.status == "published"]
+    require_owner_approvals(root, (page.content_id for page in all_pages))
     generated_pages = content_index["pages"]
     source_ids = {page.content_id for page in source_pages}
     generated_ids = _unique_ids(generated_pages, "content_id", "content pages")

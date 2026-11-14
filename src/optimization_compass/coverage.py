@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from datetime import datetime
@@ -10,7 +11,7 @@ from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from optimization_compass.article_quality import ArticleReport, evaluate_all
+from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import (
     SCOPE_SEED_PATH,
@@ -125,12 +126,12 @@ SCOPE_UNITS = ("knowledge_topic", "problem_structure")
 _AXIS_STATES: dict[str, tuple[str, ...]] = {
     "identity": ("candidate", "unrepresented", "unknown"),
     "claims": ("no_canonical_row",),
-    "lesson": ("stale", "in_progress", "no_article"),
+    "lesson": ("no_article",),
     "experience": ("undecided",),
     "transfer": ("undecided",),
 }
 _CLAIM_REF_TYPES = frozenset({"method", "problem", "problem_definition", "feature"})
-_INTERACTIVE_LEVEL = "explorable"
+_EXPLORABLE = re.compile(r"^::: explorable ", re.MULTILINE)
 
 
 class AxisCoverage(CoverageModel):
@@ -223,20 +224,24 @@ def _scope_from_repository(root: Path) -> ScopeCoverage | None:
     seed = root / SCOPE_SEED_PATH
     if not seed.exists():
         return None
-    _, reports = evaluate_all(root)
-    return build_scope_coverage(load_editorial_scope(seed), reports)
+    return build_scope_coverage(load_editorial_scope(seed), load_content(root / "content"))
 
 
-def build_scope_coverage(scope: EditorialScope, reports: Iterable[ArticleReport]) -> ScopeCoverage:
-    """Count included members per unit and per axis. Counts only: no ratio, no total."""
-    by_content: dict[str, ArticleReport] = {}
-    by_entity: dict[str, dict[str, ArticleReport]] = defaultdict(dict)
-    for report in reports:
-        page = report.article.page
-        by_content[page.content_id] = report
+def build_scope_coverage(scope: EditorialScope, pages: Iterable[ContentPage]) -> ScopeCoverage:
+    """Count included members per unit and per axis. Counts only: no ratio, no total.
+
+    The lesson axis is a plain fact: a member is complete when a published article resolves to
+    it, and ``no_article`` otherwise. How good the article is, is not measured here.
+    """
+    by_content: dict[str, ContentPage] = {}
+    by_entity: dict[str, dict[str, ContentPage]] = defaultdict(dict)
+    for page in pages:
+        if page.status != "published":
+            continue
+        by_content[page.content_id] = page
         for entity_id in (page.method_id, page.canonical_entity_id):
             if entity_id:
-                by_entity[entity_id][page.content_id] = report
+                by_entity[entity_id][page.content_id] = page
     units: dict[str, UnitScopeCoverage] = {}
     for unit in SCOPE_UNITS:
         members = [m for m in scope.members if m.unit == unit]
@@ -246,10 +251,13 @@ def build_scope_coverage(scope: EditorialScope, reports: Iterable[ArticleReport]
             resolved = _resolve_articles(member, by_content, by_entity)
             _count_identity(member, axes["identity"])
             _count_claims(member, axes["claims"])
-            _count_lesson(resolved, axes["lesson"])
+            if resolved:
+                axes["lesson"].complete += 1
+            else:
+                axes["lesson"].states["no_article"] += 1
             axes["experience"].states["undecided"] += 1
             axes["transfer"].states["undecided"] += 1
-            if any(r.visual_level == _INTERACTIVE_LEVEL for r in resolved):
+            if any(_EXPLORABLE.search(page.body) for page in resolved):
                 axes["experience"].info["has_interactive"] += 1
         units[unit] = UnitScopeCoverage(
             denominator=len(included),
@@ -276,10 +284,10 @@ def _empty_axes(included: int) -> dict[str, AxisCoverage]:
 
 def _resolve_articles(
     member: ScopeMember,
-    by_content: Mapping[str, ArticleReport],
-    by_entity: Mapping[str, Mapping[str, ArticleReport]],
-) -> list[ArticleReport]:
-    found: dict[str, ArticleReport] = {}
+    by_content: Mapping[str, ContentPage],
+    by_entity: Mapping[str, Mapping[str, ContentPage]],
+) -> list[ContentPage]:
+    found: dict[str, ContentPage] = {}
     for ref in member.mapping.refs:
         if ref.type == "content" and ref.id in by_content:
             found[ref.id] = by_content[ref.id]
@@ -303,16 +311,6 @@ def _count_claims(member: ScopeMember, axis: AxisCoverage) -> None:
         axis.complete += 1
     else:
         axis.states["no_canonical_row"] += 1
-
-
-def _count_lesson(resolved: list[ArticleReport], axis: AxisCoverage) -> None:
-    if not resolved:
-        axis.states["no_article"] += 1
-    elif any(r.status == "達成" for r in resolved):
-        axis.complete += 1
-    else:
-        best = min(resolved, key=lambda r: (r.count("fail"), r.count("stale", "new", "unreviewed")))
-        axis.states["stale" if best.count("stale", "new") else "in_progress"] += 1
 
 
 def _scope_delta(

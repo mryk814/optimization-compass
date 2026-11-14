@@ -1,0 +1,17 @@
+{
+  "contract_version": "1.0.0",
+  "approvals": {
+    "adam": {
+      "body_sha256": "5af80116bf1a",
+      "approved_on": "2026-10-03"
+    },
+    "bayesian-optimization": {
+      "body_sha256": "0551f92707a8",
+      "approved_on": "2026-10-03"
+    },
+    "concept.linear-least-squares": {
+      "body_sha256": "c5cdbf494cad",
+      "approved_on": "2026-10-03"
+    }
+  }
+}

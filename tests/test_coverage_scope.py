@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from optimization_compass.article_quality import Article, ArticleReport, CheckResult, State
 from optimization_compass.content_models import ContentPage
 from optimization_compass.coverage import (
     CoverageReport,
@@ -56,14 +55,15 @@ def scope_of(*members: dict[str, Any]) -> EditorialScope:
     )
 
 
-def report(
+def article(
     content_id: str,
-    *states: State,
+    *,
     method_id: str | None = None,
     entity_id: str = "X",
-    visual: str = "none",
-) -> ArticleReport:
-    page = ContentPage(
+    explorable: bool = False,
+    status: str = "published",
+) -> ContentPage:
+    return ContentPage(
         content_id=content_id,
         kind="method" if method_id else "concept",
         method_id=method_id,
@@ -80,15 +80,12 @@ def report(
         aliases=(),
         visualization_aliases=(),
         comparison_aliases=(),
-        status="published",
+        status=status,
         last_reviewed="2026-10-10",
-        body="",
+        body="::: explorable demo\n図。\n:::\n" if explorable else "本文。",
         html="",
         toc=(),
     )
-    article = Article(page, Path(f"content/{content_id}.md"), "method", False)
-    results = tuple(CheckResult(f"c{i}", s) for i, s in enumerate(states))
-    return ArticleReport(article, results, None, 0, visual)
 
 
 M = {"type": "method", "id": "M_A"}
@@ -106,11 +103,11 @@ def test_counts_per_axis_and_state() -> None:
         member("TOPIC_G", decision="hold"),
         member("STRUCTURE_P", refs=[P], unit="problem_structure"),
     )
-    reports = [
-        report("method.a", "pass", method_id="M_A", entity_id="M_A", visual="explorable"),
-        report("concept.e", "pass", "stale", entity_id="PA9"),
+    articles = [
+        article("method.a", method_id="M_A", entity_id="M_A", explorable=True),
+        article("concept.e", entity_id="PA9"),
     ]
-    cov = build_scope_coverage(scope, reports)
+    cov = build_scope_coverage(scope, articles)
     topic = cov.units["knowledge_topic"]
     assert (topic.denominator, topic.excluded, topic.held, topic.merged) == (5, 1, 1, 0)
     identity = topic.axes["identity"]
@@ -120,8 +117,8 @@ def test_counts_per_axis_and_state() -> None:
     assert (claims.eligible, claims.complete) == (5, 2)
     assert claims.states == {"no_canonical_row": 3}
     lesson = topic.axes["lesson"]
-    assert lesson.complete == 1
-    assert lesson.states == {"stale": 1, "in_progress": 0, "no_article": 3}
+    assert lesson.complete == 2
+    assert lesson.states == {"no_article": 3}
     assert topic.axes["experience"].eligible == 0
     assert topic.axes["experience"].states == {"undecided": 5}
     assert topic.axes["experience"].info == {"has_interactive": 1}
@@ -141,28 +138,25 @@ def test_alias_pair_merged_is_counted_once() -> None:
     assert topic.axes["identity"].complete == 1
 
 
-def test_lesson_state_priority() -> None:
+def test_lesson_counts_only_published_articles() -> None:
     scope = scope_of(
         member("TOPIC_A", refs=[M]),
         member("TOPIC_B", refs=[{"type": "method", "id": "M_B"}]),
-        member("TOPIC_C", refs=[{"type": "method", "id": "M_C"}]),
     )
-    reports = [
-        report("a1", "stale", method_id="M_A", entity_id="M_A"),
-        report("a2", "pass", method_id="M_A", entity_id="M_A"),
-        report("b1", "unreviewed", method_id="M_B", entity_id="M_B"),
-        report("c1", "new", method_id="M_C", entity_id="M_C"),
+    articles = [
+        article("a1", method_id="M_A", entity_id="M_A"),
+        article("b1", method_id="M_B", entity_id="M_B", status="draft"),
     ]
-    lesson = build_scope_coverage(scope, reports).units["knowledge_topic"].axes["lesson"]
+    lesson = build_scope_coverage(scope, articles).units["knowledge_topic"].axes["lesson"]
     assert lesson.complete == 1
-    assert lesson.states == {"stale": 1, "in_progress": 1, "no_article": 0}
+    assert lesson.states == {"no_article": 1}
 
 
 def test_diff_reports_denominator_and_completion_separately() -> None:
     before = build_scope_coverage(scope_of(member("TOPIC_A", refs=[M])), [])
     after = build_scope_coverage(
         scope_of(member("TOPIC_A", refs=[M]), member("TOPIC_B", "unknown", review="candidate")),
-        [report("a", "pass", method_id="M_A", entity_id="M_A")],
+        [article("a", method_id="M_A", entity_id="M_A")],
     )
     base = CoverageReport.model_validate_json(
         (ROOT / "site/public/data/coverage.json").read_text(encoding="utf-8")

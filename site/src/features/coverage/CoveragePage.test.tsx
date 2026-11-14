@@ -65,6 +65,11 @@ describe("CoveragePage", () => {
     expect(identity).toHaveTextContent(`${topic.axes.identity.complete}`);
     expect(identity).toHaveTextContent(`/ ${topic.axes.identity.eligible}`);
     expect(identity).toHaveTextContent(`未表現 ${topic.axes.identity.states.unrepresented}件`);
+    // The lesson axis is a plain fact (a published article exists), not a review verdict.
+    const lesson = screen.getByRole("article", { name: "知識トピックの説明" });
+    expect(lesson).toHaveTextContent(`${topic.axes.lesson.complete} / ${topic.axes.lesson.eligible}`);
+    expect(lesson).toHaveTextContent("公開済みの記事がある件数");
+    expect(Object.keys(topic.axes.lesson.states)).toEqual(["no_article"]);
     const experience = screen.getByRole("article", { name: "知識トピックの体験" });
     expect(experience).toHaveTextContent("判定前");
     expect(experience).not.toHaveTextContent("0 / 0");

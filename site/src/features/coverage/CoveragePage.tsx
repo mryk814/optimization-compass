@@ -154,7 +154,7 @@ const scopeUnitLabels: Record<string, string> = {
 };
 const scopeCards: Array<{ axis: string; title: string; hint: string }> = [
   { axis: "identity", title: "収録範囲", hint: "名前と同一性を既存の行・記事と照合した件数" },
-  { axis: "lesson", title: "説明", hint: "品質台帳で「達成」の記事がある件数" },
+  { axis: "lesson", title: "説明", hint: "公開済みの記事がある件数" },
   { axis: "experience", title: "体験", hint: "操作して確かめる体験が必要かは、まだ決めていません" },
   { axis: "transfer", title: "分野横断", hint: "分野をまたぐ転用は、まだ追跡していません" },
 ];
@@ -162,8 +162,6 @@ const scopeStateLabels: Record<string, string> = {
   candidate: "未確認（候補）",
   unknown: "未照合",
   unrepresented: "未表現",
-  stale: "stale（記事の更新後に未再確認）",
-  in_progress: "整備中",
   no_article: "記事なし",
   undecided: "判定前",
   no_canonical_row: "正規行なし",
