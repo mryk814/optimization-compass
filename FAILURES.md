@@ -32,3 +32,11 @@
 - **原因**: その段の時計が動いている最中に `show` を呼ぶと、React が時計の effect を片付ける前に、予約済みの `requestAnimationFrame` が1回走り、`show` が置いた秒数を時計の秒数で上書きしていた。375px では lesson が最初から画面内にあり、時計が動いていた。
 - **直し方**: `show` がその場で立てる ref（`holding`）を時計の各フレームが見て、立っていれば何もしない（`site/src/features/explorable/Lesson.tsx`）。
 - **再発防止**: `Lesson.test.tsx` の「keeps a held step where automation put it…」が、`show` の直後に時計のフレームが走っても終了状態のままであることを確かめる。state で止める時計は、止める側が同期で読める印も持たせる。
+
+## 2026-11-14 補助図を書き出すと、Windows で関係のない図が全部「変更あり」になった
+
+- **したこと**: 新しい fixture を足すために `uv run python scripts/generate_lesson_figures.py`（`--check` なし）。
+- **起きたこと**: `git status` に `site/public/figures/*.svg` 66個と `inverseProblem.fixture.json` が変更として出た。`git diff --stat` は空だった。
+- **原因**: この PC は `core.autocrlf=true` で、作業ツリーのファイルは CRLF。スクリプトは LF で書き出すので、中身が同じでも作業ツリーのバイトが変わる。
+- **直し方**: `git checkout -- site/public/figures site/src/features/explorable/math/inverseProblem.fixture.json` で戻し、自分の出力だけを足した。`--check` は文字として比べるので影響を受けない。
+- **再発防止**: 記録だけ。コミットに混ざる差分ではない（Git が改行を正規化する）ので、仕組みは足していない。書き出した後に大量の変更が見えたら、まず `git diff --stat` が空かを見る。
