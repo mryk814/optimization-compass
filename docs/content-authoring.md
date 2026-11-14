@@ -40,7 +40,7 @@ The public Atlas is Japanese-first and English-term-aware. The authoritative dec
 | Field or surface | Language responsibility | Requirement for `published` |
 |---|---|---|
 | `title_ja` | Japanese public title | Required and complete |
-| `summary` | Japanese card, search-result, and SEO explanation | Required; must match the first body paragraph |
+| `summary` | Japanese card, search-result, and SEO explanation | Required; one or two sentences, written separately from the body's opening |
 | Markdown body | Japanese explanatory prose | Required and understandable without an English article |
 | `title_en` | Canonical English term and retrieval metadata | Required by the current schema; not a translated article |
 | frontmatter `aliases`, `visualization_aliases`, `comparison_aliases` | Alternate URL routes | Add routes only; never put lexical terms or abbreviations here |

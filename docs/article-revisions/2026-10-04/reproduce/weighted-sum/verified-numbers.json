@@ -1,0 +1,159 @@
+{
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "unscaled_runs": [
+    {
+      "w": 0,
+      "scale_f1": 1,
+      "effective_weight": 0.0,
+      "x": [
+        0.0,
+        1.0
+      ],
+      "f_original": [
+        2.0,
+        0.0
+      ],
+      "scipy_x": [
+        0.0,
+        1.0
+      ],
+      "scipy_success": true,
+      "gradient_norm": 0.0
+    },
+    {
+      "w": 0.2,
+      "scale_f1": 1,
+      "effective_weight": 0.2,
+      "x": [
+        0.2,
+        0.8
+      ],
+      "f_original": [
+        1.2800000000000002,
+        0.07999999999999999
+      ],
+      "scipy_x": [
+        0.20000000000000007,
+        0.8
+      ],
+      "scipy_success": true,
+      "gradient_norm": 0.0
+    },
+    {
+      "w": 0.5,
+      "scale_f1": 1,
+      "effective_weight": 0.5,
+      "x": [
+        0.5,
+        0.5
+      ],
+      "f_original": [
+        0.5,
+        0.5
+      ],
+      "scipy_x": [
+        0.5,
+        0.5
+      ],
+      "scipy_success": true,
+      "gradient_norm": 0.0
+    },
+    {
+      "w": 0.8,
+      "scale_f1": 1,
+      "effective_weight": 0.8,
+      "x": [
+        0.8,
+        0.19999999999999996
+      ],
+      "f_original": [
+        0.07999999999999996,
+        1.2800000000000002
+      ],
+      "scipy_x": [
+        0.8,
+        0.19999999999999996
+      ],
+      "scipy_success": true,
+      "gradient_norm": 0.0
+    },
+    {
+      "w": 1,
+      "scale_f1": 1,
+      "effective_weight": 1.0,
+      "x": [
+        1.0,
+        0.0
+      ],
+      "f_original": [
+        0.0,
+        2.0
+      ],
+      "scipy_x": [
+        1.0,
+        0.0
+      ],
+      "scipy_success": true,
+      "gradient_norm": 0.0
+    }
+  ],
+  "scale_100_weight_half": {
+    "w": 0.5,
+    "scale_f1": 100,
+    "effective_weight": 0.9900990099009901,
+    "x": [
+      0.9900990099009901,
+      0.00990099009900991
+    ],
+    "f_original": [
+      0.00019605920988138452,
+      1.9605920988138417
+    ],
+    "scipy_x": [
+      0.9900990099009883,
+      0.0099009900990083
+    ],
+    "scipy_success": true,
+    "gradient_norm": 8.881784197001252e-16
+  },
+  "scale_100_compensated_weight": {
+    "w": 0.009900990099009901,
+    "scale_f1": 100,
+    "effective_weight": 0.5,
+    "x": [
+      0.5,
+      0.5
+    ],
+    "f_original": [
+      0.5,
+      0.5
+    ],
+    "scipy_x": [
+      0.5,
+      0.5
+    ],
+    "scipy_success": true,
+    "gradient_norm": 0.0
+  },
+  "exact_scaled": {
+    "x": [
+      "100/101",
+      "1/101"
+    ],
+    "f1": "2/10201",
+    "f2": "20000/10201"
+  },
+  "existing_concave_frontier_counterexample": {
+    "midpoint": [
+      0.5,
+      0.75
+    ],
+    "weight_half_score": 0.625,
+    "endpoint_best_score": 0.5,
+    "1001_weight_grid_check": true,
+    "analytical_reason": "Weighted objective is concave in t, with all strictly interior t worse than an endpoint for 0<=w<=1."
+  },
+  "all_scalar_subproblems_are_strictly_convex": true
+}

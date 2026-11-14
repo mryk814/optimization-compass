@@ -1,0 +1,728 @@
+{
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "domain": "X,Y integers in 0..10; output>=18",
+  "total_grid_points": 121,
+  "demand_feasible_plans": 88,
+  "pareto_plans": [
+    {
+      "x": 0,
+      "y": 9,
+      "output": 18,
+      "cost": 63,
+      "emissions": 18
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "output": 18,
+      "cost": 58,
+      "emissions": 24
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "output": 18,
+      "cost": 53,
+      "emissions": 30
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "output": 18,
+      "cost": 48,
+      "emissions": 36
+    }
+  ],
+  "epsilon_results": [
+    {
+      "epsilon": 36,
+      "plan": {
+        "x": 6,
+        "y": 0,
+        "output": 18,
+        "cost": 48,
+        "emissions": 36
+      },
+      "milp_status": 0,
+      "milp_fun": 48.0
+    },
+    {
+      "epsilon": 30,
+      "plan": {
+        "x": 4,
+        "y": 3,
+        "output": 18,
+        "cost": 53,
+        "emissions": 30
+      },
+      "milp_status": 0,
+      "milp_fun": 53.0
+    },
+    {
+      "epsilon": 24,
+      "plan": {
+        "x": 2,
+        "y": 6,
+        "output": 18,
+        "cost": 58,
+        "emissions": 24
+      },
+      "milp_status": 0,
+      "milp_fun": 58.0
+    },
+    {
+      "epsilon": 18,
+      "plan": {
+        "x": 0,
+        "y": 9,
+        "output": 18,
+        "cost": 63,
+        "emissions": 18
+      },
+      "milp_status": 0,
+      "milp_fun": 63.0
+    },
+    {
+      "epsilon": 12,
+      "plan": null,
+      "milp_status": 2,
+      "milp_fun": null
+    }
+  ],
+  "epsilon_29_9": {
+    "x": 2,
+    "y": 6,
+    "output": 18,
+    "cost": 58,
+    "emissions": 24
+  },
+  "emission_lower_bound": 18,
+  "cost_lower_bound_formula": "78 - 5*epsilon/6",
+  "all_four_frontier_points_supported_at_cost_plus_lambda_emissions": {
+    "lambda": "5/6",
+    "common_score": 78,
+    "normalized_cost_weight": "6/11"
+  },
+  "wide_box_0_30_same_frontier": true,
+  "all_plans": [
+    {
+      "x": 0,
+      "y": 9,
+      "output": 18,
+      "cost": 63,
+      "emissions": 18
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "output": 20,
+      "cost": 70,
+      "emissions": 20
+    },
+    {
+      "x": 1,
+      "y": 8,
+      "output": 19,
+      "cost": 64,
+      "emissions": 22
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "output": 21,
+      "cost": 71,
+      "emissions": 24
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "output": 23,
+      "cost": 78,
+      "emissions": 26
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "output": 18,
+      "cost": 58,
+      "emissions": 24
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "output": 20,
+      "cost": 65,
+      "emissions": 26
+    },
+    {
+      "x": 2,
+      "y": 8,
+      "output": 22,
+      "cost": 72,
+      "emissions": 28
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "output": 24,
+      "cost": 79,
+      "emissions": 30
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "output": 26,
+      "cost": 86,
+      "emissions": 32
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "output": 19,
+      "cost": 59,
+      "emissions": 28
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "output": 21,
+      "cost": 66,
+      "emissions": 30
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "output": 23,
+      "cost": 73,
+      "emissions": 32
+    },
+    {
+      "x": 3,
+      "y": 8,
+      "output": 25,
+      "cost": 80,
+      "emissions": 34
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "output": 27,
+      "cost": 87,
+      "emissions": 36
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "output": 29,
+      "cost": 94,
+      "emissions": 38
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "output": 18,
+      "cost": 53,
+      "emissions": 30
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "output": 20,
+      "cost": 60,
+      "emissions": 32
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "output": 22,
+      "cost": 67,
+      "emissions": 34
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "output": 24,
+      "cost": 74,
+      "emissions": 36
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "output": 26,
+      "cost": 81,
+      "emissions": 38
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "output": 28,
+      "cost": 88,
+      "emissions": 40
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "output": 30,
+      "cost": 95,
+      "emissions": 42
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "output": 32,
+      "cost": 102,
+      "emissions": 44
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "output": 19,
+      "cost": 54,
+      "emissions": 34
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "output": 21,
+      "cost": 61,
+      "emissions": 36
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "output": 23,
+      "cost": 68,
+      "emissions": 38
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "output": 25,
+      "cost": 75,
+      "emissions": 40
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "output": 27,
+      "cost": 82,
+      "emissions": 42
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "output": 29,
+      "cost": 89,
+      "emissions": 44
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "output": 31,
+      "cost": 96,
+      "emissions": 46
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "output": 33,
+      "cost": 103,
+      "emissions": 48
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "output": 35,
+      "cost": 110,
+      "emissions": 50
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "output": 18,
+      "cost": 48,
+      "emissions": 36
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "output": 20,
+      "cost": 55,
+      "emissions": 38
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "output": 22,
+      "cost": 62,
+      "emissions": 40
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "output": 24,
+      "cost": 69,
+      "emissions": 42
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "output": 26,
+      "cost": 76,
+      "emissions": 44
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "output": 28,
+      "cost": 83,
+      "emissions": 46
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "output": 30,
+      "cost": 90,
+      "emissions": 48
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "output": 32,
+      "cost": 97,
+      "emissions": 50
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "output": 34,
+      "cost": 104,
+      "emissions": 52
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "output": 36,
+      "cost": 111,
+      "emissions": 54
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "output": 38,
+      "cost": 118,
+      "emissions": 56
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "output": 21,
+      "cost": 56,
+      "emissions": 42
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "output": 23,
+      "cost": 63,
+      "emissions": 44
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "output": 25,
+      "cost": 70,
+      "emissions": 46
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "output": 27,
+      "cost": 77,
+      "emissions": 48
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "output": 29,
+      "cost": 84,
+      "emissions": 50
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "output": 31,
+      "cost": 91,
+      "emissions": 52
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "output": 33,
+      "cost": 98,
+      "emissions": 54
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "output": 35,
+      "cost": 105,
+      "emissions": 56
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "output": 37,
+      "cost": 112,
+      "emissions": 58
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "output": 39,
+      "cost": 119,
+      "emissions": 60
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "output": 41,
+      "cost": 126,
+      "emissions": 62
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "output": 24,
+      "cost": 64,
+      "emissions": 48
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "output": 26,
+      "cost": 71,
+      "emissions": 50
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "output": 28,
+      "cost": 78,
+      "emissions": 52
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "output": 30,
+      "cost": 85,
+      "emissions": 54
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "output": 32,
+      "cost": 92,
+      "emissions": 56
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "output": 34,
+      "cost": 99,
+      "emissions": 58
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "output": 36,
+      "cost": 106,
+      "emissions": 60
+    },
+    {
+      "x": 8,
+      "y": 7,
+      "output": 38,
+      "cost": 113,
+      "emissions": 62
+    },
+    {
+      "x": 8,
+      "y": 8,
+      "output": 40,
+      "cost": 120,
+      "emissions": 64
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "output": 42,
+      "cost": 127,
+      "emissions": 66
+    },
+    {
+      "x": 8,
+      "y": 10,
+      "output": 44,
+      "cost": 134,
+      "emissions": 68
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "output": 27,
+      "cost": 72,
+      "emissions": 54
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "output": 29,
+      "cost": 79,
+      "emissions": 56
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "output": 31,
+      "cost": 86,
+      "emissions": 58
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "output": 33,
+      "cost": 93,
+      "emissions": 60
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "output": 35,
+      "cost": 100,
+      "emissions": 62
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "output": 37,
+      "cost": 107,
+      "emissions": 64
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "output": 39,
+      "cost": 114,
+      "emissions": 66
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "output": 41,
+      "cost": 121,
+      "emissions": 68
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "output": 43,
+      "cost": 128,
+      "emissions": 70
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "output": 45,
+      "cost": 135,
+      "emissions": 72
+    },
+    {
+      "x": 9,
+      "y": 10,
+      "output": 47,
+      "cost": 142,
+      "emissions": 74
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "output": 30,
+      "cost": 80,
+      "emissions": 60
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "output": 32,
+      "cost": 87,
+      "emissions": 62
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "output": 34,
+      "cost": 94,
+      "emissions": 64
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "output": 36,
+      "cost": 101,
+      "emissions": 66
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "output": 38,
+      "cost": 108,
+      "emissions": 68
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "output": 40,
+      "cost": 115,
+      "emissions": 70
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "output": 42,
+      "cost": 122,
+      "emissions": 72
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "output": 44,
+      "cost": 129,
+      "emissions": 74
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "output": 46,
+      "cost": 136,
+      "emissions": 76
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "output": 48,
+      "cost": 143,
+      "emissions": 78
+    },
+    {
+      "x": 10,
+      "y": 10,
+      "output": 50,
+      "cost": 150,
+      "emissions": 80
+    }
+  ],
+  "tie_breaking": "lexicographic (cost, emissions, X, Y)"
+}

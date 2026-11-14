@@ -1,0 +1,70 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "convention": "loss + lambda/2 * x^2 for coupled L2; eta*lambda*x for AdamW decay",
+  "eta": 0.1,
+  "lambda": 0.1,
+  "betas": [
+    0.9,
+    0.999
+  ],
+  "epsilon": 1e-08,
+  "rows": [
+    {
+      "update": 1,
+      "before": 2.0,
+      "g": 2.0,
+      "m": 0.2,
+      "v": 0.004,
+      "mhat": 2.0000000000000004,
+      "vhat": 3.9999999999999964,
+      "gradient_step": 0.09999999950000009,
+      "decay_step": 0.020000000000000004,
+      "after": 1.8800000005,
+      "objective": 0.7744000008799999
+    },
+    {
+      "update": 2,
+      "before": 1.8800000005,
+      "g": 1.7600000009999999,
+      "m": 0.3560000001,
+      "v": 0.0070936000035200005,
+      "mhat": 1.8736842110526322,
+      "vhat": 3.5485742889045,
+      "gradient_step": 0.09946480695177788,
+      "decay_step": 0.018800000005000005,
+      "after": 1.7617351935432222,
+      "objective": 0.5802405050823302
+    },
+    {
+      "update": 3,
+      "before": 1.7617351935432222,
+      "g": 1.5234703870864443,
+      "m": 0.47274703879864444,
+      "v": 0.009407468423845801,
+      "mhat": 1.7444540177071757,
+      "vhat": 3.138960722350711,
+      "gradient_step": 0.0984615307083598,
+      "decay_step": 0.017617351935432225,
+      "after": 1.6456563108994302,
+      "objective": 0.41687207180426167
+    }
+  ],
+  "coupled_l2_first": {
+    "g_data": 2,
+    "g_penalty": 0.2,
+    "g_total": 2.2,
+    "m": 0.22000000000000003,
+    "v": 0.0048400000000000006,
+    "mhat": 2.2,
+    "vhat": 4.840000000000001,
+    "step": 0.09999999954545455,
+    "after": 1.9000000004545454
+  },
+  "decay_only_100_multiplier": 0.3660323412732292,
+  "assertions": "passed",
+  "framework_execution": "not run; scalar Python verified against documented PyTorch 2.8 formula"
+}

@@ -1,0 +1,125 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "quadratic_FR_exact": [
+    {
+      "k": 0,
+      "x": [
+        4.0,
+        3.0
+      ],
+      "g": [
+        6.0,
+        200.0
+      ],
+      "p": [
+        -6.0,
+        -200.0
+      ],
+      "alpha": 0.025021374038168284,
+      "step_norm": 5.006526224842147,
+      "f": 509.0,
+      "f_next": 8.122134503947324,
+      "beta_next": 0.0008121769024341227
+    },
+    {
+      "k": 1,
+      "x": [
+        3.8498717557709905,
+        -2.0042748076336565
+      ],
+      "g": [
+        5.699743511541981,
+        -0.1709923053462603
+      ],
+      "p": [
+        -5.704616572956586,
+        0.008556924859435766
+      ],
+      "alpha": 0.49957288440403647,
+      "step_norm": 2.8498749618749124,
+      "f": 8.122134503947324,
+      "f_next": 4.141519752410312e-30,
+      "beta_next": 9.728446418053544e-30
+    }
+  ],
+  "checks": {
+    "gradient_orthogonality_dot": -1.7763568394002505e-13,
+    "H_conjugacy_dot": -7.0947692165646e-12,
+    "solution_error": 6.280369834735101e-16
+  },
+  "nonlinear_teaching_PRplus": {
+    "iterations": 15,
+    "final_x": [
+      1.0000001227630215,
+      1.0000002460178536
+    ],
+    "final_grad_inf": 9.835909864364112e-08,
+    "restart_events": [
+      {
+        "iteration": 2,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 4,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 6,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 8,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 10,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 12,
+        "reason": "periodic restart"
+      },
+      {
+        "iteration": 14,
+        "reason": "periodic restart"
+      }
+    ],
+    "all_directions_descent": true,
+    "warning": "Independent educational implementation, not SciPy CG"
+  },
+  "scipy_CG": {
+    "quadratic": {
+      "x": [
+        1.0000000000000004,
+        -1.9999999999999973
+      ],
+      "fun": 1.4219217816608738e-28,
+      "grad_inf": 1.0658141036401503e-13,
+      "grad_2": 1.0658511104318365e-13,
+      "nit": 2,
+      "nfev": 5,
+      "njev": 5,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    },
+    "rosenbrock": {
+      "x": [
+        1.0000000054879883,
+        0.9999999972740272
+      ],
+      "fun": 1.8804459622389675e-14,
+      "grad_inf": 5.491755747813203e-06,
+      "grad_2": 6.137517237159026e-06,
+      "nit": 36,
+      "nfev": 78,
+      "njev": 77,
+      "success": true,
+      "message": "Optimization terminated successfully."
+    }
+  }
+}

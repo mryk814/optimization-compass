@@ -48,6 +48,7 @@ LEARNING_SLICE_FAMILIES = frozenset(
     {"feasible_region", "pareto_front", "field_evolution", "assignment_schedule"}
 )
 _INTERNAL_HREF = re.compile(r'<a href="(#/[^"]*)"')
+_LENS_CASES = re.compile(r"ALGORITHM_LENS_CASES\s*=\s*\[([^\]]*)\]")
 _SVG_REF = re.compile(r"\]\(\./((?:figures|media)/[^)\s]+\.svg)")
 _VIEWBOX_WIDTH = re.compile(r'viewBox="[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)')
 _FONT_SIZE = re.compile(r'font-size(?:="|:\s*)([\d.]+)|font:[^;"]*?([\d.]+)px')
@@ -135,6 +136,15 @@ def site_data_routes(root: Path) -> frozenset[str]:
     # Each computed 3D scene has a page (site/src/features/physical-scenes/catalog.ts).
     scenes = root / "site/src/features/physical-scenes/data"
     routes.update(f"#/theater/physical/{path.stem}" for path in scenes.glob("*.json"))
+    # Algorithm-lens stages exist only for the cases the site lists; read that list from the site
+    # so it is kept in one place.
+    lens_source = (root / "site/src/features/theater/theater-routes.ts").read_text(encoding="utf-8")
+    lens_cases = _LENS_CASES.search(lens_source)
+    if lens_cases is None:
+        raise ValueError("theater-routes.ts no longer declares ALGORITHM_LENS_CASES")
+    routes.update(
+        f"#/theater/lenses/{case_id}" for case_id in re.findall(r'"([^"]+)"', lens_cases[1])
+    )
     return frozenset(routes)
 
 

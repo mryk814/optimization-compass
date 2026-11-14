@@ -1,0 +1,224 @@
+{
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "milp": {
+    "x": [
+      4.0,
+      0.0
+    ],
+    "profit": 20.0,
+    "status": 0,
+    "success": true,
+    "mip_gap": 0.0,
+    "mip_dual_bound_minimization": -20.0,
+    "solver_reported_nodes": 1
+  },
+  "enumerated_points": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      0
+    ]
+  ],
+  "manual_lp_tree_depth_first_order": [
+    {
+      "name": "root",
+      "bounds": [
+        [
+          0,
+          null
+        ],
+        [
+          0,
+          null
+        ]
+      ],
+      "x": [
+        3.0,
+        1.5
+      ],
+      "upper_bound": 21.0,
+      "slack": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "left",
+      "bounds": [
+        [
+          0,
+          null
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "x": [
+        3.3333333333333335,
+        1.0
+      ],
+      "upper_bound": 20.666666666666668,
+      "slack": [
+        0.0,
+        0.6666666666666661
+      ]
+    },
+    {
+      "name": "left_left",
+      "bounds": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "x": [
+        3.0,
+        1.0
+      ],
+      "upper_bound": 19.0,
+      "slack": [
+        2.0,
+        1.0
+      ]
+    },
+    {
+      "name": "left_right",
+      "bounds": [
+        [
+          4,
+          null
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "x": [
+        4.0,
+        -0.0
+      ],
+      "upper_bound": 20.0,
+      "slack": [
+        0.0,
+        2.0
+      ]
+    },
+    {
+      "name": "right",
+      "bounds": [
+        [
+          0,
+          null
+        ],
+        [
+          2,
+          null
+        ]
+      ],
+      "x": [
+        2.0,
+        2.0
+      ],
+      "upper_bound": 18.0,
+      "slack": [
+        4.0,
+        0.0
+      ]
+    }
+  ],
+  "final_leaf_upper_bound": 20,
+  "root_relative_gap_with_incumbent_20": 0.05,
+  "rounding": {
+    "up": [
+      3,
+      2
+    ],
+    "constraint_excess": [
+      2,
+      1
+    ],
+    "down": [
+      3,
+      1
+    ],
+    "down_profit": 19
+  },
+  "big_m_example": [
+    {
+      "M": 4.0,
+      "relaxed_x_y": [
+        4.0,
+        1.0
+      ],
+      "relaxed_cost": 10.0,
+      "integer_cost": 10.0
+    },
+    {
+      "M": 100.0,
+      "relaxed_x_y": [
+        4.0,
+        0.04
+      ],
+      "relaxed_cost": 0.4,
+      "integer_cost": 10.0
+    }
+  ],
+  "tests": "all assertions passed",
+  "limit": "The five manually chosen LP nodes are not a HiGHS search log."
+}

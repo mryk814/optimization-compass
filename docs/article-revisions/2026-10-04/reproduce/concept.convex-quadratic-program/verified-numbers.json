@@ -1,0 +1,175 @@
+{
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  },
+  "analytic": {
+    "x": [
+      2.0,
+      1.0
+    ],
+    "objective": 2.0,
+    "lambda": 2.0,
+    "stationarity": [
+      0.0,
+      0.0
+    ],
+    "budget_residual": 0.0,
+    "complementarity": 0.0,
+    "Q_eigenvalues": [
+      2.0,
+      2.0
+    ],
+    "standard_objective_without_constant": -11.0,
+    "constant": 13.0
+  },
+  "slsqp": {
+    "x": [
+      2.0000000000000018,
+      1.0000000000000018
+    ],
+    "objective": 1.999999999999993,
+    "success": true
+  },
+  "vertices": [
+    {
+      "x": [
+        0,
+        0
+      ],
+      "objective": 13.0
+    },
+    {
+      "x": [
+        3,
+        0
+      ],
+      "objective": 4.0
+    },
+    {
+      "x": [
+        0,
+        3
+      ],
+      "objective": 10.0
+    }
+  ],
+  "budget_sweep": [
+    {
+      "budget": 0,
+      "x": [
+        0.0,
+        0.0
+      ],
+      "objective": 13.0,
+      "lambda_budget": 6,
+      "lower_bound_multipliers": [
+        0.0,
+        2.0
+      ]
+    },
+    {
+      "budget": 0.5,
+      "x": [
+        0.5,
+        0.0
+      ],
+      "objective": 10.25,
+      "lambda_budget": 5.0,
+      "lower_bound_multipliers": [
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "budget": 1,
+      "x": [
+        1.0,
+        0.0
+      ],
+      "objective": 8.0,
+      "lambda_budget": 4,
+      "lower_bound_multipliers": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "budget": 3,
+      "x": [
+        2.0,
+        1.0
+      ],
+      "objective": 2.0,
+      "lambda_budget": 2,
+      "lower_bound_multipliers": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "budget": 3.1,
+      "x": [
+        2.05,
+        1.05
+      ],
+      "objective": 1.8050000000000002,
+      "lambda_budget": 1.9,
+      "lower_bound_multipliers": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "budget": 5,
+      "x": [
+        3.0,
+        2.0
+      ],
+      "objective": 0.0,
+      "lambda_budget": 0.0,
+      "lower_bound_multipliers": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "budget": 6,
+      "x": [
+        3.0,
+        2.0
+      ],
+      "objective": 0.0,
+      "lambda_budget": 0.0,
+      "lower_bound_multipliers": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "psd_counterexample": {
+    "Q": [
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "two_minimizers": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "objective": 0
+  },
+  "tests": "all assertions passed"
+}

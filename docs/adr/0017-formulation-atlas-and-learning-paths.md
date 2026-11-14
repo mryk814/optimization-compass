@@ -34,6 +34,8 @@ Optimization Compass は、手法・実装・根拠・推薦規則・可視化�
 
 ### 2. 定式化記事の型
 
+（2026-11-14 に取りやめ。節の型を公開条件にすると言うことのない節が生まれたため、今は流れの例として [`writing-articles.md`](../writing-articles.md) に置くだけです。経緯は `product-direction/learning-atlas.md` の 4.3。）
+
 定式化記事は文字数ではなく、次の8節をこの順で持つことを公開条件にします（`content_quality.formulation_skeleton_gaps`）。
 
 `30秒でつかむ → 標準形を読む → 小さな例 → 見分け方 → 近い定式化 → 解き方の系統 → つまずきやすい点 → 次に読む`

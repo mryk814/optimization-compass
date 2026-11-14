@@ -1,0 +1,69 @@
+{
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "type": "fixed-bandwidth unbounded Gaussian KDE teaching example; not Optuna implementation",
+  "optuna_run": "not run: not installed",
+  "good": [
+    0.8,
+    1.2
+  ],
+  "bad": [
+    -1.0,
+    0.0,
+    3.0
+  ],
+  "observed_objective": "(x-1)^2",
+  "threshold": 0.5,
+  "gamma": 0.4,
+  "bandwidth": 0.5,
+  "candidates": [
+    0.0,
+    1.0,
+    2.0
+  ],
+  "l": [
+    0.13331536497429847,
+    0.7365402806066468,
+    0.13331536497429847
+  ],
+  "g": [
+    0.30195550199366905,
+    0.03617241797647855,
+    0.036083201876557204
+  ],
+  "unnormalized_l": [
+    0.16708603164366392,
+    0.9231163463866359,
+    0.16708603164366392
+  ],
+  "unnormalized_g": [
+    0.3784450994888641,
+    0.0453354028308059,
+    0.04522358703149833
+  ],
+  "ratio": [
+    0.441506659405377,
+    20.361931046069103,
+    3.694665607292233
+  ],
+  "log_ratio": [
+    -0.8175621754609907,
+    3.0136670322766133,
+    1.3068900516018611
+  ],
+  "chosen": 1.0,
+  "chosen_actual_value": 0.0,
+  "normalization_integrals": [
+    1.0000000000000002,
+    1.0000000000000002
+  ],
+  "remote_point": 100.0,
+  "remote_log_ratio": -704.4745348918877,
+  "density_ratio_counterexample": {
+    "x": 1.45,
+    "ratio": 85.1408285197686,
+    "true_value": 0.20249999999999996,
+    "prior_best": 0.04
+  },
+  "tests": "passed"
+}

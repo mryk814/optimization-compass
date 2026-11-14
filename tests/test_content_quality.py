@@ -61,6 +61,16 @@ def test_theater_learning_routes_open_only_learning_slice_scenarios() -> None:
     assert "#/methods/M_SMAC" not in routes
 
 
+def test_algorithm_lens_routes_follow_the_site_case_list() -> None:
+    # Regression: the check did not know /theater/lenses/<case> and would have rejected a link
+    # to a page the site opens.
+    routes = known_public_routes(ROOT, _published_pages())
+
+    assert "#/theater/lenses/hyperparameter-search" in routes
+    assert "#/theater/lenses/constrained-design" in routes
+    assert "#/theater/lenses/no-such-case" not in routes
+
+
 def test_a_query_string_does_not_change_the_route() -> None:
     routes = known_public_routes(ROOT, _published_pages())
 

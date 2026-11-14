@@ -1,0 +1,100 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "eta": 0.1,
+  "beta": 0.5,
+  "initial_x": 2,
+  "initial_velocity": 0,
+  "first_eight": [
+    {
+      "update": 1,
+      "gradient": 2.0,
+      "carry": 0.0,
+      "velocity": 2.0,
+      "x": 1.8,
+      "objective": 0.6400000000000001
+    },
+    {
+      "update": 2,
+      "gradient": 1.6,
+      "carry": 1.0,
+      "velocity": 2.6,
+      "x": 1.54,
+      "objective": 0.2916
+    },
+    {
+      "update": 3,
+      "gradient": 1.08,
+      "carry": 1.3,
+      "velocity": 2.38,
+      "x": 1.302,
+      "objective": 0.09120400000000002
+    },
+    {
+      "update": 4,
+      "gradient": 0.6040000000000001,
+      "carry": 1.19,
+      "velocity": 1.794,
+      "x": 1.1226,
+      "objective": 0.015030760000000011
+    },
+    {
+      "update": 5,
+      "gradient": 0.24520000000000008,
+      "carry": 0.897,
+      "velocity": 1.1422,
+      "x": 1.00838,
+      "objective": 7.02244000000009e-05
+    },
+    {
+      "update": 6,
+      "gradient": 0.016760000000000108,
+      "carry": 0.5711,
+      "velocity": 0.5878600000000002,
+      "x": 0.949594,
+      "objective": 0.002540764835999995
+    },
+    {
+      "update": 7,
+      "gradient": -0.1008119999999999,
+      "carry": 0.2939300000000001,
+      "velocity": 0.19311800000000018,
+      "x": 0.9302822000000001,
+      "objective": 0.0048605716368399915
+    },
+    {
+      "update": 8,
+      "gradient": -0.13943559999999988,
+      "carry": 0.09655900000000009,
+      "velocity": -0.04287659999999979,
+      "x": 0.9345698600000001,
+      "objective": 0.0042811032204195885
+    }
+  ],
+  "characteristic_roots": [
+    {
+      "real": 0.6499999999999998,
+      "imag": 0.2783882181415009,
+      "abs": 0.7071067811865472
+    },
+    {
+      "real": 0.6499999999999998,
+      "imag": -0.2783882181415009,
+      "abs": 0.7071067811865472
+    }
+  ],
+  "stable_eta_range_for_h2_beta_half": "0 < eta < 1.5",
+  "supplement_2d": {
+    "updates": 296,
+    "x": [
+      1.0000000001125522,
+      -2.000000000070891
+    ],
+    "objective": 2.1368849286820832e-19,
+    "gradient_norm": 5.675733571298056e-09
+  },
+  "assertions": "passed"
+}
