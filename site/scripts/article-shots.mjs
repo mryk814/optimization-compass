@@ -5,11 +5,13 @@
  *   npm --prefix site run shots -- concept.linear-least-squares gradient-descent [--base URL] [--out dir]
  *
  * Per content id it writes <out>/<id>/: full-page PNGs at 1280 / 375 / 320 wide, one still per
- * guided-scene beat of every explorable on the page (each with its caption), and index.html
+ * guided-scene beat of every explorable on the page (each with its caption), one still per step
+ * of every lesson on the page at 1280 and 375 (the figure with that step's text), and index.html
  * putting them side by side. <out>/index.html links every article processed.
  *
  * Beats come from the live record page (`window.__ocScene.beats`, the same mechanism as
- * record-scene.mjs), so this works wherever the explorable metadata is stored.
+ * record-scene.mjs), so this works wherever the explorable metadata is stored. Lesson steps are
+ * held one at a time through `window.__ocLessons[figureId].show(index)` on the article itself.
  * The default base is the dev server (`npm --prefix site run dev`); for a built site use
  * `npx vite preview --port N` and pass --base http://127.0.0.1:N/optimization-compass/.
  */
@@ -23,6 +25,7 @@ import { chromium } from "@playwright/test";
 const siteRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const WIDTHS = [1280, 375, 320];
 const VIEW_H = 900;
+const LESSON_WIDTHS = [1280, 375];
 
 const { values, positionals: ids } = parseArgs({
   allowPositionals: true,
@@ -78,7 +81,7 @@ async function loadArticle(page, id) {
 async function shootArticle(browser, id) {
   const dir = join(outRoot, slug(id));
   await mkdir(dir, { recursive: true });
-  const result = { id, dir, finalHash: "", shots: [], explorables: [], errors: [], beatSets: [] };
+  const result = { id, dir, finalHash: "", shots: [], explorables: [], errors: [], beatSets: [], lessonSets: [] };
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({ viewport: { width, height: VIEW_H }, locale: "ja-JP", reducedMotion: "no-preference" });
@@ -103,6 +106,43 @@ async function shootArticle(browser, id) {
       }
     } catch (error) {
       result.errors.push(`${width}px: ${error.message.split("\n")[0]}`);
+    } finally {
+      await context.close();
+    }
+  }
+
+  for (const width of LESSON_WIDTHS) {
+    const context = await browser.newContext({ viewport: { width, height: VIEW_H }, locale: "ja-JP", reducedMotion: "no-preference" });
+    const page = await context.newPage();
+    try {
+      await loadArticle(page, id);
+      const lessons = await page.evaluate(() =>
+        Object.entries(window.__ocLessons ?? {}).map(([figureId, lesson]) => ({ figureId, steps: lesson.steps })),
+      );
+      if (lessons.length === 0) break;
+      // The narrow bar is pinned to the screen; in a still of the whole lesson it belongs under the figure.
+      await page.addStyleTag({ content: ".lesson .lesson-bar { position: static !important; }" });
+      for (const { figureId, steps } of lessons) {
+        const section = page.locator(`[data-lesson-figure="${figureId}"]`);
+        const stills = [];
+        for (let i = 0; i < steps.length; i += 1) {
+          // Each step held in its finished state, as a reader who waited would see it.
+          await page.evaluate(([figure, index]) => window.__ocLessons[figure].show(index), [figureId, i]);
+          const file = `lesson-${slug(figureId)}-w${width}-${String(i + 1).padStart(2, "0")}.png`;
+          const wide = await section.evaluate((node) => node.classList.contains("is-wide"));
+          if (wide) {
+            // Two columns: the step sits beside the pinned figure, so the screen is the still.
+            const box = await section.boundingBox();
+            await page.screenshot({ path: join(dir, file), clip: { x: box.x, y: 0, width: box.width, height: VIEW_H } });
+          } else {
+            await section.screenshot({ path: join(dir, file) });
+          }
+          stills.push({ file, ...steps[i] });
+        }
+        result.lessonSets.push({ id: figureId, width, steps: stills });
+      }
+    } catch (error) {
+      result.errors.push(`lesson ${width}px: ${error.message.split("\n")[0]}`);
     } finally {
       await context.close();
     }
@@ -158,6 +198,8 @@ a{color:#0b5cad}.meta{color:#566;font-size:12px}
 .film{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
 .film figure{margin:0;flex:none;width:320px}.film img{width:320px;border:1px solid #ccd;background:#fff;display:block}
 .film figcaption{font-size:12px;margin-top:4px}
+.film.lesson-w1280 figure,.film.lesson-w1280 img{width:560px}
+.film.lesson-w375 figure,.film.lesson-w375 img{width:260px}
 `;
 
 async function writeSheet(r) {
@@ -185,6 +227,17 @@ async function writeSheet(r) {
         .join("")}</div>`,
     )
     .join("\n");
+  const lessonFilms = r.lessonSets
+    .map(
+      (set) => `<h2>lesson ${esc(set.id)} — ${set.steps.length} 段 · ${set.width}px · 合計 ${set.steps.reduce((n, s) => n + s.seconds, 0)} 秒</h2>
+<div class="film lesson-w${set.width}">${set.steps
+        .map(
+          (s, i) => `<figure><a href="${s.file}" target="_blank"><img src="${s.file}" loading="lazy" alt="step ${i + 1}"></a>
+<figcaption><b>${i + 1}.</b> ${esc(s.caption)}<br><span class="meta">${s.seconds} 秒${s.predict ? " · 予想" : ""}</span></figcaption></figure>`,
+        )
+        .join("")}</div>`,
+    )
+    .join("\n");
   const html = `<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(r.id)}</title><style>${CSS}</style>
 <p><a href="../index.html">&larr; 一覧</a></p>
@@ -192,6 +245,7 @@ async function writeSheet(r) {
 ${overflow.length ? `<div class="warn"><b>横スクロールが出ています:</b> ${overflow.join(" / ")}</div>` : ""}
 ${r.errors.map((e) => `<div class="err">${esc(e)}</div>`).join("")}
 <div class="row">${cols.join("\n")}</div>
+${lessonFilms}
 ${films}
 </html>`;
   await writeFile(join(r.dir, "index.html"), html, "utf8");
@@ -237,7 +291,8 @@ async function main() {
       await writeSheet(r);
       const flags = [...r.shots.filter((s) => s.overflow).map((s) => `横あふれ@${s.width}`), ...r.errors.map((e) => `ERR ${e}`)];
       const beatCount = r.beatSets.reduce((n, s) => n + s.beats.length, 0);
-      console.log(`${id}: ${r.shots.length} shots, ${beatCount} beat stills${flags.length ? ` [${flags.join("; ")}]` : ""}\n  ${join(r.dir, "index.html")}`);
+      const stepCount = r.lessonSets.reduce((n, s) => n + s.steps.length, 0);
+      console.log(`${id}: ${r.shots.length} shots, ${stepCount} lesson step stills, ${beatCount} beat stills${flags.length ? ` [${flags.join("; ")}]` : ""}\n  ${join(r.dir, "index.html")}`);
     }
     await writeIndex();
     console.log(`index: ${join(outRoot, "index.html")}`);
