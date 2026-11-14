@@ -18,7 +18,7 @@ import {
 } from "../../math/descent";
 import { LiveMath, addend, mi, mn, mo, paren, row, signed, sub } from "../../mathml";
 import { EXPLORABLE_META } from "../../figureMeta";
-import { numberSetting, stringSetting, type BeatSettings } from "../../scene";
+import { numberSetting, stringSetting, type BeatSettings, type ResolvedSettings } from "../../scene";
 import {
   clamp,
   makeScale,
@@ -55,7 +55,7 @@ interface Settings {
 const INITIAL: Settings = { eta: 0.04, kappa: 20, beta: 0.5, method: "gd", start: DEFAULT_START };
 
 /** A beat names only what it changes; the start is the default point unless it sets x0 / y0. */
-function fromBeat(settings: BeatSettings, base: Settings): Settings {
+function fromBeat(settings: BeatSettings | ResolvedSettings, base: Settings): Settings {
   return {
     eta: numberSetting(settings, "eta", base.eta),
     kappa: numberSetting(settings, "kappa", base.kappa),
@@ -81,7 +81,7 @@ export default function GradientDescentValley() {
     EXPLORABLE_META["gradient-descent-valley"].beats,
     useCallback((settings: BeatSettings) => setChosen((value) => fromBeat(settings, value)), []),
   );
-  const { eta, kappa, beta, method, start } = tour.beat ? fromBeat(tour.beat.settings, chosen) : chosen;
+  const { eta, kappa, beta, method, start } = tour.active ? fromBeat(tour.values, chosen) : chosen;
   const svgRef = useRef<SVGSVGElement>(null);
   const { ref: stageRef, viewport } = useStageViewport(BOUNDS, ASPECT);
 
@@ -100,8 +100,9 @@ export default function GradientDescentValley() {
     timeline,
     tour.active ? "guided" : [eta, kappa, method, beta, start[0], start[1]].join("|"),
   );
+  // A lesson step says which iteration to show (`iter`); the guided scene advances at a fixed pace.
   const position = tour.active
-    ? Math.min(timeline.length, tour.local * TOUR_STEPS_PER_SECOND)
+    ? Math.min(timeline.length, numberSetting(tour.values, "iter", tour.local * TOUR_STEPS_PER_SECOND))
     : timeline.position;
 
   const scale = useMemo(() => makeScale(viewport), [viewport]);
