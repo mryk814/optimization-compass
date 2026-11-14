@@ -7,7 +7,8 @@ content must fail the build.
 ## Frontmatter
 
 All pages require `content_id`, `kind`, `title_ja`, `title_en`, `summary`, `source_ids`,
-`status`, and `last_reviewed`. `summary` must exactly match the first prose paragraph.
+`status`, and `last_reviewed`. `summary` is the one- or two-sentence description shown on cards,
+in search, and as the page description; it is written separately from the body's opening.
 `kind` is `method` or `concept`; method pages also require `method_id`. Unknown fields,
 duplicate list items, blank IDs, and concept pages with a `method_id` are errors.
 
@@ -24,7 +25,7 @@ kind: method
 method_id: M_EXAMPLE
 title_ja: Example
 title_en: Example
-summary: 最初の本文段落と同じ要約です。
+summary: カードと検索に出る1〜2文の説明です。
 source_ids: [S001]
 status: draft
 last_reviewed: 2026-07-15
@@ -68,21 +69,16 @@ the generated site data.
 
 ## Body style
 
-Prose style — sentence tone, terminology spelling, and canonical section headings — is
-defined in [`docs/article-style.md`](article-style.md).
-Read it before writing or revising article text. The rules below cover structure only.
-
-The reading order, visual hierarchy, body measure, and progressive-disclosure policy are
-defined in [`docs/content-reading-principles.md`](content-reading-principles.md). Read it
-alongside the prose style guide when revising an existing page or adding a new one.
-For the decision to add a figure and the shared generated-image language, also read
-[`docs/content-visual-language.md`](content-visual-language.md).
+What an article should achieve, how it is built around its moving figure, and the writing
+conventions are in [`docs/writing-articles.md`](writing-articles.md). The rules below cover the
+Markdown format only.
 
 - The page shell owns `h1`; start sections with `##` and do not skip heading levels.
-- Keep the first paragraph short enough to work as a card and SEO description.
 - Ordered/unordered lists, blockquotes, tables, inline code, emphasis, and links use
   standard Markdown.
-- Inline math uses `$...$`; display math uses a `$$` block.
+- Inline math uses `$...$`; display math uses a `$$` block. The site's LaTeX→MathML conversion
+  does not support alignment environments (`aligned`, `&`, `\\` line breaks); use separate `$$`
+  blocks instead. Validation rejects them.
 - Fenced code requires one supported language: `python`, `bash`, `json`, `yaml`, or
   `text`.
 - Callouts use `::: note`, `::: tip`, or `::: warning`, closed by `:::`.
@@ -95,27 +91,16 @@ For the decision to add a figure and the shared generated-image language, also r
   heading link uses its generated slug such as `#python`.
 - Raw HTML is never allowed. Add a supported construct to the pipeline instead.
 
-## Publication quality contract
+## What publication checks
 
-Published concept guides have the same visible completion contract as method guides. A concept
-requires a summary of at least 35 characters, a body of at least 1,200 characters, four `##`
-sections, and at least one valid internal route under `## 次に読む`. Broken internal links in that
-section fail content verification.
-
-`docs/content-quality-report.md` is an optional review report, not a publication dependency.
-Warnings cover unusually long sentences, dense Japanese comma use, meta prose, legacy heading names,
-and clear Japanese/English prose mixing. They are useful for a larger content batch, but ordinary
-article edits do not need to regenerate the report.
-
-Regenerate the report from canonical content with:
-
-```powershell
-uv run python scripts/content_quality_report.py
-```
+There is no length floor and no required section list. A published article must parse, reference
+known sources and content IDs, have every internal app link (`#/...`) resolve to a public route,
+use display math the site can render, and keep ordinary English words out of Japanese sentences.
 
 ## Verification
 
 ```powershell
+uv run python scripts/check_article.py content/concepts/<file>.md
 uv run optimization-compass validate content
 ```
 

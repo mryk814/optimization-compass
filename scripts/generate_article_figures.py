@@ -6312,8 +6312,8 @@ def _turbo_trust_region_svg(dataset_version: str) -> str:
 
 # Execution figures are drawn FIGURE_WIDTH units wide with width/height attributes equal to the
 # viewBox, so a PC shows them 1:1 and a 375 px phone (353 px of article width) at about 0.8.
-# Text is drawn at 15-18 units: >= 12 px on the phone and <= 18 px on a PC
-# (docs/teaching-article-playbook.md §5.4). Side-by-side panels are stacked instead of shrunk.
+# Text is drawn at 15-18 units: >= 12 px on the phone and <= 18 px on a PC.
+# Side-by-side panels are stacked instead of shrunk.
 FIGURE_WIDTH = 440
 FIGURE_MARGIN = 20
 CONTENT_WIDTH = FIGURE_WIDTH - 2 * FIGURE_MARGIN

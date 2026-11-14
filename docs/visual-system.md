@@ -1,6 +1,6 @@
 # Conceptual Visual System（測量図）
 
-Optimization Compass のすべての画面で、問題・手法・判断・根拠・実行を同じ記号で描くための規則です。button や spacing の design token ではなく、**最適化の概念をどう描くか**を決めます。教材図の画風（`atlas-geometric-v1`、[`content-visual-language.md`](content-visual-language.md)）と explorable の操作規則（[`explorables.md`](explorables.md)）は、この文書の下位規則として残ります。
+Optimization Compass のすべての画面で、問題・手法・判断・根拠・実行を同じ記号で描くための規則です。button や spacing の design token ではなく、**最適化の概念をどう描くか**を決めます。記事の図の色（`atlas-geometric-v1`、[`writing-articles.md`](writing-articles.md)）と explorable の操作規則（[`explorables.md`](explorables.md)）は、この文書の下位規則として残ります。
 
 この文書の規則は、視覚表現より上位の原則（problem-first、alternative-first、exclusion wins、unknown is data、method ≠ implementation、traceable、deterministic、comparison needs context、no universal ranking）を弱めません。図が「この手法が一番」と読める場合、その図は誤りです。
 

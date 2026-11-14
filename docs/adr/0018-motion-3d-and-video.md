@@ -2,7 +2,7 @@
 
 - Status: proposed
 - Date: 2026-10-01
-- Related: ADR 0016, ADR 0017, [`docs/explorables.md`](../explorables.md), [`docs/content-visual-language.md`](../content-visual-language.md), [`docs/derived-media.md`](../derived-media.md)
+- Related: ADR 0016, ADR 0017, [`docs/explorables.md`](../explorables.md), [`docs/writing-articles.md`](../writing-articles.md), [`docs/derived-media.md`](../derived-media.md)
 
 ## Context
 
@@ -98,7 +98,7 @@ TTS の品質が実用水準になったため、合成音声のナレーショ�
 
 ### 7. 作る前に決める brief
 
-`content-visual-language.md` の brief を拡張し、`explorables.json` の各 entry に次を持たせます（3D・動画を使う場合は必須）。
+教材図の brief（当時の `content-visual-language.md`。現在は [`writing-articles.md`](../writing-articles.md) の絵コンテ）を拡張し、`explorables.json` の各 entry に次を持たせます（3D・動画を使う場合は必須）。
 
 ```yaml
 question: 図を見た直後に答えられる問い（1つ）

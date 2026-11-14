@@ -8,7 +8,7 @@
 ```text
 骨格（全57型・最初から公開）        肉付け（1本ずつ）              順路（問いでつなぐ）
 data/seeds/formulation_atlas.json → content/concepts/<型>.md   → data/seeds/learning_paths.json
-  標準形・読み下し・手がかり・関係      8節の型に沿った解説            ステップ＝問い＋ページ
+  標準形・読み下し・手がかり・関係      動く図を中心にした解説          ステップ＝問い＋ページ
             └──────────── export-site-data が全部を検証し、辞書・コンパス・道筋を生成 ────┘
 ```
 
@@ -34,7 +34,7 @@ uv run python scripts/formulation_backlog.py --limit 10
    canonical_entity_id: PA0xx
    title_ja: 日本語名（略称）
    title_en: English Name
-   summary: 本文の最初の段落と完全に同じ文。
+   summary: カードと検索に出る1〜2文。本文の書き出しとは別に書く。
    prerequisites: [concept.xxx]
    related_ids: [method-content-id]
    source_ids: [S054, S055]
@@ -43,26 +43,14 @@ uv run python scripts/formulation_backlog.py --limit 10
    ---
    ```
 
-3. 本文は次の8節をこの順で書きます。欠けや順序違いは export で失敗します。
-
-   | 節 | 書くこと |
-   |---|---|
-   | 30秒でつかむ | 身近な場面1つと、決めるもの／良くしたいもの／守ることの3行 |
-   | 標準形を読む | 式の前に意味を1文。記号表。solverごとの形の違い |
-   | 小さな例 | 手で検算できる数値例。答えの位置や双対値などの「読み取り」 |
-   | 見分け方 | この形を疑う言葉と、別の形へ行くべき兆候（リンク付き） |
-   | 近い定式化 | seed の関係のうち学習上重要なものを、条件付きで説明 |
-   | 解き方の系統 | 方法の系統ごとに進み方と保証。実行して同じ数値が出るコード |
-   | つまずきやすい点 | 実際に起きる誤りと、その確かめ方 |
-   | 次に読む | 2〜4本。道筋上の次の問いを優先 |
-
+3. 本文は [`docs/writing-articles.md`](writing-articles.md) に沿って書きます。節の並びは決まっていません。定式化の記事では、読者が自分の課題をこの形だと見分けられ、小さな例を解け、合わないときの行き先が分かることを目指します。標準形と性質のカード、定式化のコンパス（関係の一覧）、ソルバーの一覧はページの枠が出すので、本文で一覧にし直しません。
 4. 例の数値とコードは、実際に実行して確かめます。プロジェクト本体に数値計算ライブラリを足さず、一時環境で動かします。
 
    ```bash
    uv run --no-project --with scipy --with numpy python example.py
    ```
 
-5. 動く図が理解の核なら、既存の explorable を再利用するか、[`docs/explorables.md`](explorables.md) の手順で追加します（1記事1つ）。
+5. 動く図は、既存の explorable を再利用するか、[`docs/explorables.md`](explorables.md) の手順で追加します。
 6. export して、辞書・定式化ページ・道筋の表示を確かめます。
 
 ## レシピ B — 形どうしの関係を足す
@@ -108,17 +96,6 @@ uv run python scripts/check_article.py content/concepts/<file>.md
 ```bash
 uv run optimization-compass export-site-data --output site/public/data
 uv run optimization-compass validate content
-uv run python -m pytest tests/test_formulation_atlas.py tests/test_content_quality.py
+uv run python -m pytest tests/test_formulation_atlas.py
 npm --prefix site test -- --run src/contracts/formulation-atlas.test.ts
 ```
-
-
-### 理解してから選ぶ記事の読み順
-
-線形最小二乗の記事は、理解 → 小さな例 → つまずき → 課題からの定式化 → 関連する問題 → 数値計算、の順に読む。
-`content_skeletons.py` の `FORMULATION_LEARNER_FIRST` がこの完全な構成を検証する。
-既存記事の8節構成は引き続き有効で、他記事を一括で並べ替える必要はない。
-関連手法へのリンクは「困りごとから関連する問題へ」で検証し、重複する「次に読む」は置かない。
-method記事も、`次に読む` の代わりに「困りごとから関連する手法へ」で締められる（`METHOD_TROUBLE_ROUTE`）。
-節ごとの中身と図の水準は [`docs/teaching-article-playbook.md`](teaching-article-playbook.md) にある。
-共通UIのコンパスは記事の後に表示し、詳細なソルバー一覧は折りたたむ。

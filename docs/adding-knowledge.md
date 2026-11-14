@@ -3,7 +3,7 @@
 This guide explains where information is owned, which files to edit, and how to validate common changes.
 It is designed both for maintainers and for contributors making their first small correction or addition.
 
-For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md). For article prose style, read [`article-style.md`](article-style.md).
+For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md). For articles and their figures, read [`writing-articles.md`](writing-articles.md).
 
 ## 1. The mental model
 
@@ -143,7 +143,6 @@ content/concepts/<content-id>.md
 ### Required checks
 
 - Keep `content_id`, `method_id`, or canonical entity identity stable unless correcting a proven identity error.
-- Keep the frontmatter `summary` exactly equal to the first body paragraph.
 - Keep `source_ids`, `related_ids`, `visualization_ids`, and `comparison_ids` unique and valid.
 - Update `last_reviewed` when the factual review has actually been performed.
 - Do not turn an implementation default into a general method recommendation.
@@ -196,9 +195,8 @@ uv run optimization-compass ready content example-method
 The target-specific iteration check parses only the named article and verifies its canonical method,
 source, and content-relation IDs; it intentionally allows a draft and placeholders. `ready content`
 exports `site/public/data` from canonical inputs, validates the canonical method and source IDs,
-rejects placeholders and future review dates, enforces the published method density floor, runs the
-focused `content-ready` checks, and prints the exact files, PR gate, and post-merge URLs. Reports can
-be regenerated separately when a batch review needs them. If it is green, do not additionally run
+rejects placeholders and future review dates, runs the focused `content-ready` checks, and prints
+the exact files, PR gate, and post-merge URLs. If it is green, do not additionally run
 dataset staging or dataset publish for an ordinary existing-entity article.
 
 Draft pages are not public inputs: site export, search, retrieval, and entity links include only
@@ -226,7 +224,7 @@ kind: method
 method_id: M_EXAMPLE
 title_ja: 例示手法
 title_en: Example Method
-summary: 最初の本文段落と完全に一致する短い説明です。
+summary: カードと検索に出る1〜2文の説明です。
 source_ids: [S001]
 prerequisites: []
 related_ids: []
@@ -241,11 +239,9 @@ Replace every placeholder and verify the entity and source IDs before committing
 
 ### Content expectations
 
-- explain the method's intuition before advanced detail;
-- state variable type, available information, constraints, evaluation cost, and guarantee scope;
-- state success signals, failure/switch signals, and limitations;
-- distinguish method theory from implementation-specific behavior;
-- link to existing family guidance and application cases when possible.
+What the article should achieve and how to build it around its moving figure are in
+[`writing-articles.md`](writing-articles.md). Keep method theory separate from
+implementation-specific behavior.
 
 Start as `draft` if relations or sources are incomplete. Publication should not be used to bypass Coverage or evidence requirements.
 
