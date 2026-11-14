@@ -16,3 +16,11 @@
 - **起きたこと**: 同じ内容の実行で、ある回だけ `tests/lesson_figures/` の52件が集める段階で失敗した。再実行すると通った。
 - **原因**: 補助図の試験は `scripts.lesson_figures` を import する。`python -m pytest` はカレントディレクトリを sys.path に入れるので通るが、ほかの起動のしかたでは入らない。
 - **直し方と再発防止**: `pyproject.toml` の pytest 設定に `pythonpath = ["."]` を書いた。`tests/` から起動しても通ることを確かめた。
+
+## 2026-11-14 開発サーバーでだけ、lesson が動かない静的な表示のままになった
+
+- **したこと**: 予想の段の選択肢をボタンに描き直すために、マウント時に元の箇条書き（`<ul data-lesson-choices>`）の中身を消した。
+- **起きたこと**: `npm run dev` の画面で lesson が立ち上がらず、図が代替文のままになった。エラーは出ない。
+- **原因**: 開発時の React StrictMode は effect を2回走らせる。2回目に同じ HTML を読み直すと、選択肢がもう消えているので「読めない lesson」と判定され、静的な表示に戻していた。
+- **直し方**: 元の箇条書きは消さず CSS で隠し、ボタンは隣に足した要素へ描く（`site/src/features/explorable/lessonMarkup.ts`）。同じ HTML を何度読んでも同じ結果になる。
+- **再発防止**: `Lesson.test.tsx` の「Reading the same markup again」が、2回読んでも同じ選択肢と同じ描画先になることを確かめる。コンパイル済みの HTML を読む処理は、読んだものを壊さない形で書く。

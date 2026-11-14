@@ -293,7 +293,7 @@
   max-inline-size: none;
 }
 
-.compiled-content-layout--lesson .markdown-body > :not(.explorable) {
+.compiled-content-layout--lesson .markdown-body > :not(.explorable, .lesson) {
   max-inline-size: var(--measure-reading);
 }
 
