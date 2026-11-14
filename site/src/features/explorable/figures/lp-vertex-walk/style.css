@@ -33,7 +33,10 @@
 .lpw-plan-text strong { font-weight: 700; }
 .lpw-plan-revenue { color: var(--ex-orange-ink); font-weight: 700; }
 
-/* Stock used: teal up to the limit tick, red past it. Both limits sit at the same place. */
+/*
+ * Stock used. The box is the stock itself, so a stock used up is a box filled to its end; what a
+ * plan is short of is drawn in red outside the box, to its right. Both boxes end at the same place.
+ */
 .lpw-usage { display: grid; gap: 0.3rem; padding: 0.5rem 0.75rem; }
 .lpw-usage-head { display: flex; flex-wrap: wrap; gap: 0 0.9em; align-items: baseline; justify-content: space-between; }
 .markdown-body .ex-frame .lpw-usage-head .ex-eyebrow { margin: 0; }
@@ -50,19 +53,24 @@
 .lpw-bar-track {
   position: relative;
   height: 0.95rem;
+}
+.lpw-bar-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid var(--ex-ink-soft);
+  border: 1.5px solid var(--ex-ink);
   border-radius: 0.2rem;
   background: var(--ex-panel);
 }
 .lpw-bar-fill,
-.lpw-bar-over,
-.lpw-bar-limit { position: absolute; top: 0; bottom: 0; }
+.lpw-bar-over { position: absolute; top: 0; bottom: 0; }
 .lpw-bar-fill { left: 0; background: var(--ex-teal); }
 .lpw-bar-over {
   background: repeating-linear-gradient(135deg, var(--ex-red) 0 5px, var(--ex-red-ink) 5px 8px);
 }
-.lpw-bar-limit { width: 0; border-left: 2px solid var(--ex-ink); }
 .lpw-bar-text { white-space: nowrap; }
 .lpw-bar-flag { margin-left: 0.5em; font-weight: 700; }
 .lpw-bar-flag.is-full { color: var(--ex-teal-ink); }

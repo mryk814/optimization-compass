@@ -65,7 +65,10 @@ const [, STOCK, REVENUE, ANSWER] = [0, 1, 2, 3];
 const FOLLOW = ["off", "best"] as const;
 /** A plan that follows the best corner takes this long to slide to a new one, so the jump can be traced. */
 const SLIDE_S = 0.45;
-/** The usage bars run to this multiple of the stock, so going over has room to show. */
+/**
+ * A usage bar's box is exactly the stock, so a stock used up is a box filled to its end. The row is
+ * this many stocks wide: the rest, to the right of the box, is where a shortage is drawn in red.
+ */
 const BAR_SPAN = 1.4;
 
 interface Chosen {
@@ -284,7 +287,7 @@ export default function LpVertexWalk() {
                 </marker>
               </defs>
               <rect className="ex-ground" height={viewport.height} width={viewport.width} />
-              <Axes scale={scale} viewport={viewport} />
+              <Axes plan={plan} scale={scale} viewport={viewport} />
               {layer >= STOCK && (
                 <>
                   <path className="ex-feasible" d={polylinePath(VERTICES, scale) + "Z"} />
@@ -336,11 +339,18 @@ export default function LpVertexWalk() {
                   </g>
                 );
               })}
-              <DropLines lines={layer <= STOCK} plan={plan} scale={scale} />
+              {layer <= STOCK && <DropLines plan={plan} scale={scale} />}
               {began && apart(began.plan, plan) > 0.05 && <Diamond className="lpw-plan-ghost" plan={began.plan} scale={scale} />}
               {/* A plan the stock cannot cover has nowhere better to be pushed to: it has to come back first. */}
               {layer >= REVENUE && !zeroPrice && !out && (
                 <RevenueArrow cost={cost} named={layer === REVENUE} plan={plan} scale={scale} viewport={viewport} />
+              )}
+              {/* After the arrow and the lines, so a stock's name stays readable where they pass it. */}
+              {layer >= STOCK && (
+                <>
+                  <StockName constraint={ARTICLE_LP[0]} scale={scale} viewport={viewport} />
+                  <StockName constraint={ARTICLE_LP[1]} scale={scale} viewport={viewport} />
+                </>
               )}
               <g
                 aria-label={`いまの計画。${planWords(plan)}。${layer >= STOCK ? `${stockStatus(plan)}。` : ""}${
@@ -356,6 +366,7 @@ export default function LpVertexWalk() {
                 <circle className="ex-handle-hit" cx={scale.px(plan[0])} cy={scale.py(plan[1])} r={20} />
                 <Diamond className={out && layer >= STOCK ? "lpw-plan is-out" : "lpw-plan"} plan={plan} scale={scale} />
               </g>
+              <PlanCounts plan={plan} scale={scale} />
             </svg>
           </div>
           {!tour.active && (
@@ -441,7 +452,7 @@ interface BarProps {
 }
 
 function UsageBar({ name, used, limit, short, full }: BarProps) {
-  const percent = (amount: number) => `${(Math.min(amount, limit * BAR_SPAN) / (limit * BAR_SPAN)) * 100}%`;
+  const percent = (share: number) => `${Math.min(Math.max(share, 0), 1) * 100}%`;
   const flag = short > 0 ? "超過" : full ? "使い切り" : "";
   return (
     <div className="lpw-bar">
@@ -451,11 +462,15 @@ function UsageBar({ name, used, limit, short, full }: BarProps) {
         className="lpw-bar-track"
         role="img"
       >
-        <span className="lpw-bar-fill" style={{ width: percent(Math.min(used, limit)) }} />
+        <span className="lpw-bar-box" style={{ width: percent(1 / BAR_SPAN) }}>
+          <span className="lpw-bar-fill" style={{ width: percent(used / limit) }} />
+        </span>
         {short > 0 && (
-          <span className="lpw-bar-over" style={{ left: percent(limit), width: `calc(${percent(used)} - ${percent(limit)})` }} />
+          <span
+            className="lpw-bar-over"
+            style={{ left: percent(1 / BAR_SPAN), width: percent(Math.min(short / limit, BAR_SPAN - 1) / BAR_SPAN) }}
+          />
         )}
-        <span className="lpw-bar-limit" style={{ left: percent(limit) }} />
       </span>
       <span className="lpw-bar-text">
         {limit} のうち {num(used)}
@@ -465,7 +480,8 @@ function UsageBar({ name, used, limit, short, full }: BarProps) {
   );
 }
 
-function Axes({ scale, viewport }: { scale: Scale; viewport: Viewport }) {
+/** The tick numbers give way where the plan's own count is written over them. */
+function Axes({ scale, viewport, plan }: { scale: Scale; viewport: Viewport; plan: Vec2 }) {
   const xs = Array.from({ length: Math.floor(SPAN[0]) + 1 }, (_, index) => index);
   const ys = Array.from({ length: Math.floor(SPAN[1]) + 1 }, (_, index) => index);
   return (
@@ -478,35 +494,50 @@ function Axes({ scale, viewport }: { scale: Scale; viewport: Viewport }) {
       ))}
       <line className="lpw-axis" x1={scale.px(0)} x2={scale.px(0)} y1={scale.py(0)} y2={0} />
       <line className="lpw-axis" x1={scale.px(0)} x2={viewport.width} y1={scale.py(0)} y2={scale.py(0)} />
-      {xs.map((x) => (
+      {xs.filter((x) => Math.abs(scale.px(x) - scale.px(plan[0])) > COUNT_WIDTH(num(plan[0])) / 2 + 5).map((x) => (
         <text className="lpw-tick" key={`tx${x}`} textAnchor="middle" x={scale.px(x)} y={scale.py(0) + 17}>{x}</text>
       ))}
-      {ys.slice(1).map((y) => (
+      {ys.slice(1).filter((y) => Math.abs(scale.py(y) - scale.py(plan[1])) > 15).map((y) => (
         <text className="lpw-tick" key={`ty${y}`} textAnchor="end" x={scale.px(0) - 8} y={scale.py(y) + 4.5}>{y}</text>
       ))}
-      <text className="lpw-axis-name" textAnchor="end" x={viewport.width - 6} y={scale.py(0) + 35}>食パンの個数 →</text>
+      <text className="lpw-axis-name" textAnchor="end" x={viewport.width - 6} y={scale.py(0) + 37}>食パンの個数 →</text>
       <text className="lpw-axis-name" x={scale.px(0) + 7} y={15}>↑ クロワッサン</text>
     </g>
   );
 }
 
+/** Width of the box a count is written in on an axis. */
+const COUNT_WIDTH = (text: string) => text.length * 7 + 9;
+
 /**
- * The plan's two counts, written on the axes. The dashed lines that lead there are drawn while the
- * reader is still learning to read a point; later the revenue line and the corners need the room.
+ * Dashed lines from the plan to the axes, drawn while the reader is still learning to read a point;
+ * later the revenue line and the corners need the room.
  */
-function DropLines({ plan, scale, lines }: { plan: Vec2; scale: Scale; lines: boolean }) {
+function DropLines({ plan, scale }: { plan: Vec2; scale: Scale }) {
+  const [x, y] = [scale.px(plan[0]), scale.py(plan[1])];
+  return (
+    <g aria-hidden="true">
+      <line className="lpw-drop" x1={x} x2={x} y1={y} y2={scale.py(0)} />
+      <line className="lpw-drop" x1={x} x2={scale.px(0)} y1={y} y2={y} />
+    </g>
+  );
+}
+
+/**
+ * The plan's two counts, written on the axes. Drawn over the plan and clear of the axis line, so a
+ * plan that sits on an axis (bread only) does not cover its own count.
+ */
+function PlanCounts({ plan, scale }: { plan: Vec2; scale: Scale }) {
   const [x, y] = [scale.px(plan[0]), scale.py(plan[1])];
   const [x0, y0] = [scale.px(0), scale.py(0)];
   const [breads, croissants] = [num(plan[0]), num(plan[1])];
-  const width = (text: string) => text.length * 7 + 9;
+  const [wide, tall] = [COUNT_WIDTH(breads), COUNT_WIDTH(croissants)];
   return (
-    <g aria-hidden="true">
-      {lines && <line className="lpw-drop" x1={x} x2={x} y1={y} y2={y0} />}
-      {lines && <line className="lpw-drop" x1={x} x2={x0} y1={y} y2={y} />}
-      <rect className="lpw-read-box" height={18} rx={3} width={width(breads)} x={x - width(breads) / 2} y={y0 + 4} />
-      <text className="lpw-read" textAnchor="middle" x={x} y={y0 + 17}>{breads}</text>
-      <rect className="lpw-read-box" height={18} rx={3} width={width(croissants)} x={x0 - 5 - width(croissants)} y={y - 9} />
-      <text className="lpw-read" textAnchor="middle" x={x0 - 5 - width(croissants) / 2} y={y + 4.5}>{croissants}</text>
+    <g aria-hidden="true" pointerEvents="none">
+      <rect className="lpw-read-box" height={18} rx={3} width={wide} x={x - wide / 2} y={y0 + 5} />
+      <text className="lpw-read" textAnchor="middle" x={x} y={y0 + 18}>{breads}</text>
+      <rect className="lpw-read-box" height={18} rx={3} width={tall} x={x0 - 6 - tall} y={y - 9} />
+      <text className="lpw-read" textAnchor="middle" x={x0 - 6 - tall / 2} y={y + 4.5}>{croissants}</text>
     </g>
   );
 }
@@ -551,18 +582,22 @@ function RevenueArrow({
   // About one loaf long, so on a phone it stays clear of the names along the top of the plane.
   const length = clamp(scale.px(1.1) - scale.px(0), 34, 46);
   const tip: Vec2 = [x + ux * length, y + uy * length];
-  // The name sits past the tip on one line when there is room, on two when there is less, and
-  // otherwise above the tip, kept inside the plot.
+  // The name sits past the tip on one line when there is room. On a narrow plane it goes on two
+  // lines below the arrow's foot, clear of the stock names along the top and the right edge, and
+  // failing that above the tip, kept inside the plot.
   const roomRight = viewport.width - 6 - (tip[0] + 8);
-  const lines = roomRight >= ARROW_NAME_WIDTH[0] ? [ARROW_NAME.join("")] : ARROW_NAME;
-  const beside = roomRight >= ARROW_NAME_WIDTH[1];
-  const name = beside
+  const whole = roomRight >= ARROW_NAME_WIDTH[0];
+  const lines = whole ? [ARROW_NAME.join("")] : ARROW_NAME;
+  const below = !whole && viewport.width - 6 - (x + 12) >= ARROW_NAME_WIDTH[1];
+  const name = whole
     ? { x: tip[0] + 8, y: Math.max(14, (y + tip[1]) / 2 + 4), textAnchor: "start" as const }
-    : {
-        x: Math.min(viewport.width - 6, tip[0] + ARROW_NAME_WIDTH[1] / 2),
-        y: Math.max(14, tip[1] - 10 - 16 * (lines.length - 1)),
-        textAnchor: "end" as const,
-      };
+    : below
+      ? { x: x + 12, y: y + 22, textAnchor: "start" as const }
+      : {
+          x: Math.min(viewport.width - 6, tip[0] + ARROW_NAME_WIDTH[1] / 2),
+          y: Math.max(14, tip[1] - 10 - 16 * (lines.length - 1)),
+          textAnchor: "end" as const,
+        };
   return (
     <g aria-hidden="true">
       <line className="lpw-arrow" markerEnd="url(#lpw-arrow-head)" x1={x + ux * 14} x2={tip[0]} y1={y + uy * 14} y2={tip[1]} />
@@ -579,10 +614,24 @@ const STOCK_NAME_WIDTH = 64;
 /** The bread count at which a stock line passes the croissant count `y`. */
 const breadsOnLine = (constraint: HalfPlane, y: number) => (constraint.b - constraint.a[1] * y) / constraint.a[0];
 
-/** A stock's limit line with its name where no step of the lesson puts the plan. */
+/** A stock's limit line, cut at the axes. */
 function StockLine({ constraint, scale, viewport }: { constraint: HalfPlane; scale: Scale; viewport: Viewport }) {
   const line = levelLine(constraint.a, constraint.b, viewport.bounds);
   if (!line) return null;
+  return (
+    <line
+      className="ex-constraint"
+      clipPath="url(#lpw-plane)"
+      x1={scale.px(line[0][0])}
+      x2={scale.px(line[1][0])}
+      y1={scale.py(line[0][1])}
+      y2={scale.py(line[1][1])}
+    />
+  );
+}
+
+/** A stock line's name, at the end of the line where no step of the lesson puts the plan. */
+function StockName({ constraint, scale, viewport }: { constraint: HalfPlane; scale: Scale; viewport: Viewport }) {
   const onLine = (x: number) => (constraint.b - constraint.a[0] * x) / constraint.a[1];
   const flour = constraint === ARTICLE_LP[0];
   // Flour: right of the steep line where it leaves the top. Butter: above the line's low end at the right edge.
@@ -593,19 +642,7 @@ function StockLine({ constraint, scale, viewport }: { constraint: HalfPlane; sca
         y: scale.py(onLine(scale.ix(viewport.width - 6 - STOCK_NAME_WIDTH))) - 7,
         textAnchor: "end" as const,
       };
-  return (
-    <g>
-      <line
-        className="ex-constraint"
-        clipPath="url(#lpw-plane)"
-        x1={scale.px(line[0][0])}
-        x2={scale.px(line[1][0])}
-        y1={scale.py(line[0][1])}
-        y2={scale.py(line[1][1])}
-      />
-      <text className="ex-label ex-label-strong" {...label}>{STOCKS[flour ? 0 : 1].name} {constraint.b}</text>
-    </g>
-  );
+  return <text className="ex-label ex-label-strong" {...label}>{STOCKS[flour ? 0 : 1].name} {constraint.b}</text>;
 }
 
 /** A corner's revenue is written inside the range, toward its middle, clear of the lines that meet there. */
