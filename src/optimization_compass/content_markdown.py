@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.parse import urlsplit
 
 from latex2mathml.converter import convert as latex_to_mathml
@@ -17,10 +18,24 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
-from optimization_compass.explorables import is_valid_explorable_id, load_explorables
+from optimization_compass.explorables import (
+    Explorable,
+    Param,
+    is_valid_explorable_id,
+    load_explorables,
+)
 
 _EXPLORABLE_OPEN = "container_explorable_open"
 _EXPLORABLE_CLOSE = "container_explorable_close"
+_LESSON_OPEN = "container_lesson_open"
+_LESSON_CLOSE = "container_lesson_close"
+_STEP_OPEN = "container_step_open"
+_STEP_CLOSE = "container_step_close"
+_STEP_DEFAULT_SECONDS = 6.0
+_LESSON_MAX_SECONDS = 120.0
+_NUMBER = r"-?\d+(?:\.\d+)?"
+_STEP_SWEEP = re.compile(rf"^({_NUMBER})\.\.({_NUMBER})(?:@({_NUMBER}))?$")
+_STEP_NUMBER = re.compile(rf"^{_NUMBER}$")
 _EXPLORABLE_FALLBACK = (
     "動かして確かめる図です。JavaScriptが有効なブラウザで表示されます。"
     "読み込めない場合は、下の説明で内容を確認してください。"
@@ -53,7 +68,7 @@ def render_markdown(source: str, *, path: Path) -> RenderedMarkdown:
     tokens = parser.parse(source)
     _reject_raw_html(tokens, path)
     headings = _prepare_headings(tokens, path)
-    _validate_explorables(tokens, path)
+    _validate_explorables(tokens, path, _prepare_lessons(tokens, path))
     _validate_figures_are_standalone(tokens, path)
     _validate_and_prepare_links(tokens, headings, path)
     _validate_code_languages(tokens, path)
@@ -110,6 +125,8 @@ def _markdown_parser() -> MarkdownIt:
     for name, label in _CALLOUTS.items():
         parser.use(container_plugin, name, render=_callout_renderer(name, label))
     parser.use(container_plugin, "explorable", render=_render_explorable)
+    parser.use(container_plugin, "lesson", render=_render_lesson)
+    parser.use(container_plugin, "step", render=_render_step)
     parser.add_render_rule("fence", _render_fence)
     parser.add_render_rule("code_block", _render_code_block)
     parser.add_render_rule("math_inline", _render_inline_math)
@@ -147,10 +164,10 @@ def _render_explorable(_renderer: object, tokens: list[Token], index: int, *_: o
     )
 
 
-def _validate_explorables(tokens: list[Token], path: Path) -> None:
+def _validate_explorables(tokens: list[Token], path: Path, in_lessons: set[str]) -> None:
     """An explorable is a top-level block: a registered id and exactly one caption paragraph."""
     registry = load_explorables()
-    seen: set[str] = set()
+    seen = set(in_lessons)
     for index, token in enumerate(tokens):
         if token.type != _EXPLORABLE_OPEN:
             continue
@@ -179,6 +196,258 @@ def _validate_explorables(tokens: list[Token], path: Path) -> None:
             raise ValueError(f"{path}: explorable caption must be text: {explorable_id}")
         if not _inline_text(inline).strip():
             raise ValueError(f"{path}: explorable caption must not be blank: {explorable_id}")
+
+
+def _render_lesson(_renderer: object, tokens: list[Token], index: int, *_: object) -> str:
+    """Without JavaScript a lesson is the figure's fallback followed by its steps as a list."""
+    token = tokens[index]
+    if token.nesting == -1:
+        return "</ol></section>\n"
+    figure_id = token.info.split()[1]
+    entry = load_explorables()[figure_id]
+    return (
+        f'<section class="lesson" data-lesson-figure="{figure_id}">'
+        '<div class="lesson-stage">'
+        f'<figure class="explorable lesson-figure" role="group" data-explorable-id="{figure_id}"'
+        f' aria-label="{html.escape(entry.title_ja, quote=True)}">'
+        '<div class="explorable-mount" data-explorable-mount>'
+        f'<p class="explorable-fallback">{_EXPLORABLE_FALLBACK}</p></div></figure>'
+        '<div class="lesson-nav" data-lesson-nav></div></div>'
+        '<ol class="lesson-steps">\n'
+    )
+
+
+def _render_step(renderer: Any, tokens: list[Token], index: int, *_: object) -> str:
+    token = tokens[index]
+    if token.nesting == -1:
+        return "</li>\n"
+    return f'<li class="lesson-step" data-lesson-step{renderer.renderAttrs(token)}>\n'
+
+
+def _prepare_lessons(tokens: list[Token], path: Path) -> set[str]:
+    """Check every ``:::: lesson <figure-id>`` and write each step's data onto its token.
+
+    Returns the figure ids the lessons use, so an explorable block cannot repeat one.
+    """
+    registry = load_explorables()
+    used: set[str] = set()
+    index = 0
+    while index < len(tokens):
+        token = tokens[index]
+        if token.type == _STEP_OPEN:
+            raise ValueError(f"{path}: a step must be directly inside a lesson")
+        if token.type != _LESSON_OPEN:
+            index += 1
+            continue
+        parts = token.info.split()
+        if len(parts) != 2 or not is_valid_explorable_id(parts[1]):
+            raise ValueError(f"{path}: lesson requires exactly one kebab-case figure id")
+        figure_id = parts[1]
+        if figure_id not in registry:
+            raise ValueError(f"{path}: unknown explorable id: {figure_id}")
+        if figure_id in used:
+            raise ValueError(f"{path}: explorable is used more than once: {figure_id}")
+        used.add(figure_id)
+        if token.level != 0:
+            raise ValueError(f"{path}: lesson must be a top-level block: {figure_id}")
+        entry = registry[figure_id]
+        if entry.params is None:
+            raise ValueError(
+                f"{path}: lesson {figure_id}: the figure's meta.json must declare params"
+            )
+        where = f"{path}: lesson {figure_id}"
+        end = _closing(tokens, index, _LESSON_OPEN, _LESSON_CLOSE)
+        seconds: list[float] = []
+        # What the figure shows when a step ends; a step that omits a param keeps it.
+        carried: dict[str, float | str] = {
+            name: param.default for name, param in entry.params.items() if param.default is not None
+        }
+        cursor = index + 1
+        while cursor < end:
+            if tokens[cursor].type != _STEP_OPEN:
+                raise ValueError(f"{where}: only `::: step` blocks may appear inside a lesson")
+            step_end = _closing(tokens, cursor, _STEP_OPEN, _STEP_CLOSE)
+            step_where = f"{where} step {len(seconds) + 1}"
+            seconds.append(_prepare_step(tokens, cursor, step_end, entry, carried, step_where))
+            cursor = step_end + 1
+        if not 2 <= len(seconds) <= 12:
+            raise ValueError(f"{where}: a lesson has 2 to 12 steps, found {len(seconds)}")
+        if sum(seconds) > _LESSON_MAX_SECONDS:
+            raise ValueError(
+                f"{where}: steps must not exceed {_LESSON_MAX_SECONDS:.0f} seconds in total"
+            )
+        index = end + 1
+    return used
+
+
+def _closing(tokens: list[Token], start: int, open_type: str, close_type: str) -> int:
+    depth = 0
+    for index in range(start, len(tokens)):
+        if tokens[index].type == open_type:
+            depth += 1
+        elif tokens[index].type == close_type:
+            depth -= 1
+            if depth == 0:
+                return index
+    raise ValueError("container is not closed")  # markdown-it always emits the close token
+
+
+def _prepare_step(
+    tokens: list[Token],
+    start: int,
+    end: int,
+    entry: Explorable,
+    carried: dict[str, float | str],
+    where: str,
+) -> float:
+    """Validate one step and set its data attributes. Returns its seconds.
+
+    The step's settings are written out in full: a param it omits keeps the value the previous
+    step ended on (``carried``, updated here), or the param's default in the first step.
+    """
+    token = tokens[start]
+    params = entry.params or {}
+    seconds = _STEP_DEFAULT_SECONDS
+    predict = False
+    answer: int | None = None
+    settings: dict[str, object] = {}
+    seen: set[str] = set()
+    for word in token.info.split()[1:]:
+        key, separator, value = word.partition("=")
+        if key in seen:
+            raise ValueError(f"{where}: key is given twice: {key}")
+        seen.add(key)
+        if key == "predict":
+            if separator:
+                raise ValueError(f"{where}: predict is a flag and takes no value")
+            predict = True
+        elif not value:
+            raise ValueError(f"{where}: write keys as key=value: {word}")
+        elif key == "seconds":
+            if not _STEP_NUMBER.match(value) or not 2 <= float(value) <= 15:
+                raise ValueError(f"{where}: seconds must be a number from 2 to 15")
+            seconds = float(value)
+        elif key == "answer":
+            if not (value.isascii() and value.isdigit()):
+                raise ValueError(f"{where}: answer must be the number of a choice, from 1")
+            answer = int(value)
+        elif key not in params:
+            known = ", ".join(sorted(params)) or "none"
+            raise ValueError(f"{where}: {key!r} is not a param of {entry.id} (its params: {known})")
+        else:
+            settings[key] = _step_value(key, value, params[key], where)
+
+    body = tokens[start + 1 : end]
+    level = token.level + 1
+    for item in body:
+        if item.type == "heading_open":
+            raise ValueError(f"{where}: a step must not contain a heading")
+        if item.type in {_LESSON_OPEN, _STEP_OPEN}:
+            raise ValueError(f"{where}: a step must not contain another lesson or step")
+    caption = next(
+        (
+            _first_sentence(_inline_text(body[position + 1]))
+            for position, item in enumerate(body)
+            if item.type == "paragraph_open" and item.level == level
+        ),
+        "",
+    )
+    if not caption:
+        raise ValueError(
+            f"{where}: a step needs a paragraph of text; its first sentence is the caption"
+        )
+    lists = [
+        item
+        for item in body
+        if item.type in {"bullet_list_open", "ordered_list_open"} and item.level == level
+    ]
+    if predict:
+        if len(lists) != 1:
+            raise ValueError(f"{where}: a predict step has exactly one list, the choices")
+        choices = sum(item.type == "list_item_open" and item.level == level + 1 for item in body)
+        if not 2 <= choices <= 4:
+            raise ValueError(f"{where}: a predict step offers 2 to 4 choices, found {choices}")
+        if answer is None or not 1 <= answer <= choices:
+            raise ValueError(f"{where}: a predict step needs answer=1..{choices}")
+        lists[0].attrSet("class", "lesson-choices")
+        lists[0].attrSet("data-lesson-choices", "")
+        token.attrSet("data-predict", "")
+        token.attrSet("data-answer", str(answer))
+    elif answer is not None:
+        raise ValueError(f"{where}: answer is only for a predict step")
+    missing = sorted(set(params) - set(settings) - set(carried))
+    if missing:
+        raise ValueError(
+            f"{where}: {', '.join(missing)} is not set and has no default in "
+            f"{entry.id}/meta.json params"
+        )
+    full = {name: _plain_number(kept) for name, kept in carried.items()} | settings
+    for name, setting in settings.items():
+        carried[name] = _end_value(setting, seconds)
+    token.attrSet("data-seconds", f"{seconds:g}")
+    token.attrSet("data-settings", json.dumps(full, ensure_ascii=False, sort_keys=True))
+    token.attrSet("data-caption", caption)
+    return seconds
+
+
+def _step_value(key: str, value: str, param: Param, where: str) -> object:
+    """A constant, a sweep ``a..b`` or a rate ``a..b@r``, in the shape ``scene.ts`` reads."""
+    sweep = _STEP_SWEEP.match(value)
+    if sweep is None:
+        if param.type == "choice":
+            constant: float | str = value
+        elif _STEP_NUMBER.match(value):
+            constant = float(value)
+        else:
+            raise ValueError(f"{where}: {key}={value} must be a number, a..b or a..b@rate")
+        problem = param.problem_with(constant)
+        if problem:
+            raise ValueError(f"{where}: {key}={value} {problem}")
+        return _plain_number(constant)
+    if param.type == "choice":
+        raise ValueError(f"{where}: {key}={value}: only a number param can sweep")
+    start, stop = float(sweep.group(1)), float(sweep.group(2))
+    for endpoint in (start, stop):
+        problem = param.problem_with(endpoint)
+        if problem:
+            raise ValueError(f"{where}: {key}={value}: {endpoint:g} {problem}")
+    if start == stop:
+        raise ValueError(f"{where}: {key}={value}: a sweep needs two different ends")
+    moving: dict[str, object] = {"from": _plain_number(start), "to": _plain_number(stop)}
+    if sweep.group(3) is not None:
+        rate = float(sweep.group(3))
+        if rate <= 0:
+            raise ValueError(f"{where}: {key}={value}: the rate after @ must be positive")
+        moving["rate"] = _plain_number(rate)
+    if param.type == "integer":
+        # The figure declared whole numbers, so the moving value advances in whole steps.
+        moving["step"] = 1
+    return moving
+
+
+def _end_value(value: object, seconds: float) -> float | str:
+    """Where a step leaves a param: the same arithmetic as ``resolveSettings`` in scene.ts."""
+    if not isinstance(value, dict):
+        return cast("float | str", value)
+    start, stop = float(value["from"]), float(value["to"])
+    if "rate" not in value:
+        return stop
+    travelled = min(abs(stop - start), float(value["rate"]) * seconds)
+    if "step" in value:
+        travelled = float(value["step"]) * (travelled // float(value["step"]))
+    return start + travelled if stop > start else start - travelled
+
+
+def _plain_number(value: float | str) -> float | int | str:
+    if isinstance(value, str):
+        return value
+    return int(value) if float(value).is_integer() else value
+
+
+def _first_sentence(text: str) -> str:
+    text = " ".join(text.split())
+    end = text.find("。")
+    return text if end == -1 else text[: end + 1]
 
 
 def _walk(tokens: list[Token]) -> list[Token]:

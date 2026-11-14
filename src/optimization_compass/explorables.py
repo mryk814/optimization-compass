@@ -14,10 +14,14 @@ import json
 import re
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 _ID_PATTERN = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
+_PARAM_NAME_PATTERN = re.compile(r"^[a-z][A-Za-z0-9_]*$")
+# Keys a lesson step uses for itself (``::: step seconds=6 predict answer=2``).
+RESERVED_PARAM_NAMES = frozenset({"seconds", "predict", "answer"})
 
 
 _MAX_SCENE_SECONDS = 60.0
@@ -52,6 +56,62 @@ class Beat(BaseModel):
         return value
 
 
+class Param(BaseModel):
+    """One setting a guided beat or a lesson step may set on the figure.
+
+    ``number`` and ``integer`` carry a closed range; ``choice`` carries its allowed words. The
+    declaration is what lets an article's lesson be checked without running the figure.
+    """
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    type: Literal["number", "integer", "choice"]
+    min: float | None = None
+    max: float | None = None
+    choices: tuple[str, ...] | None = None
+    # What a lesson's first step shows when it does not set this param.
+    default: float | str | None = None
+
+    @model_validator(mode="after")
+    def _shape(self) -> Param:
+        self._check_shape()
+        if self.default is not None and (problem := self.problem_with(self.default)):
+            raise ValueError(f"default {self.default!r} {problem}")
+        return self
+
+    def _check_shape(self) -> None:
+        if self.type == "choice":
+            if self.min is not None or self.max is not None:
+                raise ValueError("a choice param takes choices, not min / max")
+            choices = self.choices or ()
+            if len(choices) < 2 or len(set(choices)) != len(choices):
+                raise ValueError("a choice param needs at least two distinct choices")
+            if any(not re.fullmatch(r"[A-Za-z0-9_-]+", choice) for choice in choices):
+                raise ValueError("choices must be words of letters, digits, - and _")
+            return
+        if self.choices is not None:
+            raise ValueError(f"a {self.type} param takes min / max, not choices")
+        if self.min is None or self.max is None or not self.min < self.max:
+            raise ValueError(f"a {self.type} param needs min < max")
+        if self.type == "integer" and not (self.min.is_integer() and self.max.is_integer()):
+            raise ValueError("an integer param needs whole-number min and max")
+
+    def problem_with(self, value: float | str) -> str | None:
+        """Why ``value`` is not a value of this param, or None when it is."""
+        if self.type == "choice":
+            if value not in (self.choices or ()):
+                return f"must be one of {', '.join(self.choices or ())}"
+            return None
+        if isinstance(value, str):
+            return "must be a number"
+        assert self.min is not None and self.max is not None
+        if not self.min <= value <= self.max:
+            return f"must be within {self.min:g}..{self.max:g}"
+        if self.type == "integer" and not float(value).is_integer():
+            return "must be a whole number"
+        return None
+
+
 class Explorable(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
@@ -60,7 +120,32 @@ class Explorable(BaseModel):
     question: str
     fixed_conditions: str
     not_implied: str
+    # None: the figure predates params; its beats are unchecked and it cannot be used in a lesson.
+    params: dict[str, Param] | None = None
     beats: tuple[Beat, ...] = ()
+
+    @field_validator("params")
+    @classmethod
+    def _param_names(cls, value: dict[str, Param] | None) -> dict[str, Param] | None:
+        for name in value or {}:
+            if not _PARAM_NAME_PATTERN.match(name):
+                raise ValueError(f"param name must start with a lowercase letter: {name!r}")
+            if name in RESERVED_PARAM_NAMES:
+                raise ValueError(f"param name is reserved for lesson steps: {name!r}")
+        return value
+
+    @model_validator(mode="after")
+    def _beats_use_declared_params(self) -> Explorable:
+        if self.params is None:
+            return self
+        for number, beat in enumerate(self.beats, start=1):
+            for key, value in beat.settings.items():
+                if key not in self.params:
+                    raise ValueError(f"beat {number} sets {key!r}, which params does not declare")
+                problem = self.params[key].problem_with(value)
+                if problem:
+                    raise ValueError(f"beat {number} setting {key}={value!r} {problem}")
+        return self
 
     @field_validator("id")
     @classmethod
@@ -115,3 +200,11 @@ def load_explorables() -> dict[str, Explorable]:
 
 def is_valid_explorable_id(value: str) -> bool:
     return bool(_ID_PATTERN.match(value))
+
+
+_EMBED = re.compile(r"^:{3,} (?:explorable|lesson) (\S+)", re.MULTILINE)
+
+
+def embedded_figure_ids(body: str) -> tuple[str, ...]:
+    """Figure ids an article body embeds, as ``::: explorable <id>`` or ``:::: lesson <id>``."""
+    return tuple(_EMBED.findall(body))

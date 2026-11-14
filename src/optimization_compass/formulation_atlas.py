@@ -26,6 +26,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from optimization_compass.content_models import ContentPage
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.explorables import embedded_figure_ids
 
 CONTRACT_VERSION = "1.0.0"
 LEARNING_PATH_CONTRACT_VERSION = "1.0.0"
@@ -557,7 +558,7 @@ def _block_math(latex: str) -> str:
 def _maturity(page: ContentPage | None) -> Maturity:
     if page is None:
         return "skeleton"
-    return "article_with_figure" if "::: explorable" in page.body else "article"
+    return "article_with_figure" if embedded_figure_ids(page.body) else "article"
 
 
 def _fit_rank(level: object) -> int:

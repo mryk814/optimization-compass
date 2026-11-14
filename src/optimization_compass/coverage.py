@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from datetime import datetime
@@ -19,6 +18,7 @@ from optimization_compass.editorial_scope import (
     ScopeMember,
     load_editorial_scope,
 )
+from optimization_compass.explorables import embedded_figure_ids
 from optimization_compass.failure_discovery import FailureDiscoveryIndex
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
@@ -131,7 +131,6 @@ _AXIS_STATES: dict[str, tuple[str, ...]] = {
     "transfer": ("undecided",),
 }
 _CLAIM_REF_TYPES = frozenset({"method", "problem", "problem_definition", "feature"})
-_EXPLORABLE = re.compile(r"^::: explorable ", re.MULTILINE)
 
 
 class AxisCoverage(CoverageModel):
@@ -257,7 +256,7 @@ def build_scope_coverage(scope: EditorialScope, pages: Iterable[ContentPage]) ->
                 axes["lesson"].states["no_article"] += 1
             axes["experience"].states["undecided"] += 1
             axes["transfer"].states["undecided"] += 1
-            if any(_EXPLORABLE.search(page.body) for page in resolved):
+            if any(embedded_figure_ids(page.body) for page in resolved):
                 axes["experience"].info["has_interactive"] += 1
         units[unit] = UnitScopeCoverage(
             denominator=len(included),
