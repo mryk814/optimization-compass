@@ -64,12 +64,16 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
   const indexRef = useRef(index);
   indexRef.current = index;
   const suppressUntil = useRef(0);
+  // Set at once when automation holds a step. React stops the clock only after its next render,
+  // and a frame of the clock that runs before then must not move the held step.
+  const holding = useRef(false);
   const painted = useRef<Array<() => void>>([]);
   const last = steps.length - 1;
   const duration = beats[index].durationS;
 
   const enter = useCallback((target: number) => {
     setSeen(true);
+    holding.current = false;
     setHeld(false);
     setFree(false);
     setIndex(target);
@@ -111,6 +115,7 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
     let previous: number | undefined;
     let elapsed = 0;
     const tick = (now: number) => {
+      if (holding.current) return;
       elapsed += previous === undefined ? 0 : Math.max(0, (now - previous) / 1000);
       previous = now;
       setLocal(Math.min(duration, elapsed));
@@ -231,6 +236,7 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
         }
         const length = beats[target].durationS;
         painted.current.push(resolve);
+        holding.current = true;
         setAuto(false);
         setFree(false);
         setHeld(true);
