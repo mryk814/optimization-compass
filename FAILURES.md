@@ -24,3 +24,11 @@
 - **原因**: 開発時の React StrictMode は effect を2回走らせる。2回目に同じ HTML を読み直すと、選択肢がもう消えているので「読めない lesson」と判定され、静的な表示に戻していた。
 - **直し方**: 元の箇条書きは消さず CSS で隠し、ボタンは隣に足した要素へ描く（`site/src/features/explorable/lessonMarkup.ts`）。同じ HTML を何度読んでも同じ結果になる。
 - **再発防止**: `Lesson.test.tsx` の「Reading the same markup again」が、2回読んでも同じ選択肢と同じ描画先になることを確かめる。コンパイル済みの HTML を読む処理は、読んだものを壊さない形で書く。
+
+## 2026-11-14 レビュー用の静止画で、lesson の最初の段だけが掃引の途中で写った
+
+- **したこと**: `npm --prefix site run shots -- concept.hyperparameter-optimization`。段ごとに `window.__ocLessons[...].show(index)` で終了状態を出して撮る。
+- **起きたこと**: 375px の1段目だけ、掃引の終わり（log10 λ = 1）ではなく途中（−3.5）の図が写り、段の文章の数値と合わなかった。1280px と、ほかの段は正しかった。
+- **原因**: その段の時計が動いている最中に `show` を呼ぶと、React が時計の effect を片付ける前に、予約済みの `requestAnimationFrame` が1回走り、`show` が置いた秒数を時計の秒数で上書きしていた。375px では lesson が最初から画面内にあり、時計が動いていた。
+- **直し方**: `show` がその場で立てる ref（`holding`）を時計の各フレームが見て、立っていれば何もしない（`site/src/features/explorable/Lesson.tsx`）。
+- **再発防止**: `Lesson.test.tsx` の「keeps a held step where automation put it…」が、`show` の直後に時計のフレームが走っても終了状態のままであることを確かめる。state で止める時計は、止める側が同期で読める印も持たせる。

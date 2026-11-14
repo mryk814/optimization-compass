@@ -361,6 +361,23 @@ describe("Lesson", () => {
     await expect(handle.show(9)).rejects.toThrow("no step 9");
     void shown;
   });
+
+  it("keeps a held step where automation put it when a frame of the running clock is still due", () => {
+    const due: FrameRequestCallback[] = [];
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => due.push(callback));
+    vi.stubGlobal("cancelAnimationFrame", () => undefined);
+    const { probe } = renderLesson();
+    const frame = (now: number) => due.splice(0).forEach((callback) => callback(now));
+    act(() => frame(1_000));
+    act(() => frame(2_000)); // the first step's clock is one second in
+    expect(probe().values.iter).toBeCloseTo(20, 5);
+    // The browser can run the clock's next frame after `show` and before React stops the clock.
+    act(() => {
+      void window.__ocLessons!["probe-figure"].show(0);
+      frame(2_100);
+    });
+    expect(probe().values.iter).toBeCloseTo(90, 5);
+  });
 });
 
 describe("a lesson inside compiled content", () => {
