@@ -635,3 +635,312 @@
 /* Root finding grid and root line, also drawn by the simplex projection: teal = the root. */
 .nr-grid { stroke: var(--ex-line); stroke-width: 1; stroke-dasharray: 3 4; }
 .nr-root { stroke: var(--ex-teal); stroke-width: 2; stroke-dasharray: 6 4; }
+
+/*
+ * Lesson: steps of prose that drive one figure (docs/explorables.md). Without JavaScript the
+ * section is the figure's fallback and an ordinary numbered list; `.is-live` is added by Lesson.tsx.
+ */
+.lesson {
+  --ex-ground: #fbf9f2;
+  --ex-panel: #ffffff;
+  --ex-ink: #1d2b4a;
+  --ex-ink-soft: #4a5673;
+  --ex-line: #ddd8c8;
+  --ex-teal: #1a8a85;
+  --ex-teal-ink: #0d5c58;
+  --ex-teal-wash: #dff1ee;
+  --ex-orange: #e07b2e;
+  --ex-orange-ink: #8a4108;
+  margin: 1.5rem 0;
+}
+
+.lesson .lesson-figure { margin: 0; }
+.lesson-stage { display: grid; gap: 0.5rem; min-width: 0; }
+.lesson-nav:empty { display: none; }
+
+.lesson.is-live .lesson-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson.is-live .lesson-step {
+  position: relative;
+  padding: 0.85rem 1rem 0.85rem 3.1rem;
+  border: 1px solid var(--ex-line);
+  border-left: 4px solid var(--ex-line);
+  border-radius: 0.4rem;
+  background: var(--ex-ground);
+}
+
+.lesson.is-live .lesson-step::before {
+  content: attr(data-lesson-number);
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  display: grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border: 1.5px solid var(--ex-ink-soft);
+  border-radius: 50%;
+  color: var(--ex-ink-soft);
+  font-size: var(--type-label);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.lesson.is-live .lesson-step.is-active {
+  border-color: var(--ex-ink);
+  background: var(--ex-panel);
+}
+
+.lesson.is-live .lesson-step.is-active::before {
+  border-color: var(--ex-ink);
+  background: var(--ex-ink);
+  color: #ffffff;
+}
+
+.lesson.is-live .lesson-step > :first-child { margin-top: 0; }
+.lesson.is-live .lesson-step > :last-child { margin-bottom: 0; }
+.lesson.is-live .lesson-step.is-tappable { cursor: pointer; }
+
+/*
+ * Under the figure: the bar says where the reader is and moves between steps; beside it are the
+ * two playback buttons. Wide screens draw both in one box, narrow screens keep only the bar pinned.
+ */
+.lesson-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.45rem 0.6rem;
+  align-items: center;
+  color: var(--ex-ink);
+}
+
+.lesson-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: space-between;
+}
+
+.lesson-nav button {
+  min-height: 2.75rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.lesson-nav button:disabled {
+  border-color: var(--ex-line);
+  color: #7a8194;
+  cursor: not-allowed;
+}
+
+.lesson-nav button:focus-visible,
+.lesson-choice:focus-visible {
+  outline: 3px solid var(--ex-ink);
+  outline-offset: 2px;
+}
+
+.lesson-nav .lesson-next {
+  border-color: var(--ex-teal-ink);
+  background: var(--ex-teal-ink);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.lesson-nav .lesson-free {
+  border-color: var(--ex-orange-ink);
+  background: #fff3e6;
+  color: var(--ex-orange-ink);
+  font-weight: 700;
+}
+
+.lesson-nav .lesson-auto[aria-pressed="true"] {
+  border-color: var(--ex-teal-ink);
+  background: var(--ex-teal-wash);
+  color: var(--ex-teal-ink);
+  font-weight: 700;
+}
+
+.markdown-body .lesson-bar p { margin: 0; color: inherit; }
+
+.markdown-body .lesson-bar .lesson-count {
+  font-size: var(--type-support);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-meta);
+  text-align: center;
+}
+
+.lesson-progress {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 0.3rem;
+}
+
+.lesson-progress span {
+  --lesson-progress: 0;
+  flex: 1;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--ex-ink) calc(var(--lesson-progress) * 100%), var(--ex-line) 0);
+}
+
+.lesson-progress span.is-done { background: var(--ex-ink); }
+
+.markdown-body .lesson-bar .lesson-caption {
+  grid-column: 1 / -1;
+  font-size: var(--type-support);
+  font-weight: 600;
+  line-height: var(--leading-support);
+}
+
+.lesson-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Narrow: the figure, then the bar, then the one step the bar points at. */
+.lesson.is-live:not(.is-wide) .lesson-step:not(.is-active) { display: none; }
+.lesson.is-live:not(.is-wide) .lesson-steps { margin-top: 0.5rem; }
+
+/*
+ * Like the figure's own player, the bar stays at the bottom of the screen while the figure is in
+ * view, so pressing 「次へ」 and watching what it changes happen on the same screen. The nav box
+ * itself is dissolved so that the bar can stick within the whole stage.
+ */
+.lesson.is-live:not(.is-wide) .lesson-nav { display: contents; }
+
+.lesson.is-live:not(.is-wide) .lesson-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.5rem;
+  background: var(--ex-panel);
+}
+
+/* In free play the figure pins its own player there instead. */
+.lesson.is-free:not(.is-wide) .lesson-bar { position: static; }
+
+/* Wide: steps on the left scroll past the figure pinned on the right. */
+.lesson.is-live.is-wide {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.lesson.is-wide .lesson-stage {
+  position: sticky;
+  top: 1rem;
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
+}
+
+/* A figure taller than the screen scrolls inside itself, so the bar under it never leaves the screen. */
+.lesson.is-wide .lesson-figure {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.lesson.is-wide .lesson-nav {
+  display: flex;
+  flex: none;
+  gap: 0.6rem;
+  align-items: start;
+  justify-content: space-between;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.5rem;
+  background: var(--ex-panel);
+}
+
+.lesson.is-wide .lesson-bar { flex: 1; grid-template-columns: auto auto auto minmax(0, 1fr); }
+.lesson.is-wide .lesson-more { flex: none; flex-wrap: nowrap; }
+/* The step beside the figure repeats the caption, so the bar drops it. */
+.lesson.is-wide .lesson-caption { display: none; }
+
+.lesson.is-wide .lesson-steps {
+  grid-row: 1;
+  grid-column: 1;
+  padding-block: 12vh 30vh;
+}
+
+.lesson.is-wide .lesson-step + .lesson-step { margin-top: 42vh; }
+
+/* Predict step: the choices are buttons until one is picked. */
+.lesson.is-live .lesson-choices { display: none; }
+
+.lesson-choice-slot {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.lesson-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  line-height: var(--leading-support);
+  text-align: left;
+  cursor: pointer;
+}
+
+.lesson-choice[aria-disabled="true"] { cursor: default; }
+.lesson-choice[aria-disabled="true"]:not(.is-chosen, .is-answer) { border-color: var(--ex-line); color: var(--ex-ink-soft); }
+.lesson-choice.is-chosen { border-width: 2px; border-color: var(--ex-orange-ink); background: #fff3e6; }
+.lesson-choice.is-answer { border-width: 2px; border-color: var(--ex-teal-ink); background: var(--ex-teal-wash); }
+
+.lesson-mark {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--ex-orange-ink);
+  color: #ffffff;
+  font-size: var(--type-label);
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lesson-mark-answer { background: var(--ex-teal-ink); }
+
+.markdown-body .lesson-step .lesson-verdict {
+  min-height: 1.6em;
+  margin: 0;
+  color: var(--ex-ink);
+  font-size: var(--type-support);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lesson * { transition: none !important; animation: none !important; }
+}
