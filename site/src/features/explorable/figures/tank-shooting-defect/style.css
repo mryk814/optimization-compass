@@ -1,0 +1,115 @@
+/* Tank cut into shooting segments: knots orange, what the model does teal, gaps red, structure navy. */
+.tsd-svg .tsd-title { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; }
+.tsd-boundary { stroke: var(--ex-ink); stroke-opacity: 0.22; stroke-width: 1; }
+.tsd-target { stroke: var(--ex-ink); stroke-width: 1.5; }
+.tsd-target-label { fill: var(--ex-ink); font-weight: 700; }
+.tsd-knot-link { fill: none; stroke: var(--ex-orange-ink); stroke-opacity: 0.7; stroke-width: 1.5; stroke-dasharray: 2 4; }
+.tsd-carry { fill: none; stroke: var(--ex-teal); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.tsd-end { fill: var(--ex-ground); stroke: var(--ex-teal-ink); stroke-width: 2.5; }
+.tsd-fine { fill: none; stroke: var(--ex-teal-ink); stroke-width: 2; stroke-dasharray: 7 5; }
+.tsd-gap { stroke: var(--ex-red); stroke-width: 5; }
+.tsd-gap-label { fill: var(--ex-red-ink); font-weight: 700; }
+.tsd-start { fill: var(--ex-ink); }
+.tsd-knot { fill: var(--ex-orange); stroke: var(--ex-ink); stroke-width: 2; }
+.tsd-knot-handle:hover .tsd-knot,
+.tsd-knot-handle:focus-visible .tsd-knot { fill: #fff3e6; stroke: var(--ex-orange-ink); stroke-width: 3; }
+.tsd-knot-handle,
+.tsd-flow-handle { cursor: ns-resize; }
+.tsd-knot-handle.is-fixed,
+.tsd-flow-handle.is-fixed { cursor: default; }
+
+.tsd-flow-bar { fill: var(--ex-orange); fill-opacity: 0.55; }
+.tsd-flow-top { stroke: var(--ex-orange-ink); stroke-width: 3; }
+.tsd-flow-handle:hover .tsd-flow-bar,
+.tsd-flow-handle:focus-visible .tsd-flow-bar { fill-opacity: 0.8; }
+.tsd-flow-ghost { fill: var(--ex-orange); fill-opacity: 0.12; stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.tsd-flow-value { fill: var(--ex-ink); font-variant-numeric: tabular-nums; }
+.tsd-flow-value.is-cut { fill: var(--ex-red-ink); font-weight: 700; }
+
+.tsd-residual.is-out { fill: var(--ex-red); }
+.tsd-residual.is-in { fill: var(--ex-teal); }
+.tsd-tolerance { stroke: var(--ex-ink); stroke-width: 2; }
+.tsd-tolerance-label { fill: var(--ex-ink); font-size: var(--type-chart-compact); font-weight: 700; }
+.tsd-verdict { font-size: var(--type-chart); font-weight: 700; }
+.tsd-verdict.is-out { fill: var(--ex-red-ink); }
+.tsd-verdict.is-in { fill: var(--ex-teal-ink); }
+
+.markdown-body .ex-frame .tsd-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.markdown-body .ex-frame .tsd-legend li {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  color: var(--ex-ink-soft);
+  font-size: var(--type-label);
+  line-height: var(--leading-meta);
+}
+.markdown-body .ex-frame .tsd-legend li::before { content: none; }
+.tsd-legend svg { flex: none; overflow: visible; }
+
+.tsd-readout { display: grid; gap: 0.4rem; font-variant-numeric: tabular-nums; }
+.markdown-body .ex-frame .tsd-cost {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.6rem;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--ex-line);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+}
+.tsd-cost-name,
+.tsd-cost-parts { color: var(--ex-ink-soft); font-size: var(--type-label); }
+.tsd-cost strong { min-width: 2.6rem; font-size: var(--type-support); }
+.tsd-cost-bar { display: flex; flex: 1 1 6rem; height: 0.6rem; border-radius: 0.3rem; background: var(--ex-line); overflow: hidden; }
+.tsd-cost-track { background: var(--ex-ink); }
+.tsd-cost-pump { background: var(--ex-orange); }
+
+.markdown-body .ex-frame .tsd-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0;
+}
+.tsd-stats > div {
+  min-width: 0;
+  padding: 0.25rem 0.35rem;
+  border: 1px solid var(--ex-line);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+}
+.markdown-body .ex-frame .tsd-stats dt {
+  margin: 0;
+  color: var(--ex-ink-soft);
+  font-size: var(--type-chart);
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.markdown-body .ex-frame .tsd-stats dd {
+  margin: 0;
+  color: var(--ex-ink);
+  font-size: var(--type-support);
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.markdown-body .ex-frame .tsd-stats dd.tsd-out { color: var(--ex-red-ink); }
+.markdown-body .ex-frame .tsd-stats dd.tsd-in { color: var(--ex-teal-ink); }
+
+.tsd-options { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; }
+.tsd-toggle { display: inline-flex; gap: 0.4rem; align-items: center; min-height: 2.5rem; font-size: var(--type-support); }
+.tsd-toggle input { width: 1.15rem; height: 1.15rem; accent-color: var(--ex-teal); }
+.ex-controls .tsd-drag-hint { grid-column: 1 / -1; }
+
+@media (max-width: 44rem) {
+  .markdown-body .ex-frame .tsd-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
