@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import known_public_routes, require_internal_links
+from optimization_compass.content_quality import (
+    known_public_routes,
+    require_internal_links,
+    require_renderable_math,
+)
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
@@ -65,6 +69,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
     _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
 
     require_internal_links(source_pages, known_public_routes(root, source_pages))
+    require_renderable_math(source_pages)
     clean = require_language_contract(root)
     if clean:
         print(

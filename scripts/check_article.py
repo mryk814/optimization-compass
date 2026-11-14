@@ -4,7 +4,8 @@
 
 Each file is checked against the Markdown sources, the released database, and the committed site
 data. Errors (exit code 1): parse errors, unknown source or content IDs, and, in a published
-article, internal links that open no page. In a draft the same link problems are warnings.
+article, internal links that open no page and formulas the site cannot render (``aligned`` or a
+bare ``\\\\`` / ``&`` outside ``cases``/``array``/matrix). In a draft these are warnings.
 English words mixed into Japanese prose are listed as warnings.
 """
 
@@ -13,6 +14,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import article_kind, load_content, parse_content
 from optimization_compass.content_quality import (
     broken_internal_links,
@@ -51,6 +53,7 @@ def main(paths: list[str]) -> int:
             if item not in content_ids
         ]
         problems = [f"link opens no page: {link}" for link in broken_internal_links(page, routes)]
+        problems += [f"formula will not render: {tex}" for tex in unrenderable_math(page.body)]
         warnings = [
             f"English word line~{warning.line}: {warning.detail}"
             for warning in language_contract_warnings(page)

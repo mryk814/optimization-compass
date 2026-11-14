@@ -65,6 +65,25 @@ def render_markdown(source: str, *, path: Path) -> RenderedMarkdown:
     )
 
 
+def unrenderable_math(source: str) -> tuple[str, ...]:
+    """Formulas whose row breaks or alignment the site's LaTeX to MathML conversion would garble.
+
+    latex2mathml turns ``\\\\`` and ``&`` into table rows and cells only inside environments it
+    knows (``cases``, ``array``, ``pmatrix``...). Elsewhere, ``aligned`` included, it emits
+    ``<mspace linebreak="newline"/>``, which browsers ignore, and a bare ``&`` that reads as a
+    symbol, so the rows run together on one line. Returns the offending TeX, whitespace-collapsed.
+    """
+    broken = []
+    for token in _walk(_markdown_parser().parse(source)):
+        if not token.type.startswith("math"):
+            continue
+        display = "block" if token.type.startswith("math_block") else "inline"
+        mathml = latex_to_mathml(token.content, display=display)
+        if 'linebreak="newline"' in mathml or "<mi>&</mi>" in mathml:
+            broken.append(" ".join(token.content.split()))
+    return tuple(broken)
+
+
 def render_inline_markdown(source: str) -> str:
     """Render trusted short metadata with the same math pipeline as articles."""
     if not source.strip():

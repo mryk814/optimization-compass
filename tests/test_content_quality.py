@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.content_quality import (
     broken_internal_links,
@@ -13,6 +14,7 @@ from optimization_compass.content_quality import (
     language_contract_warnings,
     public_content_routes,
     require_internal_links,
+    require_renderable_math,
 )
 
 ROOT = Path(__file__).parents[1]
@@ -87,3 +89,33 @@ def test_language_contract_detects_bare_mixed_prose() -> None:
         ("prose.language-mixing", "costを"),
         ("prose.language-mixing", "状態field"),
     ]
+
+
+def _math(tex: str) -> str:
+    return f"## 式\n\n本文です。\n\n$$\n{tex}\n$$\n"
+
+
+def test_formulas_whose_rows_would_run_together_are_found() -> None:
+    # Regression: three articles used `aligned`, which the site printed on one line with raw `&`.
+    assert unrenderable_math(_math(r"\begin{aligned} a &= b \\ c &= d \end{aligned}"))
+    assert unrenderable_math(_math(r"a = b \\ c = d"))
+    assert unrenderable_math("## 式\n\n行内の $a \\\\ b$ も同じです。\n")
+    for renderable in (
+        r"\begin{array}{rl} a &= b \\ c &= d \end{array}",
+        r"\begin{cases} 1 & x>0 \\ 0 & x\le 0 \end{cases}",
+        r"\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}",
+        r"x \& y",
+    ):
+        assert unrenderable_math(_math(renderable)) == (), renderable
+    assert unrenderable_math("## 式\n\n```text\n$$\na \\\\ b\n$$\n```\n") == ()
+
+
+def test_published_articles_render_every_formula() -> None:
+    pages = _published_pages()
+    require_renderable_math(pages)
+
+    page = next(page for page in pages if page.content_id == "concept.derivative-free")
+    broken = replace(page, body=_math(r"\begin{aligned} a &= b \\ c &= d \end{aligned}"))
+    with pytest.raises(ValueError, match=r"concept\.derivative-free"):
+        require_renderable_math([broken])
+    require_renderable_math([replace(broken, status="draft")])

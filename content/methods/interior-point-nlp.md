@@ -107,10 +107,10 @@ $\lambda=\mu/s$ は、$\mu\to0$ で $\lambda^\star=1.7735$ に近づきます。
 答えの点で目的関数の勾配と、制約の勾配に乗数を掛けたものを計算すると、次のようになります。
 
 $$
-\begin{aligned}
+\begin{array}{rl}
 \nabla f&=(2(0.7211-2),\ 8(0.6928-1))=(-2.558,\ -2.458)\\
 \lambda^\star\nabla g&=1.7735\times(2\times0.7211,\ 2\times0.6928)=(2.558,\ 2.457)
-\end{aligned}
+\end{array}
 $$
 
 二つはちょうど打ち消し合い、停留条件 $\nabla f+\lambda^\star\nabla g=0$ を満たします。

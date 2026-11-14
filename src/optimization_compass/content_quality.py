@@ -1,7 +1,8 @@
 """Correctness checks for published articles.
 
 Articles may take any shape. What is checked is what a reader would trip over: every internal app
-link (``#/...``) in a published article must open a page, not the site's "not found" page.
+link (``#/...``) in a published article must open a page, not the site's "not found" page, and
+every formula must render as written.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import ContentPage
 from optimization_compass.formulation_atlas import authored_route_ids
 
@@ -166,6 +168,20 @@ def require_internal_links(pages: Iterable[ContentPage], routes: frozenset[str])
     if failures:
         raise ValueError(
             "internal links must open a page the site can show: " + "; ".join(failures)
+        )
+
+
+def require_renderable_math(pages: Iterable[ContentPage]) -> None:
+    """Reject published articles with formulas whose rows the site would run into one line."""
+    failures = [
+        f"{page.content_id} ({' / '.join(formula[:60] for formula in broken)})"
+        for page in pages
+        if page.status == "published" and (broken := unrenderable_math(page.body))
+    ]
+    if failures:
+        raise ValueError(
+            "formulas must render: write rows with cases, array, or matrix environments "
+            "(aligned and bare \\\\ or & are shown as one garbled line): " + "; ".join(failures)
         )
 
 

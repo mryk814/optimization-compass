@@ -10,6 +10,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import ContentPage, load_content, parse_content
 from optimization_compass.content_quality import (
     broken_internal_links,
@@ -125,6 +126,9 @@ def require_publish_ready(
         broken = broken_internal_links(page, known_routes)
         if broken:
             errors.append("internal links open no page: " + ", ".join(broken))
+    garbled = unrenderable_math(page.body)
+    if garbled:
+        errors.append("formulas will not render: " + " / ".join(garbled))
     mixed = language_contract_warnings(page)
     if mixed:
         errors.append(
