@@ -1,3 +1,96 @@
-.ex-vertex-best { fill: var(--ex-teal); stroke: var(--ex-ink); }
-.ex-cost-arrow { stroke: var(--ex-orange-ink); stroke-width: 3.5; }
-.ex-probe { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+/* Plane: the plan point, its reading lines, the equal-revenue line and the best corner. */
+.lpw-grid { stroke: var(--ex-line); stroke-width: 1; }
+.lpw-axis { stroke: var(--ex-ink); stroke-width: 1.5; }
+.lpw-tick { fill: var(--ex-ink-soft); font-size: var(--type-chart); font-variant-numeric: tabular-nums; }
+.lpw-axis-name { fill: var(--ex-ink); font-size: var(--type-chart); font-weight: 700; paint-order: stroke; stroke: var(--ex-ground); stroke-width: 4px; }
+.lpw-range-name { fill: var(--ex-teal-ink); font-size: var(--type-chart); font-weight: 700; }
+.lpw-drop { stroke: var(--ex-ink); stroke-width: 1.5; stroke-dasharray: 3 4; stroke-opacity: 0.55; }
+.lpw-read-box { fill: var(--ex-ink); }
+.lpw-read { fill: #ffffff; font-size: var(--type-chart); font-weight: 700; font-variant-numeric: tabular-nums; }
+.lpw-plan { fill: var(--ex-ink); stroke: var(--ex-ground); stroke-width: 2; }
+.lpw-plan.is-out { fill: var(--ex-red); }
+.lpw-plan-ghost { fill: none; stroke: var(--ex-ink); stroke-width: 1.5; stroke-dasharray: 3 3; stroke-opacity: 0.55; }
+.lpw-line { stroke: var(--ex-orange); stroke-width: 2; }
+.lpw-line-ghost { stroke: var(--ex-orange-ink); stroke-width: 1.5; stroke-dasharray: 6 5; stroke-opacity: 0.6; }
+.lpw-chord { stroke: var(--ex-orange); stroke-width: 7; stroke-linecap: round; }
+.lpw-arrow { stroke: var(--ex-orange-ink); stroke-width: 3.5; }
+.lpw-arrow-name { fill: var(--ex-orange-ink); font-weight: 700; }
+.lpw-best-ring { fill: none; stroke: var(--ex-orange); stroke-width: 3.5; }
+.lpw-corner-value { fill: var(--ex-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.lpw-corner-value.is-best { fill: var(--ex-orange-ink); }
+
+/* The plan in words, above the plane. */
+.lpw-plan-text {
+  color: var(--ex-ink);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.9em;
+  margin: 0 0 0.35rem;
+  font-size: var(--type-label);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-meta);
+}
+.lpw-plan-text strong { font-weight: 700; }
+.lpw-plan-revenue { color: var(--ex-orange-ink); font-weight: 700; }
+
+/* Stock used: teal up to the limit tick, red past it. Both limits sit at the same place. */
+.lpw-usage { display: grid; gap: 0.3rem; padding: 0.5rem 0.75rem; }
+.lpw-usage-head { display: flex; flex-wrap: wrap; gap: 0 0.9em; align-items: baseline; justify-content: space-between; }
+.markdown-body .ex-frame .lpw-usage-head .ex-eyebrow { margin: 0; }
+.lpw-bar {
+  display: grid;
+  grid-template-columns: 3.6em minmax(0, 1fr) 11.5em;
+  gap: 0.15rem 0.6rem;
+  align-items: center;
+  font-size: var(--type-label);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-meta);
+}
+.lpw-bar-name { font-weight: 700; }
+.lpw-bar-track {
+  position: relative;
+  height: 0.95rem;
+  overflow: hidden;
+  border: 1px solid var(--ex-ink-soft);
+  border-radius: 0.2rem;
+  background: var(--ex-panel);
+}
+.lpw-bar-fill,
+.lpw-bar-over,
+.lpw-bar-limit { position: absolute; top: 0; bottom: 0; }
+.lpw-bar-fill { left: 0; background: var(--ex-teal); }
+.lpw-bar-over {
+  background: repeating-linear-gradient(135deg, var(--ex-red) 0 5px, var(--ex-red-ink) 5px 8px);
+}
+.lpw-bar-limit { width: 0; border-left: 2px solid var(--ex-ink); }
+.lpw-bar-text { white-space: nowrap; }
+.lpw-bar-flag { margin-left: 0.5em; font-weight: 700; }
+.lpw-bar-flag.is-full { color: var(--ex-teal-ink); }
+.lpw-bar-flag.is-over { color: var(--ex-red-ink); }
+.lpw-status { font-size: var(--type-label); font-weight: 700; line-height: var(--leading-meta); }
+.lpw-status.is-ok { color: var(--ex-teal-ink); }
+.lpw-status.is-over { color: var(--ex-red-ink); }
+
+.lpw-revenue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 0.7rem;
+  align-items: baseline;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--ex-line);
+  font-size: var(--type-label);
+  line-height: var(--leading-meta);
+}
+.lpw-revenue-name { color: var(--ex-orange-ink); font-weight: 700; }
+.lpw-revenue .live-math-block { display: inline-block; margin: 0; }
+
+@media (max-width: 40rem) {
+  /* On a phone the bar gets the whole width; its name and count share the line above it. */
+  .lpw-bar { grid-template-columns: auto minmax(0, 1fr); }
+  .lpw-bar-track { grid-row: 2; grid-column: 1 / -1; }
+  .lpw-bar-text { text-align: right; }
+}
+
+/* Free play: the legend under the plane, and corner names that wrap on a phone so 「最良」 stays in view. */
+.markdown-body .ex-frame .lpw-legend { margin-top: 0.4rem; }
+.ex-table th.lpw-corner-name { white-space: normal; }
