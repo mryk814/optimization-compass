@@ -60,7 +60,7 @@ include = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-q --strict-markers"
+addopts = "-q --strict-markers -n auto"
 testpaths = ["tests"]
 
 [tool.ruff]
