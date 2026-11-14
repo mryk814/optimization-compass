@@ -152,6 +152,12 @@ export function useSceneTour(
     () => (lessonBeat ? resolveSettings(lessonBeat.settings, lessonLocal, lessonBeat.durationS) : NO_VALUES),
     [lessonBeat, lessonLocal],
   );
+  // The beat a figure sees carries plain values, so one that still reads `tour.beat.settings`
+  // follows a lesson's sweeps as well as one that reads `tour.values`.
+  const lessonShown = useMemo(
+    () => (lessonBeat ? { ...lessonBeat, settings: lessonValues } : undefined),
+    [lessonBeat, lessonValues],
+  );
   const lessonFree = lesson?.free ?? false;
   const wasFree = useRef(lessonFree);
   const lessonValuesRef = useRef(lessonValues);
@@ -212,7 +218,7 @@ export function useSceneTour(
       durationS: sceneDuration(lesson.beats),
       index: lesson.index,
       local: lesson.local,
-      beat: lesson.free ? undefined : lessonBeat,
+      beat: lesson.free ? undefined : lessonShown,
       values: lesson.free ? NO_VALUES : lessonValues,
       lesson: true,
       start: noop,

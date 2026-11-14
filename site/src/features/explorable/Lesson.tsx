@@ -17,6 +17,8 @@ import { usePrefersReducedMotion } from "./useTimeline";
 const WIDE_QUERY = "(min-width: 64rem)";
 /** How long a programmatic scroll may take before scroll position decides the step again. */
 const SCROLL_SETTLE_MS = 900;
+/** Auto mode stays this long on a predict step after it is over, so the marked answer can be read. */
+const PREDICT_PAUSE_MS = 1800;
 
 function useWide(): boolean {
   const [wide, setWide] = useState(
@@ -53,19 +55,21 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
   const [free, setFree] = useState(false);
   // Held by automation: the clock is stopped and `local` is whatever `show` asked for.
   const [held, setHeld] = useState(false);
-  // The lesson starts its first beat when the reader reaches it, not at page load.
+  // The first beat starts when the reader reaches it, not at page load: on a wide screen when the
+  // first step's text crosses the middle, on a narrow one when the figure fills the lower half.
   const [seen, setSeen] = useState(typeof IntersectionObserver !== "function");
+  // Where keyboard focus goes after the bar's buttons are swapped by a change of mode.
+  const focusNext = useRef<"controls" | "forward" | null>(null);
   const [chosen, setChosen] = useState<Readonly<Record<number, number>>>({});
   const indexRef = useRef(index);
   indexRef.current = index;
-  const freeRef = useRef(free);
-  freeRef.current = free;
   const suppressUntil = useRef(0);
   const painted = useRef<Array<() => void>>([]);
   const last = steps.length - 1;
   const duration = beats[index].durationS;
 
   const enter = useCallback((target: number) => {
+    setSeen(true);
     setHeld(false);
     setFree(false);
     setIndex(target);
@@ -91,6 +95,7 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
   const takeOver = useCallback(() => {
     setAuto(false);
     setFree(true);
+    focusNext.current = "controls";
     const figure = mount.closest<HTMLElement>(".lesson-figure") ?? mount;
     figure.scrollTop = 0;
     if (!wide && typeof figure.scrollIntoView === "function") {
@@ -120,24 +125,33 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
 
   // Auto mode: move on when a step has played out. A predict step waits for the reader's choice.
   const waiting = steps[index].predict !== undefined && chosen[index] === undefined;
+  const predictStep = steps[index].predict !== undefined;
   useEffect(() => {
-    if (!auto || !finished || waiting || free) return;
-    if (index === last) setAuto(false);
-    else goTo(index + 1);
-  }, [auto, finished, free, goTo, index, last, waiting]);
+    if (!auto || !finished || waiting || free) return undefined;
+    const advance = () => {
+      if (index === last) setAuto(false);
+      else goTo(index + 1);
+    };
+    if (!predictStep) {
+      advance();
+      return undefined;
+    }
+    const timer = window.setTimeout(advance, PREDICT_PAUSE_MS);
+    return () => window.clearTimeout(timer);
+  }, [auto, finished, free, goTo, index, last, predictStep, waiting]);
   useEffect(() => {
     if (reducedMotion) setAuto(false);
   }, [reducedMotion]);
 
-  // Start when the lesson first comes on screen.
+  // Narrow: start once the figure's top has come up to the middle of the screen.
   useEffect(() => {
-    if (seen) return undefined;
+    if (seen || wide) return undefined;
     const observer = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) setSeen(true);
-    });
+    }, { rootMargin: "0px 0px -50% 0px" });
     observer.observe(mount);
     return () => observer.disconnect();
-  }, [mount, seen]);
+  }, [mount, seen, wide]);
 
   // Wide: the step crossing the middle of the viewport is the active one.
   useEffect(() => {
@@ -147,7 +161,11 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
       const crossing = entries.filter((entry) => entry.isIntersecting).at(-1);
       if (!crossing) return;
       const target = steps.findIndex((step) => step.node === crossing.target);
-      if (target !== -1 && (target !== indexRef.current || freeRef.current)) enter(target);
+      if (target === -1) return;
+      // The step already showing crossing again changes nothing; in free play that keeps the
+      // reader's own settings. Only its first crossing matters: it starts the lesson.
+      if (target === indexRef.current) setSeen(true);
+      else enter(target);
     }, { rootMargin: "-50% 0px -50% 0px" });
     for (const step of steps) observer.observe(step.node);
     return () => observer.disconnect();
@@ -227,6 +245,19 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
     };
   }, [beats, figureId, last, reveal, steps]);
 
+  // A change of mode swaps the bar's buttons, so focus is placed rather than left to fall to the page.
+  useEffect(() => {
+    const where = focusNext.current;
+    focusNext.current = null;
+    if (where === "controls") {
+      const control = mount.querySelector<HTMLElement>(".ex-controls :is(input, button, select)")
+        ?? nav.querySelector<HTMLElement>(".lesson-back");
+      control?.focus({ preventScroll: true });
+    } else if (where === "forward") {
+      nav.querySelector<HTMLElement>(".lesson-free, .lesson-next")?.focus({ preventScroll: true });
+    }
+  }, [free, mount, nav]);
+
   const drive: LessonDrive = useMemo(
     () => ({ beats, index, local: shownLocal, free }),
     [beats, free, index, shownLocal],
@@ -237,12 +268,25 @@ export function Lesson({ markup, children }: { markup: LessonMarkup; children: R
       {createPortal(<LessonContext.Provider value={drive}>{children}</LessonContext.Provider>, mount)}
       {createPortal(
         free ? (
-          <div aria-label="解説の操作" className="lesson-bar" role="group">
-            <button className="lesson-back" onClick={() => goTo(index)} type="button">◀ 解説に戻る</button>
+          <div aria-label="解説の操作" className="lesson-bar" key="free" role="group">
+            <button
+              className="lesson-back"
+              onClick={() => {
+                focusNext.current = "forward";
+                goTo(index);
+              }}
+              type="button"
+            >
+              ◀ 解説に戻る
+            </button>
             <p className="lesson-count">自分で動かしています</p>
           </div>
         ) : (
-          <div aria-label="解説の操作" className="lesson-bar" role="group">
+          <div aria-label="解説の操作" className="lesson-bar" key="steps" role="group">
+            {/* One announcement per step; the figure's own summary stays quiet while it moves. */}
+            <p aria-live="polite" className="lesson-sr">
+              解説 {index + 1} / {steps.length}。{steps[index].beat.captionJa}
+            </p>
             <button className="lesson-prev" disabled={index === 0} onClick={() => goTo(index - 1)} type="button">
               ◀ 前へ
             </button>
