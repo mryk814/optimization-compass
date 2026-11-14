@@ -17,7 +17,7 @@ import {
   type BoState,
 } from "./math/bayesOpt";
 import { LiveMath, mi, mn, mo, row, signed, tint } from "./mathml";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import { useStageViewport } from "./svg";
 import { SceneRecordingContext, useSceneTour } from "./useSceneTour";

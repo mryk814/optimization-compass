@@ -17,7 +17,7 @@ import {
 } from "./math/barrier2d";
 import { contourSegments, type Bounds } from "./math/contours";
 import type { Camera, SurfaceSpec } from "./math/surface3d";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, type BeatSettings } from "./scene";
 import { makeScale, polylinePath, segmentsPath, useStageViewport, type Scale, type Viewport } from "./svg";
 import { Surface3D } from "./Surface3D";

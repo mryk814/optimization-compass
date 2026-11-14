@@ -7,7 +7,7 @@ import { ADAM_DEFAULTS, runAdam, runPlainDescent, type AdamCoordinate } from "./
 import { contourSegments, type Bounds } from "./math/contours";
 import { valleyValue, type ValleyProblem } from "./math/descent";
 import { LiveMath, frac, hat, mi, mn, mo, row, signed, sub, tint } from "./mathml";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import { makeScale, polylinePath, segmentsPath, useStageViewport, type Scale, type Viewport } from "./svg";
 import { useSceneTour } from "./useSceneTour";

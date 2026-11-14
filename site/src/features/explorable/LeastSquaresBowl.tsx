@@ -6,7 +6,7 @@ import { fmt } from "./format";
 import { contourSegments, type Bounds } from "./math/contours";
 import { evaluateLine, fitLine, sseAt, type DataPoint, type Line } from "./math/leastSquares";
 import { LiveMath, mn, mo, row, sup, tint } from "./mathml";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import { clamp, makeScale, segmentsPath, useDomainDrag, useStageViewport, type Scale, type Viewport } from "./svg";
 import { useSceneTour } from "./useSceneTour";

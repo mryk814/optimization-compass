@@ -21,7 +21,7 @@ import {
   type Run,
   type Trial,
 } from "./math/expFit";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { clamp, makeScale, polylinePath, segmentsPath, useStageViewport, type Scale } from "./svg";
 import { useTimeline } from "./useTimeline";
 import "./gauss-newton-lm.css";

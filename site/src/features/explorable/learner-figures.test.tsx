@@ -7,7 +7,7 @@ import LeastSquaresBowl from "./LeastSquaresBowl";
 import { ADAM_DEFAULTS, runAdam, runPlainDescent, seededNormal } from "./math/adam";
 import { BO_INITIAL, gridMinimum, posterior, runBayesOpt, type Acquisition } from "./math/bayesOpt";
 import { evaluateLine, fitLine } from "./math/leastSquares";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting } from "./scene";
 
 afterEach(cleanup);

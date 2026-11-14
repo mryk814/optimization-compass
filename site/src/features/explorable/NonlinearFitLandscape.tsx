@@ -24,7 +24,7 @@ import {
   type Params,
 } from "./math/sineFit";
 import type { Camera, SurfaceSpec } from "./math/surface3d";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import { clamp, makeScale, polylinePath, segmentsPath, useDomainDrag, useStageViewport, type Scale, type Viewport } from "./svg";
 import { Surface3D } from "./Surface3D";

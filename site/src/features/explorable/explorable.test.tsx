@@ -1,6 +1,3 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { MemoryRouter } from "react-router-dom";
@@ -11,55 +8,14 @@ import GradientDescentValley from "./GradientDescentValley";
 import LpVertexWalk from "./LpVertexWalk";
 import NonlinearFitLandscape from "./NonlinearFitLandscape";
 import { axisRate, runDescent, valleyCurvatures } from "./math/descent";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting } from "./scene";
-import { EXPLORABLE_COMPONENTS } from "./registry";
-
-interface RegistryFile {
-  explorables: Array<{
-    id: string;
-    question: string;
-    fixed_conditions: string;
-    not_implied: string;
-    beats?: Array<{
-      settings: Record<string, number | string>;
-      duration_s: number;
-      caption_ja: string;
-      narration_ja: string;
-    }>;
-  }>;
-}
-
-const registry = JSON.parse(
-  readFileSync(join(process.cwd(), "..", "src", "optimization_compass", "resources", "explorables.json"), "utf8"),
-) as RegistryFile;
 
 afterEach(cleanup);
 
 function slider(name: RegExp) {
   return screen.getByRole("slider", { name });
 }
-
-describe("explorable registry", () => {
-  it("keeps the site components and framing in step with the Python registry", () => {
-    const ids = registry.explorables.map((entry) => entry.id).sort();
-    expect(Object.keys(EXPLORABLE_COMPONENTS).sort()).toEqual(ids);
-    expect(Object.keys(EXPLORABLE_META).sort()).toEqual(ids);
-    for (const entry of registry.explorables) {
-      expect(EXPLORABLE_META[entry.id]).toEqual({
-        question: entry.question,
-        fixedConditions: entry.fixed_conditions,
-        notImplied: entry.not_implied,
-        beats: (entry.beats ?? []).map((beat) => ({
-          settings: beat.settings,
-          durationS: beat.duration_s,
-          captionJa: beat.caption_ja,
-          narrationJa: beat.narration_ja,
-        })),
-      });
-    }
-  });
-});
 
 describe("ExplorableMounts inside compiled content", () => {
   const figure = (id: string) => `<figure class="explorable" role="group" data-explorable-id="${id}" aria-label="図">`

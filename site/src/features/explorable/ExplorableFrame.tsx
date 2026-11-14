@@ -1,7 +1,7 @@
 import { useId, type ReactNode } from "react";
 
 import { TourPanel, TourStart } from "./controls";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import type { SceneTour } from "./useSceneTour";
 
 interface ExplorableFrameProps {

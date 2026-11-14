@@ -1,9 +1,11 @@
 """Registry of interactive teaching figures ("explorables") that articles may embed.
 
-An article opts in with ``::: explorable <id>``. The registry is the authority for which ids
-exist, what question each answers, and what it must not be read as implying. The React
-component for each id lives in ``site/src/features/explorable/registry.tsx``; a site test keeps
-both sides in step.
+An article opts in with ``::: explorable <id>``. Each figure is one folder,
+``site/src/features/explorable/figures/<id>/``: its ``meta.json`` is the authority for the id,
+the question the figure answers, and what it must not be read as implying, and its
+``Figure.tsx`` is the React component the site discovers by the same folder name. Keeping
+everything about a figure in its folder lets figures be added in parallel without touching a
+shared list.
 """
 
 from __future__ import annotations
@@ -11,7 +13,7 @@ from __future__ import annotations
 import json
 import re
 from functools import lru_cache
-from importlib import resources
+from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -82,23 +84,33 @@ class Explorable(BaseModel):
         return value
 
 
-class _Registry(BaseModel):
-    model_config = ConfigDict(frozen=True, extra="forbid")
+# The figures live in the site source, so content is compiled from a repository checkout
+# (as it already is for content/); an installed wheel does not carry them.
+FIGURES_DIR = Path(__file__).resolve().parents[2] / "site/src/features/explorable/figures"
 
-    schema_version: int
-    explorables: tuple[Explorable, ...]
+
+def read_explorables(figures_dir: Path) -> dict[str, Explorable]:
+    """Validate every ``<figures_dir>/<id>/meta.json``; the folder name must be the id."""
+    if not figures_dir.is_dir():
+        raise ValueError(f"explorable figures not found: {figures_dir}")
+    entries: dict[str, Explorable] = {}
+    for folder in sorted(path for path in figures_dir.iterdir() if path.is_dir()):
+        meta = folder / "meta.json"
+        if not meta.is_file():
+            raise ValueError(f"{meta}: every figure folder needs a meta.json")
+        try:
+            entry = Explorable.model_validate(json.loads(meta.read_text(encoding="utf-8")))
+        except ValueError as error:
+            raise ValueError(f"{meta}: {error}") from error
+        if entry.id != folder.name:
+            raise ValueError(f"{meta}: id {entry.id!r} must match its folder name {folder.name!r}")
+        entries[entry.id] = entry
+    return entries
 
 
 @lru_cache(maxsize=1)
 def load_explorables() -> dict[str, Explorable]:
-    raw = resources.files("optimization_compass").joinpath("resources/explorables.json")
-    registry = _Registry.model_validate(json.loads(raw.read_text(encoding="utf-8")))
-    if registry.schema_version != 1:
-        raise ValueError(f"unsupported explorable registry version: {registry.schema_version}")
-    entries = {item.id: item for item in registry.explorables}
-    if len(entries) != len(registry.explorables):
-        raise ValueError("explorable ids must be unique")
-    return entries
+    return read_explorables(FIGURES_DIR)
 
 
 def is_valid_explorable_id(value: str) -> bool:

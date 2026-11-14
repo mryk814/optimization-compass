@@ -5,7 +5,7 @@ import { ExplorableFrame } from "./ExplorableFrame";
 import { fmt } from "./format";
 import { contourSegments, type Bounds } from "./math/contours";
 import { axisRatio, eigen2, runCmaes, valley, type Generation, type Mat, type Vec } from "./math/cmaes";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import { makeScale, polylinePath, segmentsPath, useStageViewport, type Scale, type Viewport } from "./svg";
 import { useSceneTour } from "./useSceneTour";

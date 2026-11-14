@@ -17,7 +17,7 @@ import {
   type ValleyProblem,
 } from "./math/descent";
 import { LiveMath, addend, mi, mn, mo, paren, row, signed, sub } from "./mathml";
-import { EXPLORABLE_META } from "./meta";
+import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import {
   clamp,

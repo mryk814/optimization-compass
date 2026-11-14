@@ -1,9 +1,15 @@
+import json
 from pathlib import Path
 
 import pytest
 
 from optimization_compass.content_models import load_content, parse_content
-from optimization_compass.explorables import Beat, Explorable, load_explorables
+from optimization_compass.explorables import (
+    Beat,
+    Explorable,
+    load_explorables,
+    read_explorables,
+)
 
 _HEADER = """---
 content_id: concept.example
@@ -26,6 +32,46 @@ def _page(tmp_path: Path, body: str) -> Path:
     path.parent.mkdir(parents=True)
     path.write_text(_HEADER + body, encoding="utf-8")
     return path
+
+
+def _figure(figures: Path, folder: str, **fields: object) -> None:
+    meta = {
+        "id": folder,
+        "title_ja": "t",
+        "question": "q。",
+        "fixed_conditions": "f",
+        "not_implied": "n。",
+    } | fields
+    (figures / folder).mkdir(parents=True)
+    (figures / folder / "meta.json").write_text(json.dumps(meta), encoding="utf-8")
+
+
+def test_each_figure_folder_is_read_under_its_name(tmp_path: Path) -> None:
+    _figure(tmp_path, "b-figure")
+    _figure(tmp_path, "a-figure")
+
+    assert list(read_explorables(tmp_path)) == ["a-figure", "b-figure"]
+
+
+def test_a_copied_figure_folder_must_rename_its_id(tmp_path: Path) -> None:
+    _figure(tmp_path, "new-figure", id="old-figure")
+
+    with pytest.raises(ValueError, match="must match its folder name 'new-figure'"):
+        read_explorables(tmp_path)
+
+
+def test_a_figure_folder_without_meta_json_is_rejected(tmp_path: Path) -> None:
+    (tmp_path / "half-added").mkdir()
+
+    with pytest.raises(ValueError, match="needs a meta.json"):
+        read_explorables(tmp_path)
+
+
+def test_invalid_meta_json_names_its_file(tmp_path: Path) -> None:
+    _figure(tmp_path, "bad-beats", beats=[{"settings": {}, "duration_s": 1}])
+
+    with pytest.raises(ValueError, match=r"bad-beats[\\/]meta\.json"):
+        read_explorables(tmp_path)
 
 
 def test_registry_entries_state_question_and_limits() -> None:
