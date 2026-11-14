@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from optimization_compass.failure_discovery import FailureDiscoveryIndex
-from optimization_compass.site_export import export_site_data
+
+if TYPE_CHECKING:
+    from conftest import SiteExportPair
 
 
 def test_failure_discovery_joins_structured_failures_and_case_exclusions(
-    tmp_path: Path, repository
+    site_export_pair: SiteExportPair,
 ) -> None:
-    export_site_data(tmp_path, repository)
     index = FailureDiscoveryIndex.model_validate_json(
-        (tmp_path / "failure-discovery.json").read_bytes()
+        (site_export_pair.first / "failure-discovery.json").read_bytes()
     )
 
     assert {entry.entry_kind for entry in index.entries} == {
@@ -33,11 +34,9 @@ def test_failure_discovery_joins_structured_failures_and_case_exclusions(
     assert all(entry.method_ids for entry in exclusions)
 
 
-def test_failure_discovery_is_deterministic(tmp_path: Path, repository) -> None:
-    first = tmp_path / "first"
-    second = tmp_path / "second"
-    export_site_data(first, repository)
-    export_site_data(second, repository)
+def test_failure_discovery_is_deterministic(site_export_pair: SiteExportPair) -> None:
+    first = site_export_pair.first
+    second = site_export_pair.second
     assert (first / "failure-discovery.json").read_bytes() == (
         second / "failure-discovery.json"
     ).read_bytes()

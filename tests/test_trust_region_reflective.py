@@ -5,14 +5,15 @@ import sqlite3
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 
 
-def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> None:
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_trf_is_a_canonical_method_with_one_scipy_mapping(
+    staged_release: StagedRelease,
+) -> None:
+    staged = staged_release
     connection = sqlite3.connect(staged.database_path)
     connection.row_factory = sqlite3.Row
     try:

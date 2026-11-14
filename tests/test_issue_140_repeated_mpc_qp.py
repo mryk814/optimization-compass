@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from optimization_compass.comparisons import load_comparison_seed
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 from optimization_compass.repeated_mpc_qp import (
     COLD_SCENARIO_ID,
     COLD_TRACE_ID,
@@ -69,10 +69,8 @@ def test_ec025_connects_its_own_instance_scenarios_and_comparison() -> None:
     assert comparison.ranking_eligible is False
 
 
-def test_staged_ec025_journey_is_complete(tmp_path: Path) -> None:
-    release = build_staged_release(
-        Path("data/optimization_method_selection_database_v0.2.0.sqlite"), tmp_path / "release"
-    )
+def test_staged_ec025_journey_is_complete(staged_release: StagedRelease) -> None:
+    release = staged_release
     journeys = json.loads(
         (release.site_data_directory / "learning-journeys.json").read_text(encoding="utf-8")
     )

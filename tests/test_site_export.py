@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from hashlib import sha256
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -23,6 +24,9 @@ from optimization_compass.versioned_claims import (
 )
 from optimization_compass.view_spec import SiteManifest, ViewSpec
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
+
+if TYPE_CHECKING:
+    from conftest import SiteExportPair
 
 EXPECTED_BRANCHES = [
     "代替解法を先に確認",
@@ -94,13 +98,13 @@ def test_exporter_rejects_blank_canonical_question_label(
 
 
 def test_exporter_writes_five_branch_golden_and_is_byte_identical(
-    tmp_path: Path, repository: KnowledgeRepository
+    site_export_pair: SiteExportPair, repository: KnowledgeRepository
 ) -> None:
-    first_output = tmp_path / "first"
-    second_output = tmp_path / "second"
+    first_output = site_export_pair.first
+    second_output = site_export_pair.second
 
-    first_manifest = export_site_data(first_output, repository)
-    second_manifest = export_site_data(second_output, repository)
+    first_manifest = site_export_pair.first_manifest
+    second_manifest = site_export_pair.second_manifest
 
     first_view_bytes = (first_output / "views/problem-structure.json").read_bytes()
     second_view_bytes = (second_output / "views/problem-structure.json").read_bytes()
@@ -559,12 +563,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
 
 
 def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
-    tmp_path: Path, repository: KnowledgeRepository
+    site_export_pair: SiteExportPair, repository: KnowledgeRepository
 ) -> None:
-    first_output = tmp_path / "first"
-    second_output = tmp_path / "second"
-    export_site_data(first_output, repository)
-    export_site_data(second_output, repository)
+    first_output = site_export_pair.first
+    second_output = site_export_pair.second
 
     trace_path = Path("traces/dummy-educational.json")
     index_path = Path("traces/index.json")

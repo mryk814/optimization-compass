@@ -21,13 +21,12 @@ from optimization_compass.constraint_geometry import (
     build_so3_scenario,
     generate_so3_traces,
 )
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.trace_models import TraceFrame
 from optimization_compass.visualization_scenarios import scenario_identity
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 
 
 def _metric(frame: TraceFrame, metric_id: str) -> float:
@@ -205,8 +204,10 @@ def test_constraint_geometry_audit_keeps_the_eight_field_contract_and_followups(
     assert "no direct implementation mapping" in audit
 
 
-def test_staged_release_exports_a_complete_so3_learning_journey(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_staged_release_exports_a_complete_so3_learning_journey(
+    staged_release: StagedRelease,
+) -> None:
+    release = staged_release
     payload = json.loads(
         (release.site_data_directory / "learning-journeys.json").read_text(encoding="utf-8")
     )

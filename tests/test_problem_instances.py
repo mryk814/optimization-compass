@@ -6,13 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.problem_instances import ProblemSuiteSeed
 from optimization_compass.problem_registry import get_runtime_problem, load_problem_suite
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
@@ -128,8 +127,10 @@ def test_registry_executes_nested_and_hybrid_teaching_instances() -> None:
     assert hybrid.objective_value([0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]) == 0.0
 
 
-def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_staged_sqlite_and_generated_catalog_share_one_authority(
+    staged_release: StagedRelease,
+) -> None:
+    release = staged_release
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()

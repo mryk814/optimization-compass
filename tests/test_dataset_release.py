@@ -5,6 +5,7 @@ import json
 import shutil
 import sqlite3
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -18,6 +19,9 @@ from optimization_compass.dataset_release import (
     tree_hash,
     verify_database,
 )
+
+if TYPE_CHECKING:
+    from conftest import StagedReleases
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
@@ -45,15 +49,14 @@ def test_live_checks_detect_mutation_after_stored_pass(tmp_path: Path) -> None:
     assert "CHK005" in {check.check_id for check in result.live_failures}
 
 
-def test_staging_preserves_published_dataset_and_is_reproducible(tmp_path: Path) -> None:
+def test_staging_preserves_published_dataset_and_is_reproducible(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
     before = sha256(BASE_DATABASE)
 
-    first = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "first",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+    # The shared stage was built in another directory (possibly by another xdist worker);
+    # staging again here must give the same bytes.
+    first = staged_releases.shared("0.15.2", "2026-07-18")
     second = build_staged_release(
         BASE_DATABASE,
         tmp_path / "second",
@@ -86,13 +89,10 @@ def test_staging_rejects_existing_or_overlapping_output_directories(tmp_path: Pa
         build_staged_release(BASE_DATABASE, BASE_DATABASE / "nested-output")
 
 
-def test_new_version_stage_updates_every_versioned_artifact(tmp_path: Path) -> None:
-    release = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "release",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+def test_new_version_stage_updates_every_versioned_artifact(
+    staged_releases: StagedReleases,
+) -> None:
+    release = staged_releases.shared("0.15.2", "2026-07-18")
 
     assert release.version == "0.15.2"
     assert release.database_path.name.endswith("_v0.15.2.sqlite")
@@ -131,7 +131,7 @@ def test_new_version_stage_updates_every_versioned_artifact(tmp_path: Path) -> N
 
 
 def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
-    tmp_path: Path,
+    tmp_path: Path, staged_releases: StagedReleases
 ) -> None:
     base_missing = tmp_path / "base-missing.sqlite"
     shutil.copy2(BASE_DATABASE, base_missing)
@@ -143,12 +143,7 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
     assert base_result.ok is False
     assert "missing-stored:CHK012" in base_result.status_mismatches
 
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     connection = sqlite3.connect(staged.database_path)
     connection.execute("DELETE FROM release_checks WHERE check_id = 'CHK015'")
     connection.execute(
@@ -178,14 +173,9 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
 
 
 def test_require_atlas_rejects_database_with_entire_atlas_contract_removed(
-    tmp_path: Path,
+    tmp_path: Path, staged_releases: StagedReleases
 ) -> None:
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     stripped = tmp_path / "stripped.sqlite"
     shutil.copy2(staged.database_path, stripped)
     connection = sqlite3.connect(stripped)
@@ -261,13 +251,10 @@ def _publish_release(
     )
 
 
-def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+def test_publish_succeeds_for_a_consistent_new_version(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
     _publish_release(
@@ -303,14 +290,12 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
 
 @pytest.mark.parametrize("failure_target", ["data", "runtime", "version", "site", "readme"])
 def test_publish_rolls_back_all_targets_after_injected_failure(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure_target: str
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    failure_target: str,
+    staged_releases: StagedReleases,
 ) -> None:
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
     before_data = _tree_bytes(data_dir)
     before_runtime = runtime.read_bytes()
@@ -353,14 +338,9 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
 
 
 def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
-    tmp_path: Path,
+    tmp_path: Path, staged_releases: StagedReleases
 ) -> None:
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
     version_file.write_text(
@@ -438,13 +418,10 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
         )
 
 
-def test_publish_requires_catalog_and_external_bundle_output(tmp_path: Path) -> None:
-    staged = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    )
+def test_publish_requires_catalog_and_external_bundle_output(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
+    staged = staged_releases.copy(tmp_path / "staged", "0.15.2", "2026-07-18")
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
     catalog = data_dir / "releases/catalog.json"
     catalog.unlink()

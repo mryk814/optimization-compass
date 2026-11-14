@@ -8,18 +8,19 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from optimization_compass.dataset_release import RELEASE_DATE, build_staged_release, verify_database
+from optimization_compass.dataset_release import RELEASE_DATE, StagedRelease, verify_database
 from optimization_compass.metadata_models import AtlasMetadataSeed
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 SEED_PATH = ROOT / "data/seeds/atlas_metadata.json"
 
 
 @pytest.fixture()
-def staged_database(tmp_path: Path) -> Path:
-    result = build_staged_release(BASE_DATABASE, tmp_path / "release")
-    return result.database_path
+def staged_database(tmp_path: Path, staged_release: StagedRelease) -> Path:
+    # A private copy: some tests write to it, and the shared stage must stay unchanged.
+    database = tmp_path / staged_release.database_path.name
+    shutil.copyfile(staged_release.database_path, database)
+    return database
 
 
 def test_seed_is_explicit_and_closes_all_references() -> None:

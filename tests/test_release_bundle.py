@@ -3,11 +3,11 @@ from __future__ import annotations
 import shutil
 import zipfile
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 import optimization_compass.release_bundle as release_bundle_module
-from optimization_compass.dataset_release import build_staged_release
 from optimization_compass.release_bundle import (
     ReleaseBundleError,
     build_release_bundle,
@@ -15,20 +15,17 @@ from optimization_compass.release_bundle import (
 )
 from optimization_compass.repository_boundaries import RepositoryBoundaryError
 
+if TYPE_CHECKING:
+    from conftest import StagedReleases
+
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 SOURCE_COMMIT = "1" * 40
 
 
 @pytest.fixture(scope="module")
-def staged_release(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    root = tmp_path_factory.mktemp("bundle-release")
-    return build_staged_release(
-        BASE_DATABASE,
-        root / "staged",
-        target_version="0.15.2",
-        release_date="2026-07-18",
-    ).output_directory
+def staged_release(staged_releases: StagedReleases) -> Path:
+    """The shared 0.15.2 stage's directory; bundles only read it."""
+    return staged_releases.shared("0.15.2", "2026-07-18").output_directory
 
 
 def test_complete_bundle_is_byte_deterministic_and_self_verifying(

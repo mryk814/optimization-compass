@@ -5,10 +5,9 @@ import json
 import sqlite3
 from pathlib import Path
 
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 
 
 def test_topology_cantilever_connects_formulation_to_visual_diagnostics() -> None:
@@ -35,9 +34,9 @@ def test_topology_cantilever_connects_formulation_to_visual_diagnostics() -> Non
 
 
 def test_topopt_88_mapping_is_bounded_to_the_documented_teaching_workflow(
-    tmp_path: Path,
+    staged_release: StagedRelease,
 ) -> None:
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    staged = staged_release
     with sqlite3.connect(staged.database_path) as connection:
         implementation = connection.execute(
             """

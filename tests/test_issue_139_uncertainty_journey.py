@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from optimization_compass.comparisons import load_comparison_seed
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import StagedRelease
 from optimization_compass.portfolio_uncertainty import (
     CVAR_SCENARIO_ID,
     CVAR_TRACE_ID,
@@ -19,8 +19,6 @@ from optimization_compass.portfolio_uncertainty import (
 )
 from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
-
-BASE_DATABASE = Path("data/optimization_method_selection_database_v0.2.0.sqlite")
 
 
 def test_fixed_portfolio_traces_separate_training_and_held_out_risk() -> None:
@@ -145,9 +143,9 @@ def test_uncertainty_method_source_audit_records_release_boundary_and_primary_ba
 
 
 def test_staged_site_export_contains_portfolio_traces_scenarios_and_comparison(
-    tmp_path: Path,
+    staged_release: StagedRelease,
 ) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    release = staged_release
     output = release.site_data_directory
 
     nominal = AlgorithmTrace.model_validate_json(

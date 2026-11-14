@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import RecommendationRequest
@@ -10,6 +11,9 @@ from optimization_compass.site_recommendation import (
     build_site_data,
     recommendation_projection,
 )
+
+if TYPE_CHECKING:
+    from conftest import SiteExportPair
 
 
 def test_site_data_is_complete_and_deterministic(repository: object) -> None:
@@ -28,11 +32,8 @@ def test_site_data_is_complete_and_deterministic(repository: object) -> None:
     assert first.questions[0].choices[2].label_ja == "0-1"
 
 
-def test_site_export_contains_recommendation_artifact(tmp_path: Path, repository: object) -> None:
-    from optimization_compass.site_export import export_site_data
-
-    export_site_data(tmp_path, repository)
-    artifact = tmp_path / "recommendation/site-data.json"
+def test_site_export_contains_recommendation_artifact(site_export_pair: SiteExportPair) -> None:
+    artifact = site_export_pair.first / "recommendation/site-data.json"
     assert artifact.is_file()
     SiteData.model_validate_json(artifact.read_bytes())
 

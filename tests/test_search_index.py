@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -19,6 +20,9 @@ from optimization_compass.search_index import (
     search_documents,
 )
 from optimization_compass.site_export import export_site_data
+
+if TYPE_CHECKING:
+    from conftest import SiteExportPair
 
 
 def test_search_normalization_handles_width_punctuation_and_japanese() -> None:
@@ -96,11 +100,10 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     }
 
 
-def test_alias_ranking_and_representative_benchmark(
-    tmp_path: Path, repository: KnowledgeRepository
-) -> None:
-    export_site_data(tmp_path, repository)
-    index = SearchIndex.model_validate_json((tmp_path / "search-index.json").read_bytes())
+def test_alias_ranking_and_representative_benchmark(site_export_pair: SiteExportPair) -> None:
+    index = SearchIndex.model_validate_json(
+        (site_export_pair.first / "search-index.json").read_bytes()
+    )
     hits = search_documents(index, "BO", entity_types={"method"})
     assert hits[0].document_id == "method:M_BAYESIAN_OPT_GP"
     assert "alias" in hits[0].matched_fields
@@ -111,4 +114,4 @@ def test_alias_ranking_and_representative_benchmark(
     assert report["metrics"]["top_3_relevance"] == 1.0
     assert report["metrics"]["expected_entity_recall"] == 1.0
     assert report["metrics"]["zero_result_rate"] == 1 / len(cases)
-    assert json.loads((tmp_path / "search-benchmark.json").read_bytes()) == report
+    assert json.loads((site_export_pair.first / "search-benchmark.json").read_bytes()) == report

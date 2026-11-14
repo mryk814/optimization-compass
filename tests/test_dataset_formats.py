@@ -5,25 +5,28 @@ import json
 import shutil
 import sqlite3
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 import optimization_compass.dataset_release as dataset_release_module
 from optimization_compass.dataset_release import (
     ReleaseValidationError,
-    build_staged_release,
+    StagedRelease,
     verify_database,
     verify_release_tree,
 )
 
+if TYPE_CHECKING:
+    from conftest import StagedReleases
+
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 STAGED_TEST_VERSION = "0.18.25"
 STAGED_TEST_DATE = "2026-07-24"
 
 
-def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_every_staged_format_round_trips_exactly(staged_release: StagedRelease) -> None:
+    release = staged_release
 
     verification = verify_release_tree(release.output_directory)
 
@@ -43,8 +46,10 @@ def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:
     assert check_020.status == "not_run"
 
 
-def test_format_verifier_rejects_mutated_json(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_format_verifier_rejects_mutated_json(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
+    release = staged_releases.copy(tmp_path / "release")
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     json_path = release.output_directory / manifest["artifacts"]["json"]
     payload = json.loads(json_path.read_text(encoding="utf-8"))
@@ -55,8 +60,10 @@ def test_format_verifier_rejects_mutated_json(tmp_path: Path) -> None:
         verify_release_tree(release.output_directory)
 
 
-def test_release_tree_rejects_manifest_database_hash_mismatch(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_release_tree_rejects_manifest_database_hash_mismatch(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
+    release = staged_releases.copy(tmp_path / "release")
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     manifest["database_sha256"] = "0" * 64
     release.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
@@ -71,14 +78,9 @@ def test_release_tree_rejects_manifest_database_hash_mismatch(tmp_path: Path) ->
     [("version", "9.9.9"), ("release_date", "2026-07-15")],
 )
 def test_release_tree_rejects_self_hashed_wrong_format_identity(
-    tmp_path: Path, format_name: str, field: str, wrong_value: str
+    tmp_path: Path, format_name: str, field: str, wrong_value: str, staged_releases: StagedReleases
 ) -> None:
-    release = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "release",
-        target_version=STAGED_TEST_VERSION,
-        release_date=STAGED_TEST_DATE,
-    )
+    release = staged_releases.copy(tmp_path / "release", STAGED_TEST_VERSION, STAGED_TEST_DATE)
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     artifact = release.output_directory / manifest["artifacts"][format_name]
     if format_name == "json":
@@ -112,9 +114,9 @@ def test_release_tree_rejects_self_hashed_wrong_format_identity(
     ],
 )
 def test_release_tree_validates_manifest_identity_before_artifact_paths(
-    tmp_path: Path, field: str, value: object, message: str
+    tmp_path: Path, field: str, value: object, message: str, staged_releases: StagedReleases
 ) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    release = staged_releases.copy(tmp_path / "release")
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     manifest[field] = value
     release.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
@@ -178,9 +180,9 @@ def _rewrite_release_tree_from_database(release_directory: Path) -> None:
 
 
 def test_release_tree_requires_atlas_when_all_contract_tables_and_checks_are_removed(
-    tmp_path: Path,
+    tmp_path: Path, staged_releases: StagedReleases
 ) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    release = staged_releases.copy(tmp_path / "release")
     connection = sqlite3.connect(release.database_path)
     try:
         connection.execute("PRAGMA foreign_keys = OFF")
@@ -197,14 +199,9 @@ def test_release_tree_requires_atlas_when_all_contract_tables_and_checks_are_rem
 
 
 def test_release_tree_rejects_self_consistent_wrong_sqlite_release_identity(
-    tmp_path: Path,
+    tmp_path: Path, staged_releases: StagedReleases
 ) -> None:
-    release = build_staged_release(
-        BASE_DATABASE,
-        tmp_path / "release",
-        target_version=STAGED_TEST_VERSION,
-        release_date=STAGED_TEST_DATE,
-    )
+    release = staged_releases.copy(tmp_path / "release", STAGED_TEST_VERSION, STAGED_TEST_DATE)
     connection = sqlite3.connect(release.database_path)
     try:
         connection.execute(
@@ -220,8 +217,10 @@ def test_release_tree_rejects_self_consistent_wrong_sqlite_release_identity(
         verify_release_tree(release.output_directory)
 
 
-def test_release_tree_rejects_self_hashed_wrong_report_identity(tmp_path: Path) -> None:
-    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+def test_release_tree_rejects_self_hashed_wrong_report_identity(
+    tmp_path: Path, staged_releases: StagedReleases
+) -> None:
+    release = staged_releases.copy(tmp_path / "release")
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     report = release.output_directory / manifest["artifacts"]["report"]
     report.write_text(

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from optimization_compass.dataset_release import build_staged_release, verify_database
+from optimization_compass.dataset_release import StagedRelease, verify_database
 from optimization_compass.versioned_claims import (
     CLAIM_PREDICATES,
     DEFAULT_METHOD_CLAIM_PREDICATES,
@@ -20,13 +20,11 @@ from optimization_compass.versioned_claims import (
 )
 
 ROOT = Path(__file__).parents[1]
-BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 
 
 @pytest.fixture()
-def connection(tmp_path: Path) -> Iterator[sqlite3.Connection]:
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
-    value = sqlite3.connect(staged.database_path)
+def connection(staged_release: StagedRelease) -> Iterator[sqlite3.Connection]:
+    value = sqlite3.connect(staged_release.database_path)
     value.row_factory = sqlite3.Row
     try:
         yield value
