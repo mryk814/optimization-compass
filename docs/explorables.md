@@ -51,7 +51,7 @@ site/src/features/explorable/
   │   ├ math.ts                    この図だけの計算（任意）
   │   ├ style.css                  この図だけの CSS（任意。Figure.tsx が import する）
   │   └ *.test.ts(x)               この図のテスト
-  ├ registry.tsx                   figures/*/Figure.tsx を glob で見つける。図ごとに別 chunk
+  ├ registry.tsx                   figures/*/Figure.tsx を glob で見つける。図ごとに別 chunk（figure-<id>-<hash>.js）
   ├ figureMeta.ts                  figures/*/meta.json を読む。図の共有 chunk だけが読み込む
   ├ ExplorableFrame.tsx ほか       共通の枠、操作部品、時計、SVG・MathML の部品
   ├ math/                          2つ以上の図、または図の外（theater など）が使う計算
