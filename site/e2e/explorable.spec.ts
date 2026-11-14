@@ -1,3 +1,7 @@
+import { readdirSync, readFileSync } from "node:fs";
+
+import type { Locator } from "@playwright/test";
+
 import { expect, test } from "./fixtures/test";
 import { expectNoHighImpactViolations } from "./helpers/accessibility";
 import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation";
@@ -7,41 +11,37 @@ function requiredBaseURL(baseURL: string | undefined): string {
   return baseURL;
 }
 
-const figures = [
-  {
-    label: "gradient-descent",
-    route: "/learn/method.gradient-descent",
-    id: "gradient-descent-valley",
-  },
-  { label: "primal-simplex", route: "/learn/primal-simplex", id: "simplex-pivot" },
-  { label: "linear-program", route: "/learn/concept.linear-program", id: "lp-vertex-walk" },
-  { label: "convexity", route: "/learn/concept.convexity", id: "convexity-chord" },
-  { label: "nonlinear-least-squares", route: "/learn/concept.nonlinear-least-squares", id: "nonlinear-least-squares-landscape" },
-  { label: "newton-method", route: "/learn/newton-method", id: "newton-parabola-jump" },
-  { label: "cma-es", route: "/learn/cma-es", id: "cmaes-shape-learning" },
-  { label: "interior-point-nlp", route: "/learn/interior-point-nlp", id: "interior-point-barrier-path" },
-  { label: "multiobjective", route: "/learn/concept.multiobjective-optimization", id: "multiobjective-pareto-weights" },
-  { label: "proximal-gradient", route: "/learn/proximal-gradient", id: "proximal-gradient-threshold" },
-  { label: "smooth-unconstrained", route: "/learn/concept.smooth-low-dimensional-unconstrained", id: "saddle-newton" },
-  { label: "mixed-integer-linear-program", route: "/learn/concept.mixed-integer-linear-program", id: "milp-integer-lattice" },
-  { label: "convex-quadratic-program", route: "/learn/concept.convex-quadratic-program", id: "convex-qp-projection" },
-  { label: "variable-domain", route: "/learn/concept.variable-domain", id: "variable-domain-switch" },
-  { label: "gauss-newton", route: "/learn/gauss-newton", id: "gauss-newton-lm-steps" },
-  { label: "failed-simulation", route: "/learn/concept.failed-simulation", id: "failure-ledger" },
-  { label: "root-finding", route: "/learn/concept.root-finding", id: "newton-root-residual" },
-  { label: "simplex-optimization", route: "/learn/concept.simplex-optimization", id: "simplex-projection-theta" },
-  { label: "semidefinite-program", route: "/learn/concept.semidefinite-program", id: "sdp-psd-boundary" },
-  { label: "pde-constrained-program", route: "/learn/concept.pde-constrained-program", id: "pde-heat-source-balance" },
-  { label: "external-solver-objective", route: "/learn/concept.external-solver-objective", id: "phase-fraction-target" },
-];
+// Every figure folder, in every published article that embeds it, gets these checks; nothing
+// here lists figures by hand. A figure's own interactions go in e2e/explorables/<id>.spec.ts.
+const figuresDir = new URL("../src/features/explorable/figures/", import.meta.url);
+const ids = readdirSync(figuresDir, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => (JSON.parse(readFileSync(new URL(`${entry.name}/meta.json`, figuresDir), "utf8")) as { id: string }).id)
+  .sort();
+const { pages } = JSON.parse(readFileSync(new URL("../public/data/content.json", import.meta.url), "utf8")) as {
+  pages: Array<{ content_id: string; html: string }>;
+};
+const figures = ids.flatMap((id) => pages
+  .filter((page) => page.html.includes(`data-explorable-id="${id}"`))
+  .map((page) => ({ id, label: `${id}（${page.content_id}）`, route: `/learn/${page.content_id}` })));
+
+test("記事に埋め込まれた動く図を見つける", () => {
+  expect(ids.length).toBeGreaterThan(0);
+  expect(figures.length).toBeGreaterThan(0);
+});
+
+// The live figure has replaced the static fallback and shows its question. `.ex-question`
+// rather than the text 見る問い: the Bayesian optimisation figure opens on its own first step.
+async function expectLiveFigure(region: Locator) {
+  await expect(region.locator(".ex-question").first()).toBeVisible();
+  await expect(region.locator(".explorable-fallback, .ex-loading")).toHaveCount(0);
+}
 
 for (const figure of figures) {
   test(`@critical ${figure.label}の動く図が表示され、axe違反がない`, async ({ page, baseURL }, testInfo) => {
     await gotoAtlasRoute(page, requiredBaseURL(baseURL), figure.route);
     const region = page.locator(`[data-explorable-id="${figure.id}"]`);
-    await expect(region.getByText("見る問い")).toBeVisible();
-    await expect(region.locator(".explorable-fallback")).toHaveCount(0);
-    await expect(region.getByRole("group", { name: "図" })).toBeVisible();
+    await expectLiveFigure(region);
     await region.scrollIntoViewIfNeeded();
     await expectNoHighImpactViolations(page, testInfo, `explorable-${figure.label}`);
   });
@@ -50,10 +50,13 @@ for (const figure of figures) {
     await page.setViewportSize({ width: 375, height: 800 });
     await gotoAtlasRoute(page, requiredBaseURL(baseURL), figure.route);
     const region = page.locator(`[data-explorable-id="${figure.id}"]`);
-    await expect(region.getByText("見る問い")).toBeVisible();
+    await expectLiveFigure(region);
     await expectNoHorizontalOverflow(page);
     // The SVG uses one unit per CSS pixel, so rendered chart text keeps its 13px size.
-    const rendered = await region.locator("svg text").first().evaluate((node) => {
+    // A figure drawn in HTML (cards, tables) has no chart text to measure.
+    const chartText = region.locator("svg text");
+    if ((await chartText.count()) === 0) return;
+    const rendered = await chartText.first().evaluate((node) => {
       const box = node.getBoundingClientRect();
       const style = getComputedStyle(node);
       return { size: Number.parseFloat(style.fontSize), height: box.height };
@@ -62,51 +65,3 @@ for (const figure of figures) {
     expect(rendered.height).toBeGreaterThanOrEqual(10);
   });
 }
-
-test("勾配降下法の図で学習率を動かすと結果と安定限界が切り替わる", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/method.gradient-descent");
-  const region = page.locator('[data-explorable-id="gradient-descent-valley"]');
-  await expect(region.getByText("見る問い")).toBeVisible();
-  await region.getByRole("slider", { name: /学習率/u }).fill("0.06");
-  await expect(region.getByText(/発散しました/u).first()).toBeVisible();
-  await region.getByRole("slider", { name: /学習率/u }).fill("0.03");
-  await expect(region.getByText(/発散しました/u)).toHaveCount(0);
-  await region.getByRole("radio", { name: "Momentum" }).check({ force: true });
-  await expect(region.getByRole("slider", { name: /持ち越し/u })).toBeVisible();
-});
-
-test("凸性の図で二つの谷を選ぶと定義の違反が見つかり、点をキーボードで動かせる", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/concept.convexity");
-  const region = page.locator('[data-explorable-id="convexity-chord"]');
-  await expect(region.getByText("見る問い")).toBeVisible();
-  await expect(region.getByText(/この関数は凸なので/u).first()).toBeVisible();
-  await region.getByRole("radio", { name: /二つの谷/u }).check({ force: true });
-  await expect(region.getByText(/この関数は凸ではありません/u).first()).toBeVisible();
-  const handle = region.getByRole("slider", { name: "点aの位置" });
-  await handle.focus();
-  const before = await handle.getAttribute("aria-valuenow");
-  await handle.press("ArrowRight");
-  expect(await handle.getAttribute("aria-valuenow")).not.toBe(before);
-});
-
-test("LPの図で係数を動かすと最適な頂点が切り替わる", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/concept.linear-program");
-  const region = page.locator('[data-explorable-id="lp-vertex-walk"]');
-  await expect(region.getByText("見る問い")).toBeVisible();
-  await expect(region.getByText(/最適解は頂点 \(4\.0, 3\.0\)、目的値は z=24/u).first()).toBeVisible();
-  await region.getByRole("slider", { name: /係数 c₁/u }).fill("-1");
-  await expect(region.getByText(/最適解は頂点 \(0\.0, 4\.3\)/u).first()).toBeVisible();
-});
-
-test("単体法の図で増やす変数を選び、比の最小値まで進めると最適な頂点に着く", async ({ page, baseURL }) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/primal-simplex");
-  const region = page.locator('[data-explorable-id="simplex-pivot"]');
-  await expect(region.getByText("見る問い")).toBeVisible();
-  await region.getByRole("button", { name: /x₂（クロワッサン）を増やす/u }).click();
-  await region.getByRole("slider", { name: /増やす量 θ/u }).fill("5");
-  await expect(region.getByText(/バターの余りが負になりました/u).first()).toBeVisible();
-  await region.getByRole("button", { name: "比の最小値 θ=13/3 まで進めて s₂ と入れ替える" }).click();
-  await region.getByRole("button", { name: /x₁（食パン）を増やす/u }).click();
-  await region.getByRole("button", { name: "比の最小値 θ=4 まで進めて s₁ と入れ替える" }).click();
-  await expect(region.getByText(/頂点 \(4, 3\) が最適で、売上は 24 です/u).first()).toBeVisible();
-});
