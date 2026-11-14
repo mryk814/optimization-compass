@@ -23,7 +23,7 @@ last_reviewed: 2026-07-24
 形状最適化の一反復には、形状・メッシュ・物理・最適化の層があります。
 どこで壊れたかを分けなければ、更新幅だけを小さくして原因を残します。
 
-[成立する更新](#/theater/learning/SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE)と[無効な形状](#/theater/learning/SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY)を先に見比べると、目的の代用指標だけでは受理できない理由を追えます。
+[成立する更新](#/traces/shape-diffuser-valid-update)と[無効な形状](#/traces/shape-diffuser-invalid-geometry)を先に見比べると、目的の代用指標だけでは受理できない理由を追えます。
 
 | 層 | 観測する失敗 | 典型的な確認 |
 | --- | --- | --- |

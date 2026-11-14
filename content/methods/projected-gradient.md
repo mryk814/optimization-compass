@@ -271,7 +271,7 @@ SO(3)の固定実行では、どちらも受け入れた回転の構造残差を
 橙の履歴がこの手法です。
 受け入れた点が実行可能であることと、射影の前の候補をどれだけ修正したかは、分けて読みます。
 
-[射影更新のTheater](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)では、周囲の空間で進んだあとに、QR射影でSO(3)へ戻る流れを追えます。
+[射影更新のTheater](#/traces/so3-projected-alignment)では、周囲の空間で進んだあとに、QR射影でSO(3)へ戻る流れを追えます。
 目的関数値と、直交性・行列式の残差を、分けて確認します。
 
 [Riemannian更新との比較](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じ目標・初期回転・目的関数・歩幅・12回の評価を使います。

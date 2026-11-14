@@ -189,7 +189,7 @@ Stiefel多様体／Grassmann多様体／SO(3)などでは、接空間射影と�
 
 
 
-[Riemannian 更新のTheater](#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT)では、リー代数上の一歩を指数写像でSO(3)へ戻す流れを追えます。
+[Riemannian 更新のTheater](#/traces/so3-riemannian-alignment)では、リー代数上の一歩を指数写像でSO(3)へ戻す流れを追えます。
 目的関数値と、直交性・行列式の残差を分けて確認します。
 
 [射影による更新との比較](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じ目標・初期回転・目的関数・一歩の係数・12回の評価を使います。

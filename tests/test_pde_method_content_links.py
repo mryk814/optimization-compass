@@ -15,9 +15,9 @@ def test_adjoint_sensitivity_exposes_primary_pde_lessons_before_loose_run() -> N
     assert adjoint.comparison_ids == ("COMPARE_PDE_STATE_TOLERANCE_COST",)
     for route in (
         "#/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
-        "#/theater/learning/SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+        "#/traces/pde-state-tolerance-tight",
         "#/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
-        "#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE",
+        "#/traces/pde-state-solve-failure",
     ):
         assert route in adjoint.body
 

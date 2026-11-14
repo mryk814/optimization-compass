@@ -111,7 +111,7 @@ $$
 同じ配分変数でも、目的・制約・保証範囲が変われば別の問題です。
 公称条件の共分散リスクの結果を、CVaR／確率制約／ロバスト／DROの結果として表示しません。
 
-[公称目的の実行履歴](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的の実行履歴](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+[公称目的の実行履歴](#/traces/portfolio-nominal-8-4)と[CVaR目的の実行履歴](#/traces/portfolio-cvar-8-4)は、同じ固定教材を使います。
 [公称／CVaR 比較](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、変数と標本の評価条件を固定し、リスクの扱いの違いだけを比較します。
 これは一般的な性能の順位付けや将来分布への保証ではありません。
 

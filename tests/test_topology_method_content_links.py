@@ -18,7 +18,7 @@ def test_simp_guide_separates_representation_and_update_rule_comparisons() -> No
     for route in (
         "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
         "#/compare/COMPARE_TOPOLOGY_OC_MMA",
-        "#/theater/learning/SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+        "#/traces/shape-topology-representation-contrast",
     ):
         assert route in simp.body
 

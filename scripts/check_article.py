@@ -2,26 +2,24 @@
 
     uv run python scripts/check_article.py content/concepts/knapsack.md [more.md ...]
 
-For each file this reports, from the Markdown sources and the released database only:
-parse errors, the concept publication floor and its "次に読む" links,
-unknown source / prerequisite / related IDs, and English words mixed into Japanese prose.
-Exit code 1 on errors; warnings are listed but do not fail the check.
+Each file is checked against the Markdown sources, the released database, and the committed site
+data. Errors (exit code 1): parse errors, unknown source or content IDs, and, in a published
+article, internal links that open no page. In a draft the same link problems are warnings.
+English words mixed into Japanese prose are listed as warnings.
 """
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
 from optimization_compass.content_models import article_kind, load_content, parse_content
 from optimization_compass.content_quality import (
-    inspect_concept,
+    broken_internal_links,
+    known_public_routes,
     language_contract_warnings,
-    public_content_routes,
 )
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.formulation_atlas import authored_route_ids
 
 ROOT = Path(__file__).parents[1]
 
@@ -31,20 +29,8 @@ def main(paths: list[str]) -> int:
         print(__doc__)
         return 2
     pages = load_content(ROOT / "content")
-    published = [page for page in pages if page.status == "published"]
     content_ids = {page.content_id for page in pages}
-    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
-    comparisons = json.loads(
-        (ROOT / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
-    )
-    formulation_ids, path_ids = authored_route_ids(ROOT)
-    routes = public_content_routes(
-        published,
-        gallery_ids=(item["case_id"] for item in gallery["cases"]),
-        comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
-        formulation_ids=formulation_ids,
-        path_ids=path_ids,
-    )
+    routes = known_public_routes(ROOT, [page for page in pages if page.status == "published"])
     repository = KnowledgeRepository(ROOT / "src/optimization_compass/resources/knowledge.sqlite")
     sources = {
         str(row["source_id"]) for row in repository.fetch_all("SELECT source_id FROM sources")
@@ -52,34 +38,33 @@ def main(paths: list[str]) -> int:
 
     failed = False
     for name in paths:
-        errors: list[str] = []
         try:
             page = parse_content(Path(name))
         except ValueError as error:
             print(f"{name}: ERROR {error}")
             failed = True
             continue
-        errors += [f"unknown source {item}" for item in page.source_ids if item not in sources]
+        errors = [f"unknown source {item}" for item in page.source_ids if item not in sources]
         errors += [
             f"unknown content {item}"
             for item in (*page.prerequisites, *page.related_ids)
             if item not in content_ids
         ]
-        if page.kind == "concept" and page.status == "published":
-            row = inspect_concept(page, routes)
-            if not row.meets_floor:
-                errors.append(
-                    f"concept floor (summary={row.summary_characters}, body={row.body_characters}, "
-                    f"toc={row.toc_entries}, next={len(row.valid_next_links)}, "
-                    f"invalid={','.join(row.invalid_next_links) or '-'})"
-                )
-        warnings = language_contract_warnings(page)
+        problems = [f"link opens no page: {link}" for link in broken_internal_links(page, routes)]
+        warnings = [
+            f"English word line~{warning.line}: {warning.detail}"
+            for warning in language_contract_warnings(page)
+        ]
+        if page.status == "published":
+            errors += problems
+        else:
+            warnings += problems
         status = "ERROR" if errors else "ok"
         print(f"{page.content_id} [{article_kind(page)}]: {status}, {len(warnings)} warnings")
         for error in errors:
             print(f"  error: {error}")
         for warning in warnings:
-            print(f"  warning: {warning.code} line~{warning.line}: {warning.detail}")
+            print(f"  warning: {warning}")
         failed = failed or bool(errors)
     return 1 if failed else 0
 

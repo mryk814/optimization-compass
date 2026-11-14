@@ -14,8 +14,8 @@ def test_nelder_mead_lessons_connect_initial_simplex_sensitivity() -> None:
             "nelder-mead-quadratic-shifted",
         )
         assert "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX" in page.comparison_ids
-        assert "#/theater/learning/SCENARIO_NM_QUADRATIC" in page.body
-        assert "#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED" in page.body
+        assert "#/traces/nelder-mead-quadratic" in page.body
+        assert "#/traces/nelder-mead-quadratic-shifted" in page.body
         assert "#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX" in page.body
         assert any(term in page.body for term in ("一般性能順位付け", "一般的な性能の順位付け"))
 

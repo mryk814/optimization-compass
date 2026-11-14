@@ -215,7 +215,7 @@ Adamでは、勾配の大きさと一歩の大きさが別の量になります�
 
 ## コラム: 実行記録で比べる
 
-[Adamの実行記録](#/theater/learning/SCENARIO_ADAM_QUADRATIC_DIVERGENCE)では、固定した設定での目的関数値と終了状態を追えます。
+[Adamの実行記録](#/traces/adam-quadratic-divergence)では、固定した設定での目的関数値と終了状態を追えます。
 [勾配降下法・Momentumとの感度比較](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的関数・初期点・40回の評価予算で、学習率への感度を並べます。
 どちらも決めた条件での一例で、手法の一般的な順位ではありません。
 

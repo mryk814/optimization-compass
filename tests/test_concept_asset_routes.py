@@ -16,9 +16,9 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "S064" in nested.source_ids
     assert "#/visualization/" not in nested.body
     assert "#/gallery/bilevel-regularized-regression" in nested.body
-    assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_EXACT" in nested.body
-    assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_RELAXED" in nested.body
-    assert "#/theater/learning/SCENARIO_HYBRID_MODE_CHATTERING" in nested.body
+    assert "#/traces/bilevel-regression-exact-inner" in nested.body
+    assert "#/traces/bilevel-regression-relaxed-complementarity" in nested.body
+    assert "#/traces/hybrid-mode-chattering-ledger" in nested.body
 
     pde = pages["concept.pde-constrained-optimization"]
     assert pde.visualization_ids == (
@@ -41,7 +41,7 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         "portfolio-cvar-8-4",
     )
     assert uncertainty.comparison_ids == ("COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",)
-    assert "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4" in uncertainty.body
+    assert "#/traces/portfolio-cvar-8-4" in uncertainty.body
     assert "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in uncertainty.body
 
     chance_risk = pages["concept.chance-risk-contract"]
@@ -51,8 +51,8 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     )
     assert chance_risk.comparison_ids == ("COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",)
     for route in (
-        "#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4",
-        "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4",
+        "#/traces/portfolio-nominal-8-4",
+        "#/traces/portfolio-cvar-8-4",
         "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
     ):
         assert route in chance_risk.body

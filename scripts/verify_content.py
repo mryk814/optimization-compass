@@ -5,14 +5,10 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.content_models import load_content
-from optimization_compass.content_quality import (
-    public_content_routes,
-    require_published_concept_quality,
-)
+from optimization_compass.content_quality import known_public_routes, require_internal_links
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.editorial_scope import require_scope_integrity
-from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.language_mixing import require_language_contract
 from optimization_compass.owner_approvals import require_owner_approvals
 from optimization_compass.release_identity import load_dataset_release_identity
@@ -68,16 +64,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
     )
     _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
 
-    published_pages = [page for page in source_pages if page.status == "published"]
-    formulation_ids, path_ids = authored_route_ids(root)
-    content_routes = public_content_routes(
-        published_pages,
-        gallery_ids=case_ids,
-        comparison_ids=comparison_ids,
-        formulation_ids=formulation_ids,
-        path_ids=path_ids,
-    )
-    require_published_concept_quality(source_pages, content_routes)
+    require_internal_links(source_pages, known_public_routes(root, source_pages))
     clean = require_language_contract(root)
     if clean:
         print(

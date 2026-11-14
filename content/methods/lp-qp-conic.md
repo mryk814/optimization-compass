@@ -197,7 +197,7 @@ print(result.x, -result.fun, result.status, result.message)
 | 金融 | [シナリオの裾のリスクを抑えて配分する](#/gallery/portfolio-cvar-allocation) | [学習目的値のリスクの扱い](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4) |
 | エネルギー | [価格シナリオの裾の費用を抑えて電力を調達する](#/gallery/energy-cvar-procurement) | [同じ構造を調達問題として読む](#/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4) |
 
-[平均目的の実行記録](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的の実行記録](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+[平均目的の実行記録](#/traces/portfolio-nominal-8-4)と[CVaR目的の実行記録](#/traces/portfolio-cvar-8-4)は、同じ固定教材を使います。
 4変数の各成分に上限を持つ単体とリスク水準 0.75を共有します。
 標本は8件の学習用と4件の評価用に固定します。
 0.05刻みの格子と12回の損失の評価計算予算も固定し、リスクの扱いだけを変えます。

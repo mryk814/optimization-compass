@@ -217,7 +217,7 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 
 ### 蓄積した速度が発散するとき
 
-[Momentumの失敗時の計算履歴](#/theater/learning/SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE)では、高い学習率と固定モーメンタムで目的と終了状態を追えます。
+[Momentumの失敗時の計算履歴](#/traces/momentum-quadratic-divergence)では、高い学習率と固定モーメンタムで目的と終了状態を追えます。
 [勾配降下法・Adamとの感度比較](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回の取得手段評価予算を使います。
 
 各手法には発散を説明する固定設定を使っています。

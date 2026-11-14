@@ -59,7 +59,7 @@ Nelder–MeadやPowell法はSciPyの公式APIでも微分を使わない局所�
 ## 代表例で初期条件の感度を見る
 
 Nelder–Meadは、点の配置そのものを使う微分を使わない局所手法の一例です。
-[標準の初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC)と[移動した初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED)で、同じ更新則の経路差を確認できます。
+[標準の初期単体](#/traces/nelder-mead-quadratic)と[移動した初期単体](#/traces/nelder-mead-quadratic-shifted)で、同じ更新則の経路差を確認できます。
 [初期単体の感度比較](#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX)は、目的・係数・尺度・評価予算を固定します。
 変えるのは初期単体の位置だけです。
 

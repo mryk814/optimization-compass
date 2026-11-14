@@ -107,9 +107,9 @@ $$
 
 ### 探索木で基礎部分を確認する
 
-[最後まで探索した木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE)では、暫定解の更新と、界による枝刈りを追えます。
+[最後まで探索した木](#/theater/search-tree/binary-knapsack-bnb-complete)では、暫定解の更新と、界による枝刈りを追えます。
 最後にギャップが閉じるところまで確認できます。
-[予算で止めた木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_BUDGET)では、同じ問題を途中で止めたときに、何が未証明として残るかを確認できます。
+[予算で止めた木](#/theater/search-tree/binary-knapsack-bnb-budget)では、同じ問題を途中で止めたときに、何が未証明として残るかを確認できます。
 
 [2つの停止条件を並べる](#/compare/COMPARE_KNAPSACK_BNB_BUDGET)では、問題と乱数シードを固定しています。
 分岐の順、界の計算、評価の予算も同じです。

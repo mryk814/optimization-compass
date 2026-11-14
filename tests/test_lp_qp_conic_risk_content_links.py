@@ -19,8 +19,8 @@ def test_lp_qp_conic_guide_connects_cross_domain_risk_lessons() -> None:
     for route in (
         "#/gallery/portfolio-cvar-allocation",
         "#/gallery/energy-cvar-procurement",
-        "#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4",
-        "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4",
+        "#/traces/portfolio-nominal-8-4",
+        "#/traces/portfolio-cvar-8-4",
         "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
         "#/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
     ):

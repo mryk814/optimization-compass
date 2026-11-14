@@ -129,7 +129,7 @@ for density in (0.25, 0.5, 0.75):
 | 設計表現 | 同じ物理条件と外側の包絡面 | 3つの形状パラメータ／密度場 | [形状／トポロジーの比較](#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION) |
 | 更新則 | 同じ密度場と評価条件 | OC／MMA | [OC／MMA Compare](#/compare/COMPARE_TOPOLOGY_OC_MMA) |
 
-[設計表現を比較する再生ページ](#/theater/learning/SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST)では、パラメータと幾何を分けます。
+[設計表現を比較する再生ページ](#/traces/shape-topology-representation-contrast)では、パラメータと幾何を分けます。
 メッシュと物理状態も同じ評価軸で対応付けます。
 これはSIMPやSLSQPの実ソルバー結果ではなく、結合構造変更を許す表現の違いを読む固定教材です。
 実時間・解品質・一般性能の順位付けには使いません。

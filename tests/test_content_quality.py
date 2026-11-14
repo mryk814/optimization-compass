@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from dataclasses import replace
 from pathlib import Path
 
@@ -8,72 +7,65 @@ import pytest
 
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.content_quality import (
-    inspect_concept,
+    broken_internal_links,
+    internal_links,
+    known_public_routes,
     language_contract_warnings,
     public_content_routes,
-    require_published_concept_quality,
+    require_internal_links,
 )
-from optimization_compass.formulation_atlas import authored_route_ids
+
+ROOT = Path(__file__).parents[1]
 
 
 def _published_pages() -> list[ContentPage]:
-    root = Path(__file__).parents[1]
-    return [page for page in load_content(root / "content") if page.status == "published"]
+    return [page for page in load_content(ROOT / "content") if page.status == "published"]
 
 
-def _public_routes(pages: list[ContentPage]) -> frozenset[str]:
-    root = Path(__file__).parents[1]
-    gallery = json.loads((root / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
-    comparisons = json.loads(
-        (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
-    )
-    formulation_ids, path_ids = authored_route_ids(root)
-    return public_content_routes(
-        pages,
-        gallery_ids=(item["case_id"] for item in gallery["cases"]),
-        comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
-        formulation_ids=formulation_ids,
-        path_ids=path_ids,
-    )
+def _linking_to(*targets: str) -> ContentPage:
+    page = next(page for page in _published_pages() if page.content_id == "concept.derivative-free")
+    anchors = "".join(f'<a href="{target}">先</a>' for target in targets)
+    return replace(page, html=f"<p>{anchors}</p>")
 
 
-def test_all_published_concepts_meet_the_publication_floor() -> None:
+def test_published_articles_link_only_to_pages_the_site_can_show() -> None:
     pages = _published_pages()
-    routes = _public_routes(pages)
 
-    rows = require_published_concept_quality(pages, routes)
+    require_internal_links(pages, known_public_routes(ROOT, pages))
 
-    assert rows
-    assert all(row.meets_floor for row in rows)
+    assert any(internal_links(page) for page in pages)
 
 
-def test_concept_floor_requires_a_valid_next_route() -> None:
-    page = next(page for page in _published_pages() if page.content_id == "concept.derivative-free")
-    routes = _public_routes(_published_pages())
-    incomplete = replace(
-        page,
-        body=page.body.replace("## 次に読む", "## 関連項目"),
+def test_a_link_to_a_missing_page_is_rejected() -> None:
+    routes = known_public_routes(ROOT, _published_pages())
+    broken = _linking_to("#/learn/concept.convexity", "#/learn/missing-concept")
+
+    assert broken_internal_links(broken, routes) == ("#/learn/missing-concept",)
+    with pytest.raises(ValueError, match=r"concept\.derivative-free \(#/learn/missing-concept\)"):
+        require_internal_links([broken], routes)
+    require_internal_links([replace(broken, status="draft")], routes)
+
+
+def test_theater_learning_routes_open_only_learning_slice_scenarios() -> None:
+    # Regression: 26 links sent readers to /theater/learning/ for trace scenarios and three to
+    # method IDs that do not exist; the site showed "not found" for all of them.
+    routes = known_public_routes(ROOT, _published_pages())
+
+    assert "#/theater/learning/SCENARIO_CONSTRAINED_DISK" in routes
+    assert "#/theater/learning/SCENARIO_ADAM_QUADRATIC_DIVERGENCE" not in routes
+    assert "#/traces/adam-quadratic-divergence" in routes
+    assert "#/theater/search-tree/binary-knapsack-bnb-complete" in routes
+    assert "#/theater/physical/drone" in routes
+    assert "#/methods/M_SMAC_RF" in routes
+    assert "#/methods/M_SMAC" not in routes
+
+
+def test_a_query_string_does_not_change_the_route() -> None:
+    routes = known_public_routes(ROOT, _published_pages())
+
+    assert (
+        broken_internal_links(_linking_to("#/learn/topology-optimization?figure=arm"), routes) == ()
     )
-
-    row = inspect_concept(incomplete, routes)
-
-    assert not row.meets_floor
-    assert not row.valid_next_links
-
-
-def test_unknown_next_route_is_reported_and_rejected() -> None:
-    page = next(page for page in _published_pages() if page.content_id == "concept.derivative-free")
-    routes = _public_routes(_published_pages())
-    broken = replace(
-        page,
-        body=page.body.replace("#/learn/family.local-dfo", "#/learn/missing-concept"),
-    )
-
-    row = inspect_concept(broken, routes)
-
-    assert row.invalid_next_links == ("#/learn/missing-concept",)
-    with pytest.raises(ValueError, match="invalid=#/learn/missing-concept"):
-        require_published_concept_quality([broken], routes)
 
 
 def test_draft_content_is_not_a_valid_public_next_route() -> None:
@@ -95,15 +87,3 @@ def test_language_contract_detects_bare_mixed_prose() -> None:
         ("prose.language-mixing", "costを"),
         ("prose.language-mixing", "状態field"),
     ]
-
-
-def test_learner_first_article_keeps_next_route_validation() -> None:
-    pages = _published_pages()
-    page = next(page for page in pages if page.content_id == "concept.linear-least-squares")
-    routes = _public_routes(pages)
-    assert inspect_concept(page, routes).meets_floor
-    broken = replace(
-        page,
-        body=page.body.replace("#/formulations/PA035", "#/learn/missing-concept"),
-    )
-    assert inspect_concept(broken, routes).invalid_next_links == ("#/learn/missing-concept",)

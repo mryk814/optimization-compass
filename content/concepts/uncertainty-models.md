@@ -103,7 +103,7 @@ last_reviewed: 2026-07-24
 
 現在の[ポートフォリオ配分事例](#/gallery/portfolio-allocation)は、4資産の単体制約と共分散リスクを読む公称条件の教材です。
 [CVaR配分事例](#/gallery/portfolio-cvar-allocation)は、そこから固定学習用データ 8件と評価用データ 4件を分け、平均損失とCVaRを含む目的を同じ標本契約で読みます。
-[CVaR 可視化](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)で損失分布の裾の推移を確認します。[公称／CVaR 比較](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、同じ標本の評価条件に対するリスクの扱いの差を読みます。
+[CVaR 可視化](#/traces/portfolio-cvar-8-4)で損失分布の裾の推移を確認します。[公称／CVaR 比較](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、同じ標本の評価条件に対するリスクの扱いの差を読みます。
 ただし、どちらも過去データの推定誤差や将来分布の変化を扱うロバスト・確率制約・DROの保証ではありません。
 
 この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。不確実性を扱う学習の流れでは、少なくとも次を同じ事例の識別情報へ接続します。

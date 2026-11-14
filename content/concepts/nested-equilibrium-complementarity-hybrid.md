@@ -124,19 +124,19 @@ $$
 
 [二階層正則化回帰事例](#/gallery/bilevel-regularized-regression)で、外側の係数更新と内側のリッジ回帰を分けて確認します。
 
-[内側を厳密に解く例の可視化](#/theater/learning/SCENARIO_BILEVEL_REGRESSION_EXACT)は、固定した6回の外側の更新を追います。
+[内側を厳密に解く例の可視化](#/traces/bilevel-regression-exact-inner)は、固定した6回の外側の更新を追います。
 外側と内側の目的を分け、内側の反復数も表示します。
 さらに内側の残差、停留条件残差、相補性残差を同じ評価軸に並べます。
 外側の1点は内側の1反復ではありません。
 内側の許容誤差を満たしてから外側の更新へ進んだことも確認します。
 
-[有限の緩和の可視化](#/theater/learning/SCENARIO_BILEVEL_REGRESSION_RELAXED)は同じ外側の予算と内側方針を使います。
+[有限の緩和の可視化](#/traces/bilevel-regression-relaxed-complementarity)は同じ外側の予算と内側方針を使います。
 内側の許容誤差と微分経路も固定します。
 変更するのは相補性の扱いだけで、$\tau=10^{-2}$の有限緩和を使います。
 [比較](#/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT)では、緩和した側の外側の目的がより低くても残差を確認します。
 相補性残差が残る実行を、厳密なKKT条件の達成や順位へ読み替えません。
 
-[モードの頻繁な切替の可視化](#/theater/learning/SCENARIO_HYBRID_MODE_CHATTERING)は、既存条件の取り決めで表せる最小の補助的な失敗例です。
+[モードの頻繁な切替の可視化](#/traces/hybrid-mode-chattering-ledger)は、既存条件の取り決めで表せる最小の補助的な失敗例です。
 目的関数と動力学残差が下がる一方で、有効なモードが交互に切り替わります。
 切替間隔も縮む固定台帳です。
 これは接触/摩擦ソルバーや物理シミュレーションではなく、一般的なモード選択の探索性能も示しません。

@@ -169,9 +169,9 @@ sensitivity = direct_derivative(state, design) - residual_derivative(state, desi
 ### 可視化は正常系から失敗へ読む
 
 1. [場更新の実行記録](#/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC)で、状態求解と感度が密度の更新へ入る位置を確認する
-2. [厳しい許容誤差の評価記録](#/theater/learning/SCENARIO_PDE_STATE_TOLERANCE_TIGHT)で、状態残差と随伴残差を同じシミュレーター呼び出し軸で追う
+2. [厳しい許容誤差の評価記録](#/traces/pde-state-tolerance-tight)で、状態残差と随伴残差を同じシミュレーター呼び出し軸で追う
 3. [許容誤差/費用比較](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)で、許容誤差だけを変えた緩い許容誤差実行を開く
-4. [状態-求解失敗の評価記録](#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE)で、失敗を架空の目的値に置き換えず状態区分として読む
+4. [状態-求解失敗の評価記録](#/traces/pde-state-solve-failure)で、失敗を架空の目的値に置き換えず状態区分として読む
 
 前面に置く代表可視化は、全体像・正常系・失敗の3つです。
 緩い許容誤差の個別実行は比較が引き受け、同格の入口を増やしません。

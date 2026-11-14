@@ -55,6 +55,6 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
         "shape-diffuser-invalid-geometry",
     )
     assert failure.comparison_ids == ("COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",)
-    assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE" in failure_body
-    assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY" in failure_body
+    assert "#/traces/shape-diffuser-valid-update" in failure_body
+    assert "#/traces/shape-diffuser-invalid-geometry" in failure_body
     assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in failure_body

@@ -12,12 +12,11 @@ from pydantic import BaseModel, ConfigDict
 
 from optimization_compass.content_models import ContentPage, load_content, parse_content
 from optimization_compass.content_quality import (
-    inspect_concept,
+    broken_internal_links,
+    known_public_routes,
     language_contract_warnings,
-    public_content_routes,
 )
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.formulation_atlas import authored_route_ids
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import run_task, validation_task_for_paths
 
@@ -122,15 +121,10 @@ def require_publish_ready(
         }
         if page.method_id not in known_methods:
             errors.append(f"unknown canonical method ID: {page.method_id}")
-    elif known_routes is not None:
-        concept = inspect_concept(page, known_routes)
-        if not concept.meets_floor:
-            errors.append(
-                "concept explanation floor is not met "
-                f"(summary={concept.summary_characters}, body={concept.body_characters}, "
-                f"toc={concept.toc_entries}, next={len(concept.valid_next_links)}, "
-                f"invalid={','.join(concept.invalid_next_links) or '-'})"
-            )
+    if known_routes is not None:
+        broken = broken_internal_links(page, known_routes)
+        if broken:
+            errors.append("internal links open no page: " + ", ".join(broken))
     mixed = language_contract_warnings(page)
     if mixed:
         errors.append(
@@ -177,25 +171,14 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
     """Generate public artifacts, run the owning gate, and report the exact PR handoff."""
     page, source_path = _find_content(content_id, root)
     repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")
-    pages = load_content(root / "content")
-    gallery = json.loads((root / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
-    comparisons = json.loads(
-        (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
-    )
-    published_pages = [item for item in pages if item.status == "published"]
-    formulation_ids, path_ids = authored_route_ids(root)
-    known_routes = public_content_routes(
-        published_pages,
-        gallery_ids=(item["case_id"] for item in gallery["cases"]),
-        comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
-        formulation_ids=formulation_ids,
-        path_ids=path_ids,
-    )
+    published_pages = [
+        item for item in load_content(root / "content") if item.status == "published"
+    ]
     require_publish_ready(
         page,
         source_path.read_text(encoding="utf-8"),
         repository,
-        known_routes=known_routes,
+        known_routes=known_public_routes(root, published_pages),
     )
     branch_paths = _branch_change_paths(root)
     unrelated = [

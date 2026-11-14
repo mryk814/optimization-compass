@@ -80,7 +80,7 @@ $$
 
 ![二次元の二次目的上でNelder–Meadを80回の評価予算で実行し、初期単体から反射、拡大、収縮を経て終端単体へ進む軌跡。各フレームでは頂点順位、候補、受理操作、最良値を同期している。](./media/nelder-mead-execution.svg "Optimization Compassの決定論的Python生成プログラムが出力した終端フレームです。2次元の固定教材であり、別問題での速度や頑健性を示しません。")
 
-三角形が動き、形を変え、最後に小さくなる様子がこの手法の本体です。[フレームを順に再生する](#/theater/learning/SCENARIO_NM_QUADRATIC)と、候補の採否まで追えます。
+三角形が動き、形を変え、最後に小さくなる様子がこの手法の本体です。[フレームを順に再生する](#/traces/nelder-mead-quadratic)と、候補の採否まで追えます。
 
 ## 向く条件・避ける条件
 
@@ -214,7 +214,7 @@ SciPy 1.18.1 で確認した出力です。SciPy は標準では初期点の周�
 
 ## コラム: 初期単体を変えて経路を見る
 
-[標準の初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC)と[移動した初期単体](#/theater/learning/SCENARIO_NM_QUADRATIC_SHIFTED)では、頂点・重心・候補点の動きを追えます。
+[標準の初期単体](#/traces/nelder-mead-quadratic)と[移動した初期単体](#/traces/nelder-mead-quadratic-shifted)では、頂点・重心・候補点の動きを追えます。
 [初期単体の感度比較](#/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX)は、同じ二次目的関数・係数・単体の尺度0.8・80回の評価予算を使います。
 変えるのは初期単体の位置だけです。
 

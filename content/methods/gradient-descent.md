@@ -201,7 +201,7 @@ print(iteration, x, objective(x), np.linalg.norm(gradient(x)))
 
 ## コラム: 大きい学習率の失敗を見る
 
-[勾配降下法の失敗実行記録](#/theater/learning/SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE)では、固定した二次目的で大きい学習率の軌跡と終了状態を追えます。
+[勾配降下法の失敗実行記録](#/traces/gradient_descent-quadratic-divergence)では、固定した二次目的で大きい学習率の軌跡と終了状態を追えます。
 [Momentum・Adamとの感度比較](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回の関数評価の予算を使います。
 
 各手法には発散を説明する固定の設定を使っています。
