@@ -72,14 +72,10 @@ def test_approvals_must_name_known_articles_and_be_well_formed(tmp_path: Path) -
         load_owner_approvals(tmp_path)
 
 
-def test_committed_approvals_name_published_articles() -> None:
-    approvals = load_owner_approvals(ROOT)
-    published = {
-        page.content_id: page
-        for page in load_content(ROOT / "content")
-        if page.status == "published"
-    }
+def test_committed_approvals_are_well_formed_and_name_articles() -> None:
+    pages = {page.content_id: page for page in load_content(ROOT / "content")}
 
+    require_owner_approvals(ROOT, pages)
+    approvals = load_owner_approvals(ROOT)
     assert approvals
-    assert set(approvals) <= set(published)
-    assert all(approval_state(published[key], approvals) for key in approvals)
+    assert all(approval_state(pages[key], approvals) for key in approvals)
