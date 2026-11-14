@@ -137,27 +137,23 @@ Optimization Compass の発展版（OC-EVOL）では、次の2つを並行して
 
 ### 問題型の記事
 - **お手本**: `content/concepts/` の smooth-low-dimensional-unconstrained、inverse-problem、l1-sparse-regularization、model-predictive-control です。
-- **骨格**: 7節です（30秒でつかむ／標準形を読む／小さな例／つまずきやすい点／課題から定式化する／困りごとから関連する問題へ／数値計算の方法を選ぶ）。
-- **書く前に読むもの**: [`docs/teaching-article-playbook.md`](../../teaching-article-playbook.md)、[`docs/article-style.md`](../../article-style.md)、[`docs/article-quality.md`](../../article-quality.md) です。
+- **書く前に読むもの**: [`docs/writing-articles.md`](../../writing-articles.md) です（2026-11-14 に節の型と品質台帳をやめ、この1本にまとめた）。
 - **例と数値**:
   - 1つの題材で記事を通します。
   - 数値はすべてスクリプトで計算し、出力をコメントで貼ります。手で検算できる大きさにします。
   - 順位をつけません。ライブラリの既定は推奨ではないと書きます。
 - **図**:
-  - 静止図は `scripts/generate_lesson_figures.py` で生成し、`tests/test_lesson_figures.py` で数値を固定します。
+  - 静止図は記事ごとのモジュール `scripts/lesson_figures/<記事>.py` で生成し、`tests/lesson_figures/` で数値を固定します。
   - 色は、橙＝候補・更新、緑（teal）＝実行可能・観測、赤＝違反だけ、紺＝構造です。本文の線や色の説明は、描いたとおりに書きます。
   - 細かい線分でできたパスに `stroke-dasharray` を使いません。
 - **収録範囲**: `editorial_scope.json` に、その PA を refs に含む STRUCTURE_* があれば、`{"type":"content","id":…}` を足します。
 - **検証**:
   - 数値は書き手と別の者が再実行して照合します。
-  - 1280・375・320px の実画面を Chromium で見て、横のはみ出しと図の文字を確かめます。
-  - `article_quality.py record --reviewer <名前> --pass all --na <該当しない基準> --note …` で台帳に記録します。
+  - 1280・375・320px の実画面を Chromium で見て、横のはみ出しと図の文字を確かめます（`npm --prefix site run shots -- <content-id>`）。
 
 ## はまりどころ
 
 - main を取り込んでから生成物を作り直し、それから push します。古い main で作った `site/public/data` は、CI の drift 検査で落ちます。
-- 報告2本（`docs/content-quality-report.md`、`docs/method-content-density-report.md`）は、記事を変えたら作り直します。
-- `generate_lesson_figures.py` で衝突を解いた後に、末尾の `parts.append("</svg>")` と `return "".join(parts) + "\n"` が消えたことがあります。
 - テストの期待値が記事の状態に依存しているものがあります。たとえば `tests/test_formulation_atlas.py` は PA の maturity を固定しています。記事や図を足すと変わります。
 - サイトの `DiagnosePage.test.tsx` の結果ページのテストは約3秒かかります。上限を20秒にしてあります（#308 の a27521c）。
 - `test_historical_releases.py` の3件は、タグのない shallow clone では必ず落ちます。
