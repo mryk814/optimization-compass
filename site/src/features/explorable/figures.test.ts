@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -16,6 +16,13 @@ const folders = readdirSync(FIGURES, { withFileTypes: true })
 const metaOf = (folder: string) => JSON.parse(readFileSync(join(FIGURES, folder, "meta.json"), "utf8")) as MetaFile;
 
 describe("figure folders", () => {
+  it("each hold the component and its framing", () => {
+    for (const folder of folders) {
+      expect(existsSync(join(FIGURES, folder, "Figure.tsx")), `${folder}/Figure.tsx`).toBe(true);
+      expect(existsSync(join(FIGURES, folder, "meta.json")), `${folder}/meta.json`).toBe(true);
+    }
+  });
+
   it("name each figure by the id in its meta.json", () => {
     expect(folders.length).toBeGreaterThan(0);
     for (const folder of folders) expect(metaOf(folder).id).toBe(folder);

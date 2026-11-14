@@ -3,10 +3,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
 import { CompiledContent } from "../content/CompiledContent";
-import ConvexityChord from "./ConvexityChord";
-import GradientDescentValley from "./GradientDescentValley";
-import LpVertexWalk from "./LpVertexWalk";
-import NonlinearFitLandscape from "./NonlinearFitLandscape";
+import ConvexityChord from "./figures/convexity-chord/Figure";
+import GradientDescentValley from "./figures/gradient-descent-valley/Figure";
+import LpVertexWalk from "./figures/lp-vertex-walk/Figure";
+import NonlinearFitLandscape from "./figures/nonlinear-least-squares-landscape/Figure";
 import { axisRate, runDescent, valleyCurvatures } from "./math/descent";
 import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting } from "./scene";

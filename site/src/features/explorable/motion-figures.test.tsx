@@ -1,10 +1,10 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import NewtonRootResidual from "./NewtonRootResidual";
-import PdeHeatSourceBalance from "./PdeHeatSourceBalance";
-import PsdSliceBoundary from "./PsdSliceBoundary";
-import SimplexProjectionTheta from "./SimplexProjectionTheta";
+import NewtonRootResidual from "./figures/newton-root-residual/Figure";
+import PdeHeatSourceBalance from "./figures/pde-heat-source-balance/Figure";
+import PsdSliceBoundary from "./figures/sdp-psd-boundary/Figure";
+import SimplexProjectionTheta from "./figures/simplex-projection-theta/Figure";
 
 afterEach(cleanup);
 

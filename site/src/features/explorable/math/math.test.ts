@@ -17,7 +17,7 @@ import {
   sweepReach,
   sweepTheta,
   violationIntervals,
-} from "./convexity";
+} from "../figures/convexity-chord/math";
 import {
   axisRate,
   runDescent,

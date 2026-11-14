@@ -7,38 +7,12 @@ export function figureIdOf(path: string): string {
   return match[1];
 }
 
+const loaders = import.meta.glob<{ default: ComponentType }>("./figures/*/Figure.tsx");
+
 /**
- * One entry per figure folder (`figures/<id>/meta.json`).
+ * One entry per figure folder, found by its `Figure.tsx`; adding a figure needs no edit here.
  * Each figure is its own chunk, so an article without one downloads none of this code.
  */
-export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<ComponentType>>> = {
-  "branch-bound-proof": lazy(() => import("./BranchBound")),
-  "gradient-descent-valley": lazy(() => import("./GradientDescentValley")),
-  "lp-vertex-walk": lazy(() => import("./LpVertexWalk")),
-  "simplex-pivot": lazy(() => import("./SimplexPivot")),
-  "simplex-shadow-price": lazy(() => import("./SimplexShadowPrice")),
-  "convexity-chord": lazy(() => import("./ConvexityChord")),
-  "least-squares-bowl": lazy(() => import("./LeastSquaresBowl")),
-  "adam-step-ratio": lazy(() => import("./AdamStepRatio")),
-  "bayes-opt-acquisition": lazy(() => import("./BayesOptAcquisition")),
-  "coordinate-descent-walk": lazy(() => import("./CoordinateDescentWalk")),
-  "nonlinear-least-squares-landscape": lazy(() => import("./NonlinearFitLandscape")),
-  "newton-parabola-jump": lazy(() => import("./NewtonParabola")),
-  "cmaes-shape-learning": lazy(() => import("./CmaesShape")),
-  "interior-point-barrier-path": lazy(() => import("./BarrierPath")),
-  "multiobjective-pareto-weights": lazy(() => import("./ParetoWeights")),
-  "proximal-gradient-threshold": lazy(() => import("./ProximalThreshold")),
-  "inverse-problem-alpha": lazy(() => import("./InverseProblemAlpha")),
-  "robust-loss-pull": lazy(() => import("./RobustLossPull")),
-  "saddle-newton": lazy(() => import("./SaddleNewton")),
-  "milp-integer-lattice": lazy(() => import("./MilpLattice")),
-  "convex-qp-projection": lazy(() => import("./ConvexQpProjection")),
-  "variable-domain-switch": lazy(() => import("./VariableDomain")),
-  "gauss-newton-lm-steps": lazy(() => import("./GaussNewtonLm")),
-  "failure-ledger": lazy(() => import("./FailureLedger")),
-  "newton-root-residual": lazy(() => import("./NewtonRootResidual")),
-  "simplex-projection-theta": lazy(() => import("./SimplexProjectionTheta")),
-  "sdp-psd-boundary": lazy(() => import("./PsdSliceBoundary")),
-  "pde-heat-source-balance": lazy(() => import("./PdeHeatSourceBalance")),
-  "phase-fraction-target": lazy(() => import("./PhaseFractionTarget")),
-};
+export const EXPLORABLE_COMPONENTS: Readonly<Record<string, LazyExoticComponent<ComponentType>>> = Object.fromEntries(
+  Object.entries(loaders).map(([path, load]) => [figureIdOf(path), lazy(load)]),
+);

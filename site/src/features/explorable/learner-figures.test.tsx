@@ -1,12 +1,12 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import AdamStepRatio from "./AdamStepRatio";
-import { AlgorithmReplay as BayesOptAcquisition } from "./BayesOptAcquisition";
-import LeastSquaresBowl from "./LeastSquaresBowl";
-import { ADAM_DEFAULTS, runAdam, runPlainDescent, seededNormal } from "./math/adam";
+import AdamStepRatio from "./figures/adam-step-ratio/Figure";
+import { AlgorithmReplay as BayesOptAcquisition } from "./figures/bayes-opt-acquisition/Figure";
+import LeastSquaresBowl from "./figures/least-squares-bowl/Figure";
+import { ADAM_DEFAULTS, runAdam, runPlainDescent, seededNormal } from "./figures/adam-step-ratio/math";
 import { BO_INITIAL, gridMinimum, posterior, runBayesOpt, type Acquisition } from "./math/bayesOpt";
-import { evaluateLine, fitLine } from "./math/leastSquares";
+import { evaluateLine, fitLine } from "./figures/least-squares-bowl/math";
 import { EXPLORABLE_META } from "./figureMeta";
 import { numberSetting, stringSetting } from "./scene";
 
@@ -227,7 +227,7 @@ describe("BayesOptAcquisition", () => {
 
 describe("RobustLossPull", () => {
   it("opens on the article's example: 2.5 for squared, 1/3 for Huber", async () => {
-    const { default: RobustLossPull } = await import("./RobustLossPull");
+    const { default: RobustLossPull } = await import("./figures/robust-loss-pull/Figure");
     render(<RobustLossPull />);
     const summary = document.querySelector(".ex-sr-only")?.textContent ?? "";
     expect(summary).toContain("二乗損失の当てはめは2.500");
