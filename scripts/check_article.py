@@ -6,7 +6,8 @@ Each file is checked against the Markdown sources, the released database, and th
 data. Errors (exit code 1): parse errors and unknown source or content IDs, and, in a published
 article, internal links that open no page, formulas the site cannot render (``aligned`` or a bare
 ``\\\\`` / ``&`` outside ``cases``/``array``/matrix), and ordinary English words glued into
-Japanese prose (``costを``). In a draft those three are warnings.
+Japanese prose (``costを``). In a draft those three are warnings. Static SVG figures whose text
+would read under 12 px on a phone or over 18 px on a PC are listed as warnings.
 """
 
 from __future__ import annotations
@@ -16,7 +17,13 @@ from pathlib import Path
 
 from optimization_compass.content_markdown import unrenderable_math
 from optimization_compass.content_models import article_kind, load_content, parse_content
-from optimization_compass.content_quality import broken_internal_links, known_public_routes
+from optimization_compass.content_quality import (
+    FigureText,
+    broken_internal_links,
+    figure_text,
+    known_public_routes,
+    static_svg_paths,
+)
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.language_mixing import article_mixed_words
 
@@ -61,6 +68,11 @@ def main(paths: list[str]) -> int:
         ]
         errors += problems if page.status == "published" else []
         warnings = [] if page.status == "published" else problems
+        warnings += [
+            _figure_warning(item)
+            for item in (figure_text(ROOT, ref) for ref in static_svg_paths(page))
+            if not item.readable
+        ]
         status = "ERROR" if errors else "ok"
         print(f"{page.content_id} [{article_kind(page)}]: {status}, {len(warnings)} warnings")
         for error in errors:
@@ -69,6 +81,15 @@ def main(paths: list[str]) -> int:
             print(f"  warning: {warning}")
         failed = failed or bool(errors)
     return 1 if failed else 0
+
+
+def _figure_warning(item: FigureText) -> str:
+    if item.pc is None or item.phone is None:
+        return f"figure text size unknown (missing file or font-size): {item.path}"
+    return (
+        f"figure text reads {item.phone[0]:.0f}-{item.phone[1]:.0f} px on a phone and "
+        f"{item.pc[0]:.0f}-{item.pc[1]:.0f} px on a PC (want >= 12 and <= 18): {item.path}"
+    )
 
 
 if __name__ == "__main__":

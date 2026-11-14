@@ -3,7 +3,7 @@
 Articles may take any shape. What is checked is what a reader would trip over: every internal app
 link (``#/...``) in a published article must open a page, not the site's "not found" page, and
 every formula must render as written. English words glued into Japanese prose are checked in
-``language_mixing``.
+``language_mixing``. The text size of static SVG figures is measured for review, not enforced.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ import html
 import json
 import re
 from collections.abc import Iterable
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,34 @@ LEARNING_SLICE_FAMILIES = frozenset(
     {"feasible_region", "pareto_front", "field_evolution", "assignment_schedule"}
 )
 _INTERNAL_HREF = re.compile(r'<a href="(#/[^"]*)"')
+_SVG_REF = re.compile(r"\]\(\./((?:figures|media)/[^)\s]+\.svg)")
+_VIEWBOX_WIDTH = re.compile(r'viewBox="[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)')
+_FONT_SIZE = re.compile(r'font-size(?:="|:\s*)([\d.]+)|font:[^;"]*?([\d.]+)px')
+# A static figure is shown at most this wide: 440 px for figures/, 672 px for media/ on a PC, and
+# 353 px of article width on a 375 px phone. Text should read 12 px or more on the phone and no
+# more than 18 px on the PC.
+PC_WIDTH = {"figures": 440.0, "media": 672.0}
+PHONE_WIDTH = 353.0
+MIN_PHONE_TEXT = 12.0
+MAX_PC_TEXT = 18.0
+
+
+@dataclass(frozen=True)
+class FigureText:
+    """Smallest and largest text size of one static SVG as a reader sees it, in px."""
+
+    path: str
+    pc: tuple[float, float] | None
+    phone: tuple[float, float] | None
+
+    @property
+    def readable(self) -> bool:
+        return (
+            self.pc is not None
+            and self.phone is not None
+            and self.phone[0] >= MIN_PHONE_TEXT
+            and self.pc[1] <= MAX_PC_TEXT
+        )
 
 
 def public_content_routes(
@@ -160,6 +189,27 @@ def require_renderable_math(pages: Iterable[ContentPage]) -> None:
             "formulas must render: write rows with cases, array, or matrix environments "
             "(aligned and bare \\\\ or & are shown as one garbled line): " + "; ".join(failures)
         )
+
+
+def static_svg_paths(page: ContentPage) -> tuple[str, ...]:
+    """The static SVG figures an article shows, as paths under ``site/public``."""
+    return tuple(sorted(set(_SVG_REF.findall(page.body))))
+
+
+def figure_text(root: Path, ref: str) -> FigureText:
+    """Measure one static SVG; sizes are None when the file or its text sizes are missing."""
+    svg_path = root / "site/public" / ref
+    svg = svg_path.read_text(encoding="utf-8") if svg_path.is_file() else ""
+    width_match = _VIEWBOX_WIDTH.search(svg)
+    sizes = [float(a or b) for a, b in _FONT_SIZE.findall(svg)]
+    if width_match is None or not sizes:
+        return FigureText(ref, None, None)
+    width = float(width_match.group(1))
+    pc = min(width, PC_WIDTH[ref.split("/")[0]]) / width
+    phone = min(width, PHONE_WIDTH) / width
+    return FigureText(
+        ref, (min(sizes) * pc, max(sizes) * pc), (min(sizes) * phone, max(sizes) * phone)
+    )
 
 
 def _read_json(path: Path) -> Any:
