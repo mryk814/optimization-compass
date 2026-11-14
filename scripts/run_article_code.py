@@ -13,9 +13,10 @@
     ブロックは記事内の順に、ブロックごとの新しいサブプロセスで走らせる。環境は
     ``uv run --no-project --with numpy --with scipy python -``（プロジェクトの環境には
     SciPy がないため）。ブロックの import に許可リストのパッケージ（cvxpy, scikit-learn,
-    networkx, pyomo, optuna, ortools, casadi, pymoo, cma, nlopt, highspy, pandas,
-    matplotlib）があれば ``--with`` を足す。許可リストにも標準ライブラリにもない import が
-    あるブロックは error ではなく skipped にする。NameError で落ち、前のブロックが走って
+    networkx, pyomo, optuna, ortools, casadi, pymoo, cma, nlopt, highspy, osqp, smac,
+    ConfigSpace, pandas, matplotlib）があれば ``--with`` を足す。
+    許可リストにも標準ライブラリにもない import があるブロックは、
+    error ではなく skipped にする。NameError で落ち、前のブロックが走って
     いるときは、動いた前のブロックを前置きして再実行する（その旨を note に出す）。
 
 書かれた出力の集め方（単純な規則）
@@ -71,6 +72,9 @@ EXTRA_PACKAGES = {
     "cma": "cma",
     "nlopt": "nlopt",
     "highspy": "highspy",
+    "osqp": "osqp",
+    "smac": "smac",
+    "ConfigSpace": "ConfigSpace",
     "pandas": "pandas",
     "matplotlib": "matplotlib",
 }
