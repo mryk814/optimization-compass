@@ -50,7 +50,7 @@ for (const width of [1280, 375]) {
       await expectFirstStep(page);
       await page.reload();
       await expectFirstStep(page);
-      expect(scripts.some(response => /\/ProximalThreshold-[^/]+\.js$/u.test(response.url))).toBe(true);
+      expect(scripts.some(response => /\/figure-proximal-gradient-threshold-[^/]+\.js$/u.test(response.url))).toBe(true);
       expect(scripts.filter(response => response.status >= 400)).toEqual([]);
     } finally {
       const path = testInfo.outputPath("script-responses.json");
@@ -63,7 +63,7 @@ for (const width of [1280, 375]) {
 test("cold article shows loading while its figure chunk is pending, then mounts without reload", { tag: "@critical" }, async ({ page, baseURL }) => {
   let releaseChunk!: () => void;
   const pending = new Promise<void>(resolve => { releaseChunk = resolve; });
-  await page.route(/\/ProximalThreshold-[^/]+\.js$/u, async route => {
+  await page.route(/\/figure-proximal-gradient-threshold-[^/]+\.js$/u, async route => {
     await pending;
     await route.continue();
   });
