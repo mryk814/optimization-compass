@@ -11,12 +11,15 @@ from optimization_compass.comparisons import (
 from optimization_compass.learning_journeys import _case_scenarios
 from optimization_compass.nested_solve import (
     BILEVEL_EXACT_SCENARIO_ID,
+    BILEVEL_EXACT_TRACE_ID,
     BILEVEL_GENERATOR_ID,
     BILEVEL_GENERATOR_VERSION,
     BILEVEL_PROBLEM_DEFINITION_ID,
     BILEVEL_PROBLEM_INSTANCE_ID,
     BILEVEL_RELAXED_SCENARIO_ID,
+    BILEVEL_RELAXED_TRACE_ID,
     HYBRID_CHATTERING_SCENARIO_ID,
+    HYBRID_CHATTERING_TRACE_ID,
     generate_bilevel_regression_traces,
     generate_hybrid_chattering_trace,
 )
@@ -135,9 +138,10 @@ def test_bilevel_compare_and_learning_routes_are_linked() -> None:
     article = (ROOT / "content/concepts/nested-equilibrium-complementarity-hybrid.md").read_text(
         encoding="utf-8"
     )
-    assert BILEVEL_EXACT_SCENARIO_ID in article
-    assert BILEVEL_RELAXED_SCENARIO_ID in article
-    assert HYBRID_CHATTERING_SCENARIO_ID in article
+    # These metric-history runs open on their trace pages; /theater/learning/ shows only
+    # learning-slice scenarios and reported them as not found.
+    for trace_id in (BILEVEL_EXACT_TRACE_ID, BILEVEL_RELAXED_TRACE_ID, HYBRID_CHATTERING_TRACE_ID):
+        assert f"#/traces/{trace_id}" in article
     assert comparison.comparison_id in article
 
     exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.9")
