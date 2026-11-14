@@ -14,7 +14,8 @@
     "test:e2e:artifact": "playwright test",
     "test:e2e:critical": "playwright test --grep @critical --project=chromium-desktop",
     "test:e2e:report": "playwright show-report",
-    "record:scene": "node scripts/record-scene.mjs"
+    "record:scene": "node scripts/record-scene.mjs",
+    "shots": "node scripts/article-shots.mjs"
   },
   "dependencies": {
     "react": "19.3.0",
