@@ -568,13 +568,11 @@
             }
           },
           "lesson": {
-            "complete": 17,
+            "complete": 114,
             "eligible": 160,
             "info": {},
             "states": {
-              "in_progress": 96,
-              "no_article": 46,
-              "stale": 1
+              "no_article": 46
             }
           },
           "transfer": {
@@ -622,13 +620,11 @@
             }
           },
           "lesson": {
-            "complete": 55,
+            "complete": 70,
             "eligible": 80,
             "info": {},
             "states": {
-              "in_progress": 13,
-              "no_article": 10,
-              "stale": 2
+              "no_article": 10
             }
           },
           "transfer": {
