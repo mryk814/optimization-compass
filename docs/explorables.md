@@ -54,6 +54,7 @@ site/src/features/explorable/
   ├ registry.tsx                   figures/*/Figure.tsx を glob で見つける。図ごとに別 chunk（figure-<id>-<hash>.js）
   ├ figureMeta.ts                  figures/*/meta.json を読む。図の共有 chunk だけが読み込む
   ├ ExplorableFrame.tsx ほか       共通の枠、操作部品、時計、SVG・MathML の部品
+  ├ Lesson.tsx ほか                lesson（段ごとに図を動かす）の画面。段の読み取りは lessonMarkup.ts
   ├ math/                          2つ以上の図、または図の外（theater など）が使う計算
   └ explorable.css                 2つ以上の図や共通の枠が使う規則だけ
 ```
@@ -102,7 +103,7 @@ site/src/features/explorable/
 | 解説の区切り（beats）と一つの時計 | 実装済み | `explorables.py` の Beat、`scene.ts`、`useSceneTour.ts` |
 | 録画の入力ハッシュ | 実装済み（CIでは検査しない。録画は git 管理外） | `site/scripts/record-scene.mjs` の `manifest.json` |
 | Python の例と操作図で同じ入力を使う fixture と鮮度の検査 | 実装済み（1図） | `generate_lesson_figures.py --check` |
-| 読者に先に予想させる区切り（予想してから結果を見せる） | 提案のみ | 単体法の証明・BO の場面で必要になったときに beats へ足す |
+| 段ごとに図を動かす lesson、図の params、読者に先に予想させる段 | 実装済み | `content_markdown.py`、`Lesson.tsx`、`scene.ts` の `resolveSettings`（下の「Lesson」） |
 | 学習者が見える情報と最適化側が見える情報の区別の表示 | 提案のみ | 同上 |
 | 双対価格・余裕・ギャップなど LP の観測量の共有名 | 一部実装済み（右辺 b を引数にした解、双対値、基底が有効な範囲、見積もりとの差） | `figures/simplex-shadow-price/math.ts`（OC-EVOL-011）。余裕・ギャップの共有名はまだ提案 |
 | Python と TypeScript で同じ手法を二度実装している箇所（勾配降下法、Adam） | 既知のずれの危険。同じ例を使う比較のテストはまだない | `math/descent.ts` と `traces/generators.py`、`figures/adam-step-ratio/math.ts` と同 |
@@ -126,6 +127,61 @@ npm --prefix site run record:scene -- gradient-descent-valley --still 12.5 # 1�
 ```
 
 出力は `site/.scene-media/<id>/`（git 管理外）に、`scene.mp4`、`scene.webm`、`poster.png`、`captions.vtt`、`transcript.txt`、`manifest.json` です。`manifest.json` の `input_sha256` は、その図のフォルダーと、`figures/` の外にある `site/src/features/explorable/` の共有部分（テストを除く）から計算し、録画が古いかどうかの判定に使います。ほかの図を直しても、この図の録画は古くなりません。ffmpeg が必要です。録画用の画面は `#/record/<id>`（1280×720、サイトの外枠なし）です。
+
+## Lesson（段ごとに図を動かす）と params
+
+Lesson は、文章の段と図の動きを同じ Markdown ブロックに書く形です。段に入ると、その段の設定で図が再生されます。文章と動きが別のファイルにないので、片方だけ直されてずれることがありません。
+
+```markdown
+:::: lesson gradient-descent-valley
+::: step seconds=8 eta=0.02 iter=0..100
+**この段の要点を一文で。** 続く説明。数式や箇条書きも書けます。
+:::
+::: step predict answer=2 iter=0
+どうなるか、先に選んでください。
+
+- 収束する
+- 発散する
+:::
+::: step seconds=7 eta=0.053 iter=0..30@4
+**結果を一文で。** 理由の説明。
+:::
+::::
+```
+
+- 外側はコロン4つの `:::: lesson <図のid>`、内側はコロン3つの `::: step`。Lesson はトップレベルに置き、中身は step だけです。図の id は、lesson と `::: explorable` を合わせて1ページに1回です。
+- step のキー: `seconds`（2〜15、省くと6）、`predict`（予想の段）、`answer`（正解の番号。1始まり。`predict` のときだけ必須）。ほかのキーは、図の `meta.json` の `params` にある名前だけです。
+- 値: 定数（`eta=0.02`、`method=momentum`）、掃引 `a..b`（段の長さから1.5秒を引いた時間で a から b へ等速で動き、残りは b で止まる）、速度 `a..b@r`（a から毎秒 r ずつ動き、b で止まる）。掃引と速度は number / integer の param だけで、両端は min〜max の中です。
+- **省いた param は前の段の終わりの値を引き継ぎます**（掃引は b、速度は段の秒数で届いたところ）。最初の段で省いた param は `default` を使い、`default` もなければビルドが失敗します。引き継ぎは Python が解決し、各段の `data-settings` には全部の param が入ります。
+- 予想の段は、選択肢の箇条書きをちょうど1つ（2〜4項目）含みます。読者が選ぶと、選んだものと正解に印が付きます。図での種明かしは次の段に書きます。
+- 段は2〜12個、秒数の合計は120秒以内です。段の中に見出しは置けません。
+- 段の最初の一文（最初の「。」まで）が、その段の caption です（狭い画面で図の下に出る帯、レビュー用の静止画）。数式に頼らず読める一文にします。
+
+`params` は、beat と step が設定できるものの宣言です。lesson で使う図には必須です。`params` がある図は、既存の `beats[].settings` も同じ宣言で検査します。
+
+```json
+"params": {
+  "eta":    { "type": "number",  "min": 0.005, "max": 0.3, "default": 0.04 },
+  "kappa":  { "type": "integer", "min": 1, "max": 40, "default": 20 },
+  "method": { "type": "choice",  "choices": ["gd", "momentum"], "default": "gd" }
+}
+```
+
+`choice` は、表示する層や場面の切り替え（`layer=plan` など）にも使えます。integer の param は、掃引の途中でも整数で図に届きます。
+
+図の側は `tour.values` を読むだけです。
+
+```tsx
+const tour = useSceneTour(id, EXPLORABLE_META[id].beats, onExit);
+const shown = tour.active ? fromValues(tour.values, chosen) : chosen;
+```
+
+- `tour.values` は、いまの瞬間の設定です（掃引と速度は数値に解決済み。`resolveSettings` in `scene.ts`）。`meta.json` の beats でも lesson でも同じ形なので、図に lesson 専用のコードは要りません。
+- Lesson の中では、`useSceneTour` に渡した beats は使われず、段が beats になります。`tour.lesson` が true のあいだ、`ExplorableFrame` は「解説付きで見る」と解説の枠を出さず、操作部品も隠します。読者が最後の段で「自分で動かす」を押すと、`onExit` にそのときの `values` が渡り、操作部品が出ます。
+- 画面: 幅 64rem 以上では図を右に固定し、左の段が画面の中央を通るとその段に切り替わります。それより狭い画面では、図の下に現在の段を1つだけ出し、「前へ／次へ」の帯が画面の下に残ります。reduced motion では各段の終了状態を出します。JavaScript がなければ、図の代替文と番号付きの段として読めます。
+- 固定した図が画面より高いと、図の中でスクロールすることになります。Lesson で使う図は、段の説明に要る部分が1画面に収まる高さにします。
+
+レビュー用の静止画（`npm --prefix site run shots -- <content-id>`）は、lesson の段ごとに 1280px と 375px で1枚ずつ撮ります。ほかの自動操作には `window.__ocLessons[<図のid>]` を使います。`steps`（各段の `seconds`、`caption`、`predict`）と、`show(index, local?)`（その段を `local` 秒の状態で止めて画面に出し、描画が済んだら解決する Promise。`local` を省くと終了状態）があります。
 
 ## 検証
 
