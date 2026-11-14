@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from optimization_compass.content_markdown import unrenderable_math
+from optimization_compass.content_markdown import latex_to_mathml, unrenderable_math
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.content_quality import (
     broken_internal_links,
@@ -105,6 +105,15 @@ def test_formulas_whose_rows_would_run_together_are_found() -> None:
     ):
         assert unrenderable_math(_math(renderable)) == (), renderable
     assert unrenderable_math("## 式\n\n```text\n$$\na \\\\ b\n$$\n```\n") == ()
+
+
+def test_unknown_commands_are_found_and_known_gaps_are_rewritten() -> None:
+    # Regression: latex2mathml printed `\arg` as text, shown as "¥arg min" in 11 articles.
+    assert "\\arg" not in latex_to_mathml(r"\arg\min_w f(w)", display="block")
+    assert "\\lvert" not in latex_to_mathml(r"\lvert x \rvert")
+    for renderable in (r"w^{*}\in\arg\min_{w} L(w)", r"\lvert x\rvert"):
+        assert unrenderable_math(_math(renderable)) == (), renderable
+    assert unrenderable_math(_math(r"\notacommand x"))
 
 
 def test_published_articles_render_every_formula() -> None:
