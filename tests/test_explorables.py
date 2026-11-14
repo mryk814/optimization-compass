@@ -7,6 +7,7 @@ from optimization_compass.content_models import load_content, parse_content
 from optimization_compass.explorables import (
     Beat,
     Explorable,
+    embedded_figure_ids,
     load_explorables,
     read_explorables,
 )
@@ -146,9 +147,7 @@ def test_published_articles_only_use_registered_explorables() -> None:
     used: set[str] = set()
 
     for page in load_content(root / "content"):
-        for line in page.body.splitlines():
-            if line.startswith("::: explorable "):
-                used.add(line.split()[2])
+        used.update(embedded_figure_ids(page.body))
 
     assert used <= registry
     assert used, "at least one article should embed an explorable"
@@ -196,3 +195,90 @@ def test_guided_scene_must_fit_in_a_minute() -> None:
     }
     with pytest.raises(ValueError, match="must not exceed 60 seconds"):
         Explorable.model_validate(entry)
+
+
+_PARAMS = {
+    "eta": {"type": "number", "min": 0.0, "max": 1.0},
+    "kappa": {"type": "integer", "min": 1, "max": 40},
+    "mode": {"type": "choice", "choices": ["grid", "random"]},
+}
+
+
+def _entry(**fields: object) -> dict[str, object]:
+    return {
+        "id": "x",
+        "title_ja": "t",
+        "question": "q。",
+        "fixed_conditions": "f",
+        "not_implied": "n。",
+    } | fields
+
+
+def _beat(**settings: object) -> dict[str, object]:
+    return {"settings": settings, "duration_s": 5, "caption_ja": "見る。", "narration_ja": "話す。"}
+
+
+def test_params_declare_what_beats_may_set() -> None:
+    entry = Explorable.model_validate(
+        _entry(params=_PARAMS, beats=[_beat(eta=0.5, kappa=20, mode="random")])
+    )
+
+    assert entry.params is not None
+    assert set(entry.params) == {"eta", "kappa", "mode"}
+
+
+@pytest.mark.parametrize(
+    ("param", "message"),
+    [
+        ({"type": "number", "min": 1, "max": 1}, "needs min < max"),
+        ({"type": "number", "min": 0}, "needs min < max"),
+        ({"type": "integer", "min": 0.5, "max": 3}, "whole-number min and max"),
+        ({"type": "number", "min": 0, "max": 1, "choices": ["a", "b"]}, "not choices"),
+        ({"type": "choice", "choices": ["only"]}, "at least two distinct choices"),
+        ({"type": "choice", "choices": ["a", "a"]}, "at least two distinct choices"),
+        ({"type": "choice", "choices": ["a", "b c"]}, "words of letters"),
+        ({"type": "choice", "choices": ["a", "b"], "min": 0}, "not min / max"),
+        ({"type": "text"}, "Input should be"),
+        ({"type": "number", "min": 0, "max": 1, "default": 2}, "default 2.0 must be within 0..1"),
+        ({"type": "integer", "min": 0, "max": 9, "default": 1.5}, "must be a whole number"),
+        ({"type": "choice", "choices": ["a", "b"], "default": "c"}, "must be one of a, b"),
+    ],
+)
+def test_params_reject_invalid_declarations(param: dict[str, object], message: str) -> None:
+    with pytest.raises(ValueError, match=message):
+        Explorable.model_validate(_entry(params={"p": param}))
+
+
+@pytest.mark.parametrize("name", ["seconds", "predict", "answer", "Eta", "my-param"])
+def test_param_names_stay_clear_of_step_keys(name: str) -> None:
+    with pytest.raises(ValueError, match="param name"):
+        Explorable.model_validate(_entry(params={name: _PARAMS["eta"]}))
+
+
+@pytest.mark.parametrize(
+    ("settings", "message"),
+    [
+        ({"speed": 1}, "'speed', which params does not declare"),
+        ({"eta": 1.5}, "must be within 0..1"),
+        ({"eta": "fast"}, "must be a number"),
+        ({"kappa": 2.5}, "must be a whole number"),
+        ({"mode": "sobol"}, "must be one of grid, random"),
+    ],
+)
+def test_beats_are_checked_against_declared_params(
+    settings: dict[str, object], message: str
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        Explorable.model_validate(_entry(params=_PARAMS, beats=[_beat(**settings)]))
+
+
+def test_beats_of_a_figure_without_params_stay_unchecked() -> None:
+    entry = Explorable.model_validate(_entry(beats=[_beat(anything=1)]))
+
+    assert entry.params is None
+
+
+def test_embedded_figures_are_found_in_explorable_and_lesson_blocks() -> None:
+    body = "::: explorable a-figure\nC.\n:::\n\n:::: lesson b-figure\n::: step\nS。\n:::\n::::\n"
+
+    assert embedded_figure_ids(body) == ("a-figure", "b-figure")

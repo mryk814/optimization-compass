@@ -4,6 +4,15 @@
   "question": "同じ更新式でも、学習率と谷の細長さで、収束・遅い収束・振動・発散が切り替わるのはなぜか。",
   "fixed_conditions": "目的関数は f(x,y)=(x-1)^2+κ(y+2)^2 に固定し、勾配は解析式で厳密に与える。",
   "not_implied": "一般的な手法の優劣や、実問題で良い学習率を示すものではない。",
+  "params": {
+    "method": { "type": "choice", "choices": ["gd", "momentum"], "default": "gd" },
+    "eta": { "type": "number", "min": 0.005, "max": 0.3, "default": 0.04 },
+    "kappa": { "type": "integer", "min": 1, "max": 40, "default": 20 },
+    "beta": { "type": "number", "min": 0, "max": 0.95, "default": 0.5 },
+    "x0": { "type": "number", "min": -4.2, "max": 6.7, "default": 4 },
+    "y0": { "type": "number", "min": -5.2, "max": 3.2, "default": 3 },
+    "iter": { "type": "number", "min": 0, "max": 100, "default": 100 }
+  },
   "beats": [
     {
       "settings": {

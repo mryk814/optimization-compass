@@ -38,7 +38,7 @@ from optimization_compass.content_models import (
     load_content,
 )
 from optimization_compass.content_quality import FigureText, figure_text, static_svg_paths
-from optimization_compass.explorables import load_explorables
+from optimization_compass.explorables import embedded_figure_ids, load_explorables
 from optimization_compass.owner_approvals import (
     ApprovalState,
     approval_state,
@@ -49,7 +49,6 @@ from optimization_compass.owner_approvals import (
 ROOT = Path(__file__).parents[1]
 KINDS: tuple[ArticleKind, ...] = ("formulation", "method", "family", "concept")
 _IMAGE = re.compile(r"^!\[", re.MULTILINE)
-_EXPLORABLE = re.compile(r"^::: explorable (\S+)", re.MULTILINE)
 APPROVE_HELP = (
     "record that the owner approved this article's current body; run it only when the owner "
     "says they approved the article on screen, never on your own judgement"
@@ -94,7 +93,7 @@ def inventory_rows(
         if page.status != "published":
             continue
         kind = article_kind(page)
-        explorables = tuple(_EXPLORABLE.findall(page.body))
+        explorables = embedded_figure_ids(page.body)
         rows.append(
             InventoryRow(
                 content_id=page.content_id,
