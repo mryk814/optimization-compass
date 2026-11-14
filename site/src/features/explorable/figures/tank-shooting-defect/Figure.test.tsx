@@ -26,7 +26,7 @@ describe("TankShootingDefect in free play", () => {
     render(<TankShootingDefect />);
     expect(screen.getAllByText("+376 L")).toHaveLength(5);
     expect(screen.getByText("+32 L")).toBeInTheDocument();
-    expect(statOf("継ぎ目で湧いた水")).toBe("+1911 L");
+    expect(statOf("継ぎ目で増えた水")).toBe("+1911 L");
     expect(statOf("最大残差")).toBe("0.376 m");
     expect(screen.getByText("許容値の外")).toBeInTheDocument();
   });
