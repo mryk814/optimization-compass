@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -434,7 +435,10 @@ def _end_value(value: object, seconds: float) -> float | str:
         return stop
     travelled = min(abs(stop - start), float(value["rate"]) * seconds)
     if "step" in value:
-        travelled = float(value["step"]) * (travelled // float(value["step"]))
+        # The same rounding guard as scene.ts, or the two disagree where the quotient is a whole
+        # number that floating point lands just under (2.32 * 12.5 = 28.999...).
+        step = float(value["step"])
+        travelled = step * math.floor(travelled / step + 1e-9)
     return start + travelled if stop > start else start - travelled
 
 
