@@ -23,6 +23,9 @@ export default defineConfig({
   server: { allowedHosts: ["desktop-55avlhd.tail4d1e1e.ts.net"] },
   test: {
     environment: "jsdom",
+    // jsdom once per worker instead of once per file (each file still runs in its own VM
+    // context). Setting jsdom up per file was ~80% of the run: 2m07s → 28s on this suite.
+    pool: "vmThreads",
     setupFiles: "./src/test/setup.ts",
   },
 });

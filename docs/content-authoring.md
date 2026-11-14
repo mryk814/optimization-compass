@@ -85,7 +85,7 @@ Markdown format only.
 - A figure uses `![alt text](./media/file.svg "visible caption")`. Store its file at
   `site/public/media/file.svg`; both alt text and caption are required.
 - An interactive figure uses `::: explorable <id>` with exactly one caption paragraph, closed by
-  `:::`. The id must be registered in `src/optimization_compass/resources/explorables.json`; see
+  `:::`. The id must be a figure folder `site/src/features/explorable/figures/<id>/`; see
   [`docs/explorables.md`](explorables.md) for when to use one and how to add a new figure.
 - External links must be HTTPS. App routes use `#/path`, site files use `/path`, and a
   heading link uses its generated slug such as `#python`.

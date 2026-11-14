@@ -23,7 +23,7 @@ Explorable（`::: explorable <id>`）で、2D SVG の図を「動かして、そ
 | 部品 | 中身 | 置き場所 |
 |---|---|---|
 | model | 描画に依存しない厳密な計算（状態 = f(パラメータ, 時刻)） | `site/src/features/explorable/math/*.ts`（単体テスト必須） |
-| beats | 時間の台本。「何を、どの順に、何秒で見せ、何と言うか」 | `resources/explorables.json` の `beats`（新設） |
+| beats | 時間の台本。「何を、どの順に、何秒で見せ、何と言うか」 | 図のフォルダーの `meta.json` の `beats`（当初は `resources/explorables.json`） |
 | view | model の状態を絵にする関数（2D SVG または 3D） | `site/src/features/explorable/*.tsx` |
 
 操作できる図、自動で進む解説、3D表示、動画、静止画サムネイルは、すべて **同じ scene の投影** です。動画のために別の数値やアニメーションを作りません。
