@@ -1,7 +1,15 @@
 {
   "id": "lp-vertex-walk",
-  "title_ja": "目的の向きを回して、LPの最適解が頂点に現れる様子を見る",
-  "question": "線形目的の最適解が、なぜ実行可能領域の頂点だけを調べれば見つかるのか。",
-  "fixed_conditions": "記事のパン屋のLP（小麦粉 3x₁+2x₂≤18、バター x₁+3x₂≤13、非負）で、在庫は固定し、1個あたりの売上 c=(c₁, c₂) だけを −4〜4 の範囲で0.5刻みに動かす。初期値は記事と同じ c=(3, 4)。",
-  "not_implied": "実際のprimal simplex実装のpivot ruleや計算量を示すものではない。隣の頂点へ移る動きは教育用の模式化である。"
+  "title_ja": "限られた材料で、売上がいちばん大きい焼き方がどこに現れるかを見る",
+  "question": "売上が最大の焼き方は、焼ける範囲のどこに現れるのか。",
+  "fixed_conditions": "パン屋の線形計画（小麦粉 3x₁+2x₂≤18、バター x₁+3x₂≤13、個数は0以上で小数も許す）で、在庫は固定する。動かすのは、焼く個数の点（食パン0〜8個、クロワッサン0〜4.5個）と、1個あたりの売上 c=(c₁, c₂)（0〜6、0.5刻み）だけ。初期値は c=(3, 4)、単位は小麦粉100g・バター10g・売上百円。",
+  "not_implied": "個数を整数に限ったときの答えは示さない。変数や制約が多い問題で、角をすべて調べれば解けるとは示さない。実際のソルバーの手順や速さ、この在庫と売値を離れたときの値下げの影響も示さない。",
+  "params": {
+    "layers": { "type": "choice", "choices": ["plan", "stock", "revenue", "answer"], "default": "answer" },
+    "x1": { "type": "number", "min": 0, "max": 8, "default": 2 },
+    "x2": { "type": "number", "min": 0, "max": 4.5, "default": 1.5 },
+    "c1": { "type": "number", "min": 0, "max": 6, "default": 3 },
+    "c2": { "type": "number", "min": 0, "max": 6, "default": 4 },
+    "follow": { "type": "choice", "choices": ["off", "best"], "default": "off" }
+  }
 }
