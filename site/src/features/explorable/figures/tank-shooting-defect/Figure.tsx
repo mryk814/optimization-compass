@@ -148,7 +148,7 @@ export default function TankShootingDefect() {
     `区間1つをオイラー法${steps}歩で進めた式との比較です。`,
     `費用は${fmt(price.total)}（目標からのずれ${fmt(price.track)}、ポンプ${fmt(price.pump)}）、ポンプが入れる水は${Math.round(pumped)} Lです。`,
     measured
-      ? `最大残差は結び目${norms.argmax}の${small(norms.max)} mで、許容値${small(TOLERANCE)} mの${within ? "内側" : "外側"}です。継ぎ目で湧いた水は合計${litres(norms.total)} Lです。`
+      ? `最大残差は結び目${norms.argmax}の${small(norms.max)} mで、許容値${small(TOLERANCE)} mの${within ? "内側" : "外側"}です。継ぎ目で増えた水は合計${litres(norms.total)} Lです。`
       : "残差はまだ測っていません。",
     view.fine >= 1 ? `同じ流量でタンクの式を細かく解くと、5分の水位は${fmt(fine?.[300] ?? H0, 3)} mで、結び目は${fmt(plan.s[1], 3)} mです。` : "",
   ].join("");
@@ -262,7 +262,7 @@ interface Geometry {
 function geometry(width: number): Geometry {
   const roomy = width >= 440;
   const left = 46;
-  const right = roomy ? 30 : 18;
+  const right = roomy ? 30 : 24;
   const plot = width - left - right;
   const title = 20;
   // The three panels together stay within one screen beside a lesson's steps (docs/explorables.md).
@@ -425,6 +425,18 @@ function Stage({ view, d, fine, reveal, onKnot, onFlow }: StageProps) {
             </Handle>
           );
         })}
+        {/* Once the finely solved level is drawn, the two levels at 5 minutes are written out:
+            there the knot and the dashed line are furthest apart, and still only a few pixels. */}
+        {fine && view.fine >= 1 && (
+          <g className="tsd-five-minutes">
+            <text className="ex-label tsd-fine-value" x={knotX(1) + 26} y={level.y(fine[300]) - 8}>
+              {fmt(fine[300], 3)}
+            </text>
+            <text className="ex-label tsd-knot-value" x={knotX(1) + 10} y={level.y(plan.s[1]) + 20}>
+              {fmt(plan.s[1], 3)}
+            </text>
+          </g>
+        )}
 
         {/* ポンプの流量 */}
         <text className="tsd-title" x={g.x(0)} y={pump.top - 7}>ポンプの流量（L/s）</text>
@@ -591,7 +603,7 @@ function Legend({ fine }: { fine: boolean }) {
     <ul className="tsd-legend">
       <li><svg aria-hidden="true" height="12" viewBox="0 0 16 12" width="16"><circle className="tsd-knot" cx="8" cy="6" r="5" /></svg>置いた水位</li>
       <li><svg aria-hidden="true" height="12" viewBox="0 0 26 12" width="26"><path className="tsd-carry" d="M2 3L20 9" /><circle className="tsd-end" cx="21" cy="9" r="3" /></svg>式が運ぶ先</li>
-      <li><svg aria-hidden="true" height="12" viewBox="0 0 10 12" width="10"><path className="tsd-gap" d="M5 1V11" /></svg>すき間（残差）</li>
+      <li><svg aria-hidden="true" height="12" viewBox="0 0 10 12" width="10"><path className="tsd-gap" d="M5 1V11" /></svg>すき間（数字はL）</li>
       {fine && <li><svg aria-hidden="true" height="12" viewBox="0 0 26 12" width="26"><path className="tsd-fine" d="M1 6H25" /></svg>細かく解いた水位</li>}
     </ul>
   );
@@ -630,7 +642,7 @@ function Readout({ plan, d, steps, measured, guided }: ReadoutProps) {
             <dd>{Math.round(pumpedLitres(plan))} L</dd>
           </div>
           <div>
-            <dt>継ぎ目で湧いた水</dt>
+            <dt>継ぎ目で増えた水</dt>
             <dd className={measured && water !== "0" ? "tsd-out" : undefined}>{measured ? `${water} L` : "—"}</dd>
           </div>
           <div>
@@ -664,7 +676,7 @@ function Equation({ plan, d, knot, steps }: { plan: Plan; d: readonly number[]; 
       <p className="ex-eyebrow">いちばん大きい残差（結び目{knot}）</p>
       <LiveMath
         block
-        label={`結び目${knot}の残差は、置いた水位から、手前の結び目をタンクの式で5分進めた水位を引いたもの`}
+        label={`結び目${knot}の残差は、置いた水位から、手前の結び目を、5分を進める式で進めた水位を引いたもの`}
         markup={row(sub(mi("d"), mn(String(knot))), mo("="), s(knot), mo("−"), fd, paren(s(knot - 1), mo(","), q(knot - 1)))}
       />
       {steps === 1 ? (

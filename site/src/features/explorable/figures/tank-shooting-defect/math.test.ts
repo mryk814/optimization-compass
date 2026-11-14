@@ -87,6 +87,10 @@ describe("tank cut into shooting segments", () => {
       expect(norms.max).toBeCloseTo(expected.max, 9);
     }
     expect(cutFlow(plan, 0)).toBe(plan);
+    // Breaking the equation makes the plan look cheaper: 7.56 falls to between 6.09 and 6.24.
+    const costs = [2, 3, 4, 5, 6].map((segment) => cost(cutFlow(plan, segment)).total);
+    expect(Math.min(...costs)).toBeCloseTo(6.09, 2);
+    expect(Math.max(...costs)).toBeCloseTo(6.24, 2);
   });
 
   it("finds the finely solved level above the knots although the defect is at rounding level", () => {
@@ -114,6 +118,9 @@ describe("tank cut into shooting segments", () => {
     const gap = Math.max(...fine.map((level, k) => Math.abs(level - plan.s[k])));
     expect(gap).toBeCloseTo(check.runs["5"].max_gap_to_fine, 7);
     expect(gap).toBeCloseTo(0.012, 3);
+    // Both move: the knot at 5 minutes goes up, the fine level (solved again with the new flows) down.
+    expect(plan.s[1]).toBeCloseTo(0.529, 3);
+    expect(fine[1]).toBeCloseTo(0.542, 3);
     const two = planAt("2", 4);
     expect(Math.max(...fineKnots(two.q).map((level, k) => Math.abs(level - two.s[k])))).toBeCloseTo(0.031, 3);
   });

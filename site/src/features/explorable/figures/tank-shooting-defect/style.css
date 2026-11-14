@@ -37,7 +37,7 @@
 .markdown-body .ex-frame .tsd-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.1rem 0.9rem;
+  gap: 0.1rem 0.7rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -113,3 +113,5 @@
 @media (max-width: 44rem) {
   .markdown-body .ex-frame .tsd-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+.tsd-fine-value { fill: var(--ex-teal-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.tsd-knot-value { fill: var(--ex-orange-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
