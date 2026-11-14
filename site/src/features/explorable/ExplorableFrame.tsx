@@ -32,6 +32,8 @@ export function ExplorableFrame({
   id, controls, stage, player, readout, summary, tour,
 }: ExplorableFrameProps) {
   const guided = tour?.active ?? false;
+  // In an article's lesson the steps beside the figure are the captions and the navigation.
+  const inLesson = tour?.lesson ?? false;
   const meta = EXPLORABLE_META[id];
   const summaryId = useId();
   return (
@@ -40,8 +42,9 @@ export function ExplorableFrame({
         <span>見る問い</span>
         {meta.question}
       </p>
-      {tour && <TourStart tour={tour} />}
-      {guided && tour ? <TourPanel tour={tour} /> : <div className="ex-controls">{controls}</div>}
+      {tour && !inLesson && <TourStart tour={tour} />}
+      {guided && tour && !inLesson && <TourPanel tour={tour} />}
+      {!guided && <div className="ex-controls">{controls}</div>}
       <div aria-describedby={summaryId} aria-label="図" className="ex-stage" role="group">
         {stage}
       </div>

@@ -1,6 +1,16 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { beatStart, sceneAt, sceneDuration, sceneWebVtt, type BeatSettings, type SceneBeat } from "./scene";
+import { LessonContext } from "./lessonContext";
+import {
+  beatStart,
+  resolveSettings,
+  sceneAt,
+  sceneDuration,
+  sceneWebVtt,
+  type BeatSettings,
+  type ResolvedSettings,
+  type SceneBeat,
+} from "./scene";
 import { usePrefersReducedMotion } from "./useTimeline";
 
 /**
@@ -8,6 +18,9 @@ import { usePrefersReducedMotion } from "./useTimeline";
  * frame by frame through `window.__ocScene.seek(t)` (see `site/scripts/record-scene.mjs`).
  */
 export const SceneRecordingContext = createContext(false);
+
+const NO_VALUES: ResolvedSettings = Object.freeze({});
+const noop = () => {};
 
 export interface SceneRecorderHandle {
   id: string;
@@ -37,6 +50,13 @@ export interface SceneTour {
   /** Seconds since the current beat started. */
   local: number;
   beat: SceneBeat | undefined;
+  /**
+   * The current beat's settings at this instant, with sweeps and rates resolved to plain values.
+   * Empty while the scene is off. A figure that draws from `values` works in a lesson unchanged.
+   */
+  values: ResolvedSettings;
+  /** True when an article's lesson drives this figure; the frame then leaves the chrome to it. */
+  lesson: boolean;
   start(): void;
   stop(): void;
   toggle(): void;
@@ -47,6 +67,10 @@ export interface SceneTour {
  * The guided-scene clock. It owns only time; the figure maps the current beat's settings and
  * `local` onto its own state. Leaving the scene hands the last beat's settings to `onExit`, so
  * the reader continues from what they were just shown.
+ *
+ * Inside an article's lesson (`LessonContext`) the lesson owns the clock instead: its steps are the
+ * beats, the active step is `index`, and `local` restarts when a step is entered. `beats` passed
+ * here are then ignored, and `onExit` receives the values on screen when the reader takes over.
  */
 export function useSceneTour(
   id: string,
@@ -54,6 +78,7 @@ export function useSceneTour(
   onExit: (settings: BeatSettings) => void,
 ): SceneTour {
   const recording = useContext(SceneRecordingContext);
+  const lesson = useContext(LessonContext);
   const reducedMotion = usePrefersReducedMotion();
   const durationS = sceneDuration(beats);
   const [active, setActive] = useState(recording);
@@ -121,6 +146,21 @@ export function useSceneTour(
   const { index, local } = sceneAt(beats, t);
   const beat = active ? beats[index] : undefined;
 
+  const lessonBeat = lesson?.beats[lesson.index];
+  const lessonLocal = lesson?.local ?? 0;
+  const lessonValues = useMemo(
+    () => (lessonBeat ? resolveSettings(lessonBeat.settings, lessonLocal, lessonBeat.durationS) : NO_VALUES),
+    [lessonBeat, lessonLocal],
+  );
+  const lessonFree = lesson?.free ?? false;
+  const wasFree = useRef(lessonFree);
+  const lessonValuesRef = useRef(lessonValues);
+  lessonValuesRef.current = lessonValues;
+  useLayoutEffect(() => {
+    if (lessonFree && !wasFree.current) onExit(lessonValuesRef.current);
+    wasFree.current = lessonFree;
+  }, [lessonFree, onExit]);
+
   // With reduced motion each beat is shown in its finished state and advanced by hand.
   const showBeat = useCallback((target: number) => {
     const next = reducedMotion
@@ -161,6 +201,27 @@ export function useSceneTour(
     setPlaying(!reducedMotion);
   }, [beats.length, reducedMotion, showBeat]);
 
+  if (lesson) {
+    return {
+      beats: lesson.beats,
+      active: !lesson.free,
+      playing: false,
+      recording: false,
+      reducedMotion,
+      t: beatStart(lesson.beats, lesson.index) + lesson.local,
+      durationS: sceneDuration(lesson.beats),
+      index: lesson.index,
+      local: lesson.local,
+      beat: lesson.free ? undefined : lessonBeat,
+      values: lesson.free ? NO_VALUES : lessonValues,
+      lesson: true,
+      start: noop,
+      stop: noop,
+      toggle: noop,
+      goTo: noop,
+    };
+  }
+
   return {
     beats,
     active,
@@ -172,6 +233,8 @@ export function useSceneTour(
     index,
     local,
     beat,
+    values: beat ? resolveSettings(beat.settings, local, beat.durationS) : NO_VALUES,
+    lesson: false,
     start,
     stop,
     toggle,

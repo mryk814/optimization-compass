@@ -24,6 +24,14 @@ export interface MetaFile {
   question: string;
   fixed_conditions: string;
   not_implied: string;
+  /** What beats and lesson steps may set; checked by the Python side, not read by the site. */
+  params?: Readonly<Record<string, {
+    type: string;
+    min?: number;
+    max?: number;
+    choices?: readonly string[];
+    default?: number | string;
+  }>>;
   beats?: ReadonlyArray<{
     settings: Record<string, number | string>;
     duration_s: number;
