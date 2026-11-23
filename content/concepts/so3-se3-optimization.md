@@ -154,7 +154,7 @@ $R_\star$ の回転角は、対角成分の和から読めます。$\mathrm{tr}\
 
 別の型へ向かう兆候もあります。
 
-- 対応の一部に大きな外れがある → [外れ値を含むrobust regression（PA034）](#/formulations/PA034)の損失を回転に組み合わせる
+- 対応の一部に大きな外れがある → [外れ値を含む回帰（robust regression、PA034）](#/formulations/PA034)の損失を回転に組み合わせる
 - 回転を角度などのパラメータで書き、指数や三角関数の中に入れて解く → [非線形最小二乗（PA033）](#/formulations/PA033)
 - 回る軸が1本に決まっていて、角度1つだけを決める → [滑らかな低次元無制約（PA006）](#/formulations/PA006)
 - 時刻ごとの姿勢を、運動の式で結んで決める → [軌道最適化（PA044）](#/formulations/PA044)
@@ -303,4 +303,4 @@ print(round(angle_deg(R.T @ exp_so3((w1 + w2) / 2)), 2))  # 168.54
 - [SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)：射影、retraction、指数写像の違いと、記録する診断値
 - [Riemann勾配法](#/learn/riemannian-gradient)：閉形式がない損失で、回転のまま一歩ずつ進める方法
 - [多様体値変数](#/learn/concept.manifold)：球面やStiefel多様体を含む、曲がった集合の上での最適化の共通原則
-- [外れ値を含むrobust regression（PA034）](#/formulations/PA034)：対応に外れがあるときの損失の選び方
+- [外れ値を含む回帰（robust regression、PA034）](#/formulations/PA034)：対応に外れがあるときの損失の選び方

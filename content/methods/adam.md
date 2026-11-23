@@ -4,7 +4,7 @@ kind: method
 method_id: M_ADAM
 title_ja: Adam
 title_en: Adam
-summary: Adamは、座標ごとに勾配の移動平均と勾配の二乗の移動平均を持ち、その比で一歩を決める確率的一次法です。勾配の大きさが座標ごとに何十倍違っても、各座標の一歩はおよそ学習率以下にそろい、勾配の向きがそろわない座標ほど小さくなります。
+summary: Adamは、座標ごとに勾配の移動平均と二乗の移動平均を持ち、その比で一歩を決める確率的一次法です。勾配の大きさが座標ごとに大きく違っても、各座標の一歩はおよそ学習率以下にそろいます。
 source_ids: [S047, S048, S049, S070]
 prerequisites: [method.gradient-descent]
 related_ids: [momentum-sgd, method.gradient-descent, bfgs, adamw, sgd]
@@ -225,3 +225,4 @@ Adamでは、勾配の大きさと一歩の大きさが別の量になります�
 - [Momentum SGD](#/learn/momentum-sgd)：一つの速度を持ち越す更新は、Adamと何が違うのか
 - [ニューラルネットワークの学習（PA040）](#/formulations/PA040)：Adamがよく使われる、非凸でデータ平均の損失
 - [勾配降下法](#/learn/method.gradient-descent)：一歩が勾配に比例する基本形と、安定限界 $2/L$
+- 収束理論を深掘りするなら：Adamが収束しない場合の反例と、その後の修正版の議論は、この記事の出典にある原論文と解析を辿る

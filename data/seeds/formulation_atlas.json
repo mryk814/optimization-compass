@@ -458,7 +458,7 @@
     {"from": "PA055", "to": "PA033", "type": "reformulates_to", "note_ja": "Tikhonov正則化は残差を一本追加した形なので、非線形最小二乗として解けます。"},
     {"from": "PA046", "to": "PA048", "type": "reformulates_to", "note_ja": "下位問題が凸なら、KKT条件へ置き換えて相補性制約付きの問題（MPCC）にできます。"},
     {"from": "PA027", "to": "PA023", "type": "reformulates_to", "note_ja": "各節は0-1変数の線形不等式として書けます。"},
-    {"from": "PA026", "to": "PA023", "type": "reformulates_to", "note_ja": "時刻を離散化するか big-M 制約を使うとMILPで書けます。制約programmingの方が自然で速いことも多くあります。"},
+    {"from": "PA026", "to": "PA023", "type": "reformulates_to", "note_ja": "時刻を離散化するか big-M 制約を使うとMILPで書けます。制約プログラミングの方が自然で速いことも多くあります。"},
     {"from": "PA031", "to": "PA023", "type": "reformulates_to", "note_ja": "MILPとして書けますが、実用規模では専用のroutingヒューリスティクスが主に使われます。"},
     {"from": "PA049", "to": "PA017", "type": "reformulates_to", "note_ja": "シナリオが有限個で対応が線形なら、全シナリオを並べた大きなLP（決定論的等価問題）になります。"},
     {"from": "PA050", "to": "PA020", "type": "reformulates_to", "note_ja": "線形制約の係数が楕円集合で不確かなら、robust対応問題は二次錐計画になります。"},

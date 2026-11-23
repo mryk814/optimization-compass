@@ -351,7 +351,7 @@ def generate_search_tree_artifact(
         "initialize",
         "探索木を初期化",
         "Initialize search tree",
-        "根nodeを作り、0-1 knapsackの緩和上界を準備します。",
+        "根ノードを作り、0-1 knapsackの緩和上界を準備します。",
         "Create the root node and prepare the relaxed upper bound.",
         active_node_id="root",
     )
