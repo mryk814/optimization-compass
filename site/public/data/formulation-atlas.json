@@ -6118,7 +6118,7 @@
     },
     {
       "from": "PA026",
-      "note_ja": "時刻を離散化するか big-M 制約を使うとMILPで書けます。制約programmingの方が自然で速いことも多くあります。",
+      "note_ja": "時刻を離散化するか big-M 制約を使うとMILPで書けます。制約プログラミングの方が自然で速いことも多くあります。",
       "to": "PA023",
       "type": "reformulates_to"
     },

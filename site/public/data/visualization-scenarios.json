@@ -8306,9 +8306,9 @@
           "incumbent",
           "prune_reason"
         ],
-        "payload_bytes": 102177,
+        "payload_bytes": 102182,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "44976d4237d9c1e971e763a3f8a44f3e63241354e4144db106fc5abebffb5f56",
+        "payload_sha256": "958da5db8bfe9b7139561db4acc776ff5867294c83b94120ebd9e746414b9331",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
@@ -8569,9 +8569,9 @@
           "incumbent",
           "prune_reason"
         ],
-        "payload_bytes": 39757,
+        "payload_bytes": 39762,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "8f224d5d0380f4958c1bfb03dcb5ca762d28297ebca93b74461f28f52f54bf53",
+        "payload_sha256": "9efb49acabc6de9469d857e865ccf6336b5c67033234bb1add69773275f673e8",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },

@@ -301,7 +301,8 @@ function Results({
     <div className="diagnose-results">
       {methodCount === 0 && (
         <p className="diagnose-empty">
-          候補はまだ絞れていません。分かる条件を増やすと、ここに候補と避けたい手法が現れます。
+          候補はまだ絞れていません。いま分かっている条件は{Object.values(answers).filter((answer) => answer.status === "answered").length}件です。分かる条件を増やすと、ここに候補と避けたい手法が現れます。
+          {result.followups.length > 0 && <>次に答えると絞り込みが進む条件は、下の「追加確認」にあります。</>}
         </p>
       )}
       <ResultBand data={data} items={result.alternatives_first} title="代替解法" />
@@ -438,6 +439,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
             <button onClick={() => navigateMap()} type="button">地図を開く</button>
             <PromptExportLauncher source={{ kind: "diagnose", state: atlas.state, result, manifest, data }} />
           </div>
+          <p className="atlas-note">「地図を開く」は、いまの条件のままマップへ移り、問題構造の中での位置を見るボタンです。「実装用プロンプトを作る」は、いまの条件を実装AIへ渡す文章として書き出します。どちらも、答えた条件はそのまま引き継がれます。</p>
           {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxの選び方を見る</strong><p>観測から予測モデル（surrogate）とExpected Improvementがどう更新されるかを、固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
           <section className="diagnose-signature" aria-label="いま見えている問題の形">
             <header>
@@ -455,6 +457,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
 
 export function DiagnosePage() {
   const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  useEffect(() => { document.title = "診断 | Optimization Compass"; }, []);
   useEffect(() => {
     let active = true;
     void loadArtifacts().then(

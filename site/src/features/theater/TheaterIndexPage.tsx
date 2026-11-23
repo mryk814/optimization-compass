@@ -41,6 +41,7 @@ const structureReadingLenses = [
 ] as const;
 
 export function TheaterIndexPage() {
+  useEffect(() => { document.title = "手法の動きを見る | Optimization Compass"; }, []);
   const links = useEntityLinks();
   const [scenarios, setScenarios] = useState<ReturnType<typeof parseVisualizationScenarioIndex>>();
   const [scope, setScope] = useState<"representative" | "all">("representative");
@@ -120,7 +121,7 @@ export function TheaterIndexPage() {
           <label>表示範囲<select aria-label="表示範囲" value={scope} onChange={(event) => setScope(event.target.value as typeof scope)}><option value="representative">見え方別の代表例</option><option value="all">すべてのシナリオ</option></select></label>
           <label>見る目的<select aria-label="見る目的" value={purpose} onChange={(event) => setPurpose(event.target.value)}><option value="all">すべて</option>{Object.entries(purposeLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           <label>問題領域<select aria-label="問題領域" value={domain} onChange={(event) => setDomain(event.target.value as typeof domain)}><option value="all">すべて</option>{["continuous", "constrained", "discrete", "black-box", "multi-objective"].map((value) => <option key={value} value={value}>{domainLabel(value)}</option>)}</select></label>
-          <span aria-live="polite">{visible.length}件を表示 · 条件一致 {matching.length}件 · 公開 {published.length}件</span>
+          <span aria-live="polite">{scenarios && links.status === "ready" ? `${visible.length}件を表示 · 条件一致 ${matching.length}件 · 公開 ${published.length}件` : "読み込み中…"}</span>
         </div>
         <p className="atlas-note">最初は可視化方式ごとに代表例を1件ずつ表示します。すべての条件差や失敗例が必要なときだけ、表示範囲を広げます。</p>
       </section>

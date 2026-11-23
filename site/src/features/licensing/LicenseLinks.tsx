@@ -10,7 +10,7 @@ export function LicenseLinks() {
       {" · "}
       <a href={`${baseUrl}licenses/CONTENT_LICENSE.txt`}>本文: CC BY 4.0</a>
       {" · "}
-      <a href={`${baseUrl}licenses/NOTICE.txt`}>お知らせ</a>
+      <a href={`${baseUrl}licenses/NOTICE.txt`}>帰属表示（NOTICE）</a>
     </span>
   );
 }

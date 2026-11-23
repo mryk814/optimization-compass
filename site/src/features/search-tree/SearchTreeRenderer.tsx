@@ -123,8 +123,8 @@ function assignmentLabel(assignment: Record<string, 0 | 1>): string {
 
 function terminalLabel(state: SearchTreeFramePayload["terminal_state"]): string {
   return {
-    ongoing: "探索中 — incumbentは候補で、最適性はまだ証明されていません。",
-    optimality_proven: "最適性証明済み — best feasibleとglobal boundが一致しました。",
-    budget_exhausted: "node予算で停止 — 実行可能な候補解はありますが、最適性は未証明です。",
+    ongoing: "探索中 — いまの最良の候補解は得られていますが、最適性はまだ証明されていません。",
+    optimality_proven: "最適性証明済み — これ以上良い解がないことが確かめられました。",
+    budget_exhausted: "節点数の予算で停止 — 実行可能な候補解はありますが、最適性は未証明です。",
   }[state];
 }

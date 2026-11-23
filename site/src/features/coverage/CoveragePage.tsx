@@ -73,6 +73,8 @@ const factorLabels: Record<string, string> = {
 export function CoveragePage() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
 
+  useEffect(() => { document.title = "Atlasの接続状況 | Optimization Compass"; }, []);
+
   useEffect(() => {
     const controller = new AbortController();
     void loadCoverage(controller.signal).then(
@@ -111,7 +113,7 @@ function CoverageView({
         <div>
           <p className="eyebrow">接続状況</p>
           <h1>Atlasの接続状況</h1>
-          <p>教材の深さを一律にせず、期待する学習成果と実在する成果物を分けて監査します。</p>
+          <p>教材の深さを一律にせず、期待する学習成果と実在する成果物を分けて監査します。これは読者向けの案内ではなく、作り手が整備状況を確認するための監査ページです。</p>
         </div>
         <button
           aria-pressed={showTechnical}
@@ -138,7 +140,7 @@ function CoverageView({
         ]}
       />
 
-      {report.scope && <ScopeSection scope={report.scope} />}
+      {report.scope && <ScopeSection scope={report.scope} showTechnical={showTechnical} />}
       <JourneyCompleteness journeys={journeys} showTechnical={showTechnical} />
       <CoverageSummary report={report} />
       <PriorityAreas priorities={report.priorities} showTechnical={showTechnical} />
@@ -168,13 +170,13 @@ const scopeStateLabels: Record<string, string> = {
 };
 const scopeInfoLabels: Record<string, string> = { has_interactive: "操作図のある記事（参考）" };
 
-function ScopeSection({ scope }: { scope: NonNullable<CoverageReport["scope"]> }) {
+function ScopeSection({ scope, showTechnical }: { scope: NonNullable<CoverageReport["scope"]>; showTechnical: boolean }) {
   return (
     <section aria-labelledby="scope-title" className="coverage-scope">
       <div className="coverage-section-heading">
         <div>
           <p className="eyebrow">分母</p>
-          <h2 id="scope-title">収録範囲（{scope.scope_version}, {scope.status}）</h2>
+          <h2 id="scope-title">収録範囲{showTechnical ? `（${scope.scope_version}, ${scope.status}）` : ""}</h2>
         </div>
         <p>
           採用したメンバーの件数を軸ごとに数えます。割合や総合点は出しません。
@@ -487,7 +489,7 @@ function JourneyCompleteness({
               ? `目標${target}件まであと${remaining}件`
               : `目標${target}件を達成${surplus > 0 ? `（+${surplus}件）` : ""}`}
           </span>
-          <progress aria-label={`完了${completed}件、目標${target}件`} max={target} value={Math.min(completed, target)} />
+          <progress aria-label={`完了${completed}件、目標${target}件`} max={Math.max(target, completed)} value={completed} />
         </div>
       </div>
       <div className="journey-status-grid" aria-label="学習ジャーニーのステータス">

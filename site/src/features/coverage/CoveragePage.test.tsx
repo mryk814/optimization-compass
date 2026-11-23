@@ -57,7 +57,7 @@ describe("CoveragePage", () => {
 
   test("shows scope counts per unit and axis without a percentage", async () => {
     render(<MemoryRouter><CoveragePage /></MemoryRouter>);
-    expect(await screen.findByRole("heading", { name: /^収録範囲（/u })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: /^収録範囲$/u })).toBeVisible();
     const scope = rawCoverage.scope;
     expect(scope).toBeTruthy();
     const topic = scope!.units.knowledge_topic;
@@ -75,5 +75,8 @@ describe("CoveragePage", () => {
     expect(experience).not.toHaveTextContent("0 / 0");
     const section = document.querySelector<HTMLElement>(".coverage-scope");
     expect(section?.textContent).not.toMatch(/%|％/u);
+    // The scope version and status are technical information: hidden until requested.
+    fireEvent.click(screen.getByRole("button", { name: "技術情報を表示" }));
+    expect(screen.getByRole("heading", { name: new RegExp(`^収録範囲（${scope!.scope_version}`, "u") })).toBeVisible();
   });
 });

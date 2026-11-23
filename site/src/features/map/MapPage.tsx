@@ -233,13 +233,12 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
         <select id="semantic-view" onChange={(event) => switchView(event.target.value)} value={view.view_id}>
           {views.map((candidate, index) => <option key={`${candidate.view_id}:${index}`} value={candidate.view_id}>{candidate.title}</option>)}
         </select>
-        <details className="map-view-context">
-          <summary>表示の説明</summary>
+        <div className="map-view-context">
           <div>
             <strong>{view.description}</strong>
             <span>注意: {view.limitations}</span>
           </div>
-        </details>
+        </div>
       </section>
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
         <button aria-pressed={activePane === "map"} onClick={() => setActivePane("map")} type="button">地図</button>
@@ -286,6 +285,7 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
 
 export function MapPage() {
   const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  useEffect(() => { document.title = "最適化マップ | Optimization Compass"; }, []);
   const location = useLocation();
   const requestedViewId = useMemo(
     () => new URLSearchParams(location.search).get("view") ?? "problem-structure",

@@ -382,7 +382,7 @@
       "practical_notes": "実務のCaseと1次元の固定教材を分け、観測ノイズ（noise）、現時点の最良値（best-so-far）、不確実性、評価予算（budget）の到達を一緒に記録します。",
       "problem_archetype_id": "PA039",
       "python_example": "import optuna\n\nsampler = optuna.samplers.GPSampler(seed=2604)\nstudy = optuna.create_study(direction=\"minimize\", sampler=sampler)",
-      "question": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。",
+      "question": "勾配なし・高価な実験を扱うモデルで、少ない試行から連続ハイパーパラメータを改善したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "experiment_only",
