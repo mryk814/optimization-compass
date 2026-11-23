@@ -443,8 +443,9 @@ function AppShell() {
       </main>
       <footer className="site-footer">
         <Link aria-live="polite" to="/data">Dataset {datasetVersion ?? "…"}</Link>
+        <span>（収録データの版）</span>
         <span aria-hidden="true">·</span>
-        <span>ViewSpec 1.0.0</span>
+        <span>ViewSpec 1.0.0（表示形式の版）</span>
         <span aria-hidden="true">·</span>
         <LicenseLinks />
         <span aria-hidden="true">·</span>

@@ -34,6 +34,7 @@ import {
   type LensEntry,
 } from "../../visual-system";
 export function GalleryPage() {
+  useEffect(() => { document.title = "ケースギャラリー | Optimization Compass"; }, []);
   const [cases, setCases] = useState<GalleryCase[]>([]);
   const [galleryDomains, setGalleryDomains] = useState<GalleryDomain[]>([]);
   const [journeys, setJourneys] = useState<LearningJourney[]>([]);
@@ -395,6 +396,10 @@ export function GalleryCasePage() {
     );
   }, [caseId]);
 
+  useEffect(() => {
+    if (item) document.title = `${item.title_ja} | ケース | Optimization Compass`;
+  }, [item]);
+
   const state = item && journey && datasetVersion
     ? caseState(item, datasetVersion, journey)
     : undefined;
@@ -531,11 +536,11 @@ export function GalleryCasePage() {
             )}
           </section>
 
-          <details className="gallery-formulation-disclosure">
+          <details className="gallery-formulation-disclosure" open>
             <summary>
               <span>4. 定式化</span>
               <strong>変数・目的・制約を確認する</strong>
-              <small>必要なときに展開</small>
+              <small>最初から開いています</small>
             </summary>
             <OptimizationProblemPrimer
               caseFormulation={{

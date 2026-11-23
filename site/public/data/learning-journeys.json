@@ -6521,7 +6521,7 @@
       ],
       "journey_id": "hyperparameter-search",
       "last_reviewed": "2026-07-17",
-      "learning_objective": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。",
+      "learning_objective": "勾配なし・高価な実験を扱うモデルで、少ない試行から連続ハイパーパラメータを改善したい。",
       "limitations": [
         "固定した乱数の種・1次元・RBFカーネル（kernel）・10回評価の教材であり、別データセット、探索空間（search space）、ノイズ条件でのベイズ最適化（BO）やベースライン（baseline）の優位性を示しません。"
       ],

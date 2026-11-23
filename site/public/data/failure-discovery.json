@@ -989,7 +989,7 @@
         "constraints": "$\\eta$ と $\\lambda$ の上下限に加え、実務では評価予算（evaluation budget）$\\sum_k cost(x_k)\\le budget$ を置く。固定教材では評価回数を最大10回とする。",
         "decision_variables": "学習率（learning rate）$\\eta$ と正則化係数（regularization coefficient）$\\lambda$。固定教材ではこの組を1個の正規化変数 $x\\in[-3,3]$ に写像する。",
         "objective": "設定 x を1回評価して得る検証損失 $y=f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックス（black-box）として観測する。",
-        "question": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
+        "question": "勾配なし・高価な実験を扱うモデルで、少ない試行から連続ハイパーパラメータを改善したい。"
       },
       "case_id": "hyperparameter-search",
       "confidence": "not_applicable",

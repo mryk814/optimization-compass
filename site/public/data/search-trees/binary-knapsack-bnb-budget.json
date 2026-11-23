@@ -50,7 +50,7 @@
           "best_feasible_value": null,
           "contract_version": "1.0.0",
           "decision_explanation_en": "Create the root node and prepare the relaxed upper bound.",
-          "decision_explanation_ja": "根nodeを作り、0-1 knapsackの緩和上界を準備します。",
+          "decision_explanation_ja": "根ノードを作り、0-1 knapsackの緩和上界を準備します。",
           "global_bound": 15.0,
           "incumbent": null,
           "nodes": [

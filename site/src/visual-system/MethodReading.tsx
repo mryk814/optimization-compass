@@ -33,7 +33,7 @@ export function MethodReading({ methodId, catalog }: { methodId: string; catalog
               </li>
             ))}
           </ul>
-          <p className="vs-method-reading-note">診断規則と前提（predicate）から作った図です。問題を当てはめると、Caseと診断で同じ軸に点が重なります。</p>
+          <p className="vs-method-reading-note">診断の規則と前提から作った図です。問題を当てはめると、Caseと診断で同じ軸に点が重なります。</p>
         </>
       )}
     </section>
